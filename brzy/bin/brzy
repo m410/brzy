@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ $1 = "help" ]; then
+	echo "  To get help on a specific command, type 'brz command help'"
+	echo "  - clean : command description"
+	echo "  - create-app : command description"
+	echo "  - gen-all : command description"
+	echo "  - gen-build : command description"
+	echo "  - gen-controller : command description"
+	echo "  - gen-entity : command description"
+	echo "  - gen-migration : command description"
+	echo "  - gen-service : command description"
+	echo "  - gen-views : command description"
+	echo "  - info : command description"
+	echo "  - plugin : command description"
+	echo "  - run : command description"
+	echo "  - start-app : command description"
+else 
+	CMD="$1.sh"
+	$BRZY_HOME/bin/$CMD $@ 
+fi
+
+
