@@ -1,0 +1,91 @@
+#
+# application configuration
+#
+# http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
+# http://jyaml.sourceforge.net/
+#
+--- !org.brzy.config.Config
+environment:default
+version: 1.0.0
+name: Test app
+author: Fred
+description: Some Description
+
+group_id: us.m410
+artifact_id: demoapp
+
+src_package: org.brzy.mock
+webapp_context: testapp
+
+#
+# view setup
+# [velocity,ssp]
+# [html4,html5,xhtml,xhtml2,xhtml5]
+view_type:ssp
+view_html_version: html5
+
+#
+# Dependency Management
+#
+repositories:
+  - id: fusesource
+    name: FuseSource Community Repository
+    url: http://someurl.com/test
+    snapshots: false
+    releases: true
+
+dependencies:
+  - compile: org.apache.wicket:wicket:jar:1.4-rc6
+  - compile: org.fusesource.scalate:calate-core:jar:1.0-SNAPSHOT
+
+plugins:
+  - name: breadcrumb
+  - name: scheduler
+  - name: ejb
+  - name: spring
+
+web_xml:
+  - name: description
+    content: Brzy Web Application
+  - name: listener
+    children:
+      - name: listener-class
+      - content: org.brzy.application.ApplicationListener
+#
+# Persistence
+#[java-jpa,scala-jpa,jdo,squeryl]
+db_migration: true
+db_generation: false
+#persistence_type: jpa
+#persistence: !org.brzy.config.Persistence
+#  mechanism:jpa
+
+data_source:
+  name:something
+  driver_class: org.postgresql.Driver
+  user_name: test
+  password:
+  url: jdbc:postgresql://localhost/dev
+
+application_properties:
+  something: else
+
+#
+# Logging
+#[log4j,jul]
+logging:
+  provider: log4j
+#  appenders:!String[]
+#    - output
+#  loggers:!String[]
+#    = debug
+
+#
+# override defaults for any environment
+#
+environment_overrides:
+  - environment: developement
+    migration_enabled:false
+  - environment: test
+  - environment: production
+

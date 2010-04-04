@@ -1,0 +1,4 @@
+- TODO wire services at startup
+- TODO hibernate collections
+- TODO parse ssp templates from commandline
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.brzy</groupId>
+  <artifactId>brzy</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>Brzy Framework</name>
+  <properties>
+  	<scala.version>2.8.0.Beta1</scala.version>
+  </properties>
+  <modules>
+    <!--
+    <module>brzy-archetype</module>  
+    <module>brzy-archetype-app</module>
+    <module>brzy-archetype-lib</module>
+    <module>brzy-archetype-plugin</module>
+    <module>brzy-archetype-project</module> 
+    -->
+    <module>brzy-assembly</module>
+    <module>brzy-config</module>
+    <module>brzy-migration</module>
+    <module>brzy-mvc</module>
+ 
+    <module>brzy-plugin-api</module>
+ <!--   <module>brzy-plugin-cart</module>
+    <module>brzy-plugin-ejb</module>
+    <module>brzy-plugin-java-jpa</module>
+    <module>brzy-plugin-jms</module>
+    <module>brzy-plugin-scala-jpa</module>
+    <module>brzy-plugin-scheduler</module>
+    <module>brzy-plugin-security</module>
+    <module>brzy-plugin-spring</module>
+    <module>brzy-plugin-squeryl</module>
+    <module>brzy-plugin-static</module>
+	<module>brzy-samples</module>
+ -->
+    
+    <module>brzy-shell</module>
+
+    <module>brzy-view</module>
+    <module>brzy-yaml</module>
+    <!-- <module>brzy-validator</module> -->
+  </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+    <repositories>
+    <repository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-releases</url>
+    </repository>
+    <repository>
+      <id>jboss.repository</id>
+      <name>Jboss Repository</name>
+      <url>http://repository.jboss.com/maven2</url>
+    </repository>
+    <repository>
+      <id>reflections-repo</id>
+      <name>Reflections Maven2 Repository</name>
+      <url>http://reflections.googlecode.com/svn/repo</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-releases</url>
+    </pluginRepository>
+  </pluginRepositories>
+</project>

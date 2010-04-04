@@ -1,0 +1,15 @@
+
+<ivysettings>
+  <settings defaultResolver="chained"/>
+  <resolvers>
+    <chain name="chained">
+      <filesystem name="1">
+        <artifact pattern="${basedir}/.brzy/lib2/[artifact]-[revision].[ext]"/>
+      </filesystem>
+      <!-- add ibiblio -->
+    </chain>
+  </resolvers>
+  <!--<modules>-->
+    <!--<module organisation="jayasoft" name=".*" resolver="internal" />-->
+  <!--</modules>-->
+</ivysettings>

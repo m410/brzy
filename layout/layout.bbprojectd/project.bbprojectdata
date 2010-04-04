@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HierarchyData</key>
+	<array>
+		<string>B9594890-C172-4F7D-8559-9D46C01DCB0C</string>
+	</array>
+	<key>ProjectItems</key>
+	<dict>
+		<key>B9594890-C172-4F7D-8559-9D46C01DCB0C</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>AliasData</key>
+				<data>
+				AAAAAAFWAAIAAQlIYXJkRHJpdmUAAAAAAAAAAAAAAAAA
+				AAAAAADE+gKpSCsAAAFVwG8GbGF5b3V0AAAAAAAAAAAA
+				AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+				AAAAAAAAAAAAAAAAAAAAAWHW78e5HlcAAAAAAAAAAP//
+				//8AAAkgAAAAAAAAAAAAAAAAAAAABGJyenkAEAAIAADE
+				+jrpAAAAEQAIAADHuWSnAAAAAQAQAVXAbwAOb60ADV8T
+				AAB72AACAClIYXJkRHJpdmU6VXNlcnM6bTQxMDpQcm9q
+				ZWN0czpicnp5OmxheW91dAAADgAOAAYAbABhAHkAbwB1
+				AHQADwAUAAkASABhAHIAZABEAHIAaQB2AGUAEgAfVXNl
+				cnMvbTQxMC9Qcm9qZWN0cy9icnp5L2xheW91dAAAEwAB
+				LwAAFQACAAv//wAA
+				</data>
+				<key>FileURL</key>
+				<string>file://localhost/Users/m410/Projects/brzy/layout/</string>
+				<key>RelativePath</key>
+				<string>./layout</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>layout</string>
+			<key>ItemType</key>
+			<string>FolderReference</string>
+		</dict>
+	</dict>
+	<key>com.barebones.DocumentFormatVersion</key>
+	<integer>5</integer>
+	<key>com.barebones.DocumentType</key>
+	<string>Project</string>
+</dict>
+</plist>
