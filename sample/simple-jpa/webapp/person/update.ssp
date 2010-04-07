@@ -1,0 +1,14 @@
+<% attributes("layout") = "/layouts/custom.ssp" %>
+<% attributes("title") = "Brzy :: Person :: Upadte" %>
+<h3>Update Page</h3>
+<form action="" method="POST">
+<fieldset>
+	<legend>Form</legend>
+	<input type="hidden" name="id" value="">
+	<label>Name
+		<input type="text" name="name" value="test">
+		</label>
+		<input type="submit" name="submit" value="Submit">
+		<a href="">Cancel</a>
+</fieldset>	
+</form>

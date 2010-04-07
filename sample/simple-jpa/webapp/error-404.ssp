@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <title>ERROR</title>
+	<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link rel="stylesheet" href="css/main.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" media="all" href="css/ie6.css"/>
+</head>
+<body>
+<h1>Brzy App: ERROR 404</h1>
+<p>Error page</p>
+</body>
+</html>

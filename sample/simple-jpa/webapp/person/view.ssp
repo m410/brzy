@@ -1,0 +1,6 @@
+<% attributes("layout") = "/layouts/custom.ssp" %>
+<% attributes("title") = "Brzy :: Person :: View" %>
+<% val person = request.getAttribute("person") %>
+<h3>View Person</h3>
+<p>Person id: ${person.id}</p>
+<p>Person name: ${person.name}</p>
