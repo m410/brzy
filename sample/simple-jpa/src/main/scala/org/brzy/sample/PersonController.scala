@@ -2,8 +2,8 @@ package org.brzy.sample
 
 import javax.ws.rs.Path
 import org.brzy.action.args.Parameters
-import org.brzy.validator.Validity
 import org.brzy.action.returns._
+import org.slf4j.LoggerFactory
 
 /**
  * @author Michael Fortin
@@ -12,11 +12,18 @@ import org.brzy.action.returns._
 @Path("/persons")
 class PersonController {
 
+	private val log = LoggerFactory.getLogger(classOf[PersonController])
+	
   @Path("")
   def list() = "personList"->Person.list()
 
   @Path("{id}")
-	def view(prms:Parameters) = "person"->Person.get(prms("id")(0).toLong)
+	def view(prms:Parameters) = {
+		log.debug("params: {}",prms)
+		val id = prms("id")(0).toLong
+		val person = Person.get(id)
+		"person"->person
+	}
 
 	@Path("create")
 	def create = "person"->new Person()
@@ -24,7 +31,7 @@ class PersonController {
 	@Path("save")
 	def save(params:Parameters)() = {
 	  def person:Person = Person.make(params)
- 		val validity:Validity = person.validity()
+ 		val validity = person.validity()
 
 		if(validity.isValid) {
       person.saveAndCommit
@@ -41,7 +48,7 @@ class PersonController {
 	@Path("{id}/update")
 	def update(params:Parameters) = {
 		def person = Person.make(params)
-    val validity:Validity = person.validity()
+    val validity = person.validity()
 
 		if(validity.isValid) {
       person.save

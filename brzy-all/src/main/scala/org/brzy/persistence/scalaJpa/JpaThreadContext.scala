@@ -22,8 +22,11 @@ case class JpaThreadContext(entityManagerFactory:EntityManagerFactory) extends T
   }
   
   def close = {
-    if(entityManagerInternal != null){
-      entityManagerInternal.getTransaction.commit
+    if(entityManagerInternal != null ){
+
+      if(entityManagerInternal.getTransaction.isActive)
+        entityManagerInternal.getTransaction.commit
+
       entityManagerInternal.close
     }
   }	

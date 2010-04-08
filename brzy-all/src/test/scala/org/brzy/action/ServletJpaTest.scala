@@ -70,10 +70,12 @@ class ServletJpaTest {
 
     val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
+    expect(entityTransaction.isActive).andReturn(true)
     entityTransaction.commit
     replay(entityTransaction)
 
     val entityManager = createMock(classOf[EntityManager])
+    expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.find(classOf[User], 10L)).andReturn(new User())
     expect(entityManager.getTransaction).andReturn(entityTransaction)
@@ -119,6 +121,7 @@ class ServletJpaTest {
   def testActionList = {
     val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
+    expect(entityTransaction.isActive).andReturn(true)
     entityTransaction.commit
     replay(entityTransaction)
 
@@ -127,6 +130,7 @@ class ServletJpaTest {
     replay(query)
 
     val entityManager = createMock(classOf[EntityManager])
+    expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.createQuery("select distinct t from org.brzy.mock.User t"))
             .andReturn(query)
@@ -175,10 +179,12 @@ class ServletJpaTest {
 	
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
+    expect(entityTransaction.isActive).andReturn(true)
     entityTransaction.commit
     replay(entityTransaction)
 
     val entityManager = createMock(classOf[EntityManager])
+    expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
 		entityManager.persist(anyObject)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
@@ -217,10 +223,12 @@ class ServletJpaTest {
   def testActionEdit = {
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
+    expect(entityTransaction.isActive).andReturn(true)
     entityTransaction.commit
     replay(entityTransaction)
 
     val entityManager = createMock(classOf[EntityManager])
+    expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.find(classOf[User], 10L)).andReturn(new User())
     expect(entityManager.getTransaction).andReturn(entityTransaction)
@@ -250,6 +258,7 @@ class ServletJpaTest {
   def testActionUpdate = {
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
+    expect(entityTransaction.isActive).andReturn(true)
     entityTransaction.commit
     replay(entityTransaction)
 
@@ -261,6 +270,7 @@ class ServletJpaTest {
     expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
     expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
     expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
+    expect(entityManager.getTransaction).andReturn(entityTransaction)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
 		entityManager.persist(anyObject)
     expect(entityManager.getTransaction).andReturn(entityTransaction)

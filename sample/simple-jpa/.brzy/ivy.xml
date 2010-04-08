@@ -25,7 +25,10 @@
 		<dependency org="org.hibernate" name="hibernate-validator" rev="4.0.2.GA" conf="compile"/>
 		<dependency org="org.aspectj" name="aspectjweaver" rev="1.6.8" conf="compile"/>
 		<dependency org="xerces" name="xercesImpl" rev="2.9.1" conf="compile"/>
+		<dependency org="org.fusesource.scalate" name="scalate-core" rev="1.0-SNAPSHOT" conf="compile"/>
+
 		<dependency org="org.brzy" name="brzy-all" rev="0.1" conf="compile"/>
+		
         
     <dependency org="org.easymock" name="easymock" rev="2.5.1" conf="test" />
     <dependency org="org.springframework" name="spring-test" rev="3.0.0.RELEASE" conf="test" />

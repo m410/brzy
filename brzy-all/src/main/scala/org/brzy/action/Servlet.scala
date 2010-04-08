@@ -17,7 +17,6 @@ class Servlet extends HttpServlet {
 
   private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    val ctx = getServletContext
     log.trace("request:{}",req.getRequestURI)
     val actionPath = findActionPath(req.getRequestURI,req.getContextPath)
 
@@ -28,54 +27,60 @@ class Servlet extends HttpServlet {
       val action = app.actions.find(pathCompare(actionPath)).get
       log.debug("{} >> {}",req.getRequestURI, action)
 
-      // TODO catch errors & throw 501?
-      val args = buildArgs(action, req)
-      val result = executeAction(action, args)
-      handleResults(action,result,req,res)
+      try {
+        val args = buildArgs(action, req)
+        val result = executeAction(action, args)
+        handleResults(action,result,req,res)
+      }
+      catch {
+        case unknown =>
+          log.error("Exception:" + unknown,unknown)
+          res.sendError(500)
+      }
     }
   }
 
   override def service(req: ServletRequest, res: ServletResponse) = {
     internal(req.asInstanceOf[HttpServletRequest],res.asInstanceOf[HttpServletResponse])
   }
-
-  override def service(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("service1")
-    internal(req,res)
-  }
-
-  override def doDelete(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doDelete")
-    internal(req,res)
-  }
-
-  override def doPut(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doPut")
-    internal(req,res)
-  }
-
-  override def doPost(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doPost")
-    internal(req,res)
-  }
-
-  override def doHead(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doHead")
-    internal(req,res)
-  }
-
-  override def doGet(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doGet")
-    internal(req,res)
-  }
-
-  override def doTrace(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doTrace")
-    internal(req,res)
-  }
-
-  override def doOptions(req: HttpServletRequest, res: HttpServletResponse) = {
-    log.trace("doOptions")
-    internal(req,res)
-  }
+//
+//  override def service(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("service1")
+//    internal(req,res)
+//  }
+//
+//  override def doDelete(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doDelete")
+//    internal(req,res)
+//  }
+//
+//  override def doPut(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doPut")
+//    internal(req,res)
+//  }
+//
+//  override def doPost(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doPost")
+//    internal(req,res)
+//  }
+//
+//  override def doHead(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doHead")
+//    internal(req,res)
+//  }
+//
+//  override def doGet(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doGet")
+//    internal(req,res)
+//  }
+//
+//  override def doTrace(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doTrace")
+//    internal(req,res)
+//  }
+//
+//  override def doOptions(req: HttpServletRequest, res: HttpServletResponse) = {
+//    log.trace("doOptions")
+//    internal(req,res)
+//  }
 }

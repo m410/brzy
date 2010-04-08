@@ -1,14 +1,15 @@
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "Brzy :: Person :: List" %>
 <% import org.brzy.sample.Person  %>
+<% import org.brzy.view.ViewFunctions._  %>
+<% implicit val req = request %>
 <h3>List Persons</h3>
 <div><a href="/brzy/persons/create">Create New Person</a></div>
 <table>
-	<tr><th>Header</th></tr>
-	<tr><td>Data</td></tr>
+	<tr><th>People</th></tr>
 	<% val persons = request.getAttribute("personList")
 	if(persons != Nil) {
-		for(person <- persons.asInstanceOf[Array[Person]]) { %>
-			<tr><td>${person.name}</td></tr>
+		for(person <- persons.asInstanceOf[List[Person]]) { %>
+			<tr><td><a href="${action("/persons/" + person.id)}">${person.name}</a></td></tr>
 		<% } }%>
 </table>

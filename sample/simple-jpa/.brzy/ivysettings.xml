@@ -12,6 +12,7 @@
 			<ibiblio name="java-net1" root="http://download.java.net/maven/1" />
       <ibiblio name="scala-tools" root="http://scala-tools.org/repo-releases" m2compatible="true"/>
       <ibiblio name="jboss" root="http://repository.jboss.com/maven2" m2compatible="true"/>
+      <ibiblio name="fusesource.snapshots" root="http://repo.fusesource.com/nexus/content/repositories/snapshots" m2compatible="true"/>
     </chain>
   </resolvers>
   <!--<modules>-->

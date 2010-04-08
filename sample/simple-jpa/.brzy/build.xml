@@ -140,8 +140,8 @@
   </path>
   <target name="compile" depends="resolve" description="Compile module brzy; production classes">
     <mkdir dir="${output.dir}"/>
-		<pathconvert pathsep=":" property="classpath.files" refid="default.classpath"/>
-		<echo>${classpath.files}</echo>
+		<!-- <pathconvert pathsep=":" property="classpath.files" refid="default.classpath"/> -->
+		<!-- <echo>${classpath.files}</echo> -->
     <scala:scalac destdir="${output.dir}">
       <src refid="brzy.module.sourcepath"/>
       <!--<classpath refid="brzy.module.classpath"/>-->

@@ -24,7 +24,9 @@ class ActionSupportTest {
     val result = buildArgs(action,request)
     assertNotNull(result)
     assertEquals(1,result.length)
-    assertEquals(1,result(0).asInstanceOf[Parameters].size)
+    val parameters: Parameters = result(0).asInstanceOf[Parameters]
+    assertEquals(1,parameters.size)
+    assertEquals("10",(parameters.get("id").get)(0))
   }
 
   @Test

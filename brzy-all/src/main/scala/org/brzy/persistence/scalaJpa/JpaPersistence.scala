@@ -1,7 +1,7 @@
 package org.brzy.persistence.scalaJpa
 
 import org.brzy.validator.Validity
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.LoggerFactory
 import org.brzy.persistence.RichQuery._
 import org.brzy.persistence.ThreadScope
 import org.brzy.action.args.Parameters
@@ -17,7 +17,7 @@ import org.brzy.util.ParameterConversion._
  */
 abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
 
-  val log:Logger = LoggerFactory.getLogger(clazz.getName)
+  val log = LoggerFactory.getLogger(clazz.getName)
   val countQuery = "select count(t.id) from " + clazz.getName + " t"
   val listQuery = "select distinct t from " + clazz.getName + " t"
 
