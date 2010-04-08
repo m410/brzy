@@ -16,6 +16,8 @@ class JpaPersistenceTest {
     val parameters = new Parameters()
 //    parameters.put("id",Array("1"))
     parameters.put("name",Array("john"))
+    parameters.put("submit",Array("Submit Save"))
+        
     val user = User.make(parameters)
     assertNotNull(user)
     assertEquals("john",user.name)
@@ -28,7 +30,7 @@ class JpaPersistenceTest {
     parameters.put("name",Array("john"))
     val user = new User
     val validity = user.validity()
-    validity.violations.foreach(println _)
     assertTrue(!validity.isValid)
   }
+
 }

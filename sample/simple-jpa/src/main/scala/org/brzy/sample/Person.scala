@@ -3,6 +3,8 @@ package org.brzy.sample
 import org.brzy.persistence.scalaJpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
+import javax.validation.constraints.{NotNull,Size}
+import reflect.BeanProperty
 
 /**
  * @author Michael Fortin
@@ -14,9 +16,12 @@ import javax.persistence._
 //@NamedQueries({@NamedQuery( name="test", query="select u from User u")})
 class Person {
 
-  @Id var id:Long = _
-  @Version var version:Int = _
-  @Basic var name:String = _
+  @Id  @GeneratedValue(strategy = GenerationType.IDENTITY) @BeanProperty
+	var id:java.lang.Long = _
+  
+	@Version @BeanProperty var version:java.lang.Integer = _
+  
+	@Basic @NotNull @Size(max=30) @BeanProperty var name:String = _
 
   /*
   @OneToMany{val mappedBy = "project",
@@ -34,4 +39,4 @@ class Person {
   */
 }
 
-object Person extends JpaPersistence[Person,Long](classOf[Person])
+object Person extends JpaPersistence[Person,java.lang.Long](classOf[Person])

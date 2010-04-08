@@ -27,8 +27,9 @@ class PersonController {
  		val validity:Validity = person.validity()
 
 		if(validity.isValid) {
-      person.save
-      (Redirect("/person/"+person.id), Flash("flash.1","Person saved"), Model("person"->person))
+      person.saveAndCommit
+			log.debug("person: {}",person)
+      (Redirect("/person/" + person.id), Flash("flash.1", "Person saved"), Model("person"->person))
     }
 		else
       (View("/person/create.jsp"),Model("person"->person, "errors"->validity))

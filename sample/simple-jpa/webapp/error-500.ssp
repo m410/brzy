@@ -1,16 +1,16 @@
+<% import org.brzy.view.ViewFunctions._  %>
+<% implicit val req = request %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Brzy App: Error</title>
+  <title>Brzy Error: 500</title>
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
-	<!--[if IE]><script src="js/html5.js"></script><![endif]-->
-	<link rel="stylesheet" href="css/main.css" type="text/css" >
-	<link rel="stylesheet" type="text/css" media="all" href="css/ie6.css">
-	<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">
-  <!--[if lt IE 8]><link rel="stylesheet" href="cs/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-	<link rel="stylesheet" href="css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="css/brzy.css" type="text/css" media="screen, projection">
+	<!--[if IE]><script src="${js("/html5.js")}"></script><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/blueprint/print.css")}" type="text/css" media="print">
+  <!--[if lt IE 8]><link rel="stylesheet" href="${css("/blueprint/ie.css")}" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/plugins/fancy-type/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/brzy.css")}" type="text/css" media="screen, projection">
 </head>
 <body>
 	<div id="background">
@@ -21,7 +21,7 @@
 					<h1>Brzy App</h1>
 				</header>
 				<nav class="bot-border">
-					Navigation: <a href="${action("/persons",request)}">Persons</a>
+					Navigation: <a href="${action("/persons")}">Persons</a>
 				</nav>
 				<h1>Brzy App: ERROR 500</h1>
 				<p>Error page</p>

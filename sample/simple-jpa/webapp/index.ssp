@@ -1,8 +1,8 @@
 <%  import org.brzy.view.ViewFunctions._  
 import org.brzy.application.WebApp  
 import scala.collection.JavaConversions._
-import javax.servlet.http.HttpServletRequest
-implicit def withRequest(request:HttpServletRequest) = request  %>
+import javax.servlet.http.HttpServletRequest %>
+<%implicit val req = request %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,14 +11,12 @@ implicit def withRequest(request:HttpServletRequest) = request  %>
 	<meta name="description" content="...summary of web page...">
 	<meta name="keywords"  content="brzy, web-framework, scala">
 	<meta name="robots" content="all"> 
-	<!--[if IE]><script src="js/html5.js"></script><![endif]-->
-	<link rel="stylesheet" href="css/main.css" type="text/css" >
-	<link rel="stylesheet" type="text/css" media="all" href="css/ie6.css">
-	<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">
-  <!--[if lt IE 8]><link rel="stylesheet" href="cs/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-	<link rel="stylesheet" href="css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="css/brzy.css" type="text/css" media="screen, projection">
+	<!--[if IE]><script src="${js("/html5.js")}"></script><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/blueprint/print.css")}" type="text/css" media="print">
+  <!--[if lt IE 8]><link rel="stylesheet" href="${css("/blueprint/ie.css")}" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/plugins/fancy-type/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/brzy.css")}" type="text/css" media="screen, projection">
 </head>
 <body>
 <div id="background">
@@ -29,24 +27,21 @@ implicit def withRequest(request:HttpServletRequest) = request  %>
 			<h1>Brzy App</h1>
 		</header>
 		<nav class="bot-border">
-			Navigation: <a href="${action("/persons",request)}">Persons</a>
+			Navigation: <a href="${action("/persons")}">Persons</a>
 		</nav>
 		<div class="span-18">
 			<article>
 			<h2>Actions</h2>
 			<ul>
-				<% val actions = servletContext.getAttribute("application").asInstanceOf[WebApp].actions
-				if(actions != Nil) {
-					for(action <- actions) { %>
+				<% for(action <- servletContext.getAttribute("application").asInstanceOf[WebApp].actions) { %>
 						<li>${action}</li>
-				<% } }%>
+				<% }%>
 			</ul>
 		</article>
 		<article>
 		<h2>Controllers</h2>
 		<ul>
-			<% val controllers = servletContext.getAttribute("application").asInstanceOf[WebApp].controllers
-				for(controller <- controllers) { %>
+			<% for(controller <- servletContext.getAttribute("application").asInstanceOf[WebApp].controllers) { %>
 					<li>${controller}</li>
 			<% } %>
 		</ul>
@@ -54,27 +49,23 @@ implicit def withRequest(request:HttpServletRequest) = request  %>
 		<article>
 		<h2>Services</h2>
 		<ul>
-			<% val services = servletContext.getAttribute("application").asInstanceOf[WebApp].services
-				for(service <- services) { %>
+			<% for(service <- servletContext.getAttribute("application").asInstanceOf[WebApp].services) { %>
 					<li>${service}</li>
 			<% } %>
 		</ul>
 	</article>
 		<article>
 			<h2>Request Scope Attributes</h2>
-			${request}
 				<ul>
-				<% val reqAttrs = new JEnumerationWrapper(request.getAttributeNames)
-				for(reqAttr <- reqAttrs) { %>
+				<%for(reqAttr <- new JEnumerationWrapper(request.getAttributeNames)) {%>
 						<li>${reqAttr} = ${request.getAttribute(reqAttr.asInstanceOf[String])}</li>
-				<% } %> 
+				<%}%> 
 				</ul>
 		</article>
 		<article>
 			<h2>Headers</h2>
 			<ul>
-			<% val enumer = new JEnumerationWrapper(request.getHeaderNames)
-			for(headerName <- enumer) { %>
+			<% for(headerName <- new JEnumerationWrapper(request.getHeaderNames)) { %>
 					<li>${headerName} = ${request.getHeader(headerName.asInstanceOf[String])}</li>
 			<% } %> 
 			</ul>
@@ -90,8 +81,7 @@ implicit def withRequest(request:HttpServletRequest) = request  %>
 		<article>
 			<h2>Session Scope Attributes</h2>
 			<ul>
-			<% val sess = new JEnumerationWrapper(request.getSession.getAttributeNames)
-			for(sessAttr <- sess) { %>
+			<%  for(sessAttr <- new JEnumerationWrapper(request.getSession.getAttributeNames)) { %>
 					<li>${sessAttr}</li>
 			<% } %> 
 			</ul>
@@ -99,8 +89,7 @@ implicit def withRequest(request:HttpServletRequest) = request  %>
 		<article>
 			<h2>Application Scope Attributes</h2>
 			<ul>
-			<% val app = new JEnumerationWrapper(servletContext.getAttributeNames)
-			for(appAttr <- app) { %>
+			<% for(appAttr <- new JEnumerationWrapper(servletContext.getAttributeNames)) { %>
 					<li>${appAttr}</li>
 			<% } %> 
 			</ul>

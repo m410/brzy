@@ -1,19 +1,18 @@
 <%@ var body: String %>
 <%@ var title: String = "Some Default Title" %>
 <% import org.brzy.view.ViewFunctions._  %>
+<% implicit val req = request %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <title>${title}</title>
-	<!--[if IE]><script src="${resource("/js/html5.js",request)}"></script><![endif]-->
-	<link rel="stylesheet" href="${resource("/css/main.css",request)}" type="text/css" >
-	<link rel="stylesheet" href="${resource("/css/ie6.css",request)}" type="text/css" media="all" >
-	<link rel="stylesheet" href="${resource("/css/blueprint/screen.css",request)}" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="${resource("/css/blueprint/print.css",request)}" type="text/css" media="print">
-  <!--[if lt IE 8]><link rel="stylesheet" href="${resource("/css/blueprint/ie.css",request)}" type="text/css" media="screen, projection"><![endif]-->
-	<link rel="stylesheet" href="${resource("/css/blueprint/plugins/fancy-type/screen.css",request)}" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="${resource("/css/brzy.css",request)}" type="text/css" media="screen, projection">
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+	<!--[if IE]><script src="${js("/html5.js")}"></script><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/blueprint/print.css")}" type="text/css" media="print">
+  <!--[if lt IE 8]><link rel="stylesheet" href="${css("/blueprint/ie.css")}" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/plugins/fancy-type/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/brzy.css")}" type="text/css" media="screen, projection">
 </head>
 <body>
 	<div id="background">

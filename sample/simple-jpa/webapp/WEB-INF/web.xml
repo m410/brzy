@@ -53,4 +53,8 @@
     <error-code>500</error-code>
     <location>/error-500.ssp</location>
   </error-page>
+	<error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error-500.ssp</location>
+  </error-page>
 </web-app>

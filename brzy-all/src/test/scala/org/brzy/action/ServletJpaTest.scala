@@ -257,7 +257,10 @@ class ServletJpaTest {
     val mockUser = new User
     mockUser.id=10
     mockUser.name="Bob Jones"
-    expect(entityManager.find(classOf[User],"10")).andReturn(mockUser)
+    expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
+    expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
+    expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
+    expect(entityManager.find(classOf[User],10L)).andReturn(mockUser)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
 		entityManager.persist(anyObject)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
