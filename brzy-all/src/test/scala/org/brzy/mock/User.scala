@@ -34,4 +34,6 @@ class User {
   */
 }
 
-object User extends JpaPersistence[User,Long](classOf[User])
+object User extends JpaPersistence[User,Long](classOf[User]) {
+  
+}

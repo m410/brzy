@@ -5,6 +5,8 @@ import org.slf4j.{LoggerFactory, Logger}
 import org.brzy.persistence.RichQuery._
 import org.brzy.persistence.ThreadScope
 import org.brzy.action.args.Parameters
+import javax.validation.{Validator, ConstraintViolation, ValidatorFactory, Validation}
+import java.lang.reflect.Method
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
@@ -12,7 +14,7 @@ import org.brzy.action.args.Parameters
  * another persistence api that may be easier to setup
  * http://max-l.github.com/Squeryl/getting-started.html
  */
-abstract class JpaPersistence[T,PK](val clazz:Class[T]) {
+abstract class JpaPersistence[T <:AnyRef,PK](val clazz:Class[T]) {
 
   val log:Logger = LoggerFactory.getLogger(clazz.getName)
   val countQuery = "select count(t.id) from " + clazz.getName + " t"
@@ -23,9 +25,11 @@ abstract class JpaPersistence[T,PK](val clazz:Class[T]) {
    */
   class EntityCrudOps[T](t:T) {
 
+    val validator:Validator = Validation.buildDefaultValidatorFactory.getValidator
+
     def validity() ={
       log.trace("validity")
-      new Validity()
+      Validity[T](validator.validate(t))
     }
 
     def save() = {
@@ -68,9 +72,22 @@ abstract class JpaPersistence[T,PK](val clazz:Class[T]) {
         .getTypedList[T]
 	}
 
-	def make(params:Parameters) = {
-    var instance = clazz.newInstance
-    // set the fields from the params
+	def make(params:Parameters):T = {
+    log.debug("make with params: {}",params)
+
+    val instance =
+      if(params.exists(p => p._1 equals "id"))
+        get((params.get("id").get)(0).asInstanceOf[PK])
+      else
+        clazz.newInstance
+
+    params.foreach(p => applyParam(p, instance))
     instance
 	}
+
+  private[scalaJpa] def applyParam(nvp:(String, Array[String]), inst:T):Unit = {
+    val method = inst.getClass.getMethods.find(mtd => mtd.getName == nvp._1 + "_$eq")
+        .getOrElse(error("No property by the name:" + nvp._1))
+    method.invoke(inst,nvp._2(0))
+  }
 }

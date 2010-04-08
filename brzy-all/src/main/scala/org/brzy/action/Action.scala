@@ -9,7 +9,8 @@ import java.util.regex.Pattern
  * @author Michael Fortin
  * @version $Id: $
  */
-class Action(val path:String, val actionMethod:Method, val inst:AnyRef ) extends Ordered[Action] {
+class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val viewType:String )
+        extends Ordered[Action] {
 
   val returnTypes =  actionMethod.getReturnType
 
@@ -22,11 +23,12 @@ class Action(val path:String, val actionMethod:Method, val inst:AnyRef ) extends
         clazz.getSimpleName
       else
         clazz.getSimpleName.substring(0,clazz.getSimpleName.indexOf("Controller"))
-
-    "/" + folder.toLowerCase + "/"+ actionMethod.getName + ".ssp"
+    // TODO should be configurable
+    "/" + folder.toLowerCase + "/"+ actionMethod.getName + viewType
   }
 
-  private val strPattern = "^" + path.replaceAll("\\{.*?\\}","(.*?)") + "$"
+
+  private val strPattern = "^" + path.replaceAll("""\{.*?\}""","""(.*?)""") + "$"
   val pattern = strPattern.r
 
   def matchParameters(url:String) = {

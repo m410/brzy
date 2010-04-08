@@ -19,7 +19,7 @@ webapp_context: testapp
 
 #
 # view setup
-# [velocity,ssp]
+# [jsp,ssp]
 # [html4,html5,xhtml,xhtml2,xhtml5]
 view_type:ssp
 view_html_version: html5

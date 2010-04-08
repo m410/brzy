@@ -1,18 +1,38 @@
 <%@ var body: String %>
 <%@ var title: String = "Some Default Title" %>
+<% import org.brzy.view.ViewFunctions._  %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
   <title>${title}</title>
-	<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<link rel="stylesheet" href="css/main.css" type="text/css" />
-	<link rel="stylesheet" type="text/css" media="all" href="css/ie6.css"/>
+	<!--[if IE]><script src="${resource("/js/html5.js",request)}"></script><![endif]-->
+	<link rel="stylesheet" href="${resource("/css/main.css",request)}" type="text/css" >
+	<link rel="stylesheet" href="${resource("/css/ie6.css",request)}" type="text/css" media="all" >
+	<link rel="stylesheet" href="${resource("/css/blueprint/screen.css",request)}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${resource("/css/blueprint/print.css",request)}" type="text/css" media="print">
+  <!--[if lt IE 8]><link rel="stylesheet" href="${resource("/css/blueprint/ie.css",request)}" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="${resource("/css/blueprint/plugins/fancy-type/screen.css",request)}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${resource("/css/brzy.css",request)}" type="text/css" media="screen, projection">
 </head>
 <body>
-<h1>Brzy App</h1>
-<p>layout header goes here...</p>
-<%= body %>
-<p>layout footer goes here...</p>
+	<div id="background">
+		<div id="wrapper">	
+			<div id="wrapper2">
+			<div class="container">
+			<header class="span-24 bot-border">
+				<h1>Brzy App</h1>
+			</header>
+			<nav class="bot-border">
+				Navigation
+			</nav>
+			<%=body%>
+			<footer class="top-border">
+				Brzy Web Framework
+			</footer>
+		</div>
+		</div>
+		</div>
+	</div>
 </body>
 </html>

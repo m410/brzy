@@ -20,14 +20,14 @@ class ActionTest {
     val ctlr = new UserController()
     val clazz = ctlr.getClass
     val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/", method, ctlr)
-    val action1: Action = new Action("users/{id}/companies/{cid}", method, ctlr)
-    val action2: Action = new Action("users/save", method, ctlr)
-    val action3: Action = new Action("users/create", method, ctlr)
-    val action4: Action = new Action("users/{id}/delete", method, ctlr)
-    val action5: Action = new Action("users/{id}/update", method, ctlr)
-    val action6: Action = new Action("users/{id}/edit", method, ctlr)
-    val action7: Action = new Action("users/{id}", method, ctlr)
+    val action: Action = new Action("/users", method, ctlr, ".jsp")
+    val action1: Action = new Action("/users/{id}/companies/{cid}", method, ctlr, ".jsp")
+    val action2: Action = new Action("/users/save", method, ctlr, ".jsp")
+    val action3: Action = new Action("/users/create", method, ctlr, ".jsp")
+    val action4: Action = new Action("/users/{id}/delete", method, ctlr, ".jsp")
+    val action5: Action = new Action("/users/{id}/update", method, ctlr, ".jsp")
+    val action6: Action = new Action("/users/{id}/edit", method, ctlr, ".jsp")
+    val action7: Action = new Action("/users/{id}", method, ctlr, ".jsp")
     val actions = SortedSet(action, action1, action2, action3, action4, action5, action6, action7)
 
     val array = new Array[Action](8)
@@ -48,8 +48,8 @@ class ActionTest {
     val ctlr = new UserController()
     val clazz = ctlr.getClass
     val method = clazz.getMethods()(1)
-    val action: Action = new Action("users/", method, ctlr)
-    assertEquals("/user/list.ssp",action.defaultView)
+    val action: Action = new Action("users/", method, ctlr, ".jsp")
+    assertEquals("/user/list.jsp",action.defaultView)
   }
 
   @Test
@@ -57,7 +57,7 @@ class ActionTest {
     val ctlr = new UserController()
     val clazz = ctlr.getClass
     val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/{id}/items/{item}", method, ctlr)
+    val action: Action = new Action("users/{id}/items/{item}", method, ctlr, ".jsp")
 
     val path = "users/1232/items/234543"
     val result = action.pattern.findFirstIn(path)
@@ -74,7 +74,7 @@ class ActionTest {
     val ctlr = new UserController()
     val clazz = ctlr.getClass
     val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/{id}/items/{item}", method, ctlr)
+    val action: Action = new Action("users/{id}/items/{item}", method, ctlr, ".jsp")
 
     val path = "users/1232/items/234543"
     val result = action.matchParameters(path)
@@ -89,7 +89,7 @@ class ActionTest {
     val ctlr = new UserController()
     val clazz = ctlr.getClass
     val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/{id}/items/{item}", method, ctlr)
+    val action: Action = new Action("users/{id}/items/{item}", method, ctlr, ".jsp")
 
     val path = "users/1232/items/234543"
     val result = action.matchParameterIds

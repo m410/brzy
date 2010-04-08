@@ -29,13 +29,13 @@ class ServletJpaTest {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef]()
     override lazy val actions = SortedSet(
-      new Action("/users/", controllerClass.getMethods()(1), controller),
-      new Action("/users/create", controllerClass.getMethods()(5), controller),
-      new Action("/users/save", controllerClass.getMethods()(2), controller),
-      new Action("/users/{id}", controllerClass.getMethods()(0), controller),
-      new Action("/users/{id}/edit", controllerClass.getMethods()(7), controller),
-      new Action("/users/{id}/delete", controllerClass.getMethods()(3), controller),
-      new Action("/users/{id}/update", controllerClass.getMethods()(6), controller))
+      new Action("/users/", controllerClass.getMethods()(1), controller, ".jsp"),
+      new Action("/users/create", controllerClass.getMethods()(5), controller, ".jsp"),
+      new Action("/users/save", controllerClass.getMethods()(2), controller, ".jsp"),
+      new Action("/users/{id}", controllerClass.getMethods()(0), controller, ".jsp"),
+      new Action("/users/{id}/edit", controllerClass.getMethods()(7), controller, ".jsp"),
+      new Action("/users/{id}/delete", controllerClass.getMethods()(3), controller, ".jsp"),
+      new Action("/users/{id}/update", controllerClass.getMethods()(6), controller, ".jsp"))
   }
 //	controllerClass.getMethods.foreach(println _)
 
@@ -189,6 +189,7 @@ class ServletJpaTest {
     replay(sessionFactory)
 
     val request = new MockHttpServletRequest("POST", "/users/save")
+    request.setParameter("name","John Doe")
     val response = new MockHttpServletResponse()
 
     val servletContext = new MockServletContext
@@ -253,6 +254,10 @@ class ServletJpaTest {
     replay(entityTransaction)
 
     val entityManager = createMock(classOf[EntityManager])
+    val mockUser = new User
+    mockUser.id=10
+    mockUser.name="Bob Jones"
+    expect(entityManager.find(classOf[User],"10")).andReturn(mockUser)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
 		entityManager.persist(anyObject)
     expect(entityManager.getTransaction).andReturn(entityTransaction)
@@ -264,6 +269,7 @@ class ServletJpaTest {
 
     val request = new MockHttpServletRequest("POST", "/users/10/update")
     request.setParameter("id","10")
+    request.setParameter("name","John Doe")
     val response = new MockHttpServletResponse()
 
     val servletContext = new MockServletContext

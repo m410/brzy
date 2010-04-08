@@ -1,15 +1,14 @@
 package org.brzy.sample
 
 import javax.ws.rs.Path
+import org.brzy.action.returns.View
 
 /**
  *
  */
-@Path("/")
+@Path("")
 class HomeController {
 	
-	@Path("")
-	def index = {
-		
-	}
+	@Path("") 
+	def index = View("/index.ssp")
 }

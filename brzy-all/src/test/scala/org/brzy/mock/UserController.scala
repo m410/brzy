@@ -24,7 +24,7 @@ class UserController {
   @POST @Path("save")
 	def save(params:Parameters)() = {
 	  def user:User = User.make(params)
- 		val validity:Validity = user.validity()
+ 		val validity = user.validity()
 
 		if(validity.isValid) {
       user.save
@@ -40,7 +40,7 @@ class UserController {
 	@Path("{id}/update")
 	def update(params:Parameters) = {
 		def user = User.make(params)
-    val validity:Validity = user.validity()
+    val validity = user.validity()
 
 		if(validity.isValid) {
       user.save

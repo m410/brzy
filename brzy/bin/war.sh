@@ -1,2 +1,2 @@
 #!/bin/sh
-ant -f .brzy/build.xml war
+ant -f .brzy/build.xml -q war

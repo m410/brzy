@@ -39,7 +39,7 @@ class BrzyControllerScanner(val packageName:String) {
       for(method <- clazz.getMethods if method.getAnnotation(classOf[Path]) != null) {
         val methodPath = method.getAnnotation(classOf[Path])
         val pathValue = classPath.value +"/" +  methodPath.value
-        list += new Action(pathValue,method, instance)
+        list += new Action(pathValue,method, instance, ".jsp") // TODO fix jsp
       }
     })
     SortedSet[Action]() ++ list.toIterable

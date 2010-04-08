@@ -27,13 +27,13 @@ class ServletSquerylTest {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef](controller)
     override lazy val actions = SortedSet(
-      new Action("persons/", controllerClass.getMethods()(1), controller),
-      new Action("persons/create", controllerClass.getMethods()(3), controller),
-      new Action("persons/save", controllerClass.getMethods()(2), controller),
-      new Action("persons/{id}", controllerClass.getMethods()(0), controller),
-      new Action("persons/{id}/edit", controllerClass.getMethods()(5), controller),
-      new Action("persons/{id}/delete", controllerClass.getMethods()(3), controller),
-      new Action("persons/{id}/update", controllerClass.getMethods()(4), controller))
+      new Action("persons/", controllerClass.getMethods()(1), controller, ".jsp"),
+      new Action("persons/create", controllerClass.getMethods()(3), controller, ".jsp"),
+      new Action("persons/save", controllerClass.getMethods()(2), controller, ".jsp"),
+      new Action("persons/{id}", controllerClass.getMethods()(0), controller, ".jsp"),
+      new Action("persons/{id}/edit", controllerClass.getMethods()(5), controller, ".jsp"),
+      new Action("persons/{id}/delete", controllerClass.getMethods()(3), controller, ".jsp"),
+      new Action("persons/{id}/update", controllerClass.getMethods()(4), controller, ".jsp"))
   }
 
   DbInit.init

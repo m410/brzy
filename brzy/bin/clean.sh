@@ -1,2 +1,2 @@
 #!/bin/sh
-ant -f .brzy/build.xml clean
+ant -f .brzy/build.xml -q clean

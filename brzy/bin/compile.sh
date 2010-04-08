@@ -1,2 +1,2 @@
 #!/bin/sh
-ant -f .brzy/build.xml $2
+ant -f .brzy/build.xml -q $2

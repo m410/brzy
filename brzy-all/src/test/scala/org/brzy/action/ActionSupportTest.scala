@@ -1,13 +1,12 @@
 package org.brzy.action
 
 import args.Parameters
-import org.springframework.mock.web.MockHttpServletRequest
 import org.brzy.mock.UserController
-import javax.servlet.http.HttpServletRequest
-import org.easymock.EasyMock._
 import org.junit.Test
 import org.junit.Assert._
 import ActionSupport._
+import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
+import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest}
 
 /**
  * @author Michael Fortin
@@ -17,10 +16,10 @@ class ActionSupportTest {
 
   @Test
   def testBuildArgs = {
-    val request = new MockHttpServletRequest("GET", "users/10") // should be /users/
+    val request = new MockHttpServletRequest("GET", "/users/10") // should be /users/
 
     val ctlr = new UserController()
-    val action = new Action("users/{id}", ctlr.getClass.getMethods()(0), ctlr)
+    val action = new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
 
     val result = buildArgs(action,request)
     assertNotNull(result)
@@ -30,15 +29,54 @@ class ActionSupportTest {
 
   @Test
   def testParseResults = {
-    val clazz: Class[HttpServletRequest] = classOf[HttpServletRequest]
-    val request = createMock(clazz)
-    request.setAttribute("key","value")
-    replay(request)
 
-    val tup = ("key","value")
+    val request = new MockHttpServletRequest(new MockServletContext()) {
+			override def getRequestDispatcher(path:String):RequestDispatcher = {
+				new MockRequestDispatcher(path) {
+          assertEquals("/user/get.jsp",path)
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
+						assertTrue("Correct rc attribute", fwdReq.getAttribute("rc") == null)
+					}
+				}
+			}
+		}
 
-    handleResults(tup, request, null, null)
+    val tup = ("attributeKey","attributeValue")
+    val ctlr = new UserController()
+    val action = new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
+    handleResults(action, tup, request, null)
+    assertNotNull(request.getAttribute("attributeKey"))
+  }
 
-    verify(request)
+  @Test
+  def testFindActionPath = {
+    val context = "/home"
+    val uri = "/home/users"
+    val service = new Servlet
+    assertEquals("/users", findActionPath(uri,context))
+  }
+
+  @Test
+  def testFindActionPath2 = {
+    val context = "/home"
+    val uri = "/home/user.brzy"
+    val service = new Servlet
+    assertEquals("/user", findActionPath(uri,context))
+  }
+
+  @Test
+  def testFindActionPath3 = {
+    val context = ""
+    val uri = "/home/10/create.brzy"
+    val service = new Servlet
+    assertEquals("/home/10/create", findActionPath(uri,context))
+  }
+
+  @Test
+  def testFindActionPath4 = {
+    val context = "/brzy"
+    val uri = "/brzy/.brzy"
+    val service = new Servlet
+    assertEquals("/", findActionPath(uri,context))
   }
 }

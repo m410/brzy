@@ -22,7 +22,7 @@ class Filter extends SFilter {
     val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
 
     if(!(pattern findFirstMatchIn uri).isEmpty) {
-      log.debug("doFilter: {}",uri)
+      log.trace("doFilter: {}",uri)
       chain.doFilter(req,res)
     }
     else {
@@ -33,7 +33,7 @@ class Filter extends SFilter {
         else
           uri.substring(ctx.length,uri.length)
       
-      log.debug("forward: {}",forward)
+      log.trace("forward: {}",forward)
       req.getRequestDispatcher(forward + ".brzy").forward(req,res)
     }
   }
