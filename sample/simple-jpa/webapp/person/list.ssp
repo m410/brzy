@@ -1,8 +1,9 @@
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "Brzy :: Person :: List" %>
-<% import org.brzy.sample.Person  %>
 <% import org.brzy.view.ViewFunctions._  %>
+<% import org.brzy.sample.Person %>
 <% implicit val req = request %>
+<% render("../layouts/nav.ssp")%>
 <h3>List Persons</h3>
 <div><a href="/brzy/persons/create">Create New Person</a></div>
 <table>

@@ -1,7 +1,7 @@
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "Brzy :: Person :: Create" %>
-<% import org.brzy.view.ViewFunctions._  
-import org.brzy.sample.Person %>
+<% import org.brzy.view.ViewFunctions._  %>
+<% render("../layouts/nav.ssp")%>
 <h3>Create Page</h3>
 <form action="/brzy/persons/save" method="POST">
 <fieldset>

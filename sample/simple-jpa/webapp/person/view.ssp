@@ -1,6 +1,15 @@
-<% attributes("layout") = "/layouts/custom.ssp" %>
+<% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "Brzy :: Person :: View" %>
-<% val person = request.getAttribute("person") %>
+<% import org.brzy.view.ViewFunctions._  %>
+<% import org.brzy.sample.Person %>
+<% import org.brzy.util.FlashMessage %>
+<% val person = request.getAttribute("person").asInstanceOf[Person] %>
+<% implicit val req = request %>
+<% render("../layouts/nav.ssp")%>
+<% if(request.getAttribute("flash-message") != null){%>
+<div class="message">${request.getAttribute("flash-message").asInstanceOf[FlashMessage].show}</div>
+<% } %>
 <h3>View Person</h3>
-<p>Person id: ${person.id}</p>
-<p>Person name: ${person.name}</p>
+<p>Person id: ${person.id}<br>
+Person name: ${person.name}<br>
+<a href="${action("/persons/" +person.id+"/edit")}">Update</a>

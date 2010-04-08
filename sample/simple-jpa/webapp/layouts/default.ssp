@@ -22,9 +22,7 @@
 			<header class="span-24 bot-border">
 				<h1>Brzy App</h1>
 			</header>
-			<nav class="bot-border">
-				Navigation
-			</nav>
+
 			<%=body%>
 			<footer class="top-border">
 				Brzy Web Framework

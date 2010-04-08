@@ -97,7 +97,7 @@ class ServletJpaTest {
 		}
 
 
-    val request = new MockHttpServletRequest("GET", "/users/10") // should be /users/
+    val request = new MockHttpServletRequest("GET", "/users/10.brzy") // should be /users/
     request.setParameter("id","10")
     assertEquals(1,request.getParameterMap.size)
     assertEquals("10",request.getParameterMap.get("id")(0))
