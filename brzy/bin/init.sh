@@ -1,8 +1,11 @@
 #!/bin/sh
-exec scala "$0" `pwd` $BRZY_HOME 
+exec scala-2.8 -cp $BRZY_HOME/lib/brzy-all-0.1.jar:$BRZY_HOME/lib/jyaml-1.3.jar "$0" `pwd` $BRZY_HOME 
 !#
 
-import java.io.File
+import java.io._
+import org.brzy.build._
+import org.brzy.config.{Config,Builder}
+import scala.io.Source
 
 object Initialize extends Application {
   println(" Initializing project")
@@ -24,30 +27,42 @@ object Initialize extends Application {
 	
 	// load configuration
 	val brzyConfig = new File(args(0),"brzy-app.b.yml")
-	// if(!brzyConfig.exists)
-	// 	throw new RuntimeException("This is not a brzy application directory, run 'brzy create-app' first")
-	
-	// dowload default jars
-	// ant, ivy, scala-compiler, scala-library	
-	// 					val ivy = Source.fromUrl("")
-	// val url = new java.net.URL("http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/sdn.csv")
-	// 	val urlConnection = url.openConnection
-	// 	urlConnection.connect()
-	// 	InputStream input = url.openStream
-	//  input.close()
-	// 		
+	val config = new Builder(brzyConfig,"development").config // dev is placeholder
+		
 	// create default build scripts
 	val brzyBuild = new File(args(1),"templates/project/build.xml")	
-	val to = new File(args(0),".brzy/build.xml")	
-	val out = new java.io.BufferedWriter( new java.io.FileWriter(to) );
-  io.Source.fromFile(brzyBuild).getLines.foreach(s => out.write(s,0,s.length));
-  out.close()
+	val to = new File(brzyDir,"build.xml")	
+	val source = new FileInputStream(brzyBuild).getChannel
+	val destination = new FileOutputStream(to).getChannel
+ 	destination.transferFrom(source, 0, source.size())
+	source.close
+	destination.close
+
 
 	// generate build.properties
-	// generate ivy.xml
-	// generate ivysettings.xml
+	val buildProperties = new BuildProperties(config)
+	val bpFile = new File(brzyDir,"build.properties")
+	val bpOut = new BufferedWriter(new FileWriter(bpFile))
+	bpOut.write(buildProperties.content)
+	bpOut.close
 	
-	// download plugins
+	// generate ivy.xml
+	val ivyXml = new IvyXml(config)
+	val ixFile = new File(brzyDir,"ivy.xml")
+	val ixOut = new BufferedWriter(new FileWriter(ixFile))
+	ixOut.write(ivyXml.body.toString)
+	ixOut.close
+	
+	// generate ivysettings.xml
+	val ivysettingsXml = new IvySettingsXml(config)
+	val isxFile = new File(brzyDir,"ivysettings.xml")
+	val isxOut = new BufferedWriter(new FileWriter(isxFile))
+	isxOut.write(ivysettingsXml.body.toString)
+	isxOut.close
+	
+	// write timestamp
+	
+	// copy scala jar files
 	
 }
 Initialize.main(args)

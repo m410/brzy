@@ -5,7 +5,7 @@
 # http://jyaml.sourceforge.net/
 #
 --- !org.brzy.config.Config
-environment:default
+environment: default
 version: 1.0.0
 name: Test app
 author: Fred
@@ -28,7 +28,7 @@ application_properties:
 # view setup
 # [velocity,ssp]
 # [html4,html5,xhtml,xhtml2,xhtml5]
-view_type:ssp
+view_type: .ssp
 view_html_version: html5
 
 #
@@ -36,8 +36,8 @@ view_html_version: html5
 # scope: organization:name:type:version
 #
 dependencies:
-  - runtime: org.apache.wicket:wicket:jar:1.4-rc6
-  - runtime: org.fusesource.scalate:calate-core:jar:1.0-SNAPSHOT
+  - lib: compile:org.apache.wicket:wicket:jar:1.4-rc6
+  - lib: compile:org.fusesource.scalate:calate-core:jar:1.0-SNAPSHOT
 
 #
 # Dependency Management
@@ -66,7 +66,7 @@ db_generation: false
 #  mechanism:jpa
 
 data_source:
-  name:something
+  name: something
   driver_class: org.postgresql.Driver
   user_name: test
   password:
@@ -74,19 +74,33 @@ data_source:
 
 #
 # Logging
-#[log4j,jul]
+#[logback,log4j,jul]
 logging:
-  provider: log4j
-#  appenders:!String[]
-#    - output
-#  loggers:!String[]
-#    = debug
-
+  provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout_class: ch.qos.logback.classic.PatternLayout
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+    - name: FILE
+      appender_class: ch.qos.logback.core.rolling.RollingFileAppender
+      file: logs/brzy.log
+      rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+      file_name_pattern: "brzy.%d{yyyy-MM-dd}.log"
+      layout: ch.qos.logback.classic.PatternLayout
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: [STDOUT]
 #
 # override defaults for any environment
 #
 environment_overrides: 
   - environment: developement
-    migration_enabled:false
+    migration_enabled: false
   - environment: test
   - environment: production
+

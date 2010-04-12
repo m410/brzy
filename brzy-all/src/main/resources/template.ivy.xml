@@ -6,10 +6,10 @@
   <configurations defaultconfmapping="*->*,!sources,!javadoc" >
     <conf name="provided"  />
     <conf name="compile" extends="provided"/>
-    <conf name="test" extends="default" />
+    <conf name="test" extends="compile" />
     <conf name="tomcat"  />
   </configurations>
   <dependencies>
-  <!-- add dependencies -->
+  
   </dependencies>
 </ivy-module>

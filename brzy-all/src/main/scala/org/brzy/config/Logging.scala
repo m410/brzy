@@ -8,22 +8,28 @@ import reflect.BeanProperty
  */
 class Logging {
   @BeanProperty var provider:String = _
-  @BeanProperty var appenders:Array[String] = _
-  @BeanProperty var loggers:Array[String] = _
-  @BeanProperty var root:Array[String] = _
-  // root has a level and appender-ref's
+  @BeanProperty var appenders:Array[Appender] = _
+  @BeanProperty var loggers:Array[Logger] = _
+  @BeanProperty var root:Root = _
 }
 
 class Appender {
-  // name class
-  // layout class
-  // pattern
-  // file
-  // rollingPolicy
-  // fileNamePattern
-  
+  @BeanProperty var name:String = _
+  @BeanProperty var appender_class:String = _
+  @BeanProperty var layout:String = _
+  @BeanProperty var pattern:String = _
+
+  @BeanProperty var file:String = _
+  @BeanProperty var rolling_policy:String = _
+  @BeanProperty var file_name_pattern:String = _
 }
 
 class Logger {
-  // name & level
+  @BeanProperty var name:String =_
+  @BeanProperty var level:String =_
+}
+
+class Root {
+  @BeanProperty var level:String =_
+  @BeanProperty var ref:Array[String] =_
 }

@@ -1,91 +1,163 @@
-#
-# application configuration
-#
-# http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
-# http://jyaml.sourceforge.net/
-#
---- !org.brzy.config.Config
-environment:default
+environment: default
 version: 1.0.0
 name: Test app
 author: Fred
 description: Some Description
-
 group_id: us.m410
 artifact_id: demoapp
-
+test_framework: junit
+package_type: war
 src_package: org.brzy.mock
 webapp_context: testapp
-
-#
-# view setup
-# [jsp,ssp]
-# [html4,html5,xhtml,xhtml2,xhtml5]
-view_type:ssp
+scala_version: 2.8.0.Beata1
+ivy_version: 2.1.0
+view_type: .ssp
 view_html_version: html5
-
-#
-# Dependency Management
-#
 repositories:
-  - id: fusesource
-    name: FuseSource Community Repository
-    url: http://someurl.com/test
-    snapshots: false
-    releases: true
-
+  - id: java-net2
+    name: java-net2
+    url: http://download.java.net/maven/2
+  - id: scala-tools
+    name: scala-tools
+    url: http://scala-tools.org/repo-releases
+  - id: jboss
+    name: jboss
+    url: http://repository.jboss.com/maven2
+  - id: fusesource.snapshots
+    name: fusesource.snapshots
+    url: http://repo.fusesource.com/nexus/content/repositories/snapshots
 dependencies:
-  - compile: org.apache.wicket:wicket:jar:1.4-rc6
-  - compile: org.fusesource.scalate:calate-core:jar:1.0-SNAPSHOT
-
-plugins:
-  - name: breadcrumb
-  - name: scheduler
-  - name: ejb
-  - name: spring
+  - lib: "compile,builder:org.brzy:brzy-all:0.1"
+  - lib: "compile,builder:org.scala-lang:scala-compiler:2.8.0.Beta1-RC8"
+  - lib: "compile,builder:org.scala-lang:scala-library:2.8.0.Beta1-RC8"
+  - lib: "compile,builder:xerces:xerces:2.4.0"
+  - lib: "compile,builder:org.jyaml:jyaml:1.3"
+  - lib: "compile:javax.persistence:persistence-api:1.0"
+  - lib: "compile:ch.qos.logback:logback-classic:0.9.9"
+  - lib: "compile:ch.qos.logback:logback-core:0.9.9"
+  - lib: "compile:com.google.collections:google-collections:1.0-rc3"
+  - lib: "compile:com.sun.xml.bind:jaxb-impl:2.1.3"
+  - lib: "compile:dom4j:dom4j:1.6"
+  - lib: "compile:javassist:javassist:3.8.0.GA"
+  - lib: "compile:javax.activation:activation:1.1"
+  - lib: "compile:javax.validation:validation-api:1.0.0.GA"
+  - lib: "compile:javax.ws.rs:jsr311-api:1.1.1"
+  - lib: "compile:javax.xml.bind:jaxb-api:2.1"
+  - lib: "compile:javax.xml.stream:stax-api:1.0-2"
+  - lib: "compile:jboss:javassist:3.8.0.GA"
+  - lib: "compile:org.aspectj:aspectjweaver:1.6.8"
+  - lib: "compile:org.hibernate:hibernate-validator:4.0.2.GA"
+  - lib: "compile:org.reflections:reflections:0.9.5-RC1"
+  - lib: "compile:org.slf4j:slf4j-api:1.5.0"
+  - lib: "compile:org.squeryl:squeryl:2.8.0.Beta1-RC8-0.9.1"
+  - lib: "test:junit:junit:4.4"
+  - lib: "tomcat:org.apache.tomcat:annotations-api:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:catalina:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:coyote:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:el-api:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:jasper:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:jasper-el:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:jasper-jdt:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:jsp-api:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:juli:6.0.26"
+  - lib: "tomcat:org.apache.tomcat:servlet-api:6.0.26"
 
 web_xml:
   - name: description
-    content: Brzy Web Application
-  - name: listener
-    children:
-      - name: listener-class
-      - content: org.brzy.application.ApplicationListener
-#
-# Persistence
-#[java-jpa,scala-jpa,jdo,squeryl]
+    content: Breezy Scala
+  - name: display-name
+    content: Breezy Web App
+  - name: context-param
+#    children:!org.brzy.config.WebXmlNode[]
+#    - name: param-name
+#      content: brzy-env
+#    - name: param-value
+#      content: development
+#  - name: listener
+#    children:
+#    - name: listener-class
+#      content: org.brzy.application.WebAppListener
+#  - name: filter
+#    children:
+#    - name: filter-name
+#      content: BrzyFilter
+#    - name: filter-class
+#      content: org.brzy.action.Filter
+#  - name: filter-mapping
+#    children:
+#    - name: filter-name
+#      content: BrzyFilter
+#    - name: url-pattern
+#      content: "/*"
+#  - name: servlet
+#    children:
+#    - name: servlet-name
+#      content: ScalateServlet
+#    - name: servlet-class
+#      content: org.fusesource.scalate.servlet.TemplateEngineServlet
+#    - name: load-on-startup
+#      content: "1"
+#  - name: servlet-mapping
+#    children:
+#    - name: servlet-name
+#      content: ScalateServlet
+#    - name: url-pattern
+#      content: "*.ssp"
+#  - name: servlet
+#    children:
+#    - name: servlet-name
+#      content: BrzyServlet
+#    - name: servlet-class
+#      content: org.brzy.action.Servlet
+#    - name: load-on-startup
+#      content: "1"
+#  - name: servlet-mapping
+#    children:
+#    - name: servlet-name
+#      content: BrzyServlet
+#    - name: url-pattern
+#      content: "*.brzy"
+#  - name: servlet-mapping
+#    children:
+#    - name: servlet-name
+#      content: BrzyServlet
+#    - name: url-pattern
+#      content: "/users/*"
+#  - name: welcome-file-list
+#    children:
+#    - name: welcome-file
+#      content: index.brzy
+#  - name: error-page
+#    children:
+#    - name: error-code
+#      content: "404"
+#    - name: location
+#      content: /error-404.ssp
+#  - name: error-page
+#    children:
+#    - name: error-code
+#      content: "500"
+#    - name: location
+#      content: /error-500.ssp
+#  - name: error-page
+#    children:
+#    - name: exception-type
+#      content: java.lang.Throwable
+#      content: /error-500.ssp
+
 db_migration: true
 db_generation: false
-#persistence_type: jpa
-#persistence: !org.brzy.config.Persistence
-#  mechanism:jpa
-
 data_source:
   name:something
   driver_class: org.postgresql.Driver
   user_name: test
   password:
   url: jdbc:postgresql://localhost/dev
-
-application_properties:
-  something: else
-
-#
-# Logging
-#[log4j,jul]
 logging:
-  provider: log4j
-#  appenders:!String[]
-#    - output
-#  loggers:!String[]
-#    = debug
-
-#
-# override defaults for any environment
-#
+  provider: logback
 environment_overrides:
   - environment: developement
-    migration_enabled:false
   - environment: test
   - environment: production
+
 

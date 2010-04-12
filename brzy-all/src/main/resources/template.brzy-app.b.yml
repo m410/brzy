@@ -1,0 +1,38 @@
+#
+# application configuration
+#
+name: [name]
+version: [version]
+author: Add Your Name Here
+description: Add Some application Description here
+
+group_id: [group]
+artifact_id: [artifact]
+
+src_package: [group]
+webapp_context: /
+application_class: [group].Application
+
+data_source:
+  name:datasource
+  driver_class: org.postgresql.Driver
+  user_name: test
+  password: yourPass
+  url: jdbc:postgresql://localhost/dev
+
+# Logging
+#[log4j,jul,logback]
+logging:
+  provider: logback
+
+# override defaults for any environment
+environment_overrides:
+  - environment: developement
+    data_source:
+      name: datasource
+      driver_class: org.hsqldb.jdbc.JDBCDriver
+      user_name: SA
+      password:
+      url: jdbc:hsqldb:file:testdb
+  - environment: test
+  - environment: production

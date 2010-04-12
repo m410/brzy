@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <ivysettings>
   <settings defaultResolver="chained"/>
   <resolvers>
@@ -6,10 +6,8 @@
       <filesystem name="1">
         <artifact pattern="${basedir}/.brzy/lib2/[artifact]-[revision].[ext]"/>
       </filesystem>
-      <!-- add ibiblio -->
+     <ibiblio name="ibiblio" />
+      <ibiblio name="maven" m2compatible="true" usepoms="false"/>
     </chain>
   </resolvers>
-  <!--<modules>-->
-    <!--<module organisation="jayasoft" name=".*" resolver="internal" />-->
-  <!--</modules>-->
 </ivysettings>

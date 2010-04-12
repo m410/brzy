@@ -1,0 +1,12 @@
+body{padding:10px;background:#ccc;}
+a{color:#fd9c12;text-decoration:underline;}
+a:visited{color:#b17816;}
+a:hover{text-decoration:none;}
+a:focus,a:active{background:yellow;}
+section,article,header,footer,nav,aside,hgroup{ display: block; }
+#wrapper{padding:10px;margin:0 auto;width:990px;background:#ddd;-moz-border-radius: 10px;-webkit-border-radius: 10px;}
+#wrapper2{padding:10px;margin:0 auto;width:970px;background:white;}
+.container{background:white;}
+.bot-border{border-bottom:1px solid #eee;}
+.top-border{border-top:1px solid #eee;}
+footer{color:#ccc;}

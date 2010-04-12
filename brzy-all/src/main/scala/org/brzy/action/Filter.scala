@@ -22,7 +22,6 @@ class Filter extends SFilter {
     val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
 
     if(!(pattern findFirstMatchIn uri).isEmpty) {
-      log.trace("doFilter: {}",uri)
       chain.doFilter(req,res)
     }
     else {

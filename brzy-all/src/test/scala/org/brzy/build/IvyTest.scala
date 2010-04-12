@@ -16,9 +16,9 @@ class IvyTest {
   def testParsingXml = {
     val config = new Config()
     val dep1 = new Dependency()
-    dep1.compile = "org.package:dep:1.0.0"
+    dep1.lib = "compile:org.package:dep:1.0.0"
     val dep2 = new Dependency()
-    dep2.compile = "org.apache:dep2:1.0.1"
+    dep2.lib = "compile:org.apache:dep2:1.0.1"
     config.dependencies = Array(dep1, dep2)
     
     val ivy = new IvyXml(config)

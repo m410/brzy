@@ -8,34 +8,20 @@ import reflect.BeanProperty
  * @version $Id: $
  */
 class Dependency {
-  @BeanProperty var provided:String =_
-  @BeanProperty var compile:String =_
-  @BeanProperty var test:String =_
+  @BeanProperty var lib:String =_
 
-  private var internal:String = _
   private var confIn:String = _
   private var orgIn:String = _
   private var nameIn:String = _
   private var revIn:String = _
 
   private def setup():Unit = {
-    if(internal == null) {
-      if(provided != null) {
-        internal = provided
-        confIn = "provided"
-      }
-      else if(compile != null) {
-        internal = compile
-        confIn = "compile"
-      }
-      else if(test != null) {
-        internal = test
-        confIn = "test"
-      }
-      val split = internal.split(":")
-      orgIn = split(0)
-      nameIn = split(1)
-      revIn = split(2)      
+    if(confIn == null) {
+      val split = lib.split(":")
+      confIn = split(0)
+      orgIn = split(1)
+      nameIn = split(2)
+      revIn = split(3)
     }
   }
 

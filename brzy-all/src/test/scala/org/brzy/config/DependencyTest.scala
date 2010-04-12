@@ -12,9 +12,10 @@ class DependencyTest {
   @Test
   def testDependency = {
     val dependency = new Dependency()
-    dependency.compile = "org.somecompany:app:1.0.0"
+    dependency.lib = "compile:org.somecompany:app:1.0.0"
     assertEquals("org.somecompany",dependency.org)
     assertEquals("app",dependency.name)
     assertEquals("1.0.0",dependency.rev)
+    assertEquals("compile",dependency.conf)
   }
 }

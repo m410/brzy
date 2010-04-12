@@ -18,13 +18,13 @@ class BuildProperties(config:Config) {
   private val ivyVersion="[ivyversion]"
 
   // read template
-  val content = Source.fromURL(ClassLoader.getSystemResource("template.build.properties"))
+  val content = Source.fromURL(getClass.getClassLoader.getResource("template.build.properties"))
       .mkString
-      .replaceAll(applicationVersion,config.version)
-      .replaceAll(applicationName,config.name)
-      .replaceAll(applicationOrg,config.group_id)
-      .replaceAll(applicationType,config.package_type)
-      .replaceAll(testFramework,config.test_framework)
-      .replaceAll(scalaVersion,config.scala_version)
-      .replaceAll(ivyVersion,config.ivy_version)
+      .replace(applicationVersion,config.version)
+      .replace(applicationName,config.name)
+      .replace(applicationOrg,config.group_id)
+      .replace(applicationType,config.package_type)
+      .replace(testFramework,config.test_framework)
+      .replace(scalaVersion,config.scala_version)
+      .replace(ivyVersion,config.ivy_version)
 }

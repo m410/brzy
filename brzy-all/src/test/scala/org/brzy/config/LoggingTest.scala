@@ -1,6 +1,7 @@
 package org.brzy.config
 
 import org.junit.Test
+import org.junit.Assert._
 
 /**
  * @author Michael Fortin
@@ -11,9 +12,16 @@ class LoggingTest {
   @Test
   def testLogging = {
     val log = new Logging()
-    log.provider = "log4j"
-    log.appenders = Array("file ch.qos.logback.core.ConsoleAppender layout:ch.qos.logback.classic.PatternLayout")
-    log.loggers = Array("debug org.apache ")
-    log.root = Array("info file")
+    log.provider = "logback"
+
+    val appender = new Appender
+    log.appenders = Array(appender)
+
+    val logger = new Logger
+    log.loggers = Array(logger)
+
+    log.root = new Root
+
+    assertNotNull(log.root)
   }
 }

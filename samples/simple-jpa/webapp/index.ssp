@@ -1,0 +1,130 @@
+<%  import org.brzy.view.ViewFunctions._  
+import org.brzy.application.WebApp  
+import scala.collection.JavaConversions._
+import javax.servlet.http.HttpServletRequest %>
+<%implicit val req = request %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Brzy App</title>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+	<meta name="description" content="...summary of web page...">
+	<meta name="keywords"  content="brzy, web-framework, scala">
+	<meta name="robots" content="all"> 
+	<!--[if IE]><script src="${js("/html5.js")}"></script><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/blueprint/print.css")}" type="text/css" media="print">
+  <!--[if lt IE 8]><link rel="stylesheet" href="${css("/blueprint/ie.css")}" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="${css("/blueprint/plugins/fancy-type/screen.css")}" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="${css("/brzy.css")}" type="text/css" media="screen, projection">
+</head>
+<body>
+<div id="background">
+	<div id="wrapper">		
+		<div id="wrapper2">
+		<div class="container">
+		<header class="span-24 bot-border">
+			<h1>Brzy App</h1>
+		</header>
+		<nav class="bot-border">
+			Navigation: <a href="${action("/persons")}">Persons</a>
+		</nav>
+		<div class="span-18">
+			<article>
+			<h2>Actions</h2>
+			<ul>
+				<% for(action <- servletContext.getAttribute("application").asInstanceOf[WebApp].actions) { %>
+						<li>${action}</li>
+				<% }%>
+			</ul>
+		</article>
+		<article>
+		<h2>Controllers</h2>
+		<ul>
+			<% for(controller <- servletContext.getAttribute("application").asInstanceOf[WebApp].controllers) { %>
+					<li>${controller}</li>
+			<% } %>
+		</ul>
+	</article>
+		<article>
+		<h2>Services</h2>
+		<ul>
+			<% for(service <- servletContext.getAttribute("application").asInstanceOf[WebApp].services) { %>
+					<li>${service}</li>
+			<% } %>
+		</ul>
+	</article>
+		<article>
+			<h2>Request Scope Attributes</h2>
+				<ul>
+				<%for(reqAttr <- new JEnumerationWrapper(request.getAttributeNames)) {%>
+						<li>${reqAttr} = ${request.getAttribute(reqAttr.asInstanceOf[String])}</li>
+				<%}%> 
+				</ul>
+		</article>
+		<article>
+			<h2>Headers</h2>
+			<ul>
+			<% for(headerName <- new JEnumerationWrapper(request.getHeaderNames)) { %>
+					<li>${headerName} = ${request.getHeader(headerName.asInstanceOf[String])}</li>
+			<% } %> 
+			</ul>
+		</article>
+		<article>
+			<h2>Cookies</h2>
+			<ul>
+			<%  for(cookie <- request.getCookies) { %>
+					<li>${cookie.getName} = ${cookie.getValue}</li>
+			<% } %> 
+			</ul>
+		</article>
+		<article>
+			<h2>Session Scope Attributes</h2>
+			<ul>
+			<%  for(sessAttr <- new JEnumerationWrapper(request.getSession.getAttributeNames)) { %>
+					<li>${sessAttr}</li>
+			<% } %> 
+			</ul>
+		</article>
+		<article>
+			<h2>Application Scope Attributes</h2>
+			<ul>
+			<% for(appAttr <- new JEnumerationWrapper(servletContext.getAttributeNames)) { %>
+					<li>${appAttr}</li>
+			<% } %> 
+			</ul>
+		</article>
+		<article>
+			<h2>Configuration </h2>
+			<pre>${servletContext.getAttribute("application").asInstanceOf[WebApp].config}</pre>
+		</article>
+		</div>
+		<div class="span-6 last">	
+		<aside >
+			<h3>Brzy Documentation</h3>
+			<ul>
+				<li><a href="http://brzy.org" target="_blank">Brzy Website</a></li>
+				<li><a href="http://brzy.org" target="_blank">Brzy Documentation</a></li>
+				<li><a href="http://brzy.org" target="_blank">Brzy Config Reference</a></li>
+				<li><a href="http://brzy.org" target="_blank">Brzy API</a></li>
+				<li><a href="http://brzy.org" target="_blank">Brzy Download</a></li>
+			</ul>
+			<h3>Other Resources</h3>
+			<ul>
+				<li><a href="http://brzy.org" target="_blank">CSS Blueprint</a></li>
+				<li><a href="http://brzy.org" target="_blank">jQuery</a></li>
+				<li><a href="http://brzy.org" target="_blank">Scalate</a></li>
+				<li><a href="http://brzy.org" target="_blank">Scala</a></li>
+			</ul>
+		</aside>
+		</div>
+		<br class="clear">
+		<footer class="top-border">
+			Brzy Web Framework
+		</footer>
+	</div>
+	</div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,9 +1,9 @@
 package org.brzy.build
 
-import xml.{XML, Elem}
 import collection.mutable.ListBuffer
 import xml.transform.RuleTransformer
 import org.brzy.config.{WebXmlNode, Config}
+import xml._
 
 /**
  * context-param
@@ -38,12 +38,29 @@ class WebXml(config:Config) {
   private val children = ListBuffer[Elem]()
 
   config.web_xml.foreach( node => {
-    children += <test /> //<{node.name}>{node.content}</{node.name}>
+    if(node.content != null)
+      children += Elem(null,node.name, null, TopScope, new Text(node.content))
+    else if(node.children != null && node.children.length >0)
+      children += Elem(null,node.name, null, TopScope, makeChildren(node.children):_*)
+    else
+      children += Elem(null,node.name, null, TopScope, new Text(""))
   })
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head
 
-  def appendNode(elem:Elem, node:WebXmlNode) {
-    
+  def makeChildren(children:Array[WebXmlNode]):Array[Node] = {
+
+    if(children == null || children.length== 0)
+      Array(Text(""))
+    else {
+      val nodes = children.map(f=>
+        if(f.content != null)
+          Elem(null,f.name, null, TopScope, new Text(f.content))
+        else
+          Elem(null,f.name, null, TopScope, new Text(""))
+      )
+      println(nodes)
+      nodes.toArray
+    }
   }
 }
