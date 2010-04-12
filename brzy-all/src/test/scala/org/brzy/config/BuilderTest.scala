@@ -33,7 +33,6 @@ class BuilderTest {
     assertNotNull(app.logging)
 //    assertNotNull(app.plugins)
     assertNotNull(app.web_xml)
-    app.web_xml.foreach(println _)
     assertNotNull(app.environment_overrides)
     assertEquals(3,app.environment_overrides.size)
     assertEquals(false,app.environment_overrides(0).db_migration)

@@ -68,82 +68,83 @@ web_xml:
   - name: display-name
     content: Breezy Web App
   - name: context-param
-#    children:!org.brzy.config.WebXmlNode[]
-#    - name: param-name
-#      content: brzy-env
-#    - name: param-value
-#      content: development
-#  - name: listener
-#    children:
-#    - name: listener-class
-#      content: org.brzy.application.WebAppListener
-#  - name: filter
-#    children:
-#    - name: filter-name
-#      content: BrzyFilter
-#    - name: filter-class
-#      content: org.brzy.action.Filter
-#  - name: filter-mapping
-#    children:
-#    - name: filter-name
-#      content: BrzyFilter
-#    - name: url-pattern
-#      content: "/*"
-#  - name: servlet
-#    children:
-#    - name: servlet-name
-#      content: ScalateServlet
-#    - name: servlet-class
-#      content: org.fusesource.scalate.servlet.TemplateEngineServlet
-#    - name: load-on-startup
-#      content: "1"
-#  - name: servlet-mapping
-#    children:
-#    - name: servlet-name
-#      content: ScalateServlet
-#    - name: url-pattern
-#      content: "*.ssp"
-#  - name: servlet
-#    children:
-#    - name: servlet-name
-#      content: BrzyServlet
-#    - name: servlet-class
-#      content: org.brzy.action.Servlet
-#    - name: load-on-startup
-#      content: "1"
-#  - name: servlet-mapping
-#    children:
-#    - name: servlet-name
-#      content: BrzyServlet
-#    - name: url-pattern
-#      content: "*.brzy"
-#  - name: servlet-mapping
-#    children:
-#    - name: servlet-name
-#      content: BrzyServlet
-#    - name: url-pattern
-#      content: "/users/*"
-#  - name: welcome-file-list
-#    children:
-#    - name: welcome-file
-#      content: index.brzy
-#  - name: error-page
-#    children:
-#    - name: error-code
-#      content: "404"
-#    - name: location
-#      content: /error-404.ssp
-#  - name: error-page
-#    children:
-#    - name: error-code
-#      content: "500"
-#    - name: location
-#      content: /error-500.ssp
-#  - name: error-page
-#    children:
-#    - name: exception-type
-#      content: java.lang.Throwable
-#      content: /error-500.ssp
+    children:!org.brzy.config.WebXmlNode[]
+      - name: param-name
+        content: brzy-env
+      - name: param-value
+        content: development
+  - name: listener
+    children:
+      - name: listener-class
+        content: org.brzy.application.WebAppListener
+  - name: filter
+    children:
+      - name: filter-name
+        content: BrzyFilter
+      - name: filter-class
+        content: org.brzy.action.Filter
+  - name: filter-mapping
+    children:
+      - name: filter-name
+        content: BrzyFilter
+      - name: url-pattern
+        content: "/*"
+  - name: servlet
+    children:
+      - name: servlet-name
+        content: ScalateServlet
+      - name: servlet-class
+        content: org.fusesource.scalate.servlet.TemplateEngineServlet
+      - name: load-on-startup
+        content: "1"
+  - name: servlet-mapping
+    children:
+      - name: servlet-name
+        content: ScalateServlet
+      - name: url-pattern
+        content: "*.ssp"
+  - name: servlet
+    children:
+      - name: servlet-name
+        content: BrzyServlet
+      - name: servlet-class
+        content: org.brzy.action.Servlet
+      - name: load-on-startup
+        content: "1"
+  - name: servlet-mapping
+    children:
+      - name: servlet-name
+        content: BrzyServlet
+      - name: url-pattern
+        content: "*.brzy"
+  - name: servlet-mapping
+    children:
+      - name: servlet-name
+        content: BrzyServlet
+      - name: url-pattern
+        content: "/users/*"
+  - name: welcome-file-list
+    children:
+      - name: welcome-file
+        content: index.brzy
+  - name: error-page
+    children:
+      - name: error-code
+        content: "404"
+      - name: location
+        content: /error-404.ssp
+  - name: error-page
+    children:
+      - name: error-code
+        content: "500"
+      - name: location
+        content: /error-500.ssp
+  - name: error-page
+    children:
+      - name: exception-type
+        content: java.lang.Throwable
+      - name: location
+        content: /error-500.ssp
 
 db_migration: true
 db_generation: false
