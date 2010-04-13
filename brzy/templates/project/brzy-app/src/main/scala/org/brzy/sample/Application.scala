@@ -16,10 +16,8 @@ class Application(config:Config) extends WebApp(config){
 
 	val factory = Persistence.createEntityManagerFactory("brzy-unit")
 	
-  override val services = Array(
-		make(classOf[PersonService],new JpaInterceptor(factory)))
+  override val services = Array()
   
 	override val controllers = Array(
-		make(classOf[PersonController],new JpaInterceptor(factory)),
 		make(classOf[HomeController],new JpaInterceptor(factory)))
 }

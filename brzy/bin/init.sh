@@ -30,7 +30,7 @@ object Initialize extends Application {
 	val config = new Builder(brzyConfig,"development").config // dev is placeholder
 		
 	// create default build scripts
-	val brzyBuild = new File(args(1),"templates/project/build.xml")	
+	val brzyBuild = new File(args(1),"templates/build/brzy-app/build.xml")	
 	val to = new File(brzyDir,"build.xml")	
 	val source = new FileInputStream(brzyBuild).getChannel
 	val destination = new FileOutputStream(to).getChannel
@@ -38,6 +38,13 @@ object Initialize extends Application {
 	source.close
 	destination.close
 
+	val brzyCom = new File(args(1),"templates/build/brzy-app/common.xml")	
+	val to2 = new File(brzyDir,"common.xml")	
+	val source2 = new FileInputStream(brzyCom).getChannel
+	val destination2 = new FileOutputStream(to2).getChannel
+ 	destination2.transferFrom(source2, 0, source2.size())
+	source2.close
+	destination2.close
 
 	// generate build.properties
 	val buildProperties = new BuildProperties(config)

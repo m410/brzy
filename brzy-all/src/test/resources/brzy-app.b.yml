@@ -94,7 +94,7 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: [STDOUT]
+    ref: STDOUT
 #
 # override defaults for any environment
 #

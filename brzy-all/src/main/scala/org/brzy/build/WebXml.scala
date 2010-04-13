@@ -59,7 +59,6 @@ class WebXml(config:Config) {
         else
           Elem(null,f.name, null, TopScope, new Text(""))
       )
-      println(nodes)
       nodes.toArray
     }
   }

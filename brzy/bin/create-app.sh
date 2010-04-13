@@ -73,7 +73,9 @@ object CreateApp extends Application {
 	val brzyAppFile = new File(to,"brzy-app.b.yml")
 	val appOut = new java.io.BufferedWriter( new java.io.FileWriter(brzyAppFile) )
 	appOut.write(brzyApp.content)
-	appOut.close	
+	appOut.close
+	
+	// TODO create source folders
 }
 
 class BrzyAppBYml(name:String, version:String, group:String, artifact:String) {

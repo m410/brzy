@@ -9,21 +9,36 @@ description: Add Some application Description here
 group_id: [group]
 artifact_id: [artifact]
 
-src_package: [group]
 webapp_context: /
 application_class: [group].Application
 
 data_source:
   name:datasource
   driver_class: org.postgresql.Driver
-  user_name: test
+  user_name: yourUser
   password: yourPass
-  url: jdbc:postgresql://localhost/dev
+  url: jdbc:postgresql://localhost/yourDb
 
-# Logging
-#[log4j,jul,logback]
 logging:
   provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout_class: ch.qos.logback.classic.PatternLayout
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+    - name: FILE
+      appender_class: ch.qos.logback.core.rolling.RollingFileAppender
+      file: logs/brzy.log
+      rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+      file_name_pattern: "brzy.%d{yyyy-MM-dd}.log"
+      layout: ch.qos.logback.classic.PatternLayout
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: STDOUT
 
 # override defaults for any environment
 environment_overrides:

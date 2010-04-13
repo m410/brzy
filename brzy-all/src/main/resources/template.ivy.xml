@@ -8,6 +8,7 @@
     <conf name="compile" extends="provided"/>
     <conf name="test" extends="compile" />
     <conf name="tomcat"  />
+    <conf name="builder"></conf>
   </configurations>
   <dependencies>
   

@@ -14,16 +14,19 @@ class LogBackXml(config:Config) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.logback.xml"))
   private val children = ListBuffer[Elem]()
 
-  config.logging.appenders.foreach( dep => {
-    children += appenders(dep)
-  })
+  if(config.logging.appenders != null)
+    config.logging.appenders.foreach( dep => {
+      children += appenders(dep)
+    })
 
-  config.logging.loggers.foreach( l => {
-    children += <logger name={l.name} level={l.level} />
-  })
+  if(config.logging.loggers != null)
+    config.logging.loggers.foreach( l => {
+      children += <logger name={l.name} level={l.level} />
+    })
 
-  children += Elem(null,"root", Attribute(null,"level",config.logging.root.level,Null), TopScope,
-    appenderRefs(config.logging.root.ref):_*)
+  if(config.logging.root != null)
+    children += Elem(null,"root", Attribute(null,"level",config.logging.root.level,Null), TopScope,
+      appenderRefs(config.logging.root.ref):_*)
 
 // <root level={config.logging.root.level}>
 //    {for(ref <- config.logging.root.appender-ref)}
