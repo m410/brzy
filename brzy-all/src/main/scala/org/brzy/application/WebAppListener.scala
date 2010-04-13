@@ -4,7 +4,6 @@ import javax.servlet.{ServletContextEvent, ServletContextListener}
 import org.slf4j.LoggerFactory
 import org.brzy.migration.Migrator
 import org.brzy.config.Builder
-import java.net.URL
 
 /**
  * @author Michael Fortin

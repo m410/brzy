@@ -37,7 +37,7 @@ public class RunWebApplicationTomcat {
     /**
      * The web resources directory for the web application being run.
      */
-    private String webappDir = "target/war";
+    private String webappDir = "war";
 
     /**
      * Creates a single-webapp configuration to be run in Tomcat on port 8089.
@@ -127,8 +127,8 @@ public class RunWebApplicationTomcat {
     }
 
     public static void main(String[] args) throws Exception {
-        RunWebApplicationTomcat inst = new RunWebApplicationTomcat("mywebapp");
-        inst.run(8089);
+        RunWebApplicationTomcat inst = new RunWebApplicationTomcat(args[0]);
+        inst.run(8080);
     }
 
     public int getPort() {

@@ -29,6 +29,8 @@ class BuilderTest {
     assertNotNull(app.data_source)
     assertEquals("something",app.data_source.name)
     assertNotNull(app.dependencies)
+    assertNotNull(app.application_properties)
+    assertNotNull(app.persistence_properties)
 //    assertNotNull("org.apache.wicket:wicket:jar:1.4-rc6",app.dependencies(0).compile)
     assertNotNull(app.logging)
 //    assertNotNull(app.plugins)

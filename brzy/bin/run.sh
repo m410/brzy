@@ -15,8 +15,12 @@ $BRZY_HOME/lib/tomcat-dbcp.jar:\
 $BRZY_HOME/lib/tomcat-i18n-es.jar:\
 $BRZY_HOME/lib/tomcat-i18n-fr.jar:\
 $BRZY_HOME/lib/tomcat-i18n-ja.jar:\
+$BRZY_HOME/lib/tomcat-juli.jar:\
+$BRZY_HOME/lib/scala-library.jar:\
+$BRZY_HOME/lib/scala-compiler.jar:\
+$BRZY_HOME/lib/slf4j-api-1.5.0.jar:\
 $BRZY_HOME/lib/brzy-all-0.1.jar
 
 echo $CLASSPATH
 
-java -classpath $CLASSPATH org.brzy.shell.RunWebApplicationTomcat
+java -classpath $CLASSPATH org.brzy.shell.RunWebApplicationTomcat ""

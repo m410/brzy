@@ -26,6 +26,7 @@ class Config extends Merge[Config] {
   @BeanProperty var ivy_version:String = _
   @BeanProperty var view_html_version:String = _
   @BeanProperty var persistence_type:String = "jpa"
+  @BeanProperty var persistence_properties:java.util.HashMap[String,String]= _
   @BeanProperty var db_migration:Boolean = _
   @BeanProperty var db_generation:Boolean = _
   @BeanProperty var application_properties:java.util.HashMap[String,String] = _
@@ -59,7 +60,19 @@ class Config extends Merge[Config] {
     if(that.persistence_type != null) this.persistence_type = that.persistence_type
     if(that.db_migration ) this.db_migration = true
     if(that.db_generation) this.db_generation = true
+
+    if(that.application_properties != null && this.application_properties == null)
+      this.application_properties = that.application_properties
+    else if(that.application_properties != null && this.application_properties != null)
+      this.application_properties.putAll(that.application_properties)
+
+    if(that.persistence_properties != null && this.persistence_properties == null)
+      this.persistence_properties = that.persistence_properties
+    else if(that.persistence_properties != null && this.persistence_properties != null)
+      this.persistence_properties.putAll(that.persistence_properties)
+
     if(that.application_class != null) this.application_class = that.application_class
+
     this
   }
 
@@ -96,6 +109,7 @@ class Config extends Merge[Config] {
       .append("  - db_migration").append("=").append(db_migration).append(newline)
       .append("  - db_generation").append("=").append(db_generation).append(newline)
       .append("  - application_properties").append("=").append(application_properties).append(newline)
+      .append("  - persistence_properties").append("=").append(persistence_properties).append(newline)
       .append("  - application_class").append("=").append(application_class).append(newline)
       .append("  - data_source").append("=").append(data_source).append(newline)
       .append("  - repositories").append("=").append(repositories).append(newline)

@@ -4,17 +4,36 @@ import xml.transform.RuleTransformer
 import org.brzy.config.Config
 import xml.{XML, Elem}
 import collection.mutable.ListBuffer
+import collection.JavaConversions._
+import org.reflections.scanners.TypeAnnotationsScanner
+import org.reflections.util.ConfigurationBuilder
+import org.reflections.util.ClasspathHelper._
+import org.reflections.Reflections
+import javax.persistence.Entity
+
 /**
- * Document Me..
- * 
+ *
  * @author Michael Fortin
  * @version $Id: $
  */
-
 class PersistenceXml(config:Config) {
-  private val parentName = "configuration"
+  private val parentName = "persistence-unit"
   private val template = XML.load(getClass.getClassLoader.getResource("template.persistence.xml"))
   private val children = ListBuffer[Elem]()
+
+  private val reflections = new Reflections(new ConfigurationBuilder()
+      .setUrls(getUrlsForPackagePrefix(config.group_id))
+      .setScanners(new TypeAnnotationsScanner()))
+
+  private val entities:List[Class[_]] = reflections.getTypesAnnotatedWith(classOf[Entity]).toList
+
+  entities.foreach(e =>{
+    children += <class>{e.getName}</class>
+  })
+
+  children += <properties>
+    {config.persistence_properties.map(f =>  <property name={f._1} value={f._2} />)}
+  </properties>
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head
 }
