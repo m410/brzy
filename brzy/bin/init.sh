@@ -15,11 +15,6 @@ object Initialize extends Application {
 	if(!brzyDir.exists)
 		brzyDir.mkdirs
 		
-	// create lib folder
-	val brzyLib = new File(brzyDir,"lib")
-	if(!brzyLib.exists)
-		brzyLib.mkdirs
-		
 	// create plugin folder
 	val brzyPlugins = new File(brzyDir,"plugins")
 	if(!brzyPlugins.exists)

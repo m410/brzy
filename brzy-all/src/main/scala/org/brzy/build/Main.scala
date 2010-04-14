@@ -11,10 +11,8 @@ import xml.XML
 object Main {
 
   def main(args: Array[String]) {
-    println("-- env    = " + args(0))
-    println("-- builder= " + args(1))
-    println("-- config = " + args(2))
-    println("-- target = " + args(3))
+    println("config = " + args(2))
+    println("target = " + args(3))
     val config = new Builder(args(2), args(0)).config
 
     args(1) match {

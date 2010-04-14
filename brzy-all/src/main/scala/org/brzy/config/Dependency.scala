@@ -29,4 +29,7 @@ class Dependency {
   def name():String = {setup();nameIn}
   def rev():String = {setup();revIn}
   def conf():String = {setup();confIn}
+
+
+  override def toString = lib
 }

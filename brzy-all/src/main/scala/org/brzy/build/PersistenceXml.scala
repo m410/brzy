@@ -31,9 +31,10 @@ class PersistenceXml(config:Config) {
     children += <class>{e.getName}</class>
   })
 
-  children += <properties>
-    {config.persistence_properties.map(f =>  <property name={f._1} value={f._2} />)}
-  </properties>
+  if(config.persistence_properties != null)
+    children += <properties>
+      {config.persistence_properties.map(f =>  <property name={f._1} value={f._2} />)}
+    </properties>
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head
 }

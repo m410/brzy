@@ -3,11 +3,12 @@
   <settings defaultResolver="chained"/>
   <resolvers>
     <chain name="chained">
-      <filesystem name="1">
-        <artifact pattern="${basedir}/.brzy/lib2/[artifact]-[revision].[ext]"/>
+      <filesystem name="local">
+        <artifact pattern="${basedir}/lib/[artifact]-[revision].[ext]"/>
       </filesystem>
      <ibiblio name="ibiblio" />
       <ibiblio name="maven" m2compatible="true" usepoms="false"/>
+      
     </chain>
   </resolvers>
 </ivysettings>

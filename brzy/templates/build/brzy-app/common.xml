@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project>
+<patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <include name="**/?*.properties"/>
+    <include name="**/?*.xml"/>
+    <include name="**/?*.gif"/>
+    <include name="**/?*.png"/>
+    <include name="**/?*.jpeg"/>
+    <include name="**/?*.jpg"/>
+    <include name="**/?*.html"/>
+    <include name="**/?*.dtd"/>
+    <include name="**/?*.tld"/>
+    <include name="**/?*.ftl"/>
+  </patternset>
+  <patternset id="excluded.from">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  <patternset id="excluded.from.compilation.brzy">
+    <patternset refid="excluded.from"/>
+  </patternset>
+  <path id="brzy.module.sourcepath">
+    <dirset dir="${basedir}">
+      <include name="src/main/scala"/>
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  <path id="brzy.module.test.sourcepath">
+    <dirset dir="${basedir}">
+      <include name="src/test/java"/>
+      <include name="src/test/scala"/>
+    </dirset>
+  </path>
+</project>

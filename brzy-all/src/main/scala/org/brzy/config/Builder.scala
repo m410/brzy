@@ -4,10 +4,8 @@ import org.ho.yaml.Yaml
 import java.net.URL
 import java.lang.String
 import java.io._
-import io.Source
 
 /**
- *
  * @author Michael Fortin
  * @version $Id: $
  */

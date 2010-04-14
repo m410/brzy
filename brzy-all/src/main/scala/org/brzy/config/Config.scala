@@ -58,6 +58,7 @@ class Config extends Merge[Config] {
     if(that.ivy_version != null) this.ivy_version = that.ivy_version
     if(that.view_html_version != null) this.view_html_version = that.view_html_version
     if(that.persistence_type != null) this.persistence_type = that.persistence_type
+
     if(that.db_migration ) this.db_migration = true
     if(that.db_generation) this.db_generation = true
 
@@ -71,7 +72,15 @@ class Config extends Merge[Config] {
     else if(that.persistence_properties != null && this.persistence_properties != null)
       this.persistence_properties.putAll(that.persistence_properties)
 
+    if(that.plugins != null && this.plugins == null)
+      this.plugins = that.plugins
+    else if(that.plugins != null && this.plugins != null)
+      this.plugins = this.plugins ++ that.plugins
+
+    if(that.logging != null) this.logging = that.logging
+
     if(that.application_class != null) this.application_class = that.application_class
+
 
     this
   }
@@ -112,11 +121,11 @@ class Config extends Merge[Config] {
       .append("  - persistence_properties").append("=").append(persistence_properties).append(newline)
       .append("  - application_class").append("=").append(application_class).append(newline)
       .append("  - data_source").append("=").append(data_source).append(newline)
-      .append("  - repositories").append("=").append(repositories).append(newline)
-      .append("  - dependencies").append("=").append(dependencies).append(newline)
+      .append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
+      .append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
       .append("  - logging").append("=").append(logging).append(newline)
-      .append("  - plugins").append("=").append(plugins).append(newline)
-      .append("  - environment_overrides").append("=").append(environment_overrides).append(newline)
+      .append("  - plugins").append("=").append(if(plugins != null)plugins.mkString else "").append(newline)
+      .append("  - environment_overrides").append("=").append(if(environment_overrides != null)environment_overrides.mkString else "").append(newline)
       .append("  - web_xml").append("=").append(web_xml)
       .toString
   }

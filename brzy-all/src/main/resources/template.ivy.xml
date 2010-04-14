@@ -2,7 +2,7 @@
 <ivy-module version="2.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation= "http://ant.apache.org/ivy/schemas/ivy.xsd">
-  <info organisation="org.brzy.sample" module="smiple-jpa"/>
+  <info organisation="org.brzy.sample" module="brzy"/>
   <configurations defaultconfmapping="*->*,!sources,!javadoc" >
     <conf name="provided"  />
     <conf name="compile" extends="provided"/>
@@ -11,6 +11,5 @@
     <conf name="builder"/>
   </configurations>
   <dependencies>
-  
   </dependencies>
 </ivy-module>

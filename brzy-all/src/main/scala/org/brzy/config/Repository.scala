@@ -12,4 +12,9 @@ class Repository {
   @BeanProperty var url: String = _
   @BeanProperty var snapshots: String = _
   @BeanProperty var releases: String = _
+
+
+  override def toString = new StringBuilder()
+    .append("Repository - id: ").append(id)
+    .toString
 }

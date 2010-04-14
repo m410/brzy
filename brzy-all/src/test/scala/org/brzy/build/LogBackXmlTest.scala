@@ -35,6 +35,7 @@ class LogBackXmlTest {
     config.logging = logging
 
     val logback = new LogBackXml(config)
+    println(logback.body)
     assertNotNull(logback.body)
   }
 }
