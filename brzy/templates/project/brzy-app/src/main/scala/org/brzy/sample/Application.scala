@@ -14,7 +14,7 @@ import org.brzy.interceptor.impl.LoggingInterceptor
  */
 class Application(config:Config) extends WebApp(config){
 
-	val factory = Persistence.createEntityManagerFactory("brzy-unit")
+	val factory = Persistence.createEntityManagerFactory("brzy-app")
 	
   override val services = Array()
   

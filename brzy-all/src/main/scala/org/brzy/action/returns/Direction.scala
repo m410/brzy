@@ -8,7 +8,7 @@ import xml.Elem
  * @author Michael Fortin
  * @version $Id: $
  */
-abstract class Direction
+abstract class Direction 
 
   case class View(path:String) extends Direction
 

@@ -77,6 +77,16 @@ class Config extends Merge[Config] {
     else if(that.plugins != null && this.plugins != null)
       this.plugins = this.plugins ++ that.plugins
 
+    if(that.dependencies != null && this.dependencies == null)
+      this.dependencies = that.dependencies
+    else if(that.dependencies != null && this.dependencies != null)
+      this.dependencies = this.dependencies ++ that.dependencies
+
+    if(that.repositories != null && this.repositories == null)
+      this.repositories = that.repositories
+    else if(that.repositories != null && this.repositories != null)
+      this.repositories = this.repositories ++ that.repositories
+
     if(that.logging != null) this.logging = that.logging
 
     if(that.application_class != null) this.application_class = that.application_class
@@ -93,40 +103,38 @@ class Config extends Merge[Config] {
     clazz.getConstructor(classOf[Config]).newInstance(this).asInstanceOf[WebApp]
   }
 
-
   override def toString = {
     val newline = System.getProperty("line.separator")
-    new StringBuffer()
-      .append(newline)
-      .append("  - environment").append("=").append(environment).append(newline)
-      .append("  - version").append("=").append(version).append(newline)
-      .append("  - name").append("=").append(name).append(newline)
-      .append("  - author").append("=").append(author).append(newline)
-      .append("  - description").append("=").append(description).append(newline)
-      .append("  - group_id").append("=").append(group_id).append(newline)
-      .append("  - artifact_id").append("=").append(artifact_id).append(newline)
-      .append("  - package_type").append("=").append(package_type).append(newline)
-      .append("  - src_package").append("=").append(src_package).append(newline)
-      .append("  - webapp_context").append("=").append(webapp_context).append(newline)
-      .append("  - test_framework").append("=").append(test_framework).append(newline)
-      .append("  - view_type").append("=").append(view_type).append(newline)
-      .append("  - scala_version").append("=").append(scala_version).append(newline)
-      .append("  - ant_version").append("=").append(ant_version).append(newline)
-      .append("  - ivy_version").append("=").append(ivy_version).append(newline)
-      .append("  - view_html_version").append("=").append(view_html_version).append(newline)
-      .append("  - persistence_type").append("=").append(persistence_type).append(newline)
-      .append("  - db_migration").append("=").append(db_migration).append(newline)
-      .append("  - db_generation").append("=").append(db_generation).append(newline)
-      .append("  - application_properties").append("=").append(application_properties).append(newline)
-      .append("  - persistence_properties").append("=").append(persistence_properties).append(newline)
-      .append("  - application_class").append("=").append(application_class).append(newline)
-      .append("  - data_source").append("=").append(data_source).append(newline)
-      .append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
-      .append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
-      .append("  - logging").append("=").append(logging).append(newline)
-      .append("  - plugins").append("=").append(if(plugins != null)plugins.mkString else "").append(newline)
-      .append("  - environment_overrides").append("=").append(if(environment_overrides != null)environment_overrides.mkString else "").append(newline)
-      .append("  - web_xml").append("=").append(web_xml)
-      .toString
+    val sb = new StringBuffer()
+    sb.append(newline)
+    sb.append("  - environment").append("=").append(environment).append(newline)
+    sb.append("  - version").append("=").append(version).append(newline)
+    sb.append("  - name").append("=").append(name).append(newline)
+    sb.append("  - author").append("=").append(author).append(newline)
+    sb.append("  - description").append("=").append(description).append(newline)
+    sb.append("  - group_id").append("=").append(group_id).append(newline)
+    sb.append("  - artifact_id").append("=").append(artifact_id).append(newline)
+    sb.append("  - package_type").append("=").append(package_type).append(newline)
+    sb.append("  - src_package").append("=").append(src_package).append(newline)
+    sb.append("  - webapp_context").append("=").append(webapp_context).append(newline)
+    sb.append("  - test_framework").append("=").append(test_framework).append(newline)
+    sb.append("  - view_type").append("=").append(view_type).append(newline)
+    sb.append("  - scala_version").append("=").append(scala_version).append(newline)
+    sb.append("  - ant_version").append("=").append(ant_version).append(newline)
+    sb.append("  - ivy_version").append("=").append(ivy_version).append(newline)
+    sb.append("  - view_html_version").append("=").append(view_html_version).append(newline)
+    sb.append("  - persistence_type").append("=").append(persistence_type).append(newline)
+    sb.append("  - db_migration").append("=").append(db_migration).append(newline)
+    sb.append("  - db_generation").append("=").append(db_generation).append(newline)
+    sb.append("  - application_properties").append("=").append(application_properties).append(newline)
+    sb.append("  - persistence_properties").append("=").append(persistence_properties).append(newline)
+    sb.append("  - application_class").append("=").append(application_class).append(newline)
+    sb.append("  - data_source").append("=").append(data_source).append(newline)
+    sb.append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
+    sb.append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
+    sb.append("  - logging").append("=").append(logging).append(newline)
+    sb.append("  - web_xml").append("=").append(web_xml)
+    sb.toString
+    sb
   }
 }

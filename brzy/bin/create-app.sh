@@ -12,21 +12,21 @@ object CreateApp extends Application {
 	
 	def initApp():InitWrapper = {
 		println("Create Brzy App")
-		print("Enter a Name: ")
+		print("Project Name : ")
 		val name = readLine
-		print("Enter a Version: ")
+		print("Version      : ")
 		val version = readLine
-		print("Enter a Group: ")
+		print("Group Name   : ")
 		val packageSpace = readLine
-		print("Enter a Project Artifict Name: ")
+		print("Artifict Name: ")
 		val artifact = readLine
 		
-		println("Application Properties")
-		println("  Name: " + name)
-		println("  Version: " + version)
-		println("  Group: " + packageSpace)
-		println("  Artifact: " + artifact)
-		print("accept [y|n]: ")
+		println("--Application Properties")
+		println("  Name      : " + name)
+		println("  Version   : " + version)
+		println("  Group     : " + packageSpace)
+		println("  Artifact  : " + artifact)
+		print(  "accept [y|n]: ")
 		val accept = readLine
 		
 		if(accept == "y" || accept == "Y")

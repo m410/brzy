@@ -59,7 +59,7 @@ class LogBackXml(config:Config) {
   }
   def appenderRefs(root:Array[String]):Array[Node] = {
     if(root != null)
-      root.map(x => <appender-ref name={x} />).toArray
+      root.map(x => <appender-ref ref={x} />).toArray
     else
       Array.empty
   }
