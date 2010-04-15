@@ -135,6 +135,5 @@ class Config extends Merge[Config] {
     sb.append("  - logging").append("=").append(logging).append(newline)
     sb.append("  - web_xml").append("=").append(web_xml)
     sb.toString
-    sb
   }
 }

@@ -21,7 +21,7 @@
 					<h1>Brzy App</h1>
 				</header>
 				<nav class="bot-border">
-					Navigation: <a href="${action("/persons")}">Persons</a>
+					Navigation: 
 				</nav>
 				<h1>Brzy App: ERROR 404</h1>
 				<p>Error page</p>

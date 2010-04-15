@@ -24,46 +24,47 @@ $BRZY_HOME/lib/scala-compiler.jar\
 
 import org.apache.catalina.LifecycleException
 import org.apache.catalina.loader.WebappLoader
-// import org.apache.catalina.realm.MemoryRealm
+import org.apache.catalina.realm.MemoryRealm
 import org.apache.catalina.startup.Embedded
 import java.net.InetAddress
 import java.io.File
 
 
 object Tomcat extends Application {
-	new RunWebApp("brzy",8080)
+	new RunWebApp("",8080)
 }
 
 class RunWebApp(contextName:String, port:Int) {
 	println("Running Web Application")
-
-  val path = "/" + contextName
-  val catalinaHome = "target/tomcat"
-  val webappDir = "war"
-  val classesDir = webappDir + "WEB-INF/classes"
+	
+  val appBase = "war"
+  val classesDir = appBase + "/WEB-INF/classes"
 	val container = new Embedded
 
-  container.setCatalinaHome(catalinaHome)
-// container.setRealm(new MemoryRealm())
+	val catalinaHome = new File(".brzy/plugin-tomcat")
+	container.setCatalinaHome(catalinaHome.getAbsolutePath)
+	// container.setRealm(new MemoryRealm())
   val loader = new WebappLoader(this.getClass.getClassLoader)
 
   if (classesDir != null)
       loader.addRepository(new File(classesDir).toURI.toURL.toString)
 
-  val rootContext = container.createContext(path, webappDir)
-  rootContext.setLoader(loader)
-  rootContext.setReloadable(true)
-
-  val localHost = container.createHost("localHost", new File("target").getAbsolutePath)
-  localHost.addChild(rootContext)
+	val targetDir = new File("target")
+	val targetPath = targetDir.getAbsolutePath
+  val host = container.createHost("localhost", targetPath)
+	
+	val context = container.createContext("/" + contextName, appBase)
+  context.setLoader(loader)
+  context.setReloadable(true)
+  host.addChild(context)
 
   val engine = container.createEngine()
-  engine.setName("localEngine")
-  engine.addChild(localHost)
-  engine.setDefaultHost(localHost.getName())
+  engine.setName("engine")
+  engine.addChild(host)
+  engine.setDefaultHost(host.getName())
   container.addEngine(engine)
 
-  val httpConnector = container.createConnector(InetAddress.getLocalHost, port, false)
+  val httpConnector = container.createConnector(null.asInstanceOf[InetAddress], port, false)
   container.addConnector(httpConnector)
 
   container.setAwait(true)

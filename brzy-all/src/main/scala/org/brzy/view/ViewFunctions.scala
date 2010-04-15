@@ -12,7 +12,10 @@ import java.net.URLEncoder
 object ViewFunctions {
 
   def resource(path:String,request:HttpServletRequest):String = {
-    request.getContextPath + path
+    if(request.getContextPath == "/")
+      path
+    else
+      request.getContextPath + path
   }
 
   def res(path:String)(implicit request:HttpServletRequest):String = {

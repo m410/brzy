@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest %>
 			<h1>Brzy App</h1>
 		</header>
 		<nav class="bot-border">
-			Navigation: <a href="${action("/persons")}">Persons</a>
+			Navigation: 
 		</nav>
 		<div class="span-18">
 			<article>
@@ -73,7 +73,8 @@ import javax.servlet.http.HttpServletRequest %>
 		<article>
 			<h2>Cookies</h2>
 			<ul>
-			<%  for(cookie <- request.getCookies) { %>
+			<%  if(request.getCookies != null && request.getCookies.length > 0) 
+				for(cookie <- request.getCookies) { %>
 					<li>${cookie.getName} = ${cookie.getValue}</li>
 			<% } %> 
 			</ul>
@@ -81,7 +82,8 @@ import javax.servlet.http.HttpServletRequest %>
 		<article>
 			<h2>Session Scope Attributes</h2>
 			<ul>
-			<%  for(sessAttr <- new JEnumerationWrapper(request.getSession.getAttributeNames)) { %>
+			<%  if(request.getSession(false) != null)
+					for(sessAttr <- new JEnumerationWrapper(request.getSession.getAttributeNames)) { %>
 					<li>${sessAttr}</li>
 			<% } %> 
 			</ul>

@@ -47,9 +47,9 @@ class LogBackXml(config:Config) {
       </rollingPolicy>
 
     if(appender.layout != null)
-      arrayBuf += <layout class={appender.layout}>
+      arrayBuf += <encoder class={appender.layout}>
         <pattern>{appender.pattern}</pattern>
-      </layout>
+      </encoder>
 
 //    <appender name={appender.name} class={appender.appender_class}>
 //      {arrayBuf.toArray}

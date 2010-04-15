@@ -85,14 +85,14 @@ logging:
   appenders:
     - name: STDOUT
       appender_class: ch.qos.logback.core.ConsoleAppender
-      layout_class: ch.qos.logback.classic.PatternLayout
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
       pattern: "%-4relative [%thread] %-5level %class - %msg%n"
     - name: FILE
       appender_class: ch.qos.logback.core.rolling.RollingFileAppender
       file: logs/brzy.log
       rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
       file_name_pattern: "brzy.%d{yyyy-MM-dd}.log"
-      layout: ch.qos.logback.classic.PatternLayout
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
       pattern: "%-4relative [%thread] %-5level %class - %msg%n"
   loggers:
     - name: org.brzy
