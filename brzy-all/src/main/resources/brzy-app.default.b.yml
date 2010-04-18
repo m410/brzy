@@ -125,12 +125,6 @@ web_xml:
         content: BrzyServlet
       - name: url-pattern
         content: "*.brzy"
-  - name: servlet-mapping
-    children:
-      - name: servlet-name
-        content: BrzyServlet
-      - name: url-pattern
-        content: "/users/*"
   - name: welcome-file-list
     children:
       - name: welcome-file

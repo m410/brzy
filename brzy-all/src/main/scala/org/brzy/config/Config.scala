@@ -3,109 +3,130 @@ package org.brzy.config
 import reflect.BeanProperty
 import org.brzy.application.WebApp
 import org.slf4j.LoggerFactory
+import scala.collection.mutable.ArrayBuffer
 
 /**
+ * load default, load plugins, load app.
+ * loading default and plugins has to ignore the about tag.
+ *
+ * implicit plugins:
+ * logging, persistence
+ *
  * @author Michael Fortin
  * @version $Id: $
  */
 class Config extends Merge[Config] {
+	
+	private val master = "master"
   @BeanProperty var environment:String = _
+  @BeanProperty var config_type:String = _
+  @BeanProperty var package_type:String = _
+
   @BeanProperty var version:String = _
   @BeanProperty var name:String = _
   @BeanProperty var author:String = _
   @BeanProperty var description:String = _
   @BeanProperty var group_id:String = _
   @BeanProperty var artifact_id:String = _
-  @BeanProperty var package_type:String = _
-  @BeanProperty var src_package:String = _
+
   @BeanProperty var webapp_context:String = _
   @BeanProperty var test_framework:String = _
-  @BeanProperty var view_type:String = _
+
   @BeanProperty var scala_version:String = _
   @BeanProperty var ant_version:String = _
   @BeanProperty var ivy_version:String = _
-  @BeanProperty var view_html_version:String = _
-  @BeanProperty var persistence_type:String = "jpa"
-  @BeanProperty var persistence_properties:java.util.HashMap[String,String]= _
-  @BeanProperty var db_migration:Boolean = _
-  @BeanProperty var db_generation:Boolean = _
+
+  @BeanProperty var views:Views = _
+
   @BeanProperty var application_properties:java.util.HashMap[String,String] = _
   @BeanProperty var application_class:String =_
 
-  @BeanProperty var data_source:DataSource =_
   @BeanProperty var repositories:Array[Repository] = _
   @BeanProperty var dependencies:Array[Dependency] = _
+
   @BeanProperty var logging:Logging = _
   @BeanProperty var plugins:Array[Plugin] = _
-  @BeanProperty var environment_overrides:Array[Config] = _
+  @BeanProperty var persistence:Array[Plugin] = _
   @BeanProperty var web_xml:Array[WebXmlNode] = _
 
-  def merge(that:Config):Config = {
-    if(that.environment != null) this.environment = that.environment
-    if(that.version != null) this.version = that.version
-    if(that.name != null) this.name = that.name
-    if(that.author != null) this.author = that.author
-    if(that.description != null) this.description = that.description
-    if(that.group_id != null) this.group_id = that.group_id
-    if(that.artifact_id != null) this.artifact_id = that.artifact_id
-    if(that.package_type != null) this.package_type = that.package_type
-    if(that.src_package != null) this.src_package = that.src_package
-    if(that.webapp_context != null) this.webapp_context = that.webapp_context
-    if(that.test_framework != null) this.test_framework = that.test_framework
-    if(that.view_type != null) this.view_type = that.view_type
-    if(that.scala_version != null) this.scala_version = that.scala_version
-    if(that.ant_version != null) this.ant_version = that.ant_version
-    if(that.ivy_version != null) this.ivy_version = that.ivy_version
-    if(that.view_html_version != null) this.view_html_version = that.view_html_version
-    if(that.persistence_type != null) this.persistence_type = that.persistence_type
+  @BeanProperty var environment_overrides:Array[Config] = _
 
-    if(that.db_migration ) this.db_migration = true
-    if(that.db_generation) this.db_generation = true
+	/**
+	 * merge this with other config, and return a new one
+	 */
+  def +(that:Config) = {
+    val config = copy
 
-    if(that.application_properties != null && this.application_properties == null)
-      this.application_properties = that.application_properties
-    else if(that.application_properties != null && this.application_properties != null)
-      this.application_properties.putAll(that.application_properties)
+		if(that.config_type == master) { // default merged to the app config, this needs to be update
+	    config.version = that.version
+	    config.name = that.name
+	    config.author = that.author
+	    config.description = that.description
+	    config.group_id = that.group_id
+	    config.artifact_id = that.artifact_id
 
-    if(that.persistence_properties != null && this.persistence_properties == null)
-      this.persistence_properties = that.persistence_properties
-    else if(that.persistence_properties != null && this.persistence_properties != null)
-      this.persistence_properties.putAll(that.persistence_properties)
+	    config.webapp_context = that.webapp_context
+	    config.test_framework = that.test_framework
+	    config.scala_version = that.scala_version
+	    config.ant_version = that.ant_version
+	    config.ivy_version = that.ivy_version
+	    config.application_class = that.application_class
+		}
+		
+    config.application_properties = new java.util.HashMap[String,String]
+    if(this.application_properties != null)
+      config.application_properties.putAll(this.application_properties)
+    if(that.application_properties != null)
+      config.application_properties.putAll(that.application_properties)
 
-    if(that.plugins != null && this.plugins == null)
-      this.plugins = that.plugins
-    else if(that.plugins != null && this.plugins != null)
-      this.plugins = this.plugins ++ that.plugins
+    val deps = ArrayBuffer[Dependency]()
+    if(that.dependencies != null )
+      deps ++= that.dependencies
+    if(this.dependencies != null)
+      deps ++= this.dependencies
+    config.dependencies = deps.toArray
 
-    if(that.dependencies != null && this.dependencies == null)
-      this.dependencies = that.dependencies
-    else if(that.dependencies != null && this.dependencies != null)
-      this.dependencies = this.dependencies ++ that.dependencies
+    val repos = ArrayBuffer[Repository]()
+    if(that.repositories != null )
+      repos ++= that.repositories
+    if(this.repositories != null)
+      repos ++= this.repositories
+    config.repositories = repos.toArray
 
-    if(that.repositories != null && this.repositories == null)
-      this.repositories = that.repositories
-    else if(that.repositories != null && this.repositories != null)
-      this.repositories = this.repositories ++ that.repositories
-
-    if(that.logging != null) this.logging = that.logging
-
-    if(that.application_class != null) this.application_class = that.application_class
-
-
-    this
+    config
   }
 
-  def initApp():WebApp = {
-    val log = LoggerFactory.getLogger(getClass)
-    log.info(this.toString)
-    log.info("Starting with Application class: {}", application_class)
-    val clazz = Class.forName(application_class, true, getClass.getClassLoader)
-    clazz.getConstructor(classOf[Config]).newInstance(this).asInstanceOf[WebApp]
+  def +(config:Array[Config]) = {
+    new Config()
   }
+
+	def copy = {
+		val c = new Config
+		c.environment            =environment           
+		c.config_type            =config_type           
+		c.package_type           =package_type          
+		c.version                =version               
+		c.name                   =name                  
+		c.author                 =author                
+		c.description            =description           
+		c.group_id               =group_id              
+		c.artifact_id            =artifact_id           
+		c.webapp_context         =webapp_context        
+		c.test_framework         =test_framework        
+		c.scala_version          =scala_version         
+		c.ant_version            =ant_version           
+		c.ivy_version            =ivy_version           
+		c.views                   =views                  
+		c.application_class      =application_class     
+		c.logging                =logging               
+		c.persistence            =persistence           
+		c.web_xml                =web_xml               
+		c
+	}
 
   override def toString = {
     val newline = System.getProperty("line.separator")
-    val sb = new StringBuffer()
+    val sb = new StringBuilder()
     sb.append(newline)
     sb.append("  - environment").append("=").append(environment).append(newline)
     sb.append("  - version").append("=").append(version).append(newline)
@@ -115,21 +136,14 @@ class Config extends Merge[Config] {
     sb.append("  - group_id").append("=").append(group_id).append(newline)
     sb.append("  - artifact_id").append("=").append(artifact_id).append(newline)
     sb.append("  - package_type").append("=").append(package_type).append(newline)
-    sb.append("  - src_package").append("=").append(src_package).append(newline)
     sb.append("  - webapp_context").append("=").append(webapp_context).append(newline)
     sb.append("  - test_framework").append("=").append(test_framework).append(newline)
-    sb.append("  - view_type").append("=").append(view_type).append(newline)
+    sb.append("  - views").append("=").append(views).append(newline)
     sb.append("  - scala_version").append("=").append(scala_version).append(newline)
     sb.append("  - ant_version").append("=").append(ant_version).append(newline)
     sb.append("  - ivy_version").append("=").append(ivy_version).append(newline)
-    sb.append("  - view_html_version").append("=").append(view_html_version).append(newline)
-    sb.append("  - persistence_type").append("=").append(persistence_type).append(newline)
-    sb.append("  - db_migration").append("=").append(db_migration).append(newline)
-    sb.append("  - db_generation").append("=").append(db_generation).append(newline)
     sb.append("  - application_properties").append("=").append(application_properties).append(newline)
-    sb.append("  - persistence_properties").append("=").append(persistence_properties).append(newline)
     sb.append("  - application_class").append("=").append(application_class).append(newline)
-    sb.append("  - data_source").append("=").append(data_source).append(newline)
     sb.append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
     sb.append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
     sb.append("  - logging").append("=").append(logging).append(newline)

@@ -13,7 +13,7 @@ object Main {
   def main(args: Array[String]) {
     println("config = " + args(2))
     println("target = " + args(3))
-    val config = new Builder(args(2), args(0)).config
+    val config = new Builder(args(2), args(0)).runtimeConfig
 
     args(1) match {
       case "logback" =>

@@ -46,7 +46,7 @@ object Person extends Schema {
 
     def delete() = {
       log.trace("delete")
-			persons.deleteWere(db => db.id === t.id)
+			persons.deleteWhere(db => db.id === t.id)
     }
   }
 

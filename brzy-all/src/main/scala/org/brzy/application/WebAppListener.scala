@@ -18,11 +18,11 @@ class WebAppListener extends ServletContextListener {
     log.info("Brzy Environment  : {}", env)
     val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
     log.info("Brzy Configuration: {}", url)
-    val app = new Builder(url,env).config.initApp
+    val app = new Builder(url,env).webApplication
     servletContextEvent.getServletContext.setAttribute("application", app)
 
-    if(app.config.db_migration)
-      Migrator.doMigrations
+    // if(app.config.db_migration)
+    //   Migrator.doMigrations
 
     app.startup
   }
@@ -30,5 +30,4 @@ class WebAppListener extends ServletContextListener {
   def contextDestroyed(servletContextEvent: ServletContextEvent) = {
     servletContextEvent.getServletContext.getAttribute("application").asInstanceOf[WebApp].shutdown
   }
-
 }

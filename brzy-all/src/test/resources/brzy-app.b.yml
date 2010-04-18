@@ -5,7 +5,6 @@
 # http://jyaml.sourceforge.net/
 #
 --- !org.brzy.config.Config
-environment: default
 version: 1.0.0
 name: Test app
 author: Fred
@@ -15,11 +14,10 @@ scala-version: 2.8.0
 ant-version: 1.7.1
 ivy-version: 2.1.0
 
-group_id: org.brzy.sample
+group_id: &group org.brzy.sample
 artifact_id: sample-jpa
 
-src_package: org.brzy.mock
-webapp_context: testapp
+webapp_context: mainapp
 
 application_class: org.brzy.sample.WebApp
 application_properties: 
@@ -28,8 +26,9 @@ application_properties:
 # view setup
 # [velocity,ssp]
 # [html4,html5,xhtml,xhtml2,xhtml5]
-view_type: .ssp
-view_html_version: html5
+views:
+  implementation: .ssp
+  html_version: html5
 
 #
 # dependencies
@@ -37,18 +36,14 @@ view_html_version: html5
 #
 dependencies:
   - lib: compile:org.apache.wicket:wicket:jar:1.4-rc6
-  - lib: compile:org.fusesource.scalate:calate-core:jar:1.0-SNAPSHOT
+  - lib: compile:org.fusesource.scalate:scalate-core:jar:1.0
 
 #
 # Dependency Management
 #
 repositories:
   - id: fusesource
-    name: FuseSource Community Repository
     url: http://someurl.com/test
-    snapshots: false
-    releases: true
-
 
 plugins:
   - name: breadcrumb
@@ -61,21 +56,28 @@ plugins:
 #[java-jpa,scala-jpa,jdo,squeryl]
 db_migration: true
 db_generation: false
-persistence_type: jpa
-persistence_properties:
-  "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
-  "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
-  "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
-  "hibernate.connection.username": "sa"
-  "hibernate.connection.password": ""
-  "hibernate.hbm2ddl.auto": "update"
 
-data_source:
-  name: something
-  driver_class: org.postgresql.Driver
-  user_name: test
-  password:
-  url: jdbc:postgresql://localhost/dev
+persistence:
+  - name: "brzy-app"
+    implementation: "scala-jpa"
+    version: latest
+    scan_package: *group
+    properties:
+      "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
+      "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
+      "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
+      "hibernate.connection.username": "sa"
+      "hibernate.connection.password": ""
+      "hibernate.hbm2ddl.auto": "update"
+  - name: "brzy-squeryl"
+    implementation: "squeryl"
+    version: latest
+    scan_package: *group
+    properties:
+      driver_class: org.postgresql.Driver
+      user_name: test
+      password:
+      url: jdbc:postgresql://localhost/dev
 
 #
 # Logging
@@ -99,13 +101,19 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: STDOUT
+    ref: FILE
 #
 # override defaults for any environment
 #
 environment_overrides: 
   - environment: developement
-    migration_enabled: false
+    db_migration: false
+    logging:
+      root:
+        ref:STDOUT
+    webapp_context: devapp
   - environment: test
+    webapp_context: testapp
   - environment: production
+    webapp_context: prodapp
 

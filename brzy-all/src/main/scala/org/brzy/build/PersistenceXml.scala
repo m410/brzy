@@ -20,20 +20,20 @@ class PersistenceXml(config:Config) {
   private val parentName = "persistence-unit"
   private val template = XML.load(getClass.getClassLoader.getResource("template.persistence.xml"))
   private val children = ListBuffer[Elem]()
-
+	private val persistence = config.persistence.find(persist => persist.name == "scala-jpa").get
   private val reflections = new Reflections(new ConfigurationBuilder()
       .setUrls(getUrlsForPackagePrefix(config.group_id))
       .setScanners(new TypeAnnotationsScanner()))
 
   private val entities:List[Class[_]] = reflections.getTypesAnnotatedWith(classOf[Entity]).toList
 
-  entities.foreach(e =>{
+  entities.foreach(e => {
     children += <class>{e.getName}</class>
   })
 
-  if(config.persistence_properties != null)
+  if(persistence.properties != null)
     children += <properties>
-      {config.persistence_properties.map(f =>  <property name={f._1} value={f._2} />)}
+      {persistence.properties.map(f =>  <property name={f._1} value={f._2} />)}
     </properties>
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head

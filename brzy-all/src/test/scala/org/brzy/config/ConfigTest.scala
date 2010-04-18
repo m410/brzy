@@ -10,25 +10,47 @@ import org.junit.Assert._
 class ConfigTest {
 
   @Test
-  def testInitApp = {
-    val config = new Config
-    config.application_class ="org.brzy.mock.MockWebApp"
-    assertNotNull(config.initApp)
+  def testMerge2 = {
+    val appConfig = new Config
+		appConfig.environment = "app"
+		appConfig.config_type = "master"
+    appConfig.name = "test"
+    appConfig.version = "1.1.1"
+
+    val defaultConfig = new Config
+    defaultConfig.name = "bob"
+
+    val mergedConfig = defaultConfig + appConfig
+    assertNotNull(mergedConfig)
+    assertTrue(defaultConfig != mergedConfig)
+    assertEquals("1.1.1", mergedConfig.version)
+    assertEquals("bob", mergedConfig.name)
   }
 
   @Test
-  def testMerge = {
-    val config = new Config
-    config.name = "test"
-    config.version = "1.1.1"
+  def testMerge3 = {
+    val subConfig = new Config
+    subConfig.name = "test deep"
+    subConfig.version = "1.1.1"
+    subConfig.artifact_id = "tester"
 
-    val config2 = new Config
-    config2.name = "bob"
+    val appConfig = new Config
+		appConfig.environment = "app"
+		appConfig.config_type = "master"
+    appConfig.name = "test"
+    appConfig.version = "1.1.1"
+    appConfig.group_id = "org.group"
 
-    val config3 = config2.merge(config)
-    assertNotNull(config3)
-    assertEquals(config2, config3)
-    assertEquals("1.1.1", config3.version)
-    assertEquals("test", config3.name)
+    val defaultConfig = new Config
+    defaultConfig.name = "bob"
+
+    val mergedConfig = defaultConfig + appConfig + subConfig
+    assertNotNull(mergedConfig)
+    assertTrue(defaultConfig != mergedConfig)
+    assertEquals("1.1.1", mergedConfig.version)
+    assertEquals("bob", mergedConfig.name)
+    assertEquals("tester", mergedConfig.artifact_id)
+    assertEquals("org.group", mergedConfig.group_id)
+    assertNull( mergedConfig.webapp_context)
   }
 }

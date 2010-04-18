@@ -11,5 +11,7 @@ encoding: "UTF-8"
    environment_overrides: org.brzy.config.App[]
    application_properties: java.util.HashMap
    web_xml: org.brzy.config.WebXmlNode[]
+   persistence: org.brzy.config.Plugin[]
+   views: org.brzy.config.Views
  handlers:
 #   com.mycompany.MyFunkyObject: com.mycompany.jyaml.MyFunkyObjectWrapper

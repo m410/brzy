@@ -11,5 +11,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ScheduledService {
-    String cron() default "* * * * *";
+    String cron() default "* * * * *";    
 }

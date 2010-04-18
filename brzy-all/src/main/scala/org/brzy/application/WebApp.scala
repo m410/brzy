@@ -33,7 +33,7 @@ abstract class WebApp(val config:Config) {
           if method.getAnnotation(classOf[Path]) != null) {
         val methodPath = method.getAnnotation(classOf[Path])
         val pathValue = classPath.value +"/" +  methodPath.value
-        val action = new Action(pathValue, method, ctl, config.view_type)
+        val action = new Action(pathValue, method, ctl, config.views.implementation)
         log.debug("action: " + action)
         list += action
       }
