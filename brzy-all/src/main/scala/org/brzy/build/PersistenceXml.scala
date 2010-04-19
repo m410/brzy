@@ -20,9 +20,9 @@ class PersistenceXml(config:Config) {
   private val parentName = "persistence-unit"
   private val template = XML.load(getClass.getClassLoader.getResource("template.persistence.xml"))
   private val children = ListBuffer[Elem]()
-	private val persistence = config.persistence.find(persist => persist.name == "scala-jpa").get
+	private val persistence = config.persistence.find(persist => persist.implementation == "scala-jpa").get
   private val reflections = new Reflections(new ConfigurationBuilder()
-      .setUrls(getUrlsForPackagePrefix(config.group_id))
+      .setUrls(getUrlsForPackagePrefix(config.application.group_id))
       .setScanners(new TypeAnnotationsScanner()))
 
   private val entities:List[Class[_]] = reflections.getTypesAnnotatedWith(classOf[Entity]).toList

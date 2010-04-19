@@ -10,8 +10,8 @@ class Repository {
   @BeanProperty var id: String = _
   @BeanProperty var name: String = _
   @BeanProperty var url: String = _
-  @BeanProperty var snapshots: String = _
-  @BeanProperty var releases: String = _
+  @BeanProperty var snapshots: Boolean = false
+  @BeanProperty var releases: Boolean = true
 
 
   override def toString = new StringBuilder()

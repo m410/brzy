@@ -11,46 +11,47 @@ class ConfigTest {
 
   @Test
   def testMerge2 = {
-    val appConfig = new Config
-		appConfig.environment = "app"
-		appConfig.config_type = "master"
-    appConfig.name = "test"
-    appConfig.version = "1.1.1"
+    val overrideConfig = new Config
+    overrideConfig.application = new org.brzy.config.Application
+		overrideConfig.environment = "app"
+    overrideConfig.application.name = "test"
+    overrideConfig.application.version = "1.1.1"
 
     val defaultConfig = new Config
-    defaultConfig.name = "bob"
+    defaultConfig.application = new org.brzy.config.Application
+    defaultConfig.application.name = "bob"
 
-    val mergedConfig = defaultConfig + appConfig
+    val mergedConfig = defaultConfig + overrideConfig
     assertNotNull(mergedConfig)
     assertTrue(defaultConfig != mergedConfig)
-    assertEquals("1.1.1", mergedConfig.version)
-    assertEquals("bob", mergedConfig.name)
+    assertEquals("1.1.1", mergedConfig.application.version)
+    assertEquals("test", mergedConfig.application.name)
   }
 
   @Test
   def testMerge3 = {
     val subConfig = new Config
-    subConfig.name = "test deep"
-    subConfig.version = "1.1.1"
-    subConfig.artifact_id = "tester"
+    subConfig.application = new org.brzy.config.Application
+    subConfig.application.version = "1.1.2"
+    subConfig.application.artifact_id = "tester"
 
     val appConfig = new Config
+    appConfig.application = new org.brzy.config.Application
 		appConfig.environment = "app"
-		appConfig.config_type = "master"
-    appConfig.name = "test"
-    appConfig.version = "1.1.1"
-    appConfig.group_id = "org.group"
+    appConfig.application.version = "1.1.1"
+    appConfig.application.group_id = "org.group"
 
     val defaultConfig = new Config
-    defaultConfig.name = "bob"
+    defaultConfig.application = new org.brzy.config.Application
+    defaultConfig.application.name = "bob"
 
     val mergedConfig = defaultConfig + appConfig + subConfig
     assertNotNull(mergedConfig)
     assertTrue(defaultConfig != mergedConfig)
-    assertEquals("1.1.1", mergedConfig.version)
-    assertEquals("bob", mergedConfig.name)
-    assertEquals("tester", mergedConfig.artifact_id)
-    assertEquals("org.group", mergedConfig.group_id)
-    assertNull( mergedConfig.webapp_context)
+    assertEquals("1.1.2", mergedConfig.application.version)
+    assertEquals("bob", mergedConfig.application.name)
+    assertEquals("tester", mergedConfig.application.artifact_id)
+    assertEquals("org.group", mergedConfig.application.group_id)
+    assertNull( mergedConfig.application.webapp_context)
   }
 }

@@ -3,44 +3,28 @@
 #
 # http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
 # http://jyaml.sourceforge.net/
-#
---- !org.brzy.config.Config
-version: 1.0.0
-name: Test app
-author: Fred
-description: Some Description
-
-scala-version: 2.8.0
-ant-version: 1.7.1
-ivy-version: 2.1.0
-
-group_id: &group org.brzy.sample
-artifact_id: sample-jpa
-
-webapp_context: mainapp
-
-application_class: org.brzy.sample.WebApp
-application_properties: 
-  test: value
-#
-# view setup
-# [velocity,ssp]
-# [html4,html5,xhtml,xhtml2,xhtml5]
-views:
-  implementation: .ssp
-  html_version: html5
+application:
+  version: 1.0.0
+  name: Test app
+  author: Fred
+  description: Some Description
+  group_id: &group org.brzy.sample
+  artifact_id: sample-jpa
+  application_class: org.brzy.mock.MockWebApp
+  properties:
+    test: value
+  webapp_context: mainapp
 
 #
 # dependencies
-# scope: organization:name:type:version
-#
+# scope:organization:name:version
+# scope = [provided,runtime,test]
 dependencies:
   - lib: compile:org.apache.wicket:wicket:jar:1.4-rc6
   - lib: compile:org.fusesource.scalate:scalate-core:jar:1.0
 
 #
 # Dependency Management
-#
 repositories:
   - id: fusesource
     url: http://someurl.com/test
@@ -51,15 +35,11 @@ plugins:
   - name: ejb
   - name: spring
 
-#
-# Persistence
-#[java-jpa,scala-jpa,jdo,squeryl]
-db_migration: true
-db_generation: false
+migration:
 
 persistence:
-  - name: "brzy-app"
-    implementation: "scala-jpa"
+  - name: "hibernate"
+    implementation: "scala-hibernate"
     version: latest
     scan_package: *group
     properties:
@@ -69,7 +49,7 @@ persistence:
       "hibernate.connection.username": "sa"
       "hibernate.connection.password": ""
       "hibernate.hbm2ddl.auto": "update"
-  - name: "brzy-squeryl"
+  - name: "squeryl"
     implementation: "squeryl"
     version: latest
     scan_package: *group
@@ -102,18 +82,25 @@ logging:
   root:
     level: INFO
     ref: FILE
+
+web_xml:
+
 #
 # override defaults for any environment
 #
-environment_overrides: 
+environment_overrides:
   - environment: developement
-    db_migration: false
     logging:
       root:
         ref:STDOUT
-    webapp_context: devapp
+    application:
+      webapp_context: devapp
   - environment: test
-    webapp_context: testapp
+    application:
+      webapp_context: testapp
   - environment: production
-    webapp_context: prodapp
+    application:
+      webapp_context: prodapp
+
+
 

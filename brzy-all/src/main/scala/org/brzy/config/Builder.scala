@@ -32,7 +32,6 @@ class Builder(appFile:File, environment:String) {
   val applicationConfig = {
 		val config = Yaml.loadType(appFile, classOf[Config])
 		config.environment = "app"
-		config.config_type = "master"
 		config
 	}
 
@@ -46,23 +45,11 @@ class Builder(appFile:File, environment:String) {
     if(applicationConfig.plugins != null)
       applicationConfig.plugins.foreach(plugin => plugins += loadPlugin(plugin.name))
 
-    // implicit logging plugin
-    plugins += loadPlugin(
-      if(applicationConfig.logging.provider != null)
-        applicationConfig.logging.provider
-      else
-        defaultConfig.logging.provider
-      )
-
-    // implicit persistence plugin(s)
-    if(applicationConfig.logging != null)
-      plugins += loadPlugin(applicationConfig.logging.provider)
-
-    // implicit view plugin
-//    if(applicationConfig.logging != null)
-//      plugins += loadPlugin(applicationConfig.logging.provider)
-
     plugins.toArray
+  }
+
+  def loadPlugin(name:String):Config = {
+    new Config()
   }
 
   val environmentConfig = environment match {
@@ -80,16 +67,12 @@ class Builder(appFile:File, environment:String) {
    * Adds all the other configurations to the application configuration.  Properties are
    * added to the application but do not over write them.
    */
-  val runtimeConfig = defaultConfig + applicationConfig + pluginConfigs + environmentConfig
+  val runtimeConfig = defaultConfig + applicationConfig + environmentConfig // + pluginConfigs 
 
   lazy val webApplication:WebApp = {
-    Class.forName(runtimeConfig.application_class, true, getClass.getClassLoader)
-    	.getConstructor(classOf[Config])
-			.newInstance(runtimeConfig)
-			.asInstanceOf[WebApp]
-  }
-
-  def loadPlugin(name:String):Config = {
-    new Config()
+    val c = Class.forName(runtimeConfig.application.application_class)
+    val constructor = c.getConstructor(classOf[Config])
+		val inst = constructor.newInstance(runtimeConfig)
+		inst.asInstanceOf[WebApp]
   }
 }

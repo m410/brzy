@@ -3,11 +3,11 @@ package org.brzy.application
 import org.junit.Test
 import org.junit.Assert._
 
-import org.brzy.config.Config
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.interceptor.Proxy
 import org.brzy.interceptor.impl.LoggingInterceptor
 import org.brzy.mock.{UserService, UserController}
+import org.brzy.config.{Views, Config}
 
 /**
  * @author Michael Fortin
@@ -27,6 +27,8 @@ class WebAppTest {
   @Test
   def testCreate = {
     val config = new Config()
+    config.views = new Views
+    config.views.implementation  = ".jsp"
     val webapp = new MockWebApp(config)
     assertNotNull(webapp)
     assertNotNull(webapp.services)

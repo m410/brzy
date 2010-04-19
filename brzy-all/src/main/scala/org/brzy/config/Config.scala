@@ -17,29 +17,11 @@ import scala.collection.mutable.ArrayBuffer
  */
 class Config extends Merge[Config] {
 	
-	private val master = "master"
   @BeanProperty var environment:String = _
-  @BeanProperty var config_type:String = _
-  @BeanProperty var package_type:String = _
+  @BeanProperty var application:Application = _
 
-  @BeanProperty var version:String = _
-  @BeanProperty var name:String = _
-  @BeanProperty var author:String = _
-  @BeanProperty var description:String = _
-  @BeanProperty var group_id:String = _
-  @BeanProperty var artifact_id:String = _
-
-  @BeanProperty var webapp_context:String = _
   @BeanProperty var test_framework:String = _
-
-  @BeanProperty var scala_version:String = _
-  @BeanProperty var ant_version:String = _
-  @BeanProperty var ivy_version:String = _
-
-  @BeanProperty var views:Views = _
-
-  @BeanProperty var application_properties:java.util.HashMap[String,String] = _
-  @BeanProperty var application_class:String =_
+  @BeanProperty var project:Project = _
 
   @BeanProperty var repositories:Array[Repository] = _
   @BeanProperty var dependencies:Array[Dependency] = _
@@ -48,6 +30,7 @@ class Config extends Merge[Config] {
   @BeanProperty var plugins:Array[Plugin] = _
   @BeanProperty var persistence:Array[Plugin] = _
   @BeanProperty var web_xml:Array[WebXmlNode] = _
+  @BeanProperty var views:Views = _
 
   @BeanProperty var environment_overrides:Array[Config] = _
 
@@ -57,93 +40,97 @@ class Config extends Merge[Config] {
   def +(that:Config) = {
     val config = copy
 
-		if(that.config_type == master) { // default merged to the app config, this needs to be update
-	    config.version = that.version
-	    config.name = that.name
-	    config.author = that.author
-	    config.description = that.description
-	    config.group_id = that.group_id
-	    config.artifact_id = that.artifact_id
+    if(that.environment != null)
+      config.environment = that.environment
 
-	    config.webapp_context = that.webapp_context
-	    config.test_framework = that.test_framework
-	    config.scala_version = that.scala_version
-	    config.ant_version = that.ant_version
-	    config.ivy_version = that.ivy_version
-	    config.application_class = that.application_class
-		}
-		
-    config.application_properties = new java.util.HashMap[String,String]
-    if(this.application_properties != null)
-      config.application_properties.putAll(this.application_properties)
-    if(that.application_properties != null)
-      config.application_properties.putAll(that.application_properties)
+    if(application != null)
+      config.application = application + that.application
+    else // default config is always null
+      config.application = that.application
 
+    if(that.test_framework != null)
+      config.test_framework = that.test_framework
+
+    if(project != null)
+      config.project = project + that.project
+
+    if(logging != null)
+      config.logging = logging + that.logging
+    else// default config is always null
+      config.logging = that.logging
+
+    // webxml
+    val webxml = ArrayBuffer[WebXmlNode]()
+
+    if(that.web_xml != null )
+      webxml ++= that.web_xml
+
+    if(this.web_xml != null)
+      webxml ++= this.web_xml
+
+    config.web_xml = webxml.toArray
+
+    // dependencies
     val deps = ArrayBuffer[Dependency]()
+
     if(that.dependencies != null )
       deps ++= that.dependencies
+
     if(this.dependencies != null)
       deps ++= this.dependencies
+
     config.dependencies = deps.toArray
 
+    // repositories
     val repos = ArrayBuffer[Repository]()
+
     if(that.repositories != null )
       repos ++= that.repositories
+
     if(this.repositories != null)
       repos ++= this.repositories
+
     config.repositories = repos.toArray
+
+    // persistence
+    val persist = ArrayBuffer[Plugin]()
+
+    if(that.persistence != null )
+      persist ++= that.persistence
+
+    if(this.persistence != null)
+      persist ++= this.persistence
+
+    config.persistence = persist.toArray
 
     config
   }
 
-  def +(config:Array[Config]) = {
-    new Config()
+  def copy = {
+    val config = new Config
+    config.environment = environment
+    config.application = application
+    config.test_framework = test_framework
+    config.project = project
+    config.repositories = repositories
+    config.dependencies = dependencies
+    config.logging = logging
+    config.plugins = plugins
+    config.persistence = persistence
+    config.web_xml = web_xml
+    config.environment_overrides = environment_overrides
+    config
   }
-
-	def copy = {
-		val c = new Config
-		c.environment            =environment           
-		c.config_type            =config_type           
-		c.package_type           =package_type          
-		c.version                =version               
-		c.name                   =name                  
-		c.author                 =author                
-		c.description            =description           
-		c.group_id               =group_id              
-		c.artifact_id            =artifact_id           
-		c.webapp_context         =webapp_context        
-		c.test_framework         =test_framework        
-		c.scala_version          =scala_version         
-		c.ant_version            =ant_version           
-		c.ivy_version            =ivy_version           
-		c.views                   =views                  
-		c.application_class      =application_class     
-		c.logging                =logging               
-		c.persistence            =persistence           
-		c.web_xml                =web_xml               
-		c
-	}
 
   override def toString = {
     val newline = System.getProperty("line.separator")
     val sb = new StringBuilder()
     sb.append(newline)
     sb.append("  - environment").append("=").append(environment).append(newline)
-    sb.append("  - version").append("=").append(version).append(newline)
-    sb.append("  - name").append("=").append(name).append(newline)
-    sb.append("  - author").append("=").append(author).append(newline)
-    sb.append("  - description").append("=").append(description).append(newline)
-    sb.append("  - group_id").append("=").append(group_id).append(newline)
-    sb.append("  - artifact_id").append("=").append(artifact_id).append(newline)
-    sb.append("  - package_type").append("=").append(package_type).append(newline)
-    sb.append("  - webapp_context").append("=").append(webapp_context).append(newline)
+    sb.append("  - application").append("=").append(application).append(newline)
+    sb.append("  - project").append("=").append(project).append(newline)
     sb.append("  - test_framework").append("=").append(test_framework).append(newline)
     sb.append("  - views").append("=").append(views).append(newline)
-    sb.append("  - scala_version").append("=").append(scala_version).append(newline)
-    sb.append("  - ant_version").append("=").append(ant_version).append(newline)
-    sb.append("  - ivy_version").append("=").append(ivy_version).append(newline)
-    sb.append("  - application_properties").append("=").append(application_properties).append(newline)
-    sb.append("  - application_class").append("=").append(application_class).append(newline)
     sb.append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
     sb.append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
     sb.append("  - logging").append("=").append(logging).append(newline)

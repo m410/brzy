@@ -1,15 +1,15 @@
-package org.brzy.service;
+package org.brzy.action;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Document Me..
  *
  * @author Michael Fortin
  * @version $Id: $
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ScheduledService {
-    String value() default "* * * * *";    
+public @interface Path {
+    String value();
+    String[] methods() default {"GET"};
 }

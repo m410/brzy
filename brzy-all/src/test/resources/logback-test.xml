@@ -1,8 +1,8 @@
 <configuration>
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
+    <encoder>
       <pattern>%-4relative [%thread] %-5level %class - %msg%n</pattern>
-    </layout>
+    </encoder>
   </appender>
   <logger name="org.brzy" level="TRACE"/>
   <root level="INFO">

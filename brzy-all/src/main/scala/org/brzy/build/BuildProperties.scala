@@ -20,11 +20,11 @@ class BuildProperties(config:Config) {
   // read template
   val content = Source.fromURL(getClass.getClassLoader.getResource("template.build.properties"))
       .mkString
-      .replace(applicationVersion,config.version)
-      .replace(applicationName,config.name)
-      .replace(applicationOrg,config.group_id)
-      .replace(applicationType,config.package_type)
+      .replace(applicationVersion,config.application.version)
+      .replace(applicationName,config.application.name)
+      .replace(applicationOrg,config.application.group_id)
+      .replace(applicationType,config.project.package_type)
       .replace(testFramework,config.test_framework)
-      .replace(scalaVersion,config.scala_version)
-      .replace(ivyVersion,config.ivy_version)
+      .replace(scalaVersion,config.project.scala_version)
+      .replace(ivyVersion,config.project.ivy_version)
 }

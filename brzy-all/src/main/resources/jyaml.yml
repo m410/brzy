@@ -6,12 +6,13 @@ encoding: "UTF-8"
    repositories: org.brzy.config.Repository[]
    dependencies: org.brzy.config.Dependency[]
    plugins: org.brzy.config.Plugin[]
-   data_source: org.brzy.config.DataSource
    logging: org.brzy.config.Logging
    environment_overrides: org.brzy.config.App[]
    application_properties: java.util.HashMap
    web_xml: org.brzy.config.WebXmlNode[]
    persistence: org.brzy.config.Plugin[]
    views: org.brzy.config.Views
+   project: org.brzy.config.Project
+   application: org.brzy.config.Application
  handlers:
 #   com.mycompany.MyFunkyObject: com.mycompany.jyaml.MyFunkyObjectWrapper
