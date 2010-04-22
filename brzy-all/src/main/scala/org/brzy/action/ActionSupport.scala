@@ -6,9 +6,9 @@ import org.brzy.util.FlashMessage
 
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie}
 import org.slf4j.LoggerFactory
-import java.util.Enumeration
 import scala.collection.JavaConversions._
 import collection.mutable.ListBuffer
+import java.util.Enumeration
 
 
 /**
@@ -132,19 +132,16 @@ object ActionSupport {
     
     args.toList.foreach( arg => arg match {
         case ParametersClass =>
-          var p = new Parameters()
-
-          req.getParameterMap.keysIterator.foreach(x =>{
-            val y = req.getParameterMap.get(x)
-            p.put(x.asInstanceOf[String],y.asInstanceOf[Array[String]])
-          })
           val urlParams = action.matchParameters(path)
+          val paramMap = new collection.mutable.HashMap[String,Array[String]]()
 
           for(i <- 0 to urlParams.size -1) {
             log.debug("add embeded param: ({},{})",action.matchParameterIds(i),urlParams(i))
-            p.put(action.matchParameterIds(i),Array(urlParams(i)))
+            paramMap.put(action.matchParameterIds(i),Array(urlParams(i)))
           }
-          list += p
+          val jParams = req.getParameterMap.asInstanceOf[java.util.Map[String, Array[String]]]
+					val wrappedMap = new JMapWrapper[String,Array[String]](jParams)
+          list += new Parameters( wrappedMap ++ paramMap)
         case SessionClass =>
           val session = new Session()
           val e = req.getSession.getAttributeNames.asInstanceOf[Enumeration[String]]
