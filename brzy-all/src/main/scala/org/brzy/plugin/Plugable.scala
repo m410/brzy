@@ -17,7 +17,7 @@ import org.brzy.config.Dependency
  * @version $Id: $
  */
 
-trait Plugin {
+trait Plugable {
 
   // name and version are supplied by the configuration file bundled with the jar
 //  val name = _

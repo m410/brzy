@@ -16,7 +16,7 @@ class Project extends Merge[Project]{
     val proj = new Project
 
     if(that == null) {
-      proj.scala_version =  scala_version
+      proj.scala_version = scala_version
       proj.ant_version = ant_version
       proj.ivy_version = ivy_version
       proj.package_type = package_type 

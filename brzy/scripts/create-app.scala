@@ -1,9 +1,5 @@
-#!/bin/sh
-exec scala -cp $BRZY_HOME/lib/brzy-all-0.1.jar "$0" `pwd` $BRZY_HOME 
-!#
 
 import java.io.{FileInputStream,FileOutputStream, File}
-// import org.brzy.build.BrzyAppBYml
 import io.Source
 
 object CreateApp extends Application {

@@ -1,7 +1,3 @@
-#!/bin/sh
-exec scala-2.8 -cp $BRZY_HOME/lib/brzy-all-0.1.jar:$BRZY_HOME/lib/jyaml-1.3.jar "$0" `pwd` $BRZY_HOME 
-!#
-
 import java.io._
 import org.brzy.build._
 import org.brzy.config.{Config,Builder}
@@ -22,7 +18,7 @@ object Initialize extends Application {
 	
 	// load configuration
 	val brzyConfig = new File(args(0),"brzy-app.b.yml")
-	val config = new Builder(brzyConfig,"development").config // dev is placeholder
+	val config = new Builder(brzyConfig,"development").runtimeConfig // dev is placeholder
 		
 	// create default build scripts
 	val brzyBuild = new File(args(1),"templates/build/brzy-app/build.xml")	

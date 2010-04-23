@@ -1,53 +1,51 @@
 #
 # application configuration
-#
-name: [name]
-version: [version]
-author: Add Your Name Here
-description: Add Some application Description here
-
-group_id: [group]
-artifact_id: [artifact]
-
-webapp_context: /
-application_class: [group].Application
-
-data_source:
-  name:datasource
-  driver_class: org.postgresql.Driver
-  user_name: yourUser
-  password: yourPass
-  url: jdbc:postgresql://localhost/yourDb
-
+# configuration Reference: http://brzy.org/docs/config_reference
+# configuration dump: >brzy info
+application:
+  name: [name]
+  version: [version]
+  author: Add Your Name Here
+  description: Add a description here
+  group_id: [group]
+  artifact_id: [artifact]
+  webapp_context: /
+  application_class: [group].Application
+persistence:
+  - name: "squeryl"
+    implementation: "squeryl"
+    properties:
+      driver_class: org.h2.Driver
+      user_name: sa
+      password:
+      url: jdbc:h2:test_db
+dependencies:
+  - lib: "runtime:com.h2database:h2:1.2.133"
 logging:
   provider: logback
   appenders:
     - name: STDOUT
       appender_class: ch.qos.logback.core.ConsoleAppender
-      layout_class: ch.qos.logback.classic.PatternLayout
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
       pattern: "%-4relative [%thread] %-5level %class - %msg%n"
     - name: FILE
       appender_class: ch.qos.logback.core.rolling.RollingFileAppender
       file: logs/brzy.log
       rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
-      file_name_pattern: "brzy.%d{yyyy-MM-dd}.log"
-      layout: ch.qos.logback.classic.PatternLayout
+      file_name_pattern: "logs/brzy.%d{yyyy-MM-dd}.log"
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
       pattern: "%-4relative [%thread] %-5level %class - %msg%n"
   loggers:
     - name: org.brzy
       level: debug
   root:
     level: INFO
-    ref: STDOUT
-
+    ref: FILE
 # override defaults for any environment
 environment_overrides:
   - environment: developement
-    data_source:
-      name: datasource
-      driver_class: org.hsqldb.jdbc.JDBCDriver
-      user_name: SA
-      password:
-      url: jdbc:hsqldb:file:testdb
+    logging:
+      root:
+        ref:STDOUT
   - environment: test
   - environment: production

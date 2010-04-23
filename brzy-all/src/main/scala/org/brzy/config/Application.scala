@@ -20,23 +20,40 @@ class Application extends Merge[Application] {
 
   def +(that: Application) = {
     val app = new Application
-    app.version = if(that.version != null) that.version else version
-    app.name = if(that.name != null) that.name else name
-    app.author = if(that.author != null) that.author else author
-    app.description = if(that.description != null) that.description else description
-    app.group_id = if(that.group_id != null) that.group_id else group_id
-    app.artifact_id = if(that.artifact_id != null) that.artifact_id else artifact_id
-    app.properties = if(that.properties != null) that.properties else properties
-    app.application_class = if(that.application_class != null) that.application_class else application_class
-    app.webapp_context = if(that.webapp_context != null) that.webapp_context else webapp_context
-    app.properties = new java.util.HashMap[String,String]
 
-    if(properties != null)
-      app.properties.putAll(properties)
+    if(that != null) {
+      app.version = if(that.version != null) that.version else version
+      app.name = if(that.name != null) that.name else name
+      app.author = if(that.author != null) that.author else author
+      app.description = if(that.description != null) that.description else description
+      app.group_id = if(that.group_id != null) that.group_id else group_id
+      app.artifact_id = if(that.artifact_id != null) that.artifact_id else artifact_id
+      app.properties = if(that.properties != null) that.properties else properties
+      app.application_class = if(that.application_class != null) that.application_class else application_class
+      app.webapp_context = if(that.webapp_context != null) that.webapp_context else webapp_context
+      app.properties = new java.util.HashMap[String,String]
 
-    if(that.properties != null)
-      app.properties.putAll(that.properties)
+      if(properties != null)
+        app.properties.putAll(properties)
 
+      if(that.properties != null)
+        app.properties.putAll(that.properties)
+    }
+    else {
+      app.version = version
+      app.name = name
+      app.author = author
+      app.description = description
+      app.group_id = group_id
+      app.artifact_id = artifact_id
+      app.properties = properties
+      app.application_class = application_class
+      app.webapp_context = webapp_context
+      app.properties = new java.util.HashMap[String,String]
+
+      if(properties != null)
+        app.properties.putAll(properties)
+    }
     app
   }
 

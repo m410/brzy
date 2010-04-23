@@ -1,7 +1,3 @@
-#!/bin/sh
-exec scala "$0" "$@"
-!#
-
 object Plugins extends Application {
 
   if(args.size > 1 && args(1) == "help")
