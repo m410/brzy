@@ -3,7 +3,7 @@ package org.brzy.build
 import org.junit.Test
 import org.junit.Assert._
 import java.util.HashMap
-import org.brzy.config.{Plugin, Config}
+import org.brzy.config.{PluginConfig, AppConfig}
 
 /**
  * @author Michael Fortin
@@ -13,10 +13,10 @@ class PersistenceXmlTest {
 
   @Test
   def testPersistence = {
-    val config = new Config()
+    val config = new AppConfig()
     config.application = new org.brzy.config.Application
     config.application.group_id = "org.brzy.mock"
-    config.persistence = Array(new Plugin)
+    config.persistence = Array(new PluginConfig)
     config.persistence(0).name = "brzy-app"
     config.persistence(0).implementation = "scala-jpa"
     config.persistence(0).version = "latest"

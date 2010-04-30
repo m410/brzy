@@ -4,7 +4,8 @@ import org.brzy.config.Builder
 import xml.XML
 
 /**
- *
+ * This is used by the command line app to generate the configuration files.
+ * 
  * @author Michael Fortin
  * @version $Id: $
  */

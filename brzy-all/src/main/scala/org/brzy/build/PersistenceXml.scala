@@ -1,7 +1,7 @@
 package org.brzy.build
 
 import xml.transform.RuleTransformer
-import org.brzy.config.Config
+import org.brzy.config.AppConfig
 import xml.{XML, Elem}
 import collection.mutable.ListBuffer
 import collection.JavaConversions._
@@ -16,7 +16,7 @@ import javax.persistence.Entity
  * @author Michael Fortin
  * @version $Id: $
  */
-class PersistenceXml(config:Config) {
+class PersistenceXml(config:AppConfig) {
   private val parentName = "persistence-unit"
   private val template = XML.load(getClass.getClassLoader.getResource("template.persistence.xml"))
   private val children = ListBuffer[Elem]()

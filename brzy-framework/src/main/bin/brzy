@@ -1,0 +1,88 @@
+#!/bin/bash
+
+CLASSPATH=$BRZY_HOME/lib/brzy-shell-0.1.jar:\
+$BRZY_HOME/lib/brzy-config-0.1.jar:\
+$BRZY_HOME/lib/commons-lang-2.5.jar:\
+$BRZY_HOME/lib/logback-classic-0.9.20.jar:\
+$BRZY_HOME/lib/logback-core-0.9.20.jar:\
+$BRZY_HOME/lib/scala-library-2.8.0.Beta1.jar:\
+$BRZY_HOME/lib/slf4j-api-1.5.11.jar:\
+$BRZY_HOME/lib/jyaml-1.3.jar
+echo $CLASSPATH
+
+# create-app can be called from anywhere
+if [ "$1" = "create-app" ]; then
+	SCRIPT="$BRZY_HOME/scripts/create-app.scala"
+	exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
+	exit 0
+fi
+
+# check that it's a project directory
+if [ ! -f "brzy-app.b.yml" ]; then
+	echo "Not a brzy project directory"
+	exit 1
+fi
+
+# check for generated build files
+if [ ! -d ".brzy" ]; then
+	SCRIPT="$BRZY_HOME/scripts/init.scala"
+	exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME 
+fi
+
+# run ant scripts
+if [ "$1" = "build" ]; then
+	exec ant -f .brzy/build.xml -q 
+	exit 0
+fi
+
+# run ant scripts
+if [ "$1" = "clean" ] || [ "$1" = "test" ] || [ "$1" = "compile" ] || [ "$1" = "war" ]; then
+	exec ant -f .brzy/build.xml -q $2
+	exit 0
+fi
+
+# run any other script, looking in brzy, project and plugin directories
+for i in "$BRZY_HOME/scripts"/*.scala
+do
+	if [ "`basename ${i%%.*}`" = "$1" ]; then
+		SCRIPT=$i
+	fi
+done
+
+if [ ! -e "$SCRIPT" ]; then
+		for i in "scripts"/*.scala
+		do
+    		if [ "`basename ${i%%.*}`" = "$1" ]; then
+					SCRIPT=$i
+				fi
+		done
+fi
+
+if [ ! -e "$SCRIPT" ]; then
+		for i in "scripts"/*.scala
+		do
+    		if [ "`basename ${i%%.*}`" = "$1" ];  then
+					SCRIPT=$i
+				fi
+		done
+fi
+
+
+if [ ! -e "$SCRIPT" ]; then
+		for plugin in "`pwd`/.brzy/plugins"/*
+		do
+	    	for file in "$plugin/scripts"/*.scala
+				do
+		    		if [ "`basename ${file%.*}`" = "$1" ];  then
+							SCRIPT=$file
+						fi
+				done
+		done
+fi
+
+if [ -e "$SCRIPT" ]; then
+	echo "script: $SCRIPT"
+	exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME $@
+else
+	echo "ERROR: script with name '$1' not found"
+fi

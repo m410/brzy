@@ -1,0 +1,26 @@
+<assembly>
+    <id>resources</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/scripts</directory>
+            <outputDirectory>scripts</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/templates</directory>
+            <outputDirectory>templates</outputDirectory>
+        </fileSet>
+    </fileSets>
+		<dependencySets>
+		    <dependencySet>
+		      <outputDirectory>lib</outputDirectory>
+		    </dependencySet>
+		  </dependencySets>
+</assembly>
