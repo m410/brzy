@@ -105,6 +105,25 @@ class AppConfig extends MergeConfig[AppConfig] {
     config
   }
 
+  def ++(thosePlugins:Array[PluginConfig]) =
+    if(plugins == null) {
+      plugins = thosePlugins
+      this
+    }
+    else {
+      thosePlugins.foreach(thatPlugin =>
+        if(plugins.exists(thisPlugin => thisPlugin.name == thatPlugin.name)) {
+          var thisPlugin = plugins.find(thisPlugin => thisPlugin.name == thatPlugin.name).get
+          thisPlugin = thisPlugin + thatPlugin
+        }
+        else {
+          plugins = plugins :+ thatPlugin
+        }
+      )
+      this
+    }
+
+
   def copy = {
     val config = new AppConfig
     config.environment = environment

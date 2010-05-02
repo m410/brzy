@@ -16,7 +16,6 @@ import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, 
 class ActionSupportTest {
 
   @Test
-	@Ignore
   def testBuildArgs = {
     val request = new MockHttpServletRequest("GET", "/users/10.brzy") // should be /users/
 

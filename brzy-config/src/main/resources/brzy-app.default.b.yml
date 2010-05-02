@@ -10,8 +10,10 @@ project:
 # [velocity,ssp]
 # [html4,html5,xhtml,xhtml2,xhtml5]
 views:
-  implementation: ".ssp"
+  implementation: scalate
+  version: 0.1
   html_version: html5
+  remote_location: /Users/m410/Projects/brzy/brzy-plugin-scalate/target/brzy-scalate-0.1-plugin.zip
   
 repositories:
   - id: java-net2

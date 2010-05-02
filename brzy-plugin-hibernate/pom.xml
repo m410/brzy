@@ -61,6 +61,11 @@
   </repositories>
   <dependencies>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>4.0.2.GA</version>
+    </dependency>
+    <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
       <version>0.1</version>

@@ -15,6 +15,7 @@ object DbInit {
 
   def init = {
     if(!isDone) {
+      println("init: start")
       Class.forName("org.h2.Driver")
       val conn:Connection  = DriverManager.getConnection("jdbc:h2:target/test", "sa", "sa");
       conn.createStatement.execute("drop table if exists person")
@@ -24,6 +25,7 @@ object DbInit {
       conn.createStatement.execute("""insert into person (first_name, last_name) values ('test','user')""")
       conn.close()
       isDone = true
+      println("init: done")
     }
   }
 }

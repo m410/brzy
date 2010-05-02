@@ -66,7 +66,6 @@ class ServletJpaTest {
   }
 
   @Test
-  @Ignore
   def testActionGet = {
 
     val entityTransaction = createMock(classOf[EntityTransaction])
@@ -176,7 +175,6 @@ class ServletJpaTest {
   }
 
   @Test
-  @Ignore
   def testActionSave = {
 	
 	  val entityTransaction = createMock(classOf[EntityTransaction])
@@ -222,7 +220,6 @@ class ServletJpaTest {
 	}
 	
   @Test
-  @Ignore
   def testActionEdit = {
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
@@ -258,7 +255,6 @@ class ServletJpaTest {
   }
 
   @Test
-  @Ignore
   def testActionUpdate = {
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin

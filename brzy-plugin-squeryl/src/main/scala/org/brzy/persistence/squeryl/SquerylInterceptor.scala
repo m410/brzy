@@ -12,7 +12,8 @@ import org.squeryl.adapters._
 class SquerylInterceptor(driver:String, url:String, user:String, pass:String) extends Proxy with Interceptor {
 
 	val datasource = java.sql.DriverManager.getConnection(url, user, pass)
-	val adaptor = 
+
+  val adaptor =
 			if(url.indexOf("postgresql") >= 0)
 		    new PostgreSqlAdapter
 		  else if(url.indexOf("mysql") >= 0)

@@ -3,6 +3,7 @@ package org.brzy.mock
 import org.brzy.persistence.scalaJpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
+import reflect.BeanProperty
 
 /**
  * @author Michael Fortin
@@ -16,7 +17,7 @@ class User {
 
   @Id var id:Long = _
   @Version var version:Int = _
-  @NotNull @Size(max=30) var name:String = _
+  @BeanProperty @NotNull @Size(max=30) var name:String = _
 
   /*
   @OneToMany{val mappedBy = "project",

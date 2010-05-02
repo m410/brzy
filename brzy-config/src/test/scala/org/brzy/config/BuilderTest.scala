@@ -60,12 +60,11 @@ class BuilderTest {
 	}
 
   @Test
-  @Ignore
 	def testPluginConfig = {
     val builder: Builder = new Builder(url, "development")
     val configs = builder.pluginConfigs
 		assertNotNull(configs)
-    assertEquals(6,configs.size)
+    assertEquals(3,configs.size)
 	}
 
   @Test

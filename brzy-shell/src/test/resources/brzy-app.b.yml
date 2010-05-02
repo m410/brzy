@@ -30,12 +30,10 @@ repositories:
     url: http://someurl.com/test
 
 plugins:
-  - name: breadcrumb
-  - name: scheduler
-  - name: ejb
-  - name: spring
-
-migration:
+  - name: scalate
+    local_location: /Users/m410/Projects/brzy/brzy-plugin-scalate
+  - name: hibernate
+    remote_location: /Users/m410/Projects/brzy/brzy-plugin-hibernate/target/brzy-hibernate-0.1-plugin.zip
 
 persistence:
   - name: "hibernate"

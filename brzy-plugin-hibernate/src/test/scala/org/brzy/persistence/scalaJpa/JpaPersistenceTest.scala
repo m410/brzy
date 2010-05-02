@@ -26,7 +26,6 @@ class JpaPersistenceTest {
   }
 
   @Test
-  @Ignore
   def testPersistenceValidate ={
     val map = new collection.mutable.HashMap[String, Array[String]]()
     map.put("id",Array("1"))

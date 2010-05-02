@@ -17,7 +17,7 @@ class BrzyControllerScannerTest {
   val scanner = new BrzyControllerScanner("org.brzy.mock")
 
   @Test
-	@Ignore
+  @Ignore
   def testControllerScanner = {
     val result = scanner.controllers
     assertNotNull(result)
@@ -25,7 +25,7 @@ class BrzyControllerScannerTest {
   }
 
   @Test
-	@Ignore
+  @Ignore
 	def testActionMap = {
     val result = scanner.actionMapping
     assertNotNull(result)

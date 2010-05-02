@@ -23,6 +23,8 @@ class ServletSquerylTest {
   val controllerClass = classOf[PersonController]
   val controller = make(controllerClass,interceptor)
 
+  DbInit.init
+
   val config:AppConfig = new AppConfig()
   val app = new WebApp(new AppConfig()) {
     override val services = Array[AnyRef]()
@@ -33,12 +35,9 @@ class ServletSquerylTest {
       new Action("persons/save", controllerClass.getMethods()(2), controller, ".jsp"),
       new Action("persons/{id}", controllerClass.getMethods()(0), controller, ".jsp"),
       new Action("persons/{id}/edit", controllerClass.getMethods()(5), controller, ".jsp"),
-      new Action("persons/{id}/delete", controllerClass.getMethods()(3), controller, ".jsp"),
+      new Action("persons/{id}/delete", controllerClass.getMethods()(6), controller, ".jsp"),
       new Action("persons/{id}/update", controllerClass.getMethods()(4), controller, ".jsp"))
   }
-
-  DbInit.init
-
 
   @Test
   def testActionList = {
@@ -64,7 +63,7 @@ class ServletSquerylTest {
   }
 
   @Test
-	@Ignore
+  @Ignore
   def testActionGet = {
     val context: MockServletContext = new MockServletContext()
     val request = new MockHttpServletRequest(context,"GET", "persons/1") {
@@ -138,7 +137,7 @@ class ServletSquerylTest {
   }
 
   @Test
-	@Ignore
+  @Ignore
   def testActionEdit = {
     val context: MockServletContext = new MockServletContext()
     val request = new MockHttpServletRequest(context,"GET", "persons/1/edit") {

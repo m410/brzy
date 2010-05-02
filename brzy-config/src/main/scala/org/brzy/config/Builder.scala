@@ -90,5 +90,5 @@ class Builder(appFile:File, environment:String) {
    * Adds all the other configurations to the application configuration.  Properties are
    * added to the application but do not over write them.
    */
-  val runtimeConfig = defaultConfig + applicationConfig + environmentConfig // + pluginConfigs 
+  val runtimeConfig = defaultConfig + applicationConfig + environmentConfig ++ pluginConfigs 
 }
