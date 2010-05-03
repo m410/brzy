@@ -60,7 +60,7 @@ object Initialize extends Application {
 	
 	// write timestamp
 	
-	// copy scala jar files
+	new PluginDownloader(brzyPlugins, config)
 	
 }
 Initialize.main(args)

@@ -3,13 +3,13 @@ package org.brzy.mock
 import org.brzy.action.args.Parameters
 import org.brzy.validator.Validity
 import org.brzy.action.returns._
-import javax.ws.rs.{POST, GET, Path}
+import org.brzy.controller.{Path, Controller}
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-@Path("users")
+@Controller("users")
 class UserController {
 
   @Path("")
@@ -21,7 +21,7 @@ class UserController {
 	@Path("create")
 	def create = "user"->new User()
 
-  @POST @Path("save")
+  @Path("save")
 	def save(params:Parameters)() = {
 	  def user:User = User.make(params)
  		val validity = user.validity()

@@ -2,13 +2,11 @@ package org.brzy.controller
 
 import collection.mutable.ListBuffer
 import org.reflections.Reflections
-import javax.ws.rs.{Path => RestPath}
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
 import org.reflections.scanners.TypeAnnotationsScanner
 import org.brzy.action.Action
 import collection.immutable.SortedSet
 import collection.immutable.List
-import scala.collection.mutable.WrappedArray._
 import scala.collection.JavaConversions._
 
 
@@ -24,7 +22,7 @@ class BrzyControllerScanner(val packageName:String) {
   private val reflections = new Reflections(new ConfigurationBuilder()
       .setUrls(ClasspathHelper.getUrlsForPackagePrefix(packageName))
       .setScanners(new TypeAnnotationsScanner()))
-  private val controllersInternal:List[Class[_]] = reflections.getTypesAnnotatedWith(classOf[RestPath]).toList
+  private val controllersInternal:List[Class[_]] = reflections.getTypesAnnotatedWith(classOf[Controller]).toList
 
   def controllers = controllersInternal
 
@@ -34,10 +32,10 @@ class BrzyControllerScanner(val packageName:String) {
     controllersInternal.foreach(ctl => {
       val clazz = ctl.asInstanceOf[Class[_<:java.lang.Object]]
       val instance = clazz.newInstance
-      val classPath = clazz.getAnnotation(classOf[RestPath])
+      val classPath = clazz.getAnnotation(classOf[Path])
 
-      for(method <- clazz.getMethods if method.getAnnotation(classOf[RestPath]) != null) {
-        val methodPath = method.getAnnotation(classOf[RestPath])
+      for(method <- clazz.getMethods if method.getAnnotation(classOf[Path]) != null) {
+        val methodPath = method.getAnnotation(classOf[Path])
         val pathValue = classPath.value +"/" +  methodPath.value
         list += new Action(pathValue,method, instance, ".jsp") // TODO fix jsp
       }

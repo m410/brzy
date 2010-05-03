@@ -11,10 +11,10 @@ object ProxyFactory {
 
   private val filter = new MethodFilter {
     def isHandled(m: Method) = !m.getName.equals("finalize") &&
-            !m.getName.equals("toString") &&
-            !m.getName.equals("clone") &&
-            !m.getName.equals("hashCode") &&
-            !m.getName.equals("equals")
+        !m.getName.equals("toString") &&
+        !m.getName.equals("clone") &&
+        !m.getName.equals("hashCode") &&
+        !m.getName.equals("equals")
   }
 
   def make[T](clazz:Class[T], args:Array[AnyRef], proxy:Proxy): T = {

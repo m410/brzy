@@ -1,16 +1,15 @@
 package org.brzy.mock
 
-import javax.ws.rs.Path
 import org.squeryl.PrimitiveTypeMode._
 import org.brzy.action.args.Parameters
 import Person._
 import java.lang.String
-
+import org.brzy.controller.{Controller,Path}
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-@Path("persons/")
+@Controller("persons/")
 class PersonController {
 
   @Path("")

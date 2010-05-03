@@ -1,0 +1,13 @@
+package ${packageName}
+
+import org.brzy.action.{Path,Controller}
+
+/**
+ *
+ */
+@Controller("/")
+class HomeController {
+
+	@Path("")
+	def index = {}
+}

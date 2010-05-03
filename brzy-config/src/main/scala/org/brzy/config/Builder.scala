@@ -51,8 +51,10 @@ class Builder(appFile:File, environment:String) {
 
     val viewPlugin = new PluginConfig()
     viewPlugin.name = defaultConfig.views.implementation
+    viewPlugin.remote_location = defaultConfig.views.remote_location
     viewPlugin.properties = new java.util.HashMap[String,String]
     viewPlugin.properties.put("html_version",defaultConfig.views.html_version) 
+    viewPlugin.properties.put("file_extension",defaultConfig.views.file_extension) 
     plugins += loadPlugin(viewPlugin)
 
     plugins.toArray

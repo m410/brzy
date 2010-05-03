@@ -1,190 +1,138 @@
 environment: default
 test_framework: junit
 project:
-  scala_version: 2.8.0.RC1
-  ant_version: 1.7.1
-  ivy_version: 2.1.0
-  package_type: war
-  plugin_resources: ".brzy/plugins"
+ scala_version: 2.8.0.RC1
+ ant_version: 1.7.1
+ ivy_version: 2.1.0
+ package_type: war
+ plugin_resources: ".brzy/plugins"
 # view setup
 # [velocity,ssp]
 # [html4,html5,xhtml,xhtml2,xhtml5]
 views:
-  implementation: ".ssp"
-  html_version: html5
-  
+ implementation: scalate
+ version: 0.1
+ html_version: html5
+ file_extension: .ssp
+ remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.1/brzy-scalate-0.1-plugin.zip
+
 repositories:
-  - id: java-net2
-    name: java-net2
-    url: http://download.java.net/maven/2
-  - id: scala-tools
-    name: scala-tools
-    url: http://scala-tools.org/repo-releases
-  - id: jboss
-    name: jboss
-    url: http://repository.jboss.com/maven2
+ - id: java-net2
+   name: java-net2
+   url: http://download.java.net/maven/2
+ - id: scala-tools
+   name: scala-tools
+   url: http://scala-tools.org/repo-releases
+ - id: jboss
+   name: jboss
+   url: http://repository.jboss.com/maven2
 #  - id: fusesource.snapshots
 #    name: fusesource.snapshots
 #    url: http://repo.fusesource.com/nexus/content/repositories/snapshots
 dependencies:
-  - lib: "runtime,builder:org.brzy:brzy-all:0.1"
-  - lib: "runtime,builder:org.scala-lang:scala-compiler:2.8.0.Beta1-RC8"
-  - lib: "runtime,builder:org.scala-lang:scala-library:2.8.0.Beta1-RC8"
-  - lib: "runtime,builder:xerces:xerces:2.4.0"
-  - lib: "runtime,builder:org.jyaml:jyaml:1.3"
-  - lib: "runtime,builder:org.reflections:reflections:0.9.5-RC1"
-  - lib: "runtime,builder:org.slf4j:slf4j-api:1.5.8"
-  - lib: "builder:org.slf4j:slf4j-simple:1.5.8"
-  - lib: "builder:dom4j:dom4j:1.6.1"
-  - lib: "runtime,builder:com.google.collections:google-collections:1.0-rc3"
-  - lib: "runtime,builder:javax.persistence:persistence-api:1.0"
-  
-  - lib: "runtime:ch.qos.logback:logback-classic:0.9.20"
-  - lib: "runtime:ch.qos.logback:logback-core:0.9.20"
-  - lib: "runtime:com.google.collections:google-collections:1.0-rc3"
-  - lib: "runtime:com.sun.xml.bind:jaxb-impl:2.1.3"
-  - lib: "runtime:dom4j:dom4j:1.6"
-  - lib: "runtime:javassist:javassist:3.8.0.GA"
-  - lib: "runtime:javax.activation:activation:1.1"
-  - lib: "runtime:javax.validation:validation-api:1.0.0.GA"
-  - lib: "runtime:javax.ws.rs:jsr311-api:1.1.1"
-  - lib: "runtime:javax.xml.bind:jaxb-api:2.1"
-  - lib: "runtime:javax.xml.stream:stax-api:1.0-2"
-#  - lib: "runtime:jboss:javassist:3.8.0.GA"
-  - lib: "runtime:org.aspectj:aspectjweaver:1.6.8"
-#  - lib: "runtime:org.hibernate:hibernate-validator:4.0.2.GA"
-#  - lib: "runtime:org.squeryl:squeryl:2.8.0.Beta1-RC8-0.9.1"
-  - lib: "runtime:org.reflections:reflections:0.9.5-RC1"
-  - lib: "runtime:org.fusesource.scalate:scalate-core:1.0"
+ - lib: "runtime,builder:org.brzy:brzy-all:0.1"
+ - lib: "runtime,builder:org.scala-lang:scala-compiler:2.8.0.RC1"
+ - lib: "runtime,builder:org.scala-lang:scala-library:2.8.0.RC1"
+ - lib: "runtime,builder:xerces:xerces:2.4.0"
+ - lib: "runtime,builder:org.jyaml:jyaml:1.3"
+ - lib: "runtime,builder:org.reflections:reflections:0.9.5-RC1"
+ - lib: "runtime,builder:org.slf4j:slf4j-api:1.5.8"
+ - lib: "builder:org.slf4j:slf4j-simple:1.5.8"
+ - lib: "builder:dom4j:dom4j:1.6.1"
+ - lib: "runtime,builder:com.google.collections:google-collections:1.0-rc3"
+ - lib: "runtime,builder:javax.persistence:persistence-api:1.0"
 
-  - lib: "test:junit:junit:4.4"
+ - lib: "runtime:ch.qos.logback:logback-classic:0.9.20"
+ - lib: "runtime:ch.qos.logback:logback-core:0.9.20"
+ - lib: "runtime:com.google.collections:google-collections:1.0-rc3"
+ - lib: "runtime:com.sun.xml.bind:jaxb-impl:2.1.3"
+ - lib: "runtime:dom4j:dom4j:1.6"
+ - lib: "runtime:javassist:javassist:3.8.0.GA"
+ - lib: "runtime:javax.activation:activation:1.1"
+ - lib: "runtime:javax.validation:validation-api:1.0.0.GA"
+ - lib: "runtime:javax.ws.rs:jsr311-api:1.1.1"
+ - lib: "runtime:javax.xml.bind:jaxb-api:2.1"
+ - lib: "runtime:javax.xml.stream:stax-api:1.0-2"
+ - lib: "runtime:org.aspectj:aspectjweaver:1.6.8"
+ - lib: "runtime:org.reflections:reflections:0.9.5-RC1"
+ - lib: "runtime:org.fusesource.scalate:scalate-core:1.0"
 
-  - lib: "tomcat:org.apache.tomcat:annotations-api:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:catalina:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:coyote:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:el-api:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:jasper:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:jasper-el:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:jasper-jdt:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:jsp-api:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:juli:6.0.26"
-  - lib: "tomcat:org.apache.tomcat:servlet-api:6.0.26"
+ - lib: "test:junit:junit:4.4"
 
 web_xml:
-  - name: description
-    content: Breezy Scala
-  - name: display-name
-    content: Breezy Web App
-  - name: context-param
-    children:!org.brzy.config.WebXmlNode[]
-      - name: param-name
-        content: brzy-env
-      - name: param-value
-        content: development
-  - name: listener
-    children:
-      - name: listener-class
-        content: org.brzy.application.WebAppListener
-  - name: filter
-    children:
-      - name: filter-name
-        content: BrzyFilter
-      - name: filter-class
-        content: org.brzy.action.Filter
-  - name: filter-mapping
-    children:
-      - name: filter-name
-        content: BrzyFilter
-      - name: url-pattern
-        content: "/*"
-  - name: servlet
-    children:
-      - name: servlet-name
-        content: ScalateServlet
-      - name: servlet-class
-        content: org.fusesource.scalate.servlet.TemplateEngineServlet
-      - name: load-on-startup
-        content: "1"
-  - name: servlet-mapping
-    children:
-      - name: servlet-name
-        content: ScalateServlet
-      - name: url-pattern
-        content: "*.ssp"
-  - name: servlet
-    children:
-      - name: servlet-name
-        content: BrzyServlet
-      - name: servlet-class
-        content: org.brzy.action.Servlet
-      - name: load-on-startup
-        content: "1"
-  - name: servlet-mapping
-    children:
-      - name: servlet-name
-        content: BrzyServlet
-      - name: url-pattern
-        content: "*.brzy"
-  - name: welcome-file-list
-    children:
-      - name: welcome-file
-        content: index.brzy
-  - name: error-page
-    children:
-      - name: error-code
-        content: "404"
-      - name: location
-        content: /error-404.ssp
-  - name: error-page
-    children:
-      - name: error-code
-        content: "500"
-      - name: location
-        content: /error-500.ssp
-  - name: error-page
-    children:
-      - name: exception-type
-        content: java.lang.Throwable
-      - name: location
-        content: /error-500.ssp
-
-#
-#web_xml2:
-#  - description: Breezy Scala
-#  - display-name: Breezy Web App
-#  - context-param:
-#    - param-name : brzy-env
-#    - param-value: development
-#  - listener:
-#    - listener-class: org.brzy.application.WebAppListener
-#  - filter:
-#    - filter-name: BrzyFilter
-#    - filter-class: org.brzy.action.Filter
-#  - filter-mapping:
-#    - filter-name: BrzyFilter
-#    - url-pattern: "/*"
-#  - servlet:
-#    - servlet-name: ScalateServlet
-#    - servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet
-#    - load-on-startup: 1
-#  - servlet-mapping:
-#    - servlet-name: ScalateServlet
-#    - url-pattern: "*.ssp"
-#  - servlet:
-#    - servlet-name: BrzyServlet
-#    - servlet-class: org.brzy.action.Servlet
-#    - load-on-startup: "1"
-#  - servlet-mapping:
-#    - servlet-name: BrzyServlet
-#    - url-pattern: "*.brzy"
-#  - welcome-file-list:
-#    - welcome-file: index.brzy
-#  - error-page:
-#    - error-code: "404"
-#    - location: /error-404.ssp
-#  - error-page:
-#    - error-code: "500"
-#    - location: /error-500.ssp
-#  - error-page:
-#    - exception-type: java.lang.Throwable
-#    - location: /error-500.ssp
+ - name: description
+   content: Breezy Scala
+ - name: display-name
+   content: Breezy Web App
+ - name: context-param
+   children:!org.brzy.config.WebXmlNode[]
+     - name: param-name
+       content: brzy-env
+     - name: param-value
+       content: development
+ - name: listener
+   children:
+     - name: listener-class
+       content: org.brzy.application.WebAppListener
+ - name: filter
+   children:
+     - name: filter-name
+       content: BrzyFilter
+     - name: filter-class
+       content: org.brzy.action.Filter
+ - name: filter-mapping
+   children:
+     - name: filter-name
+       content: BrzyFilter
+     - name: url-pattern
+       content: "/*"
+ - name: servlet
+   children:
+     - name: servlet-name
+       content: ScalateServlet
+     - name: servlet-class
+       content: org.fusesource.scalate.servlet.TemplateEngineServlet
+     - name: load-on-startup
+       content: "1"
+ - name: servlet-mapping
+   children:
+     - name: servlet-name
+       content: ScalateServlet
+     - name: url-pattern
+       content: "*.ssp"
+ - name: servlet
+   children:
+     - name: servlet-name
+       content: BrzyServlet
+     - name: servlet-class
+       content: org.brzy.action.Servlet
+     - name: load-on-startup
+       content: "1"
+ - name: servlet-mapping
+   children:
+     - name: servlet-name
+       content: BrzyServlet
+     - name: url-pattern
+       content: "*.brzy"
+ - name: welcome-file-list
+   children:
+     - name: welcome-file
+       content: index.brzy
+ - name: error-page
+   children:
+     - name: error-code
+       content: "404"
+     - name: location
+       content: /error-404.ssp
+ - name: error-page
+   children:
+     - name: error-code
+       content: "500"
+     - name: location
+       content: /error-500.ssp
+ - name: error-page
+   children:
+     - name: exception-type
+       content: java.lang.Throwable
+     - name: location
+       content: /error-500.ssp

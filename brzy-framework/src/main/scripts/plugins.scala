@@ -1,3 +1,4 @@
+
 object Plugins extends Application {
 
   if(args.size > 1 && args(1) == "help")
@@ -13,7 +14,7 @@ object Plugins extends Application {
     p("[available|install|list|info]")
   }
   def executeAvailable = {
-    p("Available Plugins:")
+    p("Available Plugins (MOCKUP):")
     p("- Security            (security:0.5)")
     p("- JPA Persistence     (jpa-persistence:2.0.4)")
     p("- Squeryl Persistence (squeryl-persistence:2.0.4)")

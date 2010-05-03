@@ -3,8 +3,8 @@ package org.brzy.application
 import collection.immutable.SortedSet
 import org.brzy.config.AppConfig
 import org.brzy.action.Action
-import javax.ws.rs.Path
-import org.slf4j.{Logger, LoggerFactory}
+import org.brzy.controller.{Path,Controller}
+import org.slf4j.LoggerFactory
 import collection.mutable.ListBuffer
 
 /**
@@ -27,13 +27,13 @@ abstract class WebApp(val config:AppConfig) {
     val list = new ListBuffer[Action]()
     controllers.foreach( ctl => {
       log.debug("load actions from controller: {}", ctl)
-      val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Path])
-
-      for(method <- ctl.getClass.getSuperclass.getMethods
+      val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
+      val methods = ctl.getClass.getSuperclass.getMethods
+      for(method <- methods
           if method.getAnnotation(classOf[Path]) != null) {
         val methodPath = method.getAnnotation(classOf[Path])
         val pathValue = classPath.value +"/" +  methodPath.value
-        val action = new Action(pathValue, method, ctl, config.views.implementation)
+        val action = new Action(pathValue, method, ctl, config.views.file_extension)
         log.debug("action: " + action)
         list += action
       }

@@ -11,7 +11,7 @@ import java.lang.String
  * @author Michael Fortin
  * @version $Id : $
  */
-class PluginDownload(outputDir: File, appConfig: AppConfig) {
+class PluginDownloader(outputDir: File, appConfig: AppConfig) {
   appConfig.plugins.foreach(download _)
 
   def download(plugin: PluginConfig) =
@@ -50,7 +50,15 @@ class PluginDownload(outputDir: File, appConfig: AppConfig) {
     }
     else if (plugin.remote_location != null && !plugin.remote_location.startsWith("http")) {
       val remoteLoc: String = plugin.remote_location
-      val sourceFile = new File(remoteLoc)
+
+      val sourceFile =
+        if(remoteLoc.startsWith("~")){
+          val home = new File(System.getProperty("user.home"))
+          new File(home,remoteLoc.substring(1,remoteLoc.length))
+        }
+        else
+          new File(remoteLoc)
+
       val destinationFolder = new File(outputDir, plugin.name)
 
       if(!destinationFolder.exists)

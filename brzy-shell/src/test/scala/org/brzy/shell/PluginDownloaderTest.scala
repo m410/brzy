@@ -9,7 +9,7 @@ import org.brzy.config.Builder
  * @author Michael Fortin
  * @version $Id: $
  */
-class PluginDownloadTest {
+class PluginDownloaderTest {
 
   @Test
   def downloadTest = {
@@ -26,8 +26,8 @@ class PluginDownloadTest {
     workDir.mkdirs
     assertTrue(workDir.exists)
     assertEquals(0, workDir.listFiles.length)
-    new PluginDownload(workDir,config)
-    assertEquals(1, workDir.listFiles.length)
+    new PluginDownloader(workDir,config)
+    assertEquals(2, workDir.listFiles.length)
   }
 
   def recursiveDelete(file:File):Unit = {

@@ -33,7 +33,7 @@ plugins:
   - name: scalate
     local_location: /Users/m410/Projects/brzy/brzy-plugin-scalate
   - name: hibernate
-    remote_location: /Users/m410/Projects/brzy/brzy-plugin-hibernate/target/brzy-hibernate-0.1-plugin.zip
+    remote_location: ~/.m2/repository/org/brzy/brzy-hibernate/0.1/brzy-hibernate-0.1-plugin.zip
 
 persistence:
   - name: "hibernate"
