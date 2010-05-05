@@ -29,6 +29,9 @@ repositories:
   - id: fusesource
     url: http://someurl.com/test
 
+plugins:
+  - name: scalate
+  
 persistence:
   - name: "hibernate"
     implementation: "scala-hibernate"

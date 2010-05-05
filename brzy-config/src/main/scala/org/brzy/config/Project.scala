@@ -11,6 +11,7 @@ class Project extends MergeConfig[Project]{
   @BeanProperty var ant_version:String = _
   @BeanProperty var ivy_version:String = _
   @BeanProperty var package_type:String = _
+  @BeanProperty var plugin_resources:String = _
 
   def +(that: Project) = {
     val proj = new Project
@@ -26,6 +27,7 @@ class Project extends MergeConfig[Project]{
       proj.ant_version = if(that.ant_version != null) that.ant_version else ant_version
       proj.ivy_version = if(that.ivy_version != null) that.ivy_version else ivy_version
       proj.package_type = if(that.package_type != null) that.package_type else package_type
+      proj.plugin_resources = if(that.plugin_resources != null) that.plugin_resources else plugin_resources
     }
     proj
   }
@@ -39,6 +41,7 @@ class Project extends MergeConfig[Project]{
     sb.append("   - ant_version  ").append("=").append(ant_version).append(newline)
     sb.append("   - ivy_version  ").append("=").append(ivy_version).append(newline)
     sb.append("   - package_type ").append("=").append(package_type).append(newline)
+    sb.append("   - plugin_resources ").append("=").append(plugin_resources).append(newline)
     sb.toString
   }
 }

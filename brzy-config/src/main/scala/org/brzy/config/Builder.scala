@@ -60,20 +60,34 @@ class Builder(appFile:File, environment:String) {
     plugins.toArray
   }
 
-  def loadPlugin(reference:PluginConfig):PluginConfig = {
+  def loadPlugin(plugin:PluginConfig):PluginConfig = {
 
-    val pluginFile:File = 
-      if(reference.local_location == null)
-        new File(appFile.getParentFile, ".brzy/plugins/" + reference.name + "/brzy-plugin.b.yml")
+    val pluginCache =
+      if(applicationConfig.project != null && applicationConfig.project.plugin_resources != null)
+        new File(appFile.getParent, applicationConfig.project.plugin_resources)
       else
-        new File(appFile.getParentFile, reference.local_location + "/brzy-plugin.b.yml")
+        new File(appFile.getParent, defaultConfig.project.plugin_resources)
 
-    if(!pluginFile.exists) {
-      log.warn("Plugin does not exist: " + pluginFile.getAbsolutePath)
-      reference
+    log.debug("pluginCache: " + pluginCache)
+
+    val pluginFile:File =
+      if(plugin.local_location != null)
+        new File(appFile.getParentFile, plugin.local_location + "/brzy-plugin.b.yml")
+      else  if(plugin.remote_location != null) {
+        plugin.downloadTo(pluginCache)
+        new File(pluginCache, plugin.name + "/brzy-plugin.b.yml")
+      }
+      else
+        null // TODO need to set the default
+
+    log.debug("pluginFile: " + pluginFile)
+
+    if(pluginFile == null || !pluginFile.exists) {
+      log.warn("Plugin does not exist: " + pluginFile)
+      plugin
     }
     else {
-      reference +  new PluginConfig(pluginFile)
+      plugin +  new PluginConfig(pluginFile)
     }
   }
 

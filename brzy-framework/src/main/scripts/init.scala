@@ -2,6 +2,7 @@ import java.io._
 import org.brzy.build._
 import org.brzy.config.{AppConfig,Builder}
 import scala.io.Source
+import org.brzy.shell.PluginDownloader
 
 object Initialize extends Application {
   println(" Initializing project")
