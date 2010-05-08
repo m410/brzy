@@ -79,6 +79,37 @@ logging:
     ref: FILE
 
 web_xml:
+  description: Breezy Scala
+  display-name: Breezy Web App
+  context-param:
+    param-name: brzy-env
+    param-value: development
+  listener:
+    listener-class: org.brzy.application.WebAppListener
+  filter:
+    filter-name: BrzyFilter
+    filter-class: org.brzy.action.Filter
+  filter-mapping:
+    filter-name: BrzyFilter
+    url-pattern: "/*"
+  servlet:
+    servlet-name: BrzyServlet
+    servlet-class: org.brzy.action.Servlet
+    load-on-startup: "1"
+  servlet-mapping:
+    servlet-name: BrzyServlet
+    url-pattern: "*.brzy"
+  welcome-file-list:
+    welcome-file: index.brzy
+  error-page:
+    error-code: "404"
+    location: /error-404.ssp
+  error-page:
+    error-code: "500"
+    location: /error-500.ssp
+  error-page:
+    exception-type: java.lang.Throwable
+    location: /error-500.ssp
 
 #
 # override defaults for any environment

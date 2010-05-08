@@ -5,6 +5,8 @@ import java.net.{URL, URLConnection}
 import java.io.{FileOutputStream, BufferedInputStream, BufferedOutputStream, File}
 import org.slf4j.LoggerFactory
 import org.brzy.util.FileUtils._
+import org.ho.yaml.Yaml
+import collection.mutable.ArrayBuffer
 
 /**
  * @author Michael Fortin
@@ -25,8 +27,21 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
   @BeanProperty var scan_package:String = _
   @BeanProperty var properties:java.util.HashMap[String,String] =_
 
+  @BeanProperty var web_xml:java.util.HashMap[String,java.lang.Object] = _
+  @BeanProperty var repositories:Array[Repository] = _
+  @BeanProperty var dependencies:Array[Dependency] = _
+
+
   if(file != null) {
-    // load from file
+    val config = Yaml.load(file).asInstanceOf[java.util.Map[String,java.lang.Object]]
+    log.debug("config: " + config)
+    name = config.get("name").asInstanceOf[String]
+    implementation = config.get("implementation").asInstanceOf[String]
+    remote_location = config.get("remote_location").asInstanceOf[String]
+    local_location = config.get("local_location").asInstanceOf[String]
+    version = config.get("version").asInstanceOf[String]
+    scan_package = config.get("scan_package").asInstanceOf[String]
+    properties =config.get("properties").asInstanceOf[java.util.HashMap[String,String]]
   }
 
   def +(that: PluginConfig) = {
@@ -36,6 +51,35 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
     proj.version = if(that.version != null) that.version else version
     proj.scan_package = if(that.scan_package != null) that.scan_package else scan_package
     proj.properties = if(that.properties != null) that.properties else properties
+
+    val repos = new ArrayBuffer[Repository]()
+
+    if(repositories != null)
+      repos ++= repositories
+
+    if(that.repositories != null)
+        repos ++= that.repositories
+
+    proj.repositories = repos.toArray
+
+    val deps = new ArrayBuffer[Dependency]()
+
+    if(dependencies!= null)
+      deps ++= dependencies
+
+    if(that.dependencies!= null)
+        deps ++= that.dependencies
+
+    proj.dependencies = deps.toArray
+
+    proj.web_xml = new java.util.HashMap[String,java.lang.Object]
+
+    if(web_xml!= null)
+      proj.web_xml putAll web_xml
+
+    if(that.web_xml!= null)
+        proj.web_xml putAll that.web_xml
+
     proj
   }
 
@@ -44,10 +88,10 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
    * plugin has a local_location.  In which case the local location is used instead
    * of the plugin cache.
    */
-  def downloadTo(outputDir:File) =
+  def downloadAndUnzipTo(outputDir:File) =
     // if it has a local location ignore it.
     if (local_location != null) {
-
+      log.debug("local: " + local_location)
       val file = new File(local_location)
 
       if (!file.exists)
@@ -55,6 +99,7 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
     }
     // downloads from web
     else if (remote_location != null && remote_location.startsWith("http")) {
+      log.debug("remote: " + remote_location)
       val url = new URL(remote_location)
       val urlc: URLConnection = url.openConnection
       val destinationFolder = new File(outputDir, name)
@@ -83,6 +128,7 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
     }
     // copy from local file system
     else if (remote_location != null && !remote_location.startsWith("http")) {
+      log.debug("remote: " + remote_location)
       val remoteLoc: String = remote_location
 
       val sourceFile =
@@ -106,12 +152,12 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
       sourceFile.copyTo(destinationFolder)
       destinationFile.unzip()
     }
-    // deducte the external path and downlaod it
+    // deduce the external path and download it
     else { // neither local or remote locations, need to make url
+      log.debug("default location" )
       // TODO need to implement this
       // error("Unknown file Location for plugin: '" + name + "'")
     }
-
 
 
   override def toString = {

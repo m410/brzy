@@ -26,6 +26,7 @@ class BuilderTest {
     assertNotNull(config.application.artifact_id)
     assertNotNull(config.logging)
     assertNotNull(config.persistence)
+    assertNotNull(config.web_xml)
 	}
 	
 	@Test
@@ -64,7 +65,7 @@ class BuilderTest {
     val builder: Builder = new Builder(url, "development")
     val configs = builder.pluginConfigs
 		assertNotNull(configs)
-    assertEquals(3,configs.size)
+    assertEquals(4,configs.size)
 	}
 
   @Test

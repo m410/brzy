@@ -56,121 +56,43 @@ dependencies:
   - lib: "test:junit:junit:4.4"
 
 
-web_xml:
-  - name: description
-    content: Breezy Scala
-  - name: display-name
-    content: Breezy Web App
-  - name: context-param
-    children:!org.brzy.config.WebXmlNode[]
-      - name: param-name
-        content: brzy-env
-      - name: param-value
-        content: development
-  - name: listener
-    children:
-      - name: listener-class
-        content: org.brzy.application.WebAppListener
-  - name: filter
-    children:
-      - name: filter-name
-        content: BrzyFilter
-      - name: filter-class
-        content: org.brzy.action.Filter
-  - name: filter-mapping
-    children:
-      - name: filter-name
-        content: BrzyFilter
-      - name: url-pattern
-        content: "/*"
-  - name: servlet
-    children:
-      - name: servlet-name
-        content: ScalateServlet
-      - name: servlet-class
-        content: org.fusesource.scalate.servlet.TemplateEngineServlet
-      - name: load-on-startup
-        content: "1"
-  - name: servlet-mapping
-    children:
-      - name: servlet-name
-        content: ScalateServlet
-      - name: url-pattern
-        content: "*.ssp"
-  - name: servlet
-    children:
-      - name: servlet-name
-        content: BrzyServlet
-      - name: servlet-class
-        content: org.brzy.action.Servlet
-      - name: load-on-startup
-        content: "1"
-  - name: servlet-mapping
-    children:
-      - name: servlet-name
-        content: BrzyServlet
-      - name: url-pattern
-        content: "*.brzy"
-  - name: welcome-file-list
-    children:
-      - name: welcome-file
-        content: index.brzy
-  - name: error-page
-    children:
-      - name: error-code
-        content: "404"
-      - name: location
-        content: /error-404.ssp
-  - name: error-page
-    children:
-      - name: error-code
-        content: "500"
-      - name: location
-        content: /error-500.ssp
-  - name: error-page
-    children:
-      - name: exception-type
-        content: java.lang.Throwable
-      - name: location
-        content: /error-500.ssp
 
-#
-#web_xml2:
-#  - description: Breezy Scala
-#  - display-name: Breezy Web App
-#  - context-param:
-#    - param-name : brzy-env
-#    - param-value: development
-#  - listener:
-#    - listener-class: org.brzy.application.WebAppListener
-#  - filter:
-#    - filter-name: BrzyFilter
-#    - filter-class: org.brzy.action.Filter
-#  - filter-mapping:
-#    - filter-name: BrzyFilter
-#    - url-pattern: "/*"
-#  - servlet:
-#    - servlet-name: ScalateServlet
-#    - servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet
-#    - load-on-startup: 1
-#  - servlet-mapping:
-#    - servlet-name: ScalateServlet
-#    - url-pattern: "*.ssp"
-#  - servlet:
-#    - servlet-name: BrzyServlet
-#    - servlet-class: org.brzy.action.Servlet
-#    - load-on-startup: "1"
-#  - servlet-mapping:
-#    - servlet-name: BrzyServlet
-#    - url-pattern: "*.brzy"
-#  - welcome-file-list:
-#    - welcome-file: index.brzy
-#  - error-page:
-#    - error-code: "404"
-#    - location: /error-404.ssp
-#  - error-page:
-#    - error-code: "500"
-#    - location: /error-500.ssp
-#  - error-page:
-#    - exception-type: java.lang.Throwable
-#    - location: /error-500.ssp
+web_xml:
+  description: Breezy Scala
+  display-name: Breezy Web App
+  context-param:
+    param-name : brzy-env
+    param-value: development
+  listener:
+    listener-class: org.brzy.application.WebAppListener
+  filter:
+    filter-name: BrzyFilter
+    filter-class: org.brzy.action.Filter
+  filter-mapping:
+    filter-name: BrzyFilter
+    url-pattern: "/*"
+  servlet:
+    servlet-name: ScalateServlet
+    servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet
+    load-on-startup: "1"
+  servlet-mapping:
+    servlet-name: ScalateServlet
+    url-pattern: "*.ssp"
+  servlet:
+    servlet-name: BrzyServlet
+    servlet-class: org.brzy.action.Servlet
+    load-on-startup: "1"
+  servlet-mapping:
+    servlet-name: BrzyServlet
+    url-pattern: "*.brzy"
+  welcome-file-list:
+    welcome-file: index.brzy
+  error-page:
+    error-code: "404"
+    location: "/error-404.ssp"
+  error-page:
+    error-code: "500"
+    location: "/error-500.ssp"
+  error-page:
+    exception-type: java.lang.Throwable
+    location: "/error-500.ssp"

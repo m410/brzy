@@ -4,6 +4,7 @@ import collection.mutable.ListBuffer
 import xml.transform.RuleTransformer
 import org.brzy.config.{WebXmlNode, AppConfig}
 import xml._
+import collection.JavaConversions._
 
 /**
  * context-param
@@ -37,28 +38,31 @@ class WebXml(config:AppConfig) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.web.xml"))
   private val children = ListBuffer[Elem]()
 
-  config.web_xml.foreach( node => {
-    if(node.content != null)
-      children += Elem(null,node.name, null, TopScope, new Text(node.content))
-    else if(node.children != null && node.children.length >0)
-      children += Elem(null,node.name, null, TopScope, makeChildren(node.children):_*)
-    else
-      children += Elem(null,node.name, null, TopScope, new Text(""))
-  })
+  for(key <- config.web_xml.keySet) {
+    if(config.web_xml.get(key).isInstanceOf[java.lang.String]) {
+			val value = config.web_xml.get(key).asInstanceOf[String]
+      children += Elem(null,key, null, TopScope, new Text(value))
+    }
+    else {
+			val map = config.web_xml.get(key).asInstanceOf[java.util.HashMap[String,String]]
+      children += Elem(null,key, null, TopScope, makeChildren(map):_*)
+    }
+  }
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head
 
-  def makeChildren(children:Array[WebXmlNode]):Array[Node] = {
+  def makeChildren(children:java.util.HashMap[String,String]):Array[Node] = {
 
-    if(children == null || children.length== 0)
+    if(children == null || children.size == 0)
       Array(Text(""))
     else {
       val nodes = children.map(f=>
-        if(f.content != null)
-          Elem(null,f.name, null, TopScope, new Text(f.content))
+        if(f._2 != null)
+          Elem(null,f._1, null, TopScope, new Text(f._2))
         else
-          Elem(null,f.name, null, TopScope, new Text(""))
+          Elem(null,f._1, null, TopScope, new Text(""))
       )
+			println("nodes=" + nodes)
       nodes.toArray
     }
   }

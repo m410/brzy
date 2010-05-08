@@ -1,0 +1,16 @@
+#application:
+#  version:1
+#  name:test
+#  author:tester
+#  description:Some long description
+#  group_id:org.brzy
+#  artifact_id:test
+name:test
+implementation:test
+remote_location: /Users/m410/Projects/brzy/brzy-config/src/test/resources/brzy-test-plugin.zip
+#local_location:
+version:"0.3"
+
+properties:
+  foo: bar
+  baz: foo

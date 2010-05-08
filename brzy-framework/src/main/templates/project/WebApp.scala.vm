@@ -1,6 +1,6 @@
 package ${packageName}
 
-import org.brzy.config.Config
+import org.brzy.config.AppConfig
 import org.brzy.application.WebApp
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.persistence.squeryl.SquerylInterceptor
@@ -8,11 +8,11 @@ import org.brzy.persistence.squeryl.SquerylInterceptor
 /**
  * Application Class
  */
-class Application(config:Config) extends WebApp(config){
+class Application(config:AppConfig) extends WebApp(config){
 
   override val services = Array()
 
-  override val controllers =
-    make(classOf[HomeController],new SquerylInterceptor()) ::
-    Nil
+  override val controllers = Array(
+    make(classOf[HomeController],new SquerylInterceptor("","","","")) 
+  )
 }

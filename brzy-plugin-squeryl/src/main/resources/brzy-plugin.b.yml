@@ -1,1 +1,17 @@
-test: value
+application:
+  version:"0.1"
+  name:squeryl
+  author:Michael Fortin
+  description:Uses the Squeryl api for persistence
+  group_id:org.brzy.persistence
+  artifact_id:squeryl
+name:squeryl
+remote_location: ~/.m2/repository/org/brzy/brzy-squeryl/0.1/brzy-squeryl-0.1-plugin.zip
+version:"0.1"
+properties:
+  "file.extension":".ssp"
+dependencies:
+  - lib: org.squeryl:squeryl_2.8.0.Beta1-RC8:0.9.3
+repositories:
+  - id: fusesource.m2
+    url: http://repo.fusesource.com/nexus/content/repositories/public

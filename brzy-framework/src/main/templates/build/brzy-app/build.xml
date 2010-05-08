@@ -7,10 +7,10 @@
   <property name="script.dir" value=".brzy"/>
   <property file="${basedir}/${script.dir}/build.properties"/>
   <property name="brzy-app.b.yml" location="${basedir}/brzy-app.b.yml" />
-  
-  
 
-  
+
+
+
 	<target name="check.env" unless="brzy.env">
 		<property name="brzy.env" value="development" />
 	</target>
@@ -67,8 +67,8 @@
   </path>
   <target name="compile" depends="resolve" description="Compile module brzy; production classes">
     <mkdir dir="${output.dir}"/>
-		<!-- <pathconvert pathsep=":" property="classpath.files" refid="default.classpath"/> -->
-		<!-- <echo>${classpath.files}</echo> -->
+	<pathconvert pathsep=":" property="classpath.files" refid="default.classpath"/>
+	<!--<echo>${classpath.files}</echo>-->
     <scala:scalac destdir="${output.dir}">
       <src refid="brzy.module.sourcepath"/>
       <!--<classpath refid="brzy.module.classpath"/>-->
@@ -148,7 +148,7 @@
   </target>
 	<target name="make.persistencexml" depends="assemble.lib">
     <echo>Make persistence.xml</echo>
-	 <!-- <pathconvert pathsep=":" property="classpath.files" refid="builder.classpath"/> 
+	 <!-- <pathconvert pathsep=":" property="classpath.files" refid="builder.classpath"/>
 		<echo>${classpath.files}</echo>  -->
 		<property name="metainf.loc" location="${webapp.temp.dir}/WEB-INF/classes/META-INF/"/>
 		<mkdir dir="${metainf.loc}" />
@@ -161,7 +161,7 @@
       <classpath refid="builder.classpath"/>
     </java>
   </target>
-  <target name="make.webxml" depends="make.persistencexml">
+  <target name="make.webxml" depends="assemble.lib"><!-- make.persistencexml -->
     <echo>Make web.xml</echo>
 		<property name="webxml.loc" location="${webapp.temp.dir}/WEB-INF/web.xml" />
 		<java classname="org.brzy.build.Main">
@@ -179,7 +179,7 @@
       <arg value="${brzy.env}"/>
       <arg value="logback"/>
       <arg value="${brzy-app.b.yml}"/>
-  	  <arg value="${logback.loc}"/>	
+  	  <arg value="${logback.loc}"/>
       <classpath refid="builder.classpath"/>
     </java>
   </target>

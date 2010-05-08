@@ -13,6 +13,7 @@ application:
   application_class: [group].Application
 persistence:
   - name: "squeryl"
+    remote_location: ~/.m2/repository/org/brzy/brzy-squeryl/0.1/brzy-squeryl-0.1-plugin.zip
     implementation: "squeryl"
     properties:
       driver_class: org.h2.Driver
@@ -20,7 +21,7 @@ persistence:
       password:
       url: jdbc:h2:test_db
 dependencies:
-  - lib: "runtime:com.h2database:h2:1.2.133"
+  - lib: "compile:com.h2database:h2:1.2.133"
 logging:
   provider: logback
   appenders:

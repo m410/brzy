@@ -74,7 +74,7 @@ class Builder(appFile:File, environment:String) {
       if(plugin.local_location != null)
         new File(appFile.getParentFile, plugin.local_location + "/brzy-plugin.b.yml")
       else  if(plugin.remote_location != null) {
-        plugin.downloadTo(pluginCache)
+        plugin.downloadAndUnzipTo(pluginCache)
         new File(pluginCache, plugin.name + "/brzy-plugin.b.yml")
       }
       else

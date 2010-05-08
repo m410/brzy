@@ -13,24 +13,18 @@ class PluginConfigTest {
 
   @Test
   def testDownload() = {
-    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
-    val config = new Builder(url,"development").applicationConfig
-
-    assertNotNull(config)
-    assertNotNull(config.plugins)
-    assertEquals(3,config.plugins.length)
-
-    val tmpDir = new File(System.getProperty("java.io.tmpdir"))
-    val workDir= new File(tmpDir,"junitwork")
-    println("work dir: " + workDir)
+    val url = getClass.getClassLoader.getResource("brzy-plugin.b.yml")
+    val workDir= new File(new File(System.getProperty("java.io.tmpdir")),"junitwork")
 
     if(workDir.exists)
       workDir.trash()
 
     workDir.mkdirs
     assertTrue(workDir.exists)
+    val plugin = new PluginConfig(new File(url.getFile))
+    assertNotNull(plugin)
     assertEquals(0, workDir.listFiles.length)
-    
-    assertEquals(2, workDir.listFiles.length)
+    plugin.downloadAndUnzipTo(workDir)
+    assertEquals(1, workDir.listFiles.length)
   }
 }

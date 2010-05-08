@@ -28,7 +28,7 @@ class AppConfig extends MergeConfig[AppConfig] {
   @BeanProperty var logging:Logging = _
   @BeanProperty var plugins:Array[PluginConfig] = _
   @BeanProperty var persistence:Array[PluginConfig] = _
-  @BeanProperty var web_xml:Array[WebXmlNode] = _
+  @BeanProperty var web_xml:java.util.HashMap[String,java.lang.Object] = _
   @BeanProperty var views:Views = _
 
   @BeanProperty var environment_overrides:Array[AppConfig] = _
@@ -59,15 +59,13 @@ class AppConfig extends MergeConfig[AppConfig] {
       config.logging = that.logging
 
     // webxml
-    val webxml = ArrayBuffer[WebXmlNode]()
+    config.web_xml = new java.util.HashMap[String,java.lang.Object]
 
-    if(that.web_xml != null )
-      webxml ++= that.web_xml
+    if(web_xml!= null)
+      config.web_xml putAll web_xml
 
-    if(this.web_xml != null)
-      webxml ++= this.web_xml
-
-    config.web_xml = webxml.toArray
+    if(that.web_xml!= null)
+        config.web_xml putAll that.web_xml
 
     // dependencies
     val deps = ArrayBuffer[Dependency]()
@@ -105,10 +103,9 @@ class AppConfig extends MergeConfig[AppConfig] {
     config
   }
 
-  def ++(thosePlugins:Array[PluginConfig]) =
+  def ++(thosePlugins:Array[PluginConfig]) = {
     if(plugins == null) {
       plugins = thosePlugins
-      this
     }
     else {
       thosePlugins.foreach(thatPlugin =>
@@ -120,9 +117,22 @@ class AppConfig extends MergeConfig[AppConfig] {
           plugins = plugins :+ thatPlugin
         }
       )
-      this
     }
 
+    plugins.foreach(p => {
+
+      if(p.web_xml != null)
+        this.web_xml.putAll(p.web_xml)
+
+      if(p.dependencies != null)
+        this.dependencies ++= p.dependencies
+
+      if(p.repositories != null)
+        this.repositories ++= p.repositories
+    })
+    
+    this
+  }
 
   def copy = {
     val config = new AppConfig

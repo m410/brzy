@@ -75,8 +75,6 @@ logging:
     level: INFO
     ref: FILE
 
-web_xml:
-
 #
 # override defaults for any environment
 #

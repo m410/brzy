@@ -1,9 +1,8 @@
 package ${packageName}
 
-import org.brzy.action.{Path,Controller}
+import org.brzy.controller.{Path,Controller}
 
 /**
- *
  */
 @Controller("/")
 class HomeController {
