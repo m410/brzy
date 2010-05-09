@@ -10,7 +10,7 @@ views:
   name: scalate
   implementation: scalate
   version: "0.1"
-  remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.1/brzy-scalate-0.1-plugin.zip
+#  remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.1/brzy-scalate-0.1-plugin.zip
   properties:
     html_version: html5
     file_extension: .ssp

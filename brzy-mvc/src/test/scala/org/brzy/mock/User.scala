@@ -1,7 +1,7 @@
 package org.brzy.mock
 
 import javax.validation.constraints.{NotNull,Size}
-import javax.persistence._
+//import javax.persistence._
 
 import org.brzy.action.args.Parameters
 import javax.validation.{Validator,  Validation}
@@ -13,13 +13,15 @@ import org.brzy.util.ParameterConversion._
  * @version $Id: $
  */
 @serializable
-@Entity
-@Table(name="users")
+//@Entity
+//@Table(name="users")
 //@NamedQueries({@NamedQuery( name="test", query="select u from User u")})
 class User {
 
-  @Id var id:Long = _
-  @Version var version:Int = _
+//  @Id
+  var id:Long = _
+//  @Version
+  var version:Int = _
   @NotNull @Size(max=30) var name:String = _
 
   /*

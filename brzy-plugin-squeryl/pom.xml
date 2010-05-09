@@ -73,17 +73,12 @@
       <artifactId>brzy-mvc</artifactId>
       <version>0.1</version>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.7</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javaee</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>5</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
@@ -108,6 +103,13 @@
       <artifactId>h2</artifactId>
       <version>1.2.131</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>6.0.26</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

@@ -147,8 +147,6 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
       if (!destinationFile.exists)
         destinationFile.createNewFile
 
-      println("dest file: " + destinationFile.getAbsolutePath)
-
       val bis = new BufferedInputStream(urlc.getInputStream())
       val bos = new BufferedOutputStream(new FileOutputStream(destinationFile))
       val buf: Array[Byte] = new Array[Byte](1024);
@@ -180,8 +178,6 @@ class PluginConfig(file:File) extends MergeConfig[PluginConfig] {
       val filename = remoteLoc.substring(remoteLoc.lastIndexOf("/"), remoteLoc.length)
       val destinationFile = new File(destinationFolder, filename)
 
-      println("source:" + sourceFile.getAbsolutePath)
-      println("dest:" + destinationFile.getAbsolutePath)
       sourceFile.copyTo(destinationFolder)
       destinationFile.unzip()
     }
