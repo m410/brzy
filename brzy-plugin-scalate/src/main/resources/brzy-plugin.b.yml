@@ -1,25 +1,20 @@
 application:
-  version:"0.1"
-  name:scalate
-  author:Michael Fortin
-  description:Uses Scalate as the view technology
-  group_id:org.brzy.view
-  artifact_id:scalate
-name:scalate
-remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.1/brzy-scalate-0.1-plugin.zip
-version:"0.1"
+  version: "0.1"
+  name: scalate
+  author: Michael Fortin
+  description: Uses Scalate as the view technology
+  group_id: org.brzy.view
+  artifact_id: scalate
+name: scalate
+version: "0.1"
 properties:
   "file.extension":".ssp"
 dependencies:
-  - lib: "org.fusesource.scalate:scalate-core:1.1"
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.1}
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: 0.1}
 repositories:
   - id: fusesource.m2
     url: http://repo.fusesource.com/nexus/content/repositories/public
 web_xml:
-  servlet:
-    servlet-name: ScalateServlet
-    servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet
-    load-on-startup: "1"
-  servlet-mapping:
-    servlet-name: ScalateServlet
-    url-pattern: "*.ssp"
+  - servlet: {servlet-name: ScalateServlet, servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet, load-on-startup: "1"}
+  - servlet-mapping: { servlet-name: ScalateServlet, url-pattern: "*.ssp"}

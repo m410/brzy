@@ -20,8 +20,8 @@ application:
 # scope:organization:name:version
 # scope = [provided,runtime,test]
 dependencies:
-  - lib: compile:org.apache.wicket:wicket:jar:1.4-rc6
-  - lib: compile:org.fusesource.scalate:scalate-core:jar:1.0
+  - {conf: compile, org: org.apache.wicket, name: wicket, rev: 1.4-rc6}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.0}
 
 #
 # Dependency Management
@@ -31,6 +31,10 @@ repositories:
 
 plugins:
   - name: scalate
+    dependencies:
+      - lib: "test:test:test:1.0"
+    web_xml:
+      - anything: Test
   
 persistence:
   - name: "hibernate"
@@ -79,37 +83,9 @@ logging:
     ref: FILE
 
 web_xml:
-  description: Breezy Scala
-  display-name: Breezy Web App
-  context-param:
-    param-name: brzy-env
-    param-value: development
-  listener:
-    listener-class: org.brzy.application.WebAppListener
-  filter:
-    filter-name: BrzyFilter
-    filter-class: org.brzy.action.Filter
-  filter-mapping:
-    filter-name: BrzyFilter
-    url-pattern: "/*"
-  servlet:
-    servlet-name: BrzyServlet
-    servlet-class: org.brzy.action.Servlet
-    load-on-startup: "1"
-  servlet-mapping:
-    servlet-name: BrzyServlet
-    url-pattern: "*.brzy"
-  welcome-file-list:
-    welcome-file: index.brzy
-  error-page:
-    error-code: "404"
-    location: /error-404.ssp
-  error-page:
-    error-code: "500"
-    location: /error-500.ssp
-  error-page:
-    exception-type: java.lang.Throwable
-    location: /error-500.ssp
+  - servlet: {servlet-name: ScalateServlet, servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet, load-on-startup: 1}
+  - servlet-mapping: { servlet-name: ScalateServlet, url-pattern: "*.ssp"}
+
 
 #
 # override defaults for any environment
@@ -118,7 +94,7 @@ environment_overrides:
   - environment: developement
     logging:
       root:
-        ref:STDOUT
+        ref: STDOUT
     application:
       webapp_context: devapp
   - environment: test

@@ -1,1 +1,9 @@
-test: value
+application:
+  version: "0.1"
+  name: tomcat
+  author: Michael Fortin
+  description: Uses Hibernate as the view technology
+  group_id: org.brzy
+  artifact_id: tomcat
+name: tomcat
+version: "0.1"

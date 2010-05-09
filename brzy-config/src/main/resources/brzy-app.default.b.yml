@@ -25,72 +25,35 @@ repositories:
     name: jboss
     url: http://repository.jboss.com/maven2
 dependencies:
-  - lib: "builder:org.jyaml:jyaml:1.3"
-  - lib: "builder:org.slf4j:slf4j-simple:1.5.11"
-  - lib: "builder:org.brzy:brzy-shell:0.1"
-  - lib: "builder:xerces:xerces:2.4.0"
-
-  - lib: "compile,builder:org.brzy:brzy-config:0.1"
-  - lib: "compile,builder:org.brzy:brzy-mvc:0.1"
-  - lib: "compile,builder:org.scala-lang:scala-compiler:2.8.0.RC1"
-  - lib: "compile,builder:org.scala-lang:scala-library:2.8.0.RC1"
-  - lib: "compile,builder:org.slf4j:slf4j-api:1.5.11"
-   
-  # - lib: "compile,builder:org.reflections:reflections:0.9.5-RC1"
-  # - lib: "compile,builder:com.google.collections:google-collections:1.0-rc3"
-  # - lib: "compile,builder:javax.persistence:persistence-api:1.0"
-  # - lib: "compile,builder:dom4j:dom4j:1.6"
-  - lib: "compile:ch.qos.logback:logback-classic:0.9.20"
-  - lib: "compile:ch.qos.logback:logback-core:0.9.20"
-  # - lib: "compile:com.google.collections:google-collections:1.0-rc3"
-  # - lib: "compile:com.sun.xml.bind:jaxb-impl:2.1.3"
-  - lib: "compile:javassist:javassist:3.8.0.GA"
-  # - lib: "compile:javax.activation:activation:1.1"
-  # - lib: "compile:javax.validation:validation-api:1.0.0.GA"
-  # - lib: "compile:javax.ws.rs:jsr311-api:1.1.1"
-  # - lib: "compile:javax.xml.bind:jaxb-api:2.1"
-  # - lib: "compile:javax.xml.stream:stax-api:1.0-2"
-  - lib: "compile:org.aspectj:aspectjweaver:1.6.8"
-  # - lib: "compile:org.reflections:reflections:0.9.5-RC1"
-
-  - lib: "test:junit:junit:4.4"
+  - {conf: builder, org: org.jyaml, name: jyaml, rev: 1.3}
+  - {conf: builder, org: org.slf4j, name: slf4j-simple, rev: 1.5.11}
+  - {conf: builder, org: org.brzy, name: brzy-shell, rev: 0.1}
+  - {conf: builder, org: xerces, name: xerces, rev: 2.4.0}
+  - {conf: "compile,builder", org: org.brzy, name: brzy-config, rev: 0.1}
+  - {conf: "compile,builder", org: org.brzy, name: brzy-mvc, rev: 0.1}
+  - {conf: "compile,builder", org: org.scala-lang, name: scala-compiler, rev: 2.8.0.RC1}
+  - {conf: "compile,builder", org: org.scala-lang, name: scala-library, rev: 2.8.0.RC1}
+  - {conf: "compile,builder", org: org.slf4j, name: slf4j-api, rev: 1.5.11}
+  - {conf: compile, org: javassist, name: javassist, rev: 3.11.0.GA}
+  - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: 1.6.8}
+  - {conf: compile, org: javassist, name: javassist, rev: 3.11.0.GA}
+  - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: 1.6.8}
+  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: 0.9.20}
+  - {conf: compile, org: org.jyaml, name: jyaml, rev: 1.3}
+  - {conf: compile, org: commons-lang, name: commons-lang, rev: 2.5}
+  - {conf: test, org: junit, name: junit, rev: 4.4}
 
 web_xml:
- description: Breezy Scala
- display-name: Breezy Web App
- context-param:
-   param-name : brzy-env
-   param-value: development
- listener:
-   listener-class: org.brzy.application.WebAppListener
- filter:
-   filter-name: BrzyFilter
-   filter-class: org.brzy.action.Filter
- filter-mapping:
-   filter-name: BrzyFilter
-   url-pattern: "/*"
- servlet:
-   servlet-name: ScalateServlet
-   servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet
-   load-on-startup: 1
- servlet-mapping:
-   servlet-name: ScalateServlet
-   url-pattern: "*.ssp"
- servlet:
-   servlet-name: BrzyServlet
-   servlet-class: org.brzy.action.Servlet
-   load-on-startup: "1"
- servlet-mapping:
-   servlet-name: BrzyServlet
-   url-pattern: "*.brzy"
- welcome-file-list:
-   welcome-file: index.brzy
- error-page:
-   error-code: "404"
-   location: /error-404.ssp
- error-page:
-   error-code: "500"
-   location: /error-500.ssp
- error-page:
-   exception-type: java.lang.Throwable
-   location: /error-500.ssp
+ - description: Breezy Scala
+ - display-name: Breezy Web App
+ - context-param: { param-name : brzy-env, param-value: development}
+ - listener: {listener-class: org.brzy.application.WebAppListener}
+ - filter: {filter-name: BrzyFilter, filter-class: org.brzy.action.Filter}
+ - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}
+ - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.action.Servlet, load-on-startup: "1"}
+ - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
+ - welcome-file-list: { welcome-file: index.brzy}
+ - error-page: { error-code: "404", location: /error-404.ssp}
+ - error-page: { error-code: "500", location: /error-500.ssp}
+ - error-page: {exception-type: java.lang.Throwable, location: /error-500.ssp}
+

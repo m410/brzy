@@ -14,7 +14,7 @@ class Repository {
   @BeanProperty var releases: Boolean = true
 
 
-  override def toString = new StringBuilder()
-    .append("Repository - id: ").append(id)
-    .toString
+//  override def toString = new StringBuilder()
+//    .append("Repository - id: ").append(id)
+//    .toString
 }

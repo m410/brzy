@@ -15,7 +15,7 @@ class IvyXml(config:AppConfig) {
   private val children = ListBuffer[Elem]()
 
   config.dependencies.foreach( dep => {
-    children += <dependency org={dep.org()} name={dep.name()} rev={dep.rev()} conf={dep.conf()} />
+    children += <dependency org={dep.org} name={dep.name} rev={dep.rev} conf={dep.conf} />
   })
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head

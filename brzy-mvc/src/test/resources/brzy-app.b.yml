@@ -20,8 +20,8 @@ application:
 # scope:organization:name:version
 # scope = [provided,runtime,test]
 dependencies:
-  - lib: compile:org.apache.wicket:wicket:jar:1.4-rc6
-  - lib: compile:org.fusesource.scalate:scalate-core:jar:1.0
+  - {conf: compile, org: org.apache.wicket, name: wicket, rev: 1.4-rc6}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.0}
 
 #
 # Dependency Management

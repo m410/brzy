@@ -68,7 +68,7 @@ class Builder(appFile:File, environment:String) {
       else
         new File(appFile.getParent, defaultConfig.project.plugin_resources)
 
-    log.debug("pluginCache: " + pluginCache)
+//    log.debug("pluginCache: " + pluginCache)
 
     val pluginFile:File =
       if(plugin.local_location != null)
@@ -80,10 +80,10 @@ class Builder(appFile:File, environment:String) {
       else
         null // TODO need to set the default
 
-    log.debug("pluginFile: " + pluginFile)
+//    log.debug("pluginFile: " + pluginFile)
 
     if(pluginFile == null || !pluginFile.exists) {
-      log.warn("Plugin does not exist: " + pluginFile)
+//      log.warn("Plugin does not exist: " + pluginFile)
       plugin
     }
     else {

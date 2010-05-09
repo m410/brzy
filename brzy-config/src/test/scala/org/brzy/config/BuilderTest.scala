@@ -88,7 +88,10 @@ class BuilderTest {
     assertNotNull(config.logging)
     assertNotNull(config.logging.appenders)
     assertEquals(2, config.logging.appenders.size)
-    assertNotNull(config.web_xml)
+    assertEquals("webxml: " + config.web_xml,17,config.web_xml.size)
+    assertNotNull(config.dependencies)
+    assertEquals("dependencies: "+config.dependencies.mkString(", "),22,config.dependencies.length)
+    
 //    assertNotNull(config.environment_overrides)
 //    assertEquals(3,config.environment_overrides.size)
 //    assertEquals(false,config.environment_overrides(0).)

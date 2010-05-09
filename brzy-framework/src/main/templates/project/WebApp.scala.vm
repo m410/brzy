@@ -10,9 +10,15 @@ import org.brzy.persistence.squeryl.SquerylInterceptor
  */
 class Application(config:AppConfig) extends WebApp(config){
 
-  override val services = Array()
+  val squerylPlugin = config.plugins.find(p => p.name == "squeryl").get
+  val interceptor = new SquerylInterceptor(
+      squerylPlugin.properties.get("driver_class"),
+      squerylPlugin.properties.get("url"),
+      squerylPlugin.properties.get("user_name"),
+      squerylPlugin.properties.get("password"))
 
+  override val services = Array()
   override val controllers = Array(
-    make(classOf[HomeController],new SquerylInterceptor("","","","")) 
+    make(classOf[HomeController],interceptor)
   )
 }

@@ -60,12 +60,12 @@ class Logging extends MergeConfig[Logging]{
     log
   }
 
-  override def toString = new StringBuffer()
-    .append("provider: ").append(provider)
-    .append("appenders: ").append(if(appenders != null)appenders.mkString else "{}")
-    .append("loggers: ").append(if(loggers != null) loggers.mkString else "{}")
-    .append("root: ").append(root)
-    .toString
+//  override def toString = new StringBuffer()
+//    .append("provider: ").append(provider)
+//    .append("appenders: ").append(if(appenders != null)appenders.mkString else "{}")
+//    .append("loggers: ").append(if(loggers != null) loggers.mkString else "{}")
+//    .append("root: ").append(root)
+//    .toString
 }
 
 /**
@@ -99,12 +99,12 @@ class Appender extends MergeConfig[Appender] with Comparable[Appender] {
     app
   }
 
-  override def toString = new StringBuffer()
-    .append("name: ").append(name).append(", ")
-    .append("class: ").append(appender_class).append(", ")
-    .append("layout: ").append(layout).append(", ")
-    .append("pattern: ").append(pattern)
-    .toString
+//  override def toString = new StringBuffer()
+//    .append("name: ").append(name).append(", ")
+//    .append("class: ").append(appender_class).append(", ")
+//    .append("layout: ").append(layout).append(", ")
+//    .append("pattern: ").append(pattern)
+//    .toString
 
   override def equals(obj: Any) = {
     if (obj == null)
@@ -146,10 +146,10 @@ class Logger extends MergeConfig[Logger] with Comparable[Logger]{
     logger
   }
 
-  override def toString = new StringBuffer()
-    .append("name: ").append(name).append(", ")
-    .append("level: ").append(level)
-    .toString
+//  override def toString = new StringBuffer()
+//    .append("name: ").append(name).append(", ")
+//    .append("level: ").append(level)
+//    .toString
 
   override def equals(obj: Any) = {
     if (obj == null)
@@ -185,8 +185,8 @@ class Root extends MergeConfig[Root] {
     root
   }
 
-  override def toString = new StringBuffer()
-    .append("level: ").append(level).append(", ")
-    .append("ref: ").append(if(ref != null)ref.mkString else "{}")
-    .toString
+//  override def toString = new StringBuffer()
+//    .append("level: ").append(level).append(", ")
+//    .append("ref: ").append(if(ref != null)ref.mkString else "{}")
+//    .toString
 }

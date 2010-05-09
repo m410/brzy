@@ -4,6 +4,8 @@ import org.brzy.interceptor.{Invocation, Interceptor, Proxy}
 import org.brzy.persistence.ThreadScope._
 import org.squeryl.Session
 import org.squeryl.adapters._
+import org.slf4j.LoggerFactory
+
 /**
  *
  * @author Michael Fortin
@@ -11,6 +13,13 @@ import org.squeryl.adapters._
  */
 class SquerylInterceptor(driver:String, url:String, user:String, pass:String) extends Proxy with Interceptor {
 
+  val log = LoggerFactory.getLogger(getClass)
+  log.info("driver: " + driver)
+  log.info("url   : " + url)
+  log.info("user  : " + user)
+  log.info("pass  : " + pass)
+
+  Class.forName(driver)
 	val datasource = java.sql.DriverManager.getConnection(url, user, pass)
 
   val adaptor =

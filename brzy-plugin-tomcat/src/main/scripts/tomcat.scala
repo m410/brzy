@@ -17,7 +17,7 @@ class RunWebApp(contextName:String, port:Int) {
   val classesDir = appBase + "/WEB-INF/classes"
 	val container = new Embedded
 
-	val catalinaHome = new File(".brzy/plugin-tomcat")
+	val catalinaHome = new File(".brzy/plugins/tomcat")
 	container.setCatalinaHome(catalinaHome.getAbsolutePath)
 	// container.setRealm(new MemoryRealm())
   val loader = new WebappLoader(this.getClass.getClassLoader)

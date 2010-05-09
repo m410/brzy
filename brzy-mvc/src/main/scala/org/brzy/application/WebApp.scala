@@ -28,8 +28,7 @@ abstract class WebApp(val config:AppConfig) {
     controllers.foreach( ctl => {
       log.debug("load actions from controller: {}", ctl)
       val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
-      val methods = ctl.getClass.getSuperclass.getMethods
-      for(method <- methods
+      for(method <- ctl.getClass.getSuperclass.getMethods
           if method.getAnnotation(classOf[Path]) != null) {
         val methodPath = method.getAnnotation(classOf[Path])
         val pathValue = classPath.value +"/" +  methodPath.value

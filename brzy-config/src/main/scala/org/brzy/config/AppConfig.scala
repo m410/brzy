@@ -28,7 +28,7 @@ class AppConfig extends MergeConfig[AppConfig] {
   @BeanProperty var logging:Logging = _
   @BeanProperty var plugins:Array[PluginConfig] = _
   @BeanProperty var persistence:Array[PluginConfig] = _
-  @BeanProperty var web_xml:java.util.HashMap[String,java.lang.Object] = _
+  @BeanProperty var web_xml:java.util.ArrayList[java.util.HashMap[String,java.lang.Object]] = _
   @BeanProperty var views:Views = _
 
   @BeanProperty var environment_overrides:Array[AppConfig] = _
@@ -59,13 +59,13 @@ class AppConfig extends MergeConfig[AppConfig] {
       config.logging = that.logging
 
     // webxml
-    config.web_xml = new java.util.HashMap[String,java.lang.Object]
+    config.web_xml = new java.util.ArrayList[java.util.HashMap[String,AnyRef]]
 
     if(web_xml!= null)
-      config.web_xml putAll web_xml
+      config.web_xml addAll web_xml
 
     if(that.web_xml!= null)
-        config.web_xml putAll that.web_xml
+        config.web_xml addAll that.web_xml
 
     // dependencies
     val deps = ArrayBuffer[Dependency]()
@@ -122,13 +122,13 @@ class AppConfig extends MergeConfig[AppConfig] {
     plugins.foreach(p => {
 
       if(p.web_xml != null)
-        this.web_xml.putAll(p.web_xml)
+        this.web_xml.addAll(p.web_xml)
 
       if(p.dependencies != null)
-        this.dependencies ++= p.dependencies
+        this.dependencies = this.dependencies ++ p.dependencies
 
       if(p.repositories != null)
-        this.repositories ++= p.repositories
+        this.repositories = this.repositories ++ p.repositories
     })
     
     this
@@ -150,19 +150,19 @@ class AppConfig extends MergeConfig[AppConfig] {
     config
   }
 
-  override def toString = {
-    val newline = System.getProperty("line.separator")
-    val sb = new StringBuilder()
-    sb.append(newline)
-    sb.append("  - environment").append("=").append(environment).append(newline)
-    sb.append("  - application").append("=").append(application).append(newline)
-    sb.append("  - project").append("=").append(project).append(newline)
-    sb.append("  - test_framework").append("=").append(test_framework).append(newline)
-    sb.append("  - views").append("=").append(views).append(newline)
-    sb.append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
-    sb.append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
-    sb.append("  - logging").append("=").append(logging).append(newline)
-    sb.append("  - web_xml").append("=").append(web_xml)
-    sb.toString
-  }
+//  override def toString = {
+//    val newline = System.getProperty("line.separator")
+//    val sb = new StringBuilder()
+//    sb.append(newline)
+//    sb.append("  - environment").append("=").append(environment).append(newline)
+//    sb.append("  - application").append("=").append(application).append(newline)
+//    sb.append("  - project").append("=").append(project).append(newline)
+//    sb.append("  - test_framework").append("=").append(test_framework).append(newline)
+//    sb.append("  - views").append("=").append(views).append(newline)
+//    sb.append("  - repositories").append("=").append(if(repositories != null)repositories.mkString else "").append(newline)
+//    sb.append("  - dependencies").append("=").append(if(dependencies != null)dependencies.mkString else "").append(newline)
+//    sb.append("  - logging").append("=").append(logging).append(newline)
+//    sb.append("  - web_xml").append("=").append(web_xml)
+//    sb.toString
+//  }
 }

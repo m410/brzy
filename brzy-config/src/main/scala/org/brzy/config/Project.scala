@@ -32,16 +32,16 @@ class Project extends MergeConfig[Project]{
     proj
   }
 
-  override def toString = {
-    val newline = System.getProperty("line.separator")
-    val sb = new StringBuilder()
-    sb.append(newline)
-    sb.append("  - project")append(newline)
-    sb.append("   - scala_version").append("=").append(scala_version).append(newline)
-    sb.append("   - ant_version  ").append("=").append(ant_version).append(newline)
-    sb.append("   - ivy_version  ").append("=").append(ivy_version).append(newline)
-    sb.append("   - package_type ").append("=").append(package_type).append(newline)
-    sb.append("   - plugin_resources ").append("=").append(plugin_resources).append(newline)
-    sb.toString
-  }
+//  override def toString = {
+//    val newline = System.getProperty("line.separator")
+//    val sb = new StringBuilder()
+//    sb.append(newline)
+//    sb.append("  - project")append(newline)
+//    sb.append("   - scala_version").append("=").append(scala_version).append(newline)
+//    sb.append("   - ant_version  ").append("=").append(ant_version).append(newline)
+//    sb.append("   - ivy_version  ").append("=").append(ivy_version).append(newline)
+//    sb.append("   - package_type ").append("=").append(package_type).append(newline)
+//    sb.append("   - plugin_resources ").append("=").append(plugin_resources).append(newline)
+//    sb.toString
+//  }
 }

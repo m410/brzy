@@ -6,10 +6,9 @@
 #  group_id:org.brzy
 #  artifact_id:test
 name:test
-implementation:test
-remote_location: /Users/m410/Projects/brzy/brzy-config/src/test/resources/brzy-test-plugin.zip
-#local_location:
 version:"0.3"
+implementation:test
+remote_location: ~/Projects/brzy/brzy-config/src/test/resources/brzy-test-plugin.zip
 
 properties:
   foo: bar

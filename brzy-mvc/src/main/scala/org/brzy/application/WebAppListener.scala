@@ -23,6 +23,9 @@ class WebAppListener extends ServletContextListener {
   }
   
   def contextDestroyed(servletContextEvent: ServletContextEvent) = {
-    servletContextEvent.getServletContext.getAttribute("application").asInstanceOf[WebApp].shutdown
+    val app: Any = servletContextEvent.getServletContext.getAttribute("application")
+    
+    if(app != null)
+      app.asInstanceOf[WebApp].shutdown
   }
 }

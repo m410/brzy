@@ -1,1 +1,13 @@
-test: value
+application:
+  version: "0.1"
+  name: hibernate
+  author: Michael Fortin
+  description: Uses Hibernate as the view technology
+  group_id: org.brzy.persistence
+  artifact_id: hibernate
+name: hibernate
+version: "0.1"
+dependencies:
+  - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: 3.5.0-Final}
+  - {conf: compile, org: org.brzy, name: brzy-hibernate, rev: 0.1}
+  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}

@@ -24,12 +24,12 @@ class Views extends MergeConfig[Views]{
     view
   }
 
-  override def toString = {
-    val newline = System.getProperty("line.separator")
-    val sb = new StringBuilder()
-    sb.append("  - application").append(newline)
-    sb.append("   - implementation").append("=").append(implementation).append(newline)
-    sb.append("   - html_version").append("=").append(html_version).append(newline)
-    sb.toString
-  }
+//  override def toString = {
+//    val newline = System.getProperty("line.separator")
+//    val sb = new StringBuilder()
+//    sb.append("  - application").append(newline)
+//    sb.append("   - implementation").append("=").append(implementation).append(newline)
+//    sb.append("   - html_version").append("=").append(html_version).append(newline)
+//    sb.toString
+//  }
 }

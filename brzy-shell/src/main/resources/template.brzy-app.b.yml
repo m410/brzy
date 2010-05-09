@@ -21,7 +21,11 @@ persistence:
       password:
       url: jdbc:h2:test_db
 dependencies:
-  - lib: "compile:com.h2database:h2:1.2.133"
+  - {conf: compile, org: com.h2database, name: h2, rev: 1.2.133}
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: 0.1}
+plugins:
+  - name: tomcat
+    remote_location: ~/.m2/repository/org/brzy/brzy-tomcat/0.1/brzy-tomcat-0.1-plugin.zip
 logging:
   provider: logback
   appenders:

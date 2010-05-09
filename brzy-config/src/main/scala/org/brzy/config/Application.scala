@@ -59,20 +59,20 @@ class Application extends MergeConfig[Application] {
     app
   }
 
-  override def toString = {
-    val newline = System.getProperty("line.separator")
-    val sb = new StringBuilder()
-    sb.append(newline)
-    sb.append("  - application").append(newline)
-    sb.append("   - version")                .append("=").append(version).append(newline)
-    sb.append("   - name")                   .append("=").append(name).append(newline)
-    sb.append("   - author")                 .append("=").append(author).append(newline)
-    sb.append("   - description")            .append("=").append(description).append(newline)
-    sb.append("   - group_id")               .append("=").append(group_id).append(newline)
-    sb.append("   - artifact_id")            .append("=").append(artifact_id).append(newline)
-    sb.append("   - properties")             .append("=").append(properties).append(newline)
-    sb.append("   - application_class")      .append("=").append(application_class).append(newline)
-    sb.append("   - webapp_context")         .append("=").append(webapp_context).append(newline)
-    sb.toString
-  }
+//  override def toString = {
+//    val newline = System.getProperty("line.separator")
+//    val sb = new StringBuilder()
+//    sb.append(newline)
+//    sb.append("  - application").append(newline)
+//    sb.append("   - version")                .append("=").append(version).append(newline)
+//    sb.append("   - name")                   .append("=").append(name).append(newline)
+//    sb.append("   - author")                 .append("=").append(author).append(newline)
+//    sb.append("   - description")            .append("=").append(description).append(newline)
+//    sb.append("   - group_id")               .append("=").append(group_id).append(newline)
+//    sb.append("   - artifact_id")            .append("=").append(artifact_id).append(newline)
+//    sb.append("   - properties")             .append("=").append(properties).append(newline)
+//    sb.append("   - application_class")      .append("=").append(application_class).append(newline)
+//    sb.append("   - webapp_context")         .append("=").append(webapp_context).append(newline)
+//    sb.toString
+//  }
 }

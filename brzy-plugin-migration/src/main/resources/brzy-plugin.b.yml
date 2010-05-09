@@ -1,1 +1,12 @@
-test: value
+application:
+  version: "0.1"
+  name: migration
+  author: Michael Fortin
+  description: Rails style migrations
+  group_id: org.brzy.migration
+  artifact_id: migration
+name: migration
+version: "0.1"
+dependencies:
+  - {conf: compile, org: com.imageworks, name: migration, rev: 1.0.0-2.8.0.Beta1-jdbc4}
+  - {conf: compile, org: org.brzy, name: brzy-migration, rev: 0.1}

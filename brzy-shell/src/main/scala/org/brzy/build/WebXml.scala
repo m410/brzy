@@ -2,7 +2,7 @@ package org.brzy.build
 
 import collection.mutable.ListBuffer
 import xml.transform.RuleTransformer
-import org.brzy.config.{WebXmlNode, AppConfig}
+import org.brzy.config.AppConfig
 import xml._
 import collection.JavaConversions._
 
@@ -38,15 +38,19 @@ class WebXml(config:AppConfig) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.web.xml"))
   private val children = ListBuffer[Elem]()
 
-  for(key <- config.web_xml.keySet) {
-    if(config.web_xml.get(key).isInstanceOf[java.lang.String]) {
-			val value = config.web_xml.get(key).asInstanceOf[String]
-      children += Elem(null,key, null, TopScope, new Text(value))
-    }
-    else {
-			val map = config.web_xml.get(key).asInstanceOf[java.util.HashMap[String,String]]
-      children += Elem(null,key, null, TopScope, makeChildren(map):_*)
-    }
+  for(row <- config.web_xml) {
+    val keyvals = row.asInstanceOf[java.util.HashMap[String,AnyRef]].map(nvp => nvp)
+    keyvals.foreach(keyVal => {
+        if(keyVal._2.isInstanceOf[java.lang.String]) {
+          val value = keyVal._2.asInstanceOf[String]
+          children += Elem(null,keyVal._1, null, TopScope, new Text(value))
+        }
+        else {
+          val map = keyVal._2.asInstanceOf[java.util.HashMap[String,String]]
+          children += Elem(null,keyVal._1, null, TopScope, makeChildren(map):_*)
+        }
+      }
+    )
   }
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head
