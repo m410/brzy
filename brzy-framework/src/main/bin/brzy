@@ -33,7 +33,7 @@ fi
 
 # run ant scripts
 if [ "$1" = "clean" ] || [ "$1" = "test" ] || [ "$1" = "compile" ] || [ "$1" = "war" ]; then
-   exec ant -f .brzy/build.xml -q $2
+   exec ant -f .brzy/build.xml -q $1
    exit 0
 fi
 

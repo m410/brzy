@@ -6,9 +6,10 @@ project:
   ivy_version: 2.1.0
   package_type: war
   plugin_resources: ".brzy/plugins"
+  plugin_repository: http://www.brzy.org/nexus/content/repositories/releases
 views:
-  name: scalate
-  implementation: scalate
+  name: brzy-scalate
+  group_id: org.brzy
   version: "0.1"
 #  remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.1/brzy-scalate-0.1-plugin.zip
   properties:
@@ -24,6 +25,9 @@ repositories:
   - id: jboss
     name: jboss
     url: http://repository.jboss.com/maven2
+plugin_repositories:
+  - id: brzy
+    url: http://www.brzy.org/nexus/content/repositories/releases
 dependencies:
   - {conf: builder, org: org.jyaml, name: jyaml, rev: 1.3}
   - {conf: builder, org: org.slf4j, name: slf4j-simple, rev: 1.5.11}

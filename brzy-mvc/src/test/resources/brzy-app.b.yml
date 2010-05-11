@@ -30,9 +30,9 @@ repositories:
     url: http://someurl.com/test
 
 persistence:
-  - name: "hibernate"
-    implementation: "scala-hibernate"
-    version: latest
+  - name: brzy-hibernate
+    group_id: org.brzy
+    version: 0.1
     scan_package: *group
     properties:
       "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
@@ -41,9 +41,9 @@ persistence:
       "hibernate.connection.username": "sa"
       "hibernate.connection.password": ""
       "hibernate.hbm2ddl.auto": "update"
-  - name: "squeryl"
-    implementation: "squeryl"
-    version: latest
+  - name: brzy-scalate
+    group_id: org.brzy
+    version: 0.1
     scan_package: *group
     properties:
       driver_class: org.postgresql.Driver

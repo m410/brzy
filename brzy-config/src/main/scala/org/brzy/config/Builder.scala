@@ -50,7 +50,9 @@ class Builder(appFile:File, environment:String) {
       applicationConfig.persistence.foreach(plugin => plugins += loadPlugin(plugin))
 
     val viewPlugin = new PluginConfig()
-    viewPlugin.name = defaultConfig.views.implementation
+    viewPlugin.name = defaultConfig.views.name
+    viewPlugin.version = defaultConfig.views.version
+    viewPlugin.group_id = defaultConfig.views.group_id
     viewPlugin.remote_location = defaultConfig.views.remote_location
     viewPlugin.properties = new java.util.HashMap[String,String]
     viewPlugin.properties.put("html_version",defaultConfig.views.html_version) 
@@ -62,28 +64,50 @@ class Builder(appFile:File, environment:String) {
 
   def loadPlugin(plugin:PluginConfig):PluginConfig = {
 
-    val pluginCache =
+    // check classpath at runtime
+    val cpUrl = getClass.getClassLoader.getResource("plugins/"+plugin.name+"/brzy-plugin.b.yml")
+
+    val pluginHost =
+      if(applicationConfig.project != null && applicationConfig.project.plugin_repository != null)
+        applicationConfig.project.plugin_repository
+      else
+        defaultConfig.project.plugin_repository
+
+    val appPluginCache =
       if(applicationConfig.project != null && applicationConfig.project.plugin_resources != null)
         new File(appFile.getParent, applicationConfig.project.plugin_resources)
       else
         new File(appFile.getParent, defaultConfig.project.plugin_resources)
 
-//    log.debug("pluginCache: " + pluginCache)
-
     val pluginFile:File =
-      if(plugin.local_location != null)
-        new File(appFile.getParentFile, plugin.local_location + "/brzy-plugin.b.yml")
-      else  if(plugin.remote_location != null) {
-        plugin.downloadAndUnzipTo(pluginCache)
-        new File(pluginCache, plugin.name + "/brzy-plugin.b.yml")
+      // check classpath first for runtime config files
+      if(cpUrl != null) {
+        new File(cpUrl.getFile)
       }
-      else
-        null // TODO need to set the default
+      // from local file system for developement mode
+      else if(plugin.local_location != null) {
+        new File(appFile.getParentFile, plugin.local_location + "/brzy-plugin.b.yml")
+      }
+      // copy from local system or from remote system for developement mode
+      else  if(plugin.remote_location != null) {
+        plugin.downloadAndUnzipTo(appPluginCache)
+        new File(appPluginCache, plugin.name + "/brzy-plugin.b.yml")
+      }
+      // lookup via maven repository, the default way
+      else {
+        // [org(. to /)] / [name] / [version] / [name]-[version]-plugin.zip
+        val remoteUrl = pluginHost + "/" +
+                plugin.group_id.replaceAll("\\.","/") + "/" +
+                plugin.name + "/" +
+                plugin.version + "/" +
+                plugin.name + "-" +
+                plugin.version + "-plugin.zip"
 
-//    log.debug("pluginFile: " + pluginFile)
+        plugin.downloadAndUnzipTo(remoteUrl, appPluginCache)
+        new File(appPluginCache, plugin.name + "/brzy-plugin.b.yml")
+      }
 
     if(pluginFile == null || !pluginFile.exists) {
-//      log.warn("Plugin does not exist: " + pluginFile)
       plugin
     }
     else {

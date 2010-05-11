@@ -28,7 +28,8 @@ class WebAppTest {
   def testCreate = {
     val config = new AppConfig()
     config.views = new Views
-    config.views.implementation  = ".jsp"
+    config.views.html_version = "html5"
+    config.views.file_extension = ".jsp"
     val webapp = new MockWebApp(config)
     assertNotNull(webapp)
     assertNotNull(webapp.services)

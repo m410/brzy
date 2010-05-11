@@ -98,6 +98,6 @@ object FileUtils {
     }
   }
 
-  implicit def wrappedFile(file:File) = new FileWrapper(file:File)
+  implicit def wrappedFile(file:File) = new FileWrapper(file)
 
 }

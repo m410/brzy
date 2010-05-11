@@ -45,7 +45,7 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: FILE
+    ref: [FILE]
 # override defaults for any environment
 environment_overrides:
   - environment: developement

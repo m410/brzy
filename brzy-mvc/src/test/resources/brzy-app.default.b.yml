@@ -6,13 +6,13 @@ project:
   ivy_version: 2.1.0
   package_type: war
   plugin_resources: ".brzy/plugins"
-# view setup
-# [velocity,ssp]
-# [html4,html5,xhtml,xhtml2,xhtml5]
+  plugin_repository: http://www.brzy.org/nexus/content/repositories/releases
 views:
-  implementation: ".ssp"
+  name: brzy-scalate
+  version: 0.1
+  group_id: org.brzy
+  file_extension: ".ssp"
   html_version: html5
-  
 repositories:
   - id: java-net2
     name: java-net2
@@ -23,9 +23,6 @@ repositories:
   - id: jboss
     name: jboss
     url: http://repository.jboss.com/maven2
-#  - id: fusesource.snapshots
-#    name: fusesource.snapshots
-#    url: http://repo.fusesource.com/nexus/content/repositories/snapshots
 dependencies:
   - {conf: builder, org: org.jyaml, name: jyaml, rev: 1.3}
   - {conf: builder, org: org.slf4j, name: slf4j-simple, rev: 1.5.11}
@@ -39,36 +36,6 @@ dependencies:
   - {conf: compile, org: javassist, name: javassist, rev: 3.11.0.GA}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: 1.6.8}
   - {conf: test, org: junit, name: junit, rev: 4.4}
-#  - lib: "runtime,builder:org.brzy:brzy-all:0.1"
-#  - lib: "runtime,builder:org.scala-lang:scala-compiler:2.8.0.RC1"
-#  - lib: "runtime,builder:org.scala-lang:scala-library:2.8.0.RC1"
-#  - lib: "runtime,builder:xerces:xerces:2.4.0"
-#  - lib: "runtime,builder:org.jyaml:jyaml:1.3"
-#  - lib: "runtime,builder:org.reflections:reflections:0.9.5-RC1"
-#  - lib: "runtime,builder:org.slf4j:slf4j-api:1.5.8"
-#  - lib: "builder:org.slf4j:slf4j-simple:1.5.8"
-#  - lib: "builder:dom4j:dom4j:1.6.1"
-#  - lib: "runtime,builder:com.google.collections:google-collections:1.0-rc3"
-#  - lib: "runtime,builder:javax.persistence:persistence-api:1.0"
-#
-#  - lib: "runtime:ch.qos.logback:logback-classic:0.9.20"
-#  - lib: "runtime:ch.qos.logback:logback-core:0.9.20"
-#  - lib: "runtime:com.google.collections:google-collections:1.0-rc3"
-#  - lib: "runtime:com.sun.xml.bind:jaxb-impl:2.1.3"
-#  - lib: "runtime:dom4j:dom4j:1.6"
-#  - lib: "runtime:javassist:javassist:3.8.0.GA"
-#  - lib: "runtime:javax.activation:activation:1.1"
-#  - lib: "runtime:javax.validation:validation-api:1.0.0.GA"
-#  - lib: "runtime:javax.ws.rs:jsr311-api:1.1.1"
-#  - lib: "runtime:javax.xml.bind:jaxb-api:2.1"
-#  - lib: "runtime:javax.xml.stream:stax-api:1.0-2"
-#  - lib: "runtime:org.aspectj:aspectjweaver:1.6.8"
-#  - lib: "runtime:org.reflections:reflections:0.9.5-RC1"
-#
-#  - lib: "test:junit:junit:4.4"
-
-
-
 web_xml:
   - description: Breezy Scala
   - display-name: Breezy Web App
