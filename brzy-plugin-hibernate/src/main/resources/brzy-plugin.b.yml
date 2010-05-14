@@ -1,11 +1,12 @@
 application:
   version: "0.1"
-  name: hibernate
+  name: brzy-hibernate
   author: Michael Fortin
   description: Uses Hibernate as the view technology
-  group_id: org.brzy.persistence
-  artifact_id: hibernate
-name: hibernate
+  group_id: org.brzy
+  artifact_id: brzy-hibernate
+name: brzy-hibernate
+group_id: org.brzy
 version: "0.1"
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: 3.5.0-Final}

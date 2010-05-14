@@ -16,6 +16,9 @@ views:
     html_version: html5
     file_extension: .ssp
 repositories:
+  - id: brzy
+    name: brzy
+    url: http://brzy.org/nexus/content/repositories/releases
   - id: java-net2
     name: java-net2
     url: http://download.java.net/maven/2

@@ -54,6 +54,16 @@
 	</build>
   <dependencies>
     <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-compiler</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+    <dependency>
+			<groupId>name.pachler</groupId>
+			<artifactId>jpathwatch</artifactId>
+			<version>0.92</version>
+		</dependency>
+    <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>annotations-api</artifactId>
       <version>6.0.26</version>

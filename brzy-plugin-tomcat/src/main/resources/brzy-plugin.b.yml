@@ -1,9 +1,10 @@
 application:
   version: "0.1"
-  name: tomcat
+  name: brzy-tomcat
   author: Michael Fortin
   description: Uses Hibernate as the view technology
   group_id: org.brzy
-  artifact_id: tomcat
-name: tomcat
+  artifact_id: brzy-tomcat
+name: brzy-tomcat
 version: "0.1"
+group_id: org.brzy

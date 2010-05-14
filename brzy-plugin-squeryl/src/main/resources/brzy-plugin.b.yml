@@ -1,11 +1,12 @@
 application:
   version:"0.1"
-  name: squeryl
+  name: brzy-squeryl
   author: Michael Fortin
   description: Uses the Squeryl api for persistence
-  group_id: org.brzy.persistence
-  artifact_id: squeryl
-name: squeryl
+  group_id: org.brzy
+  artifact_id: brzy-squeryl
+name: brzy-squeryl
+group_id: org.brzy
 version:"0.1"
 
 dependencies:

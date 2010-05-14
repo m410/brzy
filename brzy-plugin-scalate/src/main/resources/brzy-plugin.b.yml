@@ -1,11 +1,12 @@
 application:
   version: "0.1"
-  name: scalate
+  name: brzy-scalate
   author: Michael Fortin
   description: Uses Scalate as the view technology
   group_id: org.brzy.view
-  artifact_id: scalate
-name: scalate
+  artifact_id: brzy-scalate
+name: brzy-scalate
+group_id: org.brzy
 version: "0.1"
 properties:
   "file.extension":".ssp"
