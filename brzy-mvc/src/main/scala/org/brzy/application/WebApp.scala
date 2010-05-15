@@ -31,8 +31,11 @@ abstract class WebApp(val config:AppConfig) {
       for(method <- ctl.getClass.getSuperclass.getMethods
           if method.getAnnotation(classOf[Path]) != null) {
         val methodPath = method.getAnnotation(classOf[Path])
+        log.debug("controllerPath : " + classPath )
+        log.debug("methodPath     : " + methodPath )
+        
         val pathValue = classPath.value +"/" +  methodPath.value
-        val action = new Action(pathValue, method, ctl, config.views.file_extension)
+        val action = new Action(pathValue, method, ctl, ".ssp")//config.views.file_extension)
         log.debug("action: " + action)
         list += action
       }

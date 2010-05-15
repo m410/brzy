@@ -12,7 +12,7 @@ import tools.nsc.{Settings, Global}
  * @author Michael Fortin
  * @version $Id: $
  */
-class Compiler(codeDir:File, outputDir:File, classpath:String) {
+class ScalaCompiler(codeDir:File, outputDir:File, classpath:String) {
 
   private val settings = {
     codeDir.mkdirs

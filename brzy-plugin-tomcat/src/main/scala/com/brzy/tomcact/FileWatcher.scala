@@ -4,7 +4,7 @@ import actors.Actor._
 import scala.collection.JavaConversions._
 import java.io.{IOException, File}
 import name.pachler.nio.file._
-import org.slf4j.LoggerFactory
+import ext.ExtendedWatchEventModifier
 
 /**
  * http://www.rgagnon.com/javadetails/java-0490.html
@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory
  * @author Michael Fortin
  * @version $Id : $
  */
-class FileWatcher(baseDir: File, compiler: Compiler) {
+class FileWatcher(baseDir: File, compiler: ScalaCompiler) {
+
   val watchService:WatchService = FileSystems.getDefault.newWatchService
   val watchedPath:Path  = Paths.get(baseDir.getAbsolutePath);
+
   val key: WatchKey = {
     try {
       watchedPath.register(watchService,
-          StandardWatchEventKind.ENTRY_CREATE,
-          StandardWatchEventKind.ENTRY_MODIFY,
-          StandardWatchEventKind.ENTRY_DELETE)
+          StandardWatchEventKind.ENTRY_CREATE, StandardWatchEventKind.ENTRY_MODIFY)
     }
     catch {
       case uox: UnsupportedOperationException =>
@@ -40,18 +40,16 @@ class FileWatcher(baseDir: File, compiler: Compiler) {
       list.foreach((e: WatchEvent[_]) => e.kind match {
         case StandardWatchEventKind.ENTRY_CREATE =>
           val context: Path = e.context.asInstanceOf[Path]
-          println("New    File: " + context)
-        case StandardWatchEventKind.ENTRY_DELETE =>
-          val context: Path = e.context.asInstanceOf[Path]
-          println("Delete File: " + context)
+          println(" -- New File: " + context)
+//          compiler.compile(new File(context.toString))
         case StandardWatchEventKind.ENTRY_MODIFY =>
           val context: Path = e.context.asInstanceOf[Path]
-          println("Modify File: " + context)
+          println(" -- Modify File: " + context)
+//          compiler.compile(new File(context.toString))
         case _ =>
           val context: Path = e.context.asInstanceOf[Path]
-          println("Unknown Change: " + context)
+          println(" -- Unknown Change: " + context)
       })
     }
   }
-
 }

@@ -66,6 +66,7 @@ if [ ! -e "$SCRIPT" ]; then
        do
            if [ "`basename ${file%.*}`" = "$1" ];  then
                SCRIPT=$file
+               CLASSPATH=""
                for lib in "$plugin/lib"/*.jar
                do
                    CLASSPATH=$CLASSPATH:$lib
@@ -76,7 +77,8 @@ if [ ! -e "$SCRIPT" ]; then
 fi
 
 if [ -e "$SCRIPT" ]; then
-   echo "script: $SCRIPT"
+   echo "script    : $SCRIPT"
+   echo "classpath : $CLASSPATH"
    exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME $@
 else
    echo "ERROR: script with name '$1' not found"

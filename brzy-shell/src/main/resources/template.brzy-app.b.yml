@@ -12,9 +12,10 @@ application:
   webapp_context: /
   application_class: [group].Application
 persistence:
-  - name: "squeryl"
+  - name: brzy-squeryl
+    version: "0.1"
+    group_id: orb.grzy
     remote_location: ~/.m2/repository/org/brzy/brzy-squeryl/0.1/brzy-squeryl-0.1-plugin.zip
-    implementation: "squeryl"
     properties:
       driver_class: org.h2.Driver
       user_name: sa
@@ -24,7 +25,9 @@ dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: 1.2.133}
   - {conf: compile, org: org.brzy, name: brzy-mvc, rev: 0.1}
 plugins:
-  - name: tomcat
+  - name: brzy-tomcat
+    version: "0.1"
+    group_id: orb.grzy
     remote_location: ~/.m2/repository/org/brzy/brzy-tomcat/0.1/brzy-tomcat-0.1-plugin.zip
 logging:
   provider: logback

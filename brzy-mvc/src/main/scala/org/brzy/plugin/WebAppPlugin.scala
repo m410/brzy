@@ -8,11 +8,15 @@ import java.io.File
  */
 trait WebAppPlugin {
 
-  def buildPhase(webappBase:File):Unit = {}
+  def build(webappBase:File):Unit = {}
 
   def services:List[AnyRef] = Nil
 
   def interceptors:List[AnyRef] = Nil
 
   def controllers:List[AnyRef] = Nil
+
+  def startup = {}
+
+  def shutdown = {}
 }

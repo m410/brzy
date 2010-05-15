@@ -11,7 +11,7 @@ version: "0.1"
 properties:
   "file.extension":".ssp"
 dependencies:
-  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.1}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.2-SNAPSHOT}
   - {conf: compile, org: org.brzy, name: brzy-scalate, rev: 0.1}
 repositories:
   - id: fusesource.m2

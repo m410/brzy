@@ -1,6 +1,7 @@
 package ${packageName}
 
 import org.brzy.controller.{Path,Controller}
+import org.brzy.action.returns.View
 
 /**
  */
@@ -8,5 +9,5 @@ import org.brzy.controller.{Path,Controller}
 class HomeController {
 
 	@Path("")
-	def index = {}
+	def index = View("/index.ssp")
 }

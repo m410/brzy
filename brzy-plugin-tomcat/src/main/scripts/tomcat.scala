@@ -4,10 +4,29 @@ import org.apache.catalina.realm.MemoryRealm
 import org.apache.catalina.startup.Embedded
 import java.net.InetAddress
 import java.io.File
+import collection.JavaConversions._
+import org.brzy.tomcat.{ScalaCompiler, FileWatcher}
 
 
 object Tomcat extends Application {
-	new RunWebApp("",8080)
+
+  val sourceDir = new File(args(0),"src/main/scala")
+  val classesDir = new File(args(0),"target/war/WEB-INF/classes")
+
+  val sb = new StringBuilder
+  val libDir = new File(args(0),"target/war/WEB-INF/lib")
+  libDir.listFiles.foreach(f => {
+    sb.append(f.getAbsolutePath)
+    sb.append(":")
+  })
+
+  val classpath = sb.toString
+  println(" -- source   : " + sourceDir)
+  println(" -- classes  : " + classesDir)
+  println(" -- classpath: " + classpath )
+  new RunWebApp("",8080)
+  new FileWatcher(sourceDir,new ScalaCompiler(sourceDir,classesDir,classpath))
+  Thread.sleep(100000000) // TODO there's probably a better way to do this
 }
 
 class RunWebApp(contextName:String, port:Int) {
@@ -17,7 +36,7 @@ class RunWebApp(contextName:String, port:Int) {
   val classesDir = appBase + "/WEB-INF/classes"
 	val container = new Embedded
 
-	val catalinaHome = new File(".brzy/plugins/tomcat")
+	val catalinaHome = new File(".brzy/plugins/brzy-tomcat")
 	container.setCatalinaHome(catalinaHome.getAbsolutePath)
 	// container.setRealm(new MemoryRealm())
   val loader = new WebappLoader(this.getClass.getClassLoader)
@@ -61,8 +80,6 @@ class RunWebApp(contextName:String, port:Int) {
 			}
 		}
 	})
-
-	Thread.sleep(100000000)
 }
 
 // Start it

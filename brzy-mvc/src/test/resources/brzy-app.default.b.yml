@@ -1,7 +1,7 @@
 environment: default
 test_framework: junit
 project:
-  scala_version: 2.8.0.RC1
+  scala_version: 2.8.0.RC2
   ant_version: 1.7.1
   ivy_version: 2.1.0
   package_type: war
@@ -30,8 +30,8 @@ dependencies:
   - {conf: builder, org: xerces, name: xerces, rev: 2.4.0}
   - {conf: "compile,builder", org: org.brzy, name: brzy-config, rev: 0.1}
   - {conf: "compile,builder", org: org.brzy, name: brzy-mvc, rev: 0.1}
-  - {conf: "compile,builder", org: org.scala-lang, name: scala-compiler, rev: 2.8.0.RC1}
-  - {conf: "compile,builder", org: org.scala-lang, name: scala-library, rev: 2.8.0.RC1}
+  - {conf: "compile,builder", org: org.scala-lang, name: scala-compiler, rev: 2.8.0.RC2}
+  - {conf: "compile,builder", org: org.scala-lang, name: scala-library, rev: 2.8.0.RC2}
   - {conf: "compile,builder", org: org.slf4j, name: slf4j-api, rev: 1.5.11}
   - {conf: compile, org: javassist, name: javassist, rev: 3.11.0.GA}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: 1.6.8}

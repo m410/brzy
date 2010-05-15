@@ -10,7 +10,7 @@ import org.brzy.persistence.squeryl.SquerylInterceptor
  */
 class Application(config:AppConfig) extends WebApp(config){
 
-  val squerylPlugin = config.plugins.find(p => p.name == "squeryl").get
+  val squerylPlugin = config.plugins.find(p => p.name == "brzy-squeryl").get
   val interceptor = new SquerylInterceptor(
       squerylPlugin.properties.get("driver_class"),
       squerylPlugin.properties.get("url"),
