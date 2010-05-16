@@ -2,14 +2,14 @@ package org.brzy.build
 
 import xml.transform.RuleTransformer
 import xml._
-import org.brzy.config.{Appender, AppConfig}
+import org.brzy.config.{Appender, WebappConfig}
 import collection.mutable.{ArrayBuffer, ListBuffer}
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class LogBackXml(config:AppConfig) {
+class LogBackXml(config:WebappConfig) {
   private val parentName = "configuration"
   private val template = XML.load(getClass.getClassLoader.getResource("template.logback.xml"))
   private val children = ListBuffer[Elem]()
@@ -41,9 +41,9 @@ class LogBackXml(config:AppConfig) {
     if(appender.file != null)
       arrayBuf += <File>{appender.file}</File>
 
-    if(appender.rolling_policy != null)
-      arrayBuf += <rollingPolicy class={appender.rolling_policy}>
-        <FileNamePattern>{appender.file_name_pattern}</FileNamePattern>
+    if(appender.rollingPolicy != null)
+      arrayBuf += <rollingPolicy class={appender.rollingPolicy}>
+        <FileNamePattern>{appender.fileNamePattern}</FileNamePattern>
       </rollingPolicy>
 
     if(appender.layout != null)
@@ -55,7 +55,7 @@ class LogBackXml(config:AppConfig) {
 //      {arrayBuf.toArray}
 //    </appender>
     Elem(null,"appender", Attribute(null,"name",appender.name,
-      Attribute(null,"class",appender.appender_class,Null)), TopScope, arrayBuf.toArray:_*)
+      Attribute(null,"class",appender.appenderClass,Null)), TopScope, arrayBuf.toArray:_*)
   }
   def appenderRefs(root:Array[String]):Array[Node] = {
     if(root != null)

@@ -1,6 +1,6 @@
 package org.brzy.application
 
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 
 /**
  * Creates the web application class from the configuration.
@@ -10,9 +10,9 @@ import org.brzy.config.AppConfig
  */
 object WebAppFactory {
 
-  def create(config:AppConfig):WebApp = {
-    val c = Class.forName(config.application.application_class)
-    val constructor = c.getConstructor(classOf[AppConfig])
+  def create(config:WebappConfig):WebApp = {
+    val c = Class.forName(config.application.applicationClass)
+    val constructor = c.getConstructor(classOf[WebappConfig])
 		val inst = constructor.newInstance(config)
 		inst.asInstanceOf[WebApp]
   }

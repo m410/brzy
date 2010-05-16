@@ -2,7 +2,7 @@ package org.brzy.build
 
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.config.{Dependency, AppConfig}
+import org.brzy.config.{Dependency, WebappConfig}
 
 /**
  * http://stackoverflow.com/questions/2199040/scala-xml-building-adding-children-to-existing-nodes
@@ -14,7 +14,7 @@ class IvyTest {
 
   @Test
   def testParsingXml = {
-    val config = new AppConfig()
+    val config = new WebappConfig()
     val dep1 = new Dependency()
     dep1.conf= "compile"
     dep1.org = "org.package"

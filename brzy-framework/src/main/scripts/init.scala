@@ -1,6 +1,6 @@
 import java.io._
 import org.brzy.build._
-import org.brzy.config.{AppConfig,Builder}
+import org.brzy.config.{WebappConfig,Builder}
 import scala.io.Source
 
 object Initialize extends Application {

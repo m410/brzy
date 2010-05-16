@@ -1,6 +1,6 @@
 package org.brzy.build
 
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 import xml.transform.RuleTransformer
 import xml.{Elem, XML}
 import collection.mutable.ListBuffer
@@ -9,7 +9,7 @@ import collection.mutable.ListBuffer
  * @author Michael Fortin
  * @version $Id: $
  */
-class IvySettingsXml(config:AppConfig) {
+class IvySettingsXml(config:WebappConfig) {
   private val parentName = "chain"
   private val template = XML.load(getClass.getClassLoader.getResource("template.ivysettings.xml"))
   private val children = ListBuffer[Elem]()

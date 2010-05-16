@@ -1,7 +1,7 @@
 package org.brzy.application
 
 import collection.immutable.SortedSet
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 import org.brzy.action.Action
 import org.brzy.controller.{Path,Controller}
 import org.slf4j.LoggerFactory
@@ -11,7 +11,7 @@ import collection.mutable.ListBuffer
  * @author Michael Fortin
  * @version $Id: $
  */
-abstract class WebApp(val config:AppConfig) {
+abstract class WebApp(val config:WebappConfig) {
 
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 

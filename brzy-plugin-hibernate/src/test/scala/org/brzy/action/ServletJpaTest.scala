@@ -4,7 +4,7 @@ import org.junit._
 import org.junit.Assert._
 import org.easymock.EasyMock._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 import scala.collection.immutable.SortedSet
 import org.brzy.mock.{User, UserController}
 import javax.persistence.{Query, EntityTransaction, EntityManager, EntityManagerFactory}
@@ -25,7 +25,7 @@ class ServletJpaTest {
   val controllerClass = classOf[UserController]
   val controller = make(controllerClass,interceptor)
 
-  val app = new WebApp(new AppConfig()) {
+  val app = new WebApp(new WebappConfig()) {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef]()
     override lazy val actions = SortedSet(

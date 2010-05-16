@@ -12,12 +12,12 @@ class LogBackXmlTest {
 
   @Test
   def testCreate = {
-    val config = new AppConfig()
+    val config = new WebappConfig()
     val logging: Logging = new Logging()
 
     val appender = new Appender()
     appender.name = "STDOUT"
-    appender.appender_class = "ch.qos.logback.core.ConsoleAppender"
+    appender.appenderClass = "ch.qos.logback.core.ConsoleAppender"
     appender.layout = "ch.qos.logback.classic.PatternLayout"
     appender.pattern  = "%-4relative [%thread] %-5level %class - %msg%n"
     logging.appenders = Array(appender)

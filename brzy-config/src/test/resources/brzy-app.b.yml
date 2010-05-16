@@ -4,7 +4,7 @@
 # http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
 # http://jyaml.sourceforge.net/
 application:
-  version: 1.0.0
+  version: "1.0.0"
   name: Test app
   author: Fred
   description: Some Description
@@ -21,7 +21,7 @@ application:
 # scope = [provided,runtime,test]
 dependencies:
   - {conf: compile, org: org.apache.wicket, name: wicket, rev: 1.4-rc6}
-  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.0}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.0"}
 
 #
 # Dependency Management
@@ -31,6 +31,7 @@ repositories:
 
 plugins:
   - name: brzy-scalate
+    config_class: org.brzy.plugin.ScalatePluginConfig
     group_id: org.brzy
     version: "0.1"
     dependencies:
@@ -39,18 +40,20 @@ plugins:
       - anything: Test
   
 persistence:
-  - name: brzy-hibernate
-    group_id: org.brzy
-    version: "0.1"
-    scan_package: *group
-    properties:
-      "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
-      "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
-      "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
-      "hibernate.connection.username": "sa"
-      "hibernate.connection.password": ""
-      "hibernate.hbm2ddl.auto": "update"
+#  - config_class: org.brzy.plugin.SquerylConfigPlugin
+#    name: brzy-hibernate
+#    group_id: org.brzy
+#    version: "0.1"
+#    scan_package: *group
+#    properties:
+#      "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
+#      "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
+#      "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
+#      "hibernate.connection.username": "sa"
+#      "hibernate.connection.password": ""
+#      "hibernate.hbm2ddl.auto": "update"
   - name: brzy-squeryl
+    config_class: org.brzy.plugin.SquerylPluginConfig
     group_id: org.brzy
     version: "0.1"
     scan_package: *group
@@ -82,7 +85,7 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: FILE
+    ref: [FILE]
 
 web_xml:
   - servlet: {servlet-name: ScalateServlet, servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet, load-on-startup: 1}
@@ -96,7 +99,7 @@ environment_overrides:
   - environment: developement
     logging:
       root:
-        ref: STDOUT
+        ref: [STDOUT]
     application:
       webapp_context: devapp
   - environment: test

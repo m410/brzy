@@ -1,20 +1,23 @@
 package org.brzy.config
 
-import reflect.BeanProperty
-
 /**
  * @author Michael Fortin
- * @version $Id: $
+ * @version $Id : $
  */
-class Repository {
-  @BeanProperty var id: String = _
-  @BeanProperty var name: String = _
-  @BeanProperty var url: String = _
-  @BeanProperty var snapshots: Boolean = false
-  @BeanProperty var releases: Boolean = true
+class Repository(m: Map[String, AnyRef]) extends Config(m) {
+
+  val id: String = set[String](m.get("id"))
+  val name: String = set[String](m.get("name"))
+  val url: String = set[String](m.get("url"))
+  val snapshots: Boolean = false
+  val releases: Boolean = true
 
 
-//  override def toString = new StringBuilder()
-//    .append("Repository - id: ").append(id)
-//    .toString
+  val configurationName = "Repository"
+
+  def asMap = {
+    val map = Map[String, AnyRef]()
+    // TODO add each property
+    map
+  }
 }

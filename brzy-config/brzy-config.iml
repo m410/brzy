@@ -6,12 +6,12 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../../Library/Application Support/IntelliJIdea90/Scala/lib/scala-compiler.jar" />
+            <option value="/opt/local/share/scala-2.8/lib/scala-compiler.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">
           <array>
-            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.8.0.RC1/scala-library-2.8.0.RC1.jar" />
+            <option value="/opt/local/share/scala-2.8/lib/scala-library.jar" />
           </array>
         </option>
       </configuration>
@@ -29,7 +29,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-library:2.8.0.RC1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-library:2.8.0.RC2" level="project" />
     <orderEntry type="library" exported="" name="Maven: ch.qos.logback:logback-classic:0.9.20" level="project" />
     <orderEntry type="library" exported="" name="Maven: ch.qos.logback:logback-core:0.9.20" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.slf4j:slf4j-api:1.5.11" level="project" />

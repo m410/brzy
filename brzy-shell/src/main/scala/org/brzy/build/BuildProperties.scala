@@ -1,13 +1,13 @@
 package org.brzy.build
 
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 import io.Source
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class BuildProperties(config:AppConfig) {
+class BuildProperties(config:WebappConfig) {
 
   private val applicationVersion="[version]"
   private val applicationName="[name]"
@@ -22,9 +22,9 @@ class BuildProperties(config:AppConfig) {
       .mkString
       .replace(applicationVersion,config.application.version)
       .replace(applicationName,config.application.name)
-      .replace(applicationOrg,config.application.group_id)
-      .replace(applicationType,config.project.package_type)
-      .replace(testFramework,config.test_framework)
-      .replace(scalaVersion,config.project.scala_version)
-      .replace(ivyVersion,config.project.ivy_version)
+      .replace(applicationOrg,config.application.groupId)
+      .replace(applicationType,config.project.packageType)
+      .replace(testFramework,config.testFramework)
+      .replace(scalaVersion,config.project.scalaVersion)
+      .replace(ivyVersion,config.project.ivyVersion)
 }

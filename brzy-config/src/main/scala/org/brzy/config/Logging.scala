@@ -1,110 +1,57 @@
 package org.brzy.config
 
-import reflect.BeanProperty
-import collection.mutable.ArrayBuffer
 import org.apache.commons.lang.builder.{CompareToBuilder, HashCodeBuilder, EqualsBuilder}
+import java.util.{List=>JList}
+import collection.JavaConversions._
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class Logging extends MergeConfig[Logging]{
-  @BeanProperty var provider:String = _
-  @BeanProperty var appenders:Array[Appender] = _
-  @BeanProperty var loggers:Array[Logger] = _
-  @BeanProperty var root:Root = _
+class Logging(m:Map[String,AnyRef]) extends Config(m) with MergeConfig[Logging]{
 
 
-  def +(that: Logging) = {
-    val log = new Logging
+  val provider:String = set[String](m.get("version"))
+  val appenders:Seq[Appender] = makeSeq[Appender](classOf[Appender],m.get("appenders"))
+  val loggers:Seq[Logger] = makeSeq[Logger](classOf[Logger],m.get("loggers"))
+  val root:Root = make(classOf[Root],m.get("root"))
 
-    if(that == null) {
-      log.provider = provider
-      log.appenders = appenders
-      log.loggers = loggers
-      log.root = root
-    }
-    else {
-      log.provider = if(that.provider != null) that.provider else provider
-      log.root = root + that.root
+  val configurationName = "Logging"
 
-      if(that.appenders != null) {
-        val appBuf = ArrayBuffer[Appender]()
-        appenders.foreach(appender =>{
-          if(that.appenders.contains(appender))
-            appBuf += that.appenders(that.appenders.indexOf(appender)) + appender
-          else
-            appBuf += appender
-        })
-        log.appenders = appBuf.toArray
-      }
-      else {
-       log.appenders = appenders
-      }
-
-      if(that.loggers != null) {
-        val logBuf = ArrayBuffer[Logger]()
-        loggers.foreach(logr =>{
-          if(that.loggers.contains(logr))
-            logBuf += that.loggers(that.loggers.indexOf(logr)) + logr
-          else
-            logBuf += logr
-        })
-        log.loggers = logBuf.toArray
-      }
-      else {
-        log.loggers = loggers
-      }
-    }
-
-    log
+  def asMap = {
+    val map = Map[String,AnyRef]()
+    // TODO add each property
+    map
   }
 
-//  override def toString = new StringBuffer()
-//    .append("provider: ").append(provider)
-//    .append("appenders: ").append(if(appenders != null)appenders.mkString else "{}")
-//    .append("loggers: ").append(if(loggers != null) loggers.mkString else "{}")
-//    .append("root: ").append(root)
-//    .toString
+
+  def +(that: Logging) =  new Logging(this.asMap ++ that.asMap)
+
 }
 
 /**
  *
  */
-class Appender extends MergeConfig[Appender] with Comparable[Appender] {
-  @BeanProperty var name:String = _
-  @BeanProperty var appender_class:String = _
-  @BeanProperty var layout:String = _
-  @BeanProperty var pattern:String = _
+class Appender(m:Map[String,AnyRef]) extends Config(m) with MergeConfig[Appender] with Comparable[Appender] {
 
-  @BeanProperty var file:String = _
-  @BeanProperty var rolling_policy:String = _
-  @BeanProperty var file_name_pattern:String = _
+  val name:String = set[String](m.get("name"))
+  val appenderClass:String = set[String](m.get("appender_class"))
+  val layout:String = set[String](m.get("layout"))
+  val pattern:String = set[String](m.get("pattern"))
 
-  def compareTo(that: Appender) = {
-    new CompareToBuilder()
-      .append(this.name, that.name)
-      .toComparison
+  val file:String = set[String](m.get("file"))
+  val rollingPolicy:String = set[String](m.get("rolling_policy"))
+  val fileNamePattern:String = set[String](m.get("file_name_pattern"))
+
+  val configurationName = "Appender"
+
+  def asMap = {
+    val map = Map[String,AnyRef]()
+    // TODO add each property
+    map
   }
 
-  def +(that: Appender) = {
-    val app = new Appender
-    app.name = if(that.name != null) that.name else name
-    app.appender_class = if(that.appender_class != null) that.appender_class else appender_class
-    app.layout = if(that.layout != null) that.layout else layout
-    app.pattern = if(that.pattern != null) that.pattern else pattern
-    app.file = if(that.file != null) that.file else file
-    app.rolling_policy = if(that.rolling_policy != null) that.rolling_policy else rolling_policy
-    app.file_name_pattern = if(that.file_name_pattern != null) that.file_name_pattern else file_name_pattern
-    app
-  }
-
-//  override def toString = new StringBuffer()
-//    .append("name: ").append(name).append(", ")
-//    .append("class: ").append(appender_class).append(", ")
-//    .append("layout: ").append(layout).append(", ")
-//    .append("pattern: ").append(pattern)
-//    .toString
+  def +(that: Appender) =  new Appender(this.asMap ++ that.asMap)
 
   override def equals(obj: Any) = {
     if (obj == null)
@@ -119,6 +66,12 @@ class Appender extends MergeConfig[Appender] with Comparable[Appender] {
     }
   }
 
+  def compareTo(that: Appender) = {
+    new CompareToBuilder()
+      .append(this.name, that.name)
+      .toComparison
+  }
+
   override def hashCode = {
     new HashCodeBuilder(17, 37)
       .append(name)
@@ -129,27 +82,25 @@ class Appender extends MergeConfig[Appender] with Comparable[Appender] {
 /**
  *
  */
-class Logger extends MergeConfig[Logger] with Comparable[Logger]{
-  @BeanProperty var name:String =_
-  @BeanProperty var level:String =_
+class Logger(m:Map[String,AnyRef]) extends Config(m) with MergeConfig[Logger] with Comparable[Logger]{
+  val name:String = set[String](m.get("name"))
+  val level:String = set[String](m.get("level"))
+
+  val configurationName = "Logger"
+
+  def asMap = {
+    val map = Map[String,AnyRef]()
+    // TODO add each property
+    map
+  }
+
+  def +(that: Logger) =  new Logger(this.asMap ++ that.asMap)
 
   def compareTo(obj: Logger) = {
     new CompareToBuilder()
       .append(this.name, obj.name)
       .toComparison
   }
-
-  def +(that: Logger) = {
-    val logger = new Logger
-    logger.name = if(that.name != null) that.name else name
-    logger.level = if(that.level != null) that.level else level
-    logger
-  }
-
-//  override def toString = new StringBuffer()
-//    .append("name: ").append(name).append(", ")
-//    .append("level: ").append(level)
-//    .toString
 
   override def equals(obj: Any) = {
     if (obj == null)
@@ -174,19 +125,20 @@ class Logger extends MergeConfig[Logger] with Comparable[Logger]{
 /**
  *
  */
-class Root extends MergeConfig[Root] {
-  @BeanProperty var level:String =_
-  @BeanProperty var ref:Array[String] =_
-
-  def +(that: Root) = {
-    val root = new Root
-    root.ref = if(that.ref != null) that.ref else ref
-    root.level = if(that.level != null) that.level else level
-    root
+class Root(m:Map[String,AnyRef]) extends Config(m) with MergeConfig[Root] {
+  val level:String = set[String](m.get("level"))
+  val ref:Seq[String] = m.get("ref") match {
+    case s:Some[JList[String]] => s.get.toSeq 
+    case _ => null
   }
 
-//  override def toString = new StringBuffer()
-//    .append("level: ").append(level).append(", ")
-//    .append("ref: ").append(if(ref != null)ref.mkString else "{}")
-//    .toString
+  val configurationName = "Root"
+
+  def asMap = {
+    val map = Map[String,AnyRef]()
+    // TODO add each property
+    map
+  }
+
+  def +(that: Root) =  new Root(this.asMap ++ that.asMap)
 }

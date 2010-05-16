@@ -1,16 +1,29 @@
 package org.brzy.config
 
-import reflect.BeanProperty
+import java.util.{List=>JList}
+import collection.JavaConversions._
 
 /**
- * 
  * @author Michael Fortin
  * @version $Id: $
  */
-class Dependency {
-  @BeanProperty var org:String =_
-  @BeanProperty var name:String =_
-  @BeanProperty var rev:String =_
-  @BeanProperty var conf:String =_
+class Dependency(m:Map[String,AnyRef]) extends Config(m) {
 
+  val org =  set[String](m.get("org"))
+  val name = set[String](m.get("name"))
+  val rev = set[String](m.get("rev"))
+  val conf = set[String](m.get("conf"))
+
+  val exculdes = m.get("excludes") match {
+    case s:Some[JList[_]] => s.get.toList
+    case _ => null
+  }
+
+  val configurationName = "Dependency"
+
+  def asMap = {
+    val map = Map[String,AnyRef]()
+    // TODO add each property
+    map
+  }
 }

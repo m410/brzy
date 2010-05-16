@@ -2,7 +2,7 @@ package org.brzy.build
 
 import collection.mutable.ListBuffer
 import xml.transform.RuleTransformer
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 import xml._
 import collection.JavaConversions._
 
@@ -33,12 +33,12 @@ import collection.JavaConversions._
  * @author Michael Fortin
  * @version $Id: $
  */
-class WebXml(config:AppConfig) {
+class WebXml(config:WebappConfig) {
   private val parentName = "web-app"
   private val template = XML.load(getClass.getClassLoader.getResource("template.web.xml"))
   private val children = ListBuffer[Elem]()
 
-  for(row <- config.web_xml) {
+  for(row <- config.webXml) {
     val keyvals = row.asInstanceOf[java.util.HashMap[String,AnyRef]].map(nvp => nvp)
     keyvals.foreach(keyVal => {
         if(keyVal._2.isInstanceOf[java.lang.String]) {
