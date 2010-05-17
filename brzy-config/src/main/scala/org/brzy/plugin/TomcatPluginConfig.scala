@@ -11,6 +11,6 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin[TomcatPluginConf
 
   def +(that: TomcatPluginConfig) = new TomcatPluginConfig(this.asMap ++ that.asMap)
 
-  def asMap = Map[String,AnyRef]()
+  override def asMap = super.asMap
 
 }

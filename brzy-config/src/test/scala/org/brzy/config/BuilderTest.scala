@@ -29,37 +29,38 @@ class BuilderTest {
     assertNotNull(config.webXml)
 	}
 	
-//	@Test
-//	def testDefaultConfig = {
-//    val config = new Builder(url,"development").defaultConfig
-//		assertNotNull(config)
-//		assertNotNull(config.dependencies)
-//		assertTrue(config.dependencies.length > 0)
-//    assertNotNull(config.repositories)
-//    assertTrue(config.repositories.length > 0)
-//	}
-//
-//	@Test
-//	def testEnvironmentConfigDev = {
-//    val config  = new Builder(url, "development").environmentConfig
-//    assertNotNull(config)
-//    assertEquals("devapp",config.application.webappContext)
-//	}
-//
-//  @Test
-//	def testEnvironmentConfigTest = {
-//    val config  = new Builder(url, "test").environmentConfig
-//    assertNotNull(config)
-//    assertEquals("testapp",config.application.webappContext)
-//	}
-//
-//  @Test
-//	def testEnvironmentConfigProd = {
-//    val config  = new Builder(url, "production").environmentConfig
-//    assertNotNull(config)
-//    assertEquals("prodapp",config.application.webappContext)
-//	}
-//
+	@Test
+	def testDefaultConfig = {
+    val config = new Builder(url,"development").defaultConfig
+		assertNotNull(config)
+		assertNotNull(config.dependencies)
+		assertTrue(config.dependencies.length > 0)
+    assertNotNull(config.repositories)
+    assertTrue(config.repositories.length > 0)
+	}
+
+	@Test
+	def testEnvironmentConfigDev = {
+    val builder = new Builder(url, "development")
+    val config = builder.environmentConfig
+    assertNotNull(config)
+    assertEquals("devapp",config.application.webappContext)
+	}
+
+  @Test
+	def testEnvironmentConfigTest = {
+    val config  = new Builder(url, "test").environmentConfig
+    assertNotNull(config)
+    assertEquals("testapp",config.application.webappContext)
+	}
+
+  @Test
+	def testEnvironmentConfigProd = {
+    val config  = new Builder(url, "production").environmentConfig
+    assertNotNull(config)
+    assertEquals("prodapp",config.application.webappContext)
+	}
+
 //  @Test
 //	def testPluginConfig = {
 //    val builder: Builder = new Builder(url, "development")

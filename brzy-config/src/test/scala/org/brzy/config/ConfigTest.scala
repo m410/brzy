@@ -13,7 +13,6 @@ class ConfigTest {
 
   class TestConfig(m:Map[String,AnyRef]) extends Config(m) {
       val configurationName = "Test Config"
-      val printAsTable = ""
       val asMap = null
       val name = set[String](m.get("name"))
       val repositories = makeSeq[Repository](classOf[Repository],m.get("repositories"))

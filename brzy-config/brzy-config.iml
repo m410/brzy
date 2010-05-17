@@ -11,7 +11,7 @@
         </option>
         <option name="myScalaSdkJarPaths">
           <array>
-            <option value="/opt/local/share/scala-2.8/lib/scala-library.jar" />
+            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.8.0.RC2/scala-library-2.8.0.RC2.jar" />
           </array>
         </option>
       </configuration>

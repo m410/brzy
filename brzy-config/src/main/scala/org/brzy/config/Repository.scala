@@ -12,12 +12,14 @@ class Repository(m: Map[String, AnyRef]) extends Config(m) {
   val snapshots: Boolean = false
   val releases: Boolean = true
 
-
   val configurationName = "Repository"
 
   def asMap = {
-    val map = Map[String, AnyRef]()
-    // TODO add each property
-    map
+    Map[String, AnyRef](
+    "id" -> id,
+    "name" -> name,
+    "url" -> url,
+    "snapshots" -> snapshots.toString,
+    "releases" -> releases.toString)
   }
 }

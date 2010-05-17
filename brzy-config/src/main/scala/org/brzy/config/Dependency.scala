@@ -14,7 +14,7 @@ class Dependency(m:Map[String,AnyRef]) extends Config(m) {
   val rev = set[String](m.get("rev"))
   val conf = set[String](m.get("conf"))
 
-  val exculdes = m.get("excludes") match {
+  val excludes = m.get("excludes") match {
     case s:Some[JList[_]] => s.get.toList
     case _ => null
   }
@@ -22,8 +22,15 @@ class Dependency(m:Map[String,AnyRef]) extends Config(m) {
   val configurationName = "Dependency"
 
   def asMap = {
-    val map = Map[String,AnyRef]()
-    // TODO add each property
-    map
+    val map = collection.mutable.HashMap[String,AnyRef]()
+    map.put("org", org)
+    map.put("name", name)
+    map.put("rev", rev)
+    map.put("conf", conf)
+
+    if(excludes != null)
+      map.put("excludes", excludes.map(f=>f.asInstanceOf[Dependency].asMap))
+
+    Map[String,AnyRef]() ++ map
   }
 }

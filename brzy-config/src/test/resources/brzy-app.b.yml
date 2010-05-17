@@ -96,7 +96,7 @@ web_xml:
 # override defaults for any environment
 #
 environment_overrides:
-  - environment: developement
+  - environment: development
     logging:
       root:
         ref: [STDOUT]

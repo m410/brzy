@@ -16,9 +16,12 @@ class SquerylPluginConfig(map:Map[String,AnyRef]) extends Plugin[SquerylPluginCo
 
   def +(that: SquerylPluginConfig) = new SquerylPluginConfig(this.asMap ++ that.asMap)
 
-  def asMap = {
-    val map = Map[String,AnyRef]()
-    // TODO add each property
-    map
+  override def asMap = {
+    super.asMap ++ Map[String,AnyRef](
+      "driver" -> driver,
+      "url" -> url,
+      "user_name" -> userName,
+      "password" -> password,
+      "adaptor_name" -> adaptorName)    
   }
 }
