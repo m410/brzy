@@ -1,4 +1,5 @@
 test_framework: junit
+
 project:
   scala_version: 2.8.0.RC2
   ant_version: 1.7.1
@@ -6,17 +7,15 @@ project:
   package_type: war
   plugin_resources: ".brzy/plugins"
   plugin_repository: http://www.brzy.org/nexus/content/repositories/releases
+
 views:
   name: brzy-scalate
-  group_id: org.brzy
-  version: "0.1"
+  org: org.brzy
+  version: "0.2"
   config_class: org.brzy.plugin.ScalatePluginConfig
   file_extension: ".ssp"
   html_version: html5
-#  remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.1/brzy-scalate-0.1-plugin.zip
-  properties:
-    html_version: html5
-    file_extension: .ssp
+
 repositories:
   - id: brzy
     name: brzy
@@ -51,8 +50,6 @@ dependencies:
   - {conf: test, org: junit, name: junit, rev: "4.7"}
 
 web_xml:
- - description: Breezy Scala
- - display-name: Breezy Web App
  - context-param: { param-name : brzy-env, param-value: development}
  - listener: {listener-class: org.brzy.application.WebAppListener}
  - filter: {filter-name: BrzyFilter, filter-class: org.brzy.action.Filter}

@@ -8,9 +8,9 @@ application:
   name: Test app
   author: Fred
   description: Some Description
-  group_id: &group org.brzy.sample
+  org: &group org.brzy.sample
   artifact_id: sample-jpa
-  application_class: org.brzy.mock.MockWebApp
+  resource_class: org.brzy.mock.MockWebApp
   properties:
     test: value
   webapp_context: mainapp
@@ -31,9 +31,11 @@ repositories:
 
 persistence:
   - name: brzy-hibernate
-    group_id: org.brzy
+    org: org.brzy
     version: 0.1
     scan_package: *group
+    config_class: org.brzy.plugin.HibernatePluginConfig
+    resource_class: org.brzy.plugin.HibernatePluginConfig
     properties:
       "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
       "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
@@ -42,9 +44,11 @@ persistence:
       "hibernate.connection.password": ""
       "hibernate.hbm2ddl.auto": "update"
   - name: brzy-scalate
-    group_id: org.brzy
+    org: org.brzy
     version: 0.1
     scan_package: *group
+    config_class: org.brzy.plugin.ScalatePluginConfig
+    resource_class: org.brzy.plugin.ScalatePluginConfig
     properties:
       driver_class: org.postgresql.Driver
       user_name: test

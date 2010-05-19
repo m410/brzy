@@ -12,7 +12,10 @@ abstract class Plugin[T](map: Map[String, AnyRef]) extends Config(map) with Merg
   val version = set[String](map.get("version"))
   val org = set[String](map.get("org"))
   val configClass = set[String](map.get("config_class"))
-  val runnerClass = set[String](map.get("runner_class"))
+  val resourceClass = set[String](map.get("resource_class"))
+
+  val remoteLocation = set[String](map.get("remote_location"))
+  val localLocation = set[String](map.get("local_location"))
 
   val dependencies = makeSeq[Dependency](classOf[Dependency], map.get("dependencies"))
   val repositories = makeSeq[Repository](classOf[Repository], map.get("repositories"))
@@ -32,8 +35,14 @@ abstract class Plugin[T](map: Map[String, AnyRef]) extends Config(map) with Merg
     if (configClass != null)
       map.put("config_class", configClass)
 
-    if (runnerClass != null)
-      map.put("runner_class", runnerClass)
+    if (resourceClass != null)
+      map.put("resource_class", resourceClass)
+
+    if (remoteLocation != null)
+      map.put("remote_location", remoteLocation)
+
+    if (localLocation != null)
+      map.put("local_location", localLocation)
 
     if (dependencies != null)
       map.put("dependencies", dependencies.map(m=>m.asInstanceOf[Dependency].asMap))
@@ -42,5 +51,7 @@ abstract class Plugin[T](map: Map[String, AnyRef]) extends Config(map) with Merg
       map.put("repositories", repositories.map(m=>m.asInstanceOf[Repository].asMap))
     
     Map[String, AnyRef]() ++ map
-  } 
+  }
+
+  def +(that: Plugin[_]) = null
 }

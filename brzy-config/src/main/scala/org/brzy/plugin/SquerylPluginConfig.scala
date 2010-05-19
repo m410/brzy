@@ -14,7 +14,7 @@ class SquerylPluginConfig(map:Map[String,AnyRef]) extends Plugin[SquerylPluginCo
 
   val configurationName = "Squeryl"
 
-  def +(that: SquerylPluginConfig) = new SquerylPluginConfig(this.asMap ++ that.asMap)
+  override def +(that: SquerylPluginConfig) = new SquerylPluginConfig(this.asMap ++ that.asMap)
 
   override def asMap = {
     super.asMap ++ Map[String,AnyRef](

@@ -14,7 +14,7 @@ class Application(m: Map[String, AnyRef]) extends Config(m) {
   val name = set[String](m.get("name"))
   val author = set[String](m.get("author"))
   val description = set[String](m.get("description"))
-  val groupId = set[String](m.get("group_id"))
+  val org = set[String](m.get("org"))
   val artifactId = set[String](m.get("artifact_id"))
 
   //  val properties:Map[String,String] = m.get("artifact_id") match {
@@ -34,7 +34,7 @@ class Application(m: Map[String, AnyRef]) extends Config(m) {
     val map = new collection.mutable.HashMap[String, AnyRef]()
     map.put("name", name)
     map.put("version", version)
-    map.put("group_id", groupId)
+    map.put("org", org)
     map.put("artifact_id", artifactId)
     map.put("author", author)
     map.put("description", description)

@@ -8,7 +8,7 @@ import collection.JavaConversions._
  * @author Michael Fortin
  * @version $Id: $
  */
-class ScalatePlugin(map:Map[_,_]) extends WebAppPlugin {
+class ScalatePluginResource(map:Map[_,_]) extends WebAppPlugin {
 
   def this(jmap:java.util.Map[_,_]) = this(jmap.toMap)
 

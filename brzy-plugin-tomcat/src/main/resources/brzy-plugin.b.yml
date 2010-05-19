@@ -1,10 +1,8 @@
-application:
-  version: "0.1"
-  name: brzy-tomcat
-  author: Michael Fortin
-  description: Uses Hibernate as the view technology
-  group_id: org.brzy
-  artifact_id: brzy-tomcat
+#
+# tomcat development web server
+#
 name: brzy-tomcat
 version: "0.1"
-group_id: org.brzy
+org: org.brzy
+config_class: org.brzy.plugin.TomcatPluginConfig
+resource_class: 

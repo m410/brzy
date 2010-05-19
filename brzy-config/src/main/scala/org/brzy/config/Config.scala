@@ -13,14 +13,12 @@ import org.brzy.plugin.Plugin
  * @version $Id : $
  */
 abstract class Config(map: Map[String, AnyRef]) {
-  def this(jmap: JMap[String, AnyRef]) = this (jmap.toMap)
 
   def this() = this (Map[String, AnyRef]())
 
   val configurationName: String
 
   def asMap: Map[String, AnyRef]
-
 
   protected def set[T](s: Option[Any]): T = s match {
     case s: Some[T] => s.get

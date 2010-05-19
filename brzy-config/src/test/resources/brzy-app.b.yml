@@ -5,10 +5,10 @@
 # http://jyaml.sourceforge.net/
 application:
   version: "1.0.0"
-  name: Test app
+  name: &name Test app
   author: Fred
-  description: Some Description
-  group_id: &group org.brzy.sample
+  description: &desc Some Description
+  org: &group org.brzy.sample
   artifact_id: sample-jpa
   application_class: org.brzy.mock.MockWebApp
   properties:
@@ -20,7 +20,7 @@ application:
 # scope:organization:name:version
 # scope = [provided,runtime,test]
 dependencies:
-  - {conf: compile, org: org.apache.wicket, name: wicket, rev: 1.4-rc6}
+  - {conf: compile, org: org.apache.wicket, name: wicket, rev: "1.4-rc6"}
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.0"}
 
 #
@@ -31,18 +31,15 @@ repositories:
 
 plugins:
   - name: brzy-scalate
+    org: org.brzy
+    version: "0.2"
     config_class: org.brzy.plugin.ScalatePluginConfig
-    group_id: org.brzy
-    version: "0.1"
-    dependencies:
-      - lib: "test:test:test:1.0"
-    web_xml:
-      - anything: Test
-  
+    remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.2/brzy-scalate-0.2-plugin.zip
+
 persistence:
 #  - config_class: org.brzy.plugin.SquerylConfigPlugin
 #    name: brzy-hibernate
-#    group_id: org.brzy
+#    org: org.brzy
 #    version: "0.1"
 #    scan_package: *group
 #    properties:
@@ -53,15 +50,14 @@ persistence:
 #      "hibernate.connection.password": ""
 #      "hibernate.hbm2ddl.auto": "update"
   - name: brzy-squeryl
-    config_class: org.brzy.plugin.SquerylPluginConfig
-    group_id: org.brzy
+    org: org.brzy
     version: "0.1"
+    config_class: org.brzy.plugin.SquerylPluginConfig
     scan_package: *group
-    properties:
-      driver_class: org.postgresql.Driver
-      user_name: test
-      password:
-      url: jdbc:postgresql://localhost/dev
+    driver_class: org.postgresql.Driver
+    user_name: test
+    password:
+    url: jdbc:postgresql://localhost/dev
 
 #
 # Logging
@@ -88,6 +84,8 @@ logging:
     ref: [FILE]
 
 web_xml:
+  - description: *desc
+  - display-name: *name
   - servlet: {servlet-name: ScalateServlet, servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet, load-on-startup: 1}
   - servlet-mapping: { servlet-name: ScalateServlet, url-pattern: "*.ssp"}
 

@@ -12,7 +12,7 @@ import collection.JavaConversions._
 class CascalPluginConfig(map: Map[String, AnyRef]) extends Plugin[CascalPluginConfig](map) {
   val configurationName = "Cascal"
 
-  def +(that: CascalPluginConfig) = new CascalPluginConfig(this.asMap ++ that.asMap)
+  override def +(that: CascalPluginConfig) = new CascalPluginConfig(this.asMap ++ that.asMap)
 
   override def asMap = super.asMap
 

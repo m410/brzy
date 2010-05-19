@@ -6,7 +6,7 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="/opt/local/share/scala-2.8/lib/scala-compiler.jar" />
+            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.8.0.RC2/scala-compiler-2.8.0.RC2.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">

@@ -32,8 +32,8 @@ class WebappConfigTest {
     assertEquals("Fred", app.application.author)
     assertNotNull(app.application.description)
     assertEquals("Some Description", app.application.description)
-    assertNotNull(app.application.groupId)
-    assertEquals("org.brzy.sample", app.application.groupId)
+    assertNotNull(app.application.org)
+    assertEquals("org.brzy.sample", app.application.org)
     assertNotNull(app.application.artifactId)
     assertEquals("sample-jpa", app.application.artifactId)
     assertNotNull(app.application.applicationClass)
@@ -55,7 +55,7 @@ class WebappConfigTest {
     assertEquals(1, app.logging.loggers.size)
     assertNotNull(app.logging.root)
     assertNotNull(app.webXml)
-    assertEquals(2, app.webXml.size)
+    assertEquals(4, app.webXml.size)
   }
 
   @Test
@@ -74,7 +74,7 @@ class WebappConfigTest {
     assertNull(app.persistence)
     assertNull(app.logging)
     assertNotNull(app.webXml)
-    assertEquals(12, app.webXml.size)
+    assertEquals(10, app.webXml.size)
   }
 
   @Test
@@ -99,21 +99,20 @@ class WebappConfigTest {
     assertNotNull(merged.project)
     assertEquals("development", merged.environment)
     assertNotNull(merged.application)
-//    assertEquals(2, merged.dependencies.size)
     assertNotNull(merged.repositories)
-//    assertEquals(1, merged.repositories.size)
+    assertEquals(5, merged.repositories.size)
     assertNotNull(merged.plugins)
-//    assertEquals(1, merged.plugins.size)
+    assertEquals(1, merged.plugins.size)
     assertNotNull(merged.persistence)
-//    assertEquals(1, merged.persistence.size)
+    assertEquals(1, merged.persistence.size)
     assertNotNull(merged.logging)
     assertNotNull(merged.logging.appenders)
-//    assertEquals(2, merged.logging.appenders.size)
+    assertEquals(2, merged.logging.appenders.size)
     assertNotNull(merged.logging.loggers)
-//    assertEquals(1, merged.logging.loggers.size)
+    assertEquals(1, merged.logging.loggers.size)
     assertNotNull(merged.logging.root)
     assertNotNull(merged.webXml)
-//    assertEquals(2, merged.webXml.size)
+    assertEquals(14, merged.webXml.size)
     assertNotNull(merged.dependencies)
     assertEquals(19, merged.dependencies.size)
   }

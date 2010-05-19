@@ -11,7 +11,7 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin[ScalatePlugin
 
   val configurationName = "Scalate"
 
-  def +(that: ScalatePluginConfig) = new ScalatePluginConfig(this.asMap ++ that.asMap)
+  override def +(that: ScalatePluginConfig) = new ScalatePluginConfig(this.asMap ++ that.asMap)
 
   override def asMap = {
     val map = new collection.mutable.HashMap[String, AnyRef]()

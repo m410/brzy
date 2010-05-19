@@ -8,7 +8,7 @@ application:
   name: Test app
   author: Fred
   description: Some Description
-  group_id: &group org.brzy.sample
+  org: &group org.brzy.sample
   artifact_id: sample-jpa
   application_class: org.brzy.mock.MockWebApp
   properties:

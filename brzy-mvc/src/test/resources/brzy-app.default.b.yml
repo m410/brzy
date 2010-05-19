@@ -10,7 +10,7 @@ project:
 views:
   name: brzy-scalate
   version: 0.1
-  group_id: org.brzy
+  org: org.brzy
   file_extension: ".ssp"
   html_version: html5
 repositories:

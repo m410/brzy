@@ -22,7 +22,7 @@ class BuildProperties(config:WebappConfig) {
       .mkString
       .replace(applicationVersion,config.application.version)
       .replace(applicationName,config.application.name)
-      .replace(applicationOrg,config.application.groupId)
+      .replace(applicationOrg,config.application.org)
       .replace(applicationType,config.project.packageType)
       .replace(testFramework,config.testFramework)
       .replace(scalaVersion,config.project.scalaVersion)

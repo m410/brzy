@@ -1,17 +1,13 @@
-application:
-  version:"0.1"
-  name: brzy-cascal
-  author: Michael Fortin
-  description: Uses the Cascal library for persitence to cassandra
-  group_id: org.brzy
-  artifact_id: brzy-cascal
+#
+# implement persistence for the cassandra nosql db
+#
 name: brzy-cascal
-group_id: org.brzy
-version:"0.1"
-
+org: org.brzy
+version: "0.1"
+config_class: org.brzy.plugin.CascalPluginConfig
+resource_class: org.brzy.plugin.CascalPluginResource
 dependencies:
-  - {conf: compile, org: com.shorrockin, name: cascal, rev: 1.1}
-
+  - {conf: compile, org: com.shorrockin, name: cascal, rev: "1.1"}
 repositories:
   - id: fusesource.m2
     url: http://repo.fusesource.com/nexus/content/repositories/public

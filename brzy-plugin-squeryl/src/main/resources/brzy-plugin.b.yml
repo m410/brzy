@@ -1,19 +1,15 @@
-application:
-  version:"0.1"
-  name: brzy-squeryl
-  author: Michael Fortin
-  description: Uses the Squeryl api for persistence
-  group_id: org.brzy
-  artifact_id: brzy-squeryl
+#
+# squeryl object relational persistence
+#
 name: brzy-squeryl
-group_id: org.brzy
-version:"0.1"
-
+org: org.brzy
+version: "0.1"
+config_class: org.brzy.plugin.SquerylPluginConfig
+resource_class: org.brzy.plugin.SquerylPluginResource
 dependencies:
-  - {conf: compile, org: org.squeryl, name: squeryl_2.8.0.Beta1-RC8, rev: 0.9.3}
+  - {conf: compile, org: org.squeryl, name: squeryl_2.8.0.Beta1-RC8, rev: "0.9.3"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
-  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: 0.1}
-
+  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.1"}
 repositories:
   - id: fusesource.m2
     url: http://repo.fusesource.com/nexus/content/repositories/public

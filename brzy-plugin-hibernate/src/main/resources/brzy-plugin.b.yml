@@ -1,14 +1,12 @@
-application:
-  version: "0.1"
-  name: brzy-hibernate
-  author: Michael Fortin
-  description: Uses Hibernate as the view technology
-  group_id: org.brzy
-  artifact_id: brzy-hibernate
+#
+# hibernate persistence
+#
 name: brzy-hibernate
-group_id: org.brzy
+org: org.brzy
 version: "0.1"
+config_class: org.brzy.plugin.HibernatePluginConfig
+resource_class: org.brzy.plugin.HibernatePluginResource
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: 3.5.0-Final}
-  - {conf: compile, org: org.brzy, name: brzy-hibernate, rev: 0.1}
+  - {conf: compile, org: org.brzy, name: brzy-hibernate, rev: "0.1"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}

@@ -9,7 +9,7 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin[TomcatPluginConf
 
   val configurationName = "Tomcat"
 
-  def +(that: TomcatPluginConfig) = new TomcatPluginConfig(this.asMap ++ that.asMap)
+  override def +(that: TomcatPluginConfig) = new TomcatPluginConfig(this.asMap ++ that.asMap)
 
   override def asMap = super.asMap
 
