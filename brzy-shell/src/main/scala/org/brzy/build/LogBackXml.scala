@@ -57,7 +57,7 @@ class LogBackXml(config:WebappConfig) {
     Elem(null,"appender", Attribute(null,"name",appender.name,
       Attribute(null,"class",appender.appenderClass,Null)), TopScope, arrayBuf.toArray:_*)
   }
-  def appenderRefs(root:Array[String]):Array[Node] = {
+  def appenderRefs(root:Seq[String]):Array[Node] = {
     if(root != null)
       root.map(x => <appender-ref ref={x} />).toArray
     else

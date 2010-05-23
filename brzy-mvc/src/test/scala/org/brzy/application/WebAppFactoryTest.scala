@@ -6,15 +6,15 @@ import org.junit.Assert._
 
 /**
  * @author Michael Fortin
- * @version $Id: $
+ * @version $Id : $
  */
 class WebAppFactoryTest {
 
-  	@Test
-	def testWebApplication = {
-		val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
+  @Test
+  def testWebApplication = {
+    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
     assertNotNull(url)
-    val app = WebAppFactory.create(new Builder(url,"development").runtimeConfig)
-		assertNotNull(app)
-	}
+    val app = WebAppFactory.create(new Builder(url, "development").runtimeConfig)
+    assertNotNull(app)
+  }
 }

@@ -13,23 +13,23 @@ class ProxyFactoryTest {
 
   @Test
   def testProxyFactory {
-    val bar = ProxyFactory.make(classOf[Bar],Array[AnyRef](), new Proxy with LoggingInterceptor)
+    val bar = ProxyFactory.make(classOf[Bar],Array[AnyRef](), new MethodInvoker with LoggingInterceptor)
     assertNotNull(bar)
-    assertEquals("hello Mike", bar.hello("Mike"))
+    assertEquals("hello Mike", bar.asInstanceOf[Bar].hello("Mike"))
     def clazz = bar.getClass.getSuperclass
   }
 
   @Test
   def testProxyFactory2 {
-    val bar = ProxyFactory.make(classOf[Bar], new Proxy with LoggingInterceptor)
+    val bar = ProxyFactory.make(classOf[Bar], new MethodInvoker with LoggingInterceptor)
     assertNotNull(bar)
-    assertEquals("hello Mike", bar.hello("Mike"))
+    assertEquals("hello Mike", bar.asInstanceOf[Bar].hello("Mike"))
   }
 
   @Test
   def testProxyFactory3 {
-    val bar = ProxyFactory.make(classOf[FooBar],Array[AnyRef](new Bar), new Proxy with LoggingInterceptor)
+    val bar = ProxyFactory.make(classOf[FooBar],Array[AnyRef](new Bar), new MethodInvoker with LoggingInterceptor)
     assertNotNull(bar)
-    assertEquals("hello Mike, from foobar", bar.hello("Mike"))
+    assertEquals("hello Mike, from foobar", bar.asInstanceOf[FooBar].hello("Mike"))
   }
 }

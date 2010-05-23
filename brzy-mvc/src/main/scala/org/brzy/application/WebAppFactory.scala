@@ -11,7 +11,7 @@ import org.brzy.config.WebappConfig
 object WebAppFactory {
 
   def create(config:WebappConfig):WebApp = {
-    val c = Class.forName(config.application.applicationClass)
+    val c = Class.forName(config.application.get.applicationClass.get)
     val constructor = c.getConstructor(classOf[WebappConfig])
 		val inst = constructor.newInstance(config)
 		inst.asInstanceOf[WebApp]

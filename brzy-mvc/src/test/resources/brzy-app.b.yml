@@ -21,7 +21,7 @@ application:
 # scope = [provided,runtime,test]
 dependencies:
   - {conf: compile, org: org.apache.wicket, name: wicket, rev: 1.4-rc6}
-  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: 1.0}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.0"}
 
 #
 # Dependency Management
@@ -30,30 +30,16 @@ repositories:
     url: http://someurl.com/test
 
 persistence:
-  - name: brzy-hibernate
+  - name: brzy-squeryl
     org: org.brzy
-    version: 0.1
-    scan_package: *group
-    config_class: org.brzy.plugin.HibernatePluginConfig
-    resource_class: org.brzy.plugin.HibernatePluginConfig
-    properties:
-      "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
-      "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
-      "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
-      "hibernate.connection.username": "sa"
-      "hibernate.connection.password": ""
-      "hibernate.hbm2ddl.auto": "update"
-  - name: brzy-scalate
-    org: org.brzy
-    version: 0.1
+    version: "0.1"
     scan_package: *group
     config_class: org.brzy.plugin.ScalatePluginConfig
     resource_class: org.brzy.plugin.ScalatePluginConfig
-    properties:
-      driver_class: org.postgresql.Driver
-      user_name: test
-      password:
-      url: jdbc:postgresql://localhost/dev
+    driver_class: org.postgresql.Driver
+    user_name: test
+    password:
+    url: jdbc:postgresql://localhost/dev
 
 #
 # Logging
@@ -77,7 +63,7 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: FILE
+    ref: [FILE]
 
 #
 # override defaults for any environment
@@ -86,7 +72,7 @@ environment_overrides:
   - environment: developement
     logging:
       root:
-        ref:STDOUT
+        ref: [STDOUT]
     application:
       webapp_context: devapp
   - environment: test

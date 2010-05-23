@@ -1,41 +1,97 @@
 package org.brzy.application
 
-import collection.immutable.SortedSet
+
 import org.brzy.config.WebappConfig
 import org.brzy.action.Action
-import org.brzy.controller.{Path,Controller}
+import org.brzy.interceptor.ProxyFactory._
+import org.brzy.service.ServiceScanner
+
 import org.slf4j.LoggerFactory
-import collection.mutable.ListBuffer
+import java.lang.reflect.Constructor
+
+import collection.mutable.{ArrayBuffer, ListBuffer}
+import collection.immutable.SortedSet
+import org.brzy.controller.{ControllerScanner, Path, Controller}
+import org.brzy.interceptor.{MethodInvoker, Interceptor}
+import org.brzy.plugin.{WebAppViewPlugin, Plugin, WebAppPlugin}
 
 /**
  * @author Michael Fortin
- * @version $Id: $
+ * @version $Id : $
  */
-abstract class WebApp(val config:WebappConfig) {
-
+abstract class WebApp(val config: WebappConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 
-  // TODO load plugins
+  val viewPluginResource:WebAppViewPlugin = {
+    val resourceClass = Class.forName(config.views.get.resourceClass.get)
+    val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
+    constructor.newInstance(config.views).asInstanceOf[WebAppViewPlugin]
+  }
 
-  val controllers:Array[_<:java.lang.Object]
-  val services:Array[_<:java.lang.Object]
+  val persistencePluginResources:Array[WebAppPlugin] = {
+    config.persistence.map(persist => {
+      val p = persist.asInstanceOf[Plugin]
+      val resourceClass = Class.forName(p.resourceClass.get)
+      val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
+      constructor.newInstance(p).asInstanceOf[WebAppPlugin]
+    }).toArray
+  }
+
+  val pluginResources:Array[WebAppPlugin] = {
+    config.plugins.map(plugin => {
+      val p = plugin.asInstanceOf[Plugin]
+      val resourceClass = Class.forName(p.resourceClass.get)
+      val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
+      constructor.newInstance(p).asInstanceOf[WebAppPlugin]
+    }).toArray
+  }
+
+  val interceptor:MethodInvoker = {
+    val buffer = ArrayBuffer[MethodInvoker]()
+    persistencePluginResources.foreach(pin => pin.interceptors.foreach(p => buffer += p.asInstanceOf[MethodInvoker]))
+    val array = buffer.toArray
+    array(0)  // TODO this only returns the first interceptor, and ignores the rest
+  }
+
+  val services: Array[_ <: AnyRef] = makeServices
+
+  protected def makeServices:Array[AnyRef] = {
+    val buffer = ArrayBuffer[AnyRef]()
+    val serviceClasses = ServiceScanner(config.application.get.org.get).services
+    serviceClasses.foreach(sc => {
+      val clazz = sc.asInstanceOf[Class[_]]
+      buffer += make(clazz, interceptor)})
+    buffer.toArray[AnyRef]
+  }
+
+  val controllers: Array[_ <: AnyRef] = makeControllers
+
+  protected def makeControllers:Array[AnyRef]= {
+    val buffer = ArrayBuffer[AnyRef]()
+    val serviceClasses = ControllerScanner(config.application.get.org.get).controllers
+    serviceClasses.foreach(sc =>{
+      val clazz = sc.asInstanceOf[Class[_]]
+      // TODO inject services
+      buffer += make(clazz, interceptor)})
+    buffer.toArray[AnyRef]
+  }
 
   /**
    * The controllers are proxies so you have to get the super class
    */
   lazy val actions = {
     val list = new ListBuffer[Action]()
-    controllers.foreach( ctl => {
+    controllers.foreach(ctl => {
       log.debug("load actions from controller: {}", ctl)
       val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
-      for(method <- ctl.getClass.getSuperclass.getMethods
-          if method.getAnnotation(classOf[Path]) != null) {
+      for (method <- ctl.getClass.getSuperclass.getMethods
+           if method.getAnnotation(classOf[Path]) != null) {
         val methodPath = method.getAnnotation(classOf[Path])
-        log.debug("controllerPath : " + classPath )
-        log.debug("methodPath     : " + methodPath )
-        
-        val pathValue = classPath.value +"/" +  methodPath.value
-        val action = new Action(pathValue, method, ctl, ".ssp")//config.views.file_extension)
+        log.debug("controllerPath : " + classPath)
+        log.debug("methodPath     : " + methodPath)
+
+        val pathValue = classPath.value + "/" + methodPath.value
+        val action = new Action(pathValue, method, ctl, viewPluginResource.fileExtension) 
         log.debug("action: " + action)
         list += action
       }
@@ -44,10 +100,17 @@ abstract class WebApp(val config:WebappConfig) {
   }
 
   def startup = {
+    viewPluginResource.startup
+    persistencePluginResources.foreach(_.startup)
+    pluginResources.foreach(_.startup)
+    viewPluginResource.startup
     log.info("application startup")
   }
 
   def shutdown = {
+    viewPluginResource.shutdown
+    persistencePluginResources.foreach(_.shutdown)
+    pluginResources.foreach(_.shutdown)
     log.info("application shutdown")
   }
 }

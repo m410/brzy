@@ -17,12 +17,12 @@ object ProxyFactory {
         !m.getName.equals("equals")
   }
 
-  def make[T](clazz:Class[T], args:Array[AnyRef], proxy:Proxy): T = {
+  def make(clazz:Class[_], args:Array[AnyRef], proxy:MethodInvoker): AnyRef = {
     val factory = new PFactory
     factory.setSuperclass(clazz)
     factory.setFilter(filter)
-    factory.create(args.map(_.getClass), args, proxy).asInstanceOf[T]
+    factory.create(args.map(_.getClass), args, proxy)
   }
 
-  def make[T](clazz:Class[T], proxy:Proxy): T = make(clazz, Array[AnyRef]() ,proxy)
+  def make(clazz:Class[_], proxy:MethodInvoker): AnyRef = make(clazz, Array[AnyRef]() ,proxy)
 }

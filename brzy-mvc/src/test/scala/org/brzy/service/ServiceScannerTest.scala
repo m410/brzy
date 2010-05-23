@@ -10,14 +10,14 @@ import org.junit.Assert._
  * @version $Id: $
  */
 
-class BrzyServiceScannerTest {
+class ServiceScannerTest {
 
-  val scanner = new BrzyServiceScanner("org.brzy.mock")
+  val scanner = new ServiceScanner("org.brzy.mock")
 
   @Test
   def testServiceScanner = {
     val result = scanner.services
     assertNotNull(result)
-    assertEquals(3,result.size)
+    assertEquals(1,result.size)
   }
 }

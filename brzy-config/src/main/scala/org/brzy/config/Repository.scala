@@ -5,21 +5,21 @@ package org.brzy.config
  * @version $Id : $
  */
 class Repository(m: Map[String, AnyRef]) extends Config(m) {
-
-  val id: String = set[String](m.get("id"))
-  val name: String = set[String](m.get("name"))
-  val url: String = set[String](m.get("url"))
-  val snapshots: Boolean = false
-  val releases: Boolean = true
-
-  val configurationName = "Repository"
+  val configurationName: String = "Repository"
+  val id: Option[String] = m.get("id").asInstanceOf[Option[String]].orElse(Option(null))
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
+  val url: Option[String] = m.get("url").asInstanceOf[Option[String]].orElse(Option(null))
+  val snapshots: Option[Boolean] = m.get("snapshots").asInstanceOf[Option[Boolean]].orElse(Option(false))
+  val releases: Option[Boolean] = m.get("releases").asInstanceOf[Option[Boolean]].orElse(Option(true))
 
   def asMap = {
     Map[String, AnyRef](
-    "id" -> id,
-    "name" -> name,
-    "url" -> url,
-    "snapshots" -> snapshots.toString,
-    "releases" -> releases.toString)
+      "id" -> id,
+      "name" -> name,
+      "url" -> url,
+      "snapshots" -> snapshots,
+      "releases" -> releases,
+      "snapshots" -> snapshots,
+      "releases" -> releases)
   }
 }

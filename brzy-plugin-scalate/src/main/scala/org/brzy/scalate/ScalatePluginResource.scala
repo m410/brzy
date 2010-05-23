@@ -1,16 +1,15 @@
 package org.brzy.scalate
 
-import org.brzy.plugin.WebAppPlugin
 import collection.JavaConversions._
+import org.brzy.plugin.{WebAppViewPlugin, ScalatePluginConfig, WebAppPlugin}
 
 /**
  * 
  * @author Michael Fortin
  * @version $Id: $
  */
-class ScalatePluginResource(map:Map[_,_]) extends WebAppPlugin {
+class ScalatePluginResource(config:ScalatePluginConfig) extends WebAppViewPlugin{
 
-  def this(jmap:java.util.Map[_,_]) = this(jmap.toMap)
+  override val fileExtension = config.fileExtension
 
-  
 }

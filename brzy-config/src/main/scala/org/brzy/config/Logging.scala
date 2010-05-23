@@ -9,38 +9,77 @@ import collection.JavaConversions._
  * @version $Id : $
  */
 class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging] {
-  val provider: String = set[String](m.get("provider"))
-  val appenders: Seq[Appender] = makeSeq[Appender](classOf[Appender], m.get("appenders"))
-  val loggers: Seq[Logger] = makeSeq[Logger](classOf[Logger], m.get("loggers"))
-  val root: Root = make(classOf[Root], m.get("root"))
+  val configurationName: String = "Logging"
+  val provider: Option[String] = m.get("provider").asInstanceOf[Option[String]].orElse(Option(null))
+  val appenders: Option[List[Appender]] = m.get("appenders") match {
+    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Appender(i)).toList)
+    case _ => Option(null)
+  }
+  val loggers: Option[List[Logger]] = m.get("loggers") match {
+    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Logger(i)).toList)
+    case _ => Option(null)
+  }
+  val root: Option[Root] = m.get("loggers") match {
+    case s: Some[Map[String, AnyRef]] => Option(new Root(s.get))
+    case _ => Option(null)
+  }
 
-  val configurationName = "Logging"
 
   def asMap = {
     Map[String, AnyRef](
       "provider" -> provider,
-      "appenders" -> appenders.map(f => f.asMap),
-      "loggers" -> loggers.map(f => f.asMap),
-      "root" -> root.asMap)
+      "appenders" -> appenders.get.map(f => f.asMap).toList,
+      "loggers" -> loggers.get.map(f => f.asMap).toList,
+      "root" -> root.get.asMap)
   }
 
-  def +(that: Logging) = new Logging(this.asMap ++ that.asMap)
+  def <<(that: Logging) = {
+    if (that == null) {
+      this
+    }
+    else {
+      new Logging(Map[String, AnyRef](
+        "provider" -> that.provider.getOrElse(this.provider.get),
+        "appenders" -> {
+          if (this.appenders.isDefined && that.appenders.isDefined)
+            this.appenders.get.map(_.asMap).toList ++ that.appenders.get.map(_.asMap).toList
+          else if (this.appenders.isDefined)
+            this.appenders.get.map(_.asMap).toList
+          else if (that.appenders.isDefined)
+            that.appenders.get.map(_.asMap).toList
+          else
+            Option(null)
+        },
+        "loggers" -> {
+          if (this.loggers.isDefined && that.loggers.isDefined)
+            this.loggers.get.map(_.asMap).toList ++ that.loggers.get.map(_.asMap).toList
+          else if (this.loggers.isDefined)
+            this.loggers.get.map(_.asMap).toList
+          else if (that.loggers.isDefined)
+            that.loggers.get.map(_.asMap).toList
+          else
+            Option(null)
+        },
+        "root" -> {this.root.get << that.root.get}.asMap
+        ))
+    }
+  }
 }
 
 /**
  *
  */
 class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Appender] with Comparable[Appender] {
-  val name: String = set[String](m.get("name"))
-  val appenderClass: String = set[String](m.get("appender_class"))
-  val layout: String = set[String](m.get("layout"))
-  val pattern: String = set[String](m.get("pattern"))
-
-  val file: String = set[String](m.get("file"))
-  val rollingPolicy: String = set[String](m.get("rolling_policy"))
-  val fileNamePattern: String = set[String](m.get("file_name_pattern"))
-
   val configurationName = "Appender"
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
+  val appenderClass: Option[String] = m.get("appender_class").asInstanceOf[Option[String]].orElse(Option(null))
+  val layout: Option[String] = m.get("layout").asInstanceOf[Option[String]].orElse(Option(null))
+  val pattern: Option[String] = m.get("pattern").asInstanceOf[Option[String]].orElse(Option(null))
+
+  val file: Option[String] = m.get("file").asInstanceOf[Option[String]].orElse(Option(null))
+  val rollingPolicy: Option[String] = m.get("rolling_policy").asInstanceOf[Option[String]].orElse(Option(null))
+  val fileNamePattern: Option[String] = m.get("file_name_pattern").asInstanceOf[Option[String]].orElse(Option(null))
+
 
   def asMap = {
     Map[String, AnyRef](
@@ -53,7 +92,20 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
       "file_name_pattern" -> fileNamePattern)
   }
 
-  def +(that: Appender) = new Appender(this.asMap ++ that.asMap)
+  def <<(that: Appender) = {
+    if (that == null)
+      this
+    else
+      new Appender(Map[String, String](
+        "name" -> that.name.getOrElse(this.name.get),
+        "appender_class" -> that.appenderClass.getOrElse(this.appenderClass.get),
+        "layout" -> that.layout.getOrElse(this.layout.get),
+        "pattern" -> that.pattern.getOrElse(this.pattern.get),
+        "file" -> that.file.getOrElse(this.file.get),
+        "rolling_policy" -> that.rollingPolicy.getOrElse(this.rollingPolicy.get),
+        "file_name_pattern" -> that.fileNamePattern.getOrElse(this.fileNamePattern.get)
+        ))
+  }
 
   override def equals(obj: Any) = {
     if (obj == null)
@@ -85,10 +137,9 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
  *
  */
 class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] with Comparable[Logger] {
-  val name: String = set[String](m.get("name"))
-  val level: String = set[String](m.get("level"))
-
   val configurationName = "Logger"
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
+  val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(Option(null))
 
   def asMap = {
     Map[String, AnyRef](
@@ -96,7 +147,15 @@ class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] 
       "level" -> level)
   }
 
-  def +(that: Logger) = new Logger(this.asMap ++ that.asMap)
+  def <<(that: Logger) = {
+    if (that == null)
+      this
+    else
+      new Logger(Map[String, String](
+        "name" -> that.name.getOrElse(this.name.get),
+        "level" -> that.level.getOrElse(this.level.get)
+        ))
+  }
 
   def compareTo(obj: Logger) = {
     new CompareToBuilder()
@@ -128,17 +187,14 @@ class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] 
  *
  */
 class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
-  val level: String = set[String](m.get("level"))
-  val ref: Seq[String] = m.get("ref") match {
+  val configurationName = "Root"
+  val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(Option(null))
+  val ref: Option[List[String]] = m.get("ref") match {
     case s: Some[List[String]] =>
-      if(s.get.isInstanceOf[java.util.List[String]])
-        s.get.asInstanceOf[java.util.List[String]].toSeq
-      else
-        s.get.toSeq
-    case _ => null
+      Option(s.get.map(i => i).toList)
+    case _ => Option(null)
   }
 
-  val configurationName = "Root"
 
   def asMap = {
     Map[String, AnyRef](
@@ -147,5 +203,21 @@ class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
       )
   }
 
-  def +(that: Root) = new Root(this.asMap ++ that.asMap)
+  def <<(that: Root) = {
+    if (that == null)
+      this
+    else
+      new Root(Map[String, AnyRef](
+        "level" -> that.level.getOrElse(this.level.get),
+        "ref" -> {
+          if (this.ref.isDefined && that.ref.isDefined)
+            this.ref.get ++ that.ref.get
+          else if (this.ref.isDefined)
+            this.ref.get
+          else if (that.ref.isDefined)
+            that.ref.get
+          else
+            Option(null)
+        }))
+  }
 }

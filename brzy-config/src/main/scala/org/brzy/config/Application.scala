@@ -1,7 +1,5 @@
 package org.brzy.config
 
-import collection.JavaConversions._
-import java.util.{Map => JMap}
 
 /**
  *
@@ -9,14 +7,17 @@ import java.util.{Map => JMap}
  * @version $Id : $
  */
 class Application(m: Map[String, AnyRef]) extends Config(m) {
+  val configurationName: String = "Application Configuration"
+  val version: Option[String] = m.get("version").asInstanceOf[Option[String]].orElse(Option(null))
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
+  val author: Option[String] = m.get("author").asInstanceOf[Option[String]].orElse(Option(null))
+  val description: Option[String] = m.get("description").asInstanceOf[Option[String]].orElse(Option(null))
+  val org: Option[String] = m.get("org").asInstanceOf[Option[String]].orElse(Option(null))
+  val artifactId: Option[String] = m.get("artifact_id").asInstanceOf[Option[String]].orElse(Option(null))
+  val applicationClass: Option[String] = m.get("application_class").asInstanceOf[Option[String]].orElse(Option(null))
+  val webappContext: Option[String] = m.get("webapp_context").asInstanceOf[Option[String]].orElse(Option(null))
 
-  val version = set[String](m.get("version"))
-  val name = set[String](m.get("name"))
-  val author = set[String](m.get("author"))
-  val description = set[String](m.get("description"))
-  val org = set[String](m.get("org"))
-  val artifactId = set[String](m.get("artifact_id"))
-
+  // TODO later
   //  val properties:Map[String,String] = m.get("artifact_id") match {
   //    case s:Some[JMap[_,_]] => {
   //      val jmap: JMap[_, _] = s.get
@@ -25,21 +26,15 @@ class Application(m: Map[String, AnyRef]) extends Config(m) {
   //    case _ => null
   //  }
 
-  val applicationClass: String = set[String](m.get("application_class"))
-  val webappContext: String = set[String](m.get("webapp_context"))
-
-  val configurationName = "Application Configuration"
-
   def asMap = {
-    val map = new collection.mutable.HashMap[String, AnyRef]()
-    map.put("name", name)
-    map.put("version", version)
-    map.put("org", org)
-    map.put("artifact_id", artifactId)
-    map.put("author", author)
-    map.put("description", description)
-    map.put("webapp_context", webappContext)
-    map.put("application_class", applicationClass)
-    Map[String,AnyRef]() ++ map
+    Map[String, AnyRef](
+      "name" -> name,
+      "version" -> version,
+      "org" -> org,
+      "artifact_id" -> artifactId,
+      "author" -> author,
+      "description" -> description,
+      "webapp_context" -> webappContext,
+      "application_class" -> applicationClass)
   }
 }

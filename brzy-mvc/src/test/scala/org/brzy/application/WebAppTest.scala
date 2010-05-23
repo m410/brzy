@@ -4,7 +4,7 @@ import org.junit.Test
 import org.junit.Assert._
 
 import org.brzy.interceptor.ProxyFactory._
-import org.brzy.interceptor.Proxy
+import org.brzy.interceptor.MethodInvoker
 import org.brzy.interceptor.impl.LoggingInterceptor
 import org.brzy.mock.{UserService, UserController}
 import org.brzy.config.WebappConfig
@@ -17,10 +17,10 @@ class WebAppTest {
 
   class MockWebApp(config:WebappConfig) extends WebApp(config) {
     override val services = Array(
-      make(classOf[UserService],new Proxy with LoggingInterceptor)
+      make(classOf[UserService],new MethodInvoker with LoggingInterceptor)
       )
     override val controllers = Array(
-      make(classOf[UserController],new Proxy with LoggingInterceptor)
+      make(classOf[UserController],new MethodInvoker with LoggingInterceptor)
       )
   }
 

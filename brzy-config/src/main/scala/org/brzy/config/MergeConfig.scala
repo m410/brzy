@@ -8,5 +8,5 @@ package org.brzy.config
  */
 
 trait MergeConfig[T] {
-  def +(that:T):T
+  def <<(that:T):T
 }

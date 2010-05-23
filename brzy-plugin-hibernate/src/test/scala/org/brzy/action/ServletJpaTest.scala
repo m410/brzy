@@ -25,7 +25,7 @@ class ServletJpaTest {
   val controllerClass = classOf[UserController]
   val controller = make(controllerClass,interceptor)
 
-  val app = new WebApp(new WebappConfig()) {
+  val app = new WebApp(new WebappConfig(Map[String,AnyRef]())) {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef]()
     override lazy val actions = SortedSet(

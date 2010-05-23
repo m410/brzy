@@ -39,14 +39,14 @@ class WebXml(config:WebappConfig) {
   private val children = ListBuffer[Elem]()
 
   for(row <- config.webXml) {
-    val keyvals = row.asInstanceOf[java.util.HashMap[String,AnyRef]].map(nvp => nvp)
+    val keyvals = row.asInstanceOf[Map[String,AnyRef]].map(nvp => nvp)
     keyvals.foreach(keyVal => {
         if(keyVal._2.isInstanceOf[java.lang.String]) {
           val value = keyVal._2.asInstanceOf[String]
           children += Elem(null,keyVal._1, null, TopScope, new Text(value))
         }
         else {
-          val map = keyVal._2.asInstanceOf[java.util.HashMap[String,String]]
+          val map = keyVal._2.asInstanceOf[Map[String,String]]
           children += Elem(null,keyVal._1, null, TopScope, makeChildren(map):_*)
         }
       }
@@ -55,7 +55,7 @@ class WebXml(config:WebappConfig) {
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head
 
-  def makeChildren(children:java.util.HashMap[String,String]):Array[Node] = {
+  def makeChildren(children:Map[String,String]):Array[Node] = {
 
     if(children == null || children.size == 0)
       Array(Text(""))

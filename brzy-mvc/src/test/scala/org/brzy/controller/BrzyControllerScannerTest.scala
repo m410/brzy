@@ -14,7 +14,7 @@ import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
  */
 class BrzyControllerScannerTest {
 
-  val scanner = new BrzyControllerScanner("org.brzy.mock")
+  val scanner = new ControllerScanner("org.brzy.mock")
 
   @Test
   @Ignore
@@ -24,12 +24,4 @@ class BrzyControllerScannerTest {
     assertEquals(2,result.size)
   }
 
-  @Test
-  @Ignore
-	def testActionMap = {
-    val result = scanner.actionMapping
-    assertNotNull(result)
-    assertEquals(14,result.size)
-    assertTrue(result.exists(i=> {i.path == "users/create"}))
-  }
 }

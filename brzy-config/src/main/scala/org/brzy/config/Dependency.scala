@@ -1,36 +1,36 @@
 package org.brzy.config
 
-import java.util.{List=>JList}
-import collection.JavaConversions._
+import collection.mutable.ListBuffer
 
 /**
  * @author Michael Fortin
- * @version $Id: $
+ * @version $Id : $
  */
-class Dependency(m:Map[String,AnyRef]) extends Config(m) {
+class Dependency(m: Map[String, AnyRef]) extends Config(m) {
+  val configurationName: String = "Dependency"
+  val org: Option[String] = m.get("org").asInstanceOf[Option[String]].orElse(None)
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
+  val rev: Option[String] = m.get("rev").asInstanceOf[Option[String]].orElse(None)
+  val conf: Option[String] = m.get("conf").asInstanceOf[Option[String]].orElse(None)
 
-  val org =  set[String](m.get("org"))
-  val name = set[String](m.get("name"))
-  val rev = set[String](m.get("rev"))
-  val conf = set[String](m.get("conf"))
-
-  val excludes = m.get("excludes") match {
-    case s:Some[JList[_]] => s.get.toList
-    case _ => null
+  val excludes: Option[List[Dependency]] = m.get("excludes") match {
+    case s: Some[List[Dependency]] =>
+      val buffer = new ListBuffer[Dependency]()
+      s.get.foreach(exclude => buffer += new Dependency(exclude.asInstanceOf[Map[String, String]]))
+      Option(buffer.toList)
+    case _ => None
   }
-
-  val configurationName = "Dependency"
 
   def asMap = {
-    val map = collection.mutable.HashMap[String,AnyRef]()
-    map.put("org", org)
-    map.put("name", name)
-    map.put("rev", rev)
-    map.put("conf", conf)
-
-    if(excludes != null)
-      map.put("excludes", excludes.map(f=>f.asInstanceOf[Dependency].asMap))
-
-    Map[String,AnyRef]() ++ map
+    Map[String, AnyRef](
+      "org" -> org,
+      "name" -> name,
+      "rev" -> rev,
+      "conf" -> conf,
+      "exculdes" -> {excludes match {
+        case s: Some[List[Dependency]] => Option(s.get.map(_.asMap).toList)
+        case _ => Option(null)
+      }})
   }
+
 }
