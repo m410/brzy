@@ -18,11 +18,19 @@ abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeCo
   val localLocation: Option[String] = map.get("local_location").asInstanceOf[Option[String]].orElse(None)
 
   val repositories: Option[List[Repository]] = map.get("repositories") match {
-    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Repository(i)).toList)
+    case s: Some[List[Map[String, AnyRef]]] =>
+      if (s.get != null)
+        Option(s.get.map(i => new Repository(i)).toList)
+      else
+        None
     case _ => None
   }
   val dependencies: Option[List[Dependency]] = map.get("dependencies") match {
-    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Dependency(i)).toList)
+    case s: Some[List[Map[String, AnyRef]]] =>
+      if (s.get != null)
+        Option(s.get.map(i => new Dependency(i)).toList)
+      else
+        None
     case _ => None
   }
 
@@ -35,14 +43,18 @@ abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeCo
       "resource_class" -> resourceClass.getOrElse(null),
       "remote_location" -> remoteLocation.getOrElse(null),
       "local_location" -> localLocation.getOrElse(null),
-      "dependencies" -> {dependencies match {
-        case s: Some[List[Dependency]] => s.get.map(_.asMap).toList
-        case _ => null
-      }},
-      "repositories" -> {repositories match {
-        case s: Some[List[Repository]] => s.get.map(_.asMap).toList
-        case _ => null
-      }})
+      "dependencies" -> {
+        dependencies match {
+          case s: Some[List[Dependency]] => s.get.map(_.asMap).toList
+          case _ => List[Map[String, AnyRef]]()
+        }
+      },
+      "repositories" -> {
+        repositories match {
+          case s: Some[List[Repository]] => s.get.map(_.asMap).toList
+          case _ => List[Map[String, AnyRef]]()
+        }
+      })
   }
 
 }

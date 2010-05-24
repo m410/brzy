@@ -28,9 +28,10 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
   def asMap = {
     Map[String, AnyRef](
       "provider" -> provider.getOrElse(null),
-      "appenders" -> appenders.get.map(f => f.asMap).toList,
-      "loggers" -> loggers.get.map(f => f.asMap).toList,
-      "root" -> root.get.asMap)
+      "appenders" -> appenders.get.map(_.asMap).toList,
+      "loggers" -> loggers.get.map(_.asMap).toList,
+      "root" -> root.get.asMap
+      )
   }
 
   def <<(that: Logging) = {
@@ -42,7 +43,7 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
         "provider" -> that.provider.getOrElse(this.provider.get),
         "appenders" -> {
           if (this.appenders.isDefined && that.appenders.isDefined)
-            this.appenders.get.map(_.asMap).toList ++ that.appenders.get.map(_.asMap).toList
+            {this.appenders.get ++ that.appenders.get}.map(_.asMap).toList
           else if (this.appenders.isDefined)
             this.appenders.get.map(_.asMap).toList
           else if (that.appenders.isDefined)

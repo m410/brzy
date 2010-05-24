@@ -22,8 +22,8 @@ class ScalatePluginConfigTest {
       "remote_location" -> "test",
       "local_location" -> "test",
       "repositories" -> null,
-      "dependencies" -> null,
-      "web_xml" -> null
+      "dependencies" -> List(),
+      "web_xml" -> List()
       ))
     val p2 = new ScalatePluginConfig(Map[String, AnyRef](
       "name" -> "test2",
@@ -35,8 +35,8 @@ class ScalatePluginConfigTest {
       "remote_location" -> "test2",
       "local_location" -> "test2",
       "repositories" -> null,
-      "dependencies" -> null,
-      "web_xml" -> null
+      "dependencies" -> List(),
+      "web_xml" -> List()
       ))
     val p3 = p1 << p2
     assertNotNull(p3)

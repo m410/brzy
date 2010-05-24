@@ -126,6 +126,7 @@ class WebappConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[We
     }
     else {
       new WebappConfig(Map[String, AnyRef](
+        "environment" -> this.environment.getOrElse(that.environment.get),
         "application" -> {this.application.getOrElse(that.application.get)}.asMap,
         "project" -> {this.project.get << that.project.getOrElse(null)}.asMap,
         "repositories" -> {
@@ -160,21 +161,21 @@ class WebappConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[We
         },
         "persistence" -> {
           if (this.persistence.isDefined && that.persistence.isDefined)
-            this.persistence.get ++ that.persistence.get
+            {this.persistence.get ++ that.persistence.get}.map(_.asMap).toList
           else if (this.persistence.isDefined)
-            this.persistence.get
+            this.persistence.get.map(_.asMap).toList
           else if (that.persistence.isDefined)
-            that.persistence.get
+            that.persistence.get.map(_.asMap).toList
           else
             null
         },
         "plugins" -> {
           if (this.plugins.isDefined && that.plugins.isDefined)
-            this.plugins.get ++ that.plugins.get
+            {this.plugins.get ++ that.plugins.get}.map(_.asMap).toList
           else if (this.plugins.isDefined)
-            this.plugins.get
+            this.plugins.get.map(_.asMap).toList
           else if (that.plugins.isDefined)
-            that.plugins.get
+            that.plugins.get.map(_.asMap).toList
           else
             null
         },

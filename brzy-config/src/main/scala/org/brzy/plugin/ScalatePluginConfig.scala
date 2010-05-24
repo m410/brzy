@@ -46,7 +46,7 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
             null
         },
         "web_xml" -> {
-          if (this.webXml.isDefined && it.webXml.isDefined)
+          if (this.webXml.isDefined && it.webXml.isDefined && this.webXml.get != null && it.webXml.get != null)
             this.webXml.get ++ it.webXml.get
           else if (this.webXml.isDefined)
             this.webXml.get

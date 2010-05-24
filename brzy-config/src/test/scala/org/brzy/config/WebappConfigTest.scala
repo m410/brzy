@@ -87,6 +87,8 @@ class WebappConfigTest {
     assertNotNull(webapp)
     assertNotNull(webapp.dependencies.get)
     assertEquals(2, webapp.dependencies.get.size)
+    assertEquals(2, webapp.logging.get.appenders.get.size)
+    assertEquals(1, webapp.logging.get.loggers.get.size)
 
     val url2 = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
     val config2 = Yaml.load(url2.openStream)
@@ -108,7 +110,7 @@ class WebappConfigTest {
     assertEquals(1, merged.persistence.get.size)
     assertNotNull(merged.logging.get)
     assertNotNull(merged.logging.get.appenders.get)
-    assertEquals(2, merged.logging.get.appenders.size)
+    assertEquals(2, merged.logging.get.appenders.get.size)
     assertNotNull(merged.logging.get.loggers.get)
     assertEquals(1, merged.logging.get.loggers.get.size)
     assertNotNull(merged.logging.get.root)
