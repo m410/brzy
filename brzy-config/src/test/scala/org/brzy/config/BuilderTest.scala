@@ -19,25 +19,25 @@ class BuilderTest {
   def testApplicationConfig = {
     val config = new Builder(url, "development").applicationConfig
     assertNotNull(config)
-    assertNotNull(config.application.get.version)
-    assertNotNull(config.application.get.name)
-    assertEquals("Test app", config.application.get.name)
-    assertNotNull(config.application.get.author)
-    assertNotNull(config.application.get.description)
-    assertNotNull(config.application.get.org)
-    assertNotNull(config.application.get.artifactId)
-    assertNotNull(config.logging)
-    assertNotNull(config.persistence)
-    assertNotNull(config.webXml)
+    assertNotNull(config.application.get.version.get)
+    assertNotNull(config.application.get.name.get)
+    assertEquals("Test app", config.application.get.name.get)
+    assertNotNull(config.application.get.author.get)
+    assertNotNull(config.application.get.description.get)
+    assertNotNull(config.application.get.org.get)
+    assertNotNull(config.application.get.artifactId.get)
+    assertNotNull(config.logging.get)
+    assertNotNull(config.persistence.get)
+    assertNotNull(config.webXml.get)
   }
 
   @Test
   def testDefaultConfig = {
     val config = new Builder(url, "development").defaultConfig
     assertNotNull(config)
-    assertNotNull(config.dependencies)
+    assertNotNull(config.dependencies.get)
     assertTrue(config.dependencies.get.length > 0)
-    assertNotNull(config.repositories)
+    assertNotNull(config.repositories.get)
     assertTrue(config.repositories.get.length > 0)
   }
 
@@ -46,21 +46,21 @@ class BuilderTest {
     val builder = new Builder(url, "development")
     val config = builder.environmentConfig
     assertNotNull(config)
-    assertEquals("devapp", config.application.get.webappContext)
+    assertEquals("devapp", config.application.get.webappContext.get)
   }
 
   @Test
   def testEnvironmentConfigTest = {
     val config = new Builder(url, "test").environmentConfig
     assertNotNull(config)
-    assertEquals("testapp", config.application.get.webappContext)
+    assertEquals("testapp", config.application.get.webappContext.get)
   }
 
   @Test
   def testEnvironmentConfigProd = {
     val config = new Builder(url, "production").environmentConfig
     assertNotNull(config)
-    assertEquals("prodapp", config.application.get.webappContext)
+    assertEquals("prodapp", config.application.get.webappContext.get)
   }
 
   @Test
@@ -77,16 +77,16 @@ class BuilderTest {
     val config = new Builder(url, "development").runtimeConfig
 
     assertNotNull(config)
-    assertNotNull(config.application.get.applicationClass)
-    assertNotNull("org.brzy.sample.WebApp", config.application.get.applicationClass)
-    assertNotNull(config.application.get.version)
-    assertNotNull(config.application.get.name)
-    assertEquals("Test app", config.application.get.name)
-    assertNotNull(config.application.get.author)
-    assertNotNull(config.application.get.description)
-    assertNotNull(config.application.get.org)
-    assertNotNull(config.application.get.artifactId)
-    assertNotNull(config.application.get.webappContext)
+    assertNotNull(config.application.get.applicationClass.get)
+    assertNotNull("org.brzy.sample.WebApp", config.application.get.applicationClass.get)
+    assertNotNull(config.application.get.version.get)
+    assertNotNull(config.application.get.name.get)
+    assertEquals("Test app", config.application.get.name.get)
+    assertNotNull(config.application.get.author.get)
+    assertNotNull(config.application.get.description.get)
+    assertNotNull(config.application.get.org.get)
+    assertNotNull(config.application.get.artifactId.get)
+    assertNotNull(config.application.get.webappContext.get)
     assertNotNull(config.dependencies.get)
     assertNotNull(config.persistence.get)
     assertEquals(1, config.persistence.get.size)

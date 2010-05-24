@@ -23,13 +23,13 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) {
 
   def asMap = {
     Map[String, AnyRef](
-      "org" -> org,
-      "name" -> name,
-      "rev" -> rev,
-      "conf" -> conf,
+      "org" -> org.getOrElse(null),
+      "name" -> name.getOrElse(null),
+      "rev" -> rev.getOrElse(null),
+      "conf" -> conf.getOrElse(null),
       "exculdes" -> {excludes match {
-        case s: Some[List[Dependency]] => Option(s.get.map(_.asMap).toList)
-        case _ => Option(null)
+        case s: Some[List[Dependency]] => s.get.map(_.asMap).toList
+        case _ => null
       }})
   }
 

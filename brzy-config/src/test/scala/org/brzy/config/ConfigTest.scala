@@ -33,7 +33,7 @@ class ConfigTest {
   def testBasicConfig = {
     val m = Map("name" -> "example")
     val testConfig = new TestConfig(m)
-    assertEquals("example", testConfig.name)
+    assertEquals("example", testConfig.name.get)
     assertNotNull(testConfig.repositories)
     assertTrue(testConfig.repositories.isEmpty)
     assertNotNull(testConfig.dependencies)
@@ -44,48 +44,40 @@ class ConfigTest {
 
   @Test
   def testConfigWithRepositories = {
-    val jlist = new JList[JMap[String, JMap[String, _]]]
-    val jmap = new JMap[String, JMap[String, _]]
-    jlist.add(jmap)
+    val jlist = List[Map[String, Map[String, _]]](Map[String, Map[String, AnyRef]]())
     val m = Map("name" -> "example", "repositories" -> jlist)
     val testConfig = new TestConfig(m)
-    assertEquals("example", testConfig.name)
-    assertNotNull(testConfig.repositories)
-    assertEquals(1, testConfig.repositories.size)
+    assertEquals("example", testConfig.name.get)
+    assertNotNull(testConfig.repositories.get)
+    assertEquals(1, testConfig.repositories.get.size)
   }
 
   @Test
   def testConfigWithDependencies = {
-    val jlist = new JList[JMap[String, JMap[String, _]]]
-    val jmap = new JMap[String, JMap[String, _]]
-    jlist.add(jmap)
+    val jlist = List[Map[String, Map[String, AnyRef]]](Map[String, Map[String, AnyRef]]())
     val m = Map("name" -> "example", "dependencies" -> jlist)
     val testConfig = new TestConfig(m)
-    assertEquals("example", testConfig.name)
-    assertNotNull(testConfig.dependencies)
-    assertEquals(1, testConfig.dependencies.size)
+    assertEquals("example", testConfig.name.get)
+    assertNotNull(testConfig.dependencies.get)
+    assertEquals(1, testConfig.dependencies.get.size)
   }
 
   @Test
   def testConfigWithWebXml = {
-    val jlist = new JList[JMap[String, String]]
-    val jmap = new JMap[String, String]
-    jmap.put("description", "Name of Description")
-    jlist.add(jmap)
+    val jlist = List[Map[String, String]](Map[String, String]("description" -> "Name of Description"))
     val m = Map("name" -> "example", "web_xml" -> jlist)
     val testConfig = new TestConfig(m)
-    assertEquals("example", testConfig.name)
-    assertNotNull(testConfig.webXml)
-    assertEquals(1, testConfig.webXml.size)
+    assertEquals("example", testConfig.name.get)
+    assertNotNull(testConfig.webXml.get)
+    assertEquals(1, testConfig.webXml.get.size)
   }
 
   @Test
   def testConfigWithApplication = {
-    val jmap = new JMap[String, String]
-    jmap.put("name", "application")
+    val jmap = Map[String, String]("name" -> "application")
     val m = Map("name" -> "example", "application" -> jmap)
     val testConfig = new TestConfig(m)
-    assertEquals("example", testConfig.name)
-    assertNotNull(testConfig.application)
+    assertEquals("example", testConfig.name.get)
+    assertNotNull(testConfig.application.get)
   }
 }

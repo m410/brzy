@@ -6,8 +6,8 @@ package org.brzy.plugin
  */
 class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
   val configurationName = "Scalate"
-  val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(Option(null))
-  val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(Option(null))
+  val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
+  val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
   override def <<(that: Plugin):Plugin  = {
     if (that == null) {
@@ -33,7 +33,7 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
           else if (it.repositories.isDefined)
             it.repositories.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         },
         "dependencies" -> {
           if (this.dependencies.isDefined && it.dependencies.isDefined)
@@ -43,7 +43,7 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
           else if (it.dependencies.isDefined)
             it.dependencies.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         },
         "web_xml" -> {
           if (this.webXml.isDefined && it.webXml.isDefined)
@@ -53,15 +53,15 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
           else if (it.webXml.isDefined)
             it.webXml.get
           else
-            Option(null)
+            null
         }))
     }
   }
 
   override def asMap = {
     super.asMap ++ Map[String, AnyRef](
-      "file_extension" -> fileExtension,
-      "web_xml" -> webXml
+      "file_extension" -> fileExtension.getOrElse(null),
+      "web_xml" -> webXml.getOrElse(null)
       )
   }
 

@@ -5,6 +5,7 @@ import org.junit.Assert._
 import java.util.{Map => JMap}
 import org.ho.yaml.Yaml
 import collection.JavaConversions._
+import org.brzy.util.NestedCollectionConverter._
 
 /**
  * @author Michael Fortin
@@ -17,7 +18,7 @@ class ConfigPrinterTest {
     val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
-    val app = new WebappConfig(config.asInstanceOf[JMap[String, AnyRef]].toMap)
+    val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
     ConfigPrinter(app)
     assertTrue(true)
   }
@@ -27,7 +28,7 @@ class ConfigPrinterTest {
     val url = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
-    val app = new WebappConfig(config.asInstanceOf[JMap[String, AnyRef]].toMap)
+    val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
     ConfigPrinter(app)
     assertTrue(true)
   }

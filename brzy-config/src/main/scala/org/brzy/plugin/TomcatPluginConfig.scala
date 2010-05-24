@@ -31,7 +31,7 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin(map) {
           else if (that.repositories.isDefined)
             that.repositories.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         },
         "dependencies" -> {
           if (this.dependencies.isDefined && that.dependencies.isDefined)
@@ -41,7 +41,7 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin(map) {
           else if (that.dependencies.isDefined)
             that.dependencies.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         }
         ))
     }

@@ -6,12 +6,14 @@ import java.lang.String
 import java.io._
 import collection.JavaConversions._
 import org.slf4j.LoggerFactory
-import java.util.{Map => JMap, List => JList}
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._
 import java.lang.reflect.Constructor
-import collection.mutable.{HashMap, ListBuffer}
-import org.brzy.plugin.{WebAppViewPlugin, WebAppPlugin, Plugin}
+import collection.mutable.ListBuffer
+import java.util.{Map => JMap}
+import org.brzy.plugin.Plugin
+import org.brzy.util.NestedCollectionConverter._
+
 
 /**
  * Creates the configuration for a brzy application.  This first loads the application config,
@@ -77,7 +79,7 @@ class Builder(appFile: File, environment: String) {
     })
 
     if (option.isDefined)
-      new WebappConfig(option.get.asInstanceOf[JMap[String, AnyRef]].toMap)
+      new WebappConfig(option.get.asInstanceOf[Map[String, AnyRef]])
     else
       error("Unknown Environment: '" + environment + "' must be one of [test,development,production]")
   }
@@ -89,9 +91,8 @@ class Builder(appFile: File, environment: String) {
     val plugins = collection.mutable.ListBuffer[Plugin]()
 
     if (applicationConfig.plugins.isDefined)
-      applicationConfig.plugins.foreach(plugin => {
-        val p = plugin.asInstanceOf[Plugin]
-        plugins += loadPlugin(p)
+      applicationConfig.plugins.get.foreach(plugin => {
+        plugins += loadPlugin(plugin)
       })
 
     plugins.toList
@@ -154,27 +155,6 @@ class Builder(appFile: File, environment: String) {
     config << environmentConfig
   }
 
-  protected def convertMap(map: JMap[String, AnyRef]): Map[String, AnyRef] = {
-    val smap = HashMap[String, AnyRef]()
-    map.foreach(nvp => nvp._2 match {
-      case j: JMap[String,AnyRef] => smap.put(nvp._1, convertMap(j))
-      case j: JList[AnyRef] => smap.put(nvp._1, convertList(j))
-      case _ => smap.put(nvp._1, nvp._2)
-    })
-    smap.toMap
-  }
-
-  protected def convertList(list: JList[AnyRef]): List[AnyRef] = {
-    val slist = ListBuffer[AnyRef]()
-    list.foreach(i => i match {
-      case j: JMap[String,AnyRef] => slist += convertMap(j)
-      case j: JList[AnyRef] => slist += convertList(j)
-      case _ => slist += i
-
-    })
-    slist.toList
-  }
-
   protected def loadPlugin(plugin: Plugin): Plugin = {
 
     // check classpath at runtime
@@ -225,7 +205,7 @@ class Builder(appFile: File, environment: String) {
     //    }
     //    else {
     val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String,AnyRef]])
-    val configClass: String = yaml.get("config_class").asInstanceOf[String]
+    val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
     val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
     val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
     val newPluginInstance = constructor.newInstance(yaml)

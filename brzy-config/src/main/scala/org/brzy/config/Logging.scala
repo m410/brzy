@@ -10,24 +10,24 @@ import collection.JavaConversions._
  */
 class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging] {
   val configurationName: String = "Logging"
-  val provider: Option[String] = m.get("provider").asInstanceOf[Option[String]].orElse(Option(null))
+  val provider: Option[String] = m.get("provider").asInstanceOf[Option[String]].orElse(None)
   val appenders: Option[List[Appender]] = m.get("appenders") match {
     case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Appender(i)).toList)
-    case _ => Option(null)
+    case _ => None
   }
   val loggers: Option[List[Logger]] = m.get("loggers") match {
     case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Logger(i)).toList)
-    case _ => Option(null)
+    case _ => None
   }
-  val root: Option[Root] = m.get("loggers") match {
+  val root: Option[Root] = m.get("root") match {
     case s: Some[Map[String, AnyRef]] => Option(new Root(s.get))
-    case _ => Option(null)
+    case _ => None
   }
 
 
   def asMap = {
     Map[String, AnyRef](
-      "provider" -> provider,
+      "provider" -> provider.getOrElse(null),
       "appenders" -> appenders.get.map(f => f.asMap).toList,
       "loggers" -> loggers.get.map(f => f.asMap).toList,
       "root" -> root.get.asMap)
@@ -48,7 +48,7 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
           else if (that.appenders.isDefined)
             that.appenders.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         },
         "loggers" -> {
           if (this.loggers.isDefined && that.loggers.isDefined)
@@ -58,7 +58,7 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
           else if (that.loggers.isDefined)
             that.loggers.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         },
         "root" -> {this.root.get << that.root.get}.asMap
         ))
@@ -71,25 +71,25 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
  */
 class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Appender] with Comparable[Appender] {
   val configurationName = "Appender"
-  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
-  val appenderClass: Option[String] = m.get("appender_class").asInstanceOf[Option[String]].orElse(Option(null))
-  val layout: Option[String] = m.get("layout").asInstanceOf[Option[String]].orElse(Option(null))
-  val pattern: Option[String] = m.get("pattern").asInstanceOf[Option[String]].orElse(Option(null))
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
+  val appenderClass: Option[String] = m.get("appender_class").asInstanceOf[Option[String]].orElse(None)
+  val layout: Option[String] = m.get("layout").asInstanceOf[Option[String]].orElse(None)
+  val pattern: Option[String] = m.get("pattern").asInstanceOf[Option[String]].orElse(None)
 
-  val file: Option[String] = m.get("file").asInstanceOf[Option[String]].orElse(Option(null))
-  val rollingPolicy: Option[String] = m.get("rolling_policy").asInstanceOf[Option[String]].orElse(Option(null))
-  val fileNamePattern: Option[String] = m.get("file_name_pattern").asInstanceOf[Option[String]].orElse(Option(null))
+  val file: Option[String] = m.get("file").asInstanceOf[Option[String]].orElse(None)
+  val rollingPolicy: Option[String] = m.get("rolling_policy").asInstanceOf[Option[String]].orElse(None)
+  val fileNamePattern: Option[String] = m.get("file_name_pattern").asInstanceOf[Option[String]].orElse(None)
 
 
   def asMap = {
     Map[String, AnyRef](
-      "name" -> name,
-      "appender_class" -> appenderClass,
-      "layout" -> layout,
-      "pattern" -> pattern,
-      "file" -> file,
-      "rolling_policy" -> rollingPolicy,
-      "file_name_pattern" -> fileNamePattern)
+      "name" -> name.getOrElse(null),
+      "appender_class" -> appenderClass.getOrElse(null),
+      "layout" -> layout.getOrElse(null),
+      "pattern" -> pattern.getOrElse(null),
+      "file" -> file.getOrElse(null),
+      "rolling_policy" -> rollingPolicy.getOrElse(null),
+      "file_name_pattern" -> fileNamePattern.getOrElse(null))
   }
 
   def <<(that: Appender) = {
@@ -138,13 +138,13 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
  */
 class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] with Comparable[Logger] {
   val configurationName = "Logger"
-  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
-  val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(Option(null))
+  val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
+  val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(None)
 
   def asMap = {
     Map[String, AnyRef](
-      "name" -> name,
-      "level" -> level)
+      "name" -> name.getOrElse(null),
+      "level" -> level.getOrElse(null))
   }
 
   def <<(that: Logger) = {
@@ -188,18 +188,17 @@ class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] 
  */
 class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
   val configurationName = "Root"
-  val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(Option(null))
+  val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(None)
   val ref: Option[List[String]] = m.get("ref") match {
-    case s: Some[List[String]] =>
-      Option(s.get.map(i => i).toList)
-    case _ => Option(null)
+    case s: Some[List[String]] => s
+    case _ => None
   }
 
 
   def asMap = {
     Map[String, AnyRef](
-      "level" -> level,
-      "ref" -> ref
+      "level" -> level.getOrElse(null),
+      "ref" -> ref.getOrElse(null)
       )
   }
 
@@ -217,7 +216,7 @@ class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
           else if (that.ref.isDefined)
             that.ref.get
           else
-            Option(null)
+            null
         }))
   }
 }

@@ -2,9 +2,10 @@ package org.brzy.config
 
 import org.junit.Test
 import org.junit.Assert._
-import java.util.{HashMap => JHashMap, Map => JMap}
+import java.util.{Map => JMap}
 import org.ho.yaml.Yaml
 import collection.JavaConversions._
+import org.brzy.util.NestedCollectionConverter._
 
 /**
  * @author Michael Fortin
@@ -18,10 +19,10 @@ class WebappConfigTest {
     val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
-    val app = new WebappConfig(config.asInstanceOf[JMap[String, AnyRef]].toMap)
+    val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(app)
     assertNotNull(app.environment.get)
-    assertNull(app.project)
+    assertTrue(app.project.isEmpty)
     assertEquals("development", app.environment.get)
     assertNotNull(app.application.get)
     assertNotNull(app.application.get.version.get)
@@ -62,17 +63,17 @@ class WebappConfigTest {
   def testLoadDefault = {
     val url = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
     val config = Yaml.load(url.openStream)
-    val app = new WebappConfig(config.asInstanceOf[JMap[String, AnyRef]].toMap)
+    val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(app)
     assertNotNull(app.project.get)
-    assertNull(app.application.get)
+    assertTrue(app.application.isEmpty)
     assertNotNull(app.dependencies.get)
     assertEquals(17, app.dependencies.get.size)
     assertNotNull(app.repositories.get)
     assertEquals(4, app.repositories.get.size)
-    assertNull(app.plugins.get)
-    assertNull(app.persistence.get)
-    assertNull(app.logging.get)
+    assertTrue(app.plugins.isEmpty)
+    assertTrue(app.persistence.isEmpty)
+    assertTrue(app.logging.isEmpty)
     assertNotNull(app.webXml.get)
     assertEquals(10, app.webXml.get.size)
   }
@@ -82,19 +83,19 @@ class WebappConfigTest {
     val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
-    val webapp = new WebappConfig(config.asInstanceOf[JMap[String, AnyRef]].toMap)
+    val webapp = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(webapp)
     assertNotNull(webapp.dependencies.get)
     assertEquals(2, webapp.dependencies.get.size)
 
     val url2 = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
     val config2 = Yaml.load(url2.openStream)
-    val defaultConfig = new WebappConfig(config2.asInstanceOf[JMap[String, AnyRef]].toMap)
+    val defaultConfig = new WebappConfig(convertMap(config2.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(defaultConfig)
     assertNotNull(defaultConfig.dependencies.get)
     assertEquals(17, defaultConfig.dependencies.get.size)
 
-    val merged = webapp << defaultConfig
+    val merged = defaultConfig << webapp 
 
     assertNotNull(merged.project.get)
     assertEquals("development", merged.environment.get)

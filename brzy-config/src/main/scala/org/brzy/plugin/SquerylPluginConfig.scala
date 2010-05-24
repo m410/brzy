@@ -7,11 +7,11 @@ package org.brzy.plugin
 class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
   val configurationName = "Squeryl"
 
-  val driver: Option[String] = map.get("driver").asInstanceOf[Option[String]].orElse(Option(null))
-  val url: Option[String] = map.get("url").asInstanceOf[Option[String]].orElse(Option(null))
-  val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(Option(null))
-  val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(Option(null))
-  val adaptorName: Option[String] = map.get("adaptor_name").asInstanceOf[Option[String]].orElse(Option(null))
+  val driver: Option[String] = map.get("driver").asInstanceOf[Option[String]].orElse(None)
+  val url: Option[String] = map.get("url").asInstanceOf[Option[String]].orElse(None)
+  val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
+  val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
+  val adaptorName: Option[String] = map.get("adaptor_name").asInstanceOf[Option[String]].orElse(None)
 
 
   override def <<(that: Plugin):Plugin  = {
@@ -41,7 +41,7 @@ class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
           else if (it.repositories.isDefined)
             it.repositories.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         },
         "dependencies" -> {
           if (this.dependencies.isDefined && it.dependencies.isDefined)
@@ -51,7 +51,7 @@ class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
           else if (it.dependencies.isDefined)
             it.dependencies.get.map(_.asMap).toList
           else
-            Option(null)
+            null
         }
         ))
     }
@@ -59,10 +59,10 @@ class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
 
   override def asMap = {
     super.asMap ++ Map[String, AnyRef](
-      "driver" -> driver,
-      "url" -> url,
-      "user_name" -> userName,
-      "password" -> password,
-      "adaptor_name" -> adaptorName)
+      "driver" -> driver.getOrElse(null),
+      "url" -> url.getOrElse(null),
+      "user_name" -> userName.getOrElse(null),
+      "password" -> password.getOrElse(null),
+      "adaptor_name" -> adaptorName.getOrElse(null))
   }
 }
