@@ -21,18 +21,18 @@ class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
     else {
       val it = that.asInstanceOf[SquerylPluginConfig]
       new SquerylPluginConfig(Map[String, AnyRef](
-        "name" -> it.name.getOrElse(this.name.get),
-        "version" -> it.version.getOrElse(this.version.get),
-        "org" -> it.org.getOrElse(this.org.get),
-        "config_class" -> it.configClass.getOrElse(this.configClass.get),
-        "resource_class" -> it.resourceClass.getOrElse(this.resourceClass.get),
-        "driver" -> it.driver.getOrElse(this.driver.get),
-        "url" -> it.url.getOrElse(this.url.get),
-        "userName" -> it.userName.getOrElse(this.userName.get),
-        "password" -> it.password.getOrElse(this.password.get),
-        "adaptorName" -> it.adaptorName.getOrElse(this.adaptorName.get),
-        "remote_location" -> it.remoteLocation.getOrElse(this.remoteLocation.get),
-        "local_location" -> it.localLocation.getOrElse(this.localLocation.get),
+        "name" -> it.name.getOrElse(this.name.getOrElse(null)),
+        "version" -> it.version.getOrElse(this.version.getOrElse(null)),
+        "org" -> it.org.getOrElse(this.org.getOrElse(null)),
+        "config_class" -> it.configClass.getOrElse(this.configClass.getOrElse(null)),
+        "resource_class" -> it.resourceClass.getOrElse(this.resourceClass.getOrElse(null)),
+        "driver" -> it.driver.getOrElse(this.driver.getOrElse(null)),
+        "url" -> it.url.getOrElse(this.url.getOrElse(null)),
+        "userName" -> it.userName.getOrElse(this.userName.getOrElse(null)),
+        "password" -> it.password.getOrElse(this.password.getOrElse(null)),
+        "adaptorName" -> it.adaptorName.getOrElse(this.adaptorName.getOrElse(null)),
+        "remote_location" -> it.remoteLocation.getOrElse(this.remoteLocation.getOrElse(null)),
+        "local_location" -> it.localLocation.getOrElse(this.localLocation.getOrElse(null)),
         "repositories" -> {
           if (this.repositories.isDefined && it.repositories.isDefined)
             this.repositories.get.map(_.asMap).toList ++ it.repositories.get.map(_.asMap).toList
@@ -57,7 +57,7 @@ class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
     }
   }
 
-  override def asMap = {
+  override def asMap:Map[String,AnyRef] = {
     super.asMap ++ Map[String, AnyRef](
       "driver" -> driver.getOrElse(null),
       "url" -> url.getOrElse(null),

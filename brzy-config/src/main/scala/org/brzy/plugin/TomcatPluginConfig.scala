@@ -15,14 +15,14 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin(map) {
     }
     else {
       new TomcatPluginConfig(Map[String, AnyRef](
-        "name" -> that.name.getOrElse(this.name.get),
-        "version" -> that.version.getOrElse(this.version.get),
-        "org" -> that.org.getOrElse(this.org.get),
-        "config_class" -> that.configClass.getOrElse(this.configClass.get),
-        "resource_class" -> that.resourceClass.getOrElse(this.resourceClass.get),
+        "name" -> that.name.getOrElse(this.name.getOrElse(null)),
+        "version" -> that.version.getOrElse(this.version.getOrElse(null)),
+        "org" -> that.org.getOrElse(this.org.getOrElse(null)),
+        "config_class" -> that.configClass.getOrElse(this.configClass.getOrElse(null)),
+        "resource_class" -> that.resourceClass.getOrElse(this.resourceClass.getOrElse(null)),
 
-        "remote_location" -> that.remoteLocation.getOrElse(this.remoteLocation.get),
-        "local_location" -> that.localLocation.getOrElse(this.localLocation.get),
+        "remote_location" -> that.remoteLocation.getOrElse(this.remoteLocation.getOrElse(null)),
+        "local_location" -> that.localLocation.getOrElse(this.localLocation.getOrElse(null)),
         "repositories" -> {
           if (this.repositories.isDefined && that.repositories.isDefined)
             this.repositories.get.map(_.asMap).toList ++ that.repositories.get.map(_.asMap).toList
@@ -47,6 +47,6 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin(map) {
     }
   }
 
-  override def asMap = super.asMap
+  override def asMap:Map[String,AnyRef] = super.asMap
 
 }

@@ -15,7 +15,7 @@ class IvyTest {
   @Test
   def testParsingXml = {
     val config = new WebappConfig(Map[String, AnyRef](
-      "dependencies" -> ArrayBuffer[AnyRef](
+      "dependencies" -> List[AnyRef](
         Map[String, String](
           "conf" -> "compile",
           "org" -> "org.package",

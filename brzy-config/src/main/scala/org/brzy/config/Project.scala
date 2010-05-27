@@ -16,7 +16,7 @@ class Project(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Project
   val pluginRepository: Option[String] = m.get("plugin_repository").asInstanceOf[Option[String]].orElse(null)
 
 
-  def asMap = {
+  override def asMap:Map[String,AnyRef] = {
     Map[String, AnyRef](
       "scala_version" -> scalaVersion.getOrElse(null),
       "ant_version" -> antVersion.getOrElse(null),

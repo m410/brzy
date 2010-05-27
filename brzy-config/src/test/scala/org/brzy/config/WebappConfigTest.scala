@@ -56,7 +56,7 @@ class WebappConfigTest {
     assertEquals(1, app.logging.get.loggers.size)
     assertNotNull(app.logging.get.root)
     assertNotNull(app.webXml.get)
-    assertEquals(4, app.webXml.get.size)
+    assertEquals(2, app.webXml.get.size)
   }
 
   @Test
@@ -115,7 +115,7 @@ class WebappConfigTest {
     assertEquals(1, merged.logging.get.loggers.get.size)
     assertNotNull(merged.logging.get.root)
     assertNotNull(merged.webXml.get)
-    assertEquals(14, merged.webXml.get.size)
+    assertEquals(12, merged.webXml.get.size)
     assertNotNull(merged.dependencies.get)
     assertEquals(19, merged.dependencies.get.size)
   }

@@ -37,21 +37,9 @@ plugins:
     remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.2/brzy-scalate-0.2-plugin.zip
 
 persistence:
-#  - config_class: org.brzy.plugin.SquerylConfigPlugin
-#    name: brzy-hibernate
-#    org: org.brzy
-#    version: "0.1"
-#    scan_package: *group
-#    properties:
-#      "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
-#      "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
-#      "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
-#      "hibernate.connection.username": "sa"
-#      "hibernate.connection.password": ""
-#      "hibernate.hbm2ddl.auto": "update"
   - name: brzy-squeryl
     org: org.brzy
-    version: "0.1"
+    version: "0.2"
     config_class: org.brzy.plugin.SquerylPluginConfig
     scan_package: *group
     driver_class: org.postgresql.Driver
@@ -86,9 +74,6 @@ logging:
 web_xml:
   - description: *desc
   - display-name: *name
-  - servlet: {servlet-name: ScalateServlet, servlet-class: org.fusesource.scalate.servlet.TemplateEngineServlet, load-on-startup: 1}
-  - servlet-mapping: { servlet-name: ScalateServlet, url-pattern: "*.ssp"}
-
 
 #
 # override defaults for any environment

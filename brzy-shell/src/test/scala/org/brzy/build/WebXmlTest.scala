@@ -15,7 +15,7 @@ class WebXmlTest {
   @Test
   def testCreate = {
     val config = new WebappConfig(Map[String, AnyRef](
-      "web_xml" -> ArrayBuffer[AnyRef](
+      "web_xml" -> List[AnyRef](
         Map[String, String]("session-config" -> "20"),
         Map[String, AnyRef]("context-param" -> Map[String, String](
           "param-name" -> "name",

@@ -21,7 +21,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) {
     case _ => None
   }
 
-  def asMap = {
+  override def asMap:Map[String,AnyRef] = {
     Map[String, AnyRef](
       "org" -> org.getOrElse(null),
       "name" -> name.getOrElse(null),

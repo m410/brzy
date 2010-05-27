@@ -4,6 +4,8 @@ import xml.transform.RuleTransformer
 import xml._
 import org.brzy.config.{Appender, WebappConfig}
 import collection.mutable.{ArrayBuffer, ListBuffer}
+import java.lang.String
+import collection.immutable.List
 
 /**
  * @author Michael Fortin
@@ -14,19 +16,22 @@ class LogBackXml(config:WebappConfig) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.logback.xml"))
   private val children = ListBuffer[Elem]()
 
-  if(config.logging.appenders != null)
-    config.logging.appenders.foreach( dep => {
+  if(config.logging.get.appenders.isDefined)
+    config.logging.get.appenders.get.foreach( dep => {
       children += appenders(dep)
     })
 
-  if(config.logging.loggers != null)
-    config.logging.loggers.foreach( l => {
-      children += <logger name={l.name} level={l.level} />
+  if(config.logging.get.loggers.isDefined)
+    config.logging.get.loggers.get.foreach( l => {
+      children += <logger name={l.name.get} level={l.level.get} />
     })
 
-  if(config.logging.root != null)
-    children += Elem(null,"root", Attribute(null,"level",config.logging.root.level,Null), TopScope,
-      appenderRefs(config.logging.root.ref):_*)
+  if(config.logging.get.root.isDefined)
+    children += {
+      val level: String = config.logging.get.root.get.level.get
+      val refs: List[String] = config.logging.get.root.get.ref.get
+      Elem(null,"root", Attribute(null,"level",level,Null), TopScope, appenderRefs(refs):_*)
+    }
 
 // <root level={config.logging.root.level}>
 //    {for(ref <- config.logging.root.appender-ref)}
@@ -38,24 +43,26 @@ class LogBackXml(config:WebappConfig) {
   def appenders(appender:Appender):Elem = {
     val arrayBuf = ArrayBuffer[Elem]()
 
-    if(appender.file != null)
-      arrayBuf += <File>{appender.file}</File>
+    if(appender.file.isDefined)
+      arrayBuf += <File>{appender.file.get}</File>
 
-    if(appender.rollingPolicy != null)
-      arrayBuf += <rollingPolicy class={appender.rollingPolicy}>
-        <FileNamePattern>{appender.fileNamePattern}</FileNamePattern>
+    if(appender.rollingPolicy.isDefined)
+      arrayBuf += <rollingPolicy class={appender.rollingPolicy.get}>
+        <FileNamePattern>{appender.fileNamePattern.get}</FileNamePattern>
       </rollingPolicy>
 
     if(appender.layout != null)
-      arrayBuf += <encoder class={appender.layout}>
-        <pattern>{appender.pattern}</pattern>
+      arrayBuf += <encoder class={appender.layout.get}>
+        <pattern>{appender.pattern.get}</pattern>
       </encoder>
 
 //    <appender name={appender.name} class={appender.appender_class}>
 //      {arrayBuf.toArray}
 //    </appender>
-    Elem(null,"appender", Attribute(null,"name",appender.name,
-      Attribute(null,"class",appender.appenderClass,Null)), TopScope, arrayBuf.toArray:_*)
+    val name: String = appender.name.get
+    val apClass: String = appender.appenderClass.get
+    val attr: Attribute = Attribute(null, "class", apClass, Null)
+    Elem(null,"appender", Attribute(null,"name",name, attr), TopScope, arrayBuf.toArray:_*)
   }
   def appenderRefs(root:Seq[String]):Array[Node] = {
     if(root != null)

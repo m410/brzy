@@ -38,7 +38,7 @@ class WebXml(config:WebappConfig) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.web.xml"))
   private val children = ListBuffer[Elem]()
 
-  for(row <- config.webXml) {
+  for(row <- config.webXml.get) {
     val keyvals = row.asInstanceOf[Map[String,AnyRef]].map(nvp => nvp)
     keyvals.foreach(keyVal => {
         if(keyVal._2.isInstanceOf[java.lang.String]) {

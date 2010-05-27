@@ -10,6 +10,6 @@ import org.brzy.plugin.{WebAppViewPlugin, ScalatePluginConfig, WebAppPlugin}
  */
 class ScalatePluginResource(config:ScalatePluginConfig) extends WebAppViewPlugin{
 
-  override val fileExtension = config.fileExtension
+  override val fileExtension = config.fileExtension.get
 
 }

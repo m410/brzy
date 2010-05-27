@@ -45,26 +45,26 @@ class Builder(appFile: File, environment: String) {
 
 
   private val webappConfigMap: Map[String, AnyRef] = {
-    val load = Yaml.load(appFile).asInstanceOf[JMap[String,AnyRef]]
+    val load = Yaml.load(appFile).asInstanceOf[JMap[String, AnyRef]]
     convertMap(load)
   }
   private val defaultConfigMap: Map[String, AnyRef] = {
     val asStream: InputStream = getClass.getClassLoader.getResourceAsStream("brzy-app.default.b.yml")
-    val load = Yaml.load(asStream).asInstanceOf[JMap[String,AnyRef]]
+    val load = Yaml.load(asStream).asInstanceOf[JMap[String, AnyRef]]
     convertMap(load)
   }
 
   /**
    *
    */
-  val applicationConfig:WebappConfig = {
-    new WebappConfig(webappConfigMap ++ Map[String,String]("environment" -> environment))
+  val applicationConfig: WebappConfig = {
+    new WebappConfig(webappConfigMap ++ Map[String, String]("environment" -> environment))
   }
 
   /**
    *
    */
-  val defaultConfig:WebappConfig = {
+  val defaultConfig: WebappConfig = {
     new WebappConfig(defaultConfigMap)
   }
 
@@ -72,7 +72,7 @@ class Builder(appFile: File, environment: String) {
    *
    */
   lazy val environmentConfig: WebappConfig = {
-    val list = webappConfigMap.get("environment_overrides").get.asInstanceOf[List[Map[String,AnyRef]]]
+    val list = webappConfigMap.get("environment_overrides").get.asInstanceOf[List[Map[String, AnyRef]]]
     val option = list.find(innermap => {
       val tuple = innermap.find(hm => hm._1 == "environment").get
       tuple._2.asInstanceOf[String].compareTo(environment) == 0
@@ -101,7 +101,7 @@ class Builder(appFile: File, environment: String) {
   /**
    *
    */
-  lazy val viewPluginConfig:Plugin = {
+  lazy val viewPluginConfig: Plugin = {
     val plugin =
     if (applicationConfig.views.isDefined)
       applicationConfig.views.get
@@ -118,7 +118,7 @@ class Builder(appFile: File, environment: String) {
     val plugins = collection.mutable.ListBuffer[Plugin]()
 
     if (applicationConfig.persistence.isDefined)
-      applicationConfig.plugins.foreach(plugin => {
+      applicationConfig.persistence.get.foreach(plugin => {
         val p = plugin.asInstanceOf[Plugin]
         plugins += loadPlugin(p)
       })
@@ -133,24 +133,68 @@ class Builder(appFile: File, environment: String) {
    */
   lazy val runtimeConfig = {
     var config = defaultConfig << applicationConfig
-    val newView = viewPluginConfig << applicationConfig.views.get
+
+    // views
+    val newView = viewPluginConfig << applicationConfig.views.getOrElse(null)
     config = config << new WebappConfig(Map[String, AnyRef]("views" -> newView.asMap))
 
     var merged = new ListBuffer[Plugin]()
-    for (i <- 0 to persistencePluginConfigs.length)
+
+    // persistence
+    for (i <- 0 until persistencePluginConfigs.size)
       merged += persistencePluginConfigs(i) << applicationConfig.persistence.get(i)
 
+    // TODO wrong, makes duplicate entries
     merged.foreach(merge => {
-      config = config << new WebappConfig(Map[String, AnyRef]("persistence" -> merge))
+      config = config << new WebappConfig(Map[String, AnyRef]("persistence" -> List(merge.asMap)))
     })
 
+    // plugins
     var merged2 = new ListBuffer[Plugin]()
-    for (i <- 0 to pluginConfigs.length)
+    for (i <- 0 until pluginConfigs.size)
       merged2 += pluginConfigs(i) << applicationConfig.plugins.get(i)
 
     merged2.foreach(merge => {
-      config = config << new WebappConfig(Map[String, AnyRef]("plugins" -> merge))
+      config = config << new WebappConfig(Map[String, AnyRef]("plugins" -> List(merge.asMap)))
     })
+
+    // dependencies
+    val dependencies = new ListBuffer[Dependency]()
+    if (config.persistence.isDefined && config.persistence.get.size > 0)
+      config.persistence.get.foreach(dependencies ++= _.dependencies.getOrElse(Nil))
+
+    if (config.plugins.isDefined && config.plugins.get.size > 0)
+      config.plugins.get.foreach(dependencies ++= _.dependencies.getOrElse(Nil))
+
+    if (config.views.isDefined)
+      dependencies ++= config.views.get.dependencies.getOrElse(Nil)
+
+    // repositories
+    val repositories = new ListBuffer[Repository]()
+    if (config.persistence.isDefined && config.persistence.get.size > 0)
+      config.persistence.get.foreach(repositories ++= _.repositories.getOrElse(Nil))
+
+    if (config.plugins.isDefined && config.plugins.get.size > 0)
+      config.plugins.get.foreach(repositories ++= _.repositories.getOrElse(Nil))
+
+    if (config.views.isDefined)
+      repositories ++= config.views.get.repositories.getOrElse(Nil)
+
+    // web_xml
+//    val webXml = new ListBuffer[Map[String, AnyRef]]()
+//    if (config.persistence.isDefined && config.persistence.get.size > 0)
+//      config.persistence.get.foreach(webXml ++= _.webXml.getOrElse(Nil))
+//
+//    if (config.plugins.isDefined && config.plugins.get.size > 0)
+//      config.plugins.get.foreach(webXml ++= _.webXml.getOrElse(Nil))
+//
+//    if (config.views.isDefined)
+//      webXml ++= config.views.get.webXml.getOrElse(Nil)
+
+    config = config << new WebappConfig(Map[String, AnyRef](
+      "dependencies" -> dependencies.map(_.asMap).toList,
+      "repositories" -> repositories.map(_.asMap).toList
+      ))
 
     config << environmentConfig
   }
@@ -204,7 +248,7 @@ class Builder(appFile: File, environment: String) {
     //      plugin
     //    }
     //    else {
-    val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String,AnyRef]])
+    val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String, AnyRef]])
     val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
     val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
     val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])

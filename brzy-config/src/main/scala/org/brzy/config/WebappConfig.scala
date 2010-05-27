@@ -54,66 +54,91 @@ class WebappConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[We
   }
   val plugins: Option[List[Plugin]] = m.get("plugins") match {
     case s: Some[List[Map[String, AnyRef]]] =>
-      val buffer = new ListBuffer[Plugin]()
-      s.get.foreach(map => {
-        val className = map.get("config_class")
-        val clazz = Class.forName(className.get.asInstanceOf[String])
-        val constructor: Constructor[_] = clazz.getConstructor(classOf[Map[String, AnyRef]])
-        buffer += constructor.newInstance(map).asInstanceOf[Plugin]
-      })
-      Option(buffer.toList)
+      if (s.get != null) {
+        val buffer = new ListBuffer[Plugin]()
+        s.get.foreach(map => {
+          val className = map.get("config_class")
+          val clazz = Class.forName(className.get.asInstanceOf[String])
+          val constructor: Constructor[_] = clazz.getConstructor(classOf[Map[String, AnyRef]])
+          buffer += constructor.newInstance(map).asInstanceOf[Plugin]
+        })
+        Option(buffer.toList)
+      }
+      else
+        None
     case _ => None
   }
   val persistence: Option[List[Plugin]] = m.get("persistence") match {
     case s: Some[List[Map[String, AnyRef]]] =>
       val buffer = new ListBuffer[Plugin]()
-      s.get.foreach(map => {
-        val className = map.get("config_class")
-        val clazz = Class.forName(className.get.asInstanceOf[String])
-        val constructor: Constructor[_] = clazz.getConstructor(classOf[Map[String, AnyRef]])
-        buffer += constructor.newInstance(map).asInstanceOf[Plugin]
-      })
-      Option(buffer.toList)
+      if (s.get != null) {
+        s.get.foreach(map => {
+          val className = map.get("config_class")
+          val clazz = Class.forName(className.get.asInstanceOf[String])
+          val constructor: Constructor[_] = clazz.getConstructor(classOf[Map[String, AnyRef]])
+          buffer += constructor.newInstance(map).asInstanceOf[Plugin]
+        })
+        Option(buffer.toList)
+      }
+      else {
+        None
+      }
     case _ => None
   }
 
   def asMap = {
     Map[String, AnyRef](
       "environment" -> environment,
-      "application" -> {application match {
-        case s: Some[Application] => s.get.asMap
-        case _ => null
-      }},
-      "project" -> {project match {
-        case s: Some[Project] => s.get.asMap
-        case _ => null
-      }},
+      "application" -> {
+        application match {
+          case s: Some[Application] => s.get.asMap
+          case _ => null
+        }
+      },
+      "project" -> {
+        project match {
+          case s: Some[Project] => s.get.asMap
+          case _ => null
+        }
+      },
       "test_framework" -> testFramework,
-      "repositories" -> { repositories match {
-        case s: Some[List[Repository]] => s.get.map(_.asMap.toList)
-        case _ => null
-      }},
-      "dependencies" -> {dependencies match {
-        case s: Some[List[Dependency]] => s.get.map(_.asMap).toList
-        case _ => null
-      }},
-      "logging" -> {logging match {
-        case s: Some[Logging] => s.get.asMap
-        case _ => null
-      }},
-      "plugins" -> { plugins match {
-        case s: Some[List[Plugin]] => s.get.map(_.asMap.toList)
-        case _ => null
-      }},
-      "persistence" -> {persistence match {
-        case s: Some[List[Plugin]] => s.get.map(_.asMap.toList)
-        case _ => null
-      }},
+      "repositories" -> {
+        repositories match {
+          case s: Some[List[Repository]] => s.get.map(_.asMap)
+          case _ => null
+        }
+      },
+      "dependencies" -> {
+        dependencies match {
+          case s: Some[List[Dependency]] => s.get.map(_.asMap)
+          case _ => null
+        }
+      },
+      "logging" -> {
+        logging match {
+          case s: Some[Logging] => s.get.asMap
+          case _ => null
+        }
+      },
+      "plugins" -> {
+        plugins match {
+          case s: Some[List[Plugin]] => s.get.map(_.asMap)
+          case _ => null
+        }
+      },
+      "persistence" -> {
+        persistence match {
+          case s: Some[List[Plugin]] => s.get.map(_.asMap)
+          case _ => null
+        }
+      },
       "web_xml" -> webXml,
-      "views" -> {views match {
-        case s: Some[Plugin] => s.get.asMap
-        case _ => null
-      }})
+      "views" -> {
+        views match {
+          case s: Some[Plugin] => s.get.asMap
+          case _ => null
+        }
+      })
   }
 
   /**
@@ -161,21 +186,21 @@ class WebappConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[We
         },
         "persistence" -> {
           if (this.persistence.isDefined && that.persistence.isDefined)
-            {this.persistence.get ++ that.persistence.get}.map(_.asMap).toList
+            {this.persistence.get ++ that.persistence.get}.distinct.map(_.asMap).toList
           else if (this.persistence.isDefined)
-            this.persistence.get.map(_.asMap).toList
+            this.persistence.get.distinct.map(_.asMap).toList
           else if (that.persistence.isDefined)
-            that.persistence.get.map(_.asMap).toList
+            that.persistence.get.distinct.map(_.asMap).toList
           else
             null
         },
         "plugins" -> {
           if (this.plugins.isDefined && that.plugins.isDefined)
-            {this.plugins.get ++ that.plugins.get}.map(_.asMap).toList
+            {this.plugins.get ++ that.plugins.get}.distinct.map(_.asMap).toList
           else if (this.plugins.isDefined)
-            this.plugins.get.map(_.asMap).toList
+            this.plugins.get.distinct.map(_.asMap).toList
           else if (that.plugins.isDefined)
-            that.plugins.get.map(_.asMap).toList
+            that.plugins.get.distinct.map(_.asMap).toList
           else
             null
         },
@@ -190,7 +215,7 @@ class WebappConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[We
             None
         },
         "logging" -> {
-          if (this.logging.isDefined )
+          if (this.logging.isDefined)
             {this.logging.get << that.logging.getOrElse(null)}.asMap
           else if (that.logging.isDefined)
             that.logging.get.asMap

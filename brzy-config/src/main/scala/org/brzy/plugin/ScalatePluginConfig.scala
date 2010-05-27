@@ -16,15 +16,15 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
     else {
       val it = that.asInstanceOf[ScalatePluginConfig]
       new ScalatePluginConfig(Map[String, AnyRef](
-        "name" -> it.name.getOrElse(this.name.get),
-        "version" -> it.version.getOrElse(this.version.get),
-        "org" -> it.org.getOrElse(this.org.get),
-        "config_class" -> it.configClass.getOrElse(this.configClass.get),
-        "resource_class" -> it.resourceClass.getOrElse(this.resourceClass.get),
-        "file_extension" -> it.fileExtension.getOrElse(this.fileExtension.get),
+        "name" -> it.name.getOrElse(this.name.getOrElse(null)),
+        "version" -> it.version.getOrElse(this.version.getOrElse(null)),
+        "org" -> it.org.getOrElse(this.org.getOrElse(null)),
+        "config_class" -> it.configClass.getOrElse(this.configClass.getOrElse(null)),
+        "resource_class" -> it.resourceClass.getOrElse(this.resourceClass.getOrElse(null)),
+        "file_extension" -> it.fileExtension.getOrElse(this.fileExtension.getOrElse(null)),
 
-        "remote_location" -> it.remoteLocation.getOrElse(this.remoteLocation.get),
-        "local_location" -> it.localLocation.getOrElse(this.localLocation.get),
+        "remote_location" -> it.remoteLocation.getOrElse(this.remoteLocation.getOrElse(null)),
+        "local_location" -> it.localLocation.getOrElse(this.localLocation.getOrElse(null)),
         "repositories" -> {
           if (this.repositories.isDefined && it.repositories.isDefined)
             this.repositories.get.map(_.asMap).toList ++ it.repositories.get.map(_.asMap).toList
@@ -58,7 +58,7 @@ class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
     }
   }
 
-  override def asMap = {
+  override def asMap:Map[String,AnyRef] = {
     super.asMap ++ Map[String, AnyRef](
       "file_extension" -> fileExtension.getOrElse(null),
       "web_xml" -> webXml.getOrElse(null)

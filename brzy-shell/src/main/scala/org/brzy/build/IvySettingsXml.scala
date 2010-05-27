@@ -14,8 +14,8 @@ class IvySettingsXml(config:WebappConfig) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.ivysettings.xml"))
   private val children = ListBuffer[Elem]()
 
-  config.repositories.foreach( repo => {
-    children += <ibiblio name={repo.id} root={repo.url} m2compatible="true" />
+  config.repositories.get.foreach( repo => {
+    children += <ibiblio name={repo.id.get} root={repo.url.get} m2compatible="true" />
   })
 
   val body = new RuleTransformer(new AddChildrenTo(parentName, children)).transform(template).head

@@ -14,12 +14,12 @@ class LogBackXmlTest {
   def testCreate = {
     val config = new WebappConfig(Map[String, AnyRef](
       "logging" -> Map[String, AnyRef](
-        "appenders" -> ArrayBuffer[AnyRef](Map[String, String](
+        "appenders" -> List[AnyRef](Map[String, String](
           "name" -> "STDOUT",
-          "appenderClass" -> "ch.qos.logback.core.ConsoleAppender",
+          "appender_class" -> "ch.qos.logback.core.ConsoleAppender",
           "layout" -> "ch.qos.logback.classic.PatternLayout",
           "pattern" -> "%-4relative [%thread] %-5level %class - %msg%n")),
-        "loggers" -> ArrayBuffer[AnyRef](Map[String, String](
+        "loggers" -> List[AnyRef](Map[String, String](
           "name" -> "org.brzy",
           "level" -> "INFO")),
         "root" -> Map[String, AnyRef](

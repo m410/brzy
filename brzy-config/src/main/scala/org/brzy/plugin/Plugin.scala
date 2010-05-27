@@ -1,13 +1,14 @@
 package org.brzy.plugin
 
 import org.brzy.config.{Repository, Dependency, MergeConfig, Config}
+import org.apache.commons.lang.builder.{CompareToBuilder, HashCodeBuilder, EqualsBuilder}
 
 /**
  *
  * @author Michael Fortin
  * @version $Id : $
  */
-abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] {
+abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Comparable[Plugin] {
   val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
   val version: Option[String] = map.get("version").asInstanceOf[Option[String]].orElse(None)
   val org: Option[String] = map.get("org").asInstanceOf[Option[String]].orElse(None)
@@ -34,7 +35,7 @@ abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeCo
     case _ => None
   }
 
-  def asMap = {
+  override def asMap:Map[String,AnyRef] = {
     Map[String, AnyRef](
       "name" -> name.getOrElse(null),
       "version" -> version.getOrElse(null),
@@ -57,4 +58,28 @@ abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeCo
       })
   }
 
+
+  def compareTo(that: Plugin) = {
+    new CompareToBuilder()
+        .append(this.name.get, that.name.get)
+        .toComparison
+  }
+
+  override def equals(p1: Any) = {
+    if (p1 == null)
+      false
+    else {
+      val rhs = p1.asInstanceOf[Plugin]
+      new EqualsBuilder()
+              .appendSuper(super.equals(p1))
+              .append(name.get, rhs.name.get)
+              .isEquals
+    }
+  }
+
+  override def hashCode = {
+    new HashCodeBuilder(17, 37)
+            .append(name.get)
+            .toHashCode
+  }
 }

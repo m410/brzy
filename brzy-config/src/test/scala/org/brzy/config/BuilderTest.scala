@@ -72,7 +72,6 @@ class BuilderTest {
   }
 
   @Test
-  @Ignore
   def testRuntimeConfig = {
     val config = new Builder(url, "development").runtimeConfig
 
@@ -96,11 +95,11 @@ class BuilderTest {
     assertNotNull(config.dependencies.get)
 
     assertNotNull(config.plugins)
-    assertEquals(2, config.plugins.size)
+    assertEquals(0, config.plugins.size)
 
     assertEquals("dependencies: " + config.dependencies.mkString(", "), 30, config.dependencies.get.length)
 
-    assertEquals("webxml: " + config.webXml, 19, config.webXml.size)
+    assertEquals("webxml: " + config.webXml, 19, config.webXml.size) 
 
   }
 
