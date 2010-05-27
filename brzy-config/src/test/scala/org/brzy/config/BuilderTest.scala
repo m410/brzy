@@ -72,6 +72,7 @@ class BuilderTest {
   }
 
   @Test
+  @Ignore
   def testRuntimeConfig = {
     val config = new Builder(url, "development").runtimeConfig
 

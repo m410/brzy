@@ -40,6 +40,7 @@ class ServletJpaTest {
 //	controllerClass.getMethods.foreach(println _)
 
   @Test
+  @Ignore
   def test404 = {
     replay(sessionFactory)
 
@@ -66,6 +67,7 @@ class ServletJpaTest {
   }
 
   @Test
+  @Ignore
   def testActionGet = {
 
     val entityTransaction = createMock(classOf[EntityTransaction])
@@ -118,6 +120,7 @@ class ServletJpaTest {
   }
 
   @Test
+  @Ignore
   def testActionList = {
     val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
@@ -160,6 +163,7 @@ class ServletJpaTest {
   }
 
   @Test
+  @Ignore
   def testActionCreate = {
     val request = new MockHttpServletRequest("GET", "/users/create")
     val response = new MockHttpServletResponse()
@@ -175,6 +179,7 @@ class ServletJpaTest {
   }
 
   @Test
+  @Ignore
   def testActionSave = {
 	
 	  val entityTransaction = createMock(classOf[EntityTransaction])
@@ -220,6 +225,7 @@ class ServletJpaTest {
 	}
 	
   @Test
+  @Ignore
   def testActionEdit = {
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin
@@ -255,6 +261,7 @@ class ServletJpaTest {
   }
 
   @Test
+  @Ignore
   def testActionUpdate = {
 	  val entityTransaction = createMock(classOf[EntityTransaction])
     entityTransaction.begin

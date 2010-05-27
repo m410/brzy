@@ -1,11 +1,11 @@
 package org.brzy.config
 
-import org.junit.Test
 import org.junit.Assert._
 import java.io.File
 import org.ho.yaml.Yaml
 import java.util.{Map => JMap}
 import org.brzy.util.NestedCollectionConverter._
+import org.junit.{Ignore, Test}
 
 /**
  * Document Me..
@@ -24,6 +24,7 @@ class BootConfigTest {
   }
 
   @Test
+  @Ignore
   def testInit: Unit = {
     val initFile = new File("/Users/m410/Projects/brzy/project/brzy-webapp.development.b.yml")
     assertTrue(initFile.exists)

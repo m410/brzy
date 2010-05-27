@@ -1,15 +1,23 @@
 package org.brzy.webapp
 
-import org.brzy.config.WebappConfig
 import org.brzy.plugin.Plugin
+import org.brzy.config._
 
 /**
  * Document Me..
- * 
+ *
  * @author Michael Fortin
- * @version $Id: $
+ * @version $Id : $
  */
 
-class WebApplicationConfig(init:WebappConfig, view:Plugin, persistence:List[Plugin],plugin:List[Plugin]) {
+class WebApplicationConfig(init: WebappConfig,
+        val views: Plugin,
+        val persistence: List[Plugin],
+        val plugins: List[Plugin]) {
+
+  val environment: String = init.environment.get
+  val application: Application = init.application.get
+  val project: Project = init.project.get
+  val logging: Logging = init.logging.get
 
 }
