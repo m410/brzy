@@ -49,7 +49,7 @@ class Builder(appFile: File, environment: String) {
     convertMap(load)
   }
   private val defaultConfigMap: Map[String, AnyRef] = {
-    val asStream: InputStream = getClass.getClassLoader.getResourceAsStream("brzy-app.default.b.yml")
+    val asStream: InputStream = getClass.getClassLoader.getResourceAsStream("brzy-webapp.default.b.yml")
     val load = Yaml.load(asStream).asInstanceOf[JMap[String, AnyRef]]
     convertMap(load)
   }

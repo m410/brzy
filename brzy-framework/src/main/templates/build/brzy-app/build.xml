@@ -6,7 +6,23 @@
   <import file="./common.xml"/>
   <property name="script.dir" value=".brzy"/>
   <property file="${basedir}/${script.dir}/build.properties"/>
-  <property name="brzy-app.b.yml" location="${basedir}/brzy-app.b.yml" />
+  <property name="brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+" location="${basedir}/brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+" />
 
 
 
@@ -156,7 +172,15 @@
 		<java classname="org.brzy.build.Main">
       <arg value="${brzy.env}"/>
       <arg value="persistence"/>
-      <arg value="${brzy-app.b.yml}"/>
+      <arg value="${brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+}"/>
 			<arg value="${persistencexml.loc}"/>
       <classpath refid="builder.classpath"/>
     </java>
@@ -167,7 +191,15 @@
 		<java classname="org.brzy.build.Main">
       <arg value="${brzy.env}"/>
       <arg value="web"/>
-      <arg value="${brzy-app.b.yml}"/>
+      <arg value="${brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+}"/>
 			<arg value="${webxml.loc}"/>
       <classpath refid="builder.classpath"/>
     </java>
@@ -178,14 +210,38 @@
 	<java classname="org.brzy.build.Main">
       <arg value="${brzy.env}"/>
       <arg value="logback"/>
-      <arg value="${brzy-app.b.yml}"/>
+      <arg value="${brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+}"/>
   	  <arg value="${logback.loc}"/>
       <classpath refid="builder.classpath"/>
     </java>
   </target>
   <target name="copy.config" depends="make.logbackxml">
     <echo>Make brzy config</echo>
-		<copy file="${brzy-app.b.yml}" tofile="${webapp.temp.dir}/WEB-INF/classes/brzy-app.b.yml" overwrite="true" />
+		<copy file="${brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+}" tofile="${webapp.temp.dir}/WEB-INF/classes/brzy-webapp.b.yml
+#Wed May 26 21:30:14 EDT 2010
+project.organization=org.brzy.demo
+project.name=demo
+sbt.version=0.7.4
+project.version=1.0
+build.scala.versions=2.8.0.RC2
+project.initialize=false
+" overwrite="true" />
 		<copy todir="${webapp.temp.dir}/WEB-INF/classes">
 	    <fileset dir="${output.dir}" includes="**/*.class"/>
 	  </copy>

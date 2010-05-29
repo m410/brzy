@@ -13,7 +13,7 @@ class WebAppFactoryTest {
   @Test
   @Ignore
   def testWebApplication = {
-    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     assertNotNull(url)
     val app = WebAppFactory.create(new Builder(url, "development").runtimeConfig)
     assertNotNull(app)

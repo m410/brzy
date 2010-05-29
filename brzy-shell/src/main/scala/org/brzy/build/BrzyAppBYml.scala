@@ -13,7 +13,7 @@ class BrzyAppBYml(name:String, version:String, group:String, artifact:String) {
   private val groupHolder = "[group]"
   private val artifactHolder = "[artifact]"
 
-  val content = Source.fromURL(getClass.getClassLoader.getResource("template.brzy-app.b.yml"))
+  val content = Source.fromURL(getClass.getClassLoader.getResource("template.brzy-webapp.b.yml"))
     .mkString
     .replaceAll(nameHolder,name)
     .replaceAll(versionHolder,version)

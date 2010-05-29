@@ -59,7 +59,7 @@ abstract class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeCo
   }
 
 
-  def compareTo(that: Plugin) = {
+  override def compareTo(that: Plugin) = {
     new CompareToBuilder()
         .append(this.name.get, that.name.get)
         .toComparison

@@ -1,21 +1,23 @@
 package ${packageName}
 
-import org.brzy.config.AppConfig
+import org.brzy.config.WebappConfig
 import org.brzy.application.WebApp
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.persistence.squeryl.SquerylInterceptor
+import org.brzy.plugin.SquerylPluginConfig
 
 /**
  * Application Class
  */
-class Application(config:AppConfig) extends WebApp(config){
+class Application(config:WebappConfig) extends WebApp(config){
 
-  val squerylPlugin = config.plugins.find(p => p.name == "brzy-squeryl").get
-  val interceptor = new SquerylInterceptor(
-      squerylPlugin.properties.get("driver_class"),
-      squerylPlugin.properties.get("url"),
-      squerylPlugin.properties.get("user_name"),
-      squerylPlugin.properties.get("password"))
+  val plugin = config.plugins.get.find(p => p.name.get == "brzy-squeryl").get
+	val squerylPlugin = plugin.asInstanceOf[SquerylPluginConfig]
+  override val interceptor = new SquerylInterceptor(
+      squerylPlugin.driver.get,
+      squerylPlugin.url.get,
+      squerylPlugin.userName.get,
+      squerylPlugin.password.get)
 
   override val services = Array()
   override val controllers = Array(

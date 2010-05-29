@@ -14,7 +14,7 @@ if [ "$1" = "create-app" ]; then
 fi
 
 # check that it's a project directory
-if [ ! -f "brzy-app.b.yml" ]; then
+if [ ! -f "brzy-webapp.b.yml" ]; then
    echo "Not a brzy project directory"
    exit 1
 fi

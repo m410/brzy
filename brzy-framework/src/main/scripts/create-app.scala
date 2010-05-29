@@ -68,12 +68,11 @@ object CreateApp extends Application {
 
 	// create yml file
 	val brzyApp = new BrzyAppBYml(init.name, init.version, init.packageSpace, init.artifact)
-	val brzyAppFile = new File(to,"brzy-app.b.yml")
+	val brzyAppFile = new File(to,"brzy-webapp.b.yml")
 	val appOut = new java.io.BufferedWriter( new java.io.FileWriter(brzyAppFile) )
 	appOut.write(brzyApp.content)
 	appOut.close
 
-	// TODO create source folders
   val DS = System.getProperty("file.separator")
   val packagePath = init.packageSpace.replaceAll("\\.",DS)
   val sourceFolder = new File(to, "src/main/scala/" + packagePath)
@@ -87,7 +86,7 @@ object CreateApp extends Application {
   val velocityEngine = new VelocityEngine
   velocityEngine.init(props)
   val context = new VelocityContext
-  context.put("packageName", init.packageSpace);
+  context.put("packageName", init.packageSpace)
 
   val template = velocityEngine.getTemplate("project/WebApp.scala.vm")
   val applicationFile = new File(sourceFolder,"Application.scala")
@@ -109,7 +108,7 @@ class BrzyAppBYml(name:String, version:String, group:String, artifact:String) {
   private val groupHolder = "[group]"
   private val artifactHolder = "[artifact]"
 
-  val content = Source.fromURL(getClass.getClassLoader.getResource("template.brzy-app.b.yml"))
+  val content = Source.fromURL(getClass.getClassLoader.getResource("template.brzy-webapp.b.yml"))
     .mkString
     .replace(nameHolder,name)
     .replace(versionHolder,version)

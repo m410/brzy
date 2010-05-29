@@ -16,7 +16,7 @@ class WebappConfigTest {
 
   @Test
   def testLoad = {
-    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
     val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
@@ -61,7 +61,7 @@ class WebappConfigTest {
 
   @Test
   def testLoadDefault = {
-    val url = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.default.b.yml")
     val config = Yaml.load(url.openStream)
     val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(app)
@@ -80,7 +80,7 @@ class WebappConfigTest {
 
   @Test
   def testMerge = {
-    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
     val webapp = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
@@ -90,7 +90,7 @@ class WebappConfigTest {
     assertEquals(2, webapp.logging.get.appenders.get.size)
     assertEquals(1, webapp.logging.get.loggers.get.size)
 
-    val url2 = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
+    val url2 = getClass.getClassLoader.getResource("brzy-webapp.default.b.yml")
     val config2 = Yaml.load(url2.openStream)
     val defaultConfig = new WebappConfig(convertMap(config2.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(defaultConfig)

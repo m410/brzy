@@ -16,10 +16,10 @@ import org.junit.{Ignore, Test}
 class BootConfigTest {
   @Test
   def testBoot: Unit = {
-    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     val file = new File(url.toURI.toURL.getFile)
     assertNotNull(file)
-    BootConfig(file, "development")
+    BootConfigBuilder(file, "development")
     assertTrue(true)
   }
 

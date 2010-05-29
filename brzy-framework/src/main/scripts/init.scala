@@ -17,7 +17,7 @@ object Initialize extends Application {
 		brzyPlugins.mkdirs
 	
 	// load configuration
-	val brzyConfig = new File(args(0),"brzy-app.b.yml")
+	val brzyConfig = new File(args(0),"brzy-webapp.b.yml")
 	val config = new Builder(brzyConfig,"development").runtimeConfig // dev is placeholder
 		
 	// create default build scripts

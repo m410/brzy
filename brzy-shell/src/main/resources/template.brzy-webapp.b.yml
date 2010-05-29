@@ -1,0 +1,63 @@
+#
+# application configuration
+# configuration Reference: http://brzy.org/docs/config_reference
+# configuration dump: >brzy info
+application:
+  name: &name [name]
+  org: [group]
+  version: "[version]"
+  author: Add Your Name Here
+  description: &desc Add a description here
+  artifact_id: [artifact]
+  webapp_context: /
+  application_class: [group].Application
+persistence:
+  - name: brzy-squeryl
+    org: orb.grzy
+    version: "0.2"
+    config_class: org.brzy.plugin.SquerylPluginConfig
+    remote_location: ~/.m2/repository/org/brzy/brzy-squeryl/0.2/brzy-squeryl-0.2-plugin.jar
+    driver_class: org.h2.Driver
+    user_name: sa
+    password:
+    url: jdbc:h2:test_db
+dependencies:
+  - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
+plugins:
+  - name: brzy-tomcat
+    org: orb.grzy
+    version: "0.2"
+    config_class: org.brzy.plugin.TomcatPluginConfig
+    remote_location: ~/.m2/repository/org/brzy/brzy-tomcat/0.2/brzy-tomcat-0.2-plugin.jar
+logging:
+  provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+    - name: FILE
+      appender_class: ch.qos.logback.core.rolling.RollingFileAppender
+      file: logs/brzy.log
+      rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+      file_name_pattern: "logs/brzy.%d{yyyy-MM-dd}.log"
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: [FILE]
+web_xml:
+  - description: *desc
+  - display-name: *name
+# override defaults for any environment
+environment_overrides:
+  - environment: developement
+    logging:
+      root:
+        ref:STDOUT
+  - environment: test
+  - environment: production

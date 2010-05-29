@@ -15,7 +15,7 @@ class ConfigPrinterTest {
 
   @Test
   def testPrint() = {
-    val url = getClass.getClassLoader.getResource("brzy-app.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
     val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
@@ -25,7 +25,7 @@ class ConfigPrinterTest {
 
   @Test
   def testPrintDefault() = {
-    val url = getClass.getClassLoader.getResource("brzy-app.default.b.yml")
+    val url = getClass.getClassLoader.getResource("brzy-webapp.default.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")
     val app = new WebappConfig(convertMap(config.asInstanceOf[JMap[String, AnyRef]]))
