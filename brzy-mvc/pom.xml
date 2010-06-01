@@ -40,8 +40,19 @@
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://nexus.scala-tools.org/content/repositories/releases</url>
     </repository>
+    <repository>
+      <id>jboss</id>
+      <name>jboss repository</name>
+      <url>http://repository.jboss.com/maven2</url>
+    </repository>
   </repositories>
   <dependencies>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.reflections</groupId>
       <artifactId>reflections</artifactId>
@@ -50,6 +61,10 @@
         <exclusion>
           <groupId>ch.qos.logback</groupId>
           <artifactId>logback-classic</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -61,7 +76,7 @@
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.8.0.GA</version>
+      <version>3.11.0.GA</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -102,7 +117,7 @@
       <version>3.0.0.RELEASE</version>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>servlet-api</artifactId>

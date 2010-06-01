@@ -1,7 +1,7 @@
 package org.brzy.application
 
 
-import org.brzy.config.WebappConfig
+import org.brzy.config.BootConfig
 import org.brzy.action.Action
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.service.ServiceScanner
@@ -19,7 +19,7 @@ import org.brzy.plugin.{WebAppViewPlugin, Plugin, WebAppPlugin}
  * @author Michael Fortin
  * @version $Id : $
  */
-abstract class WebApp(val config: WebappConfig) {
+abstract class WebApp(val config: BootConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 
   val viewPluginResource:WebAppViewPlugin = {

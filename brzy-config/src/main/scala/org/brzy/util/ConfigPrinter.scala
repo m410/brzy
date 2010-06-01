@@ -23,5 +23,5 @@ class ConfigPrinter(config: Config) {
 }
 
 object ConfigPrinter {
-  def apply(config: WebappConfig) = new ConfigPrinter(config)
+  def apply(config: BootConfig) = new ConfigPrinter(config)
 }

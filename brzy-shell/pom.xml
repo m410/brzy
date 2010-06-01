@@ -43,6 +43,12 @@
   </repositories>
   <dependencies>
     <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-config</artifactId>
       <version>0.2</version>

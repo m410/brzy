@@ -20,20 +20,20 @@ if [ ! -f "brzy-webapp.b.yml" ]; then
 fi
 
 # check for generated build files
-if [ ! -d ".brzy" ]; then
-   SCRIPT="$BRZY_HOME/scripts/init.scala"
+if [ ! -d "project" ]; then
+   SCRIPT="$BRZY_HOME/scripts/bootstrap.scala"
    exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
 fi
 
 # run ant scripts
 if [ "$1" = "build" ]; then
-   exec ant -f .brzy/build.xml -q
+   exec ant -f project/build.xml -q
    exit 0
 fi
 
 # run ant scripts
 if [ "$1" = "clean" ] || [ "$1" = "test" ] || [ "$1" = "compile" ] || [ "$1" = "war" ]; then
-   exec ant -f .brzy/build.xml -q $1
+   exec ant -f project/build.xml -q $1
    exit 0
 fi
 
@@ -60,7 +60,7 @@ fi
 
 
 if [ ! -e "$SCRIPT" ]; then
-   for plugin in "`pwd`/.brzy/plugins"/*
+   for plugin in "`pwd`/project/plugins"/*
    do
        for file in "$plugin/scripts"/*.scala
        do

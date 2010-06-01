@@ -7,7 +7,7 @@ import org.brzy.interceptor.ProxyFactory._
 import org.brzy.interceptor.MethodInvoker
 import org.brzy.interceptor.impl.LoggingInterceptor
 import org.brzy.mock.{UserService, UserController}
-import org.brzy.config.WebappConfig
+import org.brzy.config.BootConfig
 
 /**
  * @author Michael Fortin
@@ -15,7 +15,7 @@ import org.brzy.config.WebappConfig
  */
 class WebAppTest {
 
-  class MockWebApp(config:WebappConfig) extends WebApp(config) {
+  class MockWebApp(config:BootConfig) extends WebApp(config) {
     override val services = Array(
       make(classOf[UserService],new MethodInvoker with LoggingInterceptor)
       )

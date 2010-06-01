@@ -9,18 +9,4 @@ import org.brzy.plugin.SquerylPluginConfig
 /**
  * Application Class
  */
-class Application(config:WebappConfig) extends WebApp(config){
-
-  val plugin = config.plugins.get.find(p => p.name.get == "brzy-squeryl").get
-	val squerylPlugin = plugin.asInstanceOf[SquerylPluginConfig]
-  override val interceptor = new SquerylInterceptor(
-      squerylPlugin.driver.get,
-      squerylPlugin.url.get,
-      squerylPlugin.userName.get,
-      squerylPlugin.password.get)
-
-  override val services = Array()
-  override val controllers = Array(
-    make(classOf[HomeController],interceptor)
-  )
-}
+class Application(config:WebappConfig) extends WebApp(config)

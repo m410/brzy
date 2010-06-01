@@ -40,12 +40,18 @@
 	      <name>Scala-Tools Maven2 Repository</name>
 	      <url>http://nexus.scala-tools.org/content/repositories/releases</url>
 	    </repository>
+      <repository>
+        <id>scala-tools-snapshot</id>
+        <name>scala-tools-snapshot</name>
+        <url>http://www.scala-tools.org/repo-snapshots</url>
+      </repository>
 	  </repositories>
 	<dependencies>
 		<dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
+      <scope>provided</scope>
     </dependency>
 		<dependency>
 	      <groupId>ch.qos.logback</groupId>
@@ -68,5 +74,10 @@
 	      <version>4.7</version>
 	      <scope>test</scope>
 	    </dependency>
+      <dependency>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest</artifactId>
+        <version>1.2-for-scala-2.8.0.RC2-SNAPSHOT</version>
+      </dependency>
 	</dependencies>
 </project>

@@ -5,7 +5,7 @@ import org.brzy.application.WebApp
 import org.brzy.mock.PersonController
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockHttpServletResponse, MockHttpServletRequest, MockServletContext, MockRequestDispatcher}
-import org.brzy.config.WebappConfig
+import org.brzy.config.BootConfig
 import collection.immutable.SortedSet
 import org.junit.Test
 import org.junit.Ignore
@@ -25,9 +25,9 @@ class ServletSquerylTest {
 
   DbInit.init
 
-  val config:WebappConfig = new WebappConfig(Map[String,AnyRef]())
+  val config:BootConfig = new BootConfig(Map[String,AnyRef]())
 
-  val app = new WebApp(new WebappConfig(Map[String,AnyRef]())) {
+  val app = new WebApp(new BootConfig(Map[String,AnyRef]())) {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef](controller)
     override lazy val actions = SortedSet(

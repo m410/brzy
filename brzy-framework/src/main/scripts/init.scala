@@ -1,8 +1,9 @@
 import java.io._
 import org.brzy.build._
-import org.brzy.config.{WebappConfig,Builder}
+import org.brzy.config.{BootConfig,Builder}
 import scala.io.Source
 
+@deprecated("use boot1 & boot2")
 object Initialize extends Application {
   println(" Initializing project")
 
