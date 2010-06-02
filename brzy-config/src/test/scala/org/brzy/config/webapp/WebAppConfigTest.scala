@@ -6,12 +6,13 @@ import java.util.{Map => JMap}
 import org.ho.yaml.Yaml
 import collection.JavaConversions._
 import org.brzy.util.NestedCollectionConverter._
+import org.scalatest.junit.AssertionsForJUnit
 
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-class WebAppConfigTest {
+class WebAppConfigTest extends AssertionsForJUnit {
 
 
   @Test

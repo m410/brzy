@@ -13,36 +13,38 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
 import collection.immutable.SortedSet
 import org.brzy.controller.{ControllerScanner, Path, Controller}
 import org.brzy.interceptor.{MethodInvoker, Interceptor}
-import org.brzy.plugin.{WebAppViewPlugin, Plugin, WebAppPlugin}
+import org.brzy.plugin.{WebAppViewPlugin, Plugin}
+import org.brzy.webapp.WebAppConfig
+import org.brzy.config.plugin.{ViewPluginResource, PluginResource}
 
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-abstract class WebApp(val config: BootConfig) {
+abstract class WebApp(val config: WebAppConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 
-  val viewPluginResource:WebAppViewPlugin = {
-    val resourceClass = Class.forName(config.views.get.resourceClass.get)
+  val viewPluginResource:ViewPluginResource = {
+    val resourceClass = Class.forName(config.views.resourceClass.get)
     val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
-    constructor.newInstance(config.views).asInstanceOf[WebAppViewPlugin]
+    constructor.newInstance(config.views).asInstanceOf[ViewPluginResource]
   }
 
-  val persistencePluginResources:Array[WebAppPlugin] = {
+  val persistencePluginResources:Array[PluginResource] = {
     config.persistence.map(persist => {
       val p = persist.asInstanceOf[Plugin]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-      constructor.newInstance(p).asInstanceOf[WebAppPlugin]
+      constructor.newInstance(p).asInstanceOf[PluginResource]
     }).toArray
   }
 
-  val pluginResources:Array[WebAppPlugin] = {
+  val pluginResources:Array[PluginResource] = {
     config.plugins.map(plugin => {
       val p = plugin.asInstanceOf[Plugin]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-      constructor.newInstance(p).asInstanceOf[WebAppPlugin]
+      constructor.newInstance(p).asInstanceOf[PluginResource]
     }).toArray
   }
 
@@ -57,7 +59,7 @@ abstract class WebApp(val config: BootConfig) {
 
   protected def makeServices:Array[AnyRef] = {
     val buffer = ArrayBuffer[AnyRef]()
-    val serviceClasses = ServiceScanner(config.application.get.org.get).services
+    val serviceClasses = ServiceScanner(config.application.org.get).services
     serviceClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
       buffer += make(clazz, interceptor)})
@@ -68,7 +70,7 @@ abstract class WebApp(val config: BootConfig) {
 
   protected def makeControllers:Array[AnyRef]= {
     val buffer = ArrayBuffer[AnyRef]()
-    val serviceClasses = ControllerScanner(config.application.get.org.get).controllers
+    val serviceClasses = ControllerScanner(config.application.org.get).controllers
     serviceClasses.foreach(sc =>{
       val clazz = sc.asInstanceOf[Class[_]]
       // TODO inject services

@@ -1,6 +1,5 @@
 package org.brzy.application
 
-import org.brzy.config.Builder
 import org.junit.Assert._
 import org.junit.{Ignore, Test}
 
@@ -15,7 +14,7 @@ class WebAppFactoryTest {
   def testWebApplication = {
     val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     assertNotNull(url)
-    val app = WebAppFactory.create(new Builder(url, "development").runtimeConfig)
+    val app = null// WebAppFactory.create(new Builder(url, "development").runtimeConfig)
     assertNotNull(app)
   }
 }

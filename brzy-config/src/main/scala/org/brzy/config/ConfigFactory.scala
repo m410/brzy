@@ -91,7 +91,7 @@ object ConfigFactory {
   /**
    *
    */
-  def downloadPlugin(destDir: File, plugin: Plugin): Unit = {
+  def installPlugin(destDir: File, plugin: Plugin): Unit = {
 
     // from local file system for development mode
     if (plugin.localLocation.isDefined) {
@@ -142,7 +142,7 @@ object ConfigFactory {
       else
         new File(remoteLoc)
 
-      val destinationFolder = new File(outputDir, plgn.name)
+      val destinationFolder = new File(outputDir, plgn.name.get)
 
       if (!destinationFolder.exists)
         destinationFolder.mkdirs
@@ -156,7 +156,7 @@ object ConfigFactory {
   }
 
   private def downloadAndUnzipTo(plgn: Plugin, remoteUrl: String, appPluginCache: File) = {
-    val destinationFile = new URL(remoteUrl).downloadToDir(new File(appPluginCache, plgn.name))
+    val destinationFile = new URL(remoteUrl).downloadToDir(new File(appPluginCache, plgn.name.get))
     destinationFile.unzip()
   }
 

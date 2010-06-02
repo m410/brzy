@@ -2,7 +2,8 @@ package org.brzy.application
 
 import javax.servlet.{ServletContextEvent, ServletContextListener}
 import org.slf4j.LoggerFactory
-import org.brzy.config.Builder
+import org.brzy.webapp.{WebAppConfig, ConfigFactory}
+import java.io.File
 
 /**
  * @author Michael Fortin
@@ -17,7 +18,7 @@ class WebAppListener extends ServletContextListener {
     log.info("Brzy Environment  : {}", env)
     val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     log.info("Brzy Configuration: {}", url)
-    val app = WebAppFactory.create(new Builder(url,env).runtimeConfig)
+    val app = WebAppFactory.create(url, env)
     servletContextEvent.getServletContext.setAttribute("application", app)
     app.startup
   }

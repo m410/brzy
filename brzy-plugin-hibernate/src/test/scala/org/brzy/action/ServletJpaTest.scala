@@ -13,6 +13,7 @@ import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, 
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.persistence.scalaJpa.JpaInterceptor
 import org.brzy.application.WebApp
+import org.brzy.webapp.WebAppConfig
 
 /**
  * @author Michael Fortin
@@ -25,7 +26,7 @@ class ServletJpaTest {
   val controllerClass = classOf[UserController]
   val controller = make(controllerClass,interceptor)
 
-  val app = new WebApp(new BootConfig(Map[String,AnyRef]())) {
+  val app = new WebApp(new WebAppConfig(new BootConfig(Map[String,AnyRef]()),null,Nil,Nil)) {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef]()
     override lazy val actions = SortedSet(

@@ -2,6 +2,7 @@ package org.brzy.config
 
 import org.junit.Test
 import org.junit.Assert._
+import org.scalatest.junit.AssertionsForJUnit
 
 /**
  * Document Me..
@@ -9,7 +10,7 @@ import org.junit.Assert._
  * @author Michael Fortin
  * @version $Id: $
  */
-class ProjectTest {
+class ProjectTest extends AssertionsForJUnit {
 
   @Test
   def testMerge = {

@@ -11,7 +11,7 @@ import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareT
 class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Comparable[Plugin] {
 
   val configurationName = "Plugin Reference"
-  val name: String = map.get("name").get.asInstanceOf[String]
+  val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
   val version: Option[String] = map.get("version").asInstanceOf[Option[String]].orElse(None)
   val org: Option[String] = map.get("org").asInstanceOf[Option[String]].orElse(None)
   val configClass: Option[String] = map.get("config_class").asInstanceOf[Option[String]].orElse(None)
@@ -61,7 +61,7 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
     }
     else {
       new Plugin(Map[String, AnyRef](
-        "name" -> that.name,
+        "name" -> that.name.getOrElse(null),
         "version" -> that.version.getOrElse(this.version.getOrElse(null)),
         "org" -> that.org.getOrElse(this.org.getOrElse(null)),
         "config_class" -> that.configClass.getOrElse(this.configClass.getOrElse(null)),
@@ -94,7 +94,7 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
 
   def compareTo(that: Plugin) = {
     new CompareToBuilder()
-        .append(this.name, that.name)
+        .append(this.name.get, that.name.get)
         .append(this.org.get, that.org.get)
         .append(this.version.get, that.version.get)
         .toComparison
@@ -108,7 +108,7 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
       val rhs = p1.asInstanceOf[Plugin]
       new EqualsBuilder()
           .appendSuper(super.equals(p1))
-          .append(name, rhs.name)
+          .append(name.get, rhs.name.get)
           .append(org.get, rhs.org.get)
           .append(version.get, rhs.version.get)
           .isEquals
@@ -116,11 +116,11 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
   }
 
   override def hashCode =  new HashCodeBuilder(11, 37)
-      .append(name)
+      .append(name.get)
       .append(org.get)
       .append(version.get)
       .toHashCode
 
 
-  override def toString = "Plugin: " + name
+  override def toString = "Plugin: " + name.get
 }

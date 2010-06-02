@@ -10,7 +10,7 @@ import collection.JavaConversions._
  * @version $Id : $
  */
 class CascalPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
-  val configurationName = "Cascal"
+  override val configurationName = "Cascal"
 
   override def <<(that: Plugin):Plugin = {
     if (that == null) {
