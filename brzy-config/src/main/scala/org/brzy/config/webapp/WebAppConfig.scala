@@ -1,6 +1,6 @@
 package org.brzy.webapp
 
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 import org.brzy.config._
 
 /**

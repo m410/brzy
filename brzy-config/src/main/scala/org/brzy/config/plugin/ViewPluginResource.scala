@@ -1,6 +1,6 @@
 package org.brzy.config.plugin
 
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 
 /**
  * Document Me..

@@ -1,11 +1,13 @@
 package org.brzy.plugin
 
+import org.brzy.config.plugin.Plugin
+
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-class ScalatePluginConfig(map: Map[String, AnyRef]) extends WebAppViewPlugin(map) {
-  val configurationName = "Scalate"
+class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
+  override val configurationName = "Scalate"
   val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
   val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 

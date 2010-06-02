@@ -1,13 +1,14 @@
 package org.brzy.plugin
 
+import tools.nsc.plugins.Plugin
+
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
 class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin(map) {
-
-  val configurationName = "Tomcat"
+  override val configurationName = "Tomcat"
 
   override def <<(that: Plugin):Plugin  = {
     if (that == null) {

@@ -1,14 +1,13 @@
 package org.brzy.scalate
 
-import collection.JavaConversions._
-import org.brzy.plugin.{WebAppViewPlugin, ScalatePluginConfig, WebAppPlugin}
+import org.brzy.plugin.{WebAppViewResource, ScalatePluginConfig}
 
 /**
  * 
  * @author Michael Fortin
  * @version $Id: $
  */
-class ScalatePluginResource(config:ScalatePluginConfig) extends WebAppViewPlugin{
+class ScalatePluginResource(config:ScalatePluginConfig) extends WebAppViewResource(config){
 
   override val fileExtension = config.fileExtension.get
 

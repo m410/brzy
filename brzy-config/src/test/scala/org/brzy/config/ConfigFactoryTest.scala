@@ -7,7 +7,7 @@ import org.junit.Test
 import org.junit.Before
 import org.brzy.webapp.ConfigFactory
 import java.io.File
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 import org.brzy.util.FileUtils._
 
 /**

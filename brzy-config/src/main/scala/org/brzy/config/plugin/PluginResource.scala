@@ -1,6 +1,6 @@
 package org.brzy.config.plugin
 
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 
 /**
  * Document Me..
@@ -17,8 +17,5 @@ class PluginResource(plugin:Plugin) {
   def services:List[AnyRef] = Nil
 
   def interceptors:List[Interceptor] = Nil
-
-  def controllers:List[AnyRef] = Nil
-
 
 }

@@ -6,7 +6,6 @@ package org.brzy.interceptor
  * @author Michael Fortin
  * @version $Id: $
  */
-
 trait Invoker {
   def invoke(invocation: Invocation): AnyRef = invocation.invoke
 }

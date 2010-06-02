@@ -13,9 +13,9 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
 import collection.immutable.SortedSet
 import org.brzy.controller.{ControllerScanner, Path, Controller}
 import org.brzy.interceptor.{MethodInvoker, Interceptor}
-import org.brzy.plugin.{WebAppViewPlugin, Plugin}
+import org.brzy.plugin.WebAppViewResource
 import org.brzy.webapp.WebAppConfig
-import org.brzy.config.plugin.{ViewPluginResource, PluginResource}
+import org.brzy.config.plugin.{Plugin, ViewPluginResource, PluginResource}
 
 /**
  * @author Michael Fortin

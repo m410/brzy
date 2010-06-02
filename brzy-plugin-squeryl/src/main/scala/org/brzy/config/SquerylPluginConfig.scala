@@ -1,11 +1,13 @@
 package org.brzy.plugin
 
+import org.brzy.config.plugin.Plugin
+
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
 class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
-  val configurationName = "Squeryl"
+  override val configurationName = "Squeryl"
 
   val driver: Option[String] = map.get("driver").asInstanceOf[Option[String]].orElse(None)
   val url: Option[String] = map.get("url").asInstanceOf[Option[String]].orElse(None)

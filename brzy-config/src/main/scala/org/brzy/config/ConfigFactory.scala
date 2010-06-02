@@ -6,7 +6,7 @@ import java.io.{InputStream, File}
 import org.ho.yaml.Yaml
 import java.net.URL
 import java.lang.reflect.Constructor
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 import org.brzy.util.NestedCollectionConverter._
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._

@@ -2,7 +2,7 @@ import java.io._
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.VelocityContext
 import org.brzy.config.BootConfigBuilder
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 import org.brzy.plugin.Downloader._
 import org.brzy.config.{Dependency,Repository}
 import collection.JavaConversions._

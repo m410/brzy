@@ -98,9 +98,8 @@
     </dependency>
     <dependency>
       <groupId>org.brzy</groupId>
-      <artifactId>brzy-mvc</artifactId>
+      <artifactId>brzy-config</artifactId>
       <version>0.2</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

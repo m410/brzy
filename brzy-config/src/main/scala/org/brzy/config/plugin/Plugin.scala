@@ -1,4 +1,4 @@
-package org.brzy.plugin
+package org.brzy.config.plugin
 
 import org.brzy.config.{Config, MergeConfig, Repository, Dependency}
 import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareToBuilder}

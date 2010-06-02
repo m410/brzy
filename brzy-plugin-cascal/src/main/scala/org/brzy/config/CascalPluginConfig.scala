@@ -1,8 +1,7 @@
-package org.brzy.plugin
+package org.brzy.config
 
 
-import java.util.{Map => JMap}
-import collection.JavaConversions._
+import org.brzy.config.plugin.Plugin
 
 /**
  *

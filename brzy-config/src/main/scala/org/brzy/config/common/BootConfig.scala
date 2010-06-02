@@ -1,6 +1,6 @@
 package org.brzy.config
 
-import org.brzy.plugin.Plugin
+import org.brzy.config.plugin.Plugin
 import java.lang.reflect.Constructor
 import java.lang.String
 import collection.mutable.ListBuffer
