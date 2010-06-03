@@ -6,12 +6,13 @@ import org.junit.Assert._
 import org.brzy.mock.User
 import org.brzy.action.args.Parameters
 import collection.JavaConversions._
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class JpaPersistenceTest {
+class JpaPersistenceTest extends JUnitSuite {
 
   @Test
   def testPersistenceMake ={

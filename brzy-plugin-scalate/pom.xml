@@ -53,19 +53,24 @@
     </plugins>
   </build>
   <repositories>
-   <repository>
-     <id>fusesource.m2</id>
-     <name>FuseSource Public Repository</name>
-     <url>http://repo.fusesource.com/nexus/content/repositories/public</url>
-     <snapshots>
-       <enabled>false</enabled>
-     </snapshots>
-     <releases>
-       <enabled>true</enabled>
-     </releases>
-   </repository>
- </repositories>
+    <repository>
+      <id>fusesource.m2</id>
+      <name>FuseSource Public Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/repositories/public</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
   <dependencies>
+    <dependency>
+      <groupId>org.brzy</groupId>
+      <artifactId>brzy-config</artifactId>
+      <version>0.2</version>
+    </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
@@ -96,6 +101,18 @@
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest</artifactId>
       <version>1.2-for-scala-2.8.0.RC2-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.7</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.brzy</groupId>
+      <artifactId>brzy-mvc</artifactId>
+      <version>0.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

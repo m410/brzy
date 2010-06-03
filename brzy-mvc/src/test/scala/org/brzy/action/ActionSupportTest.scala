@@ -3,17 +3,17 @@ package org.brzy.action
 import args.Parameters
 import org.brzy.mock.UserController
 import org.junit.Test
-import org.junit.Ignore
 import org.junit.Assert._
 import ActionSupport._
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class ActionSupportTest {
+class ActionSupportTest extends JUnitSuite {
 
   @Test
   def testBuildArgs = {

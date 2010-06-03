@@ -9,5 +9,5 @@ import javassist.util.proxy.MethodHandler
  */
 class MethodInvoker extends MethodHandler with Invoker {
   def invoke(self: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef =
-    invoke(Invocation(m2, args, self))
+      invoke(Invocation(m2, args, self))
 }

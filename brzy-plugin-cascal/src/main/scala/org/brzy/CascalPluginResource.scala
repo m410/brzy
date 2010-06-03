@@ -1,5 +1,7 @@
 package org.brzy.persistence.cascal
 
+import org.brzy.config.plugin.PluginResource
+
 /**
  * Document Me..
  * 
@@ -7,4 +9,4 @@ package org.brzy.persistence.cascal
  * @version $Id: $
  */
 
-class CascalPluginResource
+class CascalPluginResource extends PluginResource

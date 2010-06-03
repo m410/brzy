@@ -1,9 +1,10 @@
 package org.brzy.application
 
 import java.io.File
-import org.brzy.webapp.{ConfigFactory, WebAppConfig}
+import org.brzy.webapp.ConfigFactory
 import java.net.URL
 import org.brzy.config.plugin.Plugin
+import org.brzy.config.webapp.WebAppConfig
 
 /**
  * Creates the web application class from the configuration.

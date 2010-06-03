@@ -1,7 +1,6 @@
 package org.brzy.config
 
-import org.scalatest.junit.AssertionsForJUnit
-import scala.collection.mutable.ListBuffer
+import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.junit.Test
 import org.junit.Before
@@ -16,7 +15,7 @@ import org.brzy.util.FileUtils._
  * @author Michael Fortin
  * @version $Id : $
  */
-class ConfigFactoryTest extends AssertionsForJUnit {
+class ConfigFactoryTest extends JUnitSuite {
 
   @Before
   def initialize = {

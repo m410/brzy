@@ -1,6 +1,6 @@
 package org.brzy.webapp
 
-import org.brzy.config.{Config, BootConfig}
+import org.brzy.config.common.{Config, BootConfig}
 import java.util.{Map => JMap, HashMap => JHashMap, List => JList, ArrayList => JArrayList}
 import java.io.{InputStream, File}
 import org.ho.yaml.Yaml
@@ -10,6 +10,7 @@ import org.brzy.config.plugin.Plugin
 import org.brzy.util.NestedCollectionConverter._
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._
+import org.brzy.config.webapp.WebAppConfig
 
 /**
  * Document Me..

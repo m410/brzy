@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.config.common
 
 /**
  * Document Me..

@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.config.common
 
 import org.brzy.config.plugin.Plugin
 import java.lang.reflect.Constructor

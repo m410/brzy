@@ -1,6 +1,6 @@
 package org.brzy.config.plugin
 
-import org.brzy.config.{Config, MergeConfig, Repository, Dependency}
+import org.brzy.config.common.{Config, MergeConfig, Repository, Dependency}
 import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareToBuilder}
 
 /**
@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareT
  * @author Michael Fortin
  * @version $Id : $
  */
-class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Comparable[Plugin] {
+class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Ordered[Plugin] {
 
   val configurationName = "Plugin Reference"
   val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
@@ -92,7 +92,7 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
     }
   }
 
-  def compareTo(that: Plugin) = {
+  override def compare(that: Plugin) = {
     new CompareToBuilder()
         .append(this.name.get, that.name.get)
         .append(this.org.get, that.org.get)

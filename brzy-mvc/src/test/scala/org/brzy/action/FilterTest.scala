@@ -4,12 +4,13 @@ import org.junit.Test
 import org.junit.Assert._
 import javax.servlet.{RequestDispatcher, ServletResponse, ServletRequest, FilterChain}
 import org.springframework.mock.web.{MockRequestDispatcher, MockServletContext, MockHttpServletRequest, MockHttpServletResponse}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class FilterTest {
+class FilterTest extends JUnitSuite {
 
 
   @Test

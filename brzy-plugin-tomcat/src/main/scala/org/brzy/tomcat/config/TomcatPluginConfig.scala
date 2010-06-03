@@ -1,6 +1,6 @@
-package org.brzy.plugin
+package org.brzy.tomcat.config
 
-import tools.nsc.plugins.Plugin
+import org.brzy.config.plugin.Plugin
 
 
 /**

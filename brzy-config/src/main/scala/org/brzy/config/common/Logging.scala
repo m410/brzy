@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.config.common
 
 import org.apache.commons.lang.builder.{CompareToBuilder, HashCodeBuilder, EqualsBuilder}
 import java.util.{List => JList}
@@ -70,7 +70,7 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
 /**
  *
  */
-class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Appender] with Comparable[Appender] {
+class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Appender] with Ordered[Appender] {
   val configurationName = "Appender"
   val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
   val appenderClass: Option[String] = m.get("appender_class").asInstanceOf[Option[String]].orElse(None)
@@ -121,7 +121,7 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
     }
   }
 
-  def compareTo(that: Appender) = {
+  override def compare(that: Appender) = {
     new CompareToBuilder()
             .append(this.name, that.name)
             .toComparison
@@ -137,7 +137,7 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
 /**
  *
  */
-class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] with Comparable[Logger] {
+class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] with Ordered[Logger] {
   val configurationName = "Logger"
   val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
   val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(None)
@@ -158,7 +158,7 @@ class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] 
         ))
   }
 
-  def compareTo(obj: Logger) = {
+  override def compare(obj: Logger) = {
     new CompareToBuilder()
             .append(this.name, obj.name)
             .toComparison

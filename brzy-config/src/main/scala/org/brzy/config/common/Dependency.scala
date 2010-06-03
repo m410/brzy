@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.config.common
 
 import collection.mutable.ListBuffer
 import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder, CompareToBuilder}
@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder, CompareT
  * @author Michael Fortin
  * @version $Id : $
  */
-class Dependency(m: Map[String, AnyRef]) extends Config(m) with Comparable[Dependency] {
+class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependency] {
   val configurationName: String = "Dependency"
   val org: Option[String] = m.get("org").asInstanceOf[Option[String]].orElse(None)
   val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
@@ -37,7 +37,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Comparable[Depen
       })
   }
 
-  def compareTo(that: Dependency) = {
+  override def compare(that: Dependency) = {
     new CompareToBuilder()
             .append(this.org.get, that.org.get)
             .append(this.name.get, that.name.get)

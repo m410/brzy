@@ -4,12 +4,13 @@ import org.brzy.mock.User
 import org.junit.Test
 import org.junit.Assert._
 import ParameterConversion._
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class ParameterConversionTest {
+class ParameterConversionTest extends JUnitSuite {
 
   @Test
   def testToType = {

@@ -2,6 +2,7 @@ package org.brzy.service
 
 import org.junit.Test
 import org.junit.Assert._
+import org.scalatest.junit.JUnitSuite
 
 /**
  * Document Me..
@@ -10,7 +11,7 @@ import org.junit.Assert._
  * @version $Id: $
  */
 
-class ServiceScannerTest {
+class ServiceScannerTest extends JUnitSuite {
 
   val scanner = new ServiceScanner("org.brzy.mock")
 

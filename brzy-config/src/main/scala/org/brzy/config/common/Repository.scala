@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.config.common
 
 import org.apache.commons.lang.builder.{CompareToBuilder, EqualsBuilder, HashCodeBuilder}
 
@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.{CompareToBuilder, EqualsBuilder, HashCod
  * @author Michael Fortin
  * @version $Id : $
  */
-class Repository(m: Map[String, AnyRef]) extends Config(m) with Comparable[Repository] {
+class Repository(m: Map[String, AnyRef]) extends Config(m) with Ordered[Repository] {
   val configurationName: String = "Repository"
   val id: Option[String] = m.get("id").asInstanceOf[Option[String]].orElse(None)
   val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
@@ -24,7 +24,7 @@ class Repository(m: Map[String, AnyRef]) extends Config(m) with Comparable[Repos
   }
 
 
-  def compareTo(that: Repository) = {
+  override def compare(that: Repository) = {
     new CompareToBuilder()
             .append(this.url.get, that.url.get)
             .toComparison

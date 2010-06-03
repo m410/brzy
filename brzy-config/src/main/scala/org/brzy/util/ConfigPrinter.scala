@@ -1,6 +1,7 @@
 package org.brzy.config
 
 import collection.JavaConversions._
+import common.{BootConfig, Config}
 
 /**
  *

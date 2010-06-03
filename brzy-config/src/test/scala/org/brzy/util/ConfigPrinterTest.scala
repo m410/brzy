@@ -1,17 +1,19 @@
 package org.brzy.config
 
+import common.BootConfig
 import org.junit.Test
 import org.junit.Assert._
 import java.util.{Map => JMap}
 import org.ho.yaml.Yaml
 import collection.JavaConversions._
 import org.brzy.util.NestedCollectionConverter._
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class ConfigPrinterTest {
+class ConfigPrinterTest extends JUnitSuite {
 
   @Test
   def testPrint() = {

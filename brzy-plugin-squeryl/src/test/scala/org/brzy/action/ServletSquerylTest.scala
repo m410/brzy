@@ -1,11 +1,9 @@
 package org.brzy.action
 
 import org.junit.Assert._
-import org.brzy.application.WebApp
 import org.brzy.mock.PersonController
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockHttpServletResponse, MockHttpServletRequest, MockServletContext, MockRequestDispatcher}
-import org.brzy.config.BootConfig
 import collection.immutable.SortedSet
 import org.junit.Test
 import org.junit.Ignore
@@ -13,12 +11,15 @@ import org.brzy.db.DbInit
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.persistence.squeryl.SquerylInterceptor
 import org.brzy.application.WebApp
+import org.brzy.config.webapp.WebAppConfig
+import org.scalatest.junit.JUnitSuite
+import org.brzy.config.common.BootConfig
 
 /**
  * @author Michael Fortin
  * @version $Id:$
  */
-class ServletSquerylTest {
+class ServletSquerylTest extends JUnitSuite {
   val interceptor = new SquerylInterceptor("org.h2.Driver","jdbc:h2:test", "sa", "sa")
   val controllerClass = classOf[PersonController]
   val controller = make(controllerClass,interceptor)
@@ -27,7 +28,7 @@ class ServletSquerylTest {
 
   val config:BootConfig = new BootConfig(Map[String,AnyRef]())
 
-  val app = new WebApp(new BootConfig(Map[String,AnyRef]())) {
+  val app = new WebApp(new WebAppConfig(new BootConfig(Map[String,AnyRef]()),null,Nil,Nil)) {
     override val services = Array[AnyRef]()
     override val controllers = Array[AnyRef](controller)
     override lazy val actions = SortedSet(

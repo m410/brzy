@@ -27,6 +27,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2-for-scala-2.8.0.RC2-SNAPSHOT" level="project" />
   </component>
 </module>
 

@@ -8,12 +8,13 @@ import collection.immutable.SortedSet
 import org.brzy.mock.UserController
 import javax.servlet.http.HttpServletRequest
 import org.easymock.EasyMock._
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class ActionTest {
+class ActionTest extends JUnitSuite {
 
   @Test
   def testCompare = {

@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.config.webapp
 
 import org.junit.Test
 import org.junit.Assert._
@@ -6,13 +6,14 @@ import java.util.{Map => JMap}
 import org.ho.yaml.Yaml
 import collection.JavaConversions._
 import org.brzy.util.NestedCollectionConverter._
-import org.scalatest.junit.AssertionsForJUnit
+import org.scalatest.junit.JUnitSuite
+import org.brzy.config.common.BootConfig
 
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-class WebAppConfigTest extends AssertionsForJUnit {
+class WebAppConfigTest extends JUnitSuite {
 
 
   @Test

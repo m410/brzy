@@ -5,12 +5,13 @@ import org.junit.Test
 import org.junit.Assert._
 import javax.servlet.ServletResponse
 import org.springframework.mock.web.{MockServletContext, MockHttpServletRequest}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class ViewFunctionTest {
+class ViewFunctionTest extends JUnitSuite {
 
   @Test
   def testResource = {

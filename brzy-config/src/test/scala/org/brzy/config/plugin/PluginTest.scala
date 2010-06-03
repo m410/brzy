@@ -2,13 +2,13 @@ package org.brzy.plugin
 
 import org.junit.Test
 import org.junit.Assert._
-import org.scalatest.junit.AssertionsForJUnit
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class PluginTest extends AssertionsForJUnit {
+class PluginTest extends JUnitSuite {
 
   @Test
   def testBasicSet = {

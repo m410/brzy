@@ -4,12 +4,13 @@ import org.junit.Test
 import org.junit.Assert._
 import org.brzy.util.FileUtils._
 import java.io.{BufferedWriter, FileWriter, File}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class FileUtilsTest {
+class FileUtilsTest extends JUnitSuite {
 
   @Test
   def testCopy = {

@@ -1,8 +1,7 @@
 package org.brzy.mock
 
 import org.brzy.application.WebApp
-import org.brzy.config.BootConfig
-import org.brzy.webapp.WebAppConfig
+import org.brzy.config.webapp.WebAppConfig
 
 /**
  * @author Michael Fortin

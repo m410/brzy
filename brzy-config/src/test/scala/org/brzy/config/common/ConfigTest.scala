@@ -1,16 +1,16 @@
-package org.brzy.config
+package org.brzy.config.common
 
 import org.junit.Test
 import org.junit.Assert._
 import java.util.{ArrayList => JList, HashMap => JMap}
-import org.scalatest.junit.AssertionsForJUnit
+import org.scalatest.junit.JUnitSuite
 
 /**
  *
  * @author Michael Fortin
  * @version $Id : $
  */
-class ConfigTest extends AssertionsForJUnit {
+class ConfigTest extends JUnitSuite {
 
   class TestConfig(m: Map[String, AnyRef]) extends Config(m) {
     val configurationName = "Test Config"

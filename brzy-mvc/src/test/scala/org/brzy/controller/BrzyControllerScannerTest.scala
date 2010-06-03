@@ -5,6 +5,7 @@ import org.junit.Ignore
 import org.junit.Assert._
 import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTypesScanner}
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * Document Me..
@@ -12,7 +13,7 @@ import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
  * @author Michael Fortin
  * @version $Id: $
  */
-class BrzyControllerScannerTest {
+class BrzyControllerScannerTest extends JUnitSuite {
 
   val scanner = new ControllerScanner("org.brzy.mock")
 

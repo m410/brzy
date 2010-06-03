@@ -1,7 +1,6 @@
 package org.brzy.application
 
 
-import org.brzy.config.BootConfig
 import org.brzy.action.Action
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.service.ServiceScanner
@@ -12,10 +11,9 @@ import java.lang.reflect.Constructor
 import collection.mutable.{ArrayBuffer, ListBuffer}
 import collection.immutable.SortedSet
 import org.brzy.controller.{ControllerScanner, Path, Controller}
-import org.brzy.interceptor.{MethodInvoker, Interceptor}
-import org.brzy.plugin.WebAppViewResource
-import org.brzy.webapp.WebAppConfig
-import org.brzy.config.plugin.{Plugin, ViewPluginResource, PluginResource}
+import org.brzy.interceptor.{MethodInvoker}
+import org.brzy.config.plugin.{Plugin, PluginResource}
+import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 
 /**
  * @author Michael Fortin
@@ -24,10 +22,10 @@ import org.brzy.config.plugin.{Plugin, ViewPluginResource, PluginResource}
 abstract class WebApp(val config: WebAppConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 
-  val viewPluginResource:ViewPluginResource = {
+  val viewPluginResource:WebAppViewResource = {
     val resourceClass = Class.forName(config.views.resourceClass.get)
     val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
-    constructor.newInstance(config.views).asInstanceOf[ViewPluginResource]
+    constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
   }
 
   val persistencePluginResources:Array[PluginResource] = {

@@ -4,12 +4,13 @@ import impl.LoggingInterceptor
 import org.junit.Test
 import org.junit.Assert._
 import org.brzy.saved.intercept.{FooBar, Bar}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class ProxyFactoryTest {
+class ProxyFactoryTest extends JUnitSuite {
 
   @Test
   def testProxyFactory {

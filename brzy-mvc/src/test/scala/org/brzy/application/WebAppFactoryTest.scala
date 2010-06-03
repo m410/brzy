@@ -2,12 +2,13 @@ package org.brzy.application
 
 import org.junit.Assert._
 import org.junit.{Ignore, Test}
+import org.scalatest.junit.JUnitSuite
 
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-class WebAppFactoryTest {
+class WebAppFactoryTest extends JUnitSuite {
 
   @Test
   @Ignore
