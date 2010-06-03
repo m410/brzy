@@ -54,12 +54,18 @@ class WebAppConfig(val init: BootConfig,
 
   override val webXml:List[Map[String,AnyRef]] = {
     val buf = ListBuffer[Map[String,AnyRef]]()
+    buf ++= views.asInstanceOf[WebXml].webXml
     buf ++= init.webXml.get
-//    buf ++= views.dependencies.get
-//    plugins.map(plugin=> {
-//        val depsList: List[Repository] = plugin.webXml.get
-//        depsList.foreach(dep=> buf += dep)
-//    })
+
+    persistence.foreach(p=> {
+      if(p.isInstanceOf[WebXml])
+        p.asInstanceOf[WebXml].webXml.foreach(xml => buf += xml)
+    })
+
+    plugins.foreach(p=> {
+      if(p.isInstanceOf[WebXml])
+        p.asInstanceOf[WebXml].webXml.foreach(xml => buf += xml)
+    })
     buf.toList
   }
 }

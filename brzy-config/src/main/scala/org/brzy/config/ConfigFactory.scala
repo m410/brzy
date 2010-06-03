@@ -2,7 +2,6 @@ package org.brzy.webapp
 
 import org.brzy.config.common.{Config, BootConfig}
 import java.util.{Map => JMap, HashMap => JHashMap, List => JList, ArrayList => JArrayList}
-import java.io.{InputStream, File}
 import org.ho.yaml.Yaml
 import java.net.URL
 import java.lang.reflect.Constructor
@@ -11,6 +10,8 @@ import org.brzy.util.NestedCollectionConverter._
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._
 import org.brzy.config.webapp.WebAppConfig
+import java.io.{OutputStream, FileOutputStream, InputStream, File}
+import java.nio.channels.Channels
 
 /**
  * Document Me..
@@ -67,7 +68,7 @@ object ConfigFactory {
     new WebAppConfig(c, view, persistence, plugins)
   }
 
-  def makePlugin(reference:Plugin, pluginFile:File):Plugin ={
+  def makePlugin(reference: Plugin, pluginFile: File): Plugin = {
     // check classpath at runtime
     val cpUrl = getClass.getClassLoader.getResource("plugins/" + reference.name + "/brzy-plugin.b.yml")
     val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String, AnyRef]])
@@ -117,6 +118,11 @@ object ConfigFactory {
 
       downloadAndUnzipTo(plugin, remoteUrl, destDir)
     }
+  }
+
+  def fileForPlugin(plugin: Plugin): File = {
+    val url = getClass.getClassLoader.getResource(plugin.name.get + "/brzy-plugin.b.yml")
+    new File(url.toURI)
   }
 
   /**

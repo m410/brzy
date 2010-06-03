@@ -9,6 +9,7 @@ import org.brzy.interceptor.impl.LoggingInterceptor
 import org.brzy.mock.{UserService, UserController}
 import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
+import org.brzy.config.plugin.Plugin
 
 /**
  * @author Michael Fortin
@@ -27,18 +28,19 @@ class WebAppTest extends JUnitSuite {
 
   @Test
   def testCreate = {
-//    val config = new AppConfig()
-////    config.views = new Views
-//    config.views.html_version = "html5"
-//    config.views.file_extension = ".jsp"
-//    val webapp = new MockWebApp(config)
-//    assertNotNull(webapp)
-//    assertNotNull(webapp.services)
-//    assertEquals(1, webapp.services.size)
-//    assertNotNull(webapp.controllers)
-//    assertEquals(1, webapp.controllers.size)
-//    assertNotNull(webapp.actions)
-//    assertEquals(8,webapp.actions.size)
+
+    val view = new Plugin(Map[String,AnyRef]()) {
+      val fileExtension = ".ssp"
+    }
+    val config = new WebAppConfig(null,view,Nil,Nil)
+    val webapp = new MockWebApp(config)
+    assertNotNull(webapp)
+    assertNotNull(webapp.services)
+    assertEquals(1, webapp.services.size)
+    assertNotNull(webapp.controllers)
+    assertEquals(1, webapp.controllers.size)
+    assertNotNull(webapp.actions)
+    assertEquals(8,webapp.actions.size)
 
   }
 }
