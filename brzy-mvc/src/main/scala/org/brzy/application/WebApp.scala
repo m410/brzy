@@ -14,6 +14,7 @@ import org.brzy.controller.{ControllerScanner, Path, Controller}
 import org.brzy.interceptor.{MethodInvoker}
 import org.brzy.config.plugin.{Plugin, PluginResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
+import org.brzy.config.common.{Project, Application => BrzyApp}
 
 /**
  * @author Michael Fortin
@@ -22,14 +23,20 @@ import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 abstract class WebApp(val config: WebAppConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 
-  val viewPluginResource:WebAppViewResource = {
+  val application: BrzyApp = config.application
+
+  val project: Project = config.project
+
+  val viewResource: WebAppViewResource = {
+    log.debug("view: {}", config.views)
     val resourceClass = Class.forName(config.views.resourceClass.get)
     val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
     constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
   }
 
-  val persistencePluginResources:Array[PluginResource] = {
+  val persistenceResources: Array[PluginResource] = {
     config.persistence.map(persist => {
+      log.debug("persistence: {}", persist)
       val p = persist.asInstanceOf[Plugin]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
@@ -37,8 +44,9 @@ abstract class WebApp(val config: WebAppConfig) {
     }).toArray
   }
 
-  val pluginResources:Array[PluginResource] = {
+  val pluginResources: Array[PluginResource] = {
     config.plugins.map(plugin => {
+      log.debug("plugin: {}", plugin)
       val p = plugin.asInstanceOf[Plugin]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
@@ -46,33 +54,36 @@ abstract class WebApp(val config: WebAppConfig) {
     }).toArray
   }
 
-  val interceptor:MethodInvoker = {
+  val interceptors: List[MethodInvoker] = makeInterceptors
+
+  protected def makeInterceptors: List[MethodInvoker] = {
     val buffer = ArrayBuffer[MethodInvoker]()
-    persistencePluginResources.foreach(pin => pin.interceptors.foreach(p => buffer += p.asInstanceOf[MethodInvoker]))
-    val array = buffer.toArray
-    array(0)  // TODO this only returns the first interceptor, and ignores the rest
+    persistenceResources.foreach(pin => pin.interceptors.foreach(p => buffer += p.asInstanceOf[MethodInvoker]))
+    buffer.toList
   }
 
   val services: Array[_ <: AnyRef] = makeServices
 
-  protected def makeServices:Array[AnyRef] = {
+  protected def makeServices: Array[AnyRef] = {
     val buffer = ArrayBuffer[AnyRef]()
     val serviceClasses = ServiceScanner(config.application.org.get).services
-    serviceClasses.foreach(sc => {
-      val clazz = sc.asInstanceOf[Class[_]]
-      buffer += make(clazz, interceptor)})
+//    serviceClasses.foreach(sc => {
+//      val clazz = sc.asInstanceOf[Class[_]]
+//      buffer += make(clazz, interceptor)
+//    })
     buffer.toArray[AnyRef]
   }
 
   val controllers: Array[_ <: AnyRef] = makeControllers
 
-  protected def makeControllers:Array[AnyRef]= {
+  protected def makeControllers: Array[AnyRef] = {
     val buffer = ArrayBuffer[AnyRef]()
     val serviceClasses = ControllerScanner(config.application.org.get).controllers
-    serviceClasses.foreach(sc =>{
-      val clazz = sc.asInstanceOf[Class[_]]
-      // TODO inject services
-      buffer += make(clazz, interceptor)})
+//    serviceClasses.foreach(sc => {
+//      val clazz = sc.asInstanceOf[Class[_]]
+//      // TODO inject services
+//      buffer += make(clazz, interceptor)
+//    })
     buffer.toArray[AnyRef]
   }
 
@@ -91,7 +102,7 @@ abstract class WebApp(val config: WebAppConfig) {
         log.debug("methodPath     : " + methodPath)
 
         val pathValue = classPath.value + "/" + methodPath.value
-        val action = new Action(pathValue, method, ctl, viewPluginResource.fileExtension) 
+        val action = new Action(pathValue, method, ctl, viewResource.fileExtension)
         log.debug("action: " + action)
         list += action
       }
@@ -100,16 +111,16 @@ abstract class WebApp(val config: WebAppConfig) {
   }
 
   def startup = {
-    viewPluginResource.startup
-    persistencePluginResources.foreach(_.startup)
+    viewResource.startup
+    persistenceResources.foreach(_.startup)
     pluginResources.foreach(_.startup)
-    viewPluginResource.startup
+    viewResource.startup
     log.info("application startup")
   }
 
   def shutdown = {
-    viewPluginResource.shutdown
-    persistencePluginResources.foreach(_.shutdown)
+    viewResource.shutdown
+    persistenceResources.foreach(_.shutdown)
     pluginResources.foreach(_.shutdown)
     log.info("application shutdown")
   }

@@ -12,15 +12,15 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
   val configurationName: String = "Logging"
   val provider: Option[String] = m.get("provider").asInstanceOf[Option[String]].orElse(None)
   val appenders: Option[List[Appender]] = m.get("appenders") match {
-    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Appender(i)).toList)
+    case Some(s) => Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Appender(i)).toList)
     case _ => None
   }
   val loggers: Option[List[Logger]] = m.get("loggers") match {
-    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Logger(i)).toList)
+    case Some(s) => Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Logger(i)).toList)
     case _ => None
   }
   val root: Option[Root] = m.get("root") match {
-    case s: Some[Map[String, AnyRef]] => Option(new Root(s.get))
+    case Some(s) => Option(new Root(s.asInstanceOf[Map[String, AnyRef]]))
     case _ => None
   }
 
@@ -191,7 +191,7 @@ class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
   val configurationName = "Root"
   val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(None)
   val ref: Option[List[String]] = m.get("ref") match {
-    case s: Some[List[String]] => s
+    case Some(s) => Option(s.asInstanceOf[List[String]])
     case _ => None
   }
 

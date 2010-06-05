@@ -16,9 +16,9 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
   val transitive: Boolean = true
 
   val excludes: Option[List[Dependency]] = m.get("excludes") match {
-    case s: Some[List[Dependency]] =>
+    case Some(s) =>
       val buffer = new ListBuffer[Dependency]()
-      s.get.foreach(exclude => buffer += new Dependency(exclude.asInstanceOf[Map[String, String]]))
+      s.asInstanceOf[List[Dependency]].foreach(exclude => buffer += new Dependency(exclude.asInstanceOf[Map[String, String]]))
       Option(buffer.toList)
     case _ => None
   }
@@ -31,7 +31,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
       "conf" -> conf.getOrElse(null),
       "exculdes" -> {
         excludes match {
-          case s: Some[List[Dependency]] => s.get.map(_.asMap).toList
+          case Some(a) => a.asInstanceOf[List[Dependency]].map(_.asMap).toList
           case _ => null
         }
       })

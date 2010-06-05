@@ -10,6 +10,7 @@ import org.brzy.mock.{UserService, UserController}
 import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.plugin.Plugin
+import org.brzy.config.common.BootConfig
 
 /**
  * @author Michael Fortin
@@ -17,14 +18,7 @@ import org.brzy.config.plugin.Plugin
  */
 class WebAppTest extends JUnitSuite {
 
-  class MockWebApp(config:WebAppConfig) extends WebApp(config) {
-    override val services = Array(
-      make(classOf[UserService],new MethodInvoker with LoggingInterceptor)
-      )
-    override val controllers = Array(
-      make(classOf[UserController],new MethodInvoker with LoggingInterceptor)
-      )
-  }
+  class MockWebApp(config:WebAppConfig) extends WebApp(config) 
 
   @Test
   def testCreate = {
@@ -32,7 +26,10 @@ class WebAppTest extends JUnitSuite {
     val view = new Plugin(Map[String,AnyRef]()) {
       val fileExtension = ".ssp"
     }
-    val config = new WebAppConfig(null,view,Nil,Nil)
+    val boot = new BootConfig(Map[String,AnyRef](
+      "environment" -> "development"
+      ))
+    val config = new WebAppConfig(boot,view,Nil,Nil)
     val webapp = new MockWebApp(config)
     assertNotNull(webapp)
     assertNotNull(webapp.services)

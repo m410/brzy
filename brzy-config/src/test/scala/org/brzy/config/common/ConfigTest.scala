@@ -18,16 +18,16 @@ class ConfigTest extends JUnitSuite {
     val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(Option(null))
     val application: Option[Application] = m.get("application") match {
       case s: Some[_] => Option(new Application(s.get.asInstanceOf[Map[String, String]]))
-      case _ => Option(null)
+      case _ => None
     }
     val webXml: Option[List[Map[String, AnyRef]]] = m.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]]
     val repositories: Option[List[Repository]] = m.get("repositories") match {
-      case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Repository(i)).toList)
-      case _ => Option(null)
+      case Some(s) => Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Repository(i)).toList)
+      case _ => None
     }
     val dependencies: Option[List[Dependency]] = m.get("dependencies") match {
-      case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Dependency(i)).toList)
-      case _ => Option(null)
+      case Some(s) => Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Dependency(i)).toList)
+      case _ => None
     }
   }
 

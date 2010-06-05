@@ -12,60 +12,82 @@ import collection.immutable.{List, SortedSet}
  * @version $Id : $
  */
 class WebAppConfig(val init: BootConfig,
-        val views: Plugin,
-        val persistence: List[Plugin],
-        val plugins: List[Plugin])
-    extends WebXml {
-
+                   val views: Plugin,
+                   val persistence: List[Plugin],
+                   val plugins: List[Plugin])
+        extends WebXml {
   val environment: String = init.environment.get
-  val application: Application = init.application.get
-  val project: Project = init.project.get
-  val logging: Logging = init.logging.get
+  val application: Application = init.application.getOrElse(null)
+  val project: Project = init.project.getOrElse(null)
+  val logging: Logging = init.logging.getOrElse(null)
 
-  val dependencies:SortedSet[Dependency] = {
+  val dependencies: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
-    dependencyBuffer ++= init.dependencies.get
-    dependencyBuffer ++= views.dependencies.get 
-    persistence.map(plugin=> {
+
+    if (init.dependencies.isDefined)
+      dependencyBuffer ++= init.dependencies.get
+
+    if (views.dependencies.isDefined)
+      dependencyBuffer ++= views.dependencies.get
+
+
+    persistence.map(plugin => {
+      if (plugin.dependencies.isDefined) {
         val depsList: List[Dependency] = plugin.dependencies.get
-        depsList.foreach(dep=> dependencyBuffer += dep)
+        depsList.foreach(dep => dependencyBuffer += dep)
+      }
     })
-    plugins.map(plugin=> {
+    plugins.map(plugin => {
+      if (plugin.dependencies.isDefined) {
         val depsList: List[Dependency] = plugin.dependencies.get
-        depsList.foreach(dep=> dependencyBuffer += dep)
+        depsList.foreach(dep => dependencyBuffer += dep)
+      }
     })
-    SortedSet(dependencyBuffer:_*)
+    SortedSet(dependencyBuffer: _*)
   }
 
-  val repositories:SortedSet[Repository] = {
+  val repositories: SortedSet[Repository] = {
     val repositoryBuffer = ListBuffer[Repository]()
-    repositoryBuffer ++= init.repositories.get
-    repositoryBuffer ++= views.repositories.get
-    persistence.map(plugin=> {
+
+    if (init.repositories.isDefined)
+      repositoryBuffer ++= init.repositories.get
+
+    if (views.repositories.isDefined)
+      repositoryBuffer ++= views.repositories.get
+
+    persistence.map(plugin => {
+      if (plugin.repositories.isDefined) {
         val depsList: List[Repository] = plugin.repositories.get
-        depsList.foreach(dep=> repositoryBuffer += dep)
+        depsList.foreach(dep => repositoryBuffer += dep)
+      }
     })
-    plugins.map(plugin=> {
+    plugins.map(plugin => {
+      if (plugin.repositories.isDefined) {
         val depsList: List[Repository] = plugin.repositories.get
-        depsList.foreach(dep=> repositoryBuffer += dep)
+        depsList.foreach(dep => repositoryBuffer += dep)
+      }
     })
-    SortedSet(repositoryBuffer:_*)
+    SortedSet(repositoryBuffer: _*)
   }
 
-  override val webXml:List[Map[String,AnyRef]] = {
-    val buf = ListBuffer[Map[String,AnyRef]]()
-    buf ++= views.asInstanceOf[WebXml].webXml
-    buf ++= init.webXml.get
+  override val webXml: Option[List[Map[String, AnyRef]]] = {
+    val buf = ListBuffer[Map[String, AnyRef]]()
 
-    persistence.foreach(p=> {
-      if(p.isInstanceOf[WebXml])
-        p.asInstanceOf[WebXml].webXml.foreach(xml => buf += xml)
+    if(views.isInstanceOf[WebXml] && views.asInstanceOf[WebXml].webXml.isDefined)
+      buf ++= views.asInstanceOf[WebXml].webXml.get
+
+    if(init.webXml.isDefined)
+      buf ++= init.webXml.get
+
+    persistence.foreach(p => {
+      if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
+        p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
     })
 
-    plugins.foreach(p=> {
-      if(p.isInstanceOf[WebXml])
-        p.asInstanceOf[WebXml].webXml.foreach(xml => buf += xml)
+    plugins.foreach(p => {
+      if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
+        p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
     })
-    buf.toList
+    Some(buf.toList)
   }
 }

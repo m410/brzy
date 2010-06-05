@@ -10,8 +10,8 @@ import org.brzy.util.NestedCollectionConverter._
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._
 import org.brzy.config.webapp.WebAppConfig
-import java.io.{OutputStream, FileOutputStream, InputStream, File}
-import java.nio.channels.Channels
+import java.io.{InputStream, File}
+import org.slf4j.LoggerFactory
 
 /**
  * Document Me..
@@ -21,6 +21,8 @@ import java.nio.channels.Channels
  */
 object ConfigFactory {
 
+  private val log = LoggerFactory.getLogger(getClass)
+  
   /**
    *
    */
@@ -58,7 +60,9 @@ object ConfigFactory {
         new BootConfig(Map[String, AnyRef]())
     }
 
-    defaultConfig << applicationConfig << environmentConfig
+    val configmerge: BootConfig = applicationConfig << environmentConfig
+    val configmerge2: BootConfig = defaultConfig << configmerge
+    configmerge2
   }
 
   /**
@@ -121,7 +125,9 @@ object ConfigFactory {
   }
 
   def fileForPlugin(plugin: Plugin): File = {
+    log.debug("plugin: {}" , plugin)
     val url = getClass.getClassLoader.getResource(plugin.name.get + "/brzy-plugin.b.yml")
+    log.debug("url: {}" , url)
     new File(url.toURI)
   }
 
@@ -171,26 +177,26 @@ object ConfigFactory {
     map.foreach(nvp => {
       nvp._2 match {
         case None =>
-        case s: Some[_] =>
-          if (s.get != null && s.get.isInstanceOf[String])
-            jm.put(nvp._1, s.get.asInstanceOf[String])
-          else if (s.get != null && s.get.isInstanceOf[List[_]]) {
+        case Some(s) =>
+          if (s != null && s.isInstanceOf[String])
+            jm.put(nvp._1, s.asInstanceOf[String])
+          else if (s != null && s.isInstanceOf[List[_]]) {
             val list = new JArrayList[AnyRef]()
-            to(s.get.asInstanceOf[List[AnyRef]], list)
+            to(s.asInstanceOf[List[AnyRef]], list)
             jm.put(nvp._1, list)
           }
-          else if (s.get != null && s.get.isInstanceOf[Map[_, _]]) {
+          else if (s != null && s.isInstanceOf[Map[_, _]]) {
             val map = new JHashMap[String, AnyRef]()
-            to(s.get.asInstanceOf[Map[String, AnyRef]], map)
+            to(s.asInstanceOf[Map[String, AnyRef]], map)
             jm.put(nvp._1, map)
           }
-        case m: Map[String, AnyRef] =>
+        case m: Map[_, _] =>
           val map = new JHashMap[String, AnyRef]()
-          to(m, map)
+          to(m.asInstanceOf[Map[String,AnyRef]], map)
           jm.put(nvp._1, map)
-        case l: List[AnyRef] =>
+        case l: List[_] =>
           val list = new JArrayList[AnyRef]()
-          to(l, list)
+          to(l.asInstanceOf[List[AnyRef]], list)
           jm.put(nvp._1, list)
         case _ =>
           jm.put(nvp._1, nvp._2)
@@ -202,33 +208,33 @@ object ConfigFactory {
     slist.foreach(entry => {
       entry match {
         case None =>
-        case s: Some[_] =>
-          if (s.get != null && s.get.isInstanceOf[String])
-            jlist.add(s.get.asInstanceOf[String])
-          else if (s.get != null && s.get.isInstanceOf[List[_]]) {
+        case Some(s) =>
+          if (s != null && s.isInstanceOf[String])
+            jlist.add(s.asInstanceOf[String])
+          else if (s != null && s.isInstanceOf[List[_]]) {
             val list = new JArrayList[AnyRef]()
-            to(s.get.asInstanceOf[List[AnyRef]], list)
+            to(s.asInstanceOf[List[AnyRef]], list)
             jlist.add(list)
           }
-          else if (s.get != null && s.get.isInstanceOf[Map[_, _]]) {
+          else if (s != null && s.isInstanceOf[Map[_, _]]) {
             val map = new JHashMap[String, AnyRef]()
             to(entry.asInstanceOf[Map[String, AnyRef]], map)
             jlist.add(map)
           }
-        case m: Map[String, AnyRef] =>
+        case m: Map[_,_] =>
           val map = new JHashMap[String, AnyRef]()
-          to(m, map)
+          to(m.asInstanceOf[Map[String,AnyRef]], map)
           jlist.add(map)
-        case l: List[AnyRef] =>
+        case l: List[_] =>
           val list = new JArrayList[AnyRef]()
-          to(l, list)
+          to(l.asInstanceOf[List[AnyRef]], list)
           jlist.add(list)
-        case t: (String, String) =>
+        case (n:String, v:String) =>
           val map = new JHashMap[String, AnyRef]()
-          if (t._2.isInstanceOf[List[_]])
-            map.put(t._1, new JArrayList())
+          if (v.isInstanceOf[List[_]])
+            map.put(n, new JArrayList())
           else
-            map.put(t._1, t._2)
+            map.put(n, v)
           jlist.add(map)
         case _ =>
           jlist.add(entry)

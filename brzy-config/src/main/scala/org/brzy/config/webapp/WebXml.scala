@@ -8,5 +8,5 @@ package org.brzy.config.webapp
  */
 
 trait WebXml {
-  val webXml:List[Map[String,AnyRef]]
+  val webXml:Option[List[Map[String,AnyRef]]]
 }

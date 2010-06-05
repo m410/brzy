@@ -19,7 +19,7 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
   private val dev = "developement"
   private val prod = "production"
   private val test = "test"
-  val configurationName: String = "Application Configuration"
+  val configurationName: String = "Boot Configuration"
   val environment: Option[String] = m.get("environment").asInstanceOf[Option[String]].orElse(None)
   val testFramework: Option[String] = m.get("test_framework").asInstanceOf[Option[String]].orElse(None)
   val application: Option[Application] = m.get("application") match {
@@ -27,34 +27,53 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
     case _ => None
   }
   val project: Option[Project] = m.get("project") match {
-    case s: Some[_] => Option(new Project(s.get.asInstanceOf[Map[String, String]]))
+    case Some(s) =>
+      if (s != null)
+        Option(new Project(s.asInstanceOf[Map[String, String]]))
+      else
+        None
     case _ => None
   }
   val logging: Option[Logging] = m.get("logging") match {
-    case s: Some[_] => Option(new Logging(s.get.asInstanceOf[Map[String, AnyRef]]))
+    case Some(s) =>
+      if (s != null)
+        Option(new Logging(s.asInstanceOf[Map[String, AnyRef]]))
+      else
+        None
     case _ => None
   }
   val webXml: Option[List[Map[String, AnyRef]]] = m.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]]
 
   val views: Option[Plugin] = m.get("views") match {
-    case s: Some[Map[String, AnyRef]] =>
-      Option(new Plugin(s.get))
+    case Some(s) =>
+      if (s != null)
+        Option(new Plugin(s.asInstanceOf[Map[String, AnyRef]]))
+      else
+        None
     case _ => None
   }
 
   val repositories: Option[List[Repository]] = m.get("repositories") match {
-    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Repository(i)).toList)
+    case Some(s) =>
+      if (s != null)
+        Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Repository(i)).toList)
+      else
+        None
     case _ => None
   }
   val dependencies: Option[List[Dependency]] = m.get("dependencies") match {
-    case s: Some[List[Map[String, AnyRef]]] => Option(s.get.map(i => new Dependency(i)).toList)
+    case Some(s) =>
+      if (s != null)
+        Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Dependency(i)).toList)
+      else
+        None
     case _ => None
   }
   val plugins: Option[List[Plugin]] = m.get("plugins") match {
-    case s: Some[List[Map[String, AnyRef]]] =>
-      if (s.get != null) {
+    case Some(s) =>
+      if (s != null) {
         val buffer = new ListBuffer[Plugin]()
-        s.get.foreach(map => {
+        s.asInstanceOf[List[Map[String, AnyRef]]].foreach(map => {
           buffer += new Plugin(map)
         })
         Option(buffer.toList)
@@ -64,10 +83,10 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
     case _ => None
   }
   val persistence: Option[List[Plugin]] = m.get("persistence") match {
-    case s: Some[List[Map[String, AnyRef]]] =>
+    case Some(s) =>
       val buffer = new ListBuffer[Plugin]()
-      if (s.get != null) {
-        s.get.foreach(map => {
+      if (s != null) {
+        s.asInstanceOf[List[Map[String, AnyRef]]].foreach(map => {
           buffer += new Plugin(map)
         })
         Option(buffer.toList)
@@ -83,51 +102,57 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
       "environment" -> environment,
       "application" -> {
         application match {
-          case s: Some[Application] => s.get.asMap
+          case Some(a) => a.asInstanceOf[Application].asMap
           case _ => null
         }
       },
       "project" -> {
         project match {
-          case s: Some[Project] => s.get.asMap
+          case Some(p) => p.asInstanceOf[Project].asMap
+          case _ => null
+        }
+      },
+      "views" -> {
+        views match {
+          case Some(v) => v.asMap
           case _ => null
         }
       },
       "test_framework" -> testFramework,
       "repositories" -> {
         repositories match {
-          case s: Some[List[Repository]] => s.get.map(_.asMap)
+          case Some(a) => a.asInstanceOf[List[Repository]].map(_.asMap)
           case _ => null
         }
       },
       "dependencies" -> {
         dependencies match {
-          case s: Some[List[Dependency]] => s.get.map(_.asMap)
+          case Some(a) => a.asInstanceOf[List[Dependency]].map(_.asMap)
           case _ => null
         }
       },
       "logging" -> {
         logging match {
-          case s: Some[Logging] => s.get.asMap
+          case Some(a) => a.asInstanceOf[Logging].asMap
           case _ => null
         }
       },
       "plugins" -> {
         plugins match {
-          case s: Some[List[Plugin]] => s.get.map(_.asMap)
+          case Some(a) => a.asInstanceOf[List[Plugin]].map(_.asMap)
           case _ => null
         }
       },
       "persistence" -> {
         persistence match {
-          case s: Some[List[Plugin]] => s.get.map(_.asMap)
+          case Some(a) => a.asInstanceOf[List[Plugin]].map(_.asMap)
           case _ => null
         }
       },
       "web_xml" -> webXml,
       "views" -> {
         views match {
-          case s: Some[Plugin] => s.get.asMap
+          case Some(a) => a.asInstanceOf[Plugin].asMap
           case _ => null
         }
       })
@@ -145,7 +170,14 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
       new BootConfig(Map[String, AnyRef](
         "environment" -> this.environment.getOrElse(that.environment.get),
         "application" -> {this.application.getOrElse(that.application.get)}.asMap,
-        "project" -> {this.project.get << that.project.getOrElse(null)}.asMap,
+        "project" -> {
+          if (this.project.isDefined && this.project.get != null)
+            {this.project.get << that.project.getOrElse(null)}.asMap
+          else if (that.project.isDefined && that.project.get != null)
+            that.project.get.asMap
+          else
+            null
+        },
         "repositories" -> {
           if (this.repositories.isDefined && that.repositories.isDefined)
             this.repositories.get.map(_.asMap).toList ++ that.repositories.get.map(_.asMap).toList
@@ -167,10 +199,8 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
             null
         },
         "views" -> {
-          if (this.views.isDefined && that.views.isDefined)
-            {this.views.get << that.views.get}.asMap
-          else if (this.views.isDefined)
-            this.views.get.asMap
+          if (this.views.isDefined && this.views.get != null)
+            {this.views.get << that.views.getOrElse(null)}.asMap
           else if (that.views.isDefined)
             that.views.get.asMap
           else

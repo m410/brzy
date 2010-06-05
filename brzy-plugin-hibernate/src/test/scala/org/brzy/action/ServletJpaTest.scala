@@ -89,16 +89,16 @@ class ServletJpaTest extends JUnitSuite {
     EasyMock.expect(sessionFactory.createEntityManager).andReturn(entityManager)
     EasyMock.replay(sessionFactory)
 
-
-    val request2 = new MockHttpServletRequest(new MockServletContext()) {
-			override def getRequestDispatcher(path:String):RequestDispatcher = {
-				new MockRequestDispatcher(path) {
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
-						assertTrue("Correct rc attribute", fwdReq.getAttribute("rc") == null)
-					}
-				}
-			}
-		}
+//
+//    val request2 = new MockHttpServletRequest(new MockServletContext()) {
+//			override def getRequestDispatcher(path:String):RequestDispatcher = {
+//				new MockRequestDispatcher(path) {
+//					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
+//						assertTrue("Correct rc attribute", fwdReq.getAttribute("rc") == null)
+//					}
+//				}
+//			}
+//		}
 
 
     val request = new MockHttpServletRequest("GET", "/users/10.brzy") // should be /users/

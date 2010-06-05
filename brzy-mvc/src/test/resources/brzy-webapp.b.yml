@@ -34,8 +34,6 @@ persistence:
     org: org.brzy
     version: "0.1"
     scan_package: *group
-    config_class: org.brzy.plugin.ScalatePluginConfig
-    resource_class: org.brzy.plugin.ScalatePluginConfig
     driver_class: org.postgresql.Driver
     user_name: test
     password:
