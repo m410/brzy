@@ -10,7 +10,7 @@ application:
   description: Some Description
   org: &group org.brzy.sample
   artifact_id: sample-jpa
-  resource_class: org.brzy.mock.MockWebApp
+  application_class: org.brzy.mock.MockWebApp
   properties:
     test: value
   webapp_context: mainapp

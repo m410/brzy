@@ -14,9 +14,8 @@ import org.slf4j.LoggerFactory
  * @version $Id : $
  */
 object WebAppFactory {
-
   private val log = LoggerFactory.getLogger(getClass)
-  
+
   /**
    *
    */
@@ -25,7 +24,7 @@ object WebAppFactory {
 
     val view: Plugin = bootConfig.views match {
       case Some(v) =>
-        if(v != null)
+        if (v != null)
           makePlugin(bootConfig.views.get, fileForPlugin(bootConfig.views.get))
         else
           null
@@ -33,18 +32,25 @@ object WebAppFactory {
     }
 
     val persistence: List[Plugin] = {
-      bootConfig.persistence.get.map(p => {
-        val file = fileForPlugin(p)
-        makePlugin(p, file)
-      })
+      if (bootConfig.persistence.isDefined)
+        bootConfig.persistence.get.map(p => {
+          val file = fileForPlugin(p)
+          makePlugin(p, file)
+        })
+      else
+        Nil
     }
     val plugins: List[Plugin] = {
-      bootConfig.plugins.get.map(p => {
-        val file = fileForPlugin(p)
-        makePlugin(p, file)
-      })
+      if (bootConfig.plugins.isDefined)
+        bootConfig.plugins.get.map(p => {
+          val file = fileForPlugin(p)
+          makePlugin(p, file)
+        })
+      else
+        Nil
     }
     val config = makeWebAppConfig(bootConfig, view, persistence, plugins)
+    log.debug("application class: {}",config.application.applicationClass.get)
     val c = Class.forName(config.application.applicationClass.get)
     val constructor = c.getConstructor(classOf[WebAppConfig])
     val inst = constructor.newInstance(config)

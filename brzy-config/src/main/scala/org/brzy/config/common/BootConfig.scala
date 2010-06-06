@@ -42,7 +42,14 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
         None
     case _ => None
   }
-  val webXml: Option[List[Map[String, AnyRef]]] = m.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]]
+  val webXml: Option[List[Map[String, AnyRef]]] = m.get("web_xml") match {
+    case Some(s) =>
+      if (s != null && s.isInstanceOf[List[_]])
+        Option(s.asInstanceOf[List[Map[String, AnyRef]]])
+      else
+        None
+    case _ => None
+  }
 
   val views: Option[Plugin] = m.get("views") match {
     case Some(s) =>
@@ -149,7 +156,12 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
           case _ => null
         }
       },
-      "web_xml" -> webXml,
+      "web_xml" -> {
+        webXml match {
+          case Some(a) => a.asInstanceOf[List[Map[String, AnyRef]]]
+          case _ => null
+        }
+      },
       "views" -> {
         views match {
           case Some(a) => a.asInstanceOf[Plugin].asMap
@@ -227,6 +239,8 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
             null
         },
         "web_xml" -> {
+          println("this: " + this.webXml)
+          println("that: " + that.webXml)
           if (this.webXml.isDefined && that.webXml.isDefined)
             this.webXml.get ++ that.webXml.get
           else if (this.webXml.isDefined)
