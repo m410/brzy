@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.scalate
 
 import org.junit.Test
 import org.junit.Assert._
@@ -23,10 +23,14 @@ class ScalatePluginConfigTest extends JUnitSuite {
       "file_extension" -> "test",
       "remote_location" -> "test",
       "local_location" -> "test",
-      "repositories" -> null,
+      "repositories" -> List(Map("url"->"http://someurl.com","id"->"repo")),
       "dependencies" -> List(),
       "web_xml" -> List()
       ))
+    assertTrue(p1.repositories.isDefined)
+    assertEquals(1,p1.repositories.get.size)
+    p1.repositories.get.foreach(d => assertEquals("repo",d.id.get))
+    
     val p2 = new ScalatePluginConfig(Map[String, AnyRef](
       "name" -> "test2",
       "version" -> "test2",
@@ -42,5 +46,8 @@ class ScalatePluginConfigTest extends JUnitSuite {
       ))
     val p3 = p1 << p2
     assertNotNull(p3)
+    assertTrue(p3.repositories.isDefined)
+    assertEquals(1,p3.repositories.get.size)
+    p3.repositories.get.foreach(d => assertEquals("repo",d.id.get))
   }
 }

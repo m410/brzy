@@ -239,8 +239,6 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
             null
         },
         "web_xml" -> {
-          println("this: " + this.webXml)
-          println("that: " + that.webXml)
           if (this.webXml.isDefined && that.webXml.isDefined)
             this.webXml.get ++ that.webXml.get
           else if (this.webXml.isDefined)

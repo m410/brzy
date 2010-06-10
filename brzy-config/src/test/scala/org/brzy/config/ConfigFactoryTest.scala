@@ -49,9 +49,9 @@ class ConfigFactoryTest extends JUnitSuite {
     assertNotNull(config.plugins.get)
     assertEquals(1, config.plugins.get.size)
 
-    assertEquals("dependencies: " + config.dependencies.mkString(", "), 19, config.dependencies.get.size)
+    assertEquals( 15, config.dependencies.get.size)
 
-    assertEquals("webxml: " + config.webXml, 12, config.webXml.get.size)
+    assertEquals( 12, config.webXml.get.size)
 
   }
 

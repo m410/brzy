@@ -34,13 +34,13 @@
       <includes>
         <include>*.jar</include>
       </includes>
-			<outputDirectory></outputDirectory>
+			<outputDirectory>/</outputDirectory>
     </fileSet>
 	</fileSets>
 	<files>
 		<file>
 			<source>src/main/resources/brzy-plugin.b.yml</source>
-			<outputDirectory></outputDirectory>
+			<outputDirectory>/</outputDirectory>
 		</file>
 	</files>
 </assembly>

@@ -18,39 +18,14 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
   def brzyClasspath = managedClasspath(brzyPlugin)
 
   // repositories
-  // $repositories
 #foreach($repo in $repositories)
-#if($repo.name())
-  val repository_$velocityCount = "${repo.name().get()}" at "${repo.url().get()}"
-#end
-#end
-
-  // plugins
-#foreach($plugin in $plugins)
-#if($plugin.name())
-  val plugin_$velocityCount = "${plugin.org().get()}" % "${plugin.name().get()}" % "${plugin.version().get()}" % "plugin" classifier "plugin" intransitive()
-#end
+  val repository_$velocityCount = "${repo.id().get()}" at "${repo.url().get()}"
 #end
 
   // dependencies
 #foreach($dep in $dependencies)
-#if($dep.name())
   val dependency_$velocityCount = "${dep.org().get()}" % "${dep.name().get()}" % "${dep.rev().get()}" % "${dep.conf().get()}"
 #end
-#end
-
-  lazy val downloadPlugins = task {
-    val plugins: PathFinder = "project" / "lib" / "plugin" ** "*-plugin.jar"
-    val plugindir = "project" / "plugins"
-    plugindir.asFile.mkdirs
-    plugins.get.foreach(f => {
-      val folderName = f.name.substring(0,f.name.length - 4)
-      val pth:Path = Path.fromString(plugindir, folderName)
-      unzip(f, pth, new ConsoleLogger())
-    })
-    None
-  } describedAs "Download and Install Plugins"
-
 
   // lazy val demo = runTask(Some("sample.Main"), testClasspath).dependsOn(testCompile) describedAs "Runs the demo."
 }

@@ -1,4 +1,4 @@
-package org.brzy.persistence.squeryl
+package org.brzy.squeryl
 
 /**
  * Document Me..
@@ -6,5 +6,4 @@ package org.brzy.persistence.squeryl
  * @author Michael Fortin
  * @version $Id: $
  */
-
 class SquerylPluginResource

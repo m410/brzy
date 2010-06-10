@@ -2,7 +2,7 @@
 # tomcat development web server
 #
 name: brzy-tomcat
-version: "0.1"
+version: "0.2"
 org: org.brzy
-config_class: org.brzy.plugin.TomcatPluginConfig
+config_class: org.brzy.tomcat.TomcatPluginConfig
 resource_class: 

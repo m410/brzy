@@ -1,4 +1,4 @@
-package org.brzy.plugin
+package org.brzy.squeryl
 
 import org.brzy.config.plugin.Plugin
 

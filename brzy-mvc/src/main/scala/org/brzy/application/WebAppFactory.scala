@@ -25,7 +25,7 @@ object WebAppFactory {
     val view: Plugin = bootConfig.views match {
       case Some(v) =>
         if (v != null)
-          makePlugin(bootConfig.views.get, fileForPlugin(bootConfig.views.get))
+          makeRuntimePlugin(bootConfig.views.get)
         else
           null
       case _ => null
@@ -33,19 +33,13 @@ object WebAppFactory {
 
     val persistence: List[Plugin] = {
       if (bootConfig.persistence.isDefined)
-        bootConfig.persistence.get.map(p => {
-          val file = fileForPlugin(p)
-          makePlugin(p, file)
-        })
+        bootConfig.persistence.get.map( makeRuntimePlugin(_))
       else
         Nil
     }
     val plugins: List[Plugin] = {
       if (bootConfig.plugins.isDefined)
-        bootConfig.plugins.get.map(p => {
-          val file = fileForPlugin(p)
-          makePlugin(p, file)
-        })
+        bootConfig.plugins.get.map( makeRuntimePlugin(_))
       else
         Nil
     }

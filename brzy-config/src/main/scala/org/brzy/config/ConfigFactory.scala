@@ -12,6 +12,7 @@ import org.brzy.util.FileUtils._
 import org.brzy.config.webapp.WebAppConfig
 import java.io.{InputStream, File}
 import org.slf4j.LoggerFactory
+import java.lang.String
 
 /**
  * Document Me..
@@ -72,15 +73,39 @@ object ConfigFactory {
     new WebAppConfig(c, view, persistence, plugins)
   }
 
-  def makePlugin(reference: Plugin, pluginFile: File): Plugin = {
-    // check classpath at runtime
-    val cpUrl = getClass.getClassLoader.getResource("plugins/" + reference.name + "/brzy-plugin.b.yml")
+  def makeRuntimePlugin(reference: Plugin): Plugin = {
+    val pluginResource: String = "brzy-plugins/" + reference.name.get + "/brzy-plugin.b.yml"
+    val cpUrl = getClass.getClassLoader.getResource(pluginResource)
+    val yaml = convertMap(Yaml.load(cpUrl.openStream).asInstanceOf[JMap[String, AnyRef]])
+
+    if(yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
+      val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
+      val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
+      val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
+      val newPluginInstance = constructor.newInstance(yaml)
+      newPluginInstance.asInstanceOf[Plugin]
+    }
+    else {
+      null 
+    }
+  }
+
+  def makeBuildTimePlugin(reference: Plugin, pluginResourceDirectory: File):Plugin = {
+    val pFile = new File(pluginResourceDirectory, reference.name.get)
+    val pluginFile = new File(pFile, "/brzy-plugin.b.yml")
     val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String, AnyRef]])
-    val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-    val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
-    val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-    val newPluginInstance = constructor.newInstance(yaml)
-    newPluginInstance.asInstanceOf[Plugin]
+
+    if(yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
+      val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
+      log.debug("configClass: {}",configClass)
+      val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
+      val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
+      val newPluginInstance = constructor.newInstance(yaml)
+      newPluginInstance.asInstanceOf[Plugin]
+    }
+    else {
+      null
+    }
   }
 
   /**
@@ -100,32 +125,31 @@ object ConfigFactory {
   def installPlugin(destDir: File, plugin: Plugin): Unit = {
 
     // from local file system for development mode
-    if (plugin.localLocation.isDefined) {
+    if (plugin.localLocation.isDefined && plugin.localLocation.get != null) {
       val file = new File(plugin.localLocation.get + "/brzy-plugin.b.yml")
 
       if (!file.exists)
-        error("No plugin file found at Local location: " + plugin.localLocation.get)
+        error("No plugin file found: '"+plugin+"', location: " + plugin.localLocation.get)
     }
     // copy from local system or from remote system for development mode
-    else if (plugin.remoteLocation.isDefined) {
+    else if (plugin.remoteLocation.isDefined && plugin.remoteLocation.get != null) {
       downloadAndUnzipTo(plugin, destDir)
     }
     // lookup via maven repository, the default way
     else {
       // [org(replace . with /)] / [name] / [version] / [name]-[version]-plugin.zip
-      val remoteUrl = "http://brzy.org/nexus/" +
+      val remoteUrl = "http://brzy.org/nexus/content/repositories/releases/" +
               plugin.org.get.replaceAll("\\.", "/") + "/" +
-              plugin.name + "/" +
+              plugin.name.get + "/" +
               plugin.version.get + "/" +
-              plugin.name + "-" +
-              plugin.version.get + "-plugin.zip"
+              plugin.name.get + "-" +
+              plugin.version.get + "-plugin.jar"
 
       downloadAndUnzipTo(plugin, remoteUrl, destDir)
     }
   }
 
   def fileForPlugin(plugin: Plugin): File = {
-    log.debug("plugin: {}" , plugin)
     val url = getClass.getClassLoader.getResource(plugin.name.get + "/brzy-plugin.b.yml")
     log.debug("url: {}" , url)
     new File(url.toURI)
@@ -142,6 +166,7 @@ object ConfigFactory {
     if (plgn.remoteLocation.isDefined && plgn.remoteLocation.get.startsWith("http")) {
       val destinationFile = new URL(plgn.remoteLocation.get).downloadToDir(outputDir)
       destinationFile.unzip()
+      destinationFile.delete()
     }
     // copy from local file system
     else {
@@ -164,13 +189,17 @@ object ConfigFactory {
       val destinationFile = new File(destinationFolder, filename)
 
       sourceFile.copyTo(destinationFolder)
+      log.debug("unzip: {}",destinationFile)
       destinationFile.unzip()
+      destinationFile.delete()
     }
   }
 
   private def downloadAndUnzipTo(plgn: Plugin, remoteUrl: String, appPluginCache: File) = {
     val destinationFile = new URL(remoteUrl).downloadToDir(new File(appPluginCache, plgn.name.get))
+    log.debug("unzip: {}",destinationFile)
     destinationFile.unzip()
+    destinationFile.delete()
   }
 
   private def to(map: Map[String, AnyRef], jm: JMap[String, AnyRef]): Unit = {

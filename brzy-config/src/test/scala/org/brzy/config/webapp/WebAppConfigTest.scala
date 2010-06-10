@@ -70,7 +70,7 @@ class WebAppConfigTest extends JUnitSuite {
     assertNotNull(app.project.get)
     assertTrue(app.application.isEmpty)
     assertNotNull(app.dependencies.get)
-    assertEquals(17, app.dependencies.get.size)
+    assertEquals(13, app.dependencies.get.size)
     assertNotNull(app.repositories.get)
     assertEquals(4, app.repositories.get.size)
     assertTrue(app.plugins.isEmpty)
@@ -97,7 +97,7 @@ class WebAppConfigTest extends JUnitSuite {
     val defaultConfig = new BootConfig(convertMap(config2.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(defaultConfig)
     assertNotNull(defaultConfig.dependencies.get)
-    assertEquals(17, defaultConfig.dependencies.get.size)
+    assertEquals(13, defaultConfig.dependencies.get.size)
 
     val merged = defaultConfig << webapp 
 
@@ -119,7 +119,7 @@ class WebAppConfigTest extends JUnitSuite {
     assertNotNull(merged.webXml.get)
     assertEquals(12, merged.webXml.get.size)
     assertNotNull(merged.dependencies.get)
-    assertEquals(19, merged.dependencies.get.size)
+    assertEquals(15, merged.dependencies.get.size)
   }
 
 }

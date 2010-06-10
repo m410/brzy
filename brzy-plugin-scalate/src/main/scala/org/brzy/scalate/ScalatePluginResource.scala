@@ -1,6 +1,5 @@
 package org.brzy.scalate
 
-import org.brzy.config.ScalatePluginConfig
 import org.brzy.config.webapp.WebAppViewResource
 
 /**

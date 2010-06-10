@@ -19,9 +19,28 @@ if [ ! -f "brzy-webapp.b.yml" ]; then
    exit 1
 fi
 
+# bootstrap
+if [ "$1" = "bootstrap" ]; then
+    #TODO check last modified dates
+   SCRIPT="$BRZY_HOME/scripts/boot1.scala"
+   scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
+   FILES="project/brzy-plugins/*/*[0-9].jar"
+   for f in $FILES
+   do
+       CLASSPATH="$CLASSPATH:`pwd`/$f"
+   done
+   SCRIPT="$BRZY_HOME/scripts/boot2.scala"
+   scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
+   exit 0
+fi
+
 # check for generated build files
 if [ ! -d "project" ]; then
-   SCRIPT="$BRZY_HOME/scripts/bootstrap.scala"
+    #TODO check last modified dates
+   SCRIPT="$BRZY_HOME/scripts/boot1.scala"
+   exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
+   #TODO make new classpath
+   SCRIPT="$BRZY_HOME/scripts/boot2.scala"
    exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
 fi
 

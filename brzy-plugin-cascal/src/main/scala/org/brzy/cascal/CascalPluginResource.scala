@@ -1,4 +1,4 @@
-package org.brzy.persistence.cascal
+package org.brzy.cascal
 
 import org.brzy.config.plugin.PluginResource
 
@@ -8,5 +8,4 @@ import org.brzy.config.plugin.PluginResource
  * @author Michael Fortin
  * @version $Id: $
  */
-
 class CascalPluginResource extends PluginResource

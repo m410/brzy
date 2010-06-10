@@ -1,5 +1,4 @@
-package org.brzy.config
-
+package org.brzy.cascal
 
 import org.brzy.config.plugin.Plugin
 

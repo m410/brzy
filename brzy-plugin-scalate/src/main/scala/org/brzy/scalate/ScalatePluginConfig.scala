@@ -1,4 +1,4 @@
-package org.brzy.config
+package org.brzy.scalate
 
 import org.brzy.config.plugin.Plugin
 

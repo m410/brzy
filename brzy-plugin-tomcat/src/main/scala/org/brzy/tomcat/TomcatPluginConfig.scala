@@ -1,4 +1,4 @@
-package org.brzy.tomcat.config
+package org.brzy.tomcat
 
 import org.brzy.config.plugin.Plugin
 
