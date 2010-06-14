@@ -8,23 +8,22 @@ import org.brzy.service.ServiceScanner
 import org.slf4j.LoggerFactory
 import java.lang.reflect.Constructor
 
-import collection.mutable.{ArrayBuffer, ListBuffer}
+import collection.mutable.ListBuffer
 import collection.immutable.SortedSet
 import org.brzy.controller.{ControllerScanner, Path, Controller}
-import org.brzy.interceptor.{MethodInvoker}
 import org.brzy.config.plugin.{Plugin, PluginResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}
+import org.brzy.interceptor.{InterceptorResource, MethodInvoker}
 
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-abstract class WebApp(val config: WebAppConfig) {
+class WebApp(val config: WebAppConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])
 
   val application: BrzyApp = config.application
-
   val project: Project = config.project
 
   val viewResource: WebAppViewResource = {
@@ -34,57 +33,70 @@ abstract class WebApp(val config: WebAppConfig) {
     constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
   }
 
-  val persistenceResources: Array[PluginResource] = {
+  val persistenceResources: List[PluginResource] = {
     config.persistence.map(persist => {
       log.debug("persistence: {}", persist)
       val p = persist.asInstanceOf[Plugin]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
       constructor.newInstance(p).asInstanceOf[PluginResource]
-    }).toArray
+    }).toList
   }
 
-  val pluginResources: Array[PluginResource] = {
+  val pluginResources: List[PluginResource] = {
     config.plugins.map(plugin => {
       log.debug("plugin: {}", plugin)
       val p = plugin.asInstanceOf[Plugin]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
       constructor.newInstance(p).asInstanceOf[PluginResource]
-    }).toArray
+    }).toList
   }
 
-  val interceptors: List[MethodInvoker] = makeInterceptors
+  val interceptor: MethodInvoker = makeInterceptor
 
-  protected def makeInterceptors: List[MethodInvoker] = {
-    val buffer = ArrayBuffer[MethodInvoker]()
-    persistenceResources.foreach(pin => pin.interceptors.foreach(p => buffer += p.asInstanceOf[MethodInvoker]))
+  protected[application] def makeInterceptor: MethodInvoker = {
+    val buffer = ListBuffer[MethodInvoker]()
+    persistenceResources.foreach(pin => {
+      if(pin.isInstanceOf[InterceptorResource])
+        buffer += pin.asInstanceOf[InterceptorResource].interceptor.asInstanceOf[MethodInvoker]
+    })
+
+    if(buffer.size > 1)
+      error("Currently, Only one interceptor is supported: " + buffer.mkString(", "))
+    else if(buffer.size < 1)
+      null
+    else
+      buffer(0)
+  }
+
+  val services: List[_ <: AnyRef] = makeServices
+
+  protected[application] def makeServices: List[AnyRef] = {
+    val buffer = ListBuffer[AnyRef]()
+
+    def append(sc:AnyRef) ={
+      val clazz = sc.asInstanceOf[Class[_]]
+      buffer += make(clazz, interceptor)
+    }
+
+    val serviceClasses = ServiceScanner(config.application.org.get).services
+    serviceClasses.foreach(append(_))
+    persistenceResources.foreach(_.services.foreach(append _))
+    pluginResources.foreach(_.services.foreach(append _))
     buffer.toList
   }
 
-  val services: Array[_ <: AnyRef] = makeServices
+  val controllers: List[_ <: AnyRef] = makeControllers
 
-  protected def makeServices: Array[AnyRef] = {
-    val buffer = ArrayBuffer[AnyRef]()
-    val serviceClasses = ServiceScanner(config.application.org.get).services
-//    serviceClasses.foreach(sc => {
-//      val clazz = sc.asInstanceOf[Class[_]]
-//      buffer += make(clazz, interceptor)
-//    })
-    buffer.toArray[AnyRef]
-  }
-
-  val controllers: Array[_ <: AnyRef] = makeControllers
-
-  protected def makeControllers: Array[AnyRef] = {
-    val buffer = ArrayBuffer[AnyRef]()
-    val serviceClasses = ControllerScanner(config.application.org.get).controllers
-//    serviceClasses.foreach(sc => {
-//      val clazz = sc.asInstanceOf[Class[_]]
-//      // TODO inject services
-//      buffer += make(clazz, interceptor)
-//    })
-    buffer.toArray[AnyRef]
+  protected[application] def makeControllers: List[AnyRef] = {
+    val buffer = ListBuffer[AnyRef]()
+    val controllerClasses = ControllerScanner(config.application.org.get).controllers
+    controllerClasses.foreach(sc => {
+      val clazz = sc.asInstanceOf[Class[_]]
+      buffer += make(clazz, interceptor)
+    })
+    buffer.toList
   }
 
   /**
@@ -116,6 +128,9 @@ abstract class WebApp(val config: WebAppConfig) {
     pluginResources.foreach(_.startup)
     viewResource.startup
     log.info("application startup")
+    log.debug("services: {}",  services.mkString(","))
+    log.debug("controllers: {}",  controllers.mkString(","))
+    log.debug("actions: {}",  actions.mkString(","))
   }
 
   def shutdown = {

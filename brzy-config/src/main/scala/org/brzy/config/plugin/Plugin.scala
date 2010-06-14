@@ -100,9 +100,9 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
 
   override def compare(that: Plugin) = {
     new CompareToBuilder()
-            .append(this.name.get, that.name.get)
-            .append(this.org.get, that.org.get)
-            .append(this.version.get, that.version.get)
+            .append(this.name.getOrElse(null), that.name.getOrElse(null))
+            .append(this.org.getOrElse(null), that.org.getOrElse(null))
+            .append(this.version.getOrElse(null), that.version.getOrElse(null))
             .toComparison
   }
 
@@ -114,17 +114,17 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
       val rhs = p1.asInstanceOf[Plugin]
       new EqualsBuilder()
               .appendSuper(super.equals(p1))
-              .append(name.get, rhs.name.get)
-              .append(org.get, rhs.org.get)
-              .append(version.get, rhs.version.get)
+              .append(name.getOrElse(null), rhs.name.getOrElse(null))
+              .append(org.getOrElse(null), rhs.org.getOrElse(null))
+              .append(version.getOrElse(null), rhs.version.getOrElse(null))
               .isEquals
     }
   }
 
   override def hashCode = new HashCodeBuilder(11, 37)
-          .append(name.get)
-          .append(org.get)
-          .append(version.get)
+          .append(name.getOrElse(null))
+          .append(org.getOrElse(null))
+          .append(version.getOrElse(null))
           .toHashCode
 
 

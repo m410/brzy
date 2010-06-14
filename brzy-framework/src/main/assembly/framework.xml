@@ -6,6 +6,10 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
+      <directory>lib/*</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>src/main/bin</directory>
       <outputDirectory>bin</outputDirectory>
     </fileSet>

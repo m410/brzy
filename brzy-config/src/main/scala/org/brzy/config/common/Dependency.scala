@@ -40,6 +40,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
 
   override def compare(that: Dependency) = {
     new CompareToBuilder()
+            .append(this.conf.getOrElse(null), that.conf.getOrElse(null))
             .append(this.org.getOrElse(null), that.org.getOrElse(null))
             .append(this.name.getOrElse(null), that.name.getOrElse(null))
             .append(this.rev.getOrElse(null), that.rev.getOrElse(null))
@@ -57,6 +58,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
       val rhs = p1.asInstanceOf[Dependency]
       new EqualsBuilder()
               .appendSuper(super.equals(p1))
+              .append(conf.getOrElse(null), rhs.conf.getOrElse(null))
               .append(org.getOrElse(null), rhs.org.getOrElse(null))
               .append(name.getOrElse(null), rhs.name.getOrElse(null))
               .append(rev.getOrElse(null), rhs.rev.getOrElse(null))
@@ -66,6 +68,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
 
   override def hashCode = {
     new HashCodeBuilder(19, 37)
+            .append(conf.getOrElse(null))
             .append(org.getOrElse(null))
             .append(name.getOrElse(null))
             .append(rev.getOrElse(null))

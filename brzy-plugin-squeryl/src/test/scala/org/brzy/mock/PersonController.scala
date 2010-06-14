@@ -3,8 +3,8 @@ package org.brzy.mock
 import org.squeryl.PrimitiveTypeMode._
 import org.brzy.action.args.Parameters
 import Person._
-import java.lang.String
 import org.brzy.controller.{Controller,Path}
+
 /**
  * @author Michael Fortin
  * @version $Id: $

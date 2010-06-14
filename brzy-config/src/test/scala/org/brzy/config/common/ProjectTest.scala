@@ -16,24 +16,21 @@ class ProjectTest extends JUnitSuite {
   def testMerge = {
     val map1 = Map[String,String](
     "scala_version" -> "one",
-      "ant_version" -> "two",
-      "ivy_version" -> "three",
+      "sbt_version" -> "three",
       "package_type" -> "four",
       "plugin_resources" -> "five",
       "plugin_repository" -> "six"
       )
     val project = new Project(map1)
     assertEquals("one",project.scalaVersion.get)
-    assertEquals("two",project.antVersion.get)
-    assertEquals("three",project.ivyVersion.get)
+    assertEquals("three",project.sbtVersion.get)
     assertEquals("four",project.packageType.get)
     assertEquals("five",project.pluginResources.get)
     assertEquals("six",project.pluginRepository.get)
 
     val map2 = Map[String,String](
     "scala_version" -> "seven",
-      "ant_version" -> "eight",
-      "ivy_version" -> "nine",
+      "sbt_version" -> "nine",
       "package_type" -> "ten",
       "plugin_resources" -> "eleven",
       "plugin_repository" -> "twelve")
@@ -41,8 +38,7 @@ class ProjectTest extends JUnitSuite {
     val merge = project << project1
     assertNotNull(merge)
     assertEquals("seven",merge.scalaVersion.get)
-    assertEquals("eight",merge.antVersion.get)
-    assertEquals("nine",merge.ivyVersion.get)
+    assertEquals("nine",merge.sbtVersion.get)
     assertEquals("ten",merge.packageType.get)
     assertEquals("eleven",merge.pluginResources.get)
     assertEquals("twelve",merge.pluginRepository.get)

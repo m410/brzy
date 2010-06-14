@@ -8,6 +8,6 @@ import org.brzy.config.webapp.WebAppConfig
  * @version $Id: $
  */
 class MockWebApp(config:WebAppConfig) extends WebApp(config) {
-  override val services = Array()
-  override val controllers = Array()
+  override def makeServices = List()
+  override def makeControllers = List()
 }

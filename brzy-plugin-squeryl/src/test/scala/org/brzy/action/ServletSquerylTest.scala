@@ -9,11 +9,11 @@ import org.junit.Test
 import org.junit.Ignore
 import org.brzy.db.DbInit
 import org.brzy.interceptor.ProxyFactory._
-import org.brzy.persistence.squeryl.SquerylInterceptor
 import org.brzy.application.WebApp
 import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
+import org.brzy.squeryl.SquerylInterceptor
 
 /**
  * @author Michael Fortin
@@ -29,8 +29,8 @@ class ServletSquerylTest extends JUnitSuite {
   val config:BootConfig = new BootConfig(Map[String,AnyRef]())
 
   val app = new WebApp(new WebAppConfig(new BootConfig(Map[String,AnyRef]()),null,Nil,Nil)) {
-    override val services = Array[AnyRef]()
-    override val controllers = Array[AnyRef](controller)
+    override val services = List[AnyRef]()
+    override val controllers = List[AnyRef](controller)
     override lazy val actions = SortedSet(
       new Action("persons/", controllerClass.getMethods()(1), controller, ".jsp"),
       new Action("persons/create", controllerClass.getMethods()(3), controller, ".jsp"),

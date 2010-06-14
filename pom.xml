@@ -9,7 +9,7 @@
   <packaging>pom</packaging>
   <name>Brzy</name>
   <properties>
-    <scala.version>2.8.0.RC2</scala.version>
+    <scala.version>2.8.0.RC3</scala.version>
   </properties>
   <modules>
     <module>brzy-config</module>

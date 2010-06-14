@@ -28,8 +28,8 @@ class ServletJpaTest extends JUnitSuite {
   val controller = make(controllerClass,interceptor)
 
   val app = new WebApp(new WebAppConfig(new BootConfig(Map[String,AnyRef]()),null,Nil,Nil)) {
-    override val services = Array[AnyRef]()
-    override val controllers = Array[AnyRef]()
+    override def makeServices = List()
+    override def makeControllers = List()
     override lazy val actions = SortedSet(
       new Action("/users/", controllerClass.getMethods()(1), controller, ".jsp"),
       new Action("/users/create", controllerClass.getMethods()(5), controller, ".jsp"),

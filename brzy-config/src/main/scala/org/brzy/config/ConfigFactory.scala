@@ -97,7 +97,6 @@ object ConfigFactory {
 
     if(yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-      log.debug("configClass: {}",configClass)
       val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
       val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
       val newPluginInstance = constructor.newInstance(yaml)
@@ -151,7 +150,6 @@ object ConfigFactory {
 
   def fileForPlugin(plugin: Plugin): File = {
     val url = getClass.getClassLoader.getResource(plugin.name.get + "/brzy-plugin.b.yml")
-    log.debug("url: {}" , url)
     new File(url.toURI)
   }
 
@@ -189,7 +187,6 @@ object ConfigFactory {
       val destinationFile = new File(destinationFolder, filename)
 
       sourceFile.copyTo(destinationFolder)
-      log.debug("unzip: {}",destinationFile)
       destinationFile.unzip()
       destinationFile.delete()
     }
@@ -197,7 +194,6 @@ object ConfigFactory {
 
   private def downloadAndUnzipTo(plgn: Plugin, remoteUrl: String, appPluginCache: File) = {
     val destinationFile = new URL(remoteUrl).downloadToDir(new File(appPluginCache, plgn.name.get))
-    log.debug("unzip: {}",destinationFile)
     destinationFile.unzip()
     destinationFile.delete()
   }

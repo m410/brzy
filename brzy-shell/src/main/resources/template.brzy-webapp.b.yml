@@ -13,7 +13,7 @@ application:
   application_class: [group].Application
 persistence:
   - name: brzy-squeryl
-    org: org.brzy
+    org: orb.grzy
     version: "0.2"
     config_class: org.brzy.plugin.SquerylPluginConfig
     remote_location: ~/.m2/repository/org/brzy/brzy-squeryl/0.2/brzy-squeryl-0.2-plugin.jar
@@ -26,7 +26,7 @@ dependencies:
   - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
 plugins:
   - name: brzy-tomcat
-    org: org.brzy
+    org: orb.grzy
     version: "0.2"
     config_class: org.brzy.plugin.TomcatPluginConfig
     remote_location: ~/.m2/repository/org/brzy/brzy-tomcat/0.2/brzy-tomcat-0.2-plugin.jar

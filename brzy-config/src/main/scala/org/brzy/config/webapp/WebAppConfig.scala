@@ -27,7 +27,7 @@ class WebAppConfig(val init: BootConfig,
     if (init.dependencies.isDefined)
       dependencyBuffer ++= init.dependencies.get
 
-    if (views.dependencies.isDefined)
+    if (views != null && views.dependencies.isDefined)
       dependencyBuffer ++= views.dependencies.get
 
 
@@ -52,7 +52,7 @@ class WebAppConfig(val init: BootConfig,
     if (init.repositories.isDefined)
       repositoryBuffer ++= init.repositories.get
 
-    if (views.repositories.isDefined)
+    if (views != null && views.repositories.isDefined)
       repositoryBuffer ++= views.repositories.get
 
     persistence.map(plugin => {
@@ -73,7 +73,7 @@ class WebAppConfig(val init: BootConfig,
   override val webXml: Option[List[Map[String, AnyRef]]] = {
     val buf = ListBuffer[Map[String, AnyRef]]()
 
-    if(views.isInstanceOf[WebXml] && views.asInstanceOf[WebXml].webXml.isDefined)
+    if(views != null && views.isInstanceOf[WebXml] && views.asInstanceOf[WebXml].webXml.isDefined)
       buf ++= views.asInstanceOf[WebXml].webXml.get
 
     if(init.webXml.isDefined)

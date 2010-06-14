@@ -31,17 +31,9 @@ if [ "$1" = "bootstrap" ]; then
    done
    SCRIPT="$BRZY_HOME/scripts/boot2.scala"
    scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
+   cp $BRZY_HOME/templates/project/brzy-app/project/build.properties project/
+   java -Xmx512m -jar $BRZY_HOME/sbt-launch.jar update
    exit 0
-fi
-
-# check for generated build files
-if [ ! -d "project" ]; then
-    #TODO check last modified dates
-   SCRIPT="$BRZY_HOME/scripts/boot1.scala"
-   exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
-   #TODO make new classpath
-   SCRIPT="$BRZY_HOME/scripts/boot2.scala"
-   exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
 fi
 
 # run ant scripts
@@ -51,8 +43,8 @@ if [ "$1" = "build" ]; then
 fi
 
 # run ant scripts
-if [ "$1" = "clean" ] || [ "$1" = "test" ] || [ "$1" = "compile" ] || [ "$1" = "war" ]; then
-   exec ant -f project/build.xml -q $1
+if [ "$1" = "clean" ] || [ "$1" = "test" ] || [ "$1" = "compile" ] || [ "$1" = "war" ] || [ "$1" = "update" ] || [ "$1" = "package" ] || [ "$1" = "jetty-run" ]; then
+   java -Xmx512m -jar $BRZY_HOME/sbt-launch.jar $@
    exit 0
 fi
 
@@ -77,9 +69,8 @@ if [ ! -e "$SCRIPT" ]; then
    done
 fi
 
-
 if [ ! -e "$SCRIPT" ]; then
-   for plugin in "`pwd`/project/plugins"/*
+   for plugin in "`pwd`/project/brzy-plugins"/*
    do
        for file in "$plugin/scripts"/*.scala
        do

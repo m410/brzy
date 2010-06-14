@@ -169,7 +169,7 @@ project.initialize=false
 		<property name="metainf.loc" location="${webapp.temp.dir}/WEB-INF/classes/META-INF/"/>
 		<mkdir dir="${metainf.loc}" />
 		<property name="persistencexml.loc" location="${metainf.loc}/persistence.xml" />
-		<java classname="org.brzy.build.Main">
+		<java classname="org.brzy.shell.Main">
       <arg value="${brzy.env}"/>
       <arg value="persistence"/>
       <arg value="${brzy-webapp.b.yml
@@ -188,7 +188,7 @@ project.initialize=false
   <target name="make.webxml" depends="assemble.lib"><!-- make.persistencexml -->
     <echo>Make web.xml</echo>
 		<property name="webxml.loc" location="${webapp.temp.dir}/WEB-INF/web.xml" />
-		<java classname="org.brzy.build.Main">
+		<java classname="org.brzy.shell.Main">
       <arg value="${brzy.env}"/>
       <arg value="web"/>
       <arg value="${brzy-webapp.b.yml
@@ -207,7 +207,7 @@ project.initialize=false
   <target name="make.logbackxml" depends="make.webxml">
     <echo>Make logback.xml</echo>
     <property name="logback.loc" location="${webapp.temp.dir}/WEB-INF/classes/logback.xml" />
-	<java classname="org.brzy.build.Main">
+	<java classname="org.brzy.shell.Main">
       <arg value="${brzy.env}"/>
       <arg value="logback"/>
       <arg value="${brzy-webapp.b.yml

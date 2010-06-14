@@ -1,4 +1,4 @@
-package org.brzy.persistence.squeryl
+package org.brzy.squeryl
 
 import org.brzy.persistence.ThreadContext
 import org.squeryl.Session

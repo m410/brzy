@@ -35,11 +35,16 @@
     </plugins>
   </build>
   <repositories>
-    <repository>
-      <id>scala-tools.org</id>
-      <name>Scala-Tools Maven2 Repository</name>
-      <url>http://nexus.scala-tools.org/content/repositories/releases</url>
-    </repository>
+      <repository>
+        <id>scala-tools.org</id>
+        <name>Scala-Tools Maven2 Repository</name>
+        <url>http://nexus.scala-tools.org/content/repositories/releases</url>
+      </repository>
+      <repository>
+        <id>scala-tools-snapshot</id>
+        <name>scala-tools-snapshot</name>
+        <url>http://www.scala-tools.org/repo-snapshots</url>
+      </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -47,11 +52,17 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>    
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-config</artifactId>
       <version>0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.brzy</groupId>
+      <artifactId>brzy-mvc</artifactId>
+      <version>0.2</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -65,11 +76,11 @@
       <version>2.5.1</version>
       <scope>test</scope>
     </dependency>
-          <dependency>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest</artifactId>
-        <version>1.2-for-scala-2.8.0.RC2-SNAPSHOT</version>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest</artifactId>
+      <version>1.2-for-scala-2.8.0.RC3-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>    
   </dependencies>
 </project>

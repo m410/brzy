@@ -1,4 +1,4 @@
-package org.brzy.config.plugin
+package org.brzy.config.common
 
 /**
  * Document Me..
@@ -7,7 +7,4 @@ package org.brzy.config.plugin
  * @version $Id: $
  */
 
-trait Interceptor {
-
-  def doWith(a:AnyRef)
-}
+trait PrettyPrint

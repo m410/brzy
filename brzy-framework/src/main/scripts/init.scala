@@ -1,5 +1,5 @@
 import java.io._
-import org.brzy.build._
+import org.brzy.shell._
 import org.brzy.config.{BootConfig,Builder}
 import scala.io.Source
 

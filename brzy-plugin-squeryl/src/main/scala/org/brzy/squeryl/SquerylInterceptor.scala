@@ -1,4 +1,4 @@
-package org.brzy.persistence.squeryl
+package org.brzy.squeryl
 
 import org.brzy.interceptor.{Invocation, Interceptor, MethodInvoker}
 import org.brzy.persistence.ThreadScope._

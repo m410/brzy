@@ -1,8 +1,5 @@
 #
 # application configuration
-#
-# http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
-# http://jyaml.sourceforge.net/
 application:
   version: 1.0.0
   name: Test app
@@ -14,52 +11,22 @@ application:
   properties:
     test: value
   webapp_context: mainapp
-
-#
-# dependencies
-# scope:organization:name:version
-# scope = [provided,runtime,test]
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.1"}
   - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.2"}
-
-#
-# Dependency Management
 repositories:
   - id: fusesource
     url: http://someurl.com/test
-
-plugins:
-  - name: scalate
-    local_location: /Users/m410/Projects/brzy/brzy-plugin-scalate
-  - name: hibernate
-    remote_location: ~/.m2/repository/org/brzy/brzy-hibernate/0.1/brzy-hibernate-0.1-plugin.zip
-
-persistence:
-  - name: "hibernate"
-    implementation: "scala-hibernate"
-    version: latest
-    scan_package: *group
-    properties:
-      "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"
-      "hibernate.connection.url": "jdbc:hsqldb:brzy-database"
-      "hibernate.connection.driver_class": "org.hsqldb.jdbcDriver"
-      "hibernate.connection.username": "sa"
-      "hibernate.connection.password": ""
-      "hibernate.hbm2ddl.auto": "update"
-  - name: "squeryl"
-    implementation: "squeryl"
-    version: latest
-    scan_package: *group
-    properties:
-      driver_class: org.postgresql.Driver
-      user_name: test
-      password:
-      url: jdbc:postgresql://localhost/dev
-
-#
-# Logging
-#[logback,log4j,jul]
+#persistence:
+#  - name: "squeryl"
+#    implementation: "squeryl"
+#    version: latest
+#    scan_package: *group
+#    properties:
+#      driver_class: org.postgresql.Driver
+#      user_name: test
+#      password:
+#      url: jdbc:postgresql://localhost/dev
 logging:
   provider: logback
   appenders:
@@ -79,18 +46,15 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: FILE
+    ref: [FILE]
 
 web_xml:
 
-#
-# override defaults for any environment
-#
 environment_overrides:
   - environment: developement
     logging:
       root:
-        ref:STDOUT
+        ref: [STDOUT]
     application:
       webapp_context: devapp
   - environment: test
