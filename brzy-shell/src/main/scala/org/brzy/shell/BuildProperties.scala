@@ -14,7 +14,7 @@ class BuildProperties(config:BootConfig) {
   private val applicationOrg="[package]"
   private val applicationType="[apptype]"
   private val scalaVersion="[scalaversion]"
-  private val ivyVersion="[sbtversion]"
+  private val sbtVersion="[sbtversion]"
 
   // read template
   val content = Source.fromURL(getClass.getClassLoader.getResource("template.build.properties"))

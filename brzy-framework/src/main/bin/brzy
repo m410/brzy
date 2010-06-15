@@ -21,7 +21,7 @@ fi
 
 # bootstrap
 if [ "$1" = "bootstrap" ]; then
-    #TODO check last modified dates
+   #TODO check last modified dates
    SCRIPT="$BRZY_HOME/scripts/boot1.scala"
    scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
    FILES="project/brzy-plugins/*/*[0-9].jar"
@@ -31,7 +31,6 @@ if [ "$1" = "bootstrap" ]; then
    done
    SCRIPT="$BRZY_HOME/scripts/boot2.scala"
    scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
-   cp $BRZY_HOME/templates/project/brzy-app/project/build.properties project/
    java -Xmx512m -jar $BRZY_HOME/sbt-launch.jar update
    exit 0
 fi

@@ -1,4 +1,5 @@
 import java.io._
+import org.brzy.shell.BuildProperties
 import org.brzy.webapp.ConfigFactory._
 
 object Boot1 extends Application {
@@ -8,8 +9,6 @@ object Boot1 extends Application {
   val projectDir = new File(args(0), "project")
   if (!projectDir.exists)
     projectDir.mkdirs
-
-  // TODO create build.properties
 
   // create plugin folder
   println(" - make plugin dir")
@@ -22,6 +21,13 @@ object Boot1 extends Application {
   val config = makeBootConfig(new File(args(0),"brzy-webapp.b.yml"), "development")
   val configFile = new File(projectDir, "brzy-webapp.development.b.yml")
   writeConfigToFile(config,configFile)
+
+  // make sbt build.properties file
+  val buildProperties = new BuildProperties(config)
+	val bpFile = new File(projectDir,"build.properties")
+	val bpOut = new BufferedWriter(new FileWriter(bpFile))
+	bpOut.write(buildProperties.content)
+	bpOut.close
 
   // download plugins
   println(" - download plugins")

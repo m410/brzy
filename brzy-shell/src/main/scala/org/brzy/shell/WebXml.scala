@@ -66,7 +66,6 @@ class WebXml(config:WebAppConfig) {
         else
           Elem(null,f._1, null, TopScope, new Text(""))
       )
-			println("nodes=" + nodes)
       nodes.toArray
     }
   }

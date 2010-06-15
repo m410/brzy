@@ -1,12 +1,15 @@
 <assembly>
-  <id>resources</id>
+  <id></id>
   <formats>
-    <format>jar</format>
+    <format>zip</format>
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>lib/*</directory>
+			<directory>${basedir}/lib</directory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
       <outputDirectory>/</outputDirectory>
     </fileSet>
     <fileSet>
@@ -22,11 +25,13 @@
       <outputDirectory>templates</outputDirectory>
     </fileSet>
     <fileSet>
+			<directory>${project.parent.basedir}</directory>
       <includes>
-        <include>${project.parent.basedir}/README*</include>
-        <include>${project.parent.basedir}/LICENSE*</include>
-        <include>${project.parent.basedir}/NOTICE*</include>
+        <include>README*</include>
+        <include>LICENSE*</include>
+        <include>NOTICE*</include>
       </includes>
+ 			<outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
   <dependencySets>

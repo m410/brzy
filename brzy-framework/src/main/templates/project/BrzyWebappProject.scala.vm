@@ -13,19 +13,59 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
   override def webappPath = "webapp"
   override def managedDependencyPath = "project" / "lib"
 
-  // plugin classpath configuration
-  val brzyPlugin = config("plugin") hide
-  def brzyClasspath = managedClasspath(brzyPlugin)
+  // brzy command execution classpath configuration
+  val brzyPlugin = config("brzy") hide
+  val brzy_1 = "org.slf4j" % "slf4j-api" % "1.5.11" % "brzy"
+  val brzy_2 = "commons-lang" % "commons-lang" % "2.5" % "brzy"
+  val brzy_3 = "org.brzy" % "brzy-config" % "0.2" % "brzy"
+  val brzy_4 = "org.brzy" % "brzy-shell" % "0.2" % "brzy"
+  def brzyClasspath = managedClasspath(brzyPlugin) +++ ("project" / "brzy-plugins").descendentsExcept("*.jar", "lib")
 
   // repositories
 #foreach($repo in $repositories)
+#if($repo.id().get())
   val repository_$velocityCount = "${repo.id().get()}" at "${repo.url().get()}"
+#end
 #end
 
   // dependencies
 #foreach($dep in $dependencies)
+#if($dep.org().get())
   val dependency_$velocityCount = "${dep.org().get()}" % "${dep.name().get()}" % "${dep.rev().get()}" % "${dep.conf().get()}"
+#end 
 #end
 
-  // lazy val demo = runTask(Some("sample.Main"), testClasspath).dependsOn(testCompile) describedAs "Runs the demo."
+  lazy val prePackage = task {
+    val logger = new ConsoleLogger
+    createDirectory(webappPath/"WEB-INF",logger)
+    createDirectory(webappPath/"WEB-INF"/"classes",logger)
+    createDirectory(webappPath/"WEB-INF"/"lib",logger)
+    copyFile(path("brzy-webapp.b.yml"), webappPath/"WEB-INF"/"classes"/"brzy-webapp.b.yml", logger)
+    val pluginConfigPaths = ("project"/"brzy-plugins" \#\#)  ** "brzy-plugin.b.yml"
+   	copy(pluginConfigPaths.get , webappPath/"WEB-INF"/"classes"/"brzy-plugins",logger)
+    None
+  }
+
+  override def packageAction = super.packageAction dependsOn(prePackage,logbackXml,webXml)
+
+  def logbackXmlAction(args: List[String]) = runTask(Some("org.brzy.shell.LogBackXmlMain"), brzyClasspath, args)
+
+  lazy val logbackXml =  {
+    val outDir = {webappPath/"WEB-INF"/"classes"}.toString
+    val config = path("brzy-webapp.b.yml").toString
+    logbackXmlAction(List(config,"development",outDir))
+  }.dependsOn(prePackage) describedAs "Generates the logback.xml file"
+
+  def webXmlAction(args: List[String]) = runTask(Some("org.brzy.shell.WebXmlMain"), brzyClasspath, args)
+
+  lazy val webXml = {
+    val outDir = {webappPath/"WEB-INF"}.toString
+    val config = path("brzy-webapp.b.yml").toString
+    webXmlAction(List(config,"development",outDir))
+  }.dependsOn(prePackage) describedAs "Generates the web.xml file"
+
+  lazy val delWebXml = {
+    FileUtilities.clean(webappPath / "WEB-INF", new ConsoleLogger)
+  }
+
 }

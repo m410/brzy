@@ -12,18 +12,20 @@ import org.brzy.config.plugin.Plugin
  * @version $Id : $
  */
 
-class WebXmlMain {
-  def main(args: Array[String]) {
+object WebXmlMain {
+  def main(args: Array[String]) = {
     println("[0]config = " + args(0))
     println("[1]env = " + args(1))
     println("[2]destination = " + args(2))
-
+    val projectDir = new File("project")
+    val pluginsDir = new File(projectDir,"brzy-plugins")
+    
     val bootConfig = ConfigFactory.makeBootConfig(new File(args(0)), args(1))
 
     val view: Plugin = bootConfig.views match {
       case Some(v) =>
         if (v != null)
-          ConfigFactory.makeRuntimePlugin(bootConfig.views.get)
+          ConfigFactory.makeBuildTimePlugin(bootConfig.views.get,pluginsDir)
         else
           null
       case _ => null
@@ -31,17 +33,19 @@ class WebXmlMain {
 
     val persistence: List[Plugin] = {
       if (bootConfig.persistence.isDefined)
-        bootConfig.persistence.get.map(ConfigFactory.makeRuntimePlugin(_))
+        bootConfig.persistence.get.map(ConfigFactory.makeBuildTimePlugin(_,pluginsDir))
       else
         Nil
     }
     val plugins: List[Plugin] = {
       if (bootConfig.plugins.isDefined)
-        bootConfig.plugins.get.map(ConfigFactory.makeRuntimePlugin(_))
+        bootConfig.plugins.get.map(ConfigFactory.makeBuildTimePlugin(_,pluginsDir))
       else
         Nil
     }
     val config = ConfigFactory.makeWebAppConfig(bootConfig, view, persistence, plugins)
-    XML.save(args(3), new WebXml(config).body)
+    val parent = new File(args(2))
+    val file = new File(parent,"web.xml")
+    XML.save(file.getAbsolutePath, new WebXml(config).body)
   }
 }
