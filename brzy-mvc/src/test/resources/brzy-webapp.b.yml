@@ -34,9 +34,9 @@ persistence:
     org: org.brzy
     version: "0.2"
     scan_package: *group
-    driver_class: org.postgresql.Driver
+    driver: org.postgresql.Driver
     user_name: test
-    password:
+    password: ""
     url: jdbc:postgresql://localhost/dev
 
 #

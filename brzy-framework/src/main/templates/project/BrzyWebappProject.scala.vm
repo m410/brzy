@@ -13,6 +13,8 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
   override def webappPath = "webapp"
   override def managedDependencyPath = "project" / "lib"
 
+  val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "test"
+
   // brzy command execution classpath configuration
   val brzyPlugin = config("brzy") hide
   val brzy_1 = "org.slf4j" % "slf4j-api" % "1.5.11" % "brzy"
@@ -34,6 +36,7 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val dependency_$velocityCount = "${dep.org().get()}" % "${dep.name().get()}" % "${dep.rev().get()}" % "${dep.conf().get()}"
 #end 
 #end
+#set($H='#')
 
   lazy val prePackage = task {
     val logger = new ConsoleLogger
@@ -41,7 +44,7 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
     createDirectory(webappPath/"WEB-INF"/"classes",logger)
     createDirectory(webappPath/"WEB-INF"/"lib",logger)
     copyFile(path("brzy-webapp.b.yml"), webappPath/"WEB-INF"/"classes"/"brzy-webapp.b.yml", logger)
-    val pluginConfigPaths = ("project"/"brzy-plugins" \#\#)  ** "brzy-plugin.b.yml"
+    val pluginConfigPaths = ("project"/"brzy-plugins" $H$H) ** "brzy-plugin.b.yml"
    	copy(pluginConfigPaths.get , webappPath/"WEB-INF"/"classes"/"brzy-plugins",logger)
     None
   }

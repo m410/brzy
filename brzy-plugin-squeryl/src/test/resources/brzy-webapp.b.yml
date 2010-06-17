@@ -1,5 +1,8 @@
 #
 # application configuration
+#
+# http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
+# http://jyaml.sourceforge.net/
 application:
   version: 1.0.0
   name: Test app
@@ -11,12 +14,20 @@ application:
   properties:
     test: value
   webapp_context: mainapp
-dependencies:
-  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.1"}
-  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.2"}
-repositories:
-  - id: fusesource
-    url: http://someurl.com/test
+
+persistence:
+  - name: brzy-squeryl
+    org: org.brzy
+    version: "0.2"
+    scan_package: *group
+    driver: org.postgresql.Driver
+    user_name: test
+    password: ""
+    url: jdbc:postgresql://localhost/dev
+
+#
+# Logging
+#[logback,log4j,jul]
 logging:
   provider: logback
   appenders:
@@ -36,23 +47,4 @@ logging:
       level: debug
   root:
     level: INFO
-    ref: [FILE]
-
-web_xml:
-
-environment_overrides:
-  - environment: developement
-    logging:
-      root:
-        ref: [STDOUT]
-    application:
-      webapp_context: devapp
-  - environment: test
-    application:
-      webapp_context: testapp
-  - environment: production
-    application:
-      webapp_context: prodapp
-
-
-
+    ref: [STDOUT]

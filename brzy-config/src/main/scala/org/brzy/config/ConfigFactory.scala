@@ -21,9 +21,8 @@ import java.lang.String
  * @version $Id : $
  */
 object ConfigFactory {
-
   private val log = LoggerFactory.getLogger(getClass)
-  
+
   /**
    *
    */
@@ -48,18 +47,24 @@ object ConfigFactory {
       new BootConfig(defaultConfigMap)
     }
 
-    val environmentConfig: BootConfig = {
-      val list = webappConfigMap.get("environment_overrides").get.asInstanceOf[List[Map[String, AnyRef]]]
-      val option = list.find(innermap => {
-        val tuple = innermap.find(hm => hm._1 == "environment").get
-        tuple._2.asInstanceOf[String].compareTo(environment) == 0
-      })
 
-      if (option.isDefined)
-        new BootConfig(option.get.asInstanceOf[Map[String, AnyRef]])
-      else
+
+    val environmentConfig: BootConfig =
+      if (webappConfigMap.get("environment_overrides").isDefined) {
+        val list = webappConfigMap.get("environment_overrides").get.asInstanceOf[List[Map[String, AnyRef]]]
+        val option = list.find(innermap => {
+          val tuple = innermap.find(hm => hm._1 == "environment").get
+          tuple._2.asInstanceOf[String].compareTo(environment) == 0
+        })
+
+        if (option.isDefined)
+          new BootConfig(option.get.asInstanceOf[Map[String, AnyRef]])
+        else
+          new BootConfig(Map[String, AnyRef]())
+      }
+      else {
         new BootConfig(Map[String, AnyRef]())
-    }
+      }
 
     val configmerge: BootConfig = applicationConfig << environmentConfig
     val configmerge2: BootConfig = defaultConfig << configmerge
@@ -78,29 +83,29 @@ object ConfigFactory {
     val cpUrl = getClass.getClassLoader.getResource(pluginResource)
     val yaml = convertMap(Yaml.load(cpUrl.openStream).asInstanceOf[JMap[String, AnyRef]])
 
-    if(yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
+    if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
       val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
       val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-      val newPluginInstance = constructor.newInstance(yaml)
-      newPluginInstance.asInstanceOf[Plugin]
+      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Plugin]
+      newPluginInstance << reference
     }
     else {
-      null 
+      null
     }
   }
 
-  def makeBuildTimePlugin(reference: Plugin, pluginResourceDirectory: File):Plugin = {
+  def makeBuildTimePlugin(reference: Plugin, pluginResourceDirectory: File): Plugin = {
     val pFile = new File(pluginResourceDirectory, reference.name.get)
     val pluginFile = new File(pFile, "/brzy-plugin.b.yml")
     val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String, AnyRef]])
 
-    if(yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
+    if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
       val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
       val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-      val newPluginInstance = constructor.newInstance(yaml)
-      newPluginInstance.asInstanceOf[Plugin]
+      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Plugin]
+      newPluginInstance << reference
     }
     else {
       null
@@ -128,7 +133,7 @@ object ConfigFactory {
       val file = new File(plugin.localLocation.get + "/brzy-plugin.b.yml")
 
       if (!file.exists)
-        error("No plugin file found: '"+plugin+"', location: " + plugin.localLocation.get)
+        error("No plugin file found: '" + plugin + "', location: " + plugin.localLocation.get)
     }
     // copy from local system or from remote system for development mode
     else if (plugin.remoteLocation.isDefined && plugin.remoteLocation.get != null) {
@@ -217,7 +222,7 @@ object ConfigFactory {
           }
         case m: Map[_, _] =>
           val map = new JHashMap[String, AnyRef]()
-          to(m.asInstanceOf[Map[String,AnyRef]], map)
+          to(m.asInstanceOf[Map[String, AnyRef]], map)
           jm.put(nvp._1, map)
         case l: List[_] =>
           val list = new JArrayList[AnyRef]()
@@ -246,15 +251,15 @@ object ConfigFactory {
             to(entry.asInstanceOf[Map[String, AnyRef]], map)
             jlist.add(map)
           }
-        case m: Map[_,_] =>
+        case m: Map[_, _] =>
           val map = new JHashMap[String, AnyRef]()
-          to(m.asInstanceOf[Map[String,AnyRef]], map)
+          to(m.asInstanceOf[Map[String, AnyRef]], map)
           jlist.add(map)
         case l: List[_] =>
           val list = new JArrayList[AnyRef]()
           to(l.asInstanceOf[List[AnyRef]], list)
           jlist.add(list)
-        case (n:String, v:String) =>
+        case (n: String, v: String) =>
           val map = new JHashMap[String, AnyRef]()
           if (v.isInstanceOf[List[_]])
             map.put(n, new JArrayList())

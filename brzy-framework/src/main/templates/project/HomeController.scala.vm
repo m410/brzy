@@ -5,7 +5,7 @@ import org.brzy.action.returns.View
 
 /**
  */
-@Controller("/")
+@Controller("")
 class HomeController {
 
 	@Path("")

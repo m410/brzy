@@ -1,10 +1,7 @@
 package ${packageName}
 
-import org.brzy.config.WebappConfig
+import org.brzy.config.webapp.WebAppConfig
 import org.brzy.application.WebApp
-import org.brzy.interceptor.ProxyFactory._
-import org.brzy.persistence.squeryl.SquerylInterceptor
-import org.brzy.plugin.SquerylPluginConfig
 
 /**
  * Application Class

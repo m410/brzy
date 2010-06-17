@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareT
  * @author Michael Fortin
  * @version $Id : $
  */
-class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Ordered[Plugin] {
+class Plugin(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Ordered[Plugin] {
   val configurationName = "Plugin Reference"
   val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
   val version: Option[String] = map.get("version").asInstanceOf[Option[String]].orElse(None)
@@ -37,29 +37,7 @@ class Plugin(map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plug
     case _ => None
   }
 
-  override def asMap: Map[String, AnyRef] = {
-    Map[String, AnyRef](
-      "name" -> name.getOrElse(null),
-      "version" -> version.getOrElse(null),
-      "org" -> org.getOrElse(null),
-      "config_class" -> configClass.getOrElse(null),
-      "resource_class" -> resourceClass.getOrElse(null),
-      "remote_location" -> remoteLocation.getOrElse(null),
-      "local_location" -> localLocation.getOrElse(null),
-      "dependencies" -> {
-        dependencies match {
-          case Some(a) => a.asInstanceOf[List[Dependency]].map(_.asMap).toList
-          case _ => List[Map[String, AnyRef]]()
-        }
-      },
-      "repositories" -> {
-        repositories match {
-          case Some(a) => a.asInstanceOf[List[Repository]].map(_.asMap).toList
-          case _ => List[Map[String, AnyRef]]()
-        }
-      })
-  }
-
+  override def asMap: Map[String, AnyRef] = map
 
   override def <<(that: Plugin) = {
     if (that == null) {

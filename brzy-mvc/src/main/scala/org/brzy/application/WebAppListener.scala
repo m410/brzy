@@ -16,6 +16,7 @@ class WebAppListener extends ServletContextListener {
     log.info("Brzy Environment  : {}", env)
     val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     log.info("Brzy Configuration: {}", url)
+    assert(url != null, "Could not find: brzy-webapp.b.yml")
     val app = WebAppFactory.create(url, env)
     servletContextEvent.getServletContext.setAttribute("application", app)
     app.startup

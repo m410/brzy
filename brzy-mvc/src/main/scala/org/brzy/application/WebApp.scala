@@ -44,13 +44,17 @@ class WebApp(val config: WebAppConfig) {
   }
 
   val pluginResources: List[PluginResource] = {
-    config.plugins.map(plugin => {
+    val list = ListBuffer[PluginResource]()
+    config.plugins.foreach(plugin => {
       log.debug("plugin: {}", plugin)
       val p = plugin.asInstanceOf[Plugin]
-      val resourceClass = Class.forName(p.resourceClass.get)
-      val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-      constructor.newInstance(p).asInstanceOf[PluginResource]
-    }).toList
+      if (p.resourceClass.isDefined && p.resourceClass.get != null) {
+        val resourceClass = Class.forName(p.resourceClass.get)
+        val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
+        list += constructor.newInstance(p).asInstanceOf[PluginResource]
+      }
+    })
+    list.toList
   }
 
   val interceptor: MethodInvoker = makeInterceptor
@@ -70,7 +74,7 @@ class WebApp(val config: WebAppConfig) {
       buffer(0)
   }
 
-  val services: List[_ <: AnyRef] = makeServices
+  val services: List[_<:AnyRef] = makeServices
 
   protected[application] def makeServices: List[AnyRef] = {
     val buffer = ListBuffer[AnyRef]()

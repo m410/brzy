@@ -42,9 +42,9 @@ persistence:
     version: "0.2"
     config_class: org.brzy.plugin.SquerylPluginConfig
     scan_package: *group
-    driver_class: org.postgresql.Driver
+    driver: org.postgresql.Driver
     user_name: test
-    password:
+    password: ""
     url: jdbc:postgresql://localhost/dev
 
 #
