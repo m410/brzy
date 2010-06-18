@@ -6,7 +6,7 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.8.0.RC3/scala-compiler-2.8.0.RC3.jar" />
+            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.8.0.RC5/scala-compiler-2.8.0.RC5.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">

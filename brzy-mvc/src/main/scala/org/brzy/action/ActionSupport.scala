@@ -91,14 +91,23 @@ object ActionSupport {
       case s:Redirect =>
         log.debug("redirect: {}",s)
         res.sendRedirect(req.getContextPath + s.path)
+      case s:Error =>
+        log.debug("Error: {}",s)
+        res.sendError(s.code,s.msg)
       case x:Xml =>
         log.debug("xml: {}",x)
+        res.setContentType(x.contentType)
+        res.getWriter.write(x.parse)
       case t:Text =>
         log.debug("text: {}",t)
+        res.setContentType(t.contentType)
+        res.getWriter.write(t.parse)
       case b:Bytes =>
         log.debug("bytes: {}",b)
       case j:Json =>
         log.debug("json: {}",j)
+        res.setContentType(j.contentType)
+        res.getWriter.write(j.parse)
       case _ => error("Unknown Direction Type")
     }
 

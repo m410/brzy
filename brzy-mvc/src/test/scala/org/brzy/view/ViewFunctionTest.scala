@@ -7,10 +7,7 @@ import javax.servlet.ServletResponse
 import org.springframework.mock.web.{MockServletContext, MockHttpServletRequest}
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ViewFunctionTest extends JUnitSuite {
 
   @Test

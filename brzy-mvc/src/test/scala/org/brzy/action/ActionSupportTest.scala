@@ -9,10 +9,7 @@ import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest}
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ActionSupportTest extends JUnitSuite {
 
   @Test

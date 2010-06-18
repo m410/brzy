@@ -10,10 +10,7 @@ import javax.servlet.http.HttpServletRequest
 import org.easymock.EasyMock._
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ActionTest extends JUnitSuite {
 
   @Test

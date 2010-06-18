@@ -8,10 +8,7 @@ import org.brzy.config.common.BootConfig
 import org.brzy.mock.MockPluginConfig
 import org.junit.{Ignore, Test}
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class WebAppTest extends JUnitSuite {
 
   class MockWebApp(config:WebAppConfig) extends WebApp(config) 

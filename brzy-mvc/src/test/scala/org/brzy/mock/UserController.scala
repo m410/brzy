@@ -21,6 +21,20 @@ class UserController {
 	@Path("create")
 	def create = "user"->new User()
 
+  @Path("other") def someOther = View("/index")
+
+  @Path("other2") def someOther2 = View("page")
+
+  @Path("xml") def xml = Xml(this)
+
+  @Path("json") def json = Json(this)
+
+  @Path("json2") def json2 = new Json(this) with Parser {
+    override def parse = "{\"name\":\"value\"}"
+  }
+
+  @Path("error") def error = Error(404,"Not Found")
+  
   @Path("save")
 	def save(params:Parameters)() = {
 	  def user:User = User.make(params)

@@ -6,10 +6,7 @@ import javax.servlet.{RequestDispatcher, ServletResponse, ServletRequest, Filter
 import org.springframework.mock.web.{MockRequestDispatcher, MockServletContext, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class FilterTest extends JUnitSuite {
 
 

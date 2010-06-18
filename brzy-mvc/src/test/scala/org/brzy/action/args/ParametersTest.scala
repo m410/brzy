@@ -7,10 +7,7 @@ import collection.JavaConversions._
 import collection.immutable.HashMap
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ParametersTest extends JUnitSuite {
 
   val map = new collection.mutable.HashMap[String, Array[String]]()
