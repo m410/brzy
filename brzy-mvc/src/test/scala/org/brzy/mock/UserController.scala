@@ -23,7 +23,7 @@ class UserController {
 
   @Path("other") def someOther = View("/index")
 
-  @Path("other2") def someOther2 = View("page")
+  @Path("other2") def someOther2 = View("/users/page")
 
   @Path("xml") def xml = Xml(this)
 

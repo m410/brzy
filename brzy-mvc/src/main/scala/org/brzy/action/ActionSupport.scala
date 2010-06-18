@@ -58,11 +58,11 @@ object ActionSupport {
     def matchDirection(result:Any):Unit = result match {
       case d:Direction =>
         log.debug("Direction: {}",d)
-        handleDirection(d,req,res)
+        handleDirection(action, d,req,res)
       case d:Data => // ignore it
       case (s:String, m:AnyRef) =>
         log.debug("Direction default: {}",action.defaultView)
-        handleDirection(View(action.defaultView),req,res)
+        handleDirection(action, View(action.defaultView),req,res)
       case tup:(_,_) =>
         tup.productIterator.foreach(s=>matchDirection(s))
       case r:(_,_,_) =>
@@ -80,11 +80,11 @@ object ActionSupport {
   /**
    * there can only be one direction
    */
-  protected def handleDirection(direct:Direction, req:Request, res:Response) =
+  protected def handleDirection(action:Action, direct:Direction, req:Request, res:Response) =
     direct match {
       case view:View =>
         log.debug("view: {}",view)
-        req.getRequestDispatcher(view.path).forward(req,res)
+        req.getRequestDispatcher(view.path + action.viewType).forward(req,res)
       case f:Forward =>
         log.debug("forward: {}",f)
         req.getRequestDispatcher(f.path).forward(req,res)
@@ -104,6 +104,8 @@ object ActionSupport {
         res.getWriter.write(t.parse)
       case b:Bytes =>
         log.debug("bytes: {}",b)
+        res.setContentType(b.contentType)
+        res.getOutputStream.write(b.bytes)
       case j:Json =>
         log.debug("json: {}",j)
         res.setContentType(j.contentType)

@@ -19,7 +19,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val action = new Action("/users", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
-    assertEquals("/user/list.ssp", action.defaultView)
+    assertEquals("/user/list", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 
@@ -43,7 +43,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther").get
     val action = new Action("/users/other", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
-    assertEquals("/user/someOther.ssp", action.defaultView)
+    assertEquals("/user/someOther", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 
@@ -67,7 +67,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther2").get
     val action = new Action("/users/some2", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
-    assertEquals("/user/someOther2.ssp", action.defaultView)
+    assertEquals("/user/someOther2", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 
@@ -76,7 +76,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val request = new MockHttpServletRequest(new MockServletContext()) {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
-          assertEquals("/users/index.ssp",path)
+          assertEquals("/users/page.ssp",path)
           callCount = callCount + 1
 					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {}
 				}
