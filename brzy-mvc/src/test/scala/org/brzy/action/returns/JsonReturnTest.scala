@@ -17,7 +17,7 @@ class JsonReturnTest  extends JUnitSuite {
     val action = new Action("/users/json", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
-    assertEquals("/user/json.ssp", action.defaultView)
+    assertEquals("/user/json", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 
@@ -34,7 +34,7 @@ class JsonReturnTest  extends JUnitSuite {
     val action = new Action("/users/json2", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
-    assertEquals("/user/json2.ssp", action.defaultView)
+    assertEquals("/user/json2", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 

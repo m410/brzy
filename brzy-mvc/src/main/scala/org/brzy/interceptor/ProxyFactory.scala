@@ -1,7 +1,7 @@
 package org.brzy.interceptor
 
 import java.lang.reflect.Method
-import javassist.util.proxy.{ProxyFactory => PFactory, MethodFilter}
+import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter}
 
 /**
  * @author Michael Fortin
@@ -21,7 +21,12 @@ object ProxyFactory {
     val factory = new PFactory
     factory.setSuperclass(clazz)
     factory.setFilter(filter)
-    factory.create(args.map(_.getClass.getSuperclass), args, proxy)
+    factory.create(args.map(a=>{
+      if(a.isInstanceOf[ProxyObject]) 
+        a.getClass.getSuperclass
+      else
+        a.getClass
+    }), args, proxy)
   }
 
   def make(clazz:Class[_], proxy:MethodInvoker): AnyRef = make(clazz, Array[AnyRef]() ,proxy)

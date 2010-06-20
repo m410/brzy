@@ -1,21 +1,22 @@
 package org.brzy.mock
 
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.Schema
 import org.squeryl.annotations.Column
 import org.brzy.action.args.Parameters
 import org.brzy.validator.Validity
 import javax.validation.{ConstraintViolation,Validation,Validator,ValidatorFactory}
 import org.slf4j.{LoggerFactory, Logger}
+import org.squeryl.{KeyedEntity, Schema}
 
 /**
  * @author Michael Fortin
  * @version $Id: $
  */
-class Person(
-        val id:Long,
-        @Column(name="first_name") val firstName:String,
-        @Column(name="last_name") val lastName:String) {
+class Person( val id:Long,
+    @Column(name="first_name") val firstName:String,
+    @Column(name="last_name") val lastName:String)
+    extends KeyedEntity[Person] {
+
   def this() = this(0, "","")
 }
 
@@ -41,7 +42,7 @@ object Person extends Schema {
 
 		def update():Unit = {
       log.trace("save")
-//			persons.update(t)
+			persons.update(t)
     }
 
     def delete() = {

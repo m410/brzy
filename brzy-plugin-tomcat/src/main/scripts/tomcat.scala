@@ -11,10 +11,10 @@ import org.brzy.tomcat.{ScalaCompiler, FileWatcher}
 object Tomcat extends Application {
 
   val sourceDir = new File(args(0),"src/main/scala")
-  val classesDir = new File(args(0),"target/war/WEB-INF/classes")
+  val classesDir = new File(args(0),"target/scala_2.8.0.RC5/classes")
 
   val sb = new StringBuilder
-  val libDir = new File(args(0),"target/war/WEB-INF/lib")
+  val libDir = new File(args(0),"target/scala_2.8.0.RC5/webapp/WEB-INF/lib")
   libDir.listFiles.foreach(f => {
     sb.append(f.getAbsolutePath)
     sb.append(":")
@@ -31,12 +31,12 @@ object Tomcat extends Application {
 
 class RunWebApp(contextName:String, port:Int) {
 	println("Running Web Application")
-	
-  val appBase = "war"
+
+  val appBase = "scala_2.8.0.RC5/webapp"
   val classesDir = appBase + "/WEB-INF/classes"
 	val container = new Embedded
 
-	val catalinaHome = new File(".brzy/plugins/brzy-tomcat")
+	val catalinaHome = new File("project/brzy-plugins/brzy-tomcat")
 	container.setCatalinaHome(catalinaHome.getAbsolutePath)
 	// container.setRealm(new MemoryRealm())
   val loader = new WebappLoader(this.getClass.getClassLoader)
@@ -47,7 +47,7 @@ class RunWebApp(contextName:String, port:Int) {
 	val targetDir = new File("target")
 	val targetPath = targetDir.getAbsolutePath
   val host = container.createHost("localhost", targetPath)
-	
+
 	val context = container.createContext("/" + contextName, appBase)
   context.setLoader(loader)
   context.setReloadable(true)
@@ -68,7 +68,7 @@ class RunWebApp(contextName:String, port:Int) {
 	Runtime.getRuntime.addShutdownHook(new Thread() {
 		override def run = {
 			try {
-				if (container != null) 
+				if (container != null)
 					container.stop
 				println("Shutdown...")
 			}

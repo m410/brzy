@@ -17,7 +17,7 @@ class ErrorReturnTest extends JUnitSuite {
     val action = new Action("/users/error", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
-    assertEquals("/user/error.ssp", action.defaultView)
+    assertEquals("/user/error", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 

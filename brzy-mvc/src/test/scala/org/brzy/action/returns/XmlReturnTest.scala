@@ -27,7 +27,7 @@ class XmlReturnTest  extends JUnitSuite {
     val action = new Action("/users/xml", ctlr.getClass.getMethods()(8), ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
-    assertEquals("/user/xml.ssp", action.defaultView)
+    assertEquals("/user/xml", action.defaultView)
     val result = executeAction(action,Array[AnyRef]())
     assertNotNull(result)
 

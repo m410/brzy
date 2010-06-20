@@ -47,7 +47,7 @@ class ActionTest extends JUnitSuite {
     val clazz = ctlr.getClass
     val method = clazz.getMethods()(1)
     val action: Action = new Action("users/", method, ctlr, ".jsp")
-    assertEquals("/user/list.jsp",action.defaultView)
+    assertEquals("/user/list",action.defaultView)
   }
 
   @Test
