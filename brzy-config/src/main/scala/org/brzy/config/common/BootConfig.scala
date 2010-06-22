@@ -104,71 +104,7 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
     case _ => None
   }
 
-  def asMap = {
-    Map[String, AnyRef](
-      "environment" -> environment,
-      "application" -> {
-        application match {
-          case Some(a) => a.asInstanceOf[Application].asMap
-          case _ => null
-        }
-      },
-      "project" -> {
-        project match {
-          case Some(p) => p.asInstanceOf[Project].asMap
-          case _ => null
-        }
-      },
-      "views" -> {
-        views match {
-          case Some(v) => v.asMap
-          case _ => null
-        }
-      },
-      "test_framework" -> testFramework,
-      "repositories" -> {
-        repositories match {
-          case Some(a) => a.asInstanceOf[List[Repository]].map(_.asMap)
-          case _ => null
-        }
-      },
-      "dependencies" -> {
-        dependencies match {
-          case Some(a) => a.asInstanceOf[List[Dependency]].map(_.asMap)
-          case _ => null
-        }
-      },
-      "logging" -> {
-        logging match {
-          case Some(a) => a.asInstanceOf[Logging].asMap
-          case _ => null
-        }
-      },
-      "plugins" -> {
-        plugins match {
-          case Some(a) => a.asInstanceOf[List[Plugin]].map(_.asMap)
-          case _ => null
-        }
-      },
-      "persistence" -> {
-        persistence match {
-          case Some(a) => a.asInstanceOf[List[Plugin]].map(_.asMap)
-          case _ => null
-        }
-      },
-      "web_xml" -> {
-        webXml match {
-          case Some(a) => a.asInstanceOf[List[Map[String, AnyRef]]]
-          case _ => null
-        }
-      },
-      "views" -> {
-        views match {
-          case Some(a) => a.asInstanceOf[Plugin].asMap
-          case _ => null
-        }
-      })
-  }
+  def asMap = m
 
   /**
    * merge this with other config, and return a new one

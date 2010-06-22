@@ -1,6 +1,6 @@
 package org.brzy.squeryl
 
-import org.brzy.validator.Validity
+import org.brzy.validator.Validation
 import org.squeryl.{Session, Schema}
 import org.brzy.action.args.Parameters
 import org.slf4j.LoggerFactory
@@ -21,7 +21,7 @@ abstract class SquerylPersistence[T,PK](val clazz:Class[T])(implicit manifestT: 
 
     def validity() ={
       log.trace("validity")
-      new Validity()
+      new Validation()
     }
 
     def save() = {

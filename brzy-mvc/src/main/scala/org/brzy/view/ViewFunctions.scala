@@ -22,6 +22,10 @@ object ViewFunctions {
     request.getContextPath + path
   }
 
+	def link(path:String)(implicit request:HttpServletRequest):String = {
+    request.getContextPath + path
+  }
+
   def action(path:String)(implicit request:HttpServletRequest):String = {
     request.getContextPath + path
   }
@@ -44,14 +48,6 @@ object ViewFunctions {
 
   def number(num:Number,format:String):String = {
     new DecimalFormat(format).format(num)
-  }
-
-  def html(str:String):String = {
-    str.replaceAll("'","&#39;")
-       .replaceAll("\"","&quot;")
-       .replaceAll("&\\s","&amp; ")
-       .replaceAll("<","&lt;")
-       .replaceAll(">","&gt;") 
   }
 
   def encode(path:String) = {

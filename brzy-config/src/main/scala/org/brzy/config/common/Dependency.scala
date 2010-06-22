@@ -2,7 +2,6 @@ package org.brzy.config.common
 
 import collection.mutable.ListBuffer
 import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder, CompareToBuilder}
-import org.slf4j.LoggerFactory
 
 /**
  * @author Michael Fortin
@@ -14,7 +13,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
   val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
   val rev: Option[String] = m.get("rev").asInstanceOf[Option[String]].orElse(None)
   val conf: Option[String] = m.get("conf").asInstanceOf[Option[String]].orElse(None)
-  val transitive: Boolean = true
+  val transitive: Option[Boolean] = m.get("transitive").asInstanceOf[Option[Boolean]].orElse(Option(true))
 
   val excludes: Option[List[Dependency]] = m.get("excludes") match {
     case Some(s) =>
@@ -24,19 +23,7 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
     case _ => None
   }
 
-  override def asMap: Map[String, AnyRef] = {
-    Map[String, AnyRef](
-      "org" -> org.getOrElse(null),
-      "name" -> name.getOrElse(null),
-      "rev" -> rev.getOrElse(null),
-      "conf" -> conf.getOrElse(null),
-      "exculdes" -> {
-        excludes match {
-          case Some(a) => a.asInstanceOf[List[Dependency]].map(_.asMap).toList
-          case _ => null
-        }
-      })
-  }
+  override def asMap: Map[String, AnyRef] = m
 
   override def compare(that: Dependency) = {
     new CompareToBuilder()

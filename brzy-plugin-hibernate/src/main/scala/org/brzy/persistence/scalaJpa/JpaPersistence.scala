@@ -1,6 +1,6 @@
 package org.brzy.persistence.scalaJpa
 
-import org.brzy.validator.Validity
+import org.brzy.validator.Validation
 import org.slf4j.LoggerFactory
 import org.brzy.persistence.RichQuery._
 import org.brzy.persistence.ThreadScope
@@ -30,7 +30,7 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
 
     def validity() ={
       log.trace("validity")
-      Validity[T](validator.validate(t))
+      Validation[T](validator.validate(t))
     }
 
     def save() = {

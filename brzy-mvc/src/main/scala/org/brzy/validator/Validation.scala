@@ -8,7 +8,7 @@ import collection.JavaConversions.JSetWrapper
  * @author Michael Fortin
  * @version $Id: $
  */
-class Validity[T](val violations:Array[ConstraintViolation[T]]) {
+class Validation[T](val violations:Array[ConstraintViolation[T]]) {
 
   def this() = this(Array[ConstraintViolation[T]]())
   
@@ -16,8 +16,8 @@ class Validity[T](val violations:Array[ConstraintViolation[T]]) {
   
 }
 
-object Validity {
+object Validation {
   def apply[T](constraints:Set[ConstraintViolation[T]]) = {
-    new Validity[T](new JSetWrapper(constraints).toArray[ConstraintViolation[T]])
+    new Validation[T](new JSetWrapper(constraints).toArray[ConstraintViolation[T]])
   }
 }

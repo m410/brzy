@@ -26,15 +26,5 @@ class Application(m: Map[String, AnyRef]) extends Config(m) {
   //    case _ => null
   //  }
 
-  def asMap = {
-    Map[String, AnyRef](
-      "name" -> name.getOrElse(null),
-      "version" -> version.getOrElse(null),
-      "org" -> org.getOrElse(null),
-      "artifact_id" -> artifactId.getOrElse(null),
-      "author" -> author.getOrElse(null),
-      "description" -> description.getOrElse(null),
-      "webapp_context" -> webappContext.getOrElse(null),
-      "application_class" -> applicationClass.getOrElse(null))
-  }
+  def asMap = m
 }

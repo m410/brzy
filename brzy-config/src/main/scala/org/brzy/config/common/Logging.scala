@@ -25,14 +25,7 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
   }
 
 
-  def asMap = {
-    Map[String, AnyRef](
-      "provider" -> provider.getOrElse(null),
-      "appenders" -> appenders.get.map(_.asMap).toList,
-      "loggers" -> loggers.get.map(_.asMap).toList,
-      "root" -> root.get.asMap
-      )
-  }
+  def asMap = m
 
   def <<(that: Logging) = {
     if (that == null) {
@@ -82,16 +75,7 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
   val fileNamePattern: Option[String] = m.get("file_name_pattern").asInstanceOf[Option[String]].orElse(None)
 
 
-  def asMap = {
-    Map[String, AnyRef](
-      "name" -> name.getOrElse(null),
-      "appender_class" -> appenderClass.getOrElse(null),
-      "layout" -> layout.getOrElse(null),
-      "pattern" -> pattern.getOrElse(null),
-      "file" -> file.getOrElse(null),
-      "rolling_policy" -> rollingPolicy.getOrElse(null),
-      "file_name_pattern" -> fileNamePattern.getOrElse(null))
-  }
+  def asMap = m
 
   def <<(that: Appender) = {
     if (that == null)
@@ -142,11 +126,7 @@ class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] 
   val name: Option[String] = m.get("name").asInstanceOf[Option[String]].orElse(None)
   val level: Option[String] = m.get("level").asInstanceOf[Option[String]].orElse(None)
 
-  def asMap = {
-    Map[String, AnyRef](
-      "name" -> name.getOrElse(null),
-      "level" -> level.getOrElse(null))
-  }
+  def asMap = m
 
   def <<(that: Logger) = {
     if (that == null)
@@ -196,12 +176,7 @@ class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
   }
 
 
-  def asMap = {
-    Map[String, AnyRef](
-      "level" -> level.getOrElse(null),
-      "ref" -> ref.getOrElse(null)
-      )
-  }
+  def asMap = m
 
   def <<(that: Root) = {
     if (that == null)

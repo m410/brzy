@@ -3,7 +3,7 @@ package org.brzy.mock
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.annotations.Column
 import org.brzy.action.args.Parameters
-import org.brzy.validator.Validity
+import org.brzy.validator.Validation
 import javax.validation.{ConstraintViolation,Validation,Validator,ValidatorFactory}
 import org.slf4j.{LoggerFactory, Logger}
 import org.squeryl.{KeyedEntity, Schema}
@@ -32,7 +32,7 @@ object Person extends Schema {
 			val factory = Validation.buildDefaultValidatorFactory
 			val validator = factory.getValidator
 			val constraintViolations = validator.validate(t);
-      new Validity()
+      new Validation()
     }
 
     def save() = {
