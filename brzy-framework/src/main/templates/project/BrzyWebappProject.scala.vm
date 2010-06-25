@@ -17,10 +17,6 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   // brzy command execution classpath configuration
   val brzyPlugin = config("brzy") hide
-  val brzy_1 = "org.slf4j" % "slf4j-api" % "1.5.11" % "brzy"
-  val brzy_2 = "commons-lang" % "commons-lang" % "2.5" % "brzy"
-  val brzy_3 = "org.brzy" % "brzy-config" % "0.2" % "brzy"
-  val brzy_4 = "org.brzy" % "brzy-shell" % "0.2" % "brzy"
   def brzyClasspath = managedClasspath(brzyPlugin) +++ ("project" / "brzy-plugins").descendentsExcept("*.jar", "lib")
 
   // repositories
@@ -31,11 +27,26 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
 #end
 
   // dependencies
+  override def ivyXML =
+    <dependencies>
+	  <dependency org="org.slf4j" name="slf4j-api" rev="1.5.11" conf="brzy" />
+	  <dependency org="commons-lang" name="commons-lang" rev="2.5" conf="brzy" />
+	  <dependency org="org.brzy" name="brzy-config" rev="0.2" conf="brzy" />
+	  <dependency org="org.brzy" name="brzy-shell" rev="0.2" conf="brzy" />
 #foreach($dep in $dependencies)
 #if($dep.org().get())
-  val dependency_$velocityCount = "${dep.org().get()}" % "${dep.name().get()}" % "${dep.rev().get()}" % "${dep.conf().get()}"
+      <dependency org="${dep.org().get()}" name="${dep.name().get()}" rev="${dep.rev().get()}" conf="${dep.conf().get()}" #if(!$dep.transitive().get()) transitive="false" #end >
+#if($dep.excludes().isDefined())
+#foreach($exclude in $$dep.excludes().get())
+	    <exclude org="${exclude.org().get()}" name="${exclude.name().get()}" />
+#end
+#end
+	  </dependency>
 #end 
 #end
+    </dependencies>
+
+
 #set($H='#')
 
   lazy val prePackage = task {

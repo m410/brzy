@@ -6,4 +6,4 @@ import org.brzy.application.WebApp
 /**
  * Application Class
  */
-class Application(config:WebappConfig) extends WebApp(config)
+class Application(config:WebAppConfig) extends WebApp(config)

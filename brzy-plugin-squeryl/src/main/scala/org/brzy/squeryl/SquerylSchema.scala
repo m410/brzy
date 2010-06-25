@@ -1,56 +1,46 @@
 package org.brzy.squeryl
 
-import org.slf4j.{LoggerFactory, Logger}
 import org.brzy.validator.Validation
-import javax.validation.Validation
-import org.squeryl.{KeyedEntity, Schema}
 import org.brzy.action.args.Parameters
+
+import javax.validation.{Validation=>jValidation}
+
+import org.squeryl.{KeyedEntity, Schema}
+import org.squeryl.PrimitiveTypeMode._
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class
  * should extend this.  Once created, any extra finders should be written into the object class.
  * <pre>
- * object Entity extends SquerylSchema[Entity] {
+ * object Entity extends SquerylSchema[Long,Entity] {
  *  def findByName(s:String) = ...
  * }
  * </pre>
  */
-class SquerylSchema[T<:KeyedEntity] extends Schema{
-  val log:Logger = LoggerFactory.getLogger(classOf[T])
+class SquerylSchema[PK<:AnyVal, T<:KeyedEntity[PK]]()(implicit manifestT: Manifest[T]) extends Schema{
   val db = table[T]
-  val validationFactory = Validation.buildDefaultValidatorFactory
+  val validationFactory = jValidation.buildDefaultValidatorFactory
 
 	class EntityCrudOps(t:T) {
 
-    def validate() ={
-      log.trace("validity")
-      Validation[T](validationFactory.getValidator.validate(t))
-    }
+    def validate() = Validation[T](validationFactory.getValidator.validate(t))
 
-    def save() = {
-      log.trace("save")
-			db.insert(t)
-    }
+    def insert() =  db.insert(t)
 
-		def update():Unit = {
-      log.trace("save")
-			db.update(t)
-    }
+		def update()= db.update(t)
 
-    def delete() = {
-      log.trace("delete")
-			db.deleteWhere(db => db.id === t.id)
-    }
+//    def delete() = db.deleteWhere(e => e.id === t.id)
   }
 
   implicit def applyCrudOps(t:T) = new EntityCrudOps(t)
 
-  def get(id:Long) = from(db)(s => where(s.id === id) select(s)).head
+//  def get(id:PK) = from(db)(s => where(s.id === id) select(s)).head
 
   def list() = from(db)(a=> select(a)).toList
-
+//
   def make(params:Parameters):T ={
     // TODO implement me
-		classOf[T].newInstance
+//		classOf[T].newInstance
+    null.asInstanceOf[T]
 	}
 }

@@ -75,7 +75,7 @@ object CreateApp extends Application {
 
   val DS = System.getProperty("file.separator")
   val packagePath = init.packageSpace.replaceAll("\\.",DS)
-  val sourceFolder = new File(to, "src/main/scala/" + packagePath)
+  val sourceFolder = new File(to, "src/scala/" + packagePath)
   sourceFolder.mkdirs
 
   val props = new java.util.Properties

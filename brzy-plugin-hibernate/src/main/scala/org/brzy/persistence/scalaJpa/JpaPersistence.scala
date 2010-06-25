@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import org.brzy.persistence.RichQuery._
 import org.brzy.persistence.ThreadScope
 import org.brzy.action.args.Parameters
-import javax.validation.{Validator,  Validation}
+import javax.validation.{Validator,  Validation=>jValidation}
 import java.lang.reflect.Method
 import org.brzy.util.ParameterConversion._
 
@@ -26,7 +26,7 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
    */
   class EntityCrudOps[T](t:T) {
 
-    val validator:Validator = Validation.buildDefaultValidatorFactory.getValidator
+    val validator:Validator = jValidation.buildDefaultValidatorFactory.getValidator
 
     def validity() ={
       log.trace("validity")

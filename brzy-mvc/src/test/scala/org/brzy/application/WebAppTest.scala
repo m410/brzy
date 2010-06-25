@@ -6,33 +6,36 @@ import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
 import org.brzy.mock.MockPluginConfig
-import org.junit.{Ignore, Test}
+import org.junit.Test
 
 
 class WebAppTest extends JUnitSuite {
 
-  class MockWebApp(config:WebAppConfig) extends WebApp(config) 
+  class MockWebApp(config: WebAppConfig) extends WebApp(config)
+
 
   @Test
-  @Ignore
   def testCreate = {
 
-    val view = new MockPluginConfig(Map[String,AnyRef]()) {
-      val fileExtension = ".ssp"
-      override val resourceClass = Option("org.brzy.mock.MockPluginResource")
-    }
-    val boot = new BootConfig(Map[String,AnyRef](
-      "environment" -> "development"
+    val view = new MockPluginConfig(Map[String, AnyRef](
+      "fileExtension" -> ".ssp",
+      "resource_class" -> "org.brzy.mock.MockPluginResource"
       ))
-    val config = new WebAppConfig(boot,view,Nil,Nil)
+    val boot = new BootConfig(Map[String, AnyRef](
+      "environment" -> "development",
+      "application" -> Map(
+        "name" -> "test",
+        "org" -> "org.brzy.mock")
+      ))
+    val config = new WebAppConfig(boot, view, Nil, Nil)
     val webapp = new MockWebApp(config)
     assertNotNull(webapp)
     assertNotNull(webapp.services)
-    assertEquals(0, webapp.services.size)
+    assertEquals(1, webapp.services.size)
     assertNotNull(webapp.controllers)
-    assertEquals(0, webapp.controllers.size)
+    assertEquals(1, webapp.controllers.size)
     assertNotNull(webapp.actions)
-    assertEquals(0,webapp.actions.size)
+    assertEquals(14, webapp.actions.size)
 
   }
 }

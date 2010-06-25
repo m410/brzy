@@ -4,7 +4,7 @@ import javax.validation.constraints.{NotNull,Size}
 //import javax.persistence._
 
 import org.brzy.action.args.Parameters
-import javax.validation.{Validator,  Validation}
+import javax.validation.{Validator,  Validation=>xValidation}
 import org.brzy.validator.Validation
 import org.brzy.util.ParameterConversion._
 
@@ -43,7 +43,7 @@ class User {
 object User {
 	
 	class EntityCrudOps[User](t:User) {
-		val validator:Validator = Validation.buildDefaultValidatorFactory.getValidator
+		val validator = xValidation.buildDefaultValidatorFactory.getValidator
 		def validity() ={
 			Validation[User](validator.validate(t))
 		}

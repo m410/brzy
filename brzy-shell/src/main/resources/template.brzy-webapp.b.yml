@@ -6,14 +6,14 @@ application:
   name: &name [name]
   org: [group]
   version: "[version]"
-  author: Add Your Name Here
-  description: &desc Add a description here
+  author: Your Name Here
+  description: &desc App Description Here
   artifact_id: [artifact]
   webapp_context: /
   application_class: [group].Application
 persistence:
   - name: brzy-squeryl
-    org: orb.grzy
+    org: org.brzy
     version: "0.2"
     driver: org.h2.Driver
     user_name: sa
@@ -21,13 +21,11 @@ persistence:
     url: jdbc:h2:test_db
 dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
-  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
+#  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
 plugins:
   - name: brzy-tomcat
-    org: orb.grzy
+    org: org.brzy
     version: "0.2"
-    config_class: org.brzy.plugin.TomcatPluginConfig
-    remote_location: ~/.m2/repository/org/brzy/brzy-tomcat/0.2/brzy-tomcat-0.2-plugin.jar
 logging:
   provider: logback
   appenders:
@@ -56,6 +54,6 @@ environment_overrides:
   - environment: developement
     logging:
       root:
-        ref:STDOUT
+        ref: [STDOUT]
   - environment: test
   - environment: production
