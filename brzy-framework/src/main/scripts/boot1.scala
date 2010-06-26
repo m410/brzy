@@ -32,8 +32,12 @@ object Boot1 extends Application {
   // download plugins
   println(" - download plugins")
   installPlugin(brzyPlugins, config.views.get)
-  config.plugins.get.foreach(it => installPlugin(brzyPlugins, it))
-  config.persistence.get.foreach(it => installPlugin(brzyPlugins, it))
+
+  if(config.plugins.isDefined)
+    config.plugins.get.foreach(it => installPlugin(brzyPlugins, it))
+
+  if(config.persistence.isDefined)
+    config.persistence.get.foreach(it => installPlugin(brzyPlugins, it))
 }
 
 Boot1.main(args)

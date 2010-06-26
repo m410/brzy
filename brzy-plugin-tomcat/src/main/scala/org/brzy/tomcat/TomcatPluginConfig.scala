@@ -48,6 +48,6 @@ class TomcatPluginConfig(map:Map[String,AnyRef]) extends Plugin(map) {
     }
   }
 
-  override def asMap:Map[String,AnyRef] = super.asMap
+  override def asMap:Map[String,AnyRef] = map
 
 }

@@ -18,7 +18,11 @@ object Boot2 extends Application {
   val configFile = new File(projectDir, "brzy-webapp.development.b.yml")
   val viewPlugin = makeBuildTimePlugin(bootConfig.views.get,brzyPlugins)
   val persistence = bootConfig.persistence.get.map(makeBuildTimePlugin(_,brzyPlugins))
-  val plugins = bootConfig.plugins.get.map(makeBuildTimePlugin(_,brzyPlugins))
+  val plugins = 
+    if(bootConfig.plugins.isDefined)
+      bootConfig.plugins.get.map(makeBuildTimePlugin(_,brzyPlugins))
+    else
+      Nil
   val config = makeWebAppConfig(bootConfig,viewPlugin, persistence, plugins)
 
   // create sbt build script
