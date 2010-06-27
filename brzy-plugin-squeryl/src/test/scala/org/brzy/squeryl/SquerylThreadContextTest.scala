@@ -8,7 +8,7 @@ import org.squeryl.Session
 
 class SquerylThreadContextTest extends JUnitSuite {
   @Test def testContext = {
-    val ctx = new SquerylThreadContext("org.h2.Driver", "jdbc:h2:squery-test", "sa", "")
+    val ctx = new SquerylContextManager("org.h2.Driver", "jdbc:h2:squery-test", "sa", "")
     val ctlr = ProxyFactory.make(classOf[MockController], new Invoker(List(ctx)))
     assertNotNull(ctlr)
     assertEquals("hello Mike", ctlr.asInstanceOf[MockController].doit("Mike"))

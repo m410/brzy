@@ -147,7 +147,7 @@ class MyManagedFactory extends ManagedThreadContext {
   val matcher = new MethodMatcher {
     def isMatch(a: AnyRef, m: Method) = true
   }
-  val emptyState = new MySession("nil")
+  val empty = new MySession("nil")
 }
 
 
@@ -192,7 +192,7 @@ class My2ManagedFactory extends ManagedThreadContext {
   val matcher = new MethodMatcher {
     def isMatch(a: AnyRef, m: Method) = true
   }
-  val emptyState = new My2Session("nil")
+  val empty = new My2Session("nil")
 }
 
 

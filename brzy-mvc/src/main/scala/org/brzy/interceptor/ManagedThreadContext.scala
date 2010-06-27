@@ -14,5 +14,5 @@ trait ManagedThreadContext {
   val factory: ContextFactory[T]
   val context: DynamicVariable[T]
   val matcher: MethodMatcher
-  val emptyState: T
+  val empty: T
 }

@@ -1,9 +1,8 @@
 package org.brzy.squeryl
 
-import old.SquerylInterceptor
 import org.brzy.config.plugin.PluginResource
 import org.slf4j.LoggerFactory
-import org.brzy.interceptor.old.InterceptorResource
+import org.brzy.interceptor.InterceptorResource
 
 /**
  * Document Me..
@@ -28,9 +27,7 @@ class SquerylPluginResource(c:SquerylPluginConfig) extends PluginResource with I
   assert(c.password.isDefined, "the database password is not defined.")
   assert(c.password.get != null, "the database password can not be null.")
 
-  override def interceptor = {
-    new SquerylInterceptor(c.driver.get, c.url.get, c.userName.get, c.password.get)
-  }
+  override def interceptor = new SquerylContextManager(c.driver.get,c.url.get,c.userName.get,c.password.get)
 
   override def services = Nil
 

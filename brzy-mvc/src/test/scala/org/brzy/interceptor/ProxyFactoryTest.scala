@@ -41,7 +41,7 @@ object FixtureSession extends DynamicVariable(new FixtureSession(""))
 class FixtureManagedThreadContext extends ManagedThreadContext {
   type T = FixtureSession
 
-  val emptyState = new FixtureSession("")
+  val empty = new FixtureSession("")
 
   val matcher = new MethodMatcher {
     def isMatch(a: AnyRef, m: Method) = true

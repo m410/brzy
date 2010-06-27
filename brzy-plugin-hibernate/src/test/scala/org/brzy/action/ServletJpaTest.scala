@@ -15,7 +15,7 @@ import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
 import org.brzy.interceptor.Invoker
-import org.brzy.jpa.JpaThreadManager
+import org.brzy.jpa.JpaContextManager
 
 /**
  * @author Michael Fortin
@@ -24,7 +24,7 @@ import org.brzy.jpa.JpaThreadManager
 class ServletJpaTest extends JUnitSuite {
 
   val sessionFactory = EasyMock.createMock(classOf[EntityManagerFactory])
-  val interceptor = new Invoker(List(new JpaThreadManager("test")))
+  val interceptor = new Invoker(List(new JpaContextManager("test")))
   val controllerClass = classOf[UserController]
   val controller = make(controllerClass,interceptor)
 

@@ -13,7 +13,7 @@ import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
 import org.brzy.squeryl.old.SquerylInterceptor
 import org.brzy.interceptor.Invoker
-import org.brzy.squeryl.SquerylThreadContext
+import org.brzy.squeryl.SquerylContextManager
 import java.lang.String
 import collection.immutable.{Map, SortedSet}
 import org.brzy.config.plugin.Plugin
@@ -26,7 +26,7 @@ import java.lang.reflect.Method
  */
 class ServletSquerylTest extends JUnitSuite {
   val controllerClass = classOf[PersonController]
-  val threadContext = new SquerylThreadContext("org.h2.Driver", "jdbc:h2:squery-test", "sa", "")
+  val threadContext = new SquerylContextManager("org.h2.Driver", "jdbc:h2:squery-test", "sa", "")
   val controller = make(controllerClass, new Invoker(List(threadContext)))
 
   DbInit.init

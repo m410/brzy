@@ -12,12 +12,12 @@ import javax.persistence.{EntityManager, Persistence}
  * @author Michael Fortin
  * @version $Id: $
  */
-class JpaThreadManager(unitName:String) extends ManagedThreadContext {
+class JpaContextManager(unitName:String) extends ManagedThreadContext {
 
   val entityManagerFactory = Persistence.createEntityManagerFactory(unitName)
   type T = Option[EntityManager]
 
-  val emptyState:T = None
+  val empty:T = None
   val matcher = new MethodMatcher {
     def isMatch(a: AnyRef, m: Method) = true
   }

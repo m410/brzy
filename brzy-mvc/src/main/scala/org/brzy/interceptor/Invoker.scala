@@ -17,7 +17,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
       var returnValue: AnyRef = null
       var nested = false
       val ctx =
-      if (managedFactory.context.value == managedFactory.emptyState)
+      if (managedFactory.context.value == managedFactory.empty)
         managedFactory.factory.create
       else {
         nested = true

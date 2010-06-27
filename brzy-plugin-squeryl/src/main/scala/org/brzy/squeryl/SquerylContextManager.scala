@@ -14,7 +14,7 @@ import util.DynamicVariable
  * @author Michael Fortin
  * @version $Id: $
  */
-class SquerylThreadContext(driver:String, url:String, usr:String, pass:String) extends ManagedThreadContext {
+class SquerylContextManager(driver:String, url:String, usr:String, pass:String) extends ManagedThreadContext {
 
   Class.forName(driver)
   type T = Option[Session]
@@ -27,8 +27,8 @@ class SquerylThreadContext(driver:String, url:String, usr:String, pass:String) e
       else error("no adapter found for url:" + url)
 
 
-  val emptyState:T = None
-  val context = new DynamicVariable(emptyState)
+  val empty:T = None
+  val context = new DynamicVariable(empty)
   SessionFactory.externalTransactionManagementAdapter = Some(()=> {
     context.value.getOrElse(error("Session was not initialized.  You may be out of transaction scope."))
   })
