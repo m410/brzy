@@ -6,6 +6,7 @@ package org.brzy.interceptor
  * @author Michael Fortin
  * @version $Id: $
  */
-trait InterceptorResource {
-  def interceptor:ManagedThreadContext
+trait ContextFactory[T] {
+  def create: T
+  def destroy(s: T)
 }

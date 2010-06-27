@@ -1,4 +1,4 @@
-package org.brzy.interceptor
+package org.brzy.interceptor.old
 
 import org.aspectj.weaver.tools.{PointcutExpression, PointcutParser}
 import java.lang.annotation.Annotation

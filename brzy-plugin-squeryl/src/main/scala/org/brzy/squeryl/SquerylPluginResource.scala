@@ -1,8 +1,9 @@
 package org.brzy.squeryl
 
+import old.SquerylInterceptor
 import org.brzy.config.plugin.PluginResource
 import org.slf4j.LoggerFactory
-import org.brzy.interceptor.InterceptorResource
+import org.brzy.interceptor.old.InterceptorResource
 
 /**
  * Document Me..

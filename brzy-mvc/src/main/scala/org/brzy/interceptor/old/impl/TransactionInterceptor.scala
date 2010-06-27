@@ -1,7 +1,8 @@
 package org.brzy.interceptor.impl
 
 import org.slf4j.LoggerFactory
-import org.brzy.interceptor.{Interceptor, Invocation}
+import org.brzy.interceptor.old.{Interceptor, Invocation}
+import org.brzy.controller.Controller
 
 /**
  * @author Michael Fortin
@@ -10,7 +11,8 @@ import org.brzy.interceptor.{Interceptor, Invocation}
 trait TransactionInterceptor extends Interceptor {
 
   private val log = LoggerFactory.getLogger(classOf[TransactionInterceptor])
-  val matchingJtaAnnotation = classOf[javax.ejb.TransactionAttribute]
+//  val matchingJtaAnnotation = classOf[javax.ejb.TransactionAttribute]
+  val matchingJtaAnnotation = classOf[Controller]
 
   abstract override def invoke(invocation: Invocation): AnyRef =
     if (matches(matchingJtaAnnotation, invocation)) {

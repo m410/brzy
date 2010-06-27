@@ -10,11 +10,12 @@ import javax.persistence.{Query, EntityTransaction, EntityManager, EntityManager
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletResponse, MockHttpServletRequest}
 import org.brzy.interceptor.ProxyFactory._
-import org.brzy.persistence.scalaJpa.JpaInterceptor
 import org.brzy.application.WebApp
 import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
+import org.brzy.interceptor.Invoker
+import org.brzy.jpa.JpaThreadManager
 
 /**
  * @author Michael Fortin
@@ -23,7 +24,7 @@ import org.brzy.config.common.BootConfig
 class ServletJpaTest extends JUnitSuite {
 
   val sessionFactory = EasyMock.createMock(classOf[EntityManagerFactory])
-  val interceptor = new JpaInterceptor(sessionFactory)
+  val interceptor = new Invoker(List(new JpaThreadManager("test")))
   val controllerClass = classOf[UserController]
   val controller = make(controllerClass,interceptor)
 

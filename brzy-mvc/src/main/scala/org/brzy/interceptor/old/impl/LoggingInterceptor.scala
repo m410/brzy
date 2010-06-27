@@ -1,7 +1,7 @@
 package org.brzy.interceptor.impl
 
 import org.slf4j.LoggerFactory
-import org.brzy.interceptor.{Interceptor, Invocation}
+import org.brzy.interceptor.old.{Interceptor, Invocation}
 
 /**
  * @author Michael Fortin

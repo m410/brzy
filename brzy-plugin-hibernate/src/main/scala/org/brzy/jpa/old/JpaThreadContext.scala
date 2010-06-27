@@ -1,4 +1,4 @@
-package org.brzy.persistence.scalaJpa
+package org.brzy.jpa.old
 
 import javax.persistence.{EntityManager, EntityManagerFactory}
 import org.brzy.persistence.ThreadContext

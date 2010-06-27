@@ -1,6 +1,6 @@
 package org.brzy.mock
 
-import org.brzy.persistence.scalaJpa.JpaPersistence
+import org.brzy.jpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
 import reflect.BeanProperty

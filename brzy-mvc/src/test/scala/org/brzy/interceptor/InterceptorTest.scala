@@ -7,6 +7,7 @@ import java.lang.reflect.Method
 import javassist.util.proxy.{MethodHandler, ProxyObject, ProxyFactory => PFactory, MethodFilter}
 import org.junit.Test
 import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder}
+import collection.immutable.List
 
 class InterceptorTest extends JUnitSuite {
   val filter = new MethodFilter {
@@ -25,7 +26,7 @@ class InterceptorTest extends JUnitSuite {
     val factory = new PFactory
     factory.setSuperclass(classOf[TargetService])
     factory.setFilter(filter)
-    val targetServiceProxy = factory.create(Array(), Array(), new MyMethodInvoker(new MyManagedFactory))
+    val targetServiceProxy = factory.create(Array(), Array(), new Invoker(List(new MyManagedFactory)))
     assertNotNull(targetServiceProxy)
     assertTrue(targetServiceProxy.isInstanceOf[ProxyObject])
     val target = targetServiceProxy.asInstanceOf[TargetService]
@@ -39,14 +40,14 @@ class InterceptorTest extends JUnitSuite {
     val factory1 = new PFactory
     factory1.setSuperclass(classOf[TargetService])
     factory1.setFilter(filter)
-    val target = factory1.create(Array(), Array(), new MyMethodInvoker(new MyManagedFactory))
+    val target = factory1.create(Array(), Array(), new Invoker(List(new MyManagedFactory)))
 
     val factory = new PFactory
     factory.setSuperclass(classOf[ParentTargetService])
     factory.setFilter(filter)
     val classes = Array[Class[_]](target.getClass.getSuperclass)
     val args = Array[AnyRef](target)
-    val targetServiceProxy = factory.create(classes, args, new MyMethodInvoker(new MyManagedFactory))
+    val targetServiceProxy = factory.create(classes, args, new Invoker(List(new MyManagedFactory)))
     assertNotNull(targetServiceProxy)
     assertTrue(targetServiceProxy.isInstanceOf[ProxyObject])
     val parent = targetServiceProxy.asInstanceOf[ParentTargetService]
@@ -54,12 +55,43 @@ class InterceptorTest extends JUnitSuite {
     assertEquals("call: two", parent.nestedCall("two"))
     assertEquals(new MySession("nil"), MySession.value)
   }
+
+  @Test
+  def testNoFactories = {
+    val factory = new PFactory
+    factory.setSuperclass(classOf[TargetService])
+    factory.setFilter(filter)
+    val targetServiceProxy = factory.create(Array(), Array(), new Invoker(List()))
+    assertNotNull(targetServiceProxy)
+    assertTrue(targetServiceProxy.isInstanceOf[ProxyObject])
+    val target = targetServiceProxy.asInstanceOf[TargetService]
+    assertEquals("call: one", target.makeCall("one"))
+    assertEquals("call: two", target.makeCall("two"))
+  }
+
+  @Test
+  def testManyFactories = {
+    val factory = new PFactory
+    factory.setSuperclass(classOf[TargetService])
+    factory.setFilter(filter)
+    val list:List[ManagedThreadContext] = List(new MyManagedFactory,new My2ManagedFactory)
+    val targetServiceProxy = factory.create(Array(), Array(), new Invoker(list))
+    assertNotNull(targetServiceProxy)
+    assertTrue(targetServiceProxy.isInstanceOf[ProxyObject])
+    val target = targetServiceProxy.asInstanceOf[TargetService]
+    assertEquals("call: one", target.makeCall("one"))
+    assertEquals("call: two", target.makeCall("two"))
+    assertEquals(new MySession("nil"), MySession.value)
+    assertEquals(new My2Session("nil"), My2Session.value)
+  }
 }
+
+
 
 class TargetService {
   def makeCall(arg: String) = {
     println("    target call: " + arg)
-    val x ="call: " + arg
+    val x = "call: " + arg
     println(" target session: " + MySession.value)
     x
   }
@@ -74,88 +106,33 @@ class ParentTargetService(t: TargetService) {
   }
 }
 
-class MyMethodInvoker[T<:AnyRef](val mf: ManagedFactory[T]) extends MethodHandler {
-  
-  override def invoke(self: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
-    var returnValue: AnyRef = null
-    var nested = false
-    val ctx =
-        if (mf.context.value == mf.emptyState)
-          mf.factory.create
-        else {
-          nested = true
-          mf.context.value
-        }
 
-    mf.context.withValue(ctx) {
-      returnValue = m2.invoke(self, args: _*)
-    }
-
-    if(!nested) {
-      mf.factory.destroy(ctx)
-    }
-    returnValue
-  }
-
-//  val collection = List[ManagedFactory[_]]()
-//
-//  def doit = {
-//    traverse(collection.iterator)
-//  }
-//  def traverse(it:Iterator[_]):AnyRef = {
-//    def myFactory = it.next
-//    myFactory.context.withValue(myFactory.value) {
-//      if(it.hasNext)
-//        traverse(it)
-//      else
-//        m2.invoke(self, args: _*)
-//    }
-//
-//  }
-}
-
-
-trait Factory[T] {
-  def create: T
-  def destroy(s: T)
-}
-
-trait Matcher {
-  def isMatch(a:AnyRef, m:Method):Boolean
-}
-
-trait ManagedFactory[T] {
-  val factory:Factory[T]
-  val context:DynamicVariable[T]
-  val matcher:Matcher
-  val emptyState:T
-}
-
-class MySession(var txt:String) {
+class MySession(var txt: String) {
   override def toString = "MySession: " + txt
 
   override def equals(p1: Any) = {
     val that = p1.asInstanceOf[MySession]
     new EqualsBuilder()
-        .append(this.txt, that.txt)
-        .isEquals()
+            .append(this.txt, that.txt)
+            .isEquals()
   }
 
   override def hashCode = {
-    new HashCodeBuilder(1,3)
-        .append(this.txt)
-        .toHashCode
+    new HashCodeBuilder(1, 3)
+            .append(this.txt)
+            .toHashCode
   }
 }
 
 object MySession extends DynamicVariable[MySession](new MySession("nil"))
 
-class MyFactory extends Factory[MySession] {
+class MyFactory extends ContextFactory[MySession] {
   var counter = 0
 
   def destroy(s: MySession) = {
     println("destroy: " + s)
   }
+
   def create = {
     println("create : ")
     counter = counter + 1
@@ -163,13 +140,61 @@ class MyFactory extends Factory[MySession] {
   }
 }
 
-class MyManagedFactory extends ManagedFactory[MySession] {
+class MyManagedFactory extends ManagedThreadContext {
+  type T = MySession
   val context = MySession
   val factory = new MyFactory
-  val matcher = new Matcher {
+  val matcher = new MethodMatcher {
     def isMatch(a: AnyRef, m: Method) = true
   }
-  val emptyState=new MySession("nil")
+  val emptyState = new MySession("nil")
 }
+
+
+
+class My2Session(var txt: String) {
+  override def toString = "My2Session: " + txt
+
+  override def equals(p1: Any) = {
+    val that = p1.asInstanceOf[My2Session]
+    new EqualsBuilder()
+            .append(this.txt, that.txt)
+            .isEquals()
+  }
+
+  override def hashCode = {
+    new HashCodeBuilder(1, 3)
+            .append(this.txt)
+            .toHashCode
+  }
+}
+
+object My2Session extends DynamicVariable[My2Session](new My2Session("nil"))
+
+class My2Factory extends ContextFactory[My2Session] {
+  var counter = 0
+
+  def destroy(s: My2Session) = {
+    println("destroy2: " + s)
+  }
+
+  def create = {
+    println("create2 : ")
+    counter = counter + 1
+    new My2Session("run2-" + counter)
+  }
+}
+
+class My2ManagedFactory extends ManagedThreadContext {
+  type T = My2Session
+  val context = My2Session
+  val factory = new My2Factory
+  val matcher = new MethodMatcher {
+    def isMatch(a: AnyRef, m: Method) = true
+  }
+  val emptyState = new My2Session("nil")
+}
+
+
 
 

@@ -1,4 +1,4 @@
-package org.brzy.interceptor
+package org.brzy.interceptor.old
 
 /**
  * Document Me..
@@ -7,5 +7,5 @@ package org.brzy.interceptor
  * @version $Id: $
  */
 trait InterceptorResource {
-  def interceptor:ManagedThreadContext
+  def interceptor:Interceptor 
 }

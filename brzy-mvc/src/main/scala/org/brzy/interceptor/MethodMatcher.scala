@@ -1,11 +1,14 @@
 package org.brzy.interceptor
 
+import java.lang.reflect.Method
+
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  * @version $Id: $
  */
-trait InterceptorResource {
-  def interceptor:ManagedThreadContext
+
+trait MethodMatcher {
+  def isMatch(a: AnyRef, m: Method): Boolean
 }

@@ -1,9 +1,8 @@
-package org.brzy.persistence.scalaJpa
+package org.brzy.jpa
 
 import org.brzy.validator.Validation
 import org.slf4j.LoggerFactory
-import org.brzy.persistence.RichQuery._
-import org.brzy.persistence.ThreadScope
+import org.brzy.jpa.RichQuery._
 import org.brzy.action.args.Parameters
 import javax.validation.{Validator,  Validation=>jValidation}
 import java.lang.reflect.Method
@@ -35,21 +34,21 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
 
     def save() = {
       log.trace("save")
-      val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-      ctx.entityManager.persist(t)
+      val entityManager = JpaContext.value.get
+      entityManager.persist(t)
     }
 
     def saveAndCommit() = {
       log.trace("save")
-      val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-      ctx.entityManager.persist(t)
-      ctx.entityManager.getTransaction.commit
+      val entityManager = JpaContext.value.get
+      entityManager.persist(t)
+      entityManager.getTransaction.commit
     }
 
     def delete() = {
       log.trace("delete")
-      val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-      ctx.entityManager.remove(t)
+      val entityManager = JpaContext.value.get
+      entityManager.remove(t)
     }
   }
 
@@ -57,23 +56,23 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
 
   def get(id:PK):T = {
     log.trace("get: " + id)
-    val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-     ctx.entityManager.find(clazz,id)
+    val entityManager = JpaContext.value.get
+    entityManager.find(clazz,id)
   }
 	
 	def count():Long = {
-		val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-    ctx.entityManager.createQuery(countQuery).getSingleResult.asInstanceOf[Long]
+		val entityManager = JpaContext.value.get
+    entityManager.createQuery(countQuery).getSingleResult.asInstanceOf[Long]
 	}
 	
 	def list():List[T] = {
-    val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-    ctx.entityManager.createQuery(listQuery).getResultList.toArray.toList.asInstanceOf[List[T]]
+    val entityManager = JpaContext.value.get
+    entityManager.createQuery(listQuery).getResultList.toArray.toList.asInstanceOf[List[T]]
 	}
 	
 	def page(start:Int, size:Int):List[T] = {
-    val ctx = ThreadScope.get.asInstanceOf[JpaThreadContext]
-    ctx.entityManager
+    val entityManager = JpaContext.value.get
+    entityManager
         .createQuery(listQuery)
         .setFirstResult(start)
         .setMaxResults(size)
@@ -93,7 +92,7 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
     instance
 	}
 
-  private[scalaJpa] def applyParam(nvp:(String, Array[String]), inst:T):Unit = {
+  private[jpa] def applyParam(nvp:(String, Array[String]), inst:T):Unit = {
     val method:Method = inst.getClass.getMethods.find(mtd => mtd.getName == nvp._1 + "_$eq").orNull
 
     if(method != null)

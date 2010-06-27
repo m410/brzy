@@ -2,6 +2,7 @@ package org.brzy.application
 
 
 import org.brzy.action.Action
+import org.brzy.interceptor.{InterceptorResource, ManagedThreadContext, Invoker}
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.service.ServiceScanner
 
@@ -14,7 +15,6 @@ import org.brzy.controller.{ControllerScanner, Path, Controller}
 import org.brzy.config.plugin.{Plugin, PluginResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}
-import org.brzy.interceptor.{InterceptorResource, MethodInvoker}
 
 /**
  * @author Michael Fortin
@@ -57,13 +57,13 @@ class WebApp(val config: WebAppConfig) {
     list.toList
   }
 
-  val interceptor: MethodInvoker = makeInterceptor
+  val interceptor: Invoker = makeInterceptor
 
-  protected[application] def makeInterceptor: MethodInvoker = {
-    val buffer = ListBuffer[MethodInvoker]()
+  protected[application] def makeInterceptor: Invoker = {
+    val buffer = ListBuffer[ManagedThreadContext]()
     persistenceResources.foreach(pin => {
       if(pin.isInstanceOf[InterceptorResource])
-        buffer += pin.asInstanceOf[InterceptorResource].interceptor.asInstanceOf[MethodInvoker]
+        buffer += pin.asInstanceOf[InterceptorResource].interceptor
     })
 
     if(buffer.size > 1)
@@ -72,6 +72,7 @@ class WebApp(val config: WebAppConfig) {
       null
     else
       buffer(0)
+    new Invoker(buffer.toList)
   }
 
   val services: List[_<:AnyRef] = makeServices
@@ -82,6 +83,7 @@ class WebApp(val config: WebAppConfig) {
     def append(sc:AnyRef) ={
       val clazz = sc.asInstanceOf[Class[_]]
       buffer += make(clazz, interceptor)
+
     }
 
     val serviceClasses = ServiceScanner(config.application.org.get).services

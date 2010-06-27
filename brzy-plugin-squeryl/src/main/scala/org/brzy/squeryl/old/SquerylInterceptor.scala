@@ -1,6 +1,6 @@
-package org.brzy.squeryl
+package org.brzy.squeryl.old
 
-import org.brzy.interceptor.{Invocation, Interceptor, MethodInvoker}
+import org.brzy.interceptor.old.{Invocation, Interceptor, Invoker}
 import org.brzy.persistence.ThreadScope._
 import org.squeryl.Session
 import org.squeryl.adapters._
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
  * @author Michael Fortin
  * @version $Id: $
  */
-class SquerylInterceptor(driver:String, url:String, user:String, pass:String) extends MethodInvoker with Interceptor {
+class SquerylInterceptor(driver:String, url:String, user:String, pass:String) extends Invoker with Interceptor {
 
   val log = LoggerFactory.getLogger(getClass)
   log.info("driver: " + driver)

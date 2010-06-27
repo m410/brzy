@@ -1,4 +1,4 @@
-package org.brzy.persistence
+package org.brzy.jpa
 
 import javax.persistence.Query
 

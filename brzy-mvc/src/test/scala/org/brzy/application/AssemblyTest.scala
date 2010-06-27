@@ -4,17 +4,19 @@ import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.brzy.interceptor.impl.LoggingInterceptor
-import org.brzy.interceptor.{ProxyFactory, MethodInvoker}
 import collection.JavaConversions._
+import org.brzy.interceptor.{ManagedThreadContext, ProxyFactory, Invoker}
 
 class AssemblyTest extends JUnitSuite {
 
   @Test
   def testInjectServiceToController = {
-    val service = ProxyFactory.make(classOf[MockService], new MethodInvoker with LoggingInterceptor)
+    val invoker: Invoker = new Invoker(List[ManagedThreadContext]())
+
+    val service = ProxyFactory.make(classOf[MockService], invoker)
     assertNotNull(service)
 
-    val ctlr = ProxyFactory.make(classOf[MockController], Array(service),  new MethodInvoker with LoggingInterceptor)
+    val ctlr = ProxyFactory.make(classOf[MockController], Array(service),  invoker)
     assertNotNull(ctlr)
 
     assertEquals("Called",ctlr.asInstanceOf[MockController].callService)

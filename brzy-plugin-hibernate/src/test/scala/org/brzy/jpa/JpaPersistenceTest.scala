@@ -1,4 +1,4 @@
-package org.brzy.persistence.scalaJpa
+package org.brzy.jpa
 
 import org.junit.Test
 import org.junit.Ignore

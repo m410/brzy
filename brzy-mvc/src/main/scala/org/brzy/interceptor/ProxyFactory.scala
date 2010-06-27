@@ -21,7 +21,7 @@ object ProxyFactory {
         !m.getName.equals("wait")
   }
 
-  def make(clazz:Class[_], args:Array[AnyRef], proxy:MethodInvoker): AnyRef = {
+  def make(clazz:Class[_], args:Array[AnyRef], proxy:Invoker): AnyRef = {
     val factory = new PFactory
     factory.setSuperclass(clazz)
     factory.setFilter(filter)
@@ -33,5 +33,5 @@ object ProxyFactory {
     }), args, proxy)
   }
 
-  def make(clazz:Class[_], proxy:MethodInvoker): AnyRef = make(clazz, Array[AnyRef]() ,proxy)
+  def make(clazz:Class[_], proxy:Invoker): AnyRef = make(clazz, Array[AnyRef]() ,proxy)
 }
