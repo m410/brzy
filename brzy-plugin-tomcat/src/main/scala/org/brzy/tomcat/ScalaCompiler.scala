@@ -28,6 +28,7 @@ class ScalaCompiler(codeDir:File, outputDir:File, classpath:String) {
   private val compiler = new Global(settings, null)
 
   def compile(file:File) = {
+    println(" -- re-compile")
     val messageCollector = new StringWriter
     val messageCollectorWrapper = new PrintWriter(messageCollector)
 

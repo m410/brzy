@@ -5,14 +5,11 @@ import org.junit.Assert._
 import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
-import org.brzy.mock.MockPluginConfig
 import org.junit.Test
+import org.brzy.mock.MockPluginConfig
 
 
 class WebAppTest extends JUnitSuite {
-
-  class MockWebApp(config: WebAppConfig) extends WebApp(config)
-
 
   @Test
   def testCreate = {
@@ -28,14 +25,13 @@ class WebAppTest extends JUnitSuite {
         "org" -> "org.brzy.mock")
       ))
     val config = new WebAppConfig(boot, view, Nil, Nil)
-    val webapp = new MockWebApp(config)
+    val webapp = new WebApp(config)
     assertNotNull(webapp)
     assertNotNull(webapp.services)
     assertEquals(1, webapp.services.size)
     assertNotNull(webapp.controllers)
-    assertEquals(1, webapp.controllers.size)
+    assertEquals(2, webapp.controllers.size)
     assertNotNull(webapp.actions)
-    assertEquals(14, webapp.actions.size)
-
+    assertEquals(17, webapp.actions.size)
   }
 }

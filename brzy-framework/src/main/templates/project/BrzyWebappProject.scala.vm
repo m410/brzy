@@ -35,14 +35,14 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
 	  <dependency org="org.brzy" name="brzy-shell" rev="0.2" conf="brzy" />
 #foreach($dep in $dependencies)
 #if($dep.org().get())
-      <dependency org="${dep.org().get()}" name="${dep.name().get()}" rev="${dep.rev().get()}" conf="${dep.conf().get()}" #if(!$dep.transitive().get()) transitive="false" #end >
+    <dependency org="${dep.org().get()}" name="${dep.name().get()}" rev="${dep.rev().get()}" conf="${dep.conf().get()}" #if(!$dep.transitive().get()) transitive="false" #end >
 #if($dep.excludes().isDefined())
-#foreach($exclude in $$dep.excludes().get())
-	    <exclude org="${exclude.org().get()}" name="${exclude.name().get()}" />
+#foreach($exclude in $dep.excludesAsJList())
+        <exclude org="${exclude.org().get()}" name="${exclude.name().get()}" />
 #end
 #end
 	  </dependency>
-#end 
+#end
 #end
     </dependencies>
 
@@ -78,8 +78,17 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
     webXmlAction(List(config,"development",outDir))
   }.dependsOn(prePackage) describedAs "Generates the web.xml file"
 
-  lazy val delWebXml = {
-    FileUtilities.clean(webappPath / "WEB-INF", new ConsoleLogger)
-  }
+  lazy val setupWebInf = task {
+    val logger = new ConsoleLogger
+    val myclasses = {("target"/"scala_2.8.0.RC6"/"classes" $H$H) ** "*.class"}.get
+	copy(myclasses,"webapp"/"WEB-INF"/"classes",true,logger)
+	val libs = {("project"/"lib"/"compile" $H$H) ** "*.jar"}.get
+	copy(libs,"webapp"/"WEB-INF"/"lib",true,logger)
+	None
+  }.dependsOn(webXml,logbackXml,compile) describedAs "Copies classes and libs"
 
+  lazy val deleteWebInf = task {
+    FileUtilities.clean(webappPath / "WEB-INF", new ConsoleLogger)
+	None
+  }
 }

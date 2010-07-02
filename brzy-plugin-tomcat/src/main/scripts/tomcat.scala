@@ -1,20 +1,22 @@
+import java.io.File
 import org.apache.catalina.LifecycleException
 import org.apache.catalina.loader.WebappLoader
-import org.apache.catalina.realm.MemoryRealm
+import org.brzy.tomcat.{FileWatcher, ScalaCompiler}
+//import org.apache.catalina.realm.MemoryRealm
 import org.apache.catalina.startup.Embedded
 import java.net.InetAddress
-import java.io.File
-import collection.JavaConversions._
-import org.brzy.tomcat.{ScalaCompiler, FileWatcher}
+
+// Start it
+Tomcat.main(args)
 
 
 object Tomcat extends Application {
 
-  val sourceDir = new File(args(0),"src/main/scala")
-  val classesDir = new File(args(0),"target/scala_2.8.0.RC5/classes")
+  val sourceDir = new File(args(0),"src/scala")
+  val classesDir = new File(args(0),"webapp/WEB-INF/classes")
 
   val sb = new StringBuilder
-  val libDir = new File(args(0),"target/scala_2.8.0.RC5/webapp/WEB-INF/lib")
+  val libDir = new File(args(0),"webapp/WEB-INF/lib")
   libDir.listFiles.foreach(f => {
     sb.append(f.getAbsolutePath)
     sb.append(":")
@@ -24,6 +26,7 @@ object Tomcat extends Application {
   println(" -- source   : " + sourceDir)
   println(" -- classes  : " + classesDir)
   println(" -- classpath: " + classpath )
+  // TODO copy files to web-inf
   new RunWebApp("",8080)
   new FileWatcher(sourceDir,new ScalaCompiler(sourceDir,classesDir,classpath))
   Thread.sleep(100000000) // TODO there's probably a better way to do this
@@ -32,8 +35,8 @@ object Tomcat extends Application {
 class RunWebApp(contextName:String, port:Int) {
 	println("Running Web Application")
 
-  val appBase = "scala_2.8.0.RC5/webapp"
-  val classesDir = appBase + "/WEB-INF/classes"
+  val appBase = "webapp"
+//  val classesDir = appBase + "/WEB-INF/classes"
 	val container = new Embedded
 
 	val catalinaHome = new File("project/brzy-plugins/brzy-tomcat")
@@ -41,10 +44,10 @@ class RunWebApp(contextName:String, port:Int) {
 	// container.setRealm(new MemoryRealm())
   val loader = new WebappLoader(this.getClass.getClassLoader)
 
-  if (classesDir != null)
-      loader.addRepository(new File(classesDir).toURI.toURL.toString)
+//  if (classesDir != null)
+//      loader.addRepository(new File(classesDir).toURI.toURL.toString)
 
-	val targetDir = new File("target")
+	val targetDir = new File("")
 	val targetPath = targetDir.getAbsolutePath
   val host = container.createHost("localhost", targetPath)
 
@@ -71,6 +74,7 @@ class RunWebApp(contextName:String, port:Int) {
 				if (container != null)
 					container.stop
 				println("Shutdown...")
+        // TODO delete web-inf
 			}
 			catch {
 				case e:LifecycleException =>
@@ -81,7 +85,3 @@ class RunWebApp(contextName:String, port:Int) {
 		}
 	})
 }
-
-// Start it
-Tomcat.main(args)
-

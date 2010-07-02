@@ -79,7 +79,7 @@ if [ -e "$SCRIPT" ]; then
     echo "pwd       : `pwd`"
     exec scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME $@
 else
-    echo "run build : $@"
+    echo "sbt : $@"
     java -Xmx512m -jar $BRZY_HOME/sbt-launch.jar $@
 fi
 

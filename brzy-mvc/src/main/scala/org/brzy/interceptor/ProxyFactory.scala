@@ -34,4 +34,6 @@ object ProxyFactory {
   }
 
   def make(clazz:Class[_], proxy:Invoker): AnyRef = make(clazz, Array[AnyRef]() ,proxy)
+
+  def isProxy(a:AnyRef):Boolean = a.isInstanceOf[ProxyObject] 
 }

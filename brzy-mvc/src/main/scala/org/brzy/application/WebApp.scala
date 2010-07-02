@@ -62,25 +62,25 @@ class WebApp(val config: WebAppConfig) {
   protected[application] def makeInterceptor: Invoker = {
     val buffer = ListBuffer[ManagedThreadContext]()
     persistenceResources.foreach(pin => {
-      if(pin.isInstanceOf[InterceptorResource])
+      if (pin.isInstanceOf[InterceptorResource])
         buffer += pin.asInstanceOf[InterceptorResource].interceptor
     })
 
-    if(buffer.size > 1)
+    if (buffer.size > 1)
       error("Currently, Only one interceptor is supported: " + buffer.mkString(", "))
-    else if(buffer.size < 1)
+    else if (buffer.size < 1)
       null
     else
       buffer(0)
     new Invoker(buffer.toList)
   }
 
-  val services: List[_<:AnyRef] = makeServices
+  val services: List[_ <: AnyRef] = makeServices
 
   protected[application] def makeServices: List[AnyRef] = {
     val buffer = ListBuffer[AnyRef]()
 
-    def append(sc:AnyRef) ={
+    def append(sc: AnyRef) = {
       val clazz = sc.asInstanceOf[Class[_]]
       buffer += make(clazz, interceptor)
 
@@ -100,7 +100,30 @@ class WebApp(val config: WebAppConfig) {
     val controllerClasses = ControllerScanner(config.application.org.get).controllers
     controllerClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
-      buffer += make(clazz, interceptor)
+      val constructor: Constructor[_] = clazz.getConstructors.find(_ != null).get // should only be one
+
+      if (constructor.getParameterTypes.length > 0) {
+        val constructorArgs = constructor.getParameterTypes.map((argClass:Class[_]) => {
+          val list = services.filter((s: AnyRef) => {
+            val serviceClass =
+                if (isProxy(s))
+                  s.getClass.getSuperclass
+                else
+                  s.getClass
+            argClass.equals(serviceClass)
+          })
+
+          if(list.size == 1)
+            list(0)
+          else
+            error("No Service for class: " + argClass)
+        })
+        println("constructorArgs: " + constructorArgs)
+        buffer += make(clazz, constructorArgs, interceptor)
+      }
+      else {
+        buffer += make(clazz, interceptor)
+      }
     })
     buffer.toList
   }
@@ -134,9 +157,9 @@ class WebApp(val config: WebAppConfig) {
     pluginResources.foreach(_.startup)
     viewResource.startup
     log.info("application startup")
-    log.debug("services: {}",  services.mkString(","))
-    log.debug("controllers: {}",  controllers.mkString(","))
-    log.debug("actions: {}",  actions.mkString(","))
+    log.debug("services: {}", services.mkString(","))
+    log.debug("controllers: {}", controllers.mkString(","))
+    log.debug("actions: {}", actions.mkString(","))
   }
 
   def shutdown = {

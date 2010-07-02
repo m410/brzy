@@ -14,6 +14,6 @@ class LoadConfigTest extends JUnitSuite {
       "version" -> "0.2",
       "org" -> "org.brzy"))
     val tomcat: Plugin = ConfigFactory.makeRuntimePlugin(plugin)
-    assertTrue(tomcat.isInstanceOf[TomcatPluginConfig])
+    assertTrue(tomcat.isInstanceOf[Plugin])
   }
 }

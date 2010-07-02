@@ -1,7 +1,7 @@
 
 
 project:
-  scala_version: 2.8.0.RC5
+  scala_version: 2.8.0.RC6
   sbt_version: 0.7.4
   package_type: war
   plugin_resources: ".brzy/plugins"
@@ -32,8 +32,8 @@ repositories:
 dependencies:
   - {conf: compile, org: org.brzy, name: brzy-config, rev: "0.2"}
   - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
-  - {conf: runtime, org: org.scala-lang, name: scala-compiler, rev: "2.8.0.RC5"}
-  - {conf: runtime, org: org.scala-lang, name: scala-library, rev: "2.8.0.RC5"}
+  - {conf: runtime, org: org.scala-lang, name: scala-compiler, rev: "2.8.0.RC6"}
+  - {conf: runtime, org: org.scala-lang, name: scala-library, rev: "2.8.0.RC6"}
   - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.5.11"}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8"}

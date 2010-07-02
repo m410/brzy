@@ -90,6 +90,7 @@
       <groupId>org.brzy</groupId>
       <artifactId>brzy-config</artifactId>
       <version>0.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.brzy</groupId>

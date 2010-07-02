@@ -21,7 +21,7 @@ application:
 # scope = [provided,runtime,test]
 dependencies:
   - {conf: compile, org: org.apache.wicket, name: wicket, rev: 1.4-rc6}
-  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.0"}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2-SNAPSHOT"}
 
 #
 # Dependency Management

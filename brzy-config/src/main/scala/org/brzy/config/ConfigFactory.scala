@@ -91,7 +91,7 @@ object ConfigFactory {
       newPluginInstance << reference
     }
     else {
-      null
+      reference
     }
   }
 
@@ -108,7 +108,7 @@ object ConfigFactory {
       newPluginInstance << reference
     }
     else {
-      null
+      reference
     }
   }
 
