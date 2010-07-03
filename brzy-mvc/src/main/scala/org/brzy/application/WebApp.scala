@@ -104,7 +104,7 @@ class WebApp(val config: WebAppConfig) {
 
       if (constructor.getParameterTypes.length > 0) {
         val constructorArgs = constructor.getParameterTypes.map((argClass:Class[_]) => {
-          val list = services.filter((s: AnyRef) => {
+          val list = services.filter((s: AnyRef) => { // work-around because find does not compile
             val serviceClass =
                 if (isProxy(s))
                   s.getClass.getSuperclass
@@ -118,7 +118,6 @@ class WebApp(val config: WebAppConfig) {
           else
             error("No Service for class: " + argClass)
         })
-        println("constructorArgs: " + constructorArgs)
         buffer += make(clazz, constructorArgs, interceptor)
       }
       else {

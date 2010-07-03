@@ -8,4 +8,7 @@ package org.brzy.interceptor
  */
 trait InterceptorResource {
   def interceptor:ManagedThreadContext
+
+  // TODO add the name of the package scope this interceptor gets applied to later
+  // val packageScope:String
 }

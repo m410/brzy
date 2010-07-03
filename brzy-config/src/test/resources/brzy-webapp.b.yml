@@ -41,7 +41,7 @@ persistence:
     org: org.brzy
     version: "0.2"
     config_class: org.brzy.plugin.SquerylPluginConfig
-    scan_package: *group
+    package_scope: *group
     driver: org.postgresql.Driver
     user_name: test
     password: ""

@@ -14,7 +14,7 @@ class BrzyControllerScannerTest extends JUnitSuite {
   def testControllerScanner = {
     val result = scanner.controllers
     assertNotNull(result)
-    assertEquals(1,result.size)
+    assertEquals(2,result.size)
   }
 
 }
