@@ -6,7 +6,7 @@ import org.junit.Test
 import org.junit.Before
 import org.brzy.webapp.ConfigFactory
 import java.io.File
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.util.FileUtils._
 
 /**
@@ -71,7 +71,7 @@ class ConfigFactoryTest extends JUnitSuite {
       "org" -> "org.brzy",
       "version" -> "0.1",
       "remote_location" -> "/Users/m410/Projects/brzy/brzy-config/src/test/resources/brzy-test-plugin.zip")
-    val plugin = new Plugin(map)
+    val plugin = new Mod(map)
     assertNotNull(plugin)
     assertEquals(0, workDir.listFiles.length)
     ConfigFactory.installPlugin( workDir, plugin)

@@ -16,7 +16,7 @@ import org.brzy.interceptor.Invoker
 import org.brzy.squeryl.SquerylContextManager
 import java.lang.String
 import collection.immutable.{Map, SortedSet}
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.mock.{MockPluginConfig, PersonController}
 import java.lang.reflect.Method
 

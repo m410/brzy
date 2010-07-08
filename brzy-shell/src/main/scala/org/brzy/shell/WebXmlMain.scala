@@ -3,7 +3,7 @@ package org.brzy.shell
 import xml.XML
 import org.brzy.webapp.ConfigFactory
 import java.io.File
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 
 /**
  * Document Me..
@@ -22,7 +22,7 @@ object WebXmlMain {
     
     val bootConfig = ConfigFactory.makeBootConfig(new File(args(0)), args(1))
 
-    val view: Plugin = bootConfig.views match {
+    val view: Mod = bootConfig.views match {
       case Some(v) =>
         if (v != null)
           ConfigFactory.makeBuildTimePlugin(bootConfig.views.get,pluginsDir)
@@ -31,13 +31,13 @@ object WebXmlMain {
       case _ => null
     }
 
-    val persistence: List[Plugin] = {
+    val persistence: List[Mod] = {
       if (bootConfig.persistence.isDefined)
         bootConfig.persistence.get.map(ConfigFactory.makeBuildTimePlugin(_,pluginsDir))
       else
         Nil
     }
-    val plugins: List[Plugin] = {
+    val plugins: List[Mod] = {
       if (bootConfig.plugins.isDefined)
         bootConfig.plugins.get.map(ConfigFactory.makeBuildTimePlugin(_,pluginsDir))
       else

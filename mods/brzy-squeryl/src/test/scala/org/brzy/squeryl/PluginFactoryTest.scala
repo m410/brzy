@@ -4,7 +4,7 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import java.io.File
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.webapp.ConfigFactory
 
 class PluginFactoryTest extends JUnitSuite {
@@ -20,7 +20,7 @@ class PluginFactoryTest extends JUnitSuite {
       assertNotNull(driver)
       assertEquals("org.postgresql.Driver",driver)
     })
-    val persistence: List[Plugin] = {
+    val persistence: List[Mod] = {
       if (bootConfig.persistence.isDefined)
         bootConfig.persistence.get.map( ConfigFactory.makeRuntimePlugin(_))
       else

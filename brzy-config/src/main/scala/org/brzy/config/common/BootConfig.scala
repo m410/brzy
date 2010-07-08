@@ -1,6 +1,6 @@
 package org.brzy.config.common
 
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import java.lang.reflect.Constructor
 import java.lang.String
 import collection.mutable.ListBuffer
@@ -51,10 +51,10 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
     case _ => None
   }
 
-  val views: Option[Plugin] = m.get("views") match {
+  val views: Option[Mod] = m.get("views") match {
     case Some(s) =>
       if (s != null)
-        Option(new Plugin(s.asInstanceOf[Map[String, AnyRef]]))
+        Option(new Mod(s.asInstanceOf[Map[String, AnyRef]]))
       else
         None
     case _ => None
@@ -76,12 +76,12 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
         None
     case _ => None
   }
-  val plugins: Option[List[Plugin]] = m.get("plugins") match {
+  val plugins: Option[List[Mod]] = m.get("plugins") match {
     case Some(s) =>
       if (s != null) {
-        val buffer = new ListBuffer[Plugin]()
+        val buffer = new ListBuffer[Mod]()
         s.asInstanceOf[List[Map[String, AnyRef]]].foreach(map => {
-          buffer += new Plugin(map)
+          buffer += new Mod(map)
         })
         Option(buffer.toList)
       }
@@ -89,12 +89,12 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
         None
     case _ => None
   }
-  val persistence: Option[List[Plugin]] = m.get("persistence") match {
+  val persistence: Option[List[Mod]] = m.get("persistence") match {
     case Some(s) =>
-      val buffer = new ListBuffer[Plugin]()
+      val buffer = new ListBuffer[Mod]()
       if (s != null) {
         s.asInstanceOf[List[Map[String, AnyRef]]].foreach(map => {
-          buffer += new Plugin(map)
+          buffer += new Mod(map)
         })
         Option(buffer.toList)
       }

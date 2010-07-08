@@ -3,7 +3,7 @@ package org.brzy.plugin
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 
 /**
  * @author Michael Fortin
@@ -13,7 +13,7 @@ class PluginTest extends JUnitSuite {
 
   @Test
   def testBasicSet = {
-    def plugin = new Plugin(Map("name"->"app",
+    def plugin = new Mod(Map("name"->"app",
       "version"->"1.0.0"))
     assertNotNull(plugin)
     assertNotNull(plugin.name.get)

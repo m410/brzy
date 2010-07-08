@@ -2,7 +2,7 @@ import java.io._
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.VelocityContext
 import org.brzy.config.common.{Dependency, Repository}
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import collection.JavaConversions._
 import org.brzy.webapp.ConfigFactory._
 
@@ -44,9 +44,9 @@ object Boot2 extends Application {
     config.dependencies.toList ++ config.plugins.map(_.dependencies) ++ config.views.dependencies
   }.asInstanceOf[List[Dependency]]
 
-  val plugs:java.util.Collection[Plugin] = {
+  val plugs:java.util.Collection[Mod] = {
     List(config.views) ++ config.plugins ++ config.persistence
-  }.asInstanceOf[List[Plugin]]
+  }.asInstanceOf[List[Mod]]
 
   context.put("repositories", repos)
   context.put("dependencies", deps)

@@ -2,7 +2,7 @@ import java.io._
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.VelocityContext
 import org.brzy.config.BootConfigBuilder
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.plugin.Downloader._
 import org.brzy.config.{Dependency,Repository}
 import collection.JavaConversions._
@@ -59,7 +59,7 @@ object Bootstrap extends Application {
 
   val repos:java.util.Collection[Repository] = {config.views.get.repositories.get ++ config.repositories.get ++ config.plugins.get.map(_.repositories.get)}.asInstanceOf[List[Repository]]
   val deps:java.util.Collection[Dependency] = {config.dependencies.get ++ config.plugins.get.map(_.dependencies.get) ++ config.views.get.dependencies.get}.asInstanceOf[List[Dependency]]
-  val plugs:java.util.Collection[Plugin] = {List[Plugin](config.views.get) ++ config.plugins.get ++ config.persistence.get}.asInstanceOf[List[Plugin]]
+  val plugs:java.util.Collection[Mod] = {List[Mod](config.views.get) ++ config.plugins.get ++ config.persistence.get}.asInstanceOf[List[Mod]]
   context.put("repositories", repos)
   context.put("dependencies", deps)
   context.put("plugins", plugs)

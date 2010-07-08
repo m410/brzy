@@ -1,4 +1,4 @@
-package org.brzy.config.plugin
+package org.brzy.config.mod
 
 import org.brzy.config.common.{Config, MergeConfig, Repository, Dependency}
 import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareToBuilder}
@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareT
  * @author Michael Fortin
  * @version $Id : $
  */
-class Plugin(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Plugin] with Ordered[Plugin] {
+class Mod(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Mod] with Ordered[Mod] {
   val configurationName = "Plugin Reference"
   val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
   val version: Option[String] = map.get("version").asInstanceOf[Option[String]].orElse(None)
@@ -39,12 +39,12 @@ class Plugin(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[
 
   override def asMap: Map[String, AnyRef] = map
 
-  override def <<(that: Plugin) = {
+  override def <<(that: Mod) = {
     if (that == null) {
       this
     }
     else {
-      new Plugin(Map[String, AnyRef](
+      new Mod(Map[String, AnyRef](
         "name" -> that.name.getOrElse(null),
         "version" -> that.version.getOrElse(this.version.getOrElse(null)),
         "org" -> that.org.getOrElse(this.org.getOrElse(null)),
@@ -76,7 +76,7 @@ class Plugin(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[
     }
   }
 
-  override def compare(that: Plugin) = {
+  override def compare(that: Mod) = {
     new CompareToBuilder()
             .append(this.name.getOrElse(null), that.name.getOrElse(null))
             .append(this.org.getOrElse(null), that.org.getOrElse(null))
@@ -89,7 +89,7 @@ class Plugin(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[
     if (p1 == null)
       false
     else {
-      val rhs = p1.asInstanceOf[Plugin]
+      val rhs = p1.asInstanceOf[Mod]
       new EqualsBuilder()
               .appendSuper(super.equals(p1))
               .append(name.getOrElse(null), rhs.name.getOrElse(null))

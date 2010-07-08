@@ -3,7 +3,7 @@ package org.brzy.scalate
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 
 /**
  * Document Me..
@@ -57,7 +57,7 @@ class ScalatePluginConfigTest extends JUnitSuite {
 
   @Test
   def testMergePlugin = {
-    val plugin = new Plugin(Map[String, AnyRef](
+    val plugin = new Mod(Map[String, AnyRef](
       "name" -> "test",
       "version" -> "test",
       "org" -> "test",
@@ -101,7 +101,7 @@ class ScalatePluginConfigTest extends JUnitSuite {
 
   @Test
   def testInstanceOf = {
-    val plugin = new Plugin(Map[String, AnyRef](
+    val plugin = new Mod(Map[String, AnyRef](
       "name" -> "test",
       "version" -> "test",
       "org" -> "test",

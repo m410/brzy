@@ -3,7 +3,7 @@ package org.brzy.application
 import java.io.File
 import org.brzy.webapp.ConfigFactory._
 import java.net.URL
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.config.webapp.WebAppConfig
 import org.slf4j.LoggerFactory
 
@@ -22,7 +22,7 @@ object WebAppFactory {
   def create(configUrl: URL, env: String): WebApp = {
     val bootConfig = makeBootConfig(new File(configUrl.getFile), env)
 
-    val view: Plugin = bootConfig.views match {
+    val view: Mod = bootConfig.views match {
       case Some(v) =>
         if (v != null)
           makeRuntimePlugin(bootConfig.views.get)
@@ -31,13 +31,13 @@ object WebAppFactory {
       case _ => null
     }
 
-    val persistence: List[Plugin] = {
+    val persistence: List[Mod] = {
       if (bootConfig.persistence.isDefined)
         bootConfig.persistence.get.map( makeRuntimePlugin(_))
       else
         Nil
     }
-    val plugins: List[Plugin] = {
+    val plugins: List[Mod] = {
       if (bootConfig.plugins.isDefined)
         bootConfig.plugins.get.map( makeRuntimePlugin(_))
       else

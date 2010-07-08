@@ -1,6 +1,6 @@
 package org.brzy.config.webapp
 
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.config.common._
 import collection.mutable.ListBuffer
 import collection.immutable.{List, SortedSet}
@@ -12,9 +12,9 @@ import collection.immutable.{List, SortedSet}
  * @version $Id : $
  */
 class WebAppConfig(val init: BootConfig,
-                   val views: Plugin,
-                   val persistence: List[Plugin],
-                   val plugins: List[Plugin])
+                   val views: Mod,
+                   val persistence: List[Mod],
+                   val plugins: List[Mod])
         extends WebXml {
   val environment: String = init.environment.get
   val application: Application = init.application.getOrElse(null)

@@ -1,16 +1,16 @@
 package org.brzy.cascal
 
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 
 /**
  *
  * @author Michael Fortin
  * @version $Id : $
  */
-class CascalPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
+class CascalPluginConfig(map: Map[String, AnyRef]) extends Mod(map) {
   override val configurationName = "Cascal"
 
-  override def <<(that: Plugin):Plugin = {
+  override def <<(that: Mod):Mod = {
     if (that == null) {
       this
     }

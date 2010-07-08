@@ -1,6 +1,6 @@
 package org.brzy.squeryl
 
-import org.brzy.config.plugin.PluginResource
+import org.brzy.config.mod.ModResource
 import org.slf4j.LoggerFactory
 import org.brzy.interceptor.InterceptorResource
 
@@ -10,7 +10,7 @@ import org.brzy.interceptor.InterceptorResource
  * @author Michael Fortin
  * @version $Id: $
  */
-class SquerylPluginResource(c:SquerylPluginConfig) extends PluginResource with InterceptorResource {
+class SquerylPluginResource(c:SquerylPluginConfig) extends ModResource with InterceptorResource {
 
   private val log = LoggerFactory.getLogger(getClass)
   log.debug("db driver: {}",c.driver.getOrElse("?"))

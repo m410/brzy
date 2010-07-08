@@ -1,12 +1,12 @@
 package org.brzy.squeryl
 
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 
 /**
  * @author Michael Fortin
  * @version $Id : $
  */
-class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
+class SquerylPluginConfig(map: Map[String, AnyRef]) extends Mod(map) {
   override val configurationName = "Squeryl"
 
   val driver: Option[String] = map.get("driver").asInstanceOf[Option[String]].orElse(None)
@@ -16,7 +16,7 @@ class SquerylPluginConfig(map: Map[String, AnyRef]) extends Plugin(map) {
   val adaptorName: Option[String] = map.get("adaptor_name").asInstanceOf[Option[String]].orElse(None)
 
 
-  override def <<(that: Plugin):Plugin  = {
+  override def <<(that: Mod):Mod  = {
     if (that == null) {
       this
     }

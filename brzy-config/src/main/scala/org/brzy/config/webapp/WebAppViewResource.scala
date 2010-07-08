@@ -1,6 +1,6 @@
 package org.brzy.config.webapp
 
-import org.brzy.config.plugin.{Plugin, PluginResource}
+import org.brzy.config.mod.{Mod, ModResource}
 
 /**
  * Document Me..
@@ -8,6 +8,6 @@ import org.brzy.config.plugin.{Plugin, PluginResource}
  * @author Michael Fortin
  * @version $Id: $
  */
-abstract class WebAppViewResource(plugin: Plugin) extends PluginResource {
+abstract class WebAppViewResource(plugin: Mod) extends ModResource {
   val fileExtension:String
 }

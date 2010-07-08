@@ -5,7 +5,7 @@ import java.util.{Map => JMap, HashMap => JHashMap, List => JList, ArrayList => 
 import org.ho.yaml.Yaml
 import java.net.URL
 import java.lang.reflect.Constructor
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.util.NestedCollectionConverter._
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._
@@ -74,11 +74,11 @@ object ConfigFactory {
   /**
    *
    */
-  def makeWebAppConfig(c: BootConfig, view: Plugin, persistence: List[Plugin], plugins: List[Plugin]) = {
+  def makeWebAppConfig(c: BootConfig, view: Mod, persistence: List[Mod], plugins: List[Mod]) = {
     new WebAppConfig(c, view, persistence, plugins)
   }
 
-  def makeRuntimePlugin(reference: Plugin): Plugin = {
+  def makeRuntimePlugin(reference: Mod): Mod = {
     val pluginResource: String = "brzy-plugins/" + reference.name.get + "/brzy-plugin.b.yml"
     val cpUrl = getClass.getClassLoader.getResource(pluginResource)
     val yaml = convertMap(Yaml.load(cpUrl.openStream).asInstanceOf[JMap[String, AnyRef]])
@@ -87,7 +87,7 @@ object ConfigFactory {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
       val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
       val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Plugin]
+      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
       newPluginInstance << reference
     }
     else {
@@ -95,7 +95,7 @@ object ConfigFactory {
     }
   }
 
-  def makeBuildTimePlugin(reference: Plugin, pluginResourceDirectory: File): Plugin = {
+  def makeBuildTimePlugin(reference: Mod, pluginResourceDirectory: File): Mod = {
     val pFile = new File(pluginResourceDirectory, reference.name.get)
     val pluginFile = new File(pFile, "/brzy-plugin.b.yml")
     val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String, AnyRef]])
@@ -104,7 +104,7 @@ object ConfigFactory {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
       val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
       val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Plugin]
+      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
       newPluginInstance << reference
     }
     else {
@@ -126,7 +126,7 @@ object ConfigFactory {
   /**
    *
    */
-  def installPlugin(destDir: File, plugin: Plugin): Unit = {
+  def installPlugin(destDir: File, plugin: Mod): Unit = {
 
     // from local file system for development mode
     if (plugin.localLocation.isDefined && plugin.localLocation.get != null) {
@@ -153,7 +153,7 @@ object ConfigFactory {
     }
   }
 
-  def fileForPlugin(plugin: Plugin): File = {
+  def fileForPlugin(plugin: Mod): File = {
     val url = getClass.getClassLoader.getResource(plugin.name.get + "/brzy-plugin.b.yml")
     new File(url.toURI)
   }
@@ -163,7 +163,7 @@ object ConfigFactory {
    * plugin has a local_location.  In which case the local location is used instead
    * of the plugin cache.
    */
-  private def downloadAndUnzipTo(plgn: Plugin, outputDir: File): Unit = {
+  private def downloadAndUnzipTo(plgn: Mod, outputDir: File): Unit = {
     // if it has a local location ignore it.
     // downloads from web
     if (plgn.remoteLocation.isDefined && plgn.remoteLocation.get.startsWith("http")) {
@@ -197,7 +197,7 @@ object ConfigFactory {
     }
   }
 
-  private def downloadAndUnzipTo(plgn: Plugin, remoteUrl: String, appPluginCache: File) = {
+  private def downloadAndUnzipTo(plgn: Mod, remoteUrl: String, appPluginCache: File) = {
     val destinationFile = new URL(remoteUrl).downloadToDir(new File(appPluginCache, plgn.name.get))
     destinationFile.unzip()
     destinationFile.delete()

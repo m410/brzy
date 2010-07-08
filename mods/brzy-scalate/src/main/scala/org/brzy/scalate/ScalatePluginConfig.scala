@@ -1,6 +1,6 @@
 package org.brzy.scalate
 
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import org.brzy.config.webapp.WebXml
 
 
@@ -8,13 +8,13 @@ import org.brzy.config.webapp.WebXml
  * @author Michael Fortin
  * @version $Id : $
  */
-class ScalatePluginConfig(map: Map[String, AnyRef]) extends Plugin(map) with WebXml {
+class ScalatePluginConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
   override val configurationName = "Scalate"
   val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
 
   override val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
-  override def <<(that: Plugin):Plugin  = {
+  override def <<(that: Mod):Mod  = {
     if (that == null) {
       this
     }

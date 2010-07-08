@@ -1,6 +1,6 @@
 package org.brzy.shell
 
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 import xml.XML
 import java.io.File
 import org.brzy.webapp.ConfigFactory

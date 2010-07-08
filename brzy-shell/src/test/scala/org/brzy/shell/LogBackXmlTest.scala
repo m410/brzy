@@ -3,7 +3,7 @@ package org.brzy.shell
 import org.junit.Test
 import org.junit.Assert._
 import org.brzy.config._
-import plugin.Plugin
+import mod.Mod
 import org.brzy.webapp.ConfigFactory._
 import java.io.File
 import org.scalatest.junit.JUnitSuite

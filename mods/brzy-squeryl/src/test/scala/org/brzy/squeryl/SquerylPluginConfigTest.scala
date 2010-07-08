@@ -3,7 +3,7 @@ package org.brzy.squeryl
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.config.plugin.Plugin
+import org.brzy.config.mod.Mod
 
 /**
  * Document Me..
@@ -14,7 +14,7 @@ import org.brzy.config.plugin.Plugin
 class SquerylPluginConfigTest extends JUnitSuite {
   @Test
   def testMerge = {
-    def plugin = new Plugin(Map(
+    def plugin = new Mod(Map(
       "name" -> "brzy-squeryl",
       "org" -> "orb.grzy",
       "version" -> "0.2",

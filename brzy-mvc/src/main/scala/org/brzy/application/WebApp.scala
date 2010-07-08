@@ -12,7 +12,7 @@ import java.lang.reflect.Constructor
 import collection.mutable.ListBuffer
 import collection.immutable.SortedSet
 import org.brzy.controller.{ControllerScanner, Path, Controller}
-import org.brzy.config.plugin.{Plugin, PluginResource}
+import org.brzy.config.mod.{Mod, ModResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}
 
@@ -33,25 +33,25 @@ class WebApp(val config: WebAppConfig) {
     constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
   }
 
-  val persistenceResources: List[PluginResource] = {
+  val persistenceResources: List[ModResource] = {
     config.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      val p = persist.asInstanceOf[Plugin]
+      val p = persist.asInstanceOf[Mod]
       val resourceClass = Class.forName(p.resourceClass.get)
       val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-      constructor.newInstance(p).asInstanceOf[PluginResource]
+      constructor.newInstance(p).asInstanceOf[ModResource]
     }).toList
   }
 
-  val pluginResources: List[PluginResource] = {
-    val list = ListBuffer[PluginResource]()
+  val pluginResources: List[ModResource] = {
+    val list = ListBuffer[ModResource]()
     config.plugins.foreach(plugin => {
       log.debug("plugin: {}", plugin)
-      val p = plugin.asInstanceOf[Plugin]
+      val p = plugin.asInstanceOf[Mod]
       if (p.resourceClass.isDefined && p.resourceClass.get != null) {
         val resourceClass = Class.forName(p.resourceClass.get)
         val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-        list += constructor.newInstance(p).asInstanceOf[PluginResource]
+        list += constructor.newInstance(p).asInstanceOf[ModResource]
       }
     })
     list.toList

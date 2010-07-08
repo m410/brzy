@@ -1,4 +1,4 @@
-package org.brzy.config.plugin
+package org.brzy.config.mod
 
 /**
  * Document Me..
@@ -6,7 +6,7 @@ package org.brzy.config.plugin
  * @author Michael Fortin
  * @version $Id: $
  */
-trait PluginResource {
+trait ModResource {
   
   def startup:Unit = {}
 
