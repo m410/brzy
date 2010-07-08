@@ -16,12 +16,15 @@
     <module>brzy-shell</module>
     <module>brzy-mvc</module>
     <module>brzy-framework</module>
-    <module>brzy-plugin-hibernate</module>
-    <module>brzy-plugin-scalate</module>
-    <module>brzy-plugin-squeryl</module>
-    <module>brzy-plugin-cascal</module>
-    <module>brzy-plugin-tomcat</module>
-    <module>brzy-plugin-migration</module>
+    <module>mods/brzy-cascal</module>
+    <module>mods/brzy-email</module>
+    <module>mods/brzy-jms</module>
+    <module>mods/brzy-jpa</module>
+    <module>mods/brzy-scalate</module>
+    <module>mods/brzy-scheduler</module>
+    <module>mods/brzy-security</module>
+    <module>mods/brzy-squeryl</module>
+    <module>mods/brzy-tomcat</module>
   </modules>
   <build>
     <plugins>

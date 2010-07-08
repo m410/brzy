@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy</groupId>
-  <artifactId>brzy-hibernate</artifactId>
-  <name>Brzy Hibernate Plugin</name>
+  <artifactId>brzy-jpa</artifactId>
+  <name>Brzy JPA Plugin</name>
   <version>0.1</version>
   <parent>
     <groupId>org.brzy</groupId>
