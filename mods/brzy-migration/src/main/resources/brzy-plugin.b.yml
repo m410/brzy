@@ -1,0 +1,11 @@
+#
+# adds RoR style database migration abilities to the application
+#
+name: brzy-migration
+org: org.brzy
+version: "0.1"
+config_class: org.brzy.plugin.MigrationPluginConfig
+resource_class: org.brzy.plugin.MigrationPluginResource
+dependencies:
+  - {conf: compile, org: com.imageworks, name: migration, rev: 1.0.0-2.8.0.Beta1-jdbc4}
+  - {conf: compile, org: org.brzy, name: brzy-migration, rev: "0.1"}

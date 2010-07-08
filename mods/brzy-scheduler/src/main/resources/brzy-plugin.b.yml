@@ -1,0 +1,8 @@
+#
+# implement persistence for the cassandra nosql db
+#
+name: brzy-scheduler
+org: org.brzy
+version: "0.1"
+config_class: org.brzy.plugin.SchedulerPluginConfig
+resource_class: org.brzy.plugin.SchedulerPluginResource
