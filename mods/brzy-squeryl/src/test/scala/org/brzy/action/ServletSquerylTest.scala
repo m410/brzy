@@ -17,8 +17,8 @@ import org.brzy.squeryl.SquerylContextManager
 import java.lang.String
 import collection.immutable.{Map, SortedSet}
 import org.brzy.config.mod.Mod
-import org.brzy.mock.{MockPluginConfig, PersonController}
 import java.lang.reflect.Method
+import org.brzy.mock.{MockModConfig, PersonController}
 
 /**
  * @author Michael Fortin
@@ -37,9 +37,9 @@ class ServletSquerylTest extends JUnitSuite {
     "environment" -> "developement",
     "application" -> Map("org" -> "org.brzy.nothing")
     )
-  val viewPlugin = new MockPluginConfig(Map[String, AnyRef](
+  val viewPlugin = new MockModConfig(Map[String, AnyRef](
     "dependencies" -> List(),
-    "resource_class" -> "org.brzy.mock.MockPluginResource"
+    "resource_class" -> "org.brzy.mock.MockModResource"
     ))
 
   val app = new WebApp(new WebAppConfig(new BootConfig(map), viewPlugin, Nil, Nil)) {

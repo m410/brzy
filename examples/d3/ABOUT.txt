@@ -1,0 +1,3 @@
+
+This is a simple web app that uses Scalate and Squery to implement
+the views and database operations. 

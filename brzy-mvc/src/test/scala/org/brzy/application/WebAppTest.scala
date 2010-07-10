@@ -6,7 +6,7 @@ import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
 import org.junit.Test
-import org.brzy.mock.MockPluginConfig
+import org.brzy.mock.MockModConfig
 
 
 class WebAppTest extends JUnitSuite {
@@ -14,9 +14,9 @@ class WebAppTest extends JUnitSuite {
   @Test
   def testCreate = {
 
-    val view = new MockPluginConfig(Map[String, AnyRef](
+    val view = new MockModConfig(Map[String, AnyRef](
       "fileExtension" -> ".ssp",
-      "resource_class" -> "org.brzy.mock.MockPluginResource"
+      "resource_class" -> "org.brzy.mock.MockModResource"
       ))
     val boot = new BootConfig(Map[String, AnyRef](
       "environment" -> "development",

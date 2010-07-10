@@ -25,7 +25,7 @@ object WebAppFactory {
     val view: Mod = bootConfig.views match {
       case Some(v) =>
         if (v != null)
-          makeRuntimePlugin(bootConfig.views.get)
+          makeRuntimeModule(bootConfig.views.get)
         else
           null
       case _ => null
@@ -33,17 +33,17 @@ object WebAppFactory {
 
     val persistence: List[Mod] = {
       if (bootConfig.persistence.isDefined)
-        bootConfig.persistence.get.map( makeRuntimePlugin(_))
+        bootConfig.persistence.get.map( makeRuntimeModule(_))
       else
         Nil
     }
-    val plugins: List[Mod] = {
-      if (bootConfig.plugins.isDefined)
-        bootConfig.plugins.get.map( makeRuntimePlugin(_))
+    val modules: List[Mod] = {
+      if (bootConfig.modules.isDefined)
+        bootConfig.modules.get.map( makeRuntimeModule(_))
       else
         Nil
     }
-    val config = makeWebAppConfig(bootConfig, view, persistence, plugins)
+    val config = makeWebAppConfig(bootConfig, view, persistence, modules)
     log.debug("application class: {}",config.application.applicationClass.get)
     val c = Class.forName(config.application.applicationClass.get)
     val constructor = c.getConstructor(classOf[WebAppConfig])

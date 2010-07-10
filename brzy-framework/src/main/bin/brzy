@@ -13,6 +13,13 @@ if [ "$1" = "create-app" ]; then
    exit 0
 fi
 
+if [ "$1" = "-version" ]; then
+   java -version
+   scala-2.8 -version
+   echo "brzy version 0.2"
+   exit 0
+fi
+
 # check that it's a project directory
 if [ ! -f "brzy-webapp.b.yml" ]; then
    echo "Not a brzy project directory"

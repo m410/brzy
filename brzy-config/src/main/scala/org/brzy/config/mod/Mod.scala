@@ -9,7 +9,7 @@ import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareT
  * @version $Id : $
  */
 class Mod(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Mod] with Ordered[Mod] {
-  val configurationName = "Plugin Reference"
+  val configurationName = "Module Reference"
   val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
   val version: Option[String] = map.get("version").asInstanceOf[Option[String]].orElse(None)
   val org: Option[String] = map.get("org").asInstanceOf[Option[String]].orElse(None)

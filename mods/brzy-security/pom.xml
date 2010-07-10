@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy</groupId>
   <artifactId>brzy-security</artifactId>
-  <name>Brzy Security Plugin</name>
+  <name>Brzy Security Module</name>
   <version>0.1</version>
   <parent>
     <groupId>org.brzy</groupId>
@@ -44,7 +44,7 @@
             <phase>package</phase>
             <configuration>
               <descriptors>
-                <descriptor>src/main/assembly/plugin.xml</descriptor>
+                <descriptor>src/main/assembly/module.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>

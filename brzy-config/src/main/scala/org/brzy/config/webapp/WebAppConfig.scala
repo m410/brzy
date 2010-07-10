@@ -14,7 +14,7 @@ import collection.immutable.{List, SortedSet}
 class WebAppConfig(val init: BootConfig,
                    val views: Mod,
                    val persistence: List[Mod],
-                   val plugins: List[Mod])
+                   val modules: List[Mod])
         extends WebXml {
   val environment: String = init.environment.get
   val application: Application = init.application.getOrElse(null)
@@ -31,15 +31,15 @@ class WebAppConfig(val init: BootConfig,
       dependencyBuffer ++= views.dependencies.get
 
 
-    persistence.map(plugin => {
-      if (plugin.dependencies.isDefined) {
-        val depsList: List[Dependency] = plugin.dependencies.get
+    persistence.map(mod => {
+      if (mod.dependencies.isDefined) {
+        val depsList: List[Dependency] = mod.dependencies.get
         depsList.foreach(dep => dependencyBuffer += dep)
       }
     })
-    plugins.map(plugin => {
-      if (plugin.dependencies.isDefined) {
-        val depsList: List[Dependency] = plugin.dependencies.get
+    modules.map(mod => {
+      if (mod.dependencies.isDefined) {
+        val depsList: List[Dependency] = mod.dependencies.get
         depsList.foreach(dep => dependencyBuffer += dep)
       }
     })
@@ -55,15 +55,15 @@ class WebAppConfig(val init: BootConfig,
     if (views != null && views.repositories.isDefined)
       repositoryBuffer ++= views.repositories.get
 
-    persistence.map(plugin => {
-      if (plugin.repositories.isDefined) {
-        val depsList: List[Repository] = plugin.repositories.get
+    persistence.map(mod => {
+      if (mod.repositories.isDefined) {
+        val depsList: List[Repository] = mod.repositories.get
         depsList.foreach(dep => repositoryBuffer += dep)
       }
     })
-    plugins.map(plugin => {
-      if (plugin.repositories.isDefined) {
-        val depsList: List[Repository] = plugin.repositories.get
+    modules.map(mod => {
+      if (mod.repositories.isDefined) {
+        val depsList: List[Repository] = mod.repositories.get
         depsList.foreach(dep => repositoryBuffer += dep)
       }
     })
@@ -84,7 +84,7 @@ class WebAppConfig(val init: BootConfig,
         p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
     })
 
-    plugins.foreach(p => {
+    modules.foreach(p => {
       if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
         p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
     })

@@ -6,10 +6,10 @@ import java.lang.String
 import collection.mutable.ListBuffer
 
 /**
- * load default, load plugins, load app.
- * loading default and plugins has to ignore the about tag.
+ * load default, load modules, load app.
+ * loading default and modules has to ignore the about tag.
  *
- * implicit plugins:
+ * implicit modules:
  * logging, persistence
  *
  * @author Michael Fortin
@@ -76,7 +76,7 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
         None
     case _ => None
   }
-  val plugins: Option[List[Mod]] = m.get("plugins") match {
+  val modules: Option[List[Mod]] = m.get("modules") match {
     case Some(s) =>
       if (s != null) {
         val buffer = new ListBuffer[Mod]()
@@ -164,13 +164,13 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
           else
             null
         },
-        "plugins" -> {
-          if (this.plugins.isDefined && that.plugins.isDefined)
-            {this.plugins.get ++ that.plugins.get}.distinct.map(_.asMap).toList
-          else if (this.plugins.isDefined)
-            this.plugins.get.distinct.map(_.asMap).toList
-          else if (that.plugins.isDefined)
-            that.plugins.get.distinct.map(_.asMap).toList
+        "modules" -> {
+          if (this.modules.isDefined && that.modules.isDefined)
+            {this.modules.get ++ that.modules.get}.distinct.map(_.asMap).toList
+          else if (this.modules.isDefined)
+            this.modules.get.distinct.map(_.asMap).toList
+          else if (that.modules.isDefined)
+            that.modules.get.distinct.map(_.asMap).toList
           else
             null
         },

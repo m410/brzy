@@ -8,6 +8,6 @@ import org.brzy.config.mod.{Mod, ModResource}
  * @author Michael Fortin
  * @version $Id: $
  */
-abstract class WebAppViewResource(plugin: Mod) extends ModResource {
+abstract class WebAppViewResource(module: Mod) extends ModResource {
   val fileExtension:String
 }

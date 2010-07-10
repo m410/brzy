@@ -26,7 +26,7 @@ abstract class Direction
     val contentType = "text"
   }
 
-  case class Bytes(bytes:Array[Byte], contentType:String) extends Direction 
+  case class Binary(bytes:Array[Byte], contentType:String) extends Direction
 
   case class Json(t:AnyRef) extends Direction with Parser {
     def parse = "{}"//tJson.build(Map("class"->t.getClass.getSimpleName))

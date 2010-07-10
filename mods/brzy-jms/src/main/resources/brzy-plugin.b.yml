@@ -1,8 +1,0 @@
-#
-# implement persistence for the cassandra nosql db
-#
-name: brzy-jms
-org: org.brzy
-version: "0.1"
-config_class: org.brzy.plugin.JmsPluginConfig
-resource_class: org.brzy.plugin.JmsPluginResource

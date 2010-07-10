@@ -22,7 +22,7 @@ persistence:
 dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
 #  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
-plugins:
+modules:
   - name: brzy-tomcat
     org: org.brzy
     version: "0.2"

@@ -9,11 +9,11 @@ import org.brzy.config.mod.Mod
 
 class LoadConfigTest extends JUnitSuite {
   @Test def testLoadConfig = {
-    val plugin = new Mod(Map(
+    val mod = new Mod(Map(
       "name" -> "brzy-tomcat",
       "version" -> "0.2",
       "org" -> "org.brzy"))
-    val tomcat: Mod = ConfigFactory.makeRuntimePlugin(plugin)
+    val tomcat: Mod = ConfigFactory.makeRuntimeModule(mod)
     assertTrue(tomcat.isInstanceOf[Mod])
   }
 }

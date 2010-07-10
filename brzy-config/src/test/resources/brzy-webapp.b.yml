@@ -29,18 +29,18 @@ repositories:
   - id: fusesource
     url: http://someurl.com/test
 
-plugins:
+modules:
   - name: brzy-scalate
     org: org.brzy
     version: "0.2"
-    config_class: org.brzy.plugin.ScalatePluginConfig
-    remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.2/brzy-scalate-0.2-plugin.zip
+    config_class: org.brzy.scalate.ScalateModConfig
+    remote_location: ~/.m2/repository/org/brzy/brzy-scalate/0.2/brzy-scalate-0.2-module.zip
 
 persistence:
   - name: brzy-squeryl
     org: org.brzy
     version: "0.2"
-    config_class: org.brzy.plugin.SquerylPluginConfig
+    config_class: org.brzy.scalate.SquerylModConfig
     package_scope: *group
     driver: org.postgresql.Driver
     user_name: test

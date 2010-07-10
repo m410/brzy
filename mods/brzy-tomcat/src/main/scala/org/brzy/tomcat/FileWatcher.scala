@@ -23,6 +23,7 @@ class FileWatcher(baseDir: File, compiler: ScalaCompiler) {
   val monitor = actor {
     loop {
       val signalledKey: WatchKey = watchService.take
+      println(" --  signal: " + signalledKey)
       val list = signalledKey.pollEvents
       signalledKey.reset
 

@@ -4,14 +4,14 @@ project:
   scala_version: 2.8.0.RC6
   sbt_version: 0.7.4
   package_type: war
-  plugin_resources: ".brzy/plugins"
-  plugin_repository: http://www.brzy.org/nexus/content/repositories/releases
+  module_resources: ".brzy/modules"
+  module_repository: http://www.brzy.org/nexus/content/repositories/releases
 
 views:
   name: brzy-scalate
   org: org.brzy
   version: "0.2"
-  config_class: org.brzy.plugin.ScalatePluginConfig
+  config_class: org.brzy.module.ScalateModuleConfig
   file_extension: ".ssp"
   html_version: html5
 

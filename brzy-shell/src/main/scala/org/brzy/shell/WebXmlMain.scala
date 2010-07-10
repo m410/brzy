@@ -11,21 +11,19 @@ import org.brzy.config.mod.Mod
  * @author Michael Fortin
  * @version $Id : $
  */
-
 object WebXmlMain {
   def main(args: Array[String]) = {
     println("[0]config = " + args(0))
     println("[1]env = " + args(1))
     println("[2]destination = " + args(2))
     val projectDir = new File("project")
-    val pluginsDir = new File(projectDir,"brzy-plugins")
-    
+    val modsDir = new File(projectDir,"brzy-modules")
     val bootConfig = ConfigFactory.makeBootConfig(new File(args(0)), args(1))
 
     val view: Mod = bootConfig.views match {
       case Some(v) =>
         if (v != null)
-          ConfigFactory.makeBuildTimePlugin(bootConfig.views.get,pluginsDir)
+          ConfigFactory.makeBuildTimeModule(bootConfig.views.get,modsDir)
         else
           null
       case _ => null
@@ -33,17 +31,17 @@ object WebXmlMain {
 
     val persistence: List[Mod] = {
       if (bootConfig.persistence.isDefined)
-        bootConfig.persistence.get.map(ConfigFactory.makeBuildTimePlugin(_,pluginsDir))
+        bootConfig.persistence.get.map(ConfigFactory.makeBuildTimeModule(_,modsDir))
       else
         Nil
     }
-    val plugins: List[Mod] = {
-      if (bootConfig.plugins.isDefined)
-        bootConfig.plugins.get.map(ConfigFactory.makeBuildTimePlugin(_,pluginsDir))
+    val modules: List[Mod] = {
+      if (bootConfig.modules.isDefined)
+        bootConfig.modules.get.map(ConfigFactory.makeBuildTimeModule(_,modsDir))
       else
         Nil
     }
-    val config = ConfigFactory.makeWebAppConfig(bootConfig, view, persistence, plugins)
+    val config = ConfigFactory.makeWebAppConfig(bootConfig, view, persistence, modules)
     val parent = new File(args(2))
     val file = new File(parent,"web.xml")
     XML.save(file.getAbsolutePath, new WebXml(config).body)

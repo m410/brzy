@@ -1,8 +1,0 @@
-#
-# implement persistence for the cassandra nosql db
-#
-name: brzy-security
-org: org.brzy
-version: "0.1"
-config_class: org.brzy.plugin.SecurityPluginConfig
-resource_class: org.brzy.plugin.SecurityPluginResource

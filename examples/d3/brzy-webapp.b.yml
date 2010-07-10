@@ -1,0 +1,67 @@
+#
+# application configuration
+# configuration Reference: http://brzy.org/docs/config_reference
+# configuration dump: >brzy info
+application:
+  name: &name d3
+  org: org.brzy.d3
+  version: "1.0"
+  author: Add Your Name Here
+  description: &desc Demo Application
+  artifact_id: d3
+  webapp_context: /
+  application_class: org.brzy.d3.Application
+  
+persistence:
+  - name: brzy-squeryl
+    org: org.brzy
+    version: "0.2"
+    driver: org.h2.Driver
+    user_name: sa
+    password: ""
+    url: jdbc:h2:test2_db
+    adaptor_name: h2
+repositories:
+  - id: scala-tools.snapshots
+    url: http://scala-tools.org/repo-snapshots
+dependencies:
+  - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
+  - {conf: compile, org: org.brzy, name: brzy-tomcat, rev: "0.2"}
+  - {conf: test, org: org.scalatest, name: scalatest, rev: "1.2-for-scala-2.8.0.RC5-SNAPSHOT"}
+modules:
+  - name: brzy-tomcat
+    org: orb.grzy
+    version: "0.2"
+logging:
+  provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+    - name: FILE
+      appender_class: ch.qos.logback.core.rolling.RollingFileAppender
+      file: logs/brzy.log
+      rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+      file_name_pattern: "logs/brzy.%d{yyyy-MM-dd}.log"
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: [STDOUT]
+web_xml:
+  - description: *desc
+  - display-name: *name
+# override defaults for any environment
+environment_overrides:
+  - environment: developement
+  - environment: test
+  - environment: production
+    logging:
+      root:
+        ref: [FILE]
+  

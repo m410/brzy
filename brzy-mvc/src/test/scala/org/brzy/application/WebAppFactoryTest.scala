@@ -7,8 +7,7 @@ import org.scalatest.junit.JUnitSuite
 
 class WebAppFactoryTest extends JUnitSuite {
 
-  @Test
-  def testWebApplication = {
+  @Test @Ignore def testWebApplication = {
     val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     assertNotNull(url)
     val app = WebAppFactory.create(url,"development")

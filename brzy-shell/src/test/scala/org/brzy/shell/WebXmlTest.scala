@@ -20,8 +20,8 @@ class WebXmlTest extends JUnitSuite {
     val bootConfig = ConfigFactory.makeBootConfig(new File(url.getFile), "test")
     val view: Mod = null
     val persistence: List[Mod] = Nil
-    val plugins: List[Mod] = Nil
-    val config = ConfigFactory.makeWebAppConfig(bootConfig, view, persistence, plugins)
+    val modules: List[Mod] = Nil
+    val config = ConfigFactory.makeWebAppConfig(bootConfig, view, persistence, modules)
     
     val webxml = new WebXml(config)
     println(webxml.body)

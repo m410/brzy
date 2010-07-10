@@ -2,12 +2,11 @@ package org.brzy.config
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.junit.Test
-import org.junit.Before
 import org.brzy.webapp.ConfigFactory
 import java.io.File
 import org.brzy.config.mod.Mod
 import org.brzy.util.FileUtils._
+import org.junit.{Ignore, Test, Before}
 
 /**
  * Document Me..
@@ -17,13 +16,10 @@ import org.brzy.util.FileUtils._
  */
 class ConfigFactoryTest extends JUnitSuite {
 
-  @Before
-  def initialize = {
-
+  @Before def initialize = {
   }
 
-  @Test
-  def testRuntimeConfig = {
+  @Test def testRuntimeConfig = {
     val url = new File(getClass.getClassLoader.getResource("brzy-webapp.b.yml").getFile)
     val config = ConfigFactory.makeBootConfig(url, "development")
 
@@ -46,8 +42,8 @@ class ConfigFactoryTest extends JUnitSuite {
     assertEquals(2, config.logging.get.appenders.get.size)
     assertNotNull(config.dependencies.get)
 
-    assertNotNull(config.plugins.get)
-    assertEquals(1, config.plugins.get.size)
+    assertNotNull(config.modules.get)
+    assertEquals(1, config.modules.get.size)
 
     assertEquals( 15, config.dependencies.get.size)
 
@@ -56,8 +52,7 @@ class ConfigFactoryTest extends JUnitSuite {
   }
 
 
-  @Test
-  def testDownload() = {
+  @Test @Ignore def testDownload = {
     val workDir = new File(new File(System.getProperty("java.io.tmpdir")), "junitwork")
 
     if (workDir.exists)
@@ -68,13 +63,13 @@ class ConfigFactoryTest extends JUnitSuite {
 
     val map = Map[String, AnyRef](
       "name" -> "brzy-scalate",
-      "org" -> "org.brzy",
+      "org" -> "org.brzy.scalate",
       "version" -> "0.1",
-      "remote_location" -> "/Users/m410/Projects/brzy/brzy-config/src/test/resources/brzy-test-plugin.zip")
-    val plugin = new Mod(map)
-    assertNotNull(plugin)
+      "remote_location" -> "/Users/m410/Projects/brzy/brzy-config/src/test/resources/brzy-test-module.zip")
+    val mod = new Mod(map)
+    assertNotNull(mod)
     assertEquals(0, workDir.listFiles.length)
-    ConfigFactory.installPlugin( workDir, plugin)
+    ConfigFactory.installModule( workDir, mod)
     assertEquals(1, workDir.listFiles.length)
   }
 }

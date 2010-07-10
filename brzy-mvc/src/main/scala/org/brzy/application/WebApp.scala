@@ -43,11 +43,11 @@ class WebApp(val config: WebAppConfig) {
     }).toList
   }
 
-  val pluginResources: List[ModResource] = {
+  val moduleResource: List[ModResource] = {
     val list = ListBuffer[ModResource]()
-    config.plugins.foreach(plugin => {
-      log.debug("plugin: {}", plugin)
-      val p = plugin.asInstanceOf[Mod]
+    config.modules.foreach(module => {
+      log.debug("module: {}", module)
+      val p = module.asInstanceOf[Mod]
       if (p.resourceClass.isDefined && p.resourceClass.get != null) {
         val resourceClass = Class.forName(p.resourceClass.get)
         val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
@@ -89,7 +89,7 @@ class WebApp(val config: WebAppConfig) {
     val serviceClasses = ServiceScanner(config.application.org.get).services
     serviceClasses.foreach(append(_))
     persistenceResources.foreach(_.services.foreach(append _))
-    pluginResources.foreach(_.services.foreach(append _))
+    moduleResource.foreach(_.services.foreach(append _))
     buffer.toList
   }
 
@@ -153,7 +153,7 @@ class WebApp(val config: WebAppConfig) {
   def startup = {
     viewResource.startup
     persistenceResources.foreach(_.startup)
-    pluginResources.foreach(_.startup)
+    moduleResource.foreach(_.startup)
     viewResource.startup
     log.info("application startup")
     log.debug("services: {}", services.mkString(","))
@@ -164,7 +164,7 @@ class WebApp(val config: WebAppConfig) {
   def shutdown = {
     viewResource.shutdown
     persistenceResources.foreach(_.shutdown)
-    pluginResources.foreach(_.shutdown)
+    moduleResource.foreach(_.shutdown)
     log.info("application shutdown")
   }
 }

@@ -7,23 +7,23 @@ import collection.JavaConversions._
 import org.brzy.webapp.ConfigFactory._
 
 /**
- * called after boot1, this loads with a classpath that includes the plugins that boot1 downloaded
+ * called after boot1, this loads with a classpath that includes the modules that boot1 downloaded
  */
 object Boot2 extends Application {
 
   val projectDir = new File(args(0), "project")
-  val brzyPlugins = new File(projectDir, "brzy-plugins")
+  val brzyMods = new File(projectDir, "brzy-modules")
 
   val bootConfig = makeBootConfig(new File(args(0),"brzy-webapp.b.yml"), "development")
   val configFile = new File(projectDir, "brzy-webapp.development.b.yml")
-  val viewPlugin = makeBuildTimePlugin(bootConfig.views.get,brzyPlugins)
-  val persistence = bootConfig.persistence.get.map(makeBuildTimePlugin(_,brzyPlugins))
-  val plugins = 
-    if(bootConfig.plugins.isDefined)
-      bootConfig.plugins.get.map(makeBuildTimePlugin(_,brzyPlugins))
+  val viewModule = makeBuildTimeModule(bootConfig.views.get,brzyMods)
+  val persistence = bootConfig.persistence.get.map(makeBuildTimeModule(_,brzyMods))
+  val modules =
+    if(bootConfig.modules.isDefined)
+      bootConfig.modules.get.map(makeBuildTimeModule(_,brzyMods))
     else
       Nil
-  val config = makeWebAppConfig(bootConfig,viewPlugin, persistence, plugins)
+  val config = makeWebAppConfig(bootConfig,viewModule, persistence, modules)
 
   // create sbt build script
   println(" - create build script")
@@ -37,20 +37,20 @@ object Boot2 extends Application {
   val context = new VelocityContext
 
   val repos:java.util.Collection[Repository] = {
-    config.views.repositories ++ config.repositories.toList ++ config.plugins.map(_.repositories)
+    config.views.repositories ++ config.repositories.toList ++ config.modules.map(_.repositories)
   }.asInstanceOf[List[Repository]]
 
   val deps:java.util.Collection[Dependency] = {
-    config.dependencies.toList ++ config.plugins.map(_.dependencies) ++ config.views.dependencies
+    config.dependencies.toList ++ config.modules.map(_.dependencies) ++ config.views.dependencies
   }.asInstanceOf[List[Dependency]]
 
-  val plugs:java.util.Collection[Mod] = {
-    List(config.views) ++ config.plugins ++ config.persistence
+  val mods:java.util.Collection[Mod] = {
+    List(config.views) ++ config.modules ++ config.persistence
   }.asInstanceOf[List[Mod]]
 
   context.put("repositories", repos)
   context.put("dependencies", deps)
-  context.put("plugins", plugs)
+  context.put("modules", mods)
 
   val template = velocityEngine.getTemplate("project/BrzyWebappProject.scala.vm")
   val buildDir = new File(projectDir, "build")

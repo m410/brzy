@@ -10,11 +10,11 @@ object Boot1 extends Application {
   if (!projectDir.exists)
     projectDir.mkdirs
 
-  // create plugin folder
-  println(" - make plugin dir")
-  val brzyPlugins = new File(projectDir, "brzy-plugins")
-  if (!brzyPlugins.exists)
-    brzyPlugins.mkdirs
+  // create modules folder
+  println(" - make modules dir")
+  val brzyMods = new File(projectDir, "brzy-modules")
+  if (!brzyMods.exists)
+    brzyMods.mkdirs
 
   // create merged config and put it in the project directory
   println(" - make config")
@@ -29,15 +29,15 @@ object Boot1 extends Application {
 	bpOut.write(buildProperties.content)
 	bpOut.close
 
-  // download plugins
-  println(" - download plugins")
-  installPlugin(brzyPlugins, config.views.get)
+  // download modules
+  println(" - download modules")
+  installModule(brzyMods, config.views.get)
 
-  if(config.plugins.isDefined)
-    config.plugins.get.foreach(it => installPlugin(brzyPlugins, it))
+  if(config.modules.isDefined)
+    config.modules.get.foreach(it => installPlugin(brzyMods, it))
 
   if(config.persistence.isDefined)
-    config.persistence.get.foreach(it => installPlugin(brzyPlugins, it))
+    config.persistence.get.foreach(it => installPlugin(brzyMods, it))
 }
 
 Boot1.main(args)

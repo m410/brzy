@@ -74,38 +74,38 @@ object ConfigFactory {
   /**
    *
    */
-  def makeWebAppConfig(c: BootConfig, view: Mod, persistence: List[Mod], plugins: List[Mod]) = {
-    new WebAppConfig(c, view, persistence, plugins)
+  def makeWebAppConfig(c: BootConfig, view: Mod, persistence: List[Mod], mods: List[Mod]) = {
+    new WebAppConfig(c, view, persistence, mods)
   }
 
-  def makeRuntimePlugin(reference: Mod): Mod = {
-    val pluginResource: String = "brzy-plugins/" + reference.name.get + "/brzy-plugin.b.yml"
-    val cpUrl = getClass.getClassLoader.getResource(pluginResource)
+  def makeRuntimeModule(reference: Mod): Mod = {
+    val modResource: String = "brzy-modules/" + reference.name.get + "/brzy-module.b.yml"
+    val cpUrl = getClass.getClassLoader.getResource(modResource)
     val yaml = convertMap(Yaml.load(cpUrl.openStream).asInstanceOf[JMap[String, AnyRef]])
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-      val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
-      val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
-      newPluginInstance << reference
+      val modClass = Class.forName(configClass).asInstanceOf[Class[_]]
+      val constructor: Constructor[_] = modClass.getConstructor(classOf[Map[String, AnyRef]])
+      val newModuleInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
+      newModuleInstance << reference
     }
     else {
       reference
     }
   }
 
-  def makeBuildTimePlugin(reference: Mod, pluginResourceDirectory: File): Mod = {
-    val pFile = new File(pluginResourceDirectory, reference.name.get)
-    val pluginFile = new File(pFile, "/brzy-plugin.b.yml")
-    val yaml = convertMap(Yaml.load(pluginFile).asInstanceOf[JMap[String, AnyRef]])
+  def makeBuildTimeModule(reference: Mod, modResourceDir: File): Mod = {
+    val pFile = new File(modResourceDir, reference.name.get)
+    val modFile = new File(pFile, "/brzy-module.b.yml")
+    val yaml = convertMap(Yaml.load(modFile).asInstanceOf[JMap[String, AnyRef]])
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-      val pluginClass = Class.forName(configClass).asInstanceOf[Class[_]]
-      val constructor: Constructor[_] = pluginClass.getConstructor(classOf[Map[String, AnyRef]])
-      val newPluginInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
-      newPluginInstance << reference
+      val modClass = Class.forName(configClass).asInstanceOf[Class[_]]
+      val constructor: Constructor[_] = modClass.getConstructor(classOf[Map[String, AnyRef]])
+      val newModuleInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
+      newModuleInstance << reference
     }
     else {
       reference
@@ -126,42 +126,42 @@ object ConfigFactory {
   /**
    *
    */
-  def installPlugin(destDir: File, plugin: Mod): Unit = {
+  def installModule(destDir: File, mod: Mod): Unit = {
 
     // from local file system for development mode
-    if (plugin.localLocation.isDefined && plugin.localLocation.get != null) {
-      val file = new File(plugin.localLocation.get + "/brzy-plugin.b.yml")
+    if (mod.localLocation.isDefined && mod.localLocation.get != null) {
+      val file = new File(mod.localLocation.get + "/brzy-module.b.yml")
 
       if (!file.exists)
-        error("No plugin file found: '" + plugin + "', location: " + plugin.localLocation.get)
+        error("No module file found: '" + mod + "', location: " + mod.localLocation.get)
     }
     // copy from local system or from remote system for development mode
-    else if (plugin.remoteLocation.isDefined && plugin.remoteLocation.get != null) {
-      downloadAndUnzipTo(plugin, destDir)
+    else if (mod.remoteLocation.isDefined && mod.remoteLocation.get != null) {
+      downloadAndUnzipTo(mod, destDir)
     }
     // lookup via maven repository, the default way
     else {
-      // [org(replace . with /)] / [name] / [version] / [name]-[version]-plugin.zip
+      // [org(replace . with /)] / [name] / [version] / [name]-[version]-module.zip
       val remoteUrl = "http://brzy.org/nexus/content/repositories/releases/" +
-              plugin.org.get.replaceAll("\\.", "/") + "/" +
-              plugin.name.get + "/" +
-              plugin.version.get + "/" +
-              plugin.name.get + "-" +
-              plugin.version.get + "-plugin.jar"
+              mod.org.get.replaceAll("\\.", "/") + "/" +
+              mod.name.get + "/" +
+              mod.version.get + "/" +
+              mod.name.get + "-" +
+              mod.version.get + "-module.jar"
 
-      downloadAndUnzipTo(plugin, remoteUrl, destDir)
+      downloadAndUnzipTo(mod, remoteUrl, destDir)
     }
   }
 
-  def fileForPlugin(plugin: Mod): File = {
-    val url = getClass.getClassLoader.getResource(plugin.name.get + "/brzy-plugin.b.yml")
+  def fileForModule(mod: Mod): File = {
+    val url = getClass.getClassLoader.getResource(mod.name.get + "/brzy-module.b.yml")
     new File(url.toURI)
   }
 
   /**
-   * This downloads the plugin and expands it in the output directory unless this
-   * plugin has a local_location.  In which case the local location is used instead
-   * of the plugin cache.
+   * This downloads the module and expands it in the output directory unless this
+   * module has a local_location.  In which case the local location is used instead
+   * of the module cache.
    */
   private def downloadAndUnzipTo(plgn: Mod, outputDir: File): Unit = {
     // if it has a local location ignore it.
@@ -197,8 +197,8 @@ object ConfigFactory {
     }
   }
 
-  private def downloadAndUnzipTo(plgn: Mod, remoteUrl: String, appPluginCache: File) = {
-    val destinationFile = new URL(remoteUrl).downloadToDir(new File(appPluginCache, plgn.name.get))
+  private def downloadAndUnzipTo(plgn: Mod, remoteUrl: String, appModuleCache: File) = {
+    val destinationFile = new URL(remoteUrl).downloadToDir(new File(appModuleCache, plgn.name.get))
     destinationFile.unzip()
     destinationFile.delete()
   }

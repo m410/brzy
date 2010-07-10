@@ -34,19 +34,11 @@ object Tomcat extends Application {
 
 class RunWebApp(contextName:String, port:Int) {
 	println("Running Web Application")
-
   val appBase = "webapp"
-//  val classesDir = appBase + "/WEB-INF/classes"
 	val container = new Embedded
-
-	val catalinaHome = new File("project/brzy-plugins/brzy-tomcat")
+	val catalinaHome = new File("project/brzy-modules/brzy-tomcat")
 	container.setCatalinaHome(catalinaHome.getAbsolutePath)
-	// container.setRealm(new MemoryRealm())
   val loader = new WebappLoader(this.getClass.getClassLoader)
-
-//  if (classesDir != null)
-//      loader.addRepository(new File(classesDir).toURI.toURL.toString)
-
 	val targetDir = new File("")
 	val targetPath = targetDir.getAbsolutePath
   val host = container.createHost("localhost", targetPath)

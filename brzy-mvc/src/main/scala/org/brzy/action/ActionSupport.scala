@@ -102,7 +102,7 @@ object ActionSupport {
         log.debug("text: {}",t)
         res.setContentType(t.contentType)
         res.getWriter.write(t.parse)
-      case b:Bytes =>
+      case b:Binary =>
         log.debug("bytes: {}",b)
         res.setContentType(b.contentType)
         res.getOutputStream.write(b.bytes)

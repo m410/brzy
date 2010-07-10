@@ -1,7 +1,0 @@
-#
-#
-name: brzy-email
-org: org.brzy
-version: "0.1"
-config_class: org.brzy.plugin.EmailPluginConfig
-resource_class: org.brzy.plugin.EmailPluginResource
