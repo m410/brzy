@@ -6,7 +6,6 @@ import common.{BootConfig, Config}
 /**
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class ConfigPrinter(config: Config) {
   println(config.configurationName)

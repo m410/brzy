@@ -18,7 +18,6 @@ import java.lang.String
  * Document Me..
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 object ConfigFactory {
   private val log = LoggerFactory.getLogger(getClass)

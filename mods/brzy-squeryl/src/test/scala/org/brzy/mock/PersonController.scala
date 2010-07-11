@@ -5,10 +5,7 @@ import org.brzy.action.args.Parameters
 import Person._
 import org.brzy.controller.{Controller,Path}
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 @Controller("persons/")
 class PersonController {
 

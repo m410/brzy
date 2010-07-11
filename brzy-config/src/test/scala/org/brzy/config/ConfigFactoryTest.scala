@@ -8,12 +8,7 @@ import org.brzy.config.mod.Mod
 import org.brzy.util.FileUtils._
 import org.junit.{Ignore, Test, Before}
 
-/**
- * Document Me..
- *
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class ConfigFactoryTest extends JUnitSuite {
 
   @Before def initialize = {

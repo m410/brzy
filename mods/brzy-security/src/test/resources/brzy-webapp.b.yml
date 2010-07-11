@@ -1,0 +1,30 @@
+#
+#
+application:
+  version: 1.0.0
+  name: Test app
+  org: &group org.brzy.sample
+  author: Fred
+  description: Some Description
+
+modules:
+  - name: brzy-security
+    org: org.brzy
+    version: "0.2"
+    authority_entity: Person
+#
+# Logging
+#[logback,log4j,jul]
+logging:
+  provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: [STDOUT]

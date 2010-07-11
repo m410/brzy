@@ -6,7 +6,6 @@ import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareT
 /**
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class Mod(val map: Map[String, AnyRef]) extends Config(map) with MergeConfig[Mod] with Ordered[Mod] {
   val configurationName = "Module Reference"

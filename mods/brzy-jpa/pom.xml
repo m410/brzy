@@ -65,7 +65,7 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
       <scope>provided</scope>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
@@ -124,11 +124,11 @@
       <version>6.0</version>
       <scope>provided</scope>
     </dependency>
-          <dependency>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest</artifactId>
-        <version>1.2-for-scala-2.8.0.RC5-SNAPSHOT</version>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest</artifactId>
+      <version>1.2-for-scala-2.8.0.RC5-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

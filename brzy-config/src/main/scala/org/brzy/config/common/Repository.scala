@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory
 
 /**
  * @author Michael Fortin
- * @version $Id : $
  */
 class Repository(m: Map[String, AnyRef]) extends Config(m) with Ordered[Repository] {
   val configurationName: String = "Repository"

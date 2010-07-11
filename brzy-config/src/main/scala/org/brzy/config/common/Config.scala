@@ -6,7 +6,6 @@ import collection.immutable.Map
 /**
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 abstract class Config(map: Map[String, AnyRef]) {
 

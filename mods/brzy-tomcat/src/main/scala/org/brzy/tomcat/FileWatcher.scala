@@ -12,7 +12,6 @@ import name.pachler.nio.file.StandardWatchEventKind._
  *  http://jpathwatch.wordpress.com/
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class FileWatcher(baseDir: File, compiler: ScalaCompiler) {
   val watchService: WatchService = FileSystems.getDefault.newWatchService

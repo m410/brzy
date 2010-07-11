@@ -18,7 +18,6 @@ import org.brzy.config.common.{Project, Application => BrzyApp}
 
 /**
  * @author Michael Fortin
- * @version $Id : $
  */
 class WebApp(val config: WebAppConfig) {
   private val log = LoggerFactory.getLogger(classOf[WebApp])

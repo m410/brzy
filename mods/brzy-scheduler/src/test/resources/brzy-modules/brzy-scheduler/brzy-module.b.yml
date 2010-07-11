@@ -1,0 +1,8 @@
+#
+# squeryl object relational persistence
+#
+name: brzy-scheduler
+org: org.brzy
+version: "0.2"
+config_class: org.brzy.scheduler.SchedulerModConfig
+resource_class: org.brzy.scheduler.SchedulerModResource

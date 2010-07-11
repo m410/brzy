@@ -5,10 +5,7 @@ import org.brzy.validator.Validation
 import org.brzy.action.returns._
 import org.brzy.controller.{Path, Controller}
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 @Controller("users")
 class UserController {
 

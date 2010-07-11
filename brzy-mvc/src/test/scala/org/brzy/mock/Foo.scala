@@ -1,9 +1,6 @@
 package org.brzy.saved.intercept
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 trait Foo {
   def hello:Unit
 }

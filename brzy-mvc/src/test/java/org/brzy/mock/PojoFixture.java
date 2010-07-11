@@ -1,11 +1,6 @@
 package org.brzy.mock;
 
-/**
- * Document Me..
- *
- * @author Michael Fortin
- * @version $Id: $
- */
+
 public class PojoFixture {
     private String name;
 

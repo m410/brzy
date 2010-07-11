@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory
  * Creates the web application class from the configuration.
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 object WebAppFactory {
   private val log = LoggerFactory.getLogger(getClass)

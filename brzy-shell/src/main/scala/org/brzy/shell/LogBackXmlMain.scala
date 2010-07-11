@@ -9,7 +9,6 @@ import org.brzy.webapp.ConfigFactory
  * Document Me..
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 object LogBackXmlMain {
   def main(args: Array[String]) = {

@@ -6,12 +6,6 @@ import com.shorrockin.cascal.session._
 import com.shorrockin.cascal.utils.Conversions._
 import org.junit.{Ignore, Test}
 
-/**
- * Document Me..
- *
- * @author Michael Fortin
- * @version $Id : $
- */
 
 class ConnectionTest extends JUnitSuite {
   // needs to have the database running to work

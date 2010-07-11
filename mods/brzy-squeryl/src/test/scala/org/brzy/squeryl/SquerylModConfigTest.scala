@@ -5,12 +5,7 @@ import org.junit.Test
 import org.junit.Assert._
 import org.brzy.config.mod.Mod
 
-/**
- * Document Me..
- *
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class SquerylModConfigTest extends JUnitSuite {
   @Test
   def testMerge = {

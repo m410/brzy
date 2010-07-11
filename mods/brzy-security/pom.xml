@@ -94,7 +94,6 @@
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
       <version>0.2</version>
-      <scope>test</scope>
     </dependency>
           <dependency>
         <groupId>org.scalatest</groupId>

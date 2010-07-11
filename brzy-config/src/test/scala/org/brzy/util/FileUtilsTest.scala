@@ -6,10 +6,7 @@ import org.brzy.util.FileUtils._
 import java.io.{BufferedWriter, FileWriter, File}
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class FileUtilsTest extends JUnitSuite {
 
   @Test

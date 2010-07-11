@@ -9,12 +9,7 @@ import org.brzy.util.NestedCollectionConverter._
 import org.junit.{Ignore, Test}
 import org.brzy.webapp.ConfigFactory
 
-/**
- * Document Me..
- *
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class BootConfigTest extends JUnitSuite {
 
   @Test

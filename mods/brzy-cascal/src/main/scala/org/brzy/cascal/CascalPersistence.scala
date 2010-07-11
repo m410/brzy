@@ -1,4 +1,4 @@
-package org.brzy.scheduler
+package org.brzy.cascal
 
 /**
  * Document Me..
@@ -6,4 +6,5 @@ package org.brzy.scheduler
  * @author Michael Fortin
  * @version $Id: $
  */
-class SchedularModConfig
+
+class CascalPersistence

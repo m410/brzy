@@ -7,5 +7,7 @@ package org.brzy.email
  * @version $Id: $
  */
 class EmailService {
-  
+  def send(msg:Message) = {
+    
+  }
 }

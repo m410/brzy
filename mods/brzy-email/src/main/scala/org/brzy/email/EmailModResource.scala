@@ -1,5 +1,7 @@
 package org.brzy.email
 
+import org.brzy.config.mod.ModResource
+
 /**
  * Document Me..
  * 
@@ -7,4 +9,6 @@ package org.brzy.email
  * @version $Id: $
  */
 
-class EmailModResource
+class EmailModResource(c:EmailModConfig) extends ModResource {
+  
+}

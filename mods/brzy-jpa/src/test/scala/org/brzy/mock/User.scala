@@ -5,10 +5,7 @@ import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
 import reflect.BeanProperty
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 @serializable
 @Entity
 @Table(name="users")

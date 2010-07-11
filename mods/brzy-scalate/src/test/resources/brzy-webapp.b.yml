@@ -1,0 +1,31 @@
+#
+# application configuration
+#
+# http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
+# http://jyaml.sourceforge.net/
+application:
+  version: 1.0.0
+  org: &group org.brzy.sample
+  name: Test app
+  author: Fred
+  description: Some Description
+views:
+  name: brzy-scalate
+  org: org.brzy
+  version: "0.2"
+  config_class: org.brzy.module.ScalateModuleConfig
+  file_extension: ".ssp"
+  html_version: html5
+logging:
+  provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: [STDOUT]

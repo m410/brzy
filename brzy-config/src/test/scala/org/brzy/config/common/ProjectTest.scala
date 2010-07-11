@@ -4,12 +4,7 @@ import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
 
-/**
- * Document Me..
- * 
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ProjectTest extends JUnitSuite {
 
   @Test

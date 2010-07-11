@@ -9,7 +9,6 @@ import collection.immutable.{List, SortedSet}
  * Document Me..
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class WebAppConfig(val init: BootConfig,
                    val views: Mod,

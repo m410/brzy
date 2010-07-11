@@ -5,11 +5,7 @@ import org.junit.Assert._
 import java.util.{ArrayList => JList, HashMap => JMap}
 import org.scalatest.junit.JUnitSuite
 
-/**
- *
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class ConfigTest extends JUnitSuite {
 
   class TestConfig(m: Map[String, AnyRef]) extends Config(m) {

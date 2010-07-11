@@ -8,10 +8,7 @@ import javax.validation.{ConstraintViolation,Validation=>jValidation,Validator,V
 import org.slf4j.{LoggerFactory, Logger}
 import org.squeryl.{KeyedEntity, Schema}
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class Person( val id:Long,
     @Column(name="first_name") val firstName:String,
     @Column(name="last_name") val lastName:String)

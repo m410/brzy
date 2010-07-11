@@ -8,10 +8,7 @@ import org.brzy.action.args.Parameters
 import collection.JavaConversions._
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class JpaPersistenceTest extends JUnitSuite {
 
   @Test

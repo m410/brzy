@@ -6,4 +6,5 @@ package org.brzy.email
  * @author Michael Fortin
  * @version $Id: $
  */
-class Message
+abstract class Message
+  case class SimpleMessage(to:Array[String],subject:String, body:String) extends Message

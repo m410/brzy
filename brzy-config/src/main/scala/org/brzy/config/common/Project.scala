@@ -4,7 +4,6 @@ import reflect.BeanProperty
 
 /**
  * @author Michael Fortin
- * @version $Id : $
  */
 class Project(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Project] {
   val configurationName: String = "Project"

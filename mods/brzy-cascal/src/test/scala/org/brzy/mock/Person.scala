@@ -5,10 +5,7 @@ import com.shorrockin.cascal.serialization.Converter
 import org.brzy.cascal.Cascal
 import com.shorrockin.cascal.utils.Conversions._
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 @Keyspace("Keyspace1") // Driiiv
 @Family("Standard1") // Hit|Creative|Suppression
 case class Person(

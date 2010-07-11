@@ -9,15 +9,10 @@ import org.brzy.util.NestedCollectionConverter._
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
 
-/**
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class WebAppConfigTest extends JUnitSuite {
 
-
-  @Test
-  def testLoad = {
+  @Test def testLoad = {
     val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     val config = Yaml.load(url.openStream)
     config.asInstanceOf[JMap[String, AnyRef]].put("environment", "development")

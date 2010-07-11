@@ -9,7 +9,6 @@ import org.brzy.config.mod.Mod
  * Document Me..
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 object WebXmlMain {
   def main(args: Array[String]) = {

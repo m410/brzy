@@ -6,7 +6,6 @@ import collection.JavaConversions._
 
 /**
  * @author Michael Fortin
- * @version $Id : $
  */
 class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging] {
   val configurationName: String = "Logging"

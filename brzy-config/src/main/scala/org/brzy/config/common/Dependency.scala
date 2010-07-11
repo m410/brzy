@@ -7,7 +7,6 @@ import collection.mutable.{Buffer, ListBuffer}
 
 /**
  * @author Michael Fortin
- * @version $Id : $
  */
 class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependency] {
   val configurationName: String = "Dependency"

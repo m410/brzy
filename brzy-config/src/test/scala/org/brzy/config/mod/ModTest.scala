@@ -5,10 +5,7 @@ import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.mod.Mod
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ModTest extends JUnitSuite {
 
   @Test

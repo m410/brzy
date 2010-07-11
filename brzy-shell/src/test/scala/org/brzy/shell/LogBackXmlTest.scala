@@ -8,10 +8,7 @@ import org.brzy.webapp.ConfigFactory._
 import java.io.File
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class LogBackXmlTest extends JUnitSuite {
   @Test
   def testCreate = {

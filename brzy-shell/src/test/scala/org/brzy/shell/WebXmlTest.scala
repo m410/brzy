@@ -8,10 +8,7 @@ import org.brzy.webapp.ConfigFactory
 import org.scalatest.junit.JUnitSuite
 
 
-/**
- * @author Michael Fortin
- * @version $Id : $
- */
+
 class WebXmlTest extends JUnitSuite {
 
   @Test

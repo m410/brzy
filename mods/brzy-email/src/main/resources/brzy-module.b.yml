@@ -5,3 +5,11 @@ org: org.brzy
 version: "0.1"
 config_class: org.brzy.email.EmailModConfig
 resource_class: org.brzy.email.EmailModResource
+
+smtp_host: localhost
+user_name: ""
+password: ""
+
+dependencies:
+  - {conf: compile, org: javax.mail, name: mail, rev: "1.4"}
+  - {conf: compile, org: org.brzy, name: brzy-email, rev: "0.2", transitive: false}

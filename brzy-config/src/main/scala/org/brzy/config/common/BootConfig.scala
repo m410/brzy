@@ -13,7 +13,6 @@ import collection.mutable.ListBuffer
  * logging, persistence
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[BootConfig] {
   private val dev = "developement"

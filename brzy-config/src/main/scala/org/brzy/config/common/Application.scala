@@ -4,7 +4,6 @@ package org.brzy.config.common
 /**
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class Application(m: Map[String, AnyRef]) extends Config(m) {
   val configurationName: String = "Application Configuration"

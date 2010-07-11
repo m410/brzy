@@ -9,7 +9,6 @@ import org.brzy.interceptor.{ContextFactory, MethodMatcher, ManagedThreadContext
  * Document Me..
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class CascalContextManager extends ManagedThreadContext {
   val hosts = Host("localhost", 9160, 250) :: Nil

@@ -1,5 +1,7 @@
 package org.brzy.scheduler
 
+import org.brzy.config.mod.ModResource
+
 /**
  * Document Me..
  * 
@@ -7,4 +9,6 @@ package org.brzy.scheduler
  * @version $Id: $
  */
 
-class SchedulerModResource
+class SchedulerModResource(c:SchedulerModConfig) extends ModResource {
+  
+}

@@ -9,10 +9,7 @@ import collection.JavaConversions._
 import org.brzy.util.NestedCollectionConverter._
 import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Michael Fortin
- * @version $Id: $
- */
+
 class ConfigPrinterTest extends JUnitSuite {
 
   @Test

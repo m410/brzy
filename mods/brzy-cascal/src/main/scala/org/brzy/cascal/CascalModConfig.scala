@@ -5,48 +5,37 @@ import org.brzy.config.mod.Mod
 /**
  *
  * @author Michael Fortin
- * @version $Id : $
  */
 class CascalModConfig(map: Map[String, AnyRef]) extends Mod(map) {
-  override val configurationName = "Cascal"
-
+  override val configurationName = "Cascal Configuration"
+  val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
+  val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
+  val keySpace: Option[String] = map.get("key_space").asInstanceOf[Option[String]].orElse(None)
+  val keyFamily: Option[String] = map.get("key_family").asInstanceOf[Option[String]].orElse(None)
+  
   override def <<(that: Mod):Mod = {
     if (that == null) {
       this
     }
+    else if(that.isInstanceOf[CascalModConfig]) {
+      val it = that.asInstanceOf[CascalModConfig]
+      new CascalModConfig(Map[String, AnyRef](
+        "user_name" -> it.userName.getOrElse(this.userName.getOrElse(null)),
+        "password" -> it.password.getOrElse(this.password.getOrElse(null)),
+        "key_space" -> it.keySpace.getOrElse(this.keySpace.getOrElse(null)),
+        "key_family" -> it.keyFamily.getOrElse(this.keyFamily.getOrElse(null)))
+        ++ super.<<(that).asMap)
+    }
     else {
       new CascalModConfig(Map[String, AnyRef](
-        "name" -> that.name.getOrElse(this.name.getOrElse(null)),
-        "version" -> that.version.getOrElse(this.version.getOrElse(null)),
-        "org" -> that.org.getOrElse(this.org.getOrElse(null)),
-        "config_class" -> that.configClass.getOrElse(this.configClass.getOrElse(null)),
-        "resource_class" -> that.resourceClass.getOrElse(this.resourceClass.getOrElse(null)),
-        "remote_location" -> that.remoteLocation.getOrElse(this.remoteLocation.getOrElse(null)),
-        "local_location" -> that.localLocation.getOrElse(this.localLocation.getOrElse(null)),
-        "repositories" -> {
-          if (this.repositories.isDefined && that.repositories.isDefined)
-            this.repositories.get.map(_.asMap).toList ++ that.repositories.get.map(_.asMap).toList
-          else if (this.repositories.isDefined)
-            this.repositories.get.map(_.asMap).toList
-          else if (that.repositories.isDefined)
-            that.repositories.get.map(_.asMap).toList
-          else
-            null
-        },
-        "dependencies" -> {
-          if (this.dependencies.isDefined && that.dependencies.isDefined)
-            this.dependencies.get.map(_.asMap).toList ++ that.dependencies.get.map(_.asMap).toList
-          else if (this.dependencies.isDefined)
-            this.dependencies.get.map(_.asMap).toList
-          else if (that.dependencies.isDefined)
-            that.dependencies.get.map(_.asMap).toList
-          else
-            null
-        }
-        ))
+        "user_name" -> that.map.get("user_name").getOrElse(this.userName.getOrElse(null)),
+        "password" -> that.map.get("password").getOrElse(this.password.getOrElse(null)),
+        "key_space" -> that.map.get("key_space").getOrElse(this.keySpace.getOrElse(null)),
+        "key_family" -> that.map.get("key_family").getOrElse(this.keyFamily.getOrElse(null)))
+        ++ super.<<(that).asMap)
     }
   }
 
-  override def asMap = super.asMap
+  override def asMap = map
 
 }
