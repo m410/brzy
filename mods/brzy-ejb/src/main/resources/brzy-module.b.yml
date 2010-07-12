@@ -1,0 +1,14 @@
+#
+#
+name: brzy-ejb
+org: org.brzy
+version: "0.1"
+config_class: org.brzy.ejb.EjbModConfig
+resource_class: org.brzy.ejb.EjbModResource
+
+smtp_host: localhost
+user_name: ""
+password: ""
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-ejb, rev: "0.2", transitive: false}
