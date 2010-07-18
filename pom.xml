@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
   <name>Brzy</name>
   <properties>
-    <scala.version>2.8.0.RC7</scala.version>
+    <scala.version>2.8.0</scala.version>
   </properties>
   <modules>
     <module>brzy-config</module>
@@ -24,6 +24,8 @@
     <module>mods/brzy-security</module>
     <module>mods/brzy-squeryl</module>
     <module>mods/brzy-tomcat</module>
+    <module>mods/brzy-ejb</module>
+    <module>mods/brzy-spring</module>
 
   </modules>
   <build>
@@ -38,6 +40,18 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>scala-tools.snapshot</id>
+      <url>http://scala-tools.org/repo-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   <distributionManagement>
     <repository>
       <id>nexus</id>

@@ -6,10 +6,7 @@ version: "0.2"
 config_class: org.brzy.ejb.EjbModConfig
 resource_class: org.brzy.ejb.EjbModResource
 
-smtp_host: localhost
-user_name: ""
-password: ""
+jndi: localhost
 
 dependencies:
-  - {conf: compile, org: javax.mail, name: mail, rev: "1.4"}
   - {conf: compile, org: org.brzy, name: brzy-ejb, rev: "0.2", transitive: false}

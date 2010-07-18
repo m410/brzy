@@ -19,3 +19,23 @@ dependencies:
   - {conf: compile, org: org.brzy, name: brzy-security, rev: "0.2", transitive: false}
 
 web_xml:
+  - filter:
+    filter-name: SecurityFilter
+    filter-class: org.brzy.security.SecurityFilter
+  - filter-mapping:
+    filter-name: SecurityFilter
+    url-pattern: /*
+  - security-constraint:
+    - web-resource-collection:
+        web-resource-name: Reasaurs
+        url-pattern: /*
+    - auth-constraint:
+        role-name: Toppy
+    - user-data-constraint:
+        transport-guarantee: NONE
+  - login-config:
+    - auth-method: FORM
+    - form-login-config:
+        form-login-page: /auth/login.html
+        form-error-page: /auth/login-error.html
+

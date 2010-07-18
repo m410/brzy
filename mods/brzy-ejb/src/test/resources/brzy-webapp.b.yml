@@ -8,18 +8,11 @@ application:
   org: &group org.brzy.sample
   artifact_id: sample-jpa
   application_class: org.brzy.mock.MockWebApp
-
 modules:
   - name: brzy-ejb
     org: org.brzy
     version: "0.2"
-    smtp_host: localhost
-    user_name: ""
-    password: ""
-
-#
-# Logging
-#[logback,log4j,jul]
+    jndi: localhost
 logging:
   provider: logback
   appenders:

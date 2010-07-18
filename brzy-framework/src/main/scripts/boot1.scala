@@ -34,10 +34,10 @@ object Boot1 extends Application {
   installModule(brzyMods, config.views.get)
 
   if(config.modules.isDefined)
-    config.modules.get.foreach(it => installPlugin(brzyMods, it))
+    config.modules.get.foreach(it => installModule(brzyMods, it))
 
   if(config.persistence.isDefined)
-    config.persistence.get.foreach(it => installPlugin(brzyMods, it))
+    config.persistence.get.foreach(it => installModule(brzyMods, it))
 }
 
 Boot1.main(args)

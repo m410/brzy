@@ -50,19 +50,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4.3</version>
-        <configuration>
-          <useSystemClassLoader>false</useSystemClassLoader>
-          <argLine>-Xmx512m</argLine>
-          <includes>
-            <include>**/*Unit.java</include>
-            <include>**/*Spec.java</include>
-          </includes>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -82,12 +69,12 @@
     <dependency>
       <groupId>com.shorrockin</groupId>
       <artifactId>cascal</artifactId>
-      <version>1.2-Scala.2.8.0.RC6-SNAPSHOT</version>
+      <version>1.2-Scala.2.8.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.scala-tools.testing</groupId>
-      <artifactId>specs</artifactId>
-      <version>1.6.1-2.8.0.Beta1-RC6</version>
+      <artifactId>specs_2.8.0</artifactId>
+      <version>1.6.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -104,7 +91,7 @@
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest</artifactId>
-      <version>1.2-for-scala-2.8.0.RC5-SNAPSHOT</version>
+      <version>1.2-for-scala-2.8.0.final-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

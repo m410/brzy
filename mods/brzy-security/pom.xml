@@ -50,19 +50,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4.3</version>
-        <configuration>
-          <useSystemClassLoader>false</useSystemClassLoader>
-          <argLine>-Xmx512m</argLine>
-          <includes>
-            <include>**/*Unit.java</include>
-            <include>**/*Spec.java</include>
-          </includes>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -95,11 +82,17 @@
       <artifactId>brzy-mvc</artifactId>
       <version>0.2</version>
     </dependency>
-          <dependency>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest</artifactId>
-        <version>1.2-for-scala-2.8.0.RC5-SNAPSHOT</version>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest</artifactId>
+      <version>1.2-for-scala-2.8.0.final-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
