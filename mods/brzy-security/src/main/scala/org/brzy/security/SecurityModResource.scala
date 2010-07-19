@@ -8,6 +8,7 @@ import org.brzy.config.mod.ModResource
  * @author Michael Fortin
  * @version $Id: $
  */
-class SecurityModResource extends ModResource {
-  
+class SecurityModResource(config:SecurityModConfig) extends ModResource {
+  val name = config.name.get
+  val defaultPath = config.defaultPath.get
 }

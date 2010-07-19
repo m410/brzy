@@ -10,5 +10,6 @@ import org.brzy.interceptor.InterceptorResource
  * @version $Id: $
  */
 class CascalModResource(c:CascalModConfig) extends ModResource with InterceptorResource{
+  val name = c.name.get
   def interceptor = new CascalContextManager
 }

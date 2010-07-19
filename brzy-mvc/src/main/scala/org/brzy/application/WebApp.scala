@@ -27,18 +27,23 @@ class WebApp(val config: WebAppConfig) {
 
   val viewResource: WebAppViewResource = {
     log.debug("view: {}", config.views)
-    val resourceClass = Class.forName(config.views.resourceClass.get)
-    val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
-    constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
+    if (config.views.resourceClass.isDefined) {
+      val resourceClass = Class.forName(config.views.resourceClass.get)
+      val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
+      constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
+    }
+    else {
+      null
+    }
   }
 
   val persistenceResources: List[ModResource] = {
     config.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      val p = persist.asInstanceOf[Mod]
-      val resourceClass = Class.forName(p.resourceClass.get)
-      val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-      constructor.newInstance(p).asInstanceOf[ModResource]
+      val mod = persist.asInstanceOf[Mod]
+      val resourceClass = Class.forName(mod.resourceClass.get)
+      val constructor: Constructor[_] = resourceClass.getConstructor(mod.getClass)
+      constructor.newInstance(mod).asInstanceOf[ModResource]
     }).toList
   }
 
@@ -46,11 +51,11 @@ class WebApp(val config: WebAppConfig) {
     val list = ListBuffer[ModResource]()
     config.modules.foreach(module => {
       log.debug("module: {}", module)
-      val p = module.asInstanceOf[Mod]
-      if (p.resourceClass.isDefined && p.resourceClass.get != null) {
-        val resourceClass = Class.forName(p.resourceClass.get)
-        val constructor: Constructor[_] = resourceClass.getConstructor(p.getClass)
-        list += constructor.newInstance(p).asInstanceOf[ModResource]
+      val mod = module.asInstanceOf[Mod]
+      if (mod.resourceClass.isDefined && mod.resourceClass.get != null) {
+        val resourceClass = Class.forName(mod.resourceClass.get)
+        val constructor: Constructor[_] = resourceClass.getConstructor(mod.getClass)
+        list += constructor.newInstance(mod).asInstanceOf[ModResource]
       }
     })
     list.toList

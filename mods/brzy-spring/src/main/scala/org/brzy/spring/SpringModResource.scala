@@ -10,5 +10,5 @@ import org.brzy.config.mod.ModResource
  */
 
 class SpringModResource(c:SpringModConfig) extends ModResource {
-  
+  val name = c.name.get
 }

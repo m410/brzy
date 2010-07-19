@@ -23,7 +23,6 @@ class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val view
         clazz.getSimpleName
       else
         clazz.getSimpleName.substring(0,clazz.getSimpleName.indexOf("Controller"))
-    // TODO should be configurable
     "/" + folder.toLowerCase + "/"+ actionMethod.getName
   }
 

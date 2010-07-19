@@ -3,7 +3,6 @@ package org.brzy.application
 import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.brzy.interceptor.impl.LoggingInterceptor
 import collection.JavaConversions._
 import org.brzy.interceptor.{ManagedThreadContext, ProxyFactory, Invoker}
 

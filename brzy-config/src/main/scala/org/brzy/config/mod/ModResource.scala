@@ -7,7 +7,9 @@ package org.brzy.config.mod
  * @version $Id: $
  */
 trait ModResource {
-  
+
+  val name:String
+
   def startup:Unit = {}
 
   def shutdown:Unit = {}

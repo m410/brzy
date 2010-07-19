@@ -10,5 +10,6 @@ import org.brzy.config.mod.ModResource
  */
 
 class EmailModResource(c:EmailModConfig) extends ModResource {
-  
+  val name = c.name.get
+
 }

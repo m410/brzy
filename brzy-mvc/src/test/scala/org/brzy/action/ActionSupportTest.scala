@@ -14,7 +14,7 @@ class ActionSupportTest extends JUnitSuite {
 
   @Test
   def testBuildArgs = {
-    val request = new MockHttpServletRequest("GET", "/users/10.brzy") // should be /users/
+    val request = new MockHttpServletRequest("GET", "/users/10.brzy")
 
     val ctlr = new UserController()
     val action = new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")

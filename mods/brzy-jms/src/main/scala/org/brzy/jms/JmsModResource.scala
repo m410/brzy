@@ -9,5 +9,6 @@ import org.brzy.config.mod.ModResource
  * @version $Id: $
  */
 class JmsModResource(c:JmsModConfig) extends ModResource {
+  val name = c.name.get
 
 }

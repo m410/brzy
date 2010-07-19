@@ -17,6 +17,7 @@ class SquerylModResource(c:SquerylModConfig) extends ModResource with Intercepto
   log.debug("db url   : {}",c.url.getOrElse("?"))
   log.debug("db user  : {}",c.userName.getOrElse("?"))
   log.debug("db passwd: {}",c.password.getOrElse("?"))
+  val name = c.name.get
 
   assert(c.driver.isDefined, "the database driver is not defined.")
   assert(c.driver.get != null, "the database driver can not be null.")

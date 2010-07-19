@@ -10,5 +10,6 @@ import org.brzy.config.mod.ModResource
  */
 
 class SchedulerModResource(c:SchedulerModConfig) extends ModResource {
-  
+  val name = c.name.get
+
 }

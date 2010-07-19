@@ -10,6 +10,5 @@ import java.lang.annotation.RetentionPolicy;
  * @version $Id: $
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ScheduledService {
-    String value() default "* * * * *";    
+public @interface Init {
 }

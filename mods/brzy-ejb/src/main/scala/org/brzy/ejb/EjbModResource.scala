@@ -10,5 +10,6 @@ import org.brzy.config.mod.ModResource
  */
 
 class EjbModResource(c:EjbModConfig) extends ModResource {
-  
+  val name = c.name.get
+
 }

@@ -8,7 +8,7 @@ import org.brzy.config.webapp.WebAppViewResource
  * @version $Id: $
  */
 class ScalateModResource(config:ScalateModConfig) extends WebAppViewResource(config){
-
   override val fileExtension = config.fileExtension.get
+  override val name = config.name.get
 
 }

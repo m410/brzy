@@ -1,6 +1,5 @@
 package org.brzy.interceptor
 
-import impl.LoggingInterceptor
 import org.junit.Test
 import org.junit.Assert._
 import org.brzy.saved.intercept.{FooBar, Bar}
