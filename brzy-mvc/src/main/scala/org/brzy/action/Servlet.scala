@@ -43,44 +43,5 @@ class Servlet extends HttpServlet {
   override def service(req: ServletRequest, res: ServletResponse) = {
     internal(req.asInstanceOf[HttpServletRequest],res.asInstanceOf[HttpServletResponse])
   }
-//
-//  override def service(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("service1")
-//    internal(req,res)
-//  }
-//
-//  override def doDelete(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doDelete")
-//    internal(req,res)
-//  }
-//
-//  override def doPut(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doPut")
-//    internal(req,res)
-//  }
-//
-//  override def doPost(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doPost")
-//    internal(req,res)
-//  }
-//
-//  override def doHead(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doHead")
-//    internal(req,res)
-//  }
-//
-//  override def doGet(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doGet")
-//    internal(req,res)
-//  }
-//
-//  override def doTrace(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doTrace")
-//    internal(req,res)
-//  }
-//
-//  override def doOptions(req: HttpServletRequest, res: HttpServletResponse) = {
-//    log.trace("doOptions")
-//    internal(req,res)
-//  }
+
 }

@@ -1,14 +1,15 @@
 package org.brzy.security
 
 import javax.servlet.{ServletResponse, ServletRequest, FilterConfig, Filter,FilterChain}
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+
 import org.slf4j.{LoggerFactory}
 import org.brzy.application.WebApp
-import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
-import org.brzy.config.mod.ModResource
+import org.brzy.action.ActionSupport._
+import org.brzy.action.Action
 
 /**
  *
- * 
  * @author Michael Fortin
  */
 class SecurityFilter extends Filter{
@@ -22,19 +23,24 @@ class SecurityFilter extends Filter{
     val request = req.asInstanceOf[HttpServletRequest]
     val response = res.asInstanceOf[HttpServletResponse]
     val security = findModule(request)
-    // check if the session exists
+    val app = findApp(request)
+    val actionPath = findActionPath(request.getRequestURI,request.getContextPath)
+
     if(request.getSession.getAttribute("brzy_security_login") != null) {
-      //  check action permissions
-      //    yes =  proceed
-      //      wrap request in new request with principal and roles
-      chain.doFilter(request,response)
-      //    no = 403
+      app.actions.find(pathCompare(actionPath)) match {
+        case Some(a) => secureAction(a,request,chain)
+        case _ => chain.doFilter(request,response)
+      }
     }
     else {
       request.getSession.setAttribute("brzy_security_page",request.getRequestURI)
       log.debug("security.defaultPath: {}",security.defaultPath )
       response.sendRedirect(request.getContextPath + security.defaultPath)
     }
+  }
+
+  def secureAction(a:Action,request:HttpServletRequest,chain:FilterChain) = {
+    // get the user name and the roles from the database
   }
 
   def findModule(r:HttpServletRequest):SecurityModResource = {
@@ -45,6 +51,11 @@ class SecurityFilter extends Filter{
       case _ => error("No Security Module Found")
     }
   }
+
+  def findApp(r:HttpServletRequest):WebApp = {
+      r.getSession.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+  }
+
   def destroy = {
     // nothing to do
   }

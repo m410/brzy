@@ -21,10 +21,10 @@ class Filter extends SFilter {
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
     val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
 
-    if(!(pattern findFirstMatchIn uri).isEmpty) {
+    if(!(pattern findFirstMatchIn uri).isEmpty) { // pass it on if the url ends with any extension
       chain.doFilter(req,res)
     }
-    else {
+    else { // assume it's an action and append .brzy
       val ctx = req.asInstanceOf[HttpServletRequest].getContextPath
       val forward =
         if(ctx == "")
