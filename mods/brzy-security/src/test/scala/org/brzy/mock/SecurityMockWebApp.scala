@@ -6,10 +6,10 @@ import collection.immutable.SortedSet
 import org.brzy.action.Action
 
 
-class MockWebApp(config:WebAppConfig) extends WebApp(config) {
+class SecurityMockWebApp(config:WebAppConfig) extends WebApp(config) {
   override def makeServices = List()
   override def makeControllers = List(new PersonController)
   override lazy val actions = SortedSet(
-    new Action("/users/{id}", classOf[PersonController].getMethods.find(_.getName == "show").get, new PersonController, ".ssp")
+    new Action("/persons/{id}", classOf[PersonController].getMethods.find(_.getName == "show").get, new PersonController, ".ssp")
     )
 }

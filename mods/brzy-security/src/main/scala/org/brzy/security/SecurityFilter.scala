@@ -14,21 +14,28 @@ import org.brzy.action.Action
  */
 class SecurityFilter extends Filter{
   val log = LoggerFactory.getLogger(classOf[SecurityFilter])
-
+  var security:SecurityModResource = _
+  var app:WebApp = _
 
   def init(filterConfig: FilterConfig) = {
+    app = filterConfig.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+    val option = app.moduleResource.find(_.name == "brzy-security")
+    security = option match {
+      case Some(mod) => mod.asInstanceOf[SecurityModResource]
+      case _ => error("No Security Module Found")
+    }
   }
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
     val request = req.asInstanceOf[HttpServletRequest]
     val response = res.asInstanceOf[HttpServletResponse]
-    val security = findModule(request)
-    val app = findApp(request)
     val actionPath = findActionPath(request.getRequestURI,request.getContextPath)
+    log.debug("actionPath: " + actionPath)
 
     if(request.getSession.getAttribute("brzy_security_login") != null) {
-      app.actions.find(pathCompare(actionPath)) match {
-        case Some(a) => secureAction(a,request,chain)
+      val actionOption = app.actions.find(pathCompare(actionPath))
+      actionOption match {
+        case Some(a) => secureAction(a,request,response,chain)
         case _ => chain.doFilter(request,response)
       }
     }
@@ -39,21 +46,26 @@ class SecurityFilter extends Filter{
     }
   }
 
-  def secureAction(a:Action,request:HttpServletRequest,chain:FilterChain) = {
-    // get the user name and the roles from the database
-  }
+  def secureAction(a:Action,request:HttpServletRequest,response:HttpServletResponse,chain:FilterChain) = {
 
-  def findModule(r:HttpServletRequest):SecurityModResource = {
-    val app = r.getSession.getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    val option = app.moduleResource.find(_.name == "brzy-security")
-    option match {
-      case Some(mod) => mod.asInstanceOf[SecurityModResource]
-      case _ => error("No Security Module Found")
-    }
-  }
+    val roles =
+        if(request.getSession.getAttribute("brzy_security_roles") != null)
+          request.getSession.getAttribute("brzy_security_roles").asInstanceOf[Array[String]]
+        else
+          Array[String]()
 
-  def findApp(r:HttpServletRequest):WebApp = {
-      r.getSession.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+    val allowed =
+        if(a.actionMethod.getAnnotation(classOf[Secured]) != null)
+          a.actionMethod.getAnnotation(classOf[Secured]).value.asInstanceOf[Array[String]]
+        else if(a.inst.getClass.getAnnotation(classOf[Secured]) != null)
+          a.inst.getClass.getAnnotation(classOf[Secured]).value.asInstanceOf[Array[String]]
+        else
+          Array[String]()
+
+    if(allowed.isEmpty || allowed.exists(allow => roles.exists(_ == allow)))
+      chain.doFilter(request,response)
+    else
+      response.sendError(403,"Restricted")
   }
 
   def destroy = {

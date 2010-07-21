@@ -49,4 +49,10 @@ abstract class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifestT: 
 
     instance
   }
+
+/*
+def load[A : Manifest](id: Long): A = {
+    return s.load(manifest[A].erasure, id).asInstanceOf[A];
+  }
+*/
 }

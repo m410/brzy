@@ -4,13 +4,13 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web._
-import org.brzy.mock.MockWebApp
 import org.brzy.config.webapp.WebAppConfig
 import org.brzy.config.common.BootConfig
 import org.brzy.config.mod.Mod
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import java.lang.String
 import javax.servlet.http.HttpServletRequest
+import org.brzy.mock.SecurityMockWebApp
 
 class SecurityFilterTest extends JUnitSuite {
 
@@ -34,11 +34,13 @@ class SecurityFilterTest extends JUnitSuite {
       "resource_class" -> "org.brzy.security.SecurityModResource",
       "name" -> "brzy-security",
       "default_path" -> "/security/authentication"))
-    val webapp = new MockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
+    val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
     session.getServletContext.setAttribute("application", webapp)
 
-    def filter = new SecurityFilter
-    filter.init(new MockFilterConfig)
+    val filter = new SecurityFilter
+    val filterConfig: MockFilterConfig = new MockFilterConfig
+    filterConfig.getServletContext.setAttribute("application",webapp)
+    filter.init(filterConfig)
     filter.doFilter(request, response, new MockFilterChain)
     assertEquals("/persons/10", session.getAttribute("brzy_security_page"))
     assertTrue(redirectCalled)
@@ -46,8 +48,10 @@ class SecurityFilterTest extends JUnitSuite {
 
   @Test def testUnsecured = {
     val session: MockHttpSession = new MockHttpSession
-    session.setAttribute("brzy_authentication","12")
-    val request = new MockHttpServletRequest("GET", "/persons/10") {
+    session.setAttribute("brzy_security_roles",Array("ROLE_USER"))
+    session.setAttribute("brzy_security_login","mfortin")
+
+    val request = new MockHttpServletRequest("GET", "/persons") {
       override def getSession = session
     }
 
@@ -59,7 +63,7 @@ class SecurityFilterTest extends JUnitSuite {
       "resource_class" -> "org.brzy.security.SecurityModResource",
       "name" -> "brzy-security",
       "default_path" -> "/security/authentication"))
-    val webapp = new MockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
+    val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
     session.getServletContext.setAttribute("application", webapp)
     var doFilterCalled = false
 
@@ -69,8 +73,10 @@ class SecurityFilterTest extends JUnitSuite {
       }
     }
 
-    def filter = new SecurityFilter
-    filter.init(new MockFilterConfig)
+    val filter = new SecurityFilter
+    val filterConfig: MockFilterConfig = new MockFilterConfig
+    filterConfig.getServletContext.setAttribute("application",webapp)
+    filter.init(filterConfig)
     filter.doFilter(request, response, chain)
     assertTrue(doFilterCalled)
   }
@@ -79,7 +85,8 @@ class SecurityFilterTest extends JUnitSuite {
     var doSendError = false
 
     val session: MockHttpSession = new MockHttpSession
-    session.setAttribute("brzy_authentication","12")
+    session.setAttribute("brzy_security_roles",Array("ROLE_OTHER"))
+    session.setAttribute("brzy_security_login","mfortin")
     val request = new MockHttpServletRequest("GET", "/persons/10") {
       override def getSession = session
     }
@@ -98,11 +105,13 @@ class SecurityFilterTest extends JUnitSuite {
       "resource_class" -> "org.brzy.security.SecurityModResource",
       "name" -> "brzy-security",
       "default_path" -> "/security/authentication"))
-    val webapp = new MockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
+    val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
     session.getServletContext.setAttribute("application", webapp)
 
-    def filter = new SecurityFilter
-    filter.init(new MockFilterConfig)
+    val filter = new SecurityFilter
+    val filterConfig: MockFilterConfig = new MockFilterConfig
+    filterConfig.getServletContext.setAttribute("application",webapp)
+    filter.init(filterConfig)
     filter.doFilter(request, response, new MockFilterChain)
     assertTrue(doSendError)
   }
