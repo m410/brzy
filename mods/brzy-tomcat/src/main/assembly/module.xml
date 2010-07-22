@@ -38,6 +38,9 @@
       <includes>
         <include>*.jar</include>
       </includes>
+				<excludes>
+					<exclude>*-module.jar</exclude>
+				</excludes>
       <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
