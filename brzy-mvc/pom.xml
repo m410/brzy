@@ -91,7 +91,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>0.9.20</version>
+      <version>0.9.24</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
