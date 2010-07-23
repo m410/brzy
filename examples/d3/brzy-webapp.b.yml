@@ -31,7 +31,7 @@ dependencies:
   - {conf: test, org: org.scalatest, name: scalatest, rev: "1.2-for-scala-2.8.0.RC5-SNAPSHOT"}
 modules:
   - name: brzy-tomcat
-    org: orb.grzy
+    org: org.brzy
     version: "0.2"
 logging:
   provider: logback

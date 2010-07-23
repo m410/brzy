@@ -31,7 +31,7 @@ if [ "$1" = "bootstrap" ]; then
    #TODO check last modified dates
    SCRIPT="$BRZY_HOME/scripts/boot1.scala"
    scala-2.8 -savecompiled -cp $CLASSPATH $SCRIPT `pwd` $BRZY_HOME
-   FILES="project/brzy-plugins/*/*[0-9].jar"
+   FILES="project/brzy-modules/*/*[0-9].jar"
    for f in $FILES
    do
        CLASSPATH="$CLASSPATH:`pwd`/$f"
@@ -42,7 +42,7 @@ if [ "$1" = "bootstrap" ]; then
    exit 0
 fi
 
-# run any other script, looking in brzy, project and plugin directories
+# run any other script, looking in brzy, project and module directories
 for i in "$BRZY_HOME/scripts"/*.scala
 do
    if [ "`basename ${i%%.*}`" = "$1" ]; then
@@ -64,14 +64,14 @@ if [ ! -e "$SCRIPT" ]; then
 fi
 
 if [ ! -e "$SCRIPT" ]; then
-   for plugin in "`pwd`/project/brzy-plugins"/*
+   for module in "`pwd`/project/brzy-modules"/*
    do
-       for file in "$plugin/scripts"/*.scala
+       for file in "$module/scripts"/*.scala
        do
            if [ "`basename ${file%.*}`" = "$1" ];  then
                SCRIPT=$file
                CLASSPATH=""
-               for lib in "$plugin/lib"/*.jar
+               for lib in "$module/lib"/*.jar
                do
                    CLASSPATH=$CLASSPATH:$lib
                done

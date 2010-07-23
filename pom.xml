@@ -54,7 +54,7 @@
   </repositories>
   <distributionManagement>
     <repository>
-      <id>nexus</id>
+      <id>brzy-nexus</id>
       <name>Nexus Staging Repo</name>
       <url>http://brzy.org/nexus/content/repositories/releases</url>
     </repository>

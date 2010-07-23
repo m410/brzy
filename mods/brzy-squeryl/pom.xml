@@ -73,8 +73,8 @@
     </dependency>
     <dependency>
       <groupId>org.squeryl</groupId>
-      <artifactId>squeryl_2.8.0.RC6</artifactId>
-      <version>0.9.4beta6</version>
+      <artifactId>squeryl_2.8.0</artifactId>
+      <version>0.9.4beta8</version>
       <exclusions>
         <exclusion>
           <groupId>postgresql</groupId>

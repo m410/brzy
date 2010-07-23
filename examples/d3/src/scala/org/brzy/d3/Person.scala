@@ -4,7 +4,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.{Schema, KeyedEntity}
 import org.squeryl.annotations.Column
 import org.brzy.action.args.Parameters
-import org.brzy.validator.Validity
+import org.brzy.validator.{Validation=>BValidation}
 import javax.validation.{ConstraintViolation,Validation,Validator,ValidatorFactory}
 import org.slf4j.{LoggerFactory, Logger}
 
@@ -31,7 +31,7 @@ object Person extends Schema {
 			val factory = Validation.buildDefaultValidatorFactory
 			val validator = factory.getValidator
 			val constraintViolations = validator.validate(t)
-      new Validity()
+      BValidation(constraintViolations)
     }
 
     def save() = {

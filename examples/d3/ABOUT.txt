@@ -1,3 +1,3 @@
 
-This is a simple web app that uses Scalate and Squery to implement
+This is a simple web app that uses Scalate and Squeryl to implement
 the views and database operations. 

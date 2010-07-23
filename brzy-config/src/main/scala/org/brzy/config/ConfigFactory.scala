@@ -96,7 +96,7 @@ object ConfigFactory {
 
   def makeBuildTimeModule(reference: Mod, modResourceDir: File): Mod = {
     val pFile = new File(modResourceDir, reference.name.get)
-    val modFile = new File(pFile, "/brzy-module.b.yml")
+    val modFile = new File(pFile, "brzy-module.b.yml")
     val yaml = convertMap(Yaml.load(modFile).asInstanceOf[JMap[String, AnyRef]])
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {

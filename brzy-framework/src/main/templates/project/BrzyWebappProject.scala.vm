@@ -17,7 +17,7 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   // brzy command execution classpath configuration
   val brzyPlugin = config("brzy") hide
-  def brzyClasspath = managedClasspath(brzyPlugin) +++ ("project" / "brzy-plugins").descendentsExcept("*.jar", "lib")
+  def brzyClasspath = managedClasspath(brzyPlugin) +++ ("project" / "brzy-modules").descendentsExcept("*.jar", "lib")
 
   // repositories
 #foreach($repo in $repositories)
@@ -55,8 +55,8 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
     createDirectory(webappPath/"WEB-INF"/"classes",logger)
     createDirectory(webappPath/"WEB-INF"/"lib",logger)
     copyFile(path("brzy-webapp.b.yml"), webappPath/"WEB-INF"/"classes"/"brzy-webapp.b.yml", logger)
-    val pluginConfigPaths = ("project"/"brzy-plugins" $H$H) ** "brzy-plugin.b.yml"
-   	copy(pluginConfigPaths.get , webappPath/"WEB-INF"/"classes"/"brzy-plugins",logger)
+    val moduleConfigPaths = ("project"/"brzy-modules" $H$H) ** "brzy-module.b.yml"
+   	copy(moduleConfigPaths.get , webappPath/"WEB-INF"/"classes"/"brzy-modules",logger)
     None
   }
 
@@ -80,7 +80,7 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   lazy val setupWebInf = task {
     val logger = new ConsoleLogger
-    val myclasses = {("target"/"scala_2.8.0.RC6"/"classes" $H$H) ** "*.class"}.get
+    val myclasses = {("target"/"scala_2.8.0"/"classes" $H$H) ** "*.class"}.get
 	copy(myclasses,"webapp"/"WEB-INF"/"classes",true,logger)
 	val libs = {("project"/"lib"/"compile" $H$H) ** "*.jar"}.get
 	copy(libs,"webapp"/"WEB-INF"/"lib",true,logger)
