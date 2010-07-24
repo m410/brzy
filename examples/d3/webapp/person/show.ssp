@@ -10,4 +10,6 @@
 	<dd>${person.firstName}</dd>
 	<dt>last name</dt>
 	<dd>${person.lastName}</dd>
+	<dt></dt>
+	<dd><a href="${res("persons/"+person.id+"/edit")}">Edit</a></dd>
 </dl>
