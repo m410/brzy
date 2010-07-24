@@ -12,11 +12,6 @@ import org.brzy.controller.{Controller,Path}
  */
 @Controller("/persons")
 class PersonController {
-
-	@Path("make")  def make = {
-		Person.create
-		Redirect("/persons")
-	}
 	
   @Path("") 
 	def list = "personsList"->from(persons)(a=> select(a)).toList
@@ -25,13 +20,19 @@ class PersonController {
 	def show(params:Parameters) = "person"->Person.get(params("id")(0).toLong)
 
   @Path("create") 
-	def create() = "person"->new Person(0,"first","last")
+	def create() = "person"->new Person
 
   @Path("save") 
 	def save(p:Parameters) = {
     val person = new Person(0, p("firstName")(0), p("lastName")(0))
-		person.save()
-    (Model("person"->person), Redirect("/persons/" + person.id))
+		val validation = Person.validate()
+		if(validation.passes) {
+			person.save()
+			(Redirect("/persons/"+person.id), Flash("Saved"))
+		}
+		else {
+			(Model("person"->person,"validation"->validation), View("/persons/create"))
+		}
   }
 
   @Path("{id}/edit") 
@@ -40,7 +41,13 @@ class PersonController {
   @Path("{id}/update") 
 	def update(p:Parameters) = {
 		val person = new Person(p("id")(0).toLong, p("firstName")(0), p("lastName")(0))
-		person.update()
-    (Model("person"->person), Redirect("/persons/" + person.id))
+		val validation = Person.validate()
+		if(validation.passes) {
+			person.update()
+			(Redirect("/persons/"+person.id), Flash("Saved"))
+		}
+		else {
+			(Model("person"->person,"validation"->validation), View("/persons/create"))
+		}
   }
 }

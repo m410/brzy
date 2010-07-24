@@ -23,7 +23,7 @@ class UserController {
 	  def user:User = User.make(params)
  		val validity = user.validity()
 
-		if(validity.isValid) {
+		if(validity.passes) {
       user.save
       (Redirect("/user/"+user.id), Flash("flash.1","User saved"), Model("user"->user))
     }
@@ -39,7 +39,7 @@ class UserController {
 		def user = User.make(params)
     val validity = user.validity()
 
-		if(validity.isValid) {
+		if(validity.passes) {
       user.save
       (Redirect("/users/" + user.id),Flash("flash.2","User updated"),Model("user"->user))
     }

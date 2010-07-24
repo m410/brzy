@@ -14,8 +14,8 @@
 			<label for="last_name">last name</label>
 			<input type="text" name="lastName" value="${person.lastName}" id="last_name">
 		</div>		
-	</fieldset>
-	<fieldset>
-			<div><input type="submit" value="Continue"></div>
+		<div>
+			<input type="submit" value="Continue">
+		</div>
 	</fieldset>
 </form>

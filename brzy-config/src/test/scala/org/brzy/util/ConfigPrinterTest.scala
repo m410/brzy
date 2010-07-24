@@ -1,6 +1,5 @@
-package org.brzy.config
+package org.brzy.util
 
-import common.BootConfig
 import org.junit.Test
 import org.junit.Assert._
 import java.util.{Map => JMap}
@@ -8,6 +7,7 @@ import org.ho.yaml.Yaml
 import collection.JavaConversions._
 import org.brzy.util.NestedCollectionConverter._
 import org.scalatest.junit.JUnitSuite
+import org.brzy.config.common.BootConfig
 
 
 class ConfigPrinterTest extends JUnitSuite {

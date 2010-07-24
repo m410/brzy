@@ -31,6 +31,6 @@ class JpaPersistenceTest extends JUnitSuite {
     val parameters = new Parameters(map)
     val user = new User
     val validity = user.validity()
-    assertTrue(!validity.isValid)
+    assertTrue(!validity.passes)
   }
 }

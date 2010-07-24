@@ -6,15 +6,16 @@ import org.squeryl.annotations.Column
 import org.brzy.action.args.Parameters
 import org.brzy.validator.{Validation=>BValidation}
 import javax.validation.{ConstraintViolation,Validation,Validator,ValidatorFactory}
+import javax.validation.constraints.{NotNull,Size}
 import org.slf4j.{LoggerFactory, Logger}
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
+@ConstructorProperties(Array("id","firstName","lastName"))
 class Person( override val id:Long,
-		@Column(name="first_name") val firstName:String,
-    @Column(name="last_name") val lastName:String) 
+		@Column(name="first_name") @NotNull @Size(min=4,max=24) val firstName:String,
+    @Column(name="last_name") @NotNull @Size(min=4,max=24) val lastName:String) 
 		extends KeyedEntity[Long] {
   def this() = this(0, "","")
 }
@@ -53,8 +54,7 @@ object Person extends Schema {
   implicit def applyCrudOps(t:Person) = new EntityCrudOps(t)
 
   def get(id:Long) = from(persons)(s => where(s.id === id) select(s)).head
-	def make(params:Parameters):Person ={
-		val person = classOf[Person].newInstance
-		person
-	}
+
+	def make(params:Parameters):Person = Construct[Person](params)
+		
 }

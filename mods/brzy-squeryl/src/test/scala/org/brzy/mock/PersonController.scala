@@ -6,7 +6,7 @@ import Person._
 import org.brzy.controller.{Controller,Path}
 
 
-@Controller("persons/")
+@Controller("persons")
 class PersonController {
 
   @Path("")

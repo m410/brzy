@@ -7,6 +7,7 @@ import javax.validation.{Validation => jValidation}
 
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.PrimitiveTypeMode._
+import org.brzy.bean.Construct
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class
@@ -16,11 +17,13 @@ import org.squeryl.PrimitiveTypeMode._
  *  def findByName(s:String) = ...
  * }
  * </pre>
+ *
+ * Also note that the entity class needs to be annotated with the ConstructorProperties
+ * annotation for the java.bean api.
  */
-abstract class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifestT: Manifest[T]) extends Schema {
+class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema {
   val db = table[T]
   val validationFactory = jValidation.buildDefaultValidatorFactory
-  val entityClass: Class[T]
 
   class EntityCrudOps(t: T) {
     def validate() = Validation[T](validationFactory.getValidator.validate(t))
@@ -34,25 +37,10 @@ abstract class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifestT: 
 
   implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
 
-  def get(id: Long) = from(db)(s => where(s.id === id) select (s)).head
+  def get(id: Long):T = from(db)(s => where(s.id === id) select (s)).head
 
-  def list() = from(db)(a => select(a)).toList
+  def list():List[T] = from(db)(a => select(a)).toList
 
-  def make(params: Parameters): T = {
-    val instance = entityClass.newInstance
+  def make(params: Map[String,Any]): T = Construct[T](params)
 
-    params.foreach(nvp => {
-      val setter = entityClass.getMethods.find(_.getName == nvp._1 + "_$eq")
-      if (setter.isDefined)
-        setter.get.invoke(instance, nvp._2)
-    })
-
-    instance
-  }
-
-/*
-def load[A : Manifest](id: Long): A = {
-    return s.load(manifest[A].erasure, id).asInstanceOf[A];
-  }
-*/
 }

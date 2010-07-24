@@ -12,7 +12,7 @@ class Validation[T](val violations:Array[ConstraintViolation[T]]) {
 
   def this() = this(Array[ConstraintViolation[T]]())
   
-  def isValid:Boolean = violations.length <= 0
+  def passes:Boolean = violations.length <= 0
   
 }
 

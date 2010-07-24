@@ -35,14 +35,14 @@ class UserController {
   @Path("save")
 	def save(params:Parameters)() = {
 	  def user:User = User.make(params)
- 		val validity = user.validity()
+ 		val validation = user.validity()
 
-		if(validity.isValid) {
+		if(validation.passes) {
       user.save
       (Redirect("/user/"+user.id), Flash("flash.1","User saved"), Model("user"->user))
     }
 		else
-      (View("/user/create.jsp"),Model("user"->user, "errors"->validity))
+      (View("/user/create.jsp"),Model("user"->user, "errors"->validation))
 	}
 
 	@Path("{id}/edit")
@@ -51,14 +51,14 @@ class UserController {
 	@Path("{id}/update")
 	def update(params:Parameters) = {
 		def user = User.make(params)
-    val validity = user.validity()
+    val validation = user.validity()
 
-		if(validity.isValid) {
+		if(validation.passes) {
       user.save
       (Redirect("/users/" + user.id),Flash("flash.2","User updated"),Model("user"->user))
     }
 		else
-      (View("/user/edit.jsp"),Model("user"->user, "errors"->validity))
+      (View("/user/edit.jsp"),Model("user"->user, "errors"->validation))
 	}
 
 	@Path("{id}/delete")

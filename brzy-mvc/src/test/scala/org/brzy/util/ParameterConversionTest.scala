@@ -1,6 +1,5 @@
 package org.brzy.util
 
-import org.brzy.mock.User
 import org.junit.Test
 import org.junit.Assert._
 import ParameterConversion._
