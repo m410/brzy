@@ -70,8 +70,8 @@
       <groupId>name.pachler</groupId>
       <artifactId>jpathwatch</artifactId>
       <version>0.92</version>
-      <!--<scope>system</scope>-->
-      <!--<systemPath>${basedir}/lib/jpathwatch-0-92a.jar</systemPath>-->
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/jpathwatch-0-92a.jar</systemPath>
     </dependency>
 
     <dependency>

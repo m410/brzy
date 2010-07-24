@@ -28,7 +28,7 @@ object Tomcat extends Application {
   println(" -- classpath: " + classpath )
   // TODO copy files to web-inf
   new RunWebApp("",8080)
-  new FileWatcher(sourceDir,new ScalaCompiler(sourceDir,classesDir,classpath))
+//  new FileWatcher(sourceDir,new ScalaCompiler(sourceDir,classesDir,classpath))
   Thread.sleep(100000000) // TODO there's probably a better way to do this
 }
 

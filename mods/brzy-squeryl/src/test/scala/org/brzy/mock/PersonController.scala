@@ -10,18 +10,18 @@ import org.brzy.controller.{Controller,Path}
 class PersonController {
 
   @Path("")
-  def list =  "personsList"->from(persons)(a=> select(a)).toList
+  def list =  "personsList"->Person.list()
 
   @Path("{id}")
   def get(params:Parameters) =  "person"->Person.get(params("id")(0).toLong)
 
   @Path("create")
-  def create() = "person"->new Person(0,"first","last")
+  def create() = "person"->new Person
 
   @Path("save")
   def save(p:Parameters) = {
     val person = new Person(0, p("firstName")(0), p("lastName")(0))
-		person.save()
+		person.insert()
     "person"->person
   }
 
