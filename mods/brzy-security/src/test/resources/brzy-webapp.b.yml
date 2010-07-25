@@ -10,7 +10,7 @@ application:
 modules:
   - name: brzy-security
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
     authority_entity: Person
 #
 # Logging

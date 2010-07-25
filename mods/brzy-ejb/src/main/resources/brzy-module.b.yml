@@ -2,7 +2,7 @@
 #
 name: brzy-ejb
 org: org.brzy
-version: "0.1"
+version: "0.2"
 config_class: org.brzy.ejb.EjbModConfig
 resource_class: org.brzy.ejb.EjbModResource
 

@@ -12,7 +12,7 @@ application:
 modules:
   - name: brzy-email
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
     smtp_host: localhost
     user_name: ""
     password: ""

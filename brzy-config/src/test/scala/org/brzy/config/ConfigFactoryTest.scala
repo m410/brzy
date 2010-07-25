@@ -10,7 +10,6 @@ import org.junit.{Ignore, Test, Before}
 
 
 class ConfigFactoryTest extends JUnitSuite {
-
   @Before def initialize = {
   }
 
@@ -40,10 +39,8 @@ class ConfigFactoryTest extends JUnitSuite {
     assertNotNull(config.modules.get)
     assertEquals(1, config.modules.get.size)
 
-    assertEquals( 15, config.dependencies.get.size)
-
-    assertEquals( 12, config.webXml.get.size)
-
+    assertEquals(14, config.dependencies.get.size)
+    assertEquals(12, config.webXml.get.size)
   }
 
 
@@ -64,7 +61,7 @@ class ConfigFactoryTest extends JUnitSuite {
     val mod = new Mod(map)
     assertNotNull(mod)
     assertEquals(0, workDir.listFiles.length)
-    ConfigFactory.installModule( workDir, mod)
+    ConfigFactory.installModule(workDir, mod)
     assertEquals(1, workDir.listFiles.length)
   }
 }

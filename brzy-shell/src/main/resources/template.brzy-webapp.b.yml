@@ -14,7 +14,7 @@ application:
 persistence:
   - name: brzy-squeryl
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
     driver: org.h2.Driver
     user_name: sa
     password: ""
@@ -25,7 +25,7 @@ dependencies:
 modules:
   - name: brzy-tomcat
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
 logging:
   provider: logback
   appenders:

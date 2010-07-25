@@ -11,7 +11,6 @@ import org.brzy.config.common.BootConfig
 
 
 class WebAppConfigTest extends JUnitSuite {
-
   @Test def testLoad = {
     val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
     val config = Yaml.load(url.openStream)
@@ -65,7 +64,7 @@ class WebAppConfigTest extends JUnitSuite {
     assertNotNull(app.project.get)
     assertTrue(app.application.isEmpty)
     assertNotNull(app.dependencies.get)
-    assertEquals(13, app.dependencies.get.size)
+    assertEquals(12, app.dependencies.get.size)
     assertNotNull(app.repositories.get)
     assertEquals(5, app.repositories.get.size)
     assertTrue(app.modules.isEmpty)
@@ -92,9 +91,9 @@ class WebAppConfigTest extends JUnitSuite {
     val defaultConfig = new BootConfig(convertMap(config2.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(defaultConfig)
     assertNotNull(defaultConfig.dependencies.get)
-    assertEquals(13, defaultConfig.dependencies.get.size)
+    assertEquals(12, defaultConfig.dependencies.get.size)
 
-    val merged = defaultConfig << webapp 
+    val merged = defaultConfig << webapp
 
     assertNotNull(merged.project.get)
     assertEquals("development", merged.environment.get)
@@ -114,7 +113,7 @@ class WebAppConfigTest extends JUnitSuite {
     assertNotNull(merged.webXml.get)
     assertEquals(12, merged.webXml.get.size)
     assertNotNull(merged.dependencies.get)
-    assertEquals(15, merged.dependencies.get.size)
+    assertEquals(14, merged.dependencies.get.size)
   }
 
 }

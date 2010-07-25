@@ -3,13 +3,13 @@
 #
 name: brzy-squeryl
 org: org.brzy
-version: "0.2"
+version: "0.3-SNAPSHOT"
 config_class: org.brzy.squeryl.SquerylModConfig
 resource_class: org.brzy.squeryl.SquerylModResource
 dependencies:
   - {conf: compile, org: org.squeryl, name: squeryl_2.8.0, rev: "0.9.4beta8"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
-  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.3-SNAPSHOT", transitive: false}
 repositories:
   - id: "fusesource.m2"
     url: http://repo.fusesource.com/nexus/content/repositories/public

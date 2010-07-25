@@ -2,9 +2,9 @@
 # tomcat development web server
 #
 name: brzy-tomcat
-version: "0.2"
+version: "0.3-SNAPSHOT"
 org: org.brzy
 config_class: org.brzy.tomcat.TomcatModConfig
 resource_class:
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-tomcat, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-tomcat, rev: "0.3-SNAPSHOT", transitive: false}

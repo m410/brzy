@@ -12,7 +12,7 @@ application:
 views:
   name: brzy-scalate
   org: org.brzy
-  version: "0.2"
+  version: "0.3-SNAPSHOT"
   config_class: org.brzy.module.ScalateModuleConfig
   file_extension: ".ssp"
   html_version: html5

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy</groupId>
   <artifactId>brzy</artifactId>
-  <version>0.2</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
   <name>Brzy</name>
   <properties>
@@ -13,7 +15,7 @@
     <module>brzy-config</module>
     <module>brzy-shell</module>
     <module>brzy-mvc</module>
-     <!-- <module>brzy-lion</module> -->
+    <!-- <module>brzy-lion</module> -->
     <module>brzy-framework</module>
     <module>mods/brzy-cascal</module>
     <module>mods/brzy-email</module>
@@ -26,7 +28,6 @@
     <module>mods/brzy-tomcat</module>
     <module>mods/brzy-ejb</module>
     <module>mods/brzy-spring</module>
-
   </modules>
   <build>
     <plugins>
@@ -58,5 +59,9 @@
       <name>Nexus Staging Repo</name>
       <url>http://brzy.org/nexus/content/repositories/releases</url>
     </repository>
+    <snapshotRepository>
+      <id>brzy-nexus-snapshot</id>
+      <url>http://brzy.org/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
   </distributionManagement>
 </project>

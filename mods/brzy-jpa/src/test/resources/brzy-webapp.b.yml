@@ -9,7 +9,7 @@ application:
 persistence:
   - name: brzy-jpa
     org: org.brzy
-    version: "0.2"    
+    version: "0.3-SNAPSHOT"
     persistence_unit: "my-unit"
 logging:
   provider: logback

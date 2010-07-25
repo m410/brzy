@@ -15,7 +15,7 @@ application:
 persistence:
   - name: brzy-squeryl
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
     driver: org.h2.Driver
     user_name: sa
     password: ""
@@ -26,13 +26,13 @@ repositories:
     url: http://scala-tools.org/repo-snapshots
 dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
-  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
-  - {conf: compile, org: org.brzy, name: brzy-tomcat, rev: "0.2"}
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.3-SNAPSHOT"}
+  - {conf: compile, org: org.brzy, name: brzy-tomcat, rev: "0.3-SNAPSHOT"}
   - {conf: test, org: org.scalatest, name: scalatest, rev: "1.2-for-scala-2.8.0.RC5-SNAPSHOT"}
 modules:
   - name: brzy-tomcat
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
 logging:
   provider: logback
   appenders:

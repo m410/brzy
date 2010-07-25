@@ -3,7 +3,7 @@
 #
 name: brzy-security
 org: org.brzy
-version: "0.1"
+version: "0.3-SNAPSHOT"
 config_class: org.brzy.security.SecurityModConfig
 resource_class: org.brzy.security.SecurityModResource
 
@@ -16,7 +16,7 @@ default_path:
 authority_field:
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-security, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-security, rev: "0.3-SNAPSHOT", transitive: false}
 
 web_xml:
   - filter:

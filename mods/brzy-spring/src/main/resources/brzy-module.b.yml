@@ -2,7 +2,7 @@
 #
 name: brzy-spring
 org: org.brzy
-version: "0.1"
+version: "0.3-SNAPSHOT"
 config_class: org.brzy.spring.SpringModConfig
 resource_class: org.brzy.spring.SpringModResource
 
@@ -11,4 +11,4 @@ user_name: ""
 password: ""
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "0.3-SNAPSHOT", transitive: false}

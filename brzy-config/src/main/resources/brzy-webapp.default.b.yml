@@ -10,7 +10,7 @@ project:
 views:
   name: brzy-scalate
   org: org.brzy
-  version: "0.2"
+  version: "0.3-SNAPSHOT"
   config_class: org.brzy.module.ScalateModuleConfig
   file_extension: ".ssp"
   html_version: html5
@@ -32,11 +32,10 @@ repositories:
     url: http://reflections.googlecode.com/svn/repo
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-config, rev: "0.2"}
-  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
+  - {conf: compile, org: org.brzy, name: brzy-config, rev: "0.3-SNAPSHOT"}
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.3-SNAPSHOT"}
   - {conf: runtime, org: org.scala-lang, name: scala-compiler, rev: "2.8.0"}
   - {conf: runtime, org: org.scala-lang, name: scala-library, rev: "2.8.0"}
-  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.5.11"}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8"}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}

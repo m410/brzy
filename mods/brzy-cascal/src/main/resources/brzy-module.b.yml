@@ -11,7 +11,7 @@ defaultKeyFamily: Standard1
 dependencies:
   - {conf: compile, org: com.shorrockin, name: cascal, rev: "1.1"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
-  - {conf: compile, org: org.brzy, name: brzy-cascal, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-cascal, rev: "0.3-SNAPSHOT", transitive: false}
 repositories:
   - id: "shorrockin"
     url: http://maven.shorrockin.com/

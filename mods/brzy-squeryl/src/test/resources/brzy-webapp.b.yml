@@ -18,7 +18,7 @@ application:
 persistence:
   - name: brzy-squeryl
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
     scan_package: *group
     driver: org.postgresql.Driver
     user_name: test

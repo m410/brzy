@@ -10,7 +10,7 @@ application:
 modules:
   - name: brzy-scheduler
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
 
 #
 # Logging

@@ -10,7 +10,7 @@ application:
 persistence:
   - name: brzy-cascal
     org: org.brzy
-    version: "0.2"
+    version: "0.3-SNAPSHOT"
     key_space: Keyspace1
     key_family: Standard1
 
