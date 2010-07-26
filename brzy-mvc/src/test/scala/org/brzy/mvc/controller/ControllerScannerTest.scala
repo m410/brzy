@@ -1,4 +1,4 @@
-package org.brzy.controller
+package org.brzy.mvc.controller
 
 import org.junit.Test
 import org.junit.Ignore
@@ -6,7 +6,7 @@ import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
 
 
-class BrzyControllerScannerTest extends JUnitSuite {
+class ControllerScannerTest extends JUnitSuite {
 
   val scanner = new ControllerScanner("org.brzy.mock")
 

@@ -1,4 +1,4 @@
-package org.brzy.service
+package org.brzy.mvc.service
 
 import org.junit.Test
 import org.junit.Assert._

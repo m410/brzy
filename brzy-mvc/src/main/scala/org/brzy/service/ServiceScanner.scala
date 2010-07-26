@@ -1,4 +1,4 @@
-package org.brzy.service
+package org.brzy.mvc.service
 
 import org.reflections.Reflections
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
