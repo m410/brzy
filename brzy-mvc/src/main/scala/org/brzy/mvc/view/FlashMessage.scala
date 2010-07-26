@@ -1,10 +1,9 @@
-package org.brzy.util
+package org.brzy.mvc.view
 
 import javax.servlet.http.HttpSession
 
 /**
  * @author Michael Fortin
- * @version $Id:$
  */
 class FlashMessage(message:String,session:HttpSession) {
 	

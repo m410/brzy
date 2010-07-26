@@ -1,8 +1,8 @@
-package org.brzy.interceptor
+package org.brzy.mvc.interceptor
 
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.saved.intercept.{FooBar, Bar}
+import org.brzy.mvc.mock.{FooBar, Bar}
 import org.scalatest.junit.JUnitSuite
 import util.DynamicVariable
 import java.lang.reflect.Method

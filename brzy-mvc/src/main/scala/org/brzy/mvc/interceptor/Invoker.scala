@@ -1,4 +1,4 @@
-package org.brzy.interceptor
+package org.brzy.mvc.interceptor
 
 import javassist.util.proxy.MethodHandler
 import java.lang.reflect.Method

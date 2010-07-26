@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.mvc.mock
 
 import org.brzy.application.WebApp
 import org.brzy.config.webapp.WebAppConfig

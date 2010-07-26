@@ -1,4 +1,4 @@
-package org.brzy.validator
+package org.brzy.mvc.validator
 
 import javax.validation.ConstraintViolation
 import java.util.Set

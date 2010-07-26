@@ -1,7 +1,7 @@
 package org.brzy.jpa
 
 import org.brzy.config.mod.ModResource
-import org.brzy.interceptor.InterceptorResource
+import org.brzy.mvc.interceptor.InterceptorResource
 
 /**
  * Document Me..

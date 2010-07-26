@@ -1,10 +1,7 @@
 package org.brzy.mock
 
-import org.squeryl.PrimitiveTypeMode._
-import org.brzy.action.args.Parameters
-import Person._
-import org.brzy.controller.{Controller,Path}
-
+import org.brzy.mvc.action.args.Parameters
+import org.brzy.mvc.controller.{Controller,Path}
 
 @Controller("persons")
 class PersonController {

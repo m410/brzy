@@ -1,12 +1,12 @@
-package org.brzy.action.returns
+package org.brzy.mvc.action.returns
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
-import org.brzy.mock.UserController
-import org.brzy.action.Action
-import org.brzy.action.ActionSupport._
+import org.brzy.mvc.mock.UserController
+import org.brzy.mvc.action.Action
+import org.brzy.mvc.action.ActionSupport._
 import java.lang.reflect.Method
 
 class ErrorReturnTest extends JUnitSuite {

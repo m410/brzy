@@ -1,9 +1,9 @@
 package org.brzy.jpa
 
-import org.brzy.validator.Validation
+import org.brzy.mvc.validator.Validation
 import org.slf4j.LoggerFactory
 import org.brzy.jpa.RichQuery._
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.action.args.Parameters
 import javax.validation.{Validator,  Validation=>jValidation}
 import java.lang.reflect.Method
 import org.brzy.util.ParameterConversion._

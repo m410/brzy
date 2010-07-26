@@ -2,7 +2,7 @@ package org.brzy.squeryl
 
 import org.squeryl.internals.DatabaseAdapter
 import java.lang.reflect.Method
-import org.brzy.interceptor.{MethodMatcher, ContextFactory, ManagedThreadContext}
+import org.brzy.mvc.interceptor.{MethodMatcher, ContextFactory, ManagedThreadContext}
 import org.squeryl.{SessionFactory, Session}
 import org.squeryl.adapters.{H2Adapter, PostgreSqlAdapter, MySQLAdapter, OracleAdapter}
 import java.sql.{DriverManager, Connection}

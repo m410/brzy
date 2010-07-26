@@ -1,7 +1,7 @@
 package org.brzy.mock
 
-import org.brzy.controller.{Path, Controller}
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.controller.{Path, Controller}
+import org.brzy.mvc.action.args.Parameters
 
 
 @Controller("persons")

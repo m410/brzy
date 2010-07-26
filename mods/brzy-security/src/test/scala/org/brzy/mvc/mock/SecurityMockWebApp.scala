@@ -3,7 +3,7 @@ package org.brzy.mock
 import org.brzy.application.WebApp
 import org.brzy.config.webapp.WebAppConfig
 import collection.immutable.SortedSet
-import org.brzy.action.Action
+import org.brzy.mvc.action.Action
 
 
 class SecurityMockWebApp(config:WebAppConfig) extends WebApp(config) {

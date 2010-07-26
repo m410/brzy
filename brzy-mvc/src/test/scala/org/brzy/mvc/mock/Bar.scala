@@ -1,4 +1,4 @@
-package org.brzy.saved.intercept
+package org.brzy.mvc.mock
 
 
 class Bar {

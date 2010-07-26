@@ -1,8 +1,8 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import args._
 import returns._
-import org.brzy.util.FlashMessage
+import org.brzy.mvc.view.FlashMessage
 
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie}
 import org.slf4j.LoggerFactory

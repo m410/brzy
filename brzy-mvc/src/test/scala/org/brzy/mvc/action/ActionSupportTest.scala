@@ -1,7 +1,7 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import args.Parameters
-import org.brzy.mock.UserController
+import org.brzy.mvc.mock.UserController
 import org.junit.Test
 import org.junit.Assert._
 import ActionSupport._

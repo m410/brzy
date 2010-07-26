@@ -1,4 +1,4 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import javax.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory

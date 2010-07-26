@@ -1,9 +1,9 @@
-package org.brzy.mock
+package org.brzy.mvc.mock
 
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.action.args.Parameters
 
-import org.brzy.action.returns._
-import org.brzy.controller.{Path,Controller}
+import org.brzy.mvc.action.returns._
+import org.brzy.mvc.controller.{Path,Controller}
 
 
 @Controller("users")

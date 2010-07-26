@@ -1,13 +1,13 @@
-package org.brzy.action.returns
+package org.brzy.mvc.action.returns
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.springframework.mock.web.{MockHttpServletResponse, MockRequestDispatcher, MockServletContext, MockHttpServletRequest}
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
-import org.brzy.action.Action
+import org.brzy.mvc.action.Action
 import org.junit.{Ignore, Test}
-import org.brzy.mock.UserController
-import org.brzy.action.ActionSupport._
+import org.brzy.mvc.mock.UserController
+import org.brzy.mvc.action.ActionSupport._
 import java.lang.reflect.Method
 
 class XmlReturnTest  extends JUnitSuite {

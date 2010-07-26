@@ -1,7 +1,7 @@
 package org.brzy.d3
 
-import org.brzy.action.args._
-import org.brzy.action.returns._
+import org.brzy.mvc.action.args._
+import org.brzy.mvc.action.returns._
 import org.brzy.controller.{Controller,Path}
 
 /**

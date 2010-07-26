@@ -1,4 +1,4 @@
-package org.brzy.view
+package org.brzy.mvc.view
 
 import ViewFunctions._
 import org.junit.Test

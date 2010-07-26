@@ -1,11 +1,11 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import args.Parameters
 import org.springframework.mock.web.MockHttpServletRequest
 import org.junit.Test
 import org.junit.Assert._
 import collection.immutable.SortedSet
-import org.brzy.mock.UserController
+import org.brzy.mvc.mock.UserController
 import javax.servlet.http.HttpServletRequest
 import org.easymock.EasyMock._
 import org.scalatest.junit.JUnitSuite

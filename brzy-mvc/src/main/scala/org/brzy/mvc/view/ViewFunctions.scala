@@ -1,4 +1,4 @@
-package org.brzy.view
+package org.brzy.mvc.view
 
 import javax.servlet.http.HttpServletRequest
 import java.util.Date

@@ -1,4 +1,4 @@
-package org.brzy.action.returns
+package org.brzy.mvc.action.returns
 
 /**
  * @author Michael Fortin

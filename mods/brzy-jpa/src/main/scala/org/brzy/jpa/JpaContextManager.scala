@@ -3,7 +3,7 @@ package org.brzy.jpa
 import org.hibernate.Session
 import java.lang.reflect.Method
 import util.DynamicVariable
-import org.brzy.interceptor.{ContextFactory, MethodMatcher, ManagedThreadContext}
+import org.brzy.mvc.interceptor.{ContextFactory, MethodMatcher, ManagedThreadContext}
 import javax.persistence.{EntityManager, Persistence}
 
 /**

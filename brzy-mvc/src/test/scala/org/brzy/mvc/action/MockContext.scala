@@ -1,4 +1,4 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServlet

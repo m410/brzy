@@ -4,7 +4,7 @@ import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import collection.JavaConversions._
-import org.brzy.interceptor.{ManagedThreadContext, ProxyFactory, Invoker}
+import org.brzy.mvc.interceptor.{ManagedThreadContext, ProxyFactory, Invoker}
 
 class AssemblyTest extends JUnitSuite {
 

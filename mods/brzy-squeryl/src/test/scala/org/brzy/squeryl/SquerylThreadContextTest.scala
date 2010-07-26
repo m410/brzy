@@ -3,7 +3,7 @@ package org.brzy.squeryl
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.interceptor.{Invoker, ProxyFactory}
+import org.brzy.mvc.interceptor.{Invoker, ProxyFactory}
 import org.squeryl.Session
 
 class SquerylThreadContextTest extends JUnitSuite {

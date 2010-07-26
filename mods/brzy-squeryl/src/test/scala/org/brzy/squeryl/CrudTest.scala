@@ -3,7 +3,7 @@ package org.brzy.squeryl
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.brzy.mock.Person
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.action.args.Parameters
 import org.junit.{Ignore, Test}
 
 

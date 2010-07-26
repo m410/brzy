@@ -6,7 +6,7 @@ import org.brzy.config.webapp.WebAppConfig
 import org.scalatest.junit.JUnitSuite
 import org.brzy.config.common.BootConfig
 import org.junit.Test
-import org.brzy.mock.MockModConfig
+import org.brzy.mvc.mock.MockModConfig
 
 
 class WebAppTest extends JUnitSuite {
@@ -16,13 +16,13 @@ class WebAppTest extends JUnitSuite {
     val view = new MockModConfig(Map[String, AnyRef](
       "name" -> "brzy-scalate",
       "fileExtension" -> ".ssp",
-      "resource_class" -> "org.brzy.mock.MockModResource"
+      "resource_class" -> "org.brzy.mvc.mock.MockModResource"
       ))
     val boot = new BootConfig(Map[String, AnyRef](
       "environment" -> "development",
       "application" -> Map(
         "name" -> "test",
-        "org" -> "org.brzy.mock")
+        "org" -> "org.brzy.mvc.mock")
       ))
     val config = new WebAppConfig(boot, view, Nil, Nil)
     val webapp = new WebApp(config)

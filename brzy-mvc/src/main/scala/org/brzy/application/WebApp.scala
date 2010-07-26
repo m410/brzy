@@ -1,9 +1,9 @@
 package org.brzy.application
 
 
-import org.brzy.action.Action
-import org.brzy.interceptor.{InterceptorResource, ManagedThreadContext, Invoker}
-import org.brzy.interceptor.ProxyFactory._
+import org.brzy.mvc.action.Action
+import org.brzy.mvc.interceptor.{InterceptorResource, ManagedThreadContext, Invoker}
+import org.brzy.mvc.interceptor.ProxyFactory._
 import org.brzy.service.ServiceScanner
 
 import org.slf4j.LoggerFactory
@@ -11,7 +11,7 @@ import java.lang.reflect.Constructor
 
 import collection.mutable.ListBuffer
 import collection.immutable.SortedSet
-import org.brzy.controller.{ControllerScanner, Path, Controller}
+import org.brzy.mvc.controller.{ControllerScanner, Path, Controller}
 import org.brzy.config.mod.{Mod, ModResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}

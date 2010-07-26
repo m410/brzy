@@ -1,4 +1,4 @@
-package org.brzy.action.returns
+package org.brzy.mvc.action.returns
 
 //import com.twitter.json.{Json=>tJson}
 

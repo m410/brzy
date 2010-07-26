@@ -1,4 +1,4 @@
-package org.brzy.interceptor
+package org.brzy.mvc.interceptor
 
 import util.DynamicVariable
 

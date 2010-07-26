@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.mvc.mock
 
 import org.brzy.config.mod.{ModResource, Mod}
 import org.brzy.config.webapp.WebAppViewResource

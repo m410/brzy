@@ -8,7 +8,7 @@ import org.scalatest.junit.JUnitSuite
 
 class ControllerScannerTest extends JUnitSuite {
 
-  val scanner = new ControllerScanner("org.brzy.mock")
+  val scanner = new ControllerScanner("org.brzy.mvc.mock")
 
   @Test
   def testControllerScanner = {

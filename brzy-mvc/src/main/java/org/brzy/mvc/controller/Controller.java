@@ -1,4 +1,4 @@
-package org.brzy.controller;
+package org.brzy.mvc.controller;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

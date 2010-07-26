@@ -1,16 +1,15 @@
-package org.brzy.mock
+package org.brzy.mvc.mock
 
 import javax.validation.constraints.{NotNull,Size}
 //import javax.persistence._
 
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.action.args.Parameters
 import javax.validation.{Validator,  Validation=>xValidation}
-import org.brzy.validator.Validation
+import org.brzy.mvc.validator.Validation
 import org.brzy.util.ParameterConversion._
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 @serializable
 //@Entity

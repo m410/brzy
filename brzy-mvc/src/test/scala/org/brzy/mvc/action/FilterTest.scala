@@ -1,4 +1,4 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import org.junit.Test
 import org.junit.Assert._

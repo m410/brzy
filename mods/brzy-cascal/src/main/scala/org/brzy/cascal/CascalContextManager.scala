@@ -3,7 +3,7 @@ package org.brzy.cascal
 import com.shorrockin.cascal.session._
 import java.lang.reflect.Method
 import util.DynamicVariable
-import org.brzy.interceptor.{ContextFactory, MethodMatcher, ManagedThreadContext}
+import org.brzy.mvc.interceptor.{ContextFactory, MethodMatcher, ManagedThreadContext}
 
 /**
  * Document Me..

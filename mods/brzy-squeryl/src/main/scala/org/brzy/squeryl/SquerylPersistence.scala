@@ -1,7 +1,7 @@
 package org.brzy.squeryl
 
-import org.brzy.validator.Validation
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.validator.Validation
+import org.brzy.mvc.action.args.Parameters
 
 import javax.validation.{Validation => jValidation}
 

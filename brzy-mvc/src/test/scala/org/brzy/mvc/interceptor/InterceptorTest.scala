@@ -1,4 +1,4 @@
-package org.brzy.interceptor
+package org.brzy.mvc.interceptor
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._

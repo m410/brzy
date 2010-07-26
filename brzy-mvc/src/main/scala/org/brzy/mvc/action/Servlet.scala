@@ -1,4 +1,4 @@
-package org.brzy.action
+package org.brzy.mvc.action
 
 import org.brzy.application.WebApp
 import ActionSupport._

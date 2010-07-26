@@ -1,4 +1,4 @@
-package org.brzy.mvc.service
+package org.brzy.service
 
 import org.junit.Test
 import org.junit.Assert._
@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitSuite
 
 class ServiceScannerTest extends JUnitSuite {
 
-  val scanner = new ServiceScanner("org.brzy.mock")
+  val scanner = new ServiceScanner("org.brzy.mvc.mock")
 
   @Test
   def testServiceScanner = {

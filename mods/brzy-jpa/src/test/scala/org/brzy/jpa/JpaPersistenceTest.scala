@@ -4,7 +4,7 @@ import org.junit.Test
 import org.junit.Ignore
 import org.junit.Assert._
 import org.brzy.mock.User
-import org.brzy.action.args.Parameters
+import org.brzy.mvc.action.args.Parameters
 import collection.JavaConversions._
 import org.scalatest.junit.JUnitSuite
 
