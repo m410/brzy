@@ -6,7 +6,6 @@ package org.brzy.mvc.action.returns
  * Where you want to send the result of the action too.
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 abstract class Direction 
 

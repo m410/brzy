@@ -8,7 +8,6 @@ import scala.collection.JavaConversions._
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class ServiceScanner(val packageName:String) {
 

@@ -6,7 +6,6 @@ import java.sql.{Connection, DriverManager}
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 
 object DbInit {

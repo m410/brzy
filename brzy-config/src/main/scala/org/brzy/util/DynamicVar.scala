@@ -3,7 +3,6 @@ package org.brzy.util
 /**
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class DynamicVar[T] {
   private val threadLocal = new ThreadLocal[T]

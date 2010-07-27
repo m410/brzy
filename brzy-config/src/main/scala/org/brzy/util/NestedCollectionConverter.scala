@@ -9,7 +9,6 @@ import collection.mutable.{ListBuffer, HashMap}
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 
 object NestedCollectionConverter {

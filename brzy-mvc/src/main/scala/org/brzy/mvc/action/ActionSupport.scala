@@ -14,7 +14,6 @@ import java.util.Enumeration
 /**
  *
  * @author Michael Fortin
- * @version $Id: $
  */
 object ActionSupport {
   private val log = LoggerFactory.getLogger(getClass)

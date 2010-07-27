@@ -7,7 +7,6 @@ import java.net.URLEncoder
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 object ViewFunctions {
 

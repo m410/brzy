@@ -5,7 +5,6 @@ import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 object ProxyFactory {
 

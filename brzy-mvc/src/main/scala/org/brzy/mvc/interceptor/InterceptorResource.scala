@@ -4,7 +4,6 @@ package org.brzy.mvc.interceptor
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 trait InterceptorResource {
   def interceptor:ManagedThreadContext

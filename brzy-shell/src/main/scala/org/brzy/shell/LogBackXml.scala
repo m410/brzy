@@ -8,7 +8,6 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class LogBackXml(config:BootConfig) {
   private val parentName = "configuration"

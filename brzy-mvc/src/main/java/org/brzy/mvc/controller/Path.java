@@ -5,7 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Path {

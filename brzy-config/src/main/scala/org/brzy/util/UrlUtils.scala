@@ -5,7 +5,6 @@ import java.net.URL
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 object UrlUtils {
 

@@ -11,7 +11,6 @@ import collection.JavaConversions._
  *   http://code.google.com/p/reflections/
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class ControllerScanner(val packageName:String) {
 

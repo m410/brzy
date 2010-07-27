@@ -31,7 +31,6 @@ import org.brzy.config.webapp.WebAppConfig
  * welcome-file-list
  *
  * @author Michael Fortin
- * @version $Id: $
  */
 class WebXml(config:WebAppConfig) {
   private val parentName = "web-app"

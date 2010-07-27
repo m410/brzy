@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
  * Document Me..
  *
  * @author Michael Fortin
- * @version $Id: $
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Queue {

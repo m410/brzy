@@ -8,7 +8,6 @@ import org.brzy.mvc.interceptor.InterceptorResource
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class SquerylModResource(c:SquerylModConfig) extends ModResource with InterceptorResource {
 

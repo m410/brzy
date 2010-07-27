@@ -5,7 +5,6 @@ import java.io._
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 object FileUtils {
 

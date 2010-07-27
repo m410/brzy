@@ -10,7 +10,6 @@ import javax.servlet.{ServletResponse, ServletRequest}
  * The basic servlet implementation.
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class Servlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[Servlet])

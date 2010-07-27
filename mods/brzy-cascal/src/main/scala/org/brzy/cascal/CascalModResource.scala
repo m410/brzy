@@ -7,7 +7,6 @@ import org.brzy.mvc.interceptor.InterceptorResource
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class CascalModResource(c:CascalModConfig) extends ModResource with InterceptorResource{
   val name = c.name.get

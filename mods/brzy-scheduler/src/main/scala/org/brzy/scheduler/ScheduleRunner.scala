@@ -6,7 +6,6 @@ import actors.Actor._
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class ScheduleRunner {
 

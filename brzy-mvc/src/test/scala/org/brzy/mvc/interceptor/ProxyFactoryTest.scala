@@ -39,7 +39,7 @@ object FixtureSession extends DynamicVariable(new FixtureSession(""))
 
 class FixtureManagedThreadContext extends ManagedThreadContext {
   type T = FixtureSession
-
+  var count = 0
   val empty = new FixtureSession("")
 
   val matcher = new MethodMatcher {
@@ -48,14 +48,10 @@ class FixtureManagedThreadContext extends ManagedThreadContext {
 
   val context = FixtureSession
 
-  val factory = new ContextFactory[FixtureSession] {
-    private var count = 0
+  def destroySession(s: FixtureSession) = {}
 
-    def destroy(s: FixtureSession) = {}
-
-    def create = {
-      count = count + 1
-      new FixtureSession("fs-" + count)
-    }
+  def createSession = {
+    count = count + 1
+    new FixtureSession("fs-" + count)
   }
 }

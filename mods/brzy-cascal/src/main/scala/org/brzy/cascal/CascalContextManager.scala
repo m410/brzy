@@ -16,19 +16,10 @@ class CascalContextManager extends ManagedThreadContext {
   val pool = new SessionPool(hosts, params)
 
   type T = Option[Session]
-
   val empty:T = None
-
-  val matcher = new MethodMatcher {
-    def isMatch(a: AnyRef, m: Method) = true
-  }
-
   val context = Cascal
-
-  val factory = new ContextFactory[T] {
-    def destroy(s: Option[Session]) = s.get.close
-    def create = Some(pool.checkout)
-  }
+  def destroySession(target: Option[Session]) = target.get.close
+  def createSession = Some(pool.checkout)
 }
 
 object Cascal extends DynamicVariable(Option[Session](null))

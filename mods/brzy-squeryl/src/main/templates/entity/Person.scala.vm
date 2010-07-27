@@ -10,7 +10,6 @@ import org.slf4j.{LoggerFactory, Logger}
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class Person( override val id:Long,
 		@Column(name="first_name") val firstName:String,

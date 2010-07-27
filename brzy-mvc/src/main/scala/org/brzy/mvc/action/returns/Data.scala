@@ -2,7 +2,6 @@ package org.brzy.mvc.action.returns
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 abstract class Data
 

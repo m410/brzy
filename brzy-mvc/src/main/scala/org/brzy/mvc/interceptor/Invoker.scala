@@ -4,25 +4,29 @@ import javassist.util.proxy.MethodHandler
 import java.lang.reflect.Method
 
 /**
- * Document Me..
+ *  This is the javassist implementation of the methodHandler.  It's called on any controller
+ * that in the project package space.  It takes a list of threadLocal managers and calls each
+ * recursively on each call.
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
   override def invoke(self: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
 
+    // nested recursive call on the threadContext
     def traverse(it: Iterator[ManagedThreadContext]): AnyRef = {
       val managedFactory = it.next
+
       var returnValue: AnyRef = null
       var nested = false
+
       val ctx =
-      if (managedFactory.context.value == managedFactory.empty)
-        managedFactory.factory.create
-      else {
-        nested = true
-        managedFactory.context.value
-      }
+          if (managedFactory.context.value == managedFactory.empty)
+            managedFactory.createSession
+          else {
+            nested = true
+            managedFactory.context.value
+          }
 
       managedFactory.context.withValue(ctx) {
         if (it.hasNext)
@@ -32,7 +36,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
       }
 
       if (!nested) {
-        managedFactory.factory.destroy(ctx)
+        managedFactory.destroySession(ctx)
       }
       returnValue
     }

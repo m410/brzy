@@ -10,7 +10,6 @@ import tools.nsc.{Settings, Global}
  * Compile scala code
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class ScalaCompiler(codeDir:File, outputDir:File, classpath:String) {
 

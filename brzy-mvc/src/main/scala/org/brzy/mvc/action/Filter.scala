@@ -8,7 +8,6 @@ import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest
  * Forwards only requests to brzy actions, lets all other pass through.
  *
  * @author Michael Fortin
- * @version $Id: $
  */
 class Filter extends SFilter {
   private val log = LoggerFactory.getLogger(classOf[Filter])

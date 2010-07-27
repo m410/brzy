@@ -34,7 +34,7 @@ class PersistenceTest extends JUnitSuite {
 
   @Test @Ignore def testGetObject = {
     val manager = new CascalContextManager
-    val session = manager.factory.create
+    val session = manager.createSession
 
     manager.context.withValue(session) {
       val s = Cascal.value.get
@@ -48,14 +48,14 @@ class PersistenceTest extends JUnitSuite {
       val person = Person.get(key)
       assertNotNull(person)
     }
-    manager.factory.destroy(session)
+    manager.destroySession(session)
   }
 
   @Test @Ignore def testSaveObject = {
     val manager = new CascalContextManager
 
     // check if it's in from a previous test
-    val session = manager.factory.create
+    val session = manager.createSession
     manager.context.withValue(session) {
       val s = Cascal.value.get
 
@@ -64,38 +64,38 @@ class PersistenceTest extends JUnitSuite {
         println("removed key")
       }
     }
-    manager.factory.destroy(session)
+    manager.destroySession(session)
 
     // do the test
-    val session2 = manager.factory.create
+    val session2 = manager.createSession
     manager.context.withValue(session2) {
       val s = Cascal.value.get
       assertTrue(s.count(Person.keyspace \ Person.family \ insertKey) == 0)
       val person = Person(insertKey, "Fred", "Smith", new Date)
       Person.insert(person)
     }
-    manager.factory.destroy(session2)
+    manager.destroySession(session2)
 
     // check to see if it's there
-    val session3 = manager.factory.create
+    val session3 = manager.createSession
     manager.context.withValue(session3) {
       val s = Cascal.value.get
       val count = s.count(Person.keyspace \ Person.family \ insertKey)
       println("count=" + count)
       assertTrue(count == 3) // todo ????
     }
-    manager.factory.destroy(session3)
+    manager.destroySession(session3)
   }
 
   @Test @Ignore def countObject = {
     val manager = new CascalContextManager
-    val session = manager.factory.create
+    val session = manager.createSession
     manager.context.withValue(session) {
       val count = Person.count(insertKey)
       assertNotNull(count)
       assertEquals(3,count) //?
     }
-    manager.factory.destroy(session)
+    manager.destroySession(session)
   }
 }
 

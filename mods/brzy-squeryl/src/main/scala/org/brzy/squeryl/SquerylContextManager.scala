@@ -12,7 +12,6 @@ import util.DynamicVariable
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 class SquerylContextManager(driver:String, url:String, usr:String, pass:String) extends ManagedThreadContext {
 
@@ -29,16 +28,14 @@ class SquerylContextManager(driver:String, url:String, usr:String, pass:String) 
 
   val empty:T = None
   val context = new DynamicVariable(empty)
+
+  // this allows client api to use the squeryl Session object
   SessionFactory.externalTransactionManagementAdapter = Some(()=> {
     context.value.getOrElse(error("Session was not initialized.  You may be out of transaction scope."))
   })
 
-  val matcher = new MethodMatcher {
-    def isMatch(a: AnyRef, m: Method) = true
-  }
+  def destroySession(s: T) = s.get.close
 
-  val factory =  new ContextFactory[T] {
-    def destroy(s: T) = s.get.close
-    def create = Some(Session.create(DriverManager.getConnection(url,usr,pass),adaptor))
-  }
+  def createSession = Some(Session.create(DriverManager.getConnection(url,usr,pass),adaptor))
+
 }

@@ -5,7 +5,6 @@ import xml.{Elem, Node}
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class AddChildrenTo(label: String, newChildren: Seq[Node]) extends RewriteRule {
 

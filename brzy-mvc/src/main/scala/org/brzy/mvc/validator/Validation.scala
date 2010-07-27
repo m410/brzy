@@ -6,7 +6,6 @@ import collection.JavaConversions.JSetWrapper
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class Validation[T](val violations:Array[ConstraintViolation[T]]) {
 

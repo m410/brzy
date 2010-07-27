@@ -13,7 +13,7 @@ class PersonControllerTest extends JUnitSuite {
     val manager = new CascalContextManager
     val controller = new PersonController
 
-    val setup = manager.factory.create
+    val setup = manager.createSession
     val keyId: String = "myKey"
 
     manager.context.withValue(setup) {
@@ -23,15 +23,15 @@ class PersonControllerTest extends JUnitSuite {
         session.insert("Keyspace1"\"Standard2"\keyId\"firstName"\"Bob")
       }
     }
-    manager.factory.destroy(setup)
+    manager.destroySession(setup)
 
 
-    val some = manager.factory.create
+    val some = manager.createSession
     manager.context.withValue(some) {
       val person = Person.get(keyId)
       assertNotNull(person)
       assertEquals("Bob", person.firstName)
     }
-    manager.factory.destroy(some)
+    manager.destroySession(some)
   }
 }

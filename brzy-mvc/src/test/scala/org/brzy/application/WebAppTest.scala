@@ -11,8 +11,7 @@ import org.brzy.mvc.mock.MockModConfig
 
 class WebAppTest extends JUnitSuite {
 
-  @Test
-  def testCreate = {
+  @Test def testCreate = {
     val view = new MockModConfig(Map[String, AnyRef](
       "name" -> "brzy-scalate",
       "fileExtension" -> ".ssp",

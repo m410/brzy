@@ -4,7 +4,6 @@ import io.Source
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class BrzyAppBYml(name:String, version:String, group:String, artifact:String) {
 

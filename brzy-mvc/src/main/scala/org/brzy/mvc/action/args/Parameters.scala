@@ -5,7 +5,6 @@ import collection.generic._
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class Parameters(map:collection.Map[String,Array[String]])
     extends Map[String,Array[String]]

@@ -5,7 +5,6 @@ import org.brzy.config.common.BootConfig
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class BuildProperties(config:BootConfig) {
 

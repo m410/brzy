@@ -7,7 +7,6 @@ import java.util.regex.Pattern
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val viewType:String )
         extends Ordered[Action] {

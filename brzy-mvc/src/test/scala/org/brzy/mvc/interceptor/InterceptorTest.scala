@@ -126,28 +126,20 @@ class MySession(var txt: String) {
 
 object MySession extends DynamicVariable[MySession](new MySession("nil"))
 
-class MyFactory extends ContextFactory[MySession] {
+class MyManagedFactory extends ManagedThreadContext {
+  type T = MySession
+  val context = MySession
+  val empty = new MySession("nil")
   var counter = 0
-
-  def destroy(s: MySession) = {
+  def destroySession(s: MySession) = {
     println("destroy: " + s)
   }
 
-  def create = {
+  def createSession = {
     println("create : ")
     counter = counter + 1
     new MySession("run-" + counter)
   }
-}
-
-class MyManagedFactory extends ManagedThreadContext {
-  type T = MySession
-  val context = MySession
-  val factory = new MyFactory
-  val matcher = new MethodMatcher {
-    def isMatch(a: AnyRef, m: Method) = true
-  }
-  val empty = new MySession("nil")
 }
 
 
@@ -171,28 +163,22 @@ class My2Session(var txt: String) {
 
 object My2Session extends DynamicVariable[My2Session](new My2Session("nil"))
 
-class My2Factory extends ContextFactory[My2Session] {
-  var counter = 0
-
-  def destroy(s: My2Session) = {
-    println("destroy2: " + s)
-  }
-
-  def create = {
-    println("create2 : ")
-    counter = counter + 1
-    new My2Session("run2-" + counter)
-  }
-}
 
 class My2ManagedFactory extends ManagedThreadContext {
   type T = My2Session
   val context = My2Session
-  val factory = new My2Factory
-  val matcher = new MethodMatcher {
-    def isMatch(a: AnyRef, m: Method) = true
-  }
   val empty = new My2Session("nil")
+  var counter = 0
+
+  def destroySession(s: My2Session) = {
+    println("destroy2: " + s)
+  }
+
+  def createSession = {
+    println("create2 : ")
+    counter = counter + 1
+    new My2Session("run2-" + counter)
+  }
 }
 
 

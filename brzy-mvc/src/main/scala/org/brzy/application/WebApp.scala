@@ -69,13 +69,6 @@ class WebApp(val config: WebAppConfig) {
       if (pin.isInstanceOf[InterceptorResource])
         buffer += pin.asInstanceOf[InterceptorResource].interceptor
     })
-
-    if (buffer.size > 1)
-      error("Currently, Only one interceptor is supported: " + buffer.mkString(", "))
-    else if (buffer.size < 1)
-      null
-    else
-      buffer(0)
     new Invoker(buffer.toList)
   }
 

@@ -4,7 +4,6 @@ import org.brzy.config.mod.Mod
 
 /**
  * @author Michael Fortin
- * @version $Id: $
  */
 class TomcatModConfig(map:Map[String,AnyRef]) extends Mod(map) {
   override val configurationName = "Tomcat"

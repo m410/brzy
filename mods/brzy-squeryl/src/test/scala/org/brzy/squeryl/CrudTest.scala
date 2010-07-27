@@ -16,52 +16,52 @@ class CrudTest extends JUnitSuite {
 //      case _ => Person.create
 //    }
 //  }
-//  ctx.factory.destroy(session)
+//  ctx.destroySession(session)
   
   @Test @Ignore def testCreate = {
-    val session = ctx.factory.create
+    val session = ctx.createSession
     ctx.context.withValue(session) {
       def person = new Person(0, "one", "two")
       person.insert()
     }
-    ctx.factory.destroy(session)
+    ctx.destroySession(session)
   }
 
   @Test @Ignore def testRead = {
-    val session = ctx.factory.create
+    val session = ctx.createSession
     ctx.context.withValue(session) {
       assertNotNull(Person.get(1))
     }
-    ctx.factory.destroy(session)
+    ctx.destroySession(session)
   }
 
   @Test @Ignore def testUpdate = {
-    val session = ctx.factory.create
+    val session = ctx.createSession
     ctx.context.withValue(session) {
       assertNotNull(Person.get(1))
       val p2 = new Person(1, "update first", "update last")
       p2.update()
     }
-    ctx.factory.destroy(session)
+    ctx.destroySession(session)
   }
 
   @Test @Ignore def testDelete = {
-    val session = ctx.factory.create
+    val session = ctx.createSession
     ctx.context.withValue(session) {
       val person = Person.get(1)
       person.delete()
     }
-    ctx.factory.destroy(session)
+    ctx.destroySession(session)
   }
 
   @Test @Ignore def testList = {
-    val session = ctx.factory.create
+    val session = ctx.createSession
     ctx.context.withValue(session) {
       val persons = Person.list()
       assertNotNull(persons)
       assertEquals(1, persons.size)
     }
-    ctx.factory.destroy(session)
+    ctx.destroySession(session)
   }
 
   @Test @Ignore def testMake = {
