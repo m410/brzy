@@ -9,14 +9,7 @@ import org.junit.{Ignore, Test}
 
 class CrudTest extends JUnitSuite {
   val ctx = new SquerylContextManager("org.h2.Driver", "jdbc:h2:squery-test", "sa", "")
-//  val session = ctx.factory.create
-//  ctx.context.withValue(session) {
-//    Person.findTableFor(Person) match {
-//      case Some(_) => //
-//      case _ => Person.create
-//    }
-//  }
-//  ctx.destroySession(session)
+
   
   @Test @Ignore def testCreate = {
     val session = ctx.createSession

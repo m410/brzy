@@ -4,7 +4,7 @@ import util.DynamicVariable
 import javax.persistence.EntityManager
 
 /**
- * Document Me..
+ * Thread local context that holds the the entity manager.
  * 
  * @author Michael Fortin
  */

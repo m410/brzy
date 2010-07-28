@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.jpa.mock
 
 import org.brzy.mvc.action.args.Parameters
 import org.brzy.mvc.validator.Validation
@@ -21,7 +21,7 @@ class UserController {
   @Path("save")
 	def save(params:Parameters)() = {
 	  def user:User = User.make(params)
- 		val validity = user.validity()
+ 		val validity = user.validate()
 
 		if(validity.passes) {
       user.save
@@ -37,7 +37,7 @@ class UserController {
 	@Path("{id}/update")
 	def update(params:Parameters) = {
 		def user = User.make(params)
-    val validity = user.validity()
+    val validity = user.validate()
 
 		if(validity.passes) {
       user.save

@@ -13,6 +13,15 @@ class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
   val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
   val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
 
+  val mailFrom: Option[String] = map.get("mail_from").asInstanceOf[Option[String]].orElse(None)
+
+  val mailUser: Option[String] = map.get("mail_user").asInstanceOf[Option[String]].orElse(None)
+  val mailStoreProtocol: Option[String] = map.get("mail_store_protocol").asInstanceOf[Option[String]].orElse(None)
+  val mailTransportProtocol: Option[String] = map.get("mail_transport_protocol").asInstanceOf[Option[String]].orElse(None)
+
+  val mailSmtpUser: Option[String] = map.get("mail_smpt_user").asInstanceOf[Option[String]].orElse(None)
+  val mailDebug: Option[String] = map.get("mail_debug").asInstanceOf[Option[String]].orElse(None)
+
   override def <<(that: Mod): Mod = {
     if (that == null) {
       this

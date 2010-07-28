@@ -19,7 +19,14 @@ class JpaContextManager(unitName:String) extends ManagedThreadContext {
 
   val context = JpaContext
 
-  def destroySession(s: T) = s.get.close
+  def destroySession(s: T) = {
+    s.get.getTransaction.commit
+    s.get.close
+  }
 
-  def createSession = Some(entityManagerFactory.createEntityManager)
+  def createSession = {
+    val entityManager:EntityManager = entityManagerFactory.createEntityManager
+    entityManager.getTransaction.begin
+    Some(entityManager)
+  }
 }

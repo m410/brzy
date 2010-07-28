@@ -3,7 +3,7 @@ package org.brzy.jpa
 import org.junit.Test
 import org.junit.Ignore
 import org.junit.Assert._
-import org.brzy.mock.User
+import org.brzy.jpa.mock.User
 import org.brzy.mvc.action.args.Parameters
 import collection.JavaConversions._
 import org.scalatest.junit.JUnitSuite
@@ -13,24 +13,25 @@ class JpaPersistenceTest extends JUnitSuite {
 
   @Test
   def testPersistenceMake ={
-//    parameters.put("id",Array("1"))
     val map = new collection.mutable.HashMap[String, Array[String]]()
-    map.put("name",Array("john"))
+    map.put("firstName",Array("john"))
+    map.put("lastName",Array("Smith"))
     map.put("submit",Array("Submit Save"))
     val parameters = new Parameters(map)
     val user = User.make(parameters)
     assertNotNull(user)
-    assertEquals("john",user.name)
+    assertEquals("john",user.firstName)
   }
 
   @Test
   def testPersistenceValidate ={
     val map = new collection.mutable.HashMap[String, Array[String]]()
     map.put("id",Array("1"))
-    map.put("name",Array("john"))
+    map.put("lastName",Array("Smith"))
+    map.put("firstName",Array("John"))
     val parameters = new Parameters(map)
     val user = new User
-    val validity = user.validity()
+    val validity = user.validate()
     assertTrue(!validity.passes)
   }
 }

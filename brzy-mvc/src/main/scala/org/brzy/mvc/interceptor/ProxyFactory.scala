@@ -24,12 +24,13 @@ object ProxyFactory {
     val factory = new PFactory
     factory.setSuperclass(clazz)
     factory.setFilter(filter)
-    factory.create(args.map(a=>{
-      if(a.isInstanceOf[ProxyObject]) 
+    val paramTypes = args.map(a => {
+      if (a.isInstanceOf[ProxyObject])
         a.getClass.getSuperclass
       else
         a.getClass
-    }), args, proxy)
+    })
+    factory.create(paramTypes, args, proxy)
   }
 
   def make(clazz:Class[_], proxy:Invoker): AnyRef = make(clazz, Array[AnyRef]() ,proxy)

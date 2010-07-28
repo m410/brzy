@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.jpa.mock
 
 import org.brzy.jpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
@@ -9,12 +9,13 @@ import reflect.BeanProperty
 @serializable
 @Entity
 @Table(name="users")
-//@NamedQueries({@NamedQuery( name="test", query="select u from User u")})
+//@NamedQueries()
+@NamedQuery(name="test", query="select u from User u")
 class User {
-
-  @Id var id:Long = _
-  @Version var version:Int = _
-  @BeanProperty @NotNull @Size(max=30) var name:String = _
+  @BeanProperty @Id var id:Long = _
+  @BeanProperty @Version var version:Int = _
+  @BeanProperty @NotNull @Size(min=4,max=30) var firstName:String = _
+  @BeanProperty @NotNull @Size(min=4,max=30) var lastName:String = _
 
   /*
   @OneToMany{val mappedBy = "project",
@@ -32,4 +33,4 @@ class User {
   */
 }
 
-object User extends JpaPersistence[User,java.lang.Long](classOf[User]) 
+object User extends JpaPersistence[User,java.lang.Long] 

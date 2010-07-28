@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.jpa.mock
 
 import org.brzy.service.Service
 

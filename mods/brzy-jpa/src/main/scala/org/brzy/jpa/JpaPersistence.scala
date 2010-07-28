@@ -2,11 +2,12 @@ package org.brzy.jpa
 
 import org.brzy.mvc.validator.Validation
 import org.slf4j.LoggerFactory
-import org.brzy.jpa.RichQuery._
 import org.brzy.mvc.action.args.Parameters
 import javax.validation.{Validator,  Validation=>jValidation}
 import java.lang.reflect.Method
+
 import org.brzy.util.ParameterConversion._
+import org.brzy.jpa.RichQuery._
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
@@ -14,21 +15,23 @@ import org.brzy.util.ParameterConversion._
  * another persistence api that may be easier to setup
  * http://max-l.github.com/Squeryl/getting-started.html
  */
-abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
+class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Manifest[PK]) {
+  protected[jpa] val entityClass = man.erasure
+  protected[jpa] val keyClass = pk.erasure
+  protected[jpa] val log = LoggerFactory.getLogger(entityClass)
 
-  val log = LoggerFactory.getLogger(clazz.getName)
-  val countQuery = "select count(t.id) from " + clazz.getName + " t"
-  val listQuery = "select distinct t from " + clazz.getName + " t"
+  protected[jpa] val validator:Validator = jValidation.buildDefaultValidatorFactory.getValidator
+
+  protected[jpa] val countQuery = "select count(t.id) from " + entityClass.getName + " t"
+  protected[jpa] val listQuery = "select distinct t from " + entityClass.getName + " t"
 
   /**
    * Implicit methods on instances of the entity
    */
   class EntityCrudOps[T](t:T) {
 
-    val validator:Validator = jValidation.buildDefaultValidatorFactory.getValidator
-
-    def validity() ={
-      log.trace("validity")
+    def validate() ={
+      log.trace("validate")
       Validation[T](validator.validate(t))
     }
 
@@ -57,7 +60,7 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
   def get(id:PK):T = {
     log.trace("get: " + id)
     val entityManager = JpaContext.value.get
-    entityManager.find(clazz,id)
+    entityManager.find(entityClass,id).asInstanceOf[T]
   }
 	
 	def count():Long = {
@@ -83,17 +86,17 @@ abstract class JpaPersistence[T <: AnyRef, PK <: AnyRef](val clazz:Class[T]) {
     log.debug("make with params: {}",params)
 
     val instance =
-      if(params.exists(p => p._1 equals "id"))
-        get(toType(classOf[java.lang.Long],(params.get("id").get)(0)).asInstanceOf[PK])
-      else
-        clazz.newInstance
+        if(params.exists(p => p._1 equals "id"))
+          get(toType(classOf[java.lang.Long],(params.get("id").get)(0)).asInstanceOf[PK])
+        else
+          entityClass.newInstance
 
-    params.foreach(p => applyParam(p, instance))
-    instance
+    params.foreach(p => applyParam(p, instance.asInstanceOf[T]))
+    instance.asInstanceOf[T]
 	}
 
   private[jpa] def applyParam(nvp:(String, Array[String]), inst:T):Unit = {
-    val method:Method = inst.getClass.getMethods.find(mtd => mtd.getName == nvp._1 + "_$eq").orNull
+    val method:Method = entityClass.getMethods.find(mtd => mtd.getName == nvp._1 + "_$eq").orNull
 
     if(method != null)
       method.invoke(inst,toType(method.getParameterTypes()(0),nvp._2(0)))
