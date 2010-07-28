@@ -7,7 +7,7 @@ import java.lang.reflect.Method
  *  This is the javassist implementation of the methodHandler.  It's called on any controller
  * that in the project package space.  It takes a list of threadLocal managers and calls each
  * recursively on each call.
- * 
+ *
  * @author Michael Fortin
  */
 class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
@@ -28,15 +28,18 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
             managedFactory.context.value
           }
 
-      managedFactory.context.withValue(ctx) {
-        if (it.hasNext)
-          returnValue = traverse(it)
-        else
-          returnValue = m2.invoke(self, args: _*)
+      try {
+        managedFactory.context.withValue(ctx) {
+          if (it.hasNext)
+            returnValue = traverse(it)
+          else
+            returnValue = m2.invoke(self, args: _*)
+        }
       }
-
-      if (!nested) {
-        managedFactory.destroySession(ctx)
+      finally {
+        if (!nested) {
+          managedFactory.destroySession(ctx)
+        }
       }
       returnValue
     }

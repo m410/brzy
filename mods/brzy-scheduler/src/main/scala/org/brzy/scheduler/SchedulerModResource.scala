@@ -7,7 +7,6 @@ import org.brzy.config.mod.ModResource
  * 
  * @author Michael Fortin
  */
-
 class SchedulerModResource(c:SchedulerModConfig) extends ModResource {
   val name = c.name.get
 
