@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.cascal.mock
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._

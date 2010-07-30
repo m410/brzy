@@ -1,5 +1,6 @@
 package org.brzy.security
 
+import mock.SecurityMockWebApp
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
@@ -10,7 +11,7 @@ import org.brzy.config.mod.Mod
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import java.lang.String
 import javax.servlet.http.HttpServletRequest
-import org.brzy.mock.SecurityMockWebApp
+import org.brzy.application.WebApp
 
 class SecurityFilterTest extends JUnitSuite {
 
@@ -27,7 +28,10 @@ class SecurityFilterTest extends JUnitSuite {
         redirectCalled = true
       }
     }
-    val boot = new BootConfig(Map("environment" -> "development"))
+    val boot = new BootConfig(Map("environment" -> "development",
+      "application" -> Map(
+          "org" -> "org.brzy.security"
+        )))
     val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
     val securityMod = new SecurityModConfig(Map(
@@ -56,7 +60,10 @@ class SecurityFilterTest extends JUnitSuite {
     }
 
     val response = new MockHttpServletResponse
-    val boot = new BootConfig(Map("environment" -> "development"))
+    val boot = new BootConfig(Map("environment" -> "development",
+      "application" -> Map(
+          "org" -> "org.brzy.security"
+        )))
     val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
     val securityMod = new SecurityModConfig(Map(
@@ -98,7 +105,12 @@ class SecurityFilterTest extends JUnitSuite {
         doSendError = true
       }
     }
-    val boot = new BootConfig(Map("environment" -> "development"))
+    val boot = new BootConfig(Map(
+      "environment" -> "development",
+      "application" -> Map(
+          "org" -> "org.brzy.security"
+        )
+      ))
     val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
     val securityMod = new SecurityModConfig(Map(

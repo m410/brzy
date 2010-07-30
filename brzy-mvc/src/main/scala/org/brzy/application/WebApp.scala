@@ -3,18 +3,21 @@ package org.brzy.application
 
 import org.brzy.mvc.action.Action
 import org.brzy.mvc.interceptor.{InterceptorResource, ManagedThreadContext, Invoker}
+import org.brzy.mvc.controller.{ControllerScanner, Path, Controller}
 import org.brzy.mvc.interceptor.ProxyFactory._
+
 import org.brzy.service.ServiceScanner
 
-import org.slf4j.LoggerFactory
-import java.lang.reflect.Constructor
-
-import collection.mutable.ListBuffer
-import collection.immutable.SortedSet
-import org.brzy.mvc.controller.{ControllerScanner, Path, Controller}
 import org.brzy.config.mod.{Mod, ModResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}
+
+import org.slf4j.LoggerFactory
+
+import collection.immutable.SortedSet
+import collection.mutable.{WeakHashMap, ListBuffer}
+import java.beans.ConstructorProperties
+import java.lang.reflect.Constructor
 
 /**
  * @author Michael Fortin
@@ -72,22 +75,24 @@ class WebApp(val config: WebAppConfig) {
     new Invoker(buffer.toList)
   }
 
-  val services: List[_ <: AnyRef] = makeServices
+  val serviceMap: Map[String, _ <: AnyRef] = makeServiceMap
 
-  protected[application] def makeServices: List[AnyRef] = {
-    val buffer = ListBuffer[AnyRef]()
+  protected[application] def makeServiceMap:Map[String, _ <: AnyRef] = {
+    val map = WeakHashMap.empty[String, AnyRef]
 
-    def append(sc: AnyRef) = {
-      val clazz = sc.asInstanceOf[Class[_]]
-      buffer += make(clazz, interceptor)
-
+    def name(c:Class[_]):String = { // TODO also need to pull name from annotation
+      val in = c.getName
+      in.charAt(0).toLower + in.substring(1,in.length)
     }
 
     val serviceClasses = ServiceScanner(config.application.org.get).services
-    serviceClasses.foreach(append(_))
-    persistenceResources.foreach(_.services.foreach(append _))
-    moduleResource.foreach(_.services.foreach(append _))
-    buffer.toList
+    serviceClasses.foreach(sc=>{
+      val clazz = sc.asInstanceOf[Class[_]]
+      map += name(clazz)->make(clazz, interceptor)
+    })
+    persistenceResources.foreach(_.serviceMap.foreach(map + _))
+    moduleResource.foreach(_.serviceMap.foreach(map + _))
+    map.toMap
   }
 
   val controllers: List[_ <: AnyRef] = makeControllers
@@ -100,21 +105,12 @@ class WebApp(val config: WebAppConfig) {
       val constructor: Constructor[_] = clazz.getConstructors.find(_ != null).get // should only be one
 
       if (constructor.getParameterTypes.length > 0) {
-        val constructorArgs = constructor.getParameterTypes.map((argClass:Class[_]) => {
-          val list = services.filter((s: AnyRef) => { // work-around because find does not compile
-            val serviceClass =
-                if (isProxy(s))
-                  s.getClass.getSuperclass
-                else
-                  s.getClass
-            argClass.equals(serviceClass)
-          })
+        val constructorArgs:Array[AnyRef] =
+            if(canFindByName(clazz))
+              makeArgsByName(clazz,serviceMap)
+            else
+              makeArgsByType(clazz,serviceMap)
 
-          if(list.size == 1)
-            list(0)
-          else
-            error("No Service for class: " + argClass)
-        })
         buffer += make(clazz, constructorArgs, interceptor)
       }
       else {
@@ -122,6 +118,29 @@ class WebApp(val config: WebAppConfig) {
       }
     })
     buffer.toList
+  }
+
+  protected[application] def canFindByName(c:Class[_]): Boolean = {
+    c.getAnnotation(classOf[ConstructorProperties]) != null
+  }
+
+  protected[application] def makeArgsByName(c:Class[_],services:Map[String,AnyRef]): Array[AnyRef] = {
+    val constructorProps = c.getAnnotation(classOf[ConstructorProperties])
+    constructorProps.value.map(services(_))
+  }
+
+  protected[application] def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
+    val constructor: Constructor[_] = c.getConstructors.find(_ != null).get
+    constructor.getParameterTypes.map((argClass: Class[_]) => {
+      serviceMap.values.find((s:AnyRef)=> {
+        val serviceClass =
+            if (isProxy(s))
+              s.getClass.getSuperclass
+            else
+              s.getClass
+        argClass.equals(serviceClass)
+      }).get
+    })
   }
 
   /**
@@ -152,10 +171,10 @@ class WebApp(val config: WebAppConfig) {
     persistenceResources.foreach(_.startup)
     moduleResource.foreach(_.startup)
     viewResource.startup
-    log.info("application startup")
-    log.debug("services: {}", services.mkString(","))
-    log.debug("controllers: {}", controllers.mkString(","))
-    log.debug("actions: {}", actions.mkString(","))
+    log.info("application  : startup")
+    log.debug("service map : {}", serviceMap.mkString(","))
+    log.debug("controllers : {}", controllers.mkString(","))
+    log.debug("actions     : {}", actions.mkString(","))
   }
 
   def shutdown = {

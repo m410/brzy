@@ -13,5 +13,5 @@ trait ModResource {
 
   def shutdown:Unit = {}
 
-  def services:List[AnyRef] = Nil
+  val serviceMap:Map[String,AnyRef] = Map()
 }

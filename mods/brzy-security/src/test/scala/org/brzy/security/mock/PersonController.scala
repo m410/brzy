@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.security.mock
 
 import org.brzy.mvc.controller.{Path, Controller}
 import org.brzy.mvc.action.args.Parameters

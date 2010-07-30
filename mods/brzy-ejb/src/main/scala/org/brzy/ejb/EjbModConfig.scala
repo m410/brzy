@@ -11,6 +11,12 @@ class EjbModConfig(map: Map[String, AnyRef]) extends Mod(map) {
   override val configurationName = "Ejb Configuration"
   val jndi: Option[String] = map.get("jndi").asInstanceOf[Option[String]].orElse(None)
 
+  /*
+  beans:
+    - service_name: myService
+      remote_interface: com.somecompany.service.MyServiceRemote
+      jndi_name: java:comp/env/myservice
+   */
   override def <<(that: Mod): Mod = {
     if (that == null) {
       this

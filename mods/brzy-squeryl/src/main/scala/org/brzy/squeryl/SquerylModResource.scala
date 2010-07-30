@@ -12,11 +12,12 @@ import org.brzy.mvc.interceptor.InterceptorResource
 class SquerylModResource(c:SquerylModConfig) extends ModResource with InterceptorResource {
 
   private val log = LoggerFactory.getLogger(getClass)
+  val name = c.name.get
+
   log.debug("db driver: {}",c.driver.getOrElse("?"))
   log.debug("db url   : {}",c.url.getOrElse("?"))
   log.debug("db user  : {}",c.userName.getOrElse("?"))
   log.debug("db passwd: {}",c.password.getOrElse("?"))
-  val name = c.name.get
 
   assert(c.driver.isDefined, "the database driver is not defined.")
   assert(c.driver.get != null, "the database driver can not be null.")
@@ -28,8 +29,6 @@ class SquerylModResource(c:SquerylModConfig) extends ModResource with Intercepto
   assert(c.password.get != null, "the database password can not be null.")
 
   override def interceptor = new SquerylContextManager(c.driver.get,c.url.get,c.userName.get,c.password.get)
-
-  override def services = Nil
 
   override def shutdown = {
     log.debug("shutdown")

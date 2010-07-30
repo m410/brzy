@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.cascal.mock
 
 import com.shorrockin.cascal.serialization.annotations.{Key, Keyspace, Family,Value}
 import com.shorrockin.cascal.serialization.Converter

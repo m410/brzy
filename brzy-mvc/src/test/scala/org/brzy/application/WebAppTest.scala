@@ -26,10 +26,13 @@ class WebAppTest extends JUnitSuite {
     val config = new WebAppConfig(boot, view, Nil, Nil)
     val webapp = new WebApp(config)
     assertNotNull(webapp)
-    assertNotNull(webapp.services)
-    assertEquals(1, webapp.services.size)
+
+    assertNotNull(webapp.serviceMap)
+    assertEquals(1, webapp.serviceMap.size)
+
     assertNotNull(webapp.controllers)
     assertEquals(2, webapp.controllers.size)
+
     assertNotNull(webapp.actions)
     assertEquals(17, webapp.actions.size)
   }

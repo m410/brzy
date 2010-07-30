@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.security.mock
 
 
 case class Person(key:String,

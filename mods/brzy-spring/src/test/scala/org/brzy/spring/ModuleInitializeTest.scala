@@ -12,6 +12,6 @@ class ModuleInitializeTest extends JUnitSuite {
         "application_context" -> "applicationContext.xml",
         "name" -> "brzy-sping"
       )))
-    assertEquals(1,mod.services.size)
+    assertEquals(1,mod.serviceMap.size)
   }
 }

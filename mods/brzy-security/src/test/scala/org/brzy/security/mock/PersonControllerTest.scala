@@ -1,4 +1,4 @@
-package org.brzy.mock
+package org.brzy.security.mock
 
 import org.junit.Test
 import org.junit.Assert._

@@ -31,8 +31,11 @@ class SecurityFilter extends Filter{
     val response = res.asInstanceOf[HttpServletResponse]
     val actionPath = findActionPath(request.getRequestURI,request.getContextPath)
     log.debug("actionPath: " + actionPath)
+    log.debug("s: 1")
 
     if(request.getSession.getAttribute("brzy_security_login") != null) {
+      log.debug("s: 2")
+
       val actionOption = app.actions.find(pathCompare(actionPath))
       actionOption match {
         case Some(a) => secureAction(a,request,response,chain)
@@ -40,6 +43,8 @@ class SecurityFilter extends Filter{
       }
     }
     else {
+      log.debug("s: 3")
+
       request.getSession.setAttribute("brzy_security_page",request.getRequestURI)
       log.debug("security.defaultPath: {}",security.defaultPath )
       response.sendRedirect(request.getContextPath + security.defaultPath)
@@ -47,6 +52,7 @@ class SecurityFilter extends Filter{
   }
 
   def secureAction(a:Action,request:HttpServletRequest,response:HttpServletResponse,chain:FilterChain) = {
+    log.debug("s: 4")
 
     val roles =
         if(request.getSession.getAttribute("brzy_security_roles") != null)
