@@ -10,14 +10,14 @@ object ProxyFactory {
 
   private val filter = new MethodFilter {
     def isHandled(m: Method) =
-        !m.getName.equals("clone") &&
+        !m.getName.equals("toString") &&
         !m.getName.equals("equals") &&
-        !m.getName.equals("finalize") &&
         !m.getName.equals("hashCode") &&
         !m.getName.equals("notify") &&
         !m.getName.equals("notifyAll") &&
-        !m.getName.equals("toString") &&
-        !m.getName.equals("wait")
+        !m.getName.equals("wait") &&
+        !m.getName.equals("clone") &&
+        !m.getName.equals("finalize")
   }
 
   def make(clazz:Class[_], args:Array[AnyRef], proxy:Invoker): AnyRef = {

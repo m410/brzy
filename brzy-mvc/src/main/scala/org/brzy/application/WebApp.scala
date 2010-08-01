@@ -6,8 +6,6 @@ import org.brzy.mvc.interceptor.{InterceptorResource, ManagedThreadContext, Invo
 import org.brzy.mvc.controller.{ControllerScanner, Path, Controller}
 import org.brzy.mvc.interceptor.ProxyFactory._
 
-import org.brzy.service.ServiceScanner
-
 import org.brzy.config.mod.{Mod, ModResource}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}
@@ -18,6 +16,8 @@ import collection.immutable.SortedSet
 import collection.mutable.{WeakHashMap, ListBuffer}
 import java.beans.ConstructorProperties
 import java.lang.reflect.Constructor
+import javassist.util.proxy.ProxyObject
+import org.brzy.service.{PreDestroy, PostCreate, ServiceScanner}
 
 /**
  * @author Michael Fortin
@@ -171,6 +171,7 @@ class WebApp(val config: WebAppConfig) {
     persistenceResources.foreach(_.startup)
     moduleResource.foreach(_.startup)
     viewResource.startup
+    serviceMap.values.foreach(lifeCycleCreate(_))
     log.info("application  : startup")
     log.debug("service map : {}", serviceMap.mkString(","))
     log.debug("controllers : {}", controllers.mkString(","))
@@ -178,9 +179,34 @@ class WebApp(val config: WebAppConfig) {
   }
 
   def shutdown = {
+    serviceMap.values.foreach(lifeCycleDestroy(_))
     viewResource.shutdown
     persistenceResources.foreach(_.shutdown)
     moduleResource.foreach(_.shutdown)
     log.info("application shutdown")
+  }
+
+  protected[application] def lifeCycleCreate(service:AnyRef) = {
+    val clazz =
+      if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
+      else service.getClass
+
+    val option = clazz.getMethods.find(_.getAnnotation(classOf[PostCreate]) != null)
+    option match {
+      case Some(m) => m.invoke(service, Array():_*)
+      case _ =>
+    }
+  }
+
+  protected[application] def lifeCycleDestroy(service:AnyRef) = {
+    val clazz =
+      if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
+      else service.getClass
+
+    val option = clazz.getMethods.find(_.getAnnotation(classOf[PreDestroy]) != null)
+    option match {
+      case Some(m) => m.invoke(service, Array():_*)
+      case _ =>
+    }
   }
 }
