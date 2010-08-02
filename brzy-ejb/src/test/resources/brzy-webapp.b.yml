@@ -1,0 +1,35 @@
+#
+#
+application:
+  version: 1.0.0
+  name: Test app
+  author: Fred
+  description: Some Description
+  org: &group org.brzy.sample
+  artifact_id: sample-jpa
+  application_class: org.brzy.mock.MockWebApp
+modules:
+  - name: brzy-ejb
+    org: org.brzy
+    version: "0.3-SNAPSHOT"
+    jndi: localhost
+logging:
+  provider: logback
+  appenders:
+    - name: STDOUT
+      appender_class: ch.qos.logback.core.ConsoleAppender
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+    - name: FILE
+      appender_class: ch.qos.logback.core.rolling.RollingFileAppender
+      file: logs/brzy.log
+      rolling_policy: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+      file_name_pattern: "brzy.%d{yyyy-MM-dd}.log"
+      layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
+      pattern: "%-4relative [%thread] %-5level %class - %msg%n"
+  loggers:
+    - name: org.brzy
+      level: debug
+  root:
+    level: INFO
+    ref: [STDOUT]

@@ -1,0 +1,12 @@
+#
+
+name: brzy-spring
+org: org.brzy
+version: "0.3-SNAPSHOT"
+config_class: org.brzy.spring.SpringModConfig
+resource_class: org.brzy.spring.SpringModResource
+
+application_context: "classpath:applicationContext.xml"
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "0.3-SNAPSHOT", transitive: false}

@@ -1,0 +1,19 @@
+#
+# scalate view pages
+#
+name: brzy-scalate
+org: org.brzy
+version: "0.3-SNAPSHOT"
+file_extension: ".ssp"
+config_class: org.brzy.scalate.ScalateModConfig
+resource_class: org.brzy.scalate.ScalateModResource
+dependencies:
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.3-SNAPSHOT", transitive: false}
+repositories:
+  - id: fusesource.m2
+    url: http://repo.fusesource.com/nexus/content/repositories/snapshots
+web_xml:
+  - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.fusesource.scalate.servlet.TemplateEngineServlet", load-on-startup: "1"}
+  - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.ssp"}
+  - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.scaml"}
