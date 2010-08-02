@@ -17,17 +17,6 @@
     <module>brzy-mvc</module>
     <!-- <module>brzy-lion</module> -->
     <module>brzy-framework</module>
-    <module>mods/brzy-cascal</module>
-    <module>mods/brzy-email</module>
-    <module>mods/brzy-jms</module>
-    <module>mods/brzy-jpa</module>
-    <module>mods/brzy-scalate</module>
-    <module>mods/brzy-scheduler</module>
-    <module>mods/brzy-security</module>
-    <module>mods/brzy-squeryl</module>
-    <module>mods/brzy-tomcat</module>
-    <module>mods/brzy-ejb</module>
-    <module>mods/brzy-spring</module>
   </modules>
   <build>
     <plugins>
