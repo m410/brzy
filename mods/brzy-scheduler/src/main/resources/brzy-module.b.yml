@@ -1,7 +1,0 @@
-#
-#
-name: brzy-scheduler
-org: org.brzy
-version: "0.3-SNAPSHOT"
-config_class: org.brzy.scheduler.SchedulerModConfig
-resource_class: org.brzy.scheduler.SchedulerModResource
