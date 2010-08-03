@@ -7,7 +7,7 @@ import javax.validation.{Validation => jValidation}
 
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.PrimitiveTypeMode._
-import org.brzy.bean.Construct
+import org.brzy.reflect.Construct
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class

@@ -4,11 +4,6 @@
     <facet type="Scala" name="Scala">
       <configuration>
         <option name="takeFromSettings" value="true" />
-        <option name="myScalaCompilerJarPaths">
-          <array>
-            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.8.0/scala-compiler-2.8.0.jar" />
-          </array>
-        </option>
         <option name="myScalaSdkJarPaths">
           <array>
             <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.8.0/scala-library-2.8.0.jar" />
@@ -30,7 +25,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.scala-lang:scala-library:2.8.0" level="project" />
-    <orderEntry type="module" module-name="brzy-config" />
+    <orderEntry type="library" name="Maven: org.brzy:brzy-config:0.3-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:0.9.24" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:0.9.24" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.0" level="project" />
@@ -39,7 +34,7 @@
     <orderEntry type="library" name="Maven: org.fusesource.scalate:scalate-core:1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2-for-scala-2.8.0.final-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
-    <orderEntry type="module" module-name="brzy-mvc" />
+    <orderEntry type="library" name="Maven: org.brzy:brzy-mvc:0.3-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.5-RC1" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0-rc3" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.11.0.GA" level="project" />
