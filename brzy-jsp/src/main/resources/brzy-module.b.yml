@@ -6,9 +6,5 @@ version: "0.1-SNAPSHOT"
 config_class: org.brzy.jsp.JspModConfig
 resource_class: org.brzy.jsp.JspModResource
 
-smtp_host: localhost
-user_name: ""
-password: ""
-
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-jsp, rev: "0.1-SNAPSHOT", transitive: false}
+  - {conf: runtime, org: jstl, name: jstl, ref: "1.1.2"}

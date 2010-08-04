@@ -1,11 +1,14 @@
 #
 # hibernate persistence
 #
-name: brzy-hibernate
+name: brzy-jpa
 org: org.brzy
 version: "0.3-SNAPSHOT"
 config_class: org.brzy.jpa.JpaModConfig
 resource_class: org.brzy.jpa.JpaModResource
+build_plugin:
+  plugin_reference: "\"org.brzy\"%\"brzy-jpa\"%\"0.3-SNAPSHOT\""
+  project_extends: "org.brzy.jpa.sbt.JpaPlugin"
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: 3.5.0-Final}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
