@@ -23,7 +23,7 @@ trait ManagedThreadContext {
 
   def isManaged(target: AnyRef) = {
     if(packageScope != "") {
-      if(target.getClass.getPackage.getName == packageScope)
+      if(target.getClass.getPackage.getName.startsWith(packageScope))
          true
       else
         false

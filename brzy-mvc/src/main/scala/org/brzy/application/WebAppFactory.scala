@@ -6,6 +6,7 @@ import java.net.URL
 import org.brzy.config.mod.Mod
 import org.brzy.config.webapp.WebAppConfig
 import org.slf4j.LoggerFactory
+import org.brzy.reflect.Construct
 
 /**
  * Creates the web application class from the configuration.
@@ -44,9 +45,6 @@ object WebAppFactory {
     }
     val config = makeWebAppConfig(bootConfig, view, persistence, modules)
     log.debug("application class: {}",config.application.applicationClass.get)
-    val c = Class.forName(config.application.applicationClass.get)
-    val constructor = c.getConstructor(classOf[WebAppConfig])
-    val inst = constructor.newInstance(config)
-    inst.asInstanceOf[WebApp]
+    Construct[WebApp](config.application.applicationClass.get,Array(config))
   }
 }

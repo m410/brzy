@@ -20,26 +20,35 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
       var returnValue: AnyRef = null
       var nested = false
 
-      val ctx =
-          if (managedFactory.context.value == managedFactory.empty)
-            managedFactory.createSession
-          else {
-            nested = true
-            managedFactory.context.value
-          }
+      if (managedFactory.isManaged(self)) {
+        val ctx =
+            if (managedFactory.context.value == managedFactory.empty)
+              managedFactory.createSession
+            else {
+              nested = true
+              managedFactory.context.value
+            }
 
-      try {
-        managedFactory.context.withValue(ctx) {
-          if (it.hasNext)
-            returnValue = traverse(it)
-          else
-            returnValue = m2.invoke(self, args: _*)
+        try {
+          managedFactory.context.withValue(ctx) {
+            if (it.hasNext)
+              returnValue = traverse(it)
+            else
+              returnValue = m2.invoke(self, args: _*)
+          }
+        }
+        finally {
+          if (!nested) {
+            managedFactory.destroySession(ctx)
+          }
         }
       }
-      finally {
-        if (!nested) {
-          managedFactory.destroySession(ctx)
-        }
+      else {
+        if (it.hasNext)
+          returnValue = traverse(it)
+        else
+          returnValue = m2.invoke(self, args: _*)
+
       }
       returnValue
     }

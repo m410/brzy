@@ -18,6 +18,7 @@ import java.beans.ConstructorProperties
 import java.lang.reflect.Constructor
 import javassist.util.proxy.ProxyObject
 import org.brzy.service.{PreDestroy, PostCreate, ServiceScanner}
+import org.brzy.reflect.Construct
 
 /**
  * @author Michael Fortin
@@ -30,23 +31,16 @@ class WebApp(val config: WebAppConfig) {
 
   val viewResource: WebAppViewResource = {
     log.debug("view: {}", config.views)
-    if (config.views.resourceClass.isDefined) {
-      val resourceClass = Class.forName(config.views.resourceClass.get)
-      val constructor: Constructor[_] = resourceClass.getConstructor(config.views.getClass)
-      constructor.newInstance(config.views).asInstanceOf[WebAppViewResource]
-    }
-    else {
+    if (config.views.resourceClass.isDefined)
+      Construct[WebAppViewResource](config.views.resourceClass.get,Array(config.views))
+    else
       null
-    }
   }
 
   val persistenceResources: List[ModResource] = {
     config.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      val mod = persist.asInstanceOf[Mod]
-      val resourceClass = Class.forName(mod.resourceClass.get)
-      val constructor: Constructor[_] = resourceClass.getConstructor(mod.getClass)
-      constructor.newInstance(mod).asInstanceOf[ModResource]
+      Construct[ModResource](persist.resourceClass.get,Array(persist))
     }).toList
   }
 
@@ -55,10 +49,9 @@ class WebApp(val config: WebAppConfig) {
     config.modules.foreach(module => {
       log.debug("module: {}", module)
       val mod = module.asInstanceOf[Mod]
+
       if (mod.resourceClass.isDefined && mod.resourceClass.get != null) {
-        val resourceClass = Class.forName(mod.resourceClass.get)
-        val constructor: Constructor[_] = resourceClass.getConstructor(mod.getClass)
-        list += constructor.newInstance(mod).asInstanceOf[ModResource]
+        list += Construct[ModResource](mod.resourceClass.get,Array(mod))
       }
     })
     list.toList
