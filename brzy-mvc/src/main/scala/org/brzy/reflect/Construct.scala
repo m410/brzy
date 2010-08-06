@@ -25,6 +25,18 @@ object Construct {
   }
 
   /**
+   * Checks the type of the constructor argument and tries to cast the input string to
+   * the right type.
+   */
+  def withCast[T](map: Map[String, String])(implicit m: Manifest[T]): T = {
+    val c = m.erasure
+    val argNames = c.getAnnotation(classOf[ConstructorProperties]).value.asInstanceOf[Array[String]]
+    val constructor = c.getConstructors.find(c => c.getParameterTypes.size == map.size).get
+    val args = argNames.map(name => map.get(name).get).asInstanceOf[Array[_ <: Object]]
+    constructor.newInstance(args: _*).asInstanceOf[T]
+  }
+
+  /**
    * Creates a class using the constructor with the same number of arguments.
    */
   def apply[T](a: Array[_<:java.lang.Object])(implicit m: Manifest[T]): T = {

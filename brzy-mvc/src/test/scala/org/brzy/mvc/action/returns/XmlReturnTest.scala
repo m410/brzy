@@ -24,7 +24,7 @@ class XmlReturnTest  extends JUnitSuite {
   @Test def testDefaultWithNoReturn = {
     val ctlr = new UserController()
     val method: Method = ctlr.getClass.getMethods.find(_.getName == "xml").get
-    val action = new Action("/users/xml", ctlr.getClass.getMethods()(8), ctlr, ".ssp")
+    val action = new Action("/users/xml", ctlr.getClass.getMethods.find(_.getName == "xml").get, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
     assertEquals("/user/xml", action.defaultView)

@@ -10,7 +10,6 @@ import collection.mutable.{ListBuffer, HashMap}
  * 
  * @author Michael Fortin
  */
-
 object NestedCollectionConverter {
 
   def convertMap(map: JMap[String, AnyRef]): Map[String, AnyRef] = {

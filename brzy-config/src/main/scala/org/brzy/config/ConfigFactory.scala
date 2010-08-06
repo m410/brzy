@@ -42,11 +42,7 @@ object ConfigFactory {
       new BootConfig(webappConfigMap ++ Map[String, String]("environment" -> environment))
     }
 
-    val defaultConfig: BootConfig = {
-      new BootConfig(defaultConfigMap)
-    }
-
-
+    val defaultConfig: BootConfig = new BootConfig(defaultConfigMap)
 
     val environmentConfig: BootConfig =
       if (webappConfigMap.get("environment_overrides").isDefined) {
