@@ -29,7 +29,9 @@ public @interface Queue {
     boolean durable() default false;
 
     // 	Provides a client identifier for durable subscriptions.	defaults to
-    // "grailsAppListener", id property can be used instead of clientId for
+    // "brzyListener", id property can be used instead of clientId for
     // backwards compatibility
     String clientId() default "brzyListener";
+
+    String name();
 }

@@ -10,16 +10,16 @@ import org.brzy.config.mod.Mod
 class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
   override val configurationName = "Email Configuration"
   val smtpHost: Option[String] = map.get("smtp_host").asInstanceOf[Option[String]].orElse(None)
+  val smtpAuth: Option[String] = map.get("smtp_auth").asInstanceOf[Option[String]].orElse(None)
+
   val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
   val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
 
   val mailFrom: Option[String] = map.get("mail_from").asInstanceOf[Option[String]].orElse(None)
+//  val mailUser: Option[String] = map.get("mail_user").asInstanceOf[Option[String]].orElse(None)
+//  val storeProtocol: Option[String] = map.get("mail_store_protocol").asInstanceOf[Option[String]].orElse(None)
 
-  val mailUser: Option[String] = map.get("mail_user").asInstanceOf[Option[String]].orElse(None)
-  val mailStoreProtocol: Option[String] = map.get("mail_store_protocol").asInstanceOf[Option[String]].orElse(None)
-  val mailTransportProtocol: Option[String] = map.get("mail_transport_protocol").asInstanceOf[Option[String]].orElse(None)
-
-  val mailSmtpUser: Option[String] = map.get("mail_smpt_user").asInstanceOf[Option[String]].orElse(None)
+  val transportProtocol: Option[String] = map.get("mail_transport_protocol").asInstanceOf[Option[String]].orElse(None)
   val mailDebug: Option[String] = map.get("mail_debug").asInstanceOf[Option[String]].orElse(None)
 
   override def <<(that: Mod): Mod = {

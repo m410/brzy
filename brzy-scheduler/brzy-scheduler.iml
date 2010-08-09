@@ -4,6 +4,11 @@
     <facet type="Scala" name="Scala">
       <configuration>
         <option name="takeFromSettings" value="true" />
+        <option name="myScalaCompilerJarPaths">
+          <array>
+            <option value="$MODULE_DIR$/../../../Library/Application Support/IntelliJIdea90/Scala/lib/scala-compiler.jar" />
+          </array>
+        </option>
         <option name="myScalaSdkJarPaths">
           <array>
             <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.8.0/scala-library-2.8.0.jar" />
@@ -41,7 +46,7 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.5" level="project" />
     <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.6.8" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:1.0.0.GA" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2-for-scala-2.8.0.final-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2" level="project" />
   </component>
 </module>
 

@@ -49,7 +49,7 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat:jasper-jdt:6.0.26" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:jasper-el:6.0.26" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2-for-scala-2.8.0.final-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2" level="project" />
   </component>
 </module>
 

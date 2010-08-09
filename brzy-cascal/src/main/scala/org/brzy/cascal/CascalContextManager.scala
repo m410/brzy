@@ -22,4 +22,7 @@ class CascalContextManager extends ManagedThreadContext {
   def createSession = Some(pool.checkout)
 }
 
+/**
+ * Document Me..
+ */
 object Cascal extends DynamicVariable(Option[Session](null))
