@@ -29,17 +29,25 @@ class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
     else if (that.isInstanceOf[EmailModConfig]) {
       val it = that.asInstanceOf[EmailModConfig]
       new EmailModConfig(Map[String, AnyRef](
+        "smtp_host" -> it.smtpHost.getOrElse(this.smtpHost.getOrElse(null)),
+        "smtp_auth" -> it.smtpAuth.getOrElse(this.smtpAuth.getOrElse(null)),
         "user_name" -> it.userName.getOrElse(this.userName.getOrElse(null)),
         "password" -> it.password.getOrElse(this.password.getOrElse(null)),
-        "smtp_host" -> it.smtpHost.getOrElse(this.smtpHost.getOrElse(null)))
-              ++ super.<<(that).asMap)
+        "mail_from" -> it.mailFrom.getOrElse(this.mailFrom.getOrElse(null)),
+        "mail_transport_protocol" -> it.transportProtocol.getOrElse(this.transportProtocol.getOrElse(null)),
+        "mail_debug" -> it.mailDebug.getOrElse(this.mailDebug.getOrElse(null))
+        ) ++ super.<<(that).asMap)
     }
     else {
       new EmailModConfig(Map[String, AnyRef](
+        "smtp_host" -> that.map.get("smtp_host").getOrElse(this.smtpHost.getOrElse(null)),
+        "smtp_auth" -> that.map.get("smtp_auth").getOrElse(this.smtpAuth.getOrElse(null)),
         "user_name" -> that.map.get("user_name").getOrElse(this.userName.getOrElse(null)),
         "password" -> that.map.get("password").getOrElse(this.password.getOrElse(null)),
-        "smtp_host" -> that.map.get("smtp_host").getOrElse(this.smtpHost.getOrElse(null)))
-              ++ super.<<(that).asMap)
+        "mail_from" -> that.map.get("mail_from").getOrElse(this.mailFrom.getOrElse(null)),
+        "mail_transport_protocol" -> that.map.get("mail_transport_protocol").getOrElse(this.transportProtocol.getOrElse(null)),
+        "mail_debug" -> that.map.get("mail_debug").getOrElse(this.mailDebug.getOrElse(null))
+        ) ++ super.<<(that).asMap)
     }
   }
 
