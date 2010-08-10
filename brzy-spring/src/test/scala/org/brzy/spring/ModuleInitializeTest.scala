@@ -8,7 +8,7 @@ import org.scalatest.junit.JUnitSuite
 
 class ModuleInitializeTest extends JUnitSuite {
   @Test def testConTextSetup = {
-    val mod = new SpringModResource(new SpringModConfig(Map(
+    val mod = new SpringModProvider(new SpringModConfig(Map(
         "application_context" -> "applicationContext.xml",
         "name" -> "brzy-sping"
       )))

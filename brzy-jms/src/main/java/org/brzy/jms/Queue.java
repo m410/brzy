@@ -23,7 +23,7 @@ public @interface Queue {
     boolean pubSub() default true;
 
     // 	Associates JMS Message Selector to the listener	defaults to null
-    String messageSelector();
+    String messageSelector() default "";
 
     // 	Creates a durable subscription (applies to Topics only)	defaults to false
     boolean durable() default false;
@@ -32,6 +32,4 @@ public @interface Queue {
     // "brzyListener", id property can be used instead of clientId for
     // backwards compatibility
     String clientId() default "brzyListener";
-
-    String name();
 }

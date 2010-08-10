@@ -27,10 +27,8 @@ class ModuleFactoryTest extends JUnitSuite {
     assertNotNull(modules)
     assertEquals(1, modules.size)
     modules.foreach(p => {
-      val email = p.asInstanceOf[JspModConfig]
-      val host = email.applicationContext.get
-      assertNotNull(host)
-      assertEquals("localhost", host)
+      val jsp = p.asInstanceOf[JspModConfig]
+      assertNotNull(jsp)
     })
   }
 }

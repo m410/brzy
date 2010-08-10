@@ -9,8 +9,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Michael Fortin
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IntervalJob {
-    int value() default 1000 * 60 * 60;
+public @interface Cron {
+    String value() default "* * * * *";// every second
     String method() default "execute";
-    String startTime() default "";
 }

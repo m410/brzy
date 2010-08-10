@@ -1,13 +1,13 @@
 package org.brzy.email
 
-import org.brzy.config.mod.ModResource
+import org.brzy.config.mod.ModProvider
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-class EmailModResource(c:EmailModConfig) extends ModResource {
+class EmailModPrivider(c:EmailModConfig) extends ModProvider {
   val name = c.name.get
   override val serviceMap = Map("emailService" -> new EmailService(c))
 }

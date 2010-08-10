@@ -35,7 +35,7 @@ class SecurityFilterTest extends JUnitSuite {
     val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
     val securityMod = new SecurityModConfig(Map(
-      "resource_class" -> "org.brzy.security.SecurityModResource",
+      "resource_class" -> "org.brzy.security.SecurityModProvider",
       "name" -> "brzy-security",
       "default_path" -> "/security/authentication"))
     val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
@@ -67,7 +67,7 @@ class SecurityFilterTest extends JUnitSuite {
     val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
     val securityMod = new SecurityModConfig(Map(
-      "resource_class" -> "org.brzy.security.SecurityModResource",
+      "resource_class" -> "org.brzy.security.SecurityModProvider",
       "name" -> "brzy-security",
       "default_path" -> "/security/authentication"))
     val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
@@ -114,7 +114,7 @@ class SecurityFilterTest extends JUnitSuite {
     val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
     val securityMod = new SecurityModConfig(Map(
-      "resource_class" -> "org.brzy.security.SecurityModResource",
+      "resource_class" -> "org.brzy.security.SecurityModProvider",
       "name" -> "brzy-security",
       "default_path" -> "/security/authentication"))
     val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))

@@ -1,6 +1,6 @@
 package org.brzy.squeryl
 
-import org.brzy.config.mod.ModResource
+import org.brzy.config.mod.ModProvider
 import org.slf4j.LoggerFactory
 import org.brzy.mvc.interceptor.InterceptorResource
 
@@ -9,7 +9,7 @@ import org.brzy.mvc.interceptor.InterceptorResource
  * 
  * @author Michael Fortin
  */
-class SquerylModResource(c:SquerylModConfig) extends ModResource with InterceptorResource {
+class SquerylModProvider(c:SquerylModConfig) extends ModProvider with InterceptorResource {
 
   private val log = LoggerFactory.getLogger(getClass)
   val name = c.name.get

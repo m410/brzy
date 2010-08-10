@@ -11,6 +11,8 @@ class EjbModConfig(map: Map[String, AnyRef]) extends Mod(map) {
   override val configurationName = "Ejb Configuration"
   val jndi: Option[String] = map.get("jndi").asInstanceOf[Option[String]].orElse(None)
 
+  val beans:List[EjbBean] = Nil
+  
   /*
   beans:
     - service_name: myService

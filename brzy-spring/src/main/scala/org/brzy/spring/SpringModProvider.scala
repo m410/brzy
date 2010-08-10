@@ -1,6 +1,6 @@
 package org.brzy.spring
 
-import org.brzy.config.mod.ModResource
+import org.brzy.config.mod.ModProvider
 import org.springframework.context.support.ClassPathXmlApplicationContext
 import collection.JavaConversions._
 import collection.mutable.LinkedHashMap
@@ -11,7 +11,7 @@ import collection.mutable.LinkedHashMap
  * @see http ://static.springsource.org/spring/docs/3.0.3.RELEASE/spring-framework-reference/html/
  * @author Michael Fortin
  */
-class SpringModResource(c: SpringModConfig) extends ModResource {
+class SpringModProvider(c: SpringModConfig) extends ModProvider {
   val name = c.name.get
   val context = new ClassPathXmlApplicationContext(c.applicationContext.get)
 

@@ -17,9 +17,9 @@ class JmsServiceTest extends JUnitSuite {
   }
 }
 
-@Queue(name="test.queue")
+@Queue(destination="test.queue")
 class TestJmsService {
-  onMessage(msg:String) ={
+  def onMessage(msg:String) ={
     println("msg: "  + msg)
   }
 }

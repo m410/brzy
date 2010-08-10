@@ -4,7 +4,7 @@ name: brzy-email
 org: org.brzy
 version: "0.3-SNAPSHOT"
 config_class: org.brzy.email.EmailModConfig
-resource_class: org.brzy.email.EmailModResource
+resource_class: org.brzy.email.EmailModProvider
 
 smtp_host: localhost
 user_name: ""

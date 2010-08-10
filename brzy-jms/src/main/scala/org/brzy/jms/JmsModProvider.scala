@@ -1,6 +1,6 @@
 package org.brzy.jms
 
-import org.brzy.config.mod.ModResource
+import org.brzy.config.mod.ModProvider
 import org.apache.activemq.{ActiveMQConnectionFactory, ActiveMQConnection}
 import javax.jms.{Session, MessageConsumer, ConnectionFactory}
 
@@ -9,7 +9,7 @@ import javax.jms.{Session, MessageConsumer, ConnectionFactory}
  *
  * @author Michael Fortin
  */
-class JmsModResource(c: JmsModConfig) extends ModResource {
+class JmsModProvider(c: JmsModConfig) extends ModProvider {
   val name = c.name.get
 
   val connectionFactory: ConnectionFactory = new ActiveMQConnectionFactory(

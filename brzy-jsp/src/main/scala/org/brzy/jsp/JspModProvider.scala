@@ -1,9 +1,6 @@
 package org.brzy.jsp
 
-import org.brzy.config.mod.ModResource
-import org.springframework.context.support.ClassPathXmlApplicationContext
-import collection.JavaConversions._
-import collection.mutable.LinkedHashMap
+import org.brzy.config.mod.ModProvider
 
 /**
  * Creates a spring application context and adds all the beans to the application.
@@ -11,7 +8,7 @@ import collection.mutable.LinkedHashMap
  * @see http ://static.springsource.org/spring/docs/3.0.3.RELEASE/spring-framework-reference/html/
  * @author Michael Fortin
  */
-class JspModResource(c: JspModConfig) extends ModResource {
+class JspModProvider(c: JspModConfig) extends ModProvider {
   val name = c.name.get
   
 }

@@ -4,7 +4,7 @@ name: brzy-jms
 org: org.brzy
 version: "0.3-SHAPSHOT"
 config_class: org.brzy.jms.JmsModConfig
-resource_class: org.brzy.jms.JmsModResource
+resource_class: org.brzy.jms.JmsModProvider
 
 connection_factory_class: ""
 connection_url: ""

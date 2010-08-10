@@ -14,14 +14,14 @@ import org.brzy.mvc.action.Action
  */
 class SecurityFilter extends Filter{
   val log = LoggerFactory.getLogger(classOf[SecurityFilter])
-  var security:SecurityModResource = _
+  var security:SecurityModProvider = _
   var app:WebApp = _
 
   def init(filterConfig: FilterConfig) = {
     app = filterConfig.getServletContext.getAttribute("application").asInstanceOf[WebApp]
     val option = app.moduleResource.find(_.name == "brzy-security")
     security = option match {
-      case Some(mod) => mod.asInstanceOf[SecurityModResource]
+      case Some(mod) => mod.asInstanceOf[SecurityModProvider]
       case _ => error("No Security Module Found")
     }
   }

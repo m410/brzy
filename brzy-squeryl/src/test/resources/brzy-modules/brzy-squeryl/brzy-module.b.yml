@@ -5,7 +5,7 @@ name: brzy-squeryl
 org: org.brzy
 version: "0.2"
 config_class: org.brzy.squeryl.SquerylModConfig
-resource_class: org.brzy.squeryl.SquerylModResource
+resource_class: org.brzy.squeryl.SquerylModProvider
 dependencies:
   - {conf: compile, org: org.squeryl, name: squeryl_2.8.0, rev: "0.9.4beta8"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}

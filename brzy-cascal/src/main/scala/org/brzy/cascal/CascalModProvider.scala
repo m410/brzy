@@ -1,6 +1,6 @@
 package org.brzy.cascal
 
-import org.brzy.config.mod.ModResource
+import org.brzy.config.mod.ModProvider
 import org.brzy.mvc.interceptor.InterceptorResource
 
 /**
@@ -8,7 +8,7 @@ import org.brzy.mvc.interceptor.InterceptorResource
  * 
  * @author Michael Fortin
  */
-class CascalModResource(c:CascalModConfig) extends ModResource with InterceptorResource{
+class CascalModProvider(c:CascalModConfig) extends ModProvider with InterceptorResource{
   val name = c.name.get
   def interceptor = new CascalContextManager
 }

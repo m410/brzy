@@ -5,7 +5,7 @@ name: brzy-jpa
 org: org.brzy
 version: "0.3-SNAPSHOT"
 config_class: org.brzy.jpa.JpaModConfig
-resource_class: org.brzy.jpa.JpaModResource
+resource_class: org.brzy.jpa.JpaModProvider
 build_plugin:
   plugin_reference: "\"org.brzy\"%\"brzy-jpa\"%\"0.3-SNAPSHOT\""
   project_extends: "org.brzy.jpa.sbt.JpaPlugin"

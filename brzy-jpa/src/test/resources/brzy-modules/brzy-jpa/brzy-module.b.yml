@@ -5,7 +5,7 @@ name: brzy-squeryl
 org: org.brzy
 version: "0.2"
 config_class: org.brzy.jpa.JpaModConfig
-resource_class: org.brzy.jpa.JpaModResource
+resource_class: org.brzy.jpa.JpaModProvider
 
 persistence_unit: "my-unit"
 

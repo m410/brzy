@@ -1,6 +1,6 @@
 package org.brzy.jpa
 
-import org.brzy.config.mod.ModResource
+import org.brzy.config.mod.ModProvider
 import org.brzy.mvc.interceptor.InterceptorResource
 
 /**
@@ -8,7 +8,7 @@ import org.brzy.mvc.interceptor.InterceptorResource
  * 
  * @author Michael Fortin
  */
-class JpaModResource(c:JpaModConfig) extends ModResource with InterceptorResource {
+class JpaModProvider(c:JpaModConfig) extends ModProvider with InterceptorResource {
   def interceptor = new JpaContextManager(c.persistenceUnit.get)
   val name = c.name.get
 

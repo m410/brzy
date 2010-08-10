@@ -1,7 +1,9 @@
 package org.brzy.scheduler
 
 import scala.actors.{Actor, Exit, TIMEOUT}
+import scala.actors.Actor._
 import java.util.Calendar
+
 
 /**
  * Document Me..
@@ -9,7 +11,6 @@ import java.util.Calendar
  * @author Michael Fortin
  */
 object Scheduler {
-  import Actor._
 
   def interval(actOn:Actor, time: Long) = new AnyRef {
     private val executor = actor {
@@ -71,14 +72,14 @@ object Scheduler {
            sec - nowSecond
         else
           sec + 60 - nowSecond
-      case Div(a,b) => 
-      case Multiple(a) => 1
-      case Range(a,b) =>
+      case Div(a,b) => 0 // TODO fix
+      case Multiple(a) => 1 // TODO fix
+      case Range(a,b) => 0  // TODO fix
         val start = Integer.parseInt(a)
         val stop = Integer.parseInt(a)
         if(nowSecond > start && nowSecond < stop)
           1
-        elese if(nowSecond <= start)
+        else if(nowSecond <= start)
            start - nowSecond
         else
           start + 60 - nowSecond

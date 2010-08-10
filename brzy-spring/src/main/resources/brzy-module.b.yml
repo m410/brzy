@@ -4,7 +4,7 @@ name: brzy-spring
 org: org.brzy
 version: "0.3-SNAPSHOT"
 config_class: org.brzy.spring.SpringModConfig
-resource_class: org.brzy.spring.SpringModResource
+resource_class: org.brzy.spring.SpringModProvider
 
 smtp_host: localhost
 user_name: ""

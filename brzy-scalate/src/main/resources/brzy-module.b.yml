@@ -6,7 +6,7 @@ org: org.brzy
 version: "0.3-SNAPSHOT"
 file_extension: ".ssp"
 config_class: org.brzy.scalate.ScalateModConfig
-resource_class: org.brzy.scalate.ScalateModResource
+resource_class: org.brzy.scalate.ScalateModProvider
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
   - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.3-SNAPSHOT", transitive: false}

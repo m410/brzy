@@ -4,7 +4,7 @@ name: brzy-ejb
 org: org.brzy
 version: "0.2"
 config_class: org.brzy.ejb.EjbModConfig
-resource_class: org.brzy.ejb.EjbModResource
+resource_class: org.brzy.ejb.EjbModProvider
 
 smtp_host: localhost
 user_name: ""
