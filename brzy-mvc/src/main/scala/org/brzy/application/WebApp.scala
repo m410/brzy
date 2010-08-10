@@ -6,7 +6,7 @@ import org.brzy.mvc.interceptor.{InterceptorResource, ManagedThreadContext, Invo
 import org.brzy.mvc.controller.{ControllerScanner, Path, Controller}
 import org.brzy.mvc.interceptor.ProxyFactory._
 
-import org.brzy.config.mod.{Mod, ModResource}
+import org.brzy.config.mod.{Mod, ModProvider}
 import org.brzy.config.webapp.{WebAppViewResource, WebAppConfig}
 import org.brzy.config.common.{Project, Application => BrzyApp}
 
@@ -37,21 +37,21 @@ class WebApp(val config: WebAppConfig) {
       null
   }
 
-  val persistenceResources: List[ModResource] = {
+  val persistenceResources: List[ModProvider] = {
     config.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      Construct[ModResource](persist.resourceClass.get,Array(persist))
+      Construct[ModProvider](persist.resourceClass.get,Array(persist))
     }).toList
   }
 
-  val moduleResource: List[ModResource] = {
-    val list = ListBuffer[ModResource]()
+  val moduleResource: List[ModProvider] = {
+    val list = ListBuffer[ModProvider]()
     config.modules.foreach(module => {
       log.debug("module: {}", module)
       val mod = module.asInstanceOf[Mod]
 
       if (mod.resourceClass.isDefined && mod.resourceClass.get != null) {
-        list += Construct[ModResource](mod.resourceClass.get,Array(mod))
+        list += Construct[ModProvider](mod.resourceClass.get,Array(mod))
       }
     })
     list.toList

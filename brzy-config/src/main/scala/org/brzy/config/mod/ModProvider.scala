@@ -5,7 +5,7 @@ package org.brzy.config.mod
  * 
  * @author Michael Fortin
  */
-trait ModResource {
+trait ModProvider {
 
   val name:String
 
