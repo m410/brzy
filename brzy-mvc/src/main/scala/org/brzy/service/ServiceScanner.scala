@@ -18,14 +18,7 @@ class ServiceScanner(val packageName:String) {
             new TypeAnnotationsScanner(),
             new SubTypesScanner()))
 
-  val serviceAnnotationClass = classOf[Service]
-  val services = asSet(reflections.getTypesAnnotatedWith(serviceAnnotationClass))
-
-//  val service1AnnotationClass = classOf[ScheduledService]
-//  val service1Internal = asSet(reflections.getTypesAnnotatedWith(service1AnnotationClass))
-//
-//  val service2AnnotationClass = classOf[MessageService]
-//  val service2Internal = asSet(reflections.getTypesAnnotatedWith(service2AnnotationClass))
+  val services = asSet(reflections.getTypesAnnotatedWith(classOf[Service]))
 }
 
 object ServiceScanner {

@@ -9,7 +9,7 @@ import org.brzy.reflect.Construct
  * 
  * @author Michael Fortin
  */
-trait Persistable[T<:Persistent[_],PK] {
+trait Persistable[T,PK] {
   
   def get(id:PK):T 
 
