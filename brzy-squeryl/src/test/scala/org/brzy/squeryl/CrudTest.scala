@@ -58,7 +58,7 @@ class CrudTest extends JUnitSuite {
   }
 
   @Test @Ignore def testMake = {
-    val person = Person.make(Map("id" -> 1, "firstName" -> "fred", "lastName" -> "bob"))
+    val person = Person.construct(Map("id" -> 1, "firstName" -> "fred", "lastName" -> "bob"))
     assertNotNull(person)
     assertEquals(1, person.id)
     assertEquals("fred", person.firstName)

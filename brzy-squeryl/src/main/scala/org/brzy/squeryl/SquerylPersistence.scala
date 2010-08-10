@@ -8,6 +8,8 @@ import javax.validation.{Validation => jValidation}
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.PrimitiveTypeMode._
 import org.brzy.reflect.Construct
+import org.brzy.persistence.{PersistentCrudOps, Persistable}
+import java.lang.String
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class
@@ -21,26 +23,29 @@ import org.brzy.reflect.Construct
  * Also note that the entity class needs to be annotated with the ConstructorProperties
  * annotation for the java.bean api.
  */
-class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema {
+class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema with Persistable[T,Long]{
   val db = table[T]
   val validationFactory = jValidation.buildDefaultValidatorFactory
 
-  class EntityCrudOps(t: T) {
-    def validate() = Validation[T](validationFactory.getValidator.validate(t))
+  class EntityCrudOps(t: T) extends PersistentCrudOps(t){
+    override def validate() = Validation[T](validationFactory.getValidator.validate(t))
 
-    def insert() = db.insert(t)
+    override def insert() = db.insert(t)
 
-    def update() = db.update(t)
+    override def update() = db.update(t)
 
-    def delete() = db.deleteWhere(e => e.id === t.id)
+    override def delete() = db.deleteWhere(e => e.id === t.id)
   }
 
-  implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
+  override implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
 
   def get(id: Long):T = from(db)(s => where(s.id === id) select (s)).head
 
+  def load(id: String) = from(db)(s => where(s.id === id.toLong) select (s)).head
+
   def list():List[T] = from(db)(a => select(a)).toList
 
-  def make(params: Map[String,Any]): T = Construct[T](params)
+  def list(size:Int, offset:Int):List[T] = from(db)(a => select(a)).toList
 
+  override def construct(params:Parameters)(implicit m:Manifest[T]):T = null.asInstanceOf[T]
 }
