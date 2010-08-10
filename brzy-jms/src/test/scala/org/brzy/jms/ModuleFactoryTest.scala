@@ -28,7 +28,7 @@ class ModuleFactoryTest extends JUnitSuite {
     assertEquals(1, modules.size)
     modules.foreach(p => {
       val jms = p.asInstanceOf[JmsModConfig]
-      val url = jms.connectionUrl.get
+      val url = jms.brokerUrl.get
       assertNotNull(url)
       assertEquals("tcp://someurl", url)
     })

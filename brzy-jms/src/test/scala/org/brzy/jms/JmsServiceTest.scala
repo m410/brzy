@@ -1,5 +1,6 @@
 package org.brzy.jms
 
+import mock.MockJmsService
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
@@ -9,17 +10,23 @@ class JmsServiceTest extends JUnitSuite {
   val connectionFactory = new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false")
 
   @Test def testJms = {
-    val service = new JmsService(connectionFactory)
-    service.send("Test Message","test.queue")
+    val jms:JmsService = new JmsService(connectionFactory)
+    jms.send("Test Message","test.queue")
 
-    // TODO create resource to search and create services
-    assertTrue(false)
+    val config = new JmsModConfig(Map(
+      "name" -> "JMS Test",
+      "scan_package" -> "org.brzy.jms.mock",
+      "broker_url" -> "vm://localhost?broker.persistent=false"
+    ))
+    val provider = new JmsModProvider(config)
+    assertNotNull(provider.serviceMap)
+    assertEquals(1,provider.serviceMap.size)
+
+    val service = provider.serviceMap("mockJmsService")
+    provider.startup
+    assertNotNull(service)
+//    assertTrue(service.asInstanceOf[MockJmsService].didGetIt)
+    provider.shutdown
   }
 }
 
-@Queue(destination="test.queue")
-class TestJmsService {
-  def onMessage(msg:String) ={
-    println("msg: "  + msg)
-  }
-}
