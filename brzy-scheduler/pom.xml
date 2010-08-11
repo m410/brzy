@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy</groupId>
   <artifactId>brzy-scheduler</artifactId>
-  <name>Brzy Scheduler Service Module</name>
+  <name>Brzy Scheduler Module</name>
   <version>0.3-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
