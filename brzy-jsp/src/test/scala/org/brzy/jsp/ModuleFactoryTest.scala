@@ -13,22 +13,8 @@ class ModuleFactoryTest extends JUnitSuite {
     assertNotNull(url)
     val bootConfig = ConfigFactory.makeBootConfig(new File(url.getFile), "development")
     assertNotNull(bootConfig)
-    bootConfig.modules.get.foreach(p => {
-      val host = p.map("application_context")
-      assertNotNull(host)
-      assertEquals("localhost", host)
-    })
-    val modules: List[Mod] = {
-      if (bootConfig.modules.isDefined)
-        bootConfig.modules.get.map(ConfigFactory.makeRuntimeModule(_))
-      else
-        Nil
-    }
-    assertNotNull(modules)
-    assertEquals(1, modules.size)
-    modules.foreach(p => {
-      val jsp = p.asInstanceOf[JspModConfig]
-      assertNotNull(jsp)
-    })
+    val view = bootConfig.views.get
+    val viewResource = ConfigFactory.makeRuntimeModule(view)
+    assertNotNull(viewResource)
   }
 }

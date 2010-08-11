@@ -4,8 +4,8 @@ import org.brzy.config.mod.ModProvider
 import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTypesScanner}
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
 import org.reflections.Reflections
-import scala.collection.JavaConversions._
-import collection.mutable.HashMap
+import collection.JavaConversions._
+import collection.mutable.{ListBuffer, HashMap}
 
 /**
  * Document Me..
@@ -15,28 +15,34 @@ import collection.mutable.HashMap
 class SchedulerModProvider(c: SchedulerModConfig) extends ModProvider {
   val name = c.name.get
 
-  val reflections = new Reflections(new ConfigurationBuilder()
+  private val reflections = new Reflections(new ConfigurationBuilder()
           .setUrls(ClasspathHelper.getUrlsForPackagePrefix(c.scanPackage.get))
           .setScanners(
     new ResourcesScanner(),
     new TypeAnnotationsScanner(),
     new SubTypesScanner()))
 
-  override val serviceMap = {
+  val jobs = {
     val services = asSet(reflections.getTypesAnnotatedWith(classOf[Cron]))
-    val map = HashMap[String, AnyRef]()
+    val list = ListBuffer[Schedule]()
     services.foreach(s=> {
-      val in = s.getClass.getName
-      map += (in.charAt(0).toLower + in.substring(1,in.length) -> s)
+      val instance = s.newInstance.asInstanceOf[AnyRef]
+      val annotation = s.getAnnotation(classOf[Cron])
+      list += Schedule(new JobRunner(instance, null),annotation.value)
     })
+    list.toList
+  }
+
+
+
+  override val serviceMap = {
+    val map = HashMap[String, AnyRef]()
+    jobs.foreach(job=>  map += job.serviceName -> job.service )
     map.toMap
   }
 
-  override def shutdown = {
-    // todo init the scheduler
-  }
+  override def startup = jobs.foreach(_.start)
 
-  override def startup = {
-    // todo shutdown and threads in the scheduler
-  }
+  override def shutdown = jobs.foreach(_.stop)
+
 }

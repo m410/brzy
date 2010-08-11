@@ -9,10 +9,17 @@ import org.brzy.mvc.interceptor.Invoker
  *
  * @author Michael Fortin
  */
-class JobRunner(service: AnyRef, val invoker:Invoker) extends Actor {
+class JobRunner(val service: AnyRef, val invoker:Invoker) extends Actor {
   private val log = LoggerFactory.getLogger(classOf[JobRunner])
+
   val cron = service.getClass.getAnnotation(classOf[Cron])
+
   val method = service.getClass.getMethod(cron.method)
+
+  val serviceName = {
+    val className = service.getClass.getSimpleName
+    className.charAt(0).toLower + className.substring(1,className.length)
+  }
 
   def act() = loop {
     react {
