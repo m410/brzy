@@ -2,12 +2,15 @@
 #
 name: brzy-jms
 org: org.brzy
-version: "0.3-SHAPSHOT"
+version: "0.3"
 config_class: org.brzy.jms.JmsModConfig
 resource_class: org.brzy.jms.JmsModProvider
 
-connection_factory_class: ""
-connection_url: ""
+#connection_factory_class:
+#broker_url:
+#user_name:
+#password:
+#scan_package: 
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-jms, rev: "0.3-SNAPSHOT", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-jms, rev: "0.3", transitive: false}

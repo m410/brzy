@@ -2,13 +2,12 @@
 #
 name: brzy-ejb
 org: org.brzy
-version: "0.2"
+version: "0.4"
 config_class: org.brzy.ejb.EjbModConfig
 resource_class: org.brzy.ejb.EjbModProvider
 
-smtp_host: localhost
-user_name: ""
-password: ""
+#beans:
+#  - {remote_interface: "", service_name: "", jndi_name: ""}
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-ejb, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-ejb, rev: "0.4", transitive: false}

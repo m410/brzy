@@ -11,7 +11,7 @@ application:
 modules:
   - name: brzy-ejb
     org: org.brzy
-    version: "0.3-SNAPSHOT"
+    version: "0.3"
     jndi: localhost
 logging:
   provider: logback

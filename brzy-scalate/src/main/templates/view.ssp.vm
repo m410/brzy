@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>View</title>
-</head>
-<body id="body">
-<div id="frame">
-	<div id="head">
-		header
-	</div>
-	<div id="body">
-		body
-	</div>
-	<div id="foot">
-		footer
-	</div>
-</div>
-</body>
+<% import org.brzy.view.ViewFunctions._  %>
+<% import org.brzy.d3.Person %>
+<% implicit val req = request %>
+<% val person = request.getAttribute("person").asInstanceOf[Person] %>
+<% attributes("layout") = "/layouts/default.ssp" %>
+<dl>
+	<dt>id</dt>
+	<dd>${person.id}</dd>
+	<dt>first name</dt>
+	<dd>${person.firstName}</dd>
+	<dt>last name</dt>
+	<dd>${person.lastName}</dd>
+	<dt></dt>
+	<dd><a href="${res("persons/"+person.id+"/edit")}">Edit</a></dd>
+</dl>

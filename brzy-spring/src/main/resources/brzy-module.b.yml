@@ -2,13 +2,14 @@
 #
 name: brzy-spring
 org: org.brzy
-version: "0.3-SNAPSHOT"
+version: "0.4"
 config_class: org.brzy.spring.SpringModConfig
 resource_class: org.brzy.spring.SpringModProvider
 
-smtp_host: localhost
-user_name: ""
-password: ""
+application_context: applicationContext.xml
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "0.3-SNAPSHOT", transitive: false}
+  - {conf: compile, org: org.springframework, name: spring-core, rev: "3.0.3.RELEASE"}
+  - {conf: compile, org: org.springframework, name: spring-context, rev: "3.0.3.RELEASE"}
+  - {conf: compile, org: org.springframework, name: spring-beans, rev: "3.0.3.RELEASE"}
+  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "0.4", transitive: false}

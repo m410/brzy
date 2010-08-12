@@ -3,13 +3,16 @@
 #
 name: brzy-jpa
 org: org.brzy
-version: "0.3-SNAPSHOT"
+version: "0.2"
 config_class: org.brzy.jpa.JpaModConfig
 resource_class: org.brzy.jpa.JpaModProvider
+
+persistence_unit: brzy-unit
+
 build_plugin:
-  plugin_reference: "\"org.brzy\"%\"brzy-jpa\"%\"0.3-SNAPSHOT\""
+  plugin_reference: "\"org.brzy\"%\"brzy-jpa\"%\"0.3\""
   project_extends: "org.brzy.jpa.sbt.JpaPlugin"
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: 3.5.0-Final}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
-  - {conf: compile, org: org.brzy, name: brzy-hibernate, rev: "0.3-SNAPSHOT", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-hibernate, rev: "0.2", transitive: false}

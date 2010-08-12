@@ -2,14 +2,20 @@
 #
 name: brzy-email
 org: org.brzy
-version: "0.3-SNAPSHOT"
+version: "0.5"
 config_class: org.brzy.email.EmailModConfig
 resource_class: org.brzy.email.EmailModProvider
 
 smtp_host: localhost
-user_name: ""
-password: ""
+smtp_auth: false
+#user_name:
+#password:
+#mail_from:
+#mail_user:
+#mail_store_protocol:
+mail_transport_protocol: smtp
+mail_debug: false
 
 dependencies:
   - {conf: compile, org: javax.mail, name: mail, rev: "1.4"}
-  - {conf: compile, org: org.brzy, name: brzy-email, rev: "0.3-SNAPSHOT", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-email, rev: "0.5", transitive: false}

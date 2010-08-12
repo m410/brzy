@@ -6,7 +6,7 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-cascal</artifactId>
   <name>Brzy Cascal Module</name>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.4-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy-modules</artifactId>
@@ -105,7 +105,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.3</version>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>

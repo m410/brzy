@@ -11,12 +11,12 @@ application:
 modules:
   - name: brzy-spring
     org: org.brzy
-    version: "0.3-SNAPSHOT"
+    version: "0.3"
     application_context: localhost
 views:
   name: brzy-jsp
   org: org.brzy
-  version: "0.1-SNAPSHOT"
+  version: "0.1"
 logging:
   provider: logback
   appenders:
