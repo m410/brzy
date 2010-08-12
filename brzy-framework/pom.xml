@@ -6,7 +6,7 @@
  	<groupId>org.brzy</groupId>
 	<artifactId>brzy-framework</artifactId>
 	<name>Brzy Framework</name>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
   <parent>
   	<groupId>org.brzy</groupId>
@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.brzy</groupId>
       <artifactId>brzy-shell</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.4-SNAPSHOT</version>
 		</dependency>
     <dependency>
 			<groupId>org.apache.velocity</groupId>

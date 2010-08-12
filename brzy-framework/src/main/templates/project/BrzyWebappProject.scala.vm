@@ -91,6 +91,4 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
   }
 
   override def packageAction = super.packageAction dependsOn(prePackage,logbackXml,webXml,setupWebInf)
-
-  $modules
 }

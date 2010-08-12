@@ -6,7 +6,7 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-mvc</artifactId>
   <name>Brzy MVC</name>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.4-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-config</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.4-SNAPSHOT</version>
     </dependency>
     <!--<dependency>-->
       <!--<groupId>com.twitter</groupId>-->

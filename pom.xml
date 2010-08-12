@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy</groupId>
   <artifactId>brzy</artifactId>
-  <version>1.0</version>
+  <version>0.4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Brzy</name>
   <properties>
