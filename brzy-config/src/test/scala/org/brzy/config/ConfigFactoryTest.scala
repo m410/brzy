@@ -10,8 +10,6 @@ import org.junit.{Ignore, Test, Before}
 
 
 class ConfigFactoryTest extends JUnitSuite {
-  @Before def initialize = {
-  }
 
   @Test def testRuntimeConfig = {
     val url = new File(getClass.getClassLoader.getResource("brzy-webapp.b.yml").getFile)
@@ -39,7 +37,7 @@ class ConfigFactoryTest extends JUnitSuite {
     assertNotNull(config.modules.get)
     assertEquals(1, config.modules.get.size)
 
-    assertEquals(14, config.dependencies.get.size)
+    assertEquals(13, config.dependencies.get.size)
     assertEquals(12, config.webXml.get.size)
   }
 

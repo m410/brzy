@@ -6,7 +6,7 @@
  	<groupId>org.brzy</groupId>
 	<artifactId>brzy-config</artifactId>
 	<name>Brzy Config</name>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.4.1</version>
   <parent>
   	<groupId>org.brzy</groupId>
   	<artifactId>brzy</artifactId>

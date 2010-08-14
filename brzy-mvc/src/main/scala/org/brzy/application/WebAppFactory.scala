@@ -45,6 +45,10 @@ object WebAppFactory {
     }
     val config = makeWebAppConfig(bootConfig, view, persistence, modules)
     log.debug("application class: {}",config.application.applicationClass.get)
-    Construct[WebApp](config.application.applicationClass.get,Array(config))
+
+    if(config.application.applicationClass.isDefined)
+      Construct[WebApp](config.application.applicationClass.get, Array(config))
+    else
+      new WebApp(config)
   }
 }

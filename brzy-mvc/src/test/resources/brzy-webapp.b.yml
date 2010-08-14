@@ -32,7 +32,7 @@ repositories:
 persistence:
   - name: brzy-squeryl
     org: org.brzy
-    version: "0.3-SNAPSHOT"
+    version: "0.4"
     scan_package: *group
     driver: org.postgresql.Driver
     user_name: test

@@ -24,12 +24,12 @@ class Filter extends SFilter {
       chain.doFilter(req,res)
     }
     else { // assume it's an action and append .brzy
-      val ctx = req.asInstanceOf[HttpServletRequest].getContextPath
+      val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
       val forward =
-        if(ctx == "")
+        if(contextPath == "")
           uri.substring(0,uri.length)
         else
-          uri.substring(ctx.length,uri.length)
+          uri.substring(contextPath.length,uri.length)
       
       log.trace("forward: {}",forward)
       req.getRequestDispatcher(forward + ".brzy").forward(req,res)

@@ -190,14 +190,14 @@ object ActionSupport {
 
 
   def pathCompare(url:String)(action:Action):Boolean = {
-    val pathTokens:Array[String] = action.path.split("""/""")
-    val tokens:Array[String] = url.split("""/""")
+    val actionTokens:Array[String] = action.path.replaceAll("//","/").split("""/""")
+    val urlTokens:Array[String] = url.replaceAll("//","/").split("""/""")
 
-    if(pathTokens.size == tokens.size){
+    if(actionTokens.size == urlTokens.size){
       var map = Map[String,String]()
 
-      for (x <- 0 to tokens.size -1)
-        map += tokens(x) -> pathTokens(x)
+      for (x <- 0 to urlTokens.size -1)
+        map += urlTokens(x) -> actionTokens(x)
 
       map.forall((nvp)=> if (nvp._1 == nvp._2 || nvp._2.startsWith("{")) true else false)
     }

@@ -14,18 +14,17 @@ application:
 persistence:
   - name: brzy-squeryl
     org: org.brzy
-    version: "0.3-SNAPSHOT"
+    version: "0.5"
     driver: org.h2.Driver
     user_name: sa
     password: ""
     url: jdbc:h2:test_db
 dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
-#  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.2"}
 modules:
   - name: brzy-tomcat
     org: org.brzy
-    version: "0.3-SNAPSHOT"
+    version: "0.4"
 logging:
   provider: logback
   appenders:

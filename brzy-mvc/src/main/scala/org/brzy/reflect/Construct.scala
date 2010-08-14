@@ -52,9 +52,9 @@ object Construct {
     m.erasure.getConstructor(Array[Class[_]]():_*).newInstance(Array[java.lang.Object]():_*).asInstanceOf[T]
   }
 
-  def apply[T](n:String, a: Array[_<:java.lang.Object]): T = {
-    val c = Class.forName(n)
-    val constructor = c.getConstructor(a.map(_.getClass):_*)
-    constructor.newInstance(a: _*).asInstanceOf[T]
+  def apply[T](name:String, args: Array[_<:java.lang.Object]): T = {
+    val c = Class.forName(name)
+    val constructor = c.getConstructor(args.map(_.getClass):_*)
+    constructor.newInstance(args:_*).asInstanceOf[T]
   }
 }

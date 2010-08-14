@@ -2,17 +2,17 @@ minimalOutput: true
 indentAmount: "  "
 suppressWarnings: false
 encoding: "UTF-8"
- transfers:
-   repositories: org.brzy.config.Repository[]
-   dependencies: org.brzy.config.Dependency[]
-   modules: org.brzy.config.ModuleConfig[]
-   logging: org.brzy.config.Logging
-   environment_overrides: org.brzy.config.App[]
-   application_properties: java.util.HashMap
-   web_xml: java.util.ArrayList[java.lang.Object]
-   persistence: org.brzy.config.ModuleReference[]
-   views: org.brzy.config.Views
-   project: org.brzy.config.Project
-   application: org.brzy.config.Application
- handlers:
+# transfers:
+#   repositories: org.brzy.config.Repository[]
+#   dependencies: org.brzy.config.Dependency[]
+#   modules: org.brzy.config.ModuleConfig[]
+#   logging: org.brzy.config.Logging
+#   environment_overrides: org.brzy.config.App[]
+#   application_properties: java.util.HashMap
+#   web_xml: java.util.ArrayList[java.lang.Object]
+#   persistence: org.brzy.config.ModuleReference[]
+#   views: org.brzy.config.Views
+#   project: org.brzy.config.Project
+#   application: org.brzy.config.Application
+# handlers:
 #   com.mycompany.MyFunkyObject: com.mycompany.jyaml.MyFunkyObjectWrapper

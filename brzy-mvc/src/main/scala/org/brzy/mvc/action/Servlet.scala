@@ -16,9 +16,10 @@ class Servlet extends HttpServlet {
 
   private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    log.trace("request:{}",req.getRequestURI)
+    log.trace("request: {}",req.getRequestURI)
     val actionPath = findActionPath(req.getRequestURI,req.getContextPath)
-
+    log.trace("path: {}",actionPath)
+    
     if(!app.actions.exists(pathCompare(actionPath))) {
       res.sendError(404)
     }

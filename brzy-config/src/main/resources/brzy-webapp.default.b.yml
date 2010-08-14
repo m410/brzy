@@ -10,7 +10,7 @@ project:
 views:
   name: brzy-scalate
   org: org.brzy
-  version: "0.3-SNAPSHOT"
+  version: "0.4"
   config_class: org.brzy.module.ScalateModuleConfig
   file_extension: ".ssp"
   html_version: html5
@@ -32,8 +32,7 @@ repositories:
     url: http://reflections.googlecode.com/svn/repo
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-config, rev: "0.3-SNAPSHOT"}
-  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.3-SNAPSHOT"}
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.4.1"}
   - {conf: runtime, org: org.scala-lang, name: scala-compiler, rev: "2.8.0"}
   - {conf: runtime, org: org.scala-lang, name: scala-library, rev: "2.8.0"}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
@@ -48,9 +47,9 @@ dependencies:
 web_xml:
  - context-param: { param-name : brzy-env, param-value: development}
  - listener: {listener-class: org.brzy.application.WebAppListener}
- - filter: {filter-name: BrzyFilter, filter-class: org.brzy.action.Filter}
+ - filter: {filter-name: BrzyFilter, filter-class: org.brzy.mvc.action.Filter}
  - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}
- - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.action.Servlet, load-on-startup: "1"}
+ - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.mvc.action.Servlet, load-on-startup: "1"}
  - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
  - welcome-file-list: { welcome-file: "index.brzy"}
  - error-page: { error-code: "404", location: "/errors/404.ssp"}
