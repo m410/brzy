@@ -2,7 +2,7 @@
 #
 name: brzy-jsp
 org: org.brzy
-version: "0.1"
+version: "0.2"
 config_class: org.brzy.jsp.JspModConfig
 resource_class: org.brzy.jsp.JspModProvider
 

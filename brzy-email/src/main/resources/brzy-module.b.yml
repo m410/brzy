@@ -2,7 +2,7 @@
 #
 name: brzy-email
 org: org.brzy
-version: "0.5"
+version: "0.6"
 config_class: org.brzy.email.EmailModConfig
 resource_class: org.brzy.email.EmailModProvider
 
@@ -18,4 +18,4 @@ mail_debug: false
 
 dependencies:
   - {conf: compile, org: javax.mail, name: mail, rev: "1.4"}
-  - {conf: compile, org: org.brzy, name: brzy-email, rev: "0.5", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-email, rev: "0.6", transitive: false}

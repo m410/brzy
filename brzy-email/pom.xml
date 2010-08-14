@@ -6,7 +6,7 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-email</artifactId>
   <name>Brzy Email Module</name>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy-modules</artifactId>
@@ -67,26 +67,20 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.scala-tools.testing</groupId>
-      <artifactId>specs_2.8.0</artifactId>
-      <version>1.6.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>mail</artifactId>
       <version>1.4.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.brzy</groupId>
+      <artifactId>brzy-mvc</artifactId>
+      <version>0.4.1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.7</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.brzy</groupId>
-      <artifactId>brzy-mvc</artifactId>
-      <version>0.3</version>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>

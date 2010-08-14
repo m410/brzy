@@ -6,7 +6,7 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-tomcat</artifactId>
   <name>Brzy Tomcat Module</name>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.4</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy-modules</artifactId>
@@ -56,7 +56,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-config</artifactId>
-      <version>0.3</version>
+      <version>0.4.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
