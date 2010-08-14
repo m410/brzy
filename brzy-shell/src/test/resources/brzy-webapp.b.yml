@@ -13,7 +13,7 @@ application:
   webapp_context: mainapp
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
-  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.4"}
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.5"}
 repositories:
   - id: fusesource
     url: http://someurl.com/test
