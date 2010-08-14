@@ -3,6 +3,7 @@ package org.brzy.mvc.action
 import java.lang.reflect.Method
 import collection.mutable.Buffer
 import java.util.regex.Pattern
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -10,7 +11,7 @@ import java.util.regex.Pattern
  */
 class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val viewType:String )
         extends Ordered[Action] {
-
+  private val log = LoggerFactory.getLogger(classOf[Action])
   val returnTypes =  actionMethod.getReturnType
 
   val parameterTypes = actionMethod.getParameterTypes
@@ -26,10 +27,11 @@ class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val view
   }
 
 
-  private val strPattern = "^" + path.replaceAll("""\{.*?\}""","""(.*?)""") + "$"
+  private val strPattern = "^/*" + path.replaceAll("""\{.*?\}""","""(.*?)""") + "$"
   val pattern = strPattern.r
 
   def matchParameters(url:String) = {
+    log.debug("match parameters: {}, {}",strPattern,url)
     val buffer = Buffer[String]()
     val matcher = Pattern.compile(strPattern).matcher(url)
     if(matcher.find)

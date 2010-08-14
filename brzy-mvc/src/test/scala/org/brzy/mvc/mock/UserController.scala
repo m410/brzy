@@ -9,14 +9,11 @@ import org.brzy.mvc.controller.{Path,Controller}
 @Controller("users")
 class UserController {
 
-  @Path("")
-  def list() = "userList"->User.list()
+  @Path("") def list() = "userList"->User.list()
 
-  @Path("{id}")
-	def get(prms:Parameters) = "user"->User.get(prms("id")(0).toLong)
+  @Path("{id}") def get(prms:Parameters) = "user"->User.get(prms("id")(0).toLong)
 
-	@Path("create")
-	def create = "user"->new User()
+	@Path("create") def create = "user"->new User()
 
   @Path("other") def someOther = View("/index")
 

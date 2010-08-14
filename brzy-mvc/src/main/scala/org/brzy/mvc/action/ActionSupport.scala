@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 import scala.collection.JavaConversions._
 import collection.mutable.ListBuffer
 import java.util.Enumeration
+import java.lang.String
 
 
 /**
@@ -190,8 +191,9 @@ object ActionSupport {
 
 
   def pathCompare(url:String)(action:Action):Boolean = {
-    val actionTokens:Array[String] = action.path.replaceAll("//","/").split("""/""")
-    val urlTokens:Array[String] = url.replaceAll("//","/").split("""/""")
+    val actionPrePath = if (action.path.startsWith("/")) action.path else "/" + action.path
+    val actionTokens:Array[String] = actionPrePath.replaceAll("//", "/").split("/")
+    val urlTokens:Array[String] = url.replaceAll("//", "/").split("/")
 
     if(actionTokens.size == urlTokens.size){
       var map = Map[String,String]()
