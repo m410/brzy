@@ -12,8 +12,7 @@ import org.scalatest.junit.JUnitSuite
 
 class ActionSupportTest extends JUnitSuite {
 
-  @Test
-  def testBuildArgs = {
+  @Test def testBuildArgs = {
     val request = new MockHttpServletRequest("GET", "/users/10.brzy")
 
     val ctlr = new UserController()
@@ -24,12 +23,10 @@ class ActionSupportTest extends JUnitSuite {
     assertEquals(1,result.length)
     val parameters: Parameters = result(0).asInstanceOf[Parameters]
     assertEquals(1,parameters.size)
-    assertEquals("10",(parameters.get("id").get)(0))
+    assertEquals("10",parameters("id"))
   }
 
-  @Test
-  def testParseResults = {
-
+  @Test def testParseResults = {
     val request = new MockHttpServletRequest(new MockServletContext()) {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
@@ -48,32 +45,28 @@ class ActionSupportTest extends JUnitSuite {
     assertNotNull(request.getAttribute("attributeKey"))
   }
 
-  @Test
-  def testFindActionPath = {
+  @Test def testFindActionPath = {
     val context = "/home"
     val uri = "/home/users"
     val service = new Servlet
     assertEquals("/users", findActionPath(uri,context))
   }
 
-  @Test
-  def testFindActionPath2 = {
+  @Test def testFindActionPath2 = {
     val context = "/home"
     val uri = "/home/user.brzy"
     val service = new Servlet
     assertEquals("/user", findActionPath(uri,context))
   }
 
-  @Test
-  def testFindActionPath3 = {
+  @Test def testFindActionPath3 = {
     val context = ""
     val uri = "/home/10/create.brzy"
     val service = new Servlet
     assertEquals("/home/10/create", findActionPath(uri,context))
   }
 
-  @Test
-  def testFindActionPath4 = {
+  @Test def testFindActionPath4 = {
     val context = "/brzy"
     val uri = "/brzy/.brzy"
     val service = new Servlet

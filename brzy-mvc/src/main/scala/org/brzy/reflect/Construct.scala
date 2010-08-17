@@ -11,6 +11,13 @@ import java.beans.ConstructorProperties
  */
 object Construct {
 
+  private[this] val StringCls = classOf[String]
+  private[this] val IntCls = classOf[Int]
+  private[this] val LongCls = classOf[Long]
+  private[this] val FloatCls = classOf[Float]
+  private[this] val DoubleCls = classOf[Double]
+  private[this] val BooleanCls = classOf[Boolean]
+
   /**
    * If there is more than one constructor this looks for the one with the most
    * arguments and uses it.  This uses the Name annotation to identify the
@@ -32,8 +39,20 @@ object Construct {
     val c = m.erasure
     val argNames = c.getAnnotation(classOf[ConstructorProperties]).value.asInstanceOf[Array[String]]
     val constructor = c.getConstructors.find(c => c.getParameterTypes.size == map.size).get
-    val args = argNames.map(name => map.get(name).get).asInstanceOf[Array[_ <: Object]]
-    constructor.newInstance(args: _*).asInstanceOf[T]
+
+    val args = argNames.map(name => {
+      val argType = constructor.getParameterTypes()(argNames.indexOf(name))
+      argType match {
+        case StringCls => map(name)
+        case BooleanCls => map(name).toBoolean
+        case IntCls => map(name).toInt
+        case LongCls => map(name).toLong
+        case DoubleCls => map(name).toDouble
+        case FloatCls => map(name).toFloat
+        case _ => null // TODO need to handle dates and other objects somehow
+      }
+    }).asInstanceOf[Array[_ <: Object]]
+    constructor.newInstance(args:_*).asInstanceOf[T]
   }
 
   /**

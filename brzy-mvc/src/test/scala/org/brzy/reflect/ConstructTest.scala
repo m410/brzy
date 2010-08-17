@@ -29,6 +29,12 @@ class ConstructTest extends JUnitSuite {
   @Test def createWithStr = {
     assertNotNull(Construct[Fixture]("org.brzy.reflect.Fixture",Array("x","y","z")))
   }
+
+  @Test def createWithCast = {
+    val fixture = Construct.withCast[Fixture3](Map("y" -> "10", "x" -> "x"))
+    assertNotNull(fixture)
+    assertEquals(10,fixture.y)
+  }
 }
 
 
@@ -37,3 +43,6 @@ case class Fixture(x: String, y: String, z: String)
 
 
 class Fixture2()
+
+@ConstructorProperties(Array("x", "y"))
+case class Fixture3(x: String, y: Int)

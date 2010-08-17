@@ -12,24 +12,25 @@ import java.lang.String
  */
 abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E]) {
   val persist: Persistable[E, PK]
-  private val entityClass = m.erasure
-  private val entityName = {
-    val name = entityClass.getName
-    name.substring(0,1).toLowerCase + name.substring(1,name.length) 
+
+  private[this] val entityClass = m.erasure
+  private[this] val entityName = {
+    val name = entityClass.getSimpleName
+    name.substring(0,1).toLowerCase + name.substring(1)
   }
 
   implicit def applyCrudOps(e: E) = new PersistentCrudOps(e)
 
-  @Path("")
+  @Action("")
   def list = entityName + "sList" -> persist.list
 
-  @Path("{id}")
-  def show(params: Parameters) = entityName -> persist.load(params("id")(0))
+  @Action("{id}")
+  def show(params: Parameters) = entityName -> persist.load(params("id"))
 
-  @Path("create")
+  @Action("create")
   def create() = entityName -> persist.construct
 
-  @Path("save")
+  @Action("save")
   def save(p: Parameters) = {
     val entity = persist.construct(p) 
     val validation = entity.validate
@@ -39,14 +40,14 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
       (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + ".save", "Saved"))
     }
     else {
-      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "s/create"))
+      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
     }
   }
 
-  @Path("{id}/edit")
-  def edit(params: Parameters) = entityName -> persist.load(params("id")(0))
+  @Action("{id}/edit")
+  def edit(params: Parameters) = entityName -> persist.load(params("id"))
 
-  @Path("{id}/update")
+  @Action("{id}/update")
   def update(p: Parameters) = {
     val entity = persist.construct(p)
     val validation = entity.validate
@@ -56,7 +57,7 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
       (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + ".update", "Update"))
     }
     else {
-      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "s/create"))
+      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
     }
   }
 }

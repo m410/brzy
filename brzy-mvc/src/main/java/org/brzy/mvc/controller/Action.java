@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Michael Fortin
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Path {
+public @interface Action {
     String value();
 //    String method() default "GET";
 }

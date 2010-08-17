@@ -18,12 +18,12 @@ class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val view
 
   val defaultView = {
     val clazz = inst.getClass
-    val folder =
+    val folder:String =
       if(clazz.getSimpleName.indexOf("Controller") == -1)
         clazz.getSimpleName
       else
         clazz.getSimpleName.substring(0,clazz.getSimpleName.indexOf("Controller"))
-    "/" + folder.toLowerCase + "/"+ actionMethod.getName
+    "/" + folder.substring(0,1).toLowerCase + folder.substring(1) + "/"+ actionMethod.getName
   }
 
 

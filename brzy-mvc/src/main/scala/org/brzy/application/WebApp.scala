@@ -3,7 +3,7 @@ package org.brzy.application
 
 import org.brzy.mvc.action.Action
 import org.brzy.mvc.interceptor.{InterceptorResource, ManagedThreadContext, Invoker}
-import org.brzy.mvc.controller.{ControllerScanner, Path, Controller}
+import org.brzy.mvc.controller.{ControllerScanner, Action => ActionAnnotation, Controller}
 import org.brzy.mvc.interceptor.ProxyFactory._
 
 import org.brzy.config.mod.{Mod, ModProvider}
@@ -146,8 +146,8 @@ class WebApp(val config: WebAppConfig) {
       log.debug("load actions from controller: {}", ctl)
       val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
       for (method <- ctl.getClass.getSuperclass.getMethods
-           if method.getAnnotation(classOf[Path]) != null) {
-        val methodPath = method.getAnnotation(classOf[Path])
+           if method.getAnnotation(classOf[ActionAnnotation]) != null) {
+        val methodPath = method.getAnnotation(classOf[ActionAnnotation])
         log.debug("controllerPath : " + classPath)
         log.debug("methodPath     : " + methodPath)
 
