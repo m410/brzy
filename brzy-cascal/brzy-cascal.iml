@@ -42,7 +42,7 @@
     <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.5.4" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
-    <orderEntry type="library" name="Maven: org.brzy:brzy-mvc:0.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.brzy:brzy-mvc:0.4.4" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.5-RC1" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0-rc3" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.11.0.GA" level="project" />

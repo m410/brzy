@@ -10,6 +10,8 @@ import org.squeryl.PrimitiveTypeMode._
 import org.brzy.reflect.Construct
 import org.brzy.persistence.{PersistentCrudOps, Persistable}
 import java.lang.String
+import org.slf4j.LoggerFactory
+import reflect.Manifest
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class
@@ -26,26 +28,31 @@ import java.lang.String
 class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema with Persistable[T,Long]{
   val db = table[T]
   val validationFactory = jValidation.buildDefaultValidatorFactory
-
+  private[this] val log = LoggerFactory.getLogger(classOf[SquerylPersistence[_]])
+  
   class EntityCrudOps(t: T) extends PersistentCrudOps(t){
     override def validate() = Validation[T](validationFactory.getValidator.validate(t))
 
-    override def insert() = db.insert(t)
+    override def insert() = {
+      log.trace("insert: {}",t)
+      db.insert(t)
+    }
 
     override def update() = db.update(t)
 
     override def delete() = db.deleteWhere(e => e.id === t.id)
   }
 
+  override def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
+
   override implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
 
-  def get(id: Long):T = from(db)(s => where(s.id === id) select (s)).head
+  def get(id: Long):T = db.lookup(id).get
 
-  def load(id: String) = from(db)(s => where(s.id === id.toLong) select (s)).head
+  def load(id: String) = db.lookup(id.toLong).get
 
   def list():List[T] = from(db)(a => select(a)).toList
 
   def list(size:Int, offset:Int):List[T] = from(db)(a => select(a)).toList
 
-  override def construct(params:Parameters)(implicit m:Manifest[T]):T = null.asInstanceOf[T]
 }

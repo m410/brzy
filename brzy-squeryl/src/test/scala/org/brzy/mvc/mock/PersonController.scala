@@ -1,34 +1,34 @@
 package org.brzy.mock
 
 import org.brzy.mvc.action.args.Parameters
-import org.brzy.mvc.controller.{Controller,Path}
+import org.brzy.mvc.controller.{Controller,Action}
 
 @Controller("persons")
 class PersonController {
 
-  @Path("")
+  @Action("")
   def list =  "personsList"->Person.list()
 
-  @Path("{id}")
-  def get(params:Parameters) =  "person"->Person.get(params("id")(0).toLong)
+  @Action("{id}")
+  def get(params:Parameters) =  "person"->Person.get(params("id").toLong)
 
-  @Path("create")
+  @Action("create")
   def create() = "person"->new Person
 
-  @Path("save")
+  @Action("save")
   def save(p:Parameters) = {
-    val person = new Person(0, p("firstName")(0), p("lastName")(0))
+    val person = new Person(0, p("firstName"), p("lastName"))
 		person.insert()
     "person"->person
   }
 
-  @Path("{id}/edit")
-  def edit(params:Parameters) =  "person"->Person.get(params("id")(0).toLong)
+  @Action("{id}/edit")
+  def edit(params:Parameters) =  "person"->Person.get(params("id").toLong)
 
 
-  @Path("{id}/update")
+  @Action("{id}/update")
   def update(p:Parameters) = {
-		val person = new Person(p("id")(0).toLong, p("firstName")(0), p("lastName")(0))
+		val person = new Person(p("id")(0).toLong, p("firstName"), p("lastName"))
 		person.update()
     "person"->person
   }

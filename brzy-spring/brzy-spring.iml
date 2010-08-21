@@ -41,7 +41,7 @@
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:3.0.3.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
-    <orderEntry type="library" name="Maven: org.brzy:brzy-mvc:0.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.brzy:brzy-mvc:0.4.4" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.5-RC1" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0-rc3" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.11.0.GA" level="project" />

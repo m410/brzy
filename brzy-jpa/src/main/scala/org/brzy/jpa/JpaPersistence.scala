@@ -87,18 +87,10 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Mani
 
     val instance =
         if(params.exists(p => p._1 equals "id"))
-          get(toType(classOf[java.lang.Long],(params.get("id").get)(0)).asInstanceOf[PK])
+          get(params("id").toLong.asInstanceOf[PK])
         else
           entityClass.newInstance
 
-    params.foreach(p => applyParam(p, instance.asInstanceOf[T]))
     instance.asInstanceOf[T]
 	}
-
-  private[jpa] def applyParam(nvp:(String, Array[String]), inst:T):Unit = {
-    val method:Method = entityClass.getMethods.find(mtd => mtd.getName == nvp._1 + "_$eq").orNull
-
-    if(method != null)
-      method.invoke(inst,toType(method.getParameterTypes()(0),nvp._2(0)))
-  }
 }

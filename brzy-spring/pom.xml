@@ -85,7 +85,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
-      <version>0.4.1</version>
+      <version>0.4.4</version>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>
