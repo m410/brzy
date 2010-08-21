@@ -16,7 +16,6 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
     // nested recursive call on the threadContext
     def traverse(it: Iterator[ManagedThreadContext]): AnyRef = {
       val managedFactory = it.next
-
       var returnValue: AnyRef = null
       var nested = false
 

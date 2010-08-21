@@ -2,7 +2,7 @@ package org.brzy.mvc.controller
 
 import org.brzy.mvc.action.args.Parameters
 import org.brzy.mvc.action.returns.{Redirect, Flash, Model, View}
-import org.brzy.persistence.{PersistentCrudOps, Persistable, Persistent}
+import org.brzy.persistence.{Persistable, Persistent}
 import java.lang.String
 
 /**
@@ -12,14 +12,13 @@ import java.lang.String
  */
 abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E]) {
   val persist: Persistable[E, PK]
+  implicit def applyCrudOps(e: E) = persist.newPersistentCrudOps(e)
 
   private[this] val entityClass = m.erasure
   private[this] val entityName = {
     val name = entityClass.getSimpleName
     name.substring(0,1).toLowerCase + name.substring(1)
   }
-
-  implicit def applyCrudOps(e: E) = new PersistentCrudOps(e)
 
   @Action("")
   def list = entityName + "sList" -> persist.list
@@ -57,7 +56,7 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
       (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + ".update", "Update"))
     }
     else {
-      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
+      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "s/create"))
     }
   }
 }

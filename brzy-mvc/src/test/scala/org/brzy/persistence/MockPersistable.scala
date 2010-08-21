@@ -2,13 +2,14 @@ package org.brzy.persistence
 
 import java.lang.String
 import org.brzy.mvc.action.args.Parameters
+import org.brzy.reflect.Construct
 import collection.immutable.Map
 import javax.validation.Validation
 
 
 class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
 
-  def construct(m: Parameters) = null.asInstanceOf[E]
+  override def construct(p: Parameters)(implicit m:Manifest[E]) = Construct.withCast[E](p)
 
   def list(size: Int, offset: Int) = Nil
 

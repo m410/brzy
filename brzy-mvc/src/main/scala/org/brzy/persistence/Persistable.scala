@@ -5,12 +5,13 @@ import org.brzy.mvc.action.args.Parameters
 import org.brzy.reflect.Construct
 
 /**
- * Document Me..
+ * This is a persistent super class that can be used by persistence  modules to enable the
+ * use of the Abstract CrudController. It's used by Squeryl Module and the JPA Module.  
  * 
  * @author Michael Fortin
  */
 trait Persistable[T,PK] {
-  
+
   def get(id:PK):T 
 
   def load(id:String):T
@@ -24,14 +25,22 @@ trait Persistable[T,PK] {
   def construct(params:Parameters)(implicit m:Manifest[T]):T = null.asInstanceOf[T]
 
   def construct()(implicit m:Manifest[T]):T = Construct[T]()
-  
-  implicit def applyCrudOps(t:T) = new PersistentCrudOps(t)
 
+  /**
+   * Used by the abstract CrudController to to add persistence capability to the controller.
+   */
+  def newPersistentCrudOps(t:T) = new PersistentCrudOps(t)
+
+  implicit def applyCrudOps(t:T) = new PersistentCrudOps(t)
 }
 
+/**
+ * Implements the crud operations that are applied directly to instances of persistent
+ * objects.  This needs to be created as an implicit value in the companion object.
+ */
 class PersistentCrudOps[T](t:T) {
-  def insert = {}
-  def update = {}
-  def delete = {}
-  def validate:Validation[T] = new Validation[T]()
+  def insert():Unit = {}
+  def update():Unit = {}
+  def delete():Unit = {}
+  def validate():Validation[T] = new Validation[T]()
 }
