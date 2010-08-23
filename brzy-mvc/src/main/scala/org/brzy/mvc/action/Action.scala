@@ -26,7 +26,6 @@ class Action(val path:String, val actionMethod:Method, val inst:AnyRef, val view
     "/" + folder.substring(0,1).toLowerCase + folder.substring(1) + "/"+ actionMethod.getName
   }
 
-
   private val strPattern = "^/*" + path.replaceAll("""\{.*?\}""","""(.*?)""") + "$"
   val pattern = strPattern.r
 

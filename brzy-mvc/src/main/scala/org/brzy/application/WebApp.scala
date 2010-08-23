@@ -151,7 +151,12 @@ class WebApp(val config: WebAppConfig) {
         log.debug("controllerPath : " + classPath)
         log.debug("methodPath     : " + methodPath)
 
-        val pathValue = classPath.value + "/" + methodPath.value
+        val pathValue =
+              if(methodPath.value.equals(""))
+                classPath.value
+              else
+                classPath.value + "/" + methodPath.value
+        
         val action = new Action(pathValue, method, ctl, viewResource.fileExtension)
         log.debug("action: " + action)
         list += action
