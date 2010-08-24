@@ -22,7 +22,7 @@ trait Persistable[T,PK] {
 
   def construct(map:Map[String,Any])(implicit m:Manifest[T]):T = Construct[T](map)
 
-  def construct(params:Parameters)(implicit m:Manifest[T]):T = null.asInstanceOf[T]
+  def construct(params:Parameters)(implicit m:Manifest[T]):T = Construct.withCast[T](params)
 
   def construct()(implicit m:Manifest[T]):T = Construct[T]()
 

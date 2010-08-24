@@ -6,6 +6,8 @@ import java.text.{DecimalFormat, SimpleDateFormat}
 import java.net.URLEncoder
 
 /**
+ * TODO, this belongs with the scalate module.
+ *
  * @author Michael Fortin
  */
 object ViewFunctions {
@@ -51,5 +53,16 @@ object ViewFunctions {
 
   def encode(path:String) = {
     URLEncoder.encode(path, "UTF-8")  
+  }
+
+  def flash()(implicit request:HttpServletRequest):String = {
+    if(request.getSession.getAttribute("flash-message") != null)
+      request.getSession.getAttribute("flash-message").asInstanceOf[FlashMessage].show
+    else
+      ""
+  }
+
+  def hasFlash()(implicit request:HttpServletRequest):Boolean = {
+    request.getSession.getAttribute("flash-message") != null
   }
 }
