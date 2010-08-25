@@ -36,7 +36,7 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
 
     if (validation.passes) {
       entity.insert
-      (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + ".save", "Saved"))
+      (Redirect("/" + entityName + "s/" + entity.id), Flash("New "+entityName + " saved." , entityName + ".save"))
     }
     else {
       (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
@@ -53,10 +53,17 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
 
     if (validation.passes) {
       entity.update
-      (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + ".update", "Update"))
+      (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + " updated." , entityName + ".update"))
     }
     else {
       (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "s/create"))
     }
+  }
+
+  @Action("{id}/delete")
+  def delete(p:Parameters) = {
+    val entity = persist.load(p("id"))
+    entity.delete
+    (Redirect("/" + entityName + "s"),Flash(entityName +  " was Deleted.",entityName + ".delete"))
   }
 }
