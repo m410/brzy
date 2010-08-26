@@ -7,7 +7,5 @@ import org.brzy.mvc.action.returns.View
  */
 @Controller("")
 class HomeController {
-
-	@Path("")
-	def index = View("/index")
+  @Path("") def index = View("/index")
 }

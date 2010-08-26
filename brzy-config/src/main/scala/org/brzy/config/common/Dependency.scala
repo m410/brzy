@@ -76,3 +76,11 @@ class Dependency(m: Map[String, AnyRef]) extends Config(m) with Ordered[Dependen
         .toHashCode
   }
 }
+
+class LooseDependencyOrdering extends Ordering[Dependency] {
+  def compare(x: Dependency, y: Dependency) = new CompareToBuilder()
+        .append(x.conf.getOrElse(null), y.conf.getOrElse(null))
+        .append(x.org.getOrElse(null), y.org.getOrElse(null))
+        .append(x.name.getOrElse(null), y.name.getOrElse(null))
+        .toComparison
+}
