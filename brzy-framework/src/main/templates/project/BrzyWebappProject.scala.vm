@@ -31,7 +31,7 @@ class BrzyWebappProject(info: ProjectInfo) extends DefaultWebProject(info) {
     <dependencies>
 	  <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1" conf="brzy" />
 	  <dependency org="commons-lang" name="commons-lang" rev="2.5" conf="brzy" />
-	  <dependency org="org.brzy" name="brzy-config" rev="0.4.1" conf="brzy" />
+	  <dependency org="org.brzy" name="brzy-config" rev="0.5" conf="brzy" />
 	  <dependency org="org.brzy" name="brzy-shell" rev="0.4" conf="brzy" />
 #foreach($dep in $dependencies)
 #if($dep.org().get())

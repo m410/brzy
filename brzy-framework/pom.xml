@@ -6,7 +6,7 @@
  	<groupId>org.brzy</groupId>
 	<artifactId>brzy-framework</artifactId>
 	<name>Brzy Framework</name>
-  <version>0.5-SNAPSHOT</version>
+  <version>0.5</version>
 	<packaging>pom</packaging>
   <parent>
   	<groupId>org.brzy</groupId>
