@@ -25,6 +25,8 @@ object Construct {
    */
   def apply[T](map: Map[String, Any])(implicit m: Manifest[T]): T = {
     val c = m.erasure
+    assert(c.getAnnotation(classOf[ConstructorProperties]) != null, "Missing ConstructorProperties Annotation")
+
     val argNames = c.getAnnotation(classOf[ConstructorProperties]).value.asInstanceOf[Array[String]]
     val constructor = c.getConstructors.find(c => c.getParameterTypes.size == map.size).get
     val args = argNames.map(name => map.get(name).get).asInstanceOf[Array[_ <: Object]]
@@ -37,7 +39,10 @@ object Construct {
    */
   def withCast[T](map: Map[String, String])(implicit m: Manifest[T]): T = {
     val c = m.erasure
+    assert(c.getAnnotation(classOf[ConstructorProperties]) != null, "Missing ConstructorProperties Annotation")
+
     val argNames = c.getAnnotation(classOf[ConstructorProperties]).value.asInstanceOf[Array[String]]
+    // TODO this is wrong, what if there are more parameters submitted than used in the constructor
     val constructor = c.getConstructors.find(c => c.getParameterTypes.size == map.size).get
 
     val args = argNames.map(name => {
