@@ -11,10 +11,11 @@ import org.brzy.mvc.action.args.Parameters
 @serializable
 @Entity
 @Table(name="users")
-//@NamedQueries()
+@NamedQueries(Array(new NamedQuery(name="list", query="select distinct u from User u")))
 @NamedQuery(name="test", query="select u from User u")
 @ConstructorProperties(Array("id","version","firstName","lastName"))
 class User {
+  
   @BeanProperty @Id var id:Long = _
   @BeanProperty @Version var version:Int = _
   @BeanProperty @NotNull @Size(min=4,max=30) var firstName:String = _
