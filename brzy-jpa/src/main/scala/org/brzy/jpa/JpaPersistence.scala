@@ -8,6 +8,7 @@ import java.lang.reflect.Method
 
 import org.brzy.util.ParameterConversion._
 import org.brzy.jpa.RichQuery._
+import org.brzy.reflect.Construct
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
@@ -84,13 +85,6 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Mani
 
 	def make(params:Parameters):T = {
     log.debug("make with params: {}",params)
-
-    val instance =
-        if(params.exists(p => p._1 equals "id"))
-          get(params("id").toLong.asInstanceOf[PK])
-        else
-          entityClass.newInstance
-
-    instance.asInstanceOf[T]
+    Construct.withCast[T](params)
 	}
 }

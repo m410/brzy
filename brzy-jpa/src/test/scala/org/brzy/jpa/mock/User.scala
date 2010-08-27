@@ -4,6 +4,8 @@ import org.brzy.jpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
 import reflect.BeanProperty
+import java.beans.ConstructorProperties
+import org.brzy.mvc.action.args.Parameters
 
 
 @serializable
@@ -11,6 +13,7 @@ import reflect.BeanProperty
 @Table(name="users")
 //@NamedQueries()
 @NamedQuery(name="test", query="select u from User u")
+@ConstructorProperties(Array("id","version","firstName","lastName"))
 class User {
   @BeanProperty @Id var id:Long = _
   @BeanProperty @Version var version:Int = _
@@ -33,4 +36,13 @@ class User {
   */
 }
 
-object User extends JpaPersistence[User,java.lang.Long] 
+object User extends JpaPersistence[User,java.lang.Long] {
+  override def make(p: Parameters) = {
+    val user = new User()
+    user.id= p("id").toLong
+    user.version = 1
+    user.firstName = p("firstName")
+    user.lastName = p("lastName")
+    user
+  }
+}

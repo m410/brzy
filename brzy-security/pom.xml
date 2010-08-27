@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
-      <version>0.4.4</version>
+      <version>0.5</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
