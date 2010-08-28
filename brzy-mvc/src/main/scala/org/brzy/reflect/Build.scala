@@ -4,7 +4,10 @@ import collection.mutable.ArrayBuffer
 import java.beans.ConstructorProperties
 
 /**
- * Document Me..
+ * This uses the builder design pattern to construct scala classes.  It requires that the
+ * class has the java.bean.ConstructorProperies annotation at the class level and a matching
+ * constructor.  It creats the array of constructor arguments and using reflection creates
+ * an instance of the class.
  * 
  * @author Michael Fortin
  */
@@ -12,6 +15,9 @@ object Build {
 
   def apply[T]()(implicit m: Manifest[T]) = new Builder[T]()
 
+  /**
+   * The Builer implemetation
+   */
   class Builder[T]()(implicit m: Manifest[T]) {
     private[this] val cls = m.erasure
     private[this] val argNames =  cls.getAnnotation(classOf[ConstructorProperties]).value
@@ -23,11 +29,17 @@ object Build {
 
     private[this] val args = new ArrayBuffer[java.lang.Object](constructor.getParameterTypes.length)
 
-    def arg(a:(String, java.lang.Object)) = {
+    /**
+     * Populate one of the constructor arguments.
+     */
+    def arg(a:(String, java.lang.Object)) = { // TODO: Change Object to Any
       args.insert(argNames.indexOf(a._1),a._2)
       this
     }
 
+    /**
+     * Create a new instance.
+     */
     def make:T = constructor.newInstance(args.toArray:_*).asInstanceOf[T]
   }
 }
