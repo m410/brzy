@@ -1,3 +1,16 @@
+/*
+ * Copyright 2010 Michael Fortin <mike@brzy.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");  you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed 
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
+ * language governing permissions and limitations under the License.
+ */
 package org.brzy.webapp
 
 import org.brzy.config.common.{Config, BootConfig}
@@ -15,7 +28,9 @@ import org.slf4j.LoggerFactory
 import java.lang.String
 
 /**
- * Document Me..
+ * Creates a configuration from the brzy-webapp.b.yml configation file.  It can be
+ * used in two different scenarios.  In the running web application in the WebAppLister
+ * class or in the build system.
  *
  * @author Michael Fortin
  */
@@ -23,7 +38,7 @@ object ConfigFactory {
   private val log = LoggerFactory.getLogger(getClass)
 
   /**
-   *
+   * Make the boot configuration.
    */
   def makeBootConfig(appFile: File, environment: String): BootConfig = {
 
@@ -67,12 +82,15 @@ object ConfigFactory {
   }
 
   /**
-   *
+   *  Loads the web application class
    */
   def makeWebAppConfig(c: BootConfig, view: Mod, persistence: List[Mod], mods: List[Mod]) = {
     new WebAppConfig(c, view, persistence, mods)
   }
 
+  /**
+   * Loads the application configuration from the classpath
+   */
   def makeRuntimeModule(reference: Mod): Mod = {
     val modResource: String = "brzy-modules/" + reference.name.get + "/brzy-module.b.yml"
     val cpUrl = getClass.getClassLoader.getResource(modResource)
@@ -90,6 +108,9 @@ object ConfigFactory {
     }
   }
 
+  /**
+   * Loads the application configuration from the file system
+   */
   def makeBuildTimeModule(reference: Mod, modResourceDir: File): Mod = {
     val pFile = new File(modResourceDir, reference.name.get)
     val modFile = new File(pFile, "brzy-module.b.yml")
@@ -108,7 +129,7 @@ object ConfigFactory {
   }
 
   /**
-   *
+   *  Writes the merged configurations to a file.
    */
   def writeConfigToFile(config: Config, yamlFile: File) = {
     val jmap = new JHashMap[String, AnyRef]()
@@ -119,7 +140,7 @@ object ConfigFactory {
   }
 
   /**
-   *
+   * Downloads the declared modules in the configuration.
    */
   def installModule(destDir: File, mod: Mod): Unit = {
 

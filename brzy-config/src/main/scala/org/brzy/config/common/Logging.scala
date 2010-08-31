@@ -1,3 +1,16 @@
+/*
+ * Copyright 2010 Michael Fortin <mike@brzy.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");  you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed 
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
+ * language governing permissions and limitations under the License.
+ */
 package org.brzy.config.common
 
 import org.apache.commons.lang.builder.{CompareToBuilder, HashCodeBuilder, EqualsBuilder}
@@ -5,6 +18,9 @@ import java.util.{List => JList}
 import collection.JavaConversions._
 
 /**
+ * Creates the logging entry from the brzy-webapp.b.yml configuration file.  This
+ * is currently wired to Logback, but could later be tooled to accept log4j or JUL.
+ *
  * @author Michael Fortin
  */
 class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging] {
@@ -60,7 +76,7 @@ class Logging(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logging
 }
 
 /**
- *
+ *  An appender for logging output.
  */
 class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Appender] with Ordered[Appender] {
   val configurationName = "Appender"
@@ -118,7 +134,7 @@ class Appender(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Append
 }
 
 /**
- *
+ *  An individual Logger (or category) used by the logging api.
  */
 class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] with Ordered[Logger] {
   val configurationName = "Logger"
@@ -164,7 +180,7 @@ class Logger(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Logger] 
 }
 
 /**
- *
+ * The root logger
  */
 class Root(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Root] {
   val configurationName = "Root"
