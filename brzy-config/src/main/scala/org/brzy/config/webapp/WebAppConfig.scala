@@ -60,6 +60,15 @@ class WebAppConfig(val init: BootConfig,
     SortedSet(dependencyBuffer: _*)
   }
 
+  val dependencyExcludes: SortedSet[Dependency] = {
+    val dependencyBuffer = ListBuffer[Dependency]()
+
+    if (init.dependencyExcludes.isDefined)
+      dependencyBuffer ++= init.dependencyExcludes.get
+
+    SortedSet(dependencyBuffer: _*)
+  }
+
   val repositories: SortedSet[Repository] = {
     val repositoryBuffer = ListBuffer[Repository]()
 

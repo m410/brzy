@@ -17,7 +17,7 @@ import org.junit.Test
 import org.junit.Assert._
 import org.brzy.config._
 import mod.Mod
-import org.brzy.webapp.ConfigFactory._
+import org.brzy.config.ConfigFactory._
 import java.io.File
 import org.scalatest.junit.JUnitSuite
 

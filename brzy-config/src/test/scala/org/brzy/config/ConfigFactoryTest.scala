@@ -15,11 +15,10 @@ package org.brzy.config
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.brzy.webapp.ConfigFactory
 import java.io.File
 import org.brzy.config.mod.Mod
 import org.brzy.util.FileUtils._
-import org.junit.{Ignore, Test, Before}
+import org.junit.{Ignore, Test}
 
 
 class ConfigFactoryTest extends JUnitSuite {
@@ -46,11 +45,13 @@ class ConfigFactoryTest extends JUnitSuite {
     assertNotNull(config.logging.get.appenders.get)
     assertEquals(2, config.logging.get.appenders.get.size)
     assertNotNull(config.dependencies.get)
+    assertNotNull(config.dependencyExcludes.get)
 
     assertNotNull(config.modules.get)
     assertEquals(1, config.modules.get.size)
 
-    assertEquals(13, config.dependencies.get.size)
+    assertEquals(12, config.dependencies.get.size)
+    assertEquals(1, config.dependencyExcludes.get.size)
     assertEquals(12, config.webXml.get.size)
   }
 

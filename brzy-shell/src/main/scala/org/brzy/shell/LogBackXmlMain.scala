@@ -16,7 +16,7 @@ package org.brzy.shell
 import org.brzy.config.mod.Mod
 import xml.XML
 import java.io.File
-import org.brzy.webapp.ConfigFactory
+import org.brzy.config.ConfigFactory
 
 /**
  * Document Me..

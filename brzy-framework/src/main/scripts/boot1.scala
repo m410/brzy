@@ -1,6 +1,6 @@
 import java.io._
 import org.brzy.shell.BuildProperties
-import org.brzy.webapp.ConfigFactory._
+import org.brzy.config.ConfigFactory._
 
 object Boot1 extends Application {
 

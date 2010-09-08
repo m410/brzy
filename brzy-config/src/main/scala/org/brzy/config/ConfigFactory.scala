@@ -11,24 +11,26 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp
+package org.brzy.config
 
 import org.brzy.config.common.{Config, BootConfig}
-import java.util.{Map => JMap, HashMap => JHashMap, List => JList, ArrayList => JArrayList}
-import org.ho.yaml.Yaml
-import java.net.URL
-import java.lang.reflect.Constructor
 import org.brzy.config.mod.Mod
 import org.brzy.util.NestedCollectionConverter._
 import org.brzy.util.UrlUtils._
 import org.brzy.util.FileUtils._
 import org.brzy.config.webapp.WebAppConfig
+
+import org.ho.yaml.Yaml
+
 import java.io.{InputStream, File}
+import java.util.{Map => JMap, HashMap => JHashMap, List => JList, ArrayList => JArrayList}
+import java.net.URL
+import java.lang.reflect.Constructor
+
 import org.slf4j.LoggerFactory
-import java.lang.String
 
 /**
- * Creates a configuration from the brzy-webapp.b.yml configation file.  It can be
+ * Creates a configuration from the brzy-webapp.b.yml configuration file.  It can be
  * used in two different scenarios.  In the running web application in the WebAppLister
  * class or in the build system.
  *
@@ -118,7 +120,13 @@ object ConfigFactory {
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-      val modClass = Class.forName(configClass).asInstanceOf[Class[_]]
+
+
+
+      val loader = this.getClass.getClassLoader
+      val modClass = loader.loadClass(configClass).asInstanceOf[Class[_]]
+
+//      val modClass = Class.forName(configClass).asInstanceOf[Class[_]]
       val constructor: Constructor[_] = modClass.getConstructor(classOf[Map[String, AnyRef]])
       val newModuleInstance = constructor.newInstance(yaml).asInstanceOf[Mod]
       newModuleInstance << reference

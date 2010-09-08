@@ -33,8 +33,8 @@ repositories:
 
 dependencies:
   - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.5"}
-  - {conf: runtime, org: org.scala-lang, name: scala-compiler, rev: "2.8.0"}
-  - {conf: runtime, org: org.scala-lang, name: scala-library, rev: "2.8.0"}
+  - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "2.8.0"}
+  - {conf: provided, org: org.scala-lang, name: scala-library, rev: "2.8.0"}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8"}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
@@ -42,7 +42,6 @@ dependencies:
   - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.24"}
   - {conf: compile, org: org.jyaml, name: jyaml, rev: "1.3"}
   - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
-  - {conf: test, org: junit, name: junit, rev: "4.7"}
 
 web_xml:
  - context-param: { param-name : brzy-env, param-value: development}

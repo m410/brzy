@@ -20,7 +20,7 @@ import org.ho.yaml.Yaml
 import java.util.{Map => JMap}
 import org.brzy.util.NestedCollectionConverter._
 import org.junit.{Ignore, Test}
-import org.brzy.webapp.ConfigFactory
+import org.brzy.config.ConfigFactory
 
 
 class BootConfigTest extends JUnitSuite {

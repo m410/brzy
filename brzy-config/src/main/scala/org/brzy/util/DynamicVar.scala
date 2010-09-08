@@ -19,7 +19,7 @@ package org.brzy.util
  * 
  * @author Michael Fortin
  */
-@deprecated
+@deprecated("This isn't used anywhere, it's just here as an example")
 class DynamicVar[T] {
   private val threadLocal = new ThreadLocal[T]
   def get: T = threadLocal.get

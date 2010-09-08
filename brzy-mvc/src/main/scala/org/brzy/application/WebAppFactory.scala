@@ -14,7 +14,7 @@
 package org.brzy.application
 
 import java.io.File
-import org.brzy.webapp.ConfigFactory._
+import org.brzy.config.ConfigFactory._
 import java.net.URL
 import org.brzy.config.mod.Mod
 import org.brzy.config.webapp.WebAppConfig

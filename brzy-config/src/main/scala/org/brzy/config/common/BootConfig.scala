@@ -14,7 +14,6 @@
 package org.brzy.config.common
 
 import org.brzy.config.mod.Mod
-import java.lang.reflect.Constructor
 import java.lang.String
 import collection.mutable.ListBuffer
 
@@ -31,7 +30,6 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
   private val test = "test"
   val configurationName: String = "Boot Configuration"
   val environment: Option[String] = m.get("environment").asInstanceOf[Option[String]].orElse(None)
-  val testFramework: Option[String] = m.get("test_framework").asInstanceOf[Option[String]].orElse(None)
   val application: Option[Application] = m.get("application") match {
     case s: Some[_] => Option(new Application(s.get.asInstanceOf[Map[String, String]]))
     case _ => None
@@ -86,6 +84,16 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
         None
     case _ => None
   }
+
+  val dependencyExcludes: Option[List[Dependency]] = m.get("dependency_excludes") match {
+    case Some(s) =>
+      if (s != null)
+        Option(s.asInstanceOf[List[Map[String, AnyRef]]].map(i => new Dependency(i)).toList)
+      else
+        None
+    case _ => None
+  }
+  
   val modules: Option[List[Mod]] = m.get("modules") match {
     case Some(s) =>
       if (s != null) {
@@ -153,6 +161,16 @@ class BootConfig(m: Map[String, AnyRef]) extends Config(m) with MergeConfig[Boot
             this.dependencies.get.map(_.asMap).toList
           else if (that.dependencies.isDefined)
             that.dependencies.get.map(_.asMap).toList
+          else
+            null
+        },
+        "dependency_excludes" -> {
+          if (this.dependencyExcludes.isDefined && that.dependencyExcludes.isDefined)
+            this.dependencyExcludes.get.map(_.asMap).toList ++ that.dependencyExcludes.get.map(_.asMap).toList
+          else if (this.dependencyExcludes.isDefined)
+            this.dependencyExcludes.get.map(_.asMap).toList
+          else if (that.dependencyExcludes.isDefined)
+            that.dependencyExcludes.get.map(_.asMap).toList
           else
             null
         },
