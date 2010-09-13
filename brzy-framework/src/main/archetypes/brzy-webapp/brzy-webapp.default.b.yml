@@ -1,0 +1,58 @@
+
+
+project:
+  scala_version: 2.8.0
+  sbt_version: 0.7.4
+  package_type: war
+  module_resources: ".brzy/modules"
+  module_repository: http://www.brzy.org/nexus/content/repositories/releases
+
+views:
+  name: brzy-scalate
+  org: org.brzy
+  version: "0.5"
+  config_class: org.brzy.module.ScalateModuleConfig
+  file_extension: ".ssp"
+  html_version: html5
+
+repositories:
+  - id: brzy
+    name: brzy
+    url: http://brzy.org/nexus/content/repositories/releases
+  - id: java-net2
+    name: java-net2
+    url: http://download.java.net/maven/2
+  - id: scala-tools
+    name: scala-tools
+    url: http://scala-tools.org/repo-releases
+  - id: jboss
+    name: jboss
+    url: http://repository.jboss.com/maven2
+  - id: reflections-repo
+    url: http://reflections.googlecode.com/svn/repo
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.5"}
+  - {conf: runtime, org: org.scala-lang, name: scala-compiler, rev: "2.8.0"}
+  - {conf: runtime, org: org.scala-lang, name: scala-library, rev: "2.8.0"}
+  - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
+  - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8"}
+  - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA"}
+  - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8"}
+  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.24"}
+  - {conf: compile, org: org.jyaml, name: jyaml, rev: "1.3"}
+  - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
+  - {conf: test, org: junit, name: junit, rev: "4.7"}
+
+web_xml:
+ - context-param: { param-name : brzy-env, param-value: development}
+ - listener: {listener-class: org.brzy.application.WebAppListener}
+ - filter: {filter-name: BrzyFilter, filter-class: org.brzy.mvc.action.Filter}
+ - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}
+ - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.mvc.action.Servlet, load-on-startup: "1"}
+ - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
+ - welcome-file-list: { welcome-file: "index.brzy"}
+ - error-page: { error-code: "404", location: "/errors/404.ssp"}
+ - error-page: { error-code: "500", location: "/errors/500.ssp"}
+ - error-page: {exception-type: java.lang.Throwable, location: "/errors/500.ssp"}
+

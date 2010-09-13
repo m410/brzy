@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configuration>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+    
+    
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern> %-4relative [%thread] %-5level %class - %msg%n </pattern>
+    </encoder>
+  </appender><appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE">
+    <File>logs/brzy.log </File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <FileNamePattern> brzy.%d{yyyy-MM-dd}.log </FileNamePattern>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern> %-4relative [%thread] %-5level %class - %msg%n </pattern>
+    </encoder>
+  </appender>
+  <logger level="debug" name="org.brzy"></logger>
+  <root>
+    <level value="INFO"></level>
+    <appender-ref ref="FILE"></appender-ref>
+  </root>
+</configuration>
