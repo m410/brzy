@@ -15,6 +15,7 @@ package org.brzy.fab
 
 
 import org.apache.commons.cli.{Options, PosixParser, HelpFormatter}
+import print.{Info, Question, Conversation}
 
 /**
  * Command line app to create new brzy projects.  The available project types come from
@@ -36,8 +37,28 @@ object NewMain {
 
 		if(cmd.hasOption("help")) {
 			val formatter = new HelpFormatter
-			formatter.printHelp("fab-new [options] [actions]", options)
+			formatter.printHelp("fab-new [options] [archetype]", options)
 			exit(0)
 		}
+
+    if (cmd.hasOption("version")) {
+      println("Brzy Fab(ricate) New Project, Version: 0.2")
+      println("Brzy Fab(ricate) Home: " + System.getenv("BRZY_HOME"))
+      println("Java: " + System.getProperty("java.vm.name") + " ( build " + System.getProperty("java.runtime.version") + ")")
+      println("Java Home: " + System.getenv("JAVA_HOME"))
+      println("Scala: " + util.Properties.versionString)
+      exit(0)
+    }
+
+    val talk = new Conversation(cmd.hasOption("debug") || cmd.hasOption("verbose"), cmd.hasOption("debug"))
+    implicit val iTalk = talk
+
+    talk.begin(Array(""))
+    talk.say(Info("THIS IS NOT IMPLEMENTED YET. SORRY",true))
+    // TODO hard-wire to the brzy-webapp archetype
+    val archetypeName = talk.ask(Question("archetype: "))
+    talk.say(Info("you picked: " + archetypeName,true))
+    talk.end
+    exit(0)
   }
 }

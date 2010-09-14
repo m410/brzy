@@ -15,6 +15,7 @@ package org.brzy.fab
 
 
 import org.apache.commons.cli.{Options, PosixParser, HelpFormatter}
+import print.{Info, Question, Conversation}
 
 /**
  * Command line app to manage the archetype database.
@@ -25,6 +26,7 @@ object DbMain {
   val options = {
 		val options = new Options
 		options.addOption("help",    false, "Print this message.")
+		options.addOption("version",    false, "Verson number.")
 		options
 	}
 
@@ -37,5 +39,24 @@ object DbMain {
 			formatter.printHelp("fab-db [options] [actions]", options)
 			exit(0)
 		}
+
+    if (cmd.hasOption("version")) {
+      println("Brzy Fab(ricate) Database Manager, Version: 0.2")
+      println("Brzy Fab(ricate) Home: " + System.getenv("BRZY_HOME"))
+      println("Java: " + System.getProperty("java.vm.name") + " ( build " + System.getProperty("java.runtime.version") + ")")
+      println("Java Home: " + System.getenv("JAVA_HOME"))
+      println("Scala: " + util.Properties.versionString)
+      exit(0)
+    }
+
+    val talk = new Conversation(cmd.hasOption("debug") || cmd.hasOption("verbose"), cmd.hasOption("debug"))
+    implicit val iTalk = talk
+
+    talk.begin(Array(""))
+    talk.say(Info("THIS IS NOT IMPLEMENTED YET. SORRY",true))
+//    val archetypeName = talk.ask(Question("archetype: "))
+//    talk.say(Info("you picked: " + archetypeName,true))
+    talk.end
+    exit(0)
   }
 }

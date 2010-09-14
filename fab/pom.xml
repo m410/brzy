@@ -6,7 +6,7 @@
   <groupId>org.brzy.fab</groupId>
   <artifactId>fab</artifactId>
   <name>Brzy Fab(ricate)</name>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-share</artifactId>
-      <version>0.1</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

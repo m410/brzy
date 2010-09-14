@@ -6,7 +6,7 @@
   <groupId>org.brzy.fab</groupId>
   <artifactId>fab-share</artifactId>
   <name>Brzy Fab(ricate) Shared lib</name>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>

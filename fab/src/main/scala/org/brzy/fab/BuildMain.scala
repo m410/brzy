@@ -26,12 +26,11 @@ import scala.tools.nsc.{Interpreter, GenericRunnerSettings, Settings}
 import scala.Option
 
 /**
-# get dependencies: https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/Ivy.java
-#
-# http://github.com/matthild/serverpages/blob/master/serverpages/source/scala/com/mh/serverpages/scala_/ScalaCompiler.scala
-# http://days2010.scala-lang.org/node/138/146
-# http://scala-programming-language.1934581.n4.nabble.com/Compiling-a-Scala-Snippet-at-run-time-td2000704.html
-# http://harrah.github.com/browse/samples/compiler/scala/tools/nsc/Settings.scala.html
+ * This runs the main build script.  Bassed on the configuration file in the current directory
+ * it loads the archetype for the build file and executes the task passed in as an
+ * argument.  If not arguments at set it calls the default task.
+ *
+ * @author Michael Fortin
  */
 object BuildMain {
   val options = {
@@ -56,7 +55,7 @@ object BuildMain {
     }
 
     if (cmd.hasOption("version")) {
-      println("Brzy Fab(ricate) Version: 0.1")
+      println("Brzy Fab(ricate) Version: 0.2")
       println("Brzy Fab(ricate) Home: " + System.getenv("BRZY_HOME"))
       println("Java: " + System.getProperty("java.vm.name") + " ( build " + System.getProperty("java.runtime.version") + ")")
       println("Java Home: " + System.getenv("JAVA_HOME"))
@@ -120,13 +119,6 @@ object BuildMain {
     interpreter.interpret("import " + description.className)
     interpreter.interpret("val arch = new " + description.simpleName + "(context,actions,plugins.toList)")
 
-    // if(cmd.hasOption("debug")
-    // interpreter.beQuietDuring({
-    //	i.bind("result", "Array[Any]", res)
-    //	i.interpret("class Fred {def foo = 3}")
-    //	i.interpret("result(0) = new Fred")
-    //})
-
     interpreter.interpret("try {")
     if (cmd.hasOption("tasks"))
       interpreter.interpret("arch.taskInfo")
@@ -180,7 +172,6 @@ object BuildMain {
   }
 
   protected[fab] def loadPlugins(interpreter: Interpreter)(implicit talk: Conversation) = {
-    // todo with module plugins once modules are installed
     interpreter.interpret("val plugins = collection.mutable.ListBuffer[Class[_<:BuildPlugin]]()")
     val scriptsDir = Directory("scripts")
 
