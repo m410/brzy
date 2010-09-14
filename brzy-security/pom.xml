@@ -6,11 +6,11 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-security</artifactId>
   <name>Brzy Security Module</name>
-  <version>0.4</version>
+  <version>0.5-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy-modules</artifactId>
-    <version>1.0</version>
+    <version>0.6-SNAPSHOT</version>
   </parent>
   <build>
     <plugins>
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
-      <version>0.5</version>
+      <version>0.6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

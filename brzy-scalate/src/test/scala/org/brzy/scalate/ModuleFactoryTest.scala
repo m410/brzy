@@ -18,7 +18,7 @@ import org.junit.Test
 import org.junit.Assert._
 import java.io.File
 import org.brzy.config.mod.Mod
-import org.brzy.webapp.ConfigFactory
+import org.brzy.config.ConfigFactory
 
 
 class ModuleFactoryTest extends JUnitSuite {

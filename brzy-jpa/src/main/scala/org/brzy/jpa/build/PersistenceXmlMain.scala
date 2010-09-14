@@ -13,7 +13,7 @@
  */
 package org.brzy.jpa.build
 
-import org.brzy.webapp.ConfigFactory
+import org.brzy.config.ConfigFactory
 import xml.XML
 import java.io.File
 

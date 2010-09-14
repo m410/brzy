@@ -4,7 +4,7 @@ import org.apache.velocity.VelocityContext
 import org.brzy.config.common.{Dependency, Repository}
 import org.brzy.config.mod.Mod
 import collection.JavaConversions._
-import org.brzy.webapp.ConfigFactory._
+import org.brzy.config.ConfigFactory._
 
 GenScalate.main(args)
 

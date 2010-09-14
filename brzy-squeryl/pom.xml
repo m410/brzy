@@ -6,11 +6,11 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-squeryl</artifactId>
   <name>Brzy Squeryl Module</name>
-  <version>0.7</version>
+  <version>0.8-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy-modules</artifactId>
-    <version>1.0</version>
+    <version>0.6-SNAPSHOT</version>
   </parent>
   <build>
     <plugins>
@@ -100,7 +100,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-mvc</artifactId>
-      <version>0.5</version>
+      <version>0.6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

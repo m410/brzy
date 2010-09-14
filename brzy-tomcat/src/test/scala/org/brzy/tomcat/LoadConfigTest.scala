@@ -16,7 +16,7 @@ package org.brzy.tomcat
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.webapp.ConfigFactory
+import org.brzy.config.ConfigFactory
 import org.brzy.config.mod.Mod
 
 
