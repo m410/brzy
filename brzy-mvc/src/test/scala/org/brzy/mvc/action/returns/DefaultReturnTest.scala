@@ -15,7 +15,7 @@ package org.brzy.mvc.action.returns
 
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.mvc.action.ActionSupport._
+import org.brzy.mvc.action.Action._
 import org.brzy.mvc.action.Action
 import org.brzy.mvc.mock.UserController
 import org.junit.{Ignore, Test}

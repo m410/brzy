@@ -37,15 +37,15 @@ class IvyXml(config:InitConfig) {
   <dependencies defaultconfmapping="*->*,!sources,!javadoc" defaultconf="default">
   {if(config.modules.isDefined)
       for(mod <-config.modules.get) yield
-      <dependency org={mod.org.get} name={mod.name.get} rev={mod.version.get} m:classifier="module"/>
+      <dependency org={mod.org.get} name={mod.name.get} rev={mod.version.get} m:classifier="module" transitive="false" />
   }
   {if(config.persistence.isDefined)
     for(psst <- config.persistence.get) yield
-    <dependency org={psst.org.get} name={psst.name.get} rev={psst.version.get} m:classifier="module"/>
+    <dependency org={psst.org.get} name={psst.name.get} rev={psst.version.get} m:classifier="module" transitive="false" />
   }
   {if(config.views.isDefined){
     val view = config.views.get
-    <dependency org={view.org.get} name={view.name.get} rev={view.version.get} m:classifier="module"/>
+    <dependency org={view.org.get} name={view.name.get} rev={view.version.get} m:classifier="module" transitive="false" />
   }}
   </dependencies>
 </ivy-module>

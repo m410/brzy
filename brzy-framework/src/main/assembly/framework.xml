@@ -31,7 +31,7 @@
       <unpack>false</unpack>
       <!--<scope>runtime</scope>-->
       <excludes>
-        <exclude>org.brzy.fab:archetype</exclude>
+        <exclude>org.brzy:webapp-archetype</exclude>
         <exclude>org.brzy:brzy-config</exclude>
       </excludes>
     </dependencySet>
@@ -39,7 +39,7 @@
       <outputDirectory>archetypes/brzy-webapp</outputDirectory>
       <unpack>false</unpack>
       <excludes>
-        <exclude>org.brzy.fab:cli</exclude>
+        <exclude>org.brzy.fab:fab</exclude>
       </excludes>
     </dependencySet>
   </dependencySets>

@@ -25,7 +25,10 @@ import java.io.File
  * @author Michael Fortin
  */
 class IvyXml(config:WebAppConfig) {
-  
+
+  // work around for bug with sorted sets and xml
+  private val dependencies = config.dependencies.toList
+
   val ivy =
 <ivy-module version="2.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -42,15 +45,15 @@ class IvyXml(config:WebAppConfig) {
     <artifact type="jar" ext="jar" conf="default"/>
   </publications>
   <dependencies defaultconfmapping="*->*,!sources,!javadoc" defaultconf="default">
-    {for(dp <- config.dependencies) yield
+    {for(dp <- dependencies) yield
     if(dp.excludes.isDefined)
-    <dependency org={dp.org.get} name={dp.name.get} rev={dp.rev.get} cxx={dp.conf.get}>
+    <dependency org={dp.org.get} name={dp.name.get} rev={dp.rev.get} conf={dp.conf.get} transitive={dp.transitive.getOrElse(true).toString}>
       {for(exclude <- dp.excludes.get) yield
       <exclude org={exclude.org.get} name={exclude.name.get} />
       }
     </dependency>
     else
-    <dependency org={dp.org.get} name={dp.name.get} rev={dp.rev.get} cxx={dp.conf.get}/>
+    <dependency org={dp.org.get} name={dp.name.get} rev={dp.rev.get} conf={dp.conf.get} transitive={dp.transitive.getOrElse(true).toString}/>
     }
     {for(exclude <- config.dependencyExcludes) yield {
     <exclude org={exclude.org.get} module={exclude.name.get} />
@@ -58,10 +61,5 @@ class IvyXml(config:WebAppConfig) {
   </dependencies>
 </ivy-module>
 
-  def saveToFile(path:String) = {
-    val xmlContent = ivy.toString
-    val writer = new BufferedWriter(new FileWriter(new File(path)))
-    writer.write(xmlContent.replaceAll("cxx=","conf="))
-    writer.close
-  }
+  def saveToFile(path:String) = XML.save(path, ivy, "UTF-8", true, null)
 }

@@ -14,7 +14,7 @@
 package org.brzy.mvc.action
 
 import org.brzy.application.WebApp
-import ActionSupport._
+import Action._
 import org.slf4j.LoggerFactory
 import javax.servlet.http._
 import javax.servlet.{ServletResponse, ServletRequest}

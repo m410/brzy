@@ -43,6 +43,7 @@ object DependencyResolver {
     if(!base.exists)
        base.mkdirs
 
+    webappConfig.dependencies.foreach(d=>line.say(Debug("dep: " + d)))
     val settingsXml = new IvySettingsXml(webappConfig)
     settingsXml.saveToFile(settingsFile.getAbsolutePath)
 

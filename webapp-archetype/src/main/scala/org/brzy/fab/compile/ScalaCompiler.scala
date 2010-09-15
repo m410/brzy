@@ -33,18 +33,20 @@ class ScalaCompiler(out:PrintWriter) extends Compiler {
     val compiler = new Global( settings, reporter )
 
     val list = findFiles(sourceDirectory)
+    list.foreach(f=>out.write("src: " + f.getAbsolutePath + util.Properties.lineSeparator))
+    
     ( new compiler.Run ).compile( list.map( _.toString ) )
 
     // Bail out if compilation failed
     if(reporter.hasErrors) {
       reporter.printSummary
-      throw new RuntimeException( "Compilation failed:\n" + messageCollector.toString )
+      error( "Compilation failed: " + messageCollector.toString )
     }
   }
 
   private def error( message: String ): Unit = {
     out.write(message)
-    throw new RuntimeException( "Compilation failed:\n" + message )
+    error( "Compilation failed: " + message )
   }
 
   private def buildClassPath( files:Array[File] ): String = {
@@ -63,7 +65,7 @@ class ScalaCompiler(out:PrintWriter) extends Compiler {
   }
 
   private def findFiles( root: File ): List[File] = {
-    if( root.isFile )
+    if( root.isFile && root.getName.endsWith(".java") || root.getName.endsWith(".scala"))
       List( root )
     else
       makeList( root.listFiles ).flatMap { f => findFiles( f ) }

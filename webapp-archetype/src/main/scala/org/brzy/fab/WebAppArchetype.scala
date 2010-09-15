@@ -40,11 +40,9 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
     error("No Configuration file at: " + configFile.getAbsolutePath)
 
   line.say(Debug("config: " + configFile.getAbsolutePath))
-  //  val testBootConfig: BootConfig = makeBootConfig(configFile, "test")
   val buildBootConfig: BootConfig = makeBootConfig(configFile, ctx.environment)
   val webAppConfig: WebAppConfig = makeWebAppConfig(buildBootConfig)
   ctx.properties += "webAppConfig" -> webAppConfig
-
 
   // create phases & plugins
   val plugins = {
@@ -57,13 +55,13 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
   }
 
   val phases = List(
-    new CleanPhase(ctx),
-    new CompilePhase(ctx),
-    new TestPhase(ctx),
-    new PackagePhase(ctx),
-    new DependencyPhase(ctx),
-    new DocPhase(ctx),
-    new PublishPhase(ctx))
+      new CleanPhase(ctx),
+      new CompilePhase(ctx),
+      new TestPhase(ctx),
+      new PackagePhase(ctx),
+      new DependencyPhase(ctx),
+      new DocPhase(ctx),
+      new PublishPhase(ctx))
 
   def build(args: Array[String]): Unit = {
 
@@ -88,7 +86,10 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
         line.say(Info("actions"))
         val tasks = SeqBuilder(plugins, phases)
         tasks.taskList.foreach(info => {
-          line.say(Info(info.name + ": " + info.taskType + ": " + info.desc + ": " + info.seq,true))
+          line.say(Info(info.name + ": " +
+                  info.taskType + ": " +
+                  info.desc + ": depends" +
+                  info.seq.map(_.name).mkString("[",", ","]"), true))
         })
       }
     }

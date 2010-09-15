@@ -60,11 +60,7 @@ object Files {
       fs.toList
     }
     else if (path.equals("**")) {
-      val fs = ListBuffer[JFile]() // TODO this will need to be fixed
-      files.foreach(f => {
-        f.listFiles.foreach(sub => fs += sub)
-      })
-      fs.toList
+      error("Double star (**) wildcards are not supported yet.")
     }
     else { // path = * plus some value
       val Pattern = path.replace("*", "(.+)").r

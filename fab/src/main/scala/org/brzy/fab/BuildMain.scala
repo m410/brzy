@@ -21,6 +21,7 @@ import module.ModuleResolver
 import config.LoadInitConfig
 import org.apache.commons.cli._
 
+import java.io.{File=>JFile}
 import io.Source
 import scala.tools.nsc.{Interpreter, GenericRunnerSettings, Settings}
 import scala.Option
@@ -41,6 +42,7 @@ object BuildMain {
     options.addOption("verbose", false, "Verbose output.")
     options.addOption("debug", false, "Debug output.")
     options.addOption("env", true, "Set the environment.  Override the default.")
+    options.addOption("mods", false, "Reload build Modules.")
     options
   }
 
@@ -71,37 +73,37 @@ object BuildMain {
     val workingDir = System.getProperty("user.dir")
     talk.say(Info("working directory: " + workingDir))
 
-    val brzyHome = System.getenv("BRZY_HOME")
-    talk.say(Info("brzy home directory: " + brzyHome))
+    val brzyHomeStr = System.getenv("BRZY_HOME")
+    val brzyHome = new JFile(brzyHomeStr)
+    talk.say(Info("brzy home directory: " + brzyHomeStr))
 
     val configFile = File("*.b.yml")
-    val archetypeName = configFile.getName.substring(0, configFile.getName.length - 6)
-    val description = ArchetypeDatabase.list.find(desc => desc.name == archetypeName) match {
+    val archName = configFile.getName.substring(0, configFile.getName.length - 6)
+    val archDesc = ArchetypeDatabase.list.find(desc => desc.name == archName) match {
       case Some(e) => e
-      case _ => error("No Archetype Found by name: " + archetypeName)
+      case _ => error("No Archetype Found by name: " + archName)
     }
 
-    val defaultPath = System.getenv("BRZY_HOME") + "/archetypes/" +archetypeName+"/" +archetypeName+".default.b.yml"
-    val defaultConfigFile = File(defaultPath)
+    val defaultConfigFile = File(brzyHome,"/archetypes/" + archName + "/" + archName + ".default.b.yml")
     talk.say(Info("default config: " + defaultConfigFile.getAbsolutePath))
     talk.say(Info("app config: " + configFile.getAbsolutePath))
 
-    talk.subject(Phase("init")) {
+    if (!File(".brzy/modules").exists || cmd.hasOption("mods")) {
       talk.subject(Task("load-mod")) {
         val defaultConfig = LoadInitConfig(defaultConfigFile)
         val appConfig = LoadInitConfig(configFile)
         ModuleResolver(defaultConfig << appConfig)
       }
     }
-    val archetypeClasspath = Classpath(description.baseDir.listFiles.map(_.getAbsolutePath).toList)
+    val cpath = archDesc.baseDir.listFiles.filter(_.getName.endsWith(".jar"))
+    val archetypeClasspath = Classpath(cpath.map(_.getAbsolutePath).toList)
     var settings = new GenericRunnerSettings(str => talk.say(Info(str)))
-    val moduleClasspath = Classpath(Files(".brzy/modules/*/*.jar").map(_.getAbsolutePath))
+    val moduleClasspath = Classpath(Files(".brzy/modules/*/*.jar").filter(_.getName.endsWith(".jar")).map(_.getAbsolutePath))
     val pluginClasspath = makePluginClasspath
-    talk.subject(Phase("init")) {
-      talk.subject(Task("load-deps")) {
-       loadBuildDependencies(archetypeClasspath :: moduleClasspath :: pluginClasspath :: Nil, settings)
-      }
+    talk.subject(Task("load-deps")) {
+      loadBuildDependencies(archetypeClasspath :: moduleClasspath :: pluginClasspath :: Nil, settings)
     }
+
 
     var interpreter = new Interpreter(settings, talk.out)
     talk.subject(Phase("init")) {
@@ -116,8 +118,11 @@ object BuildMain {
       }
     }
 
-    interpreter.interpret("import " + description.className)
-    interpreter.interpret("val arch = new " + description.simpleName + "(context,actions,plugins.toList)")
+//    interpreter.interpret("import org.brzy.config.ConfigFactory")
+//    interpreter.interpret("println(\"class: \" + classOf[ConfigFactory])")
+
+    interpreter.interpret("import " + archDesc.className)
+    interpreter.interpret("val arch = new " + archDesc.simpleName + "(context,actions,plugins.toList)")
 
     interpreter.interpret("try {")
     if (cmd.hasOption("tasks"))
@@ -138,10 +143,11 @@ object BuildMain {
   protected[fab] def loadBuildDependencies(cp: List[Classpath], settings: Settings)(implicit talk: Conversation) = {
     talk.say(Debug("setup interpreter dependencies"))
     settings.classpath.value = ""
-    val cli = File(System.getenv("BRZY_HOME") + "/lib/cli-0.1.jar")
 
-    settings.classpath.append(cli.getAbsolutePath)
-    talk.say(Debug("cp: " + cli.getAbsolutePath))
+//    val cli = File(System.getenv("BRZY_HOME") + "/lib/cli-0.1.jar")
+//    settings.classpath.append(cli.getAbsolutePath)
+//    talk.say(Debug("cp: " + cli.getAbsolutePath))
+
     cp.foreach(_.paths.foreach(path => {
       settings.classpath.append(path)
       talk.say(Debug("cp: " + path))
@@ -173,15 +179,25 @@ object BuildMain {
 
   protected[fab] def loadPlugins(interpreter: Interpreter)(implicit talk: Conversation) = {
     interpreter.interpret("val plugins = collection.mutable.ListBuffer[Class[_<:BuildPlugin]]()")
-    val scriptsDir = Directory("scripts")
+    val scriptsDir = File("scripts")
 
-    scriptsDir.listFiles.foreach(script => {
-      if (script.getName.endsWith("Plugin.scala")) {
-        interpreter.interpret(Source.fromFile(script).mkString)
-        val className = script.getName.substring(0, script.getName.length - 6)
-        interpreter.interpret("plugins += classOf[" + className + "]")
-        talk.say(Debug("add script: " + className))
-      }
+    if (scriptsDir.exists) {
+      scriptsDir.listFiles.foreach(script => {
+        if (script.getName.endsWith("Plugin.scala")) {
+          interpreter.interpret(Source.fromFile(script).mkString)
+          val className = script.getName.substring(0, script.getName.length - 6)
+          interpreter.interpret("plugins += classOf[" + className + "]")
+          talk.say(Info("add script: " + className))
+        }
+      })
+    }
+
+    val plugins = Files(".brzy/modules/*/scripts/*Plugin.scala")
+    plugins.foreach(script=>{
+      interpreter.interpret(Source.fromFile(script).mkString)
+      val className = script.getName.substring(0, script.getName.length - 6)
+      interpreter.interpret("plugins += classOf[" + className + "]")
+      talk.say(Info("add plugin: " + className))
     })
   }
 }

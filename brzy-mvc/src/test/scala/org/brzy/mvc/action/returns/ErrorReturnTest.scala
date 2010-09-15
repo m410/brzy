@@ -19,7 +19,7 @@ import org.junit.Assert._
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
 import org.brzy.mvc.mock.UserController
 import org.brzy.mvc.action.Action
-import org.brzy.mvc.action.ActionSupport._
+import org.brzy.mvc.action.Action._
 import java.lang.reflect.Method
 
 class ErrorReturnTest extends JUnitSuite {

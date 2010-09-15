@@ -1,10 +1,10 @@
-package org.brzy.config
+package org.brzy.config.file
 
 import java.io.File
 
 import collection.mutable.{ListBuffer, HashMap}
 import collection.JavaConversions._
-import org.ho.yaml.Yaml
+import org.ho.yaml.{Yaml=>JYaml}
 import java.util.{Map => JMap, List => JList}
 
 /**
@@ -14,7 +14,7 @@ import java.util.{Map => JMap, List => JList}
  */
 object Yaml {
   def apply(file:File) = {
-    convertMap(Yaml.load(file).asInstanceOf[JMap[String, AnyRef]])
+    convertMap(JYaml.load(file).asInstanceOf[JMap[String, AnyRef]])
   }
 
   protected[this]  def convertMap(map: JMap[String, AnyRef]): Map[String, AnyRef] = {

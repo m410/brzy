@@ -16,6 +16,7 @@ package org.brzy.fab.dependency
 
 import xml.XML
 import org.brzy.config.webapp.WebAppConfig
+import java.io.{File, FileWriter, BufferedWriter}
 
 /**
  * Document Me..
@@ -24,18 +25,20 @@ import org.brzy.config.webapp.WebAppConfig
  */
 class IvySettingsXml(config:WebAppConfig) {
 
+  private val repos = config.repositories.toList
+
   val xml =
 <ivysettings>
   <property name="revision" value="SNAPSHOT" override="false"/>
   <settings defaultResolver="default"/>
   <resolvers>
     <ibiblio name="maven-local" root="file://${user.home}/.m2/repository" m2compatible="true" />
-    {for(repo <- config.repositories; if(repo.name.isDefined && repo.url.isDefined)) yield
-    <ibiblio name={repo.name.get} root={repo.url.get} />
+    {for(repo <- repos; if(repo.name.isDefined && repo.url.isDefined)) yield
+    <ibiblio xyz="true" name={repo.name.get} root={repo.url.get}  />
     }
     <chain name="default">
       <resolver ref="maven-local"/>
-      {for(repo <- config.repositories;if(repo.name.isDefined && repo.url.isDefined)) yield
+      {for(repo <- repos;if(repo.name.isDefined && repo.url.isDefined)) yield
       <resolver ref={repo.name.get} />
       }
     </chain>

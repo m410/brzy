@@ -17,13 +17,13 @@ import args.Parameters
 import org.brzy.mvc.mock.UserController
 import org.junit.Test
 import org.junit.Assert._
-import ActionSupport._
+import Action._
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest}
 import org.scalatest.junit.JUnitSuite
 
 
-class ActionSupportTest extends JUnitSuite {
+class ActionCompanionTest extends JUnitSuite {
 
   @Test def testBuildArgs = {
     val request = new MockHttpServletRequest("GET", "/users/10.brzy")

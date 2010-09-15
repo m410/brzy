@@ -27,7 +27,8 @@ import org.brzy.fab.print._
 import org.apache.ivy.util.MessageLoggerEngine
 
 /**
- * Document Me..
+ * This is run early in the Fab build.  It checks the configuration for modules and
+ * downloads them using Ivy to a the ivy cache and a local application cache.
  *
  * @author Michael Fortin
  */

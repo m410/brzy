@@ -20,7 +20,7 @@ import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import org.brzy.mvc.action.Action
 import org.junit.{Ignore, Test}
 import org.brzy.mvc.mock.UserController
-import org.brzy.mvc.action.ActionSupport._
+import org.brzy.mvc.action.Action._
 import java.lang.reflect.Method
 
 class XmlReturnTest  extends JUnitSuite {
