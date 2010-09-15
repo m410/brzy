@@ -1,0 +1,7 @@
+
+repositories:
+  - id: a-repo
+    url: http://someplace.com
+
+dependencies:
+  - {org: org.brzy, name: somename, rev: "1.2"}

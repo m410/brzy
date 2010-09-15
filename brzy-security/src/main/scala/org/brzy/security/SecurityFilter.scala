@@ -18,7 +18,7 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 
 import org.slf4j.{LoggerFactory}
 import org.brzy.application.WebApp
-import org.brzy.mvc.action.ActionSupport._
+import org.brzy.mvc.action.Action._
 import org.brzy.mvc.action.Action
 
 /**
