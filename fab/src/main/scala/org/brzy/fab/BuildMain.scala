@@ -144,10 +144,6 @@ object BuildMain {
     talk.say(Debug("setup interpreter dependencies"))
     settings.classpath.value = ""
 
-//    val cli = File(System.getenv("BRZY_HOME") + "/lib/cli-0.1.jar")
-//    settings.classpath.append(cli.getAbsolutePath)
-//    talk.say(Debug("cp: " + cli.getAbsolutePath))
-
     cp.foreach(_.paths.foreach(path => {
       settings.classpath.append(path)
       talk.say(Debug("cp: " + path))

@@ -19,33 +19,71 @@ import org.brzy.fab.print.Debug
 import org.brzy.fab.task.Task
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.doc.{Settings, DocFactory}
-import org.brzy.fab.file.File
+import org.brzy.fab.dependency.DependencyResolver
+import org.brzy.config.webapp.WebAppConfig
+import org.brzy.fab.file.{Files, File}
+import collection.immutable.List
+import java.io.{File => JFile}
 
 /**
  * Generates Javadoc and Scaladoc
- * 
+ *
  * @author Michael Fortin
  */
-@Phase(name="doc",desc="Generate Documentation",defaultTask="doc-task")
-class DocPhase(ctx:BuildContext) {
-
-  @Task(name="pre-doc",desc="Document preperation")
+@Phase(name = "doc", desc = "Generate Documentation", defaultTask = "doc-task")
+class DocPhase(ctx: BuildContext) {
+  @Task(name = "pre-doc", desc = "Document preperation")
   def preDocument = {
     ctx.line.say(Debug("pre-doc"))
+    File(ctx.targetDir, "dependency-report").mkdirs
+    File(ctx.targetDir, "scaladoc").mkdirs
   }
 
-  @Task(name="doc-task",desc="Generates scaladoc and javadoc", dependsOn=Array("pre-doc"))
+  /**
+   * http://lampsvn.epfl.ch/trac/scala/wiki/Scaladoc
+   */
+  @Task(name = "doc-task", desc = "Generates scaladoc and javadoc", dependsOn = Array("pre-doc"))
   def doDocument = {
     ctx.line.say(Debug("doc-task"))
-    val docSettings = new Settings(error)
+    File("target/scala-doc").mkdirs
+    val docSettings = new Settings((str: String) => { ctx.line.endWithError(str)})
+    docSettings.d.value = File("target/scala-doc").getAbsolutePath
+    docSettings.classpath.value = ""
+    val cp = Files(".brzy/app/lib/compile/*.jar")
+
+    cp.foreach(path => {
+      val pathStr = path.getAbsolutePath
+      println("path: " + pathStr)
+      docSettings.classpath.append(pathStr)
+    })
+     docSettings.classpath.append(File(ctx.targetDir,"classes").getAbsolutePath)
+
     val reporter = new ConsoleReporter(docSettings)
     val docProcessor = new DocFactory(reporter, docSettings)
-    docProcessor.document(List(File(ctx.sourceDir,"scala").getAbsolutePath))
+    val srcDir = File(ctx.sourceDir, "scala")
+    val srcFiles: List[JFile] = sourceFiles(srcDir)
+    docProcessor.document(srcFiles.map(_.getAbsolutePath))
   }
 
-  def error(str:String) = {
-    ctx.line.endWithError(str)
+  @Task(name = "dependency-report", desc = "Generates an Ivy dependency report.", dependsOn = Array("pre-doc"))
+  def dependecyReport = {
+    ctx.line.say(Debug("doc-task"))
+    DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConfig])
   }
-  
+
+  private def sourceFiles(root: JFile): List[JFile] = {
+    if (root.isFile && root.getName.endsWith(".java") || root.getName.endsWith(".scala"))
+      List(root)
+    else
+      makeList(root.listFiles).flatMap {f => sourceFiles(f)}
+  }
+
+  private def makeList( a: Array[JFile] ): List[JFile] = {
+    if( a == null )
+      Nil
+    else
+      a.toList
+  }
+
   override def toString = "Document Phase"
 }

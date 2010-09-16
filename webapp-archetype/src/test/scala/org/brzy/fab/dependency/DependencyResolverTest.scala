@@ -17,11 +17,27 @@ package org.brzy.fab.dependency
 import org.scalatest.junit.JUnitSuite
 import org.brzy.fab.print.Conversation
 import org.junit.{Ignore, Test}
+import org.brzy.config.common.BootConfig
+import org.brzy.config.webapp.WebAppConfig
 
 
 class DependencyResolverTest extends JUnitSuite {
   @Test @Ignore def testDownload = {
     implicit val line = new Conversation(false,false)
     DependencyResolver(null)
+    line.end
+  }
+
+  @Test @Ignore def generateReport = {
+    implicit val line = new Conversation(false,false)
+    val boot = new BootConfig(Map[String, AnyRef](
+      "environment" -> "development",
+      "application" -> Map(
+        "name" -> "squeryl-scalate",
+        "org" -> "org.brzy.squerylscalate")
+      ))
+    val config = new WebAppConfig(boot, null, Nil, Nil)
+    DependencyResolver.generateReport(config)
+    line.end
   }
 }

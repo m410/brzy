@@ -34,7 +34,7 @@ class IvySettingsXml(config:WebAppConfig) {
   <resolvers>
     <ibiblio name="maven-local" root="file://${user.home}/.m2/repository" m2compatible="true" />
     {for(repo <- repos; if(repo.name.isDefined && repo.url.isDefined)) yield
-    <ibiblio xyz="true" name={repo.name.get} root={repo.url.get}  />
+    <ibiblio m2compatible="true" name={repo.name.get} root={repo.url.get}  />
     }
     <chain name="default">
       <resolver ref="maven-local"/>
