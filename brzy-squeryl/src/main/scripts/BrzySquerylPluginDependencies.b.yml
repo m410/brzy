@@ -1,9 +1,0 @@
-#
-# Template generating dependencies
-#
-repositories:
-  - id: clapper
-    url: http://maven.clapper.org/
-
-dependencies:
-  - {org: org.clapper, name: "scalasti_2.8.0", rev: "0.5"}

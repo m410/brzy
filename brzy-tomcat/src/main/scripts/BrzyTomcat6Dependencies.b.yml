@@ -1,0 +1,13 @@
+
+
+dependencies:
+  - {org: org.apache.tomcat, name: annotations-api, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: catalina, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: coyote, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: el-api, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: jasper, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: jasper-el, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: jasper-jdt, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: jsp-api, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: juli, rev: 6.0.29}
+  - {org: org.apache.tomcat, name: servlet-api, rev: 6.0.29}

@@ -8,3 +8,5 @@ config_class: org.brzy.tomcat.TomcatModConfig
 resource_class:
 dependencies:
 #  - {conf: compile, org: org.brzy, name: brzy-tomcat, rev: "0.5-SNAPSHOT", transitive: false}
+
+
