@@ -6,33 +6,26 @@
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.fab.dependency
+package org.brzy.fab.plugin
 
 
 import xml.XML
-import org.brzy.config.webapp.WebAppConfig
-import java.io.{File, FileWriter, BufferedWriter}
+import org.brzy.fab.config.{Repository, BaseConfig}
 
 /**
  * Document Me..
- * 
+ *
  * @author Michael Fortin
  */
-class IvySettingsXml(config:WebAppConfig) {
+class IvySettingsXml(config:BaseConfig) {
 
-  private val repos = config.repositories.toList
-/*
-<filesystem name="libraries">
-      <artifact pattern="${ivy.project.dir}/lib/[artifact]-[revision]-([classifier]).[ext]" />
-    </filesystem>
-      <resolver ref="libraries"/>
+  private val repos = config.repositories.getOrElse(List.empty[Repository])
 
- */
   val xml =
 <ivysettings>
   <property name="revision" value="SNAPSHOT" override="false"/>

@@ -80,7 +80,7 @@ class PackagePhase(ctx: BuildContext) {
   def copyModuleConfigs = {
     ctx.line.say(Debug("copyModuleResources"))
     val modConfigs = Files(".brzy/modules/*/brzy-module.b.yml")
-    ctx.line.say(Debug("mod configs: " + modConfigs))
+    modConfigs.foreach(mc=>ctx.line.say(Debug("mod-config: " + mc)))
     modConfigs.foreach(config => {
       val modName = config.getParentFile.getName
       config.copyTo(File(ctx.webappDir, "WEB-INF/classes/brzy-modules/" + modName))

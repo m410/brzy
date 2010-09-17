@@ -1,4 +1,4 @@
-package ${packageName}
+package $package$
 
 import org.brzy.controller.{Path,Controller}
 import org.brzy.mvc.action.returns.View

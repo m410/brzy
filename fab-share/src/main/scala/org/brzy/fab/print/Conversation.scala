@@ -27,7 +27,7 @@ class Conversation(verbose: Boolean, debug: Boolean) {
   protected[print] val reader = new ConsoleReader
   protected[print] val startTime = System.currentTimeMillis
 
-  protected[print] var columnWidth = 14
+  protected[print] var columnWidth = 10
   protected[print] var whiteLine = {
     val sb = new StringBuilder(reader.getTermwidth)
     for (space <- 0 to reader.getTermwidth - 1) sb.append(" ")
@@ -64,7 +64,7 @@ class Conversation(verbose: Boolean, debug: Boolean) {
         else
           x.name + fill(x.name)
       } + "|")
-      case _ => print("              |")
+      case _ => print("          |")
     }
   }
 

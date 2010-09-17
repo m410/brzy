@@ -1,2 +1,2 @@
 #!/bin/bash
-java -Xmx128m -classpath $( echo $BRZY_HOME/lib/* . | sed 's/ /:/g') org.brzy.fab.NewMain $@
+java -Xmx128m -classpath $( echo $BRZY_HOME/lib/* . | sed 's/ /:/g') org.brzy.fab.DbMain $@

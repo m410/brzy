@@ -50,7 +50,7 @@ class CompilePhase(ctx:BuildContext) {
     val classpath = Files(".brzy/app/lib/compile/*.jar")
     val outputDir = new File(ctx.targetDir, "classes")
     val sourceDir = new File(ctx.sourceDir, "scala")
-    ctx.line.say(Debug("classpath: " + classpath))
+    classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))
     ctx.line.say(Debug("source: " + sourceDir))
     ctx.line.say(Debug("target: " + outputDir))
     compiler.compile(sourceDir,outputDir,classpath.toArray)

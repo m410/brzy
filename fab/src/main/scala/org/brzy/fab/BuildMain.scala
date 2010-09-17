@@ -15,19 +15,21 @@ package org.brzy.fab
 
 
 import build.{BuildContext, ArchetypeDatabase}
+import config.{BaseConfig, LoadInitConfig}
+import plugin.PluginResolver
 import print._
 import file._
 import module.ModuleResolver
-import config.LoadInitConfig
 import org.apache.commons.cli._
 
-import java.io.{File=>JFile}
+import java.io.{File => JFile}
 import io.Source
 import scala.tools.nsc.{Interpreter, GenericRunnerSettings, Settings}
 import scala.Option
+import collection.mutable.ListBuffer
 
 /**
- * This runs the main build script.  Bassed on the configuration file in the current directory
+ * This runs the main build script.  Based on the configuration file in the current directory
  * it loads the archetype for the build file and executes the task passed in as an
  * argument.  If not arguments at set it calls the default task.
  *
@@ -37,12 +39,12 @@ object BuildMain {
   val options = {
     val options = new Options
     options.addOption("help", false, "Print this message.")
-    options.addOption("version", false, "output the version")
+    options.addOption("version", false, "Output the version information.")
     options.addOption("tasks", false, "List available tasks, phases and plugins.")
-    options.addOption("verbose", false, "Verbose output.")
-    options.addOption("debug", false, "Debug output.")
-    options.addOption("env", true, "Set the environment.  Override the default.")
-    options.addOption("mods", false, "Reload build Modules.")
+    options.addOption("v", "verbose", false, "Verbose output.")
+    options.addOption("d", "debug", false, "Debug output.")
+    options.addOption("e", "env", true, "Set the environment.  Override the default environment of development.")
+    options.addOption("m", "mods", false, "Reload build modules.")
     options
   }
 
@@ -52,13 +54,13 @@ object BuildMain {
 
     if (cmd.hasOption("help")) {
       val formatter = new HelpFormatter
-      formatter.printHelp("b2 [options] [actions]", options)
+      formatter.printHelp("fab [options] [tasks]", options)
       exit(0)
     }
 
     if (cmd.hasOption("version")) {
       println("Brzy Fab(ricate) Version: 0.2")
-      println("Brzy Fab(ricate) Home: " + System.getenv("BRZY_HOME"))
+      println("Brzy Home: " + System.getenv("BRZY_HOME"))
       println("Java: " + System.getProperty("java.vm.name") + " ( build " + System.getProperty("java.runtime.version") + ")")
       println("Java Home: " + System.getenv("JAVA_HOME"))
       println("Scala: " + util.Properties.versionString)
@@ -71,11 +73,14 @@ object BuildMain {
 
     talk.begin(if (cmd.getArgs.length > 0) cmd.getArgs() else Array("default"))
     val workingDir = System.getProperty("user.dir")
-    talk.say(Info("working directory: " + workingDir))
 
     val brzyHomeStr = System.getenv("BRZY_HOME")
     val brzyHome = new JFile(brzyHomeStr)
-    talk.say(Info("brzy home directory: " + brzyHomeStr))
+
+    talk.subject(Task("init")) {
+      talk.say(Info("working directory: " + workingDir))
+      talk.say(Info("brzy home directory: " + brzyHomeStr))
+    }
 
     val configFile = File("*.b.yml")
     val archName = configFile.getName.substring(0, configFile.getName.length - 6)
@@ -84,60 +89,52 @@ object BuildMain {
       case _ => error("No Archetype Found by name: " + archName)
     }
 
-    val defaultConfigFile = File(brzyHome,"/archetypes/" + archName + "/" + archName + ".default.b.yml")
-    talk.say(Info("default config: " + defaultConfigFile.getAbsolutePath))
-    talk.say(Info("app config: " + configFile.getAbsolutePath))
+    val defaultConfigFile = File(brzyHome, "/archetypes/" + archName + "/" + archName + ".default.b.yml")
+
+    talk.subject(Task("init")) {
+      talk.say(Info("default config: " + defaultConfigFile.getAbsolutePath))
+      talk.say(Info("app config: " + configFile.getAbsolutePath))
+    }
 
     if (!File(".brzy/modules").exists || cmd.hasOption("mods")) {
-      talk.subject(Task("load-mod")) {
+      talk.subject(Task("install-mod")) {
         val defaultConfig = LoadInitConfig(defaultConfigFile)
         val appConfig = LoadInitConfig(configFile)
         ModuleResolver(defaultConfig << appConfig)
       }
     }
+
     val cpath = archDesc.baseDir.listFiles.filter(_.getName.endsWith(".jar"))
     val archetypeClasspath = Classpath(cpath.map(_.getAbsolutePath).toList)
     var settings = new GenericRunnerSettings(str => talk.say(Info(str)))
     val moduleClasspath = Classpath(Files(".brzy/modules/*/*.jar").filter(_.getName.endsWith(".jar")).map(_.getAbsolutePath))
     val pluginClasspath = makePluginClasspath
+
     talk.subject(Task("load-deps")) {
       loadBuildDependencies(archetypeClasspath :: moduleClasspath :: pluginClasspath :: Nil, settings)
     }
 
-
     var interpreter = new Interpreter(settings, talk.out)
-    talk.subject(Phase("init")) {
-      talk.subject(Task("defaults")) {
-        loadDefaults(interpreter)
-      }
-      talk.subject(Task("env")) {
-        loadEnv(interpreter, cmd)
-      }
-      talk.subject(Task("plugins")) {
-        loadPlugins(interpreter)
-      }
+    talk.subject(Task("init-defaults")) {
+      loadDefaults(interpreter)
     }
-
-//    interpreter.interpret("import org.brzy.config.ConfigFactory")
-//    interpreter.interpret("println(\"class: \" + classOf[ConfigFactory])")
+    talk.subject(Task("init-env")) {
+      loadEnv(interpreter, cmd)
+    }
+    talk.subject(Task("load-plugins")) {
+      loadPlugins(interpreter)
+    }
 
     interpreter.interpret("import " + archDesc.className)
     interpreter.interpret("val arch = new " + archDesc.simpleName + "(context,actions,plugins.toList)")
 
-    interpreter.interpret("try {")
     if (cmd.hasOption("tasks"))
       interpreter.interpret("arch.taskInfo")
     else
       interpreter.interpret("arch.build(args)")
-    interpreter.interpret("} catch { case e:Exception => line.endWithError(e) }")
+
     talk.end
     interpreter.close
-  }
-
-  protected[fab] def makePluginClasspath = {
-    // todo this also needs to load dependencies from plugins
-    // todo plugin libs needs to be declared in a yml file
-    Classpath(List[String]())
   }
 
   protected[fab] def loadBuildDependencies(cp: List[Classpath], settings: Settings)(implicit talk: Conversation) = {
@@ -189,11 +186,38 @@ object BuildMain {
     }
 
     val plugins = Files(".brzy/modules/*/scripts/*Plugin.scala")
-    plugins.foreach(script=>{
+    plugins.foreach(script => {
       interpreter.interpret(Source.fromFile(script).mkString)
       val className = script.getName.substring(0, script.getName.length - 6)
       interpreter.interpret("plugins += classOf[" + className + "]")
       talk.say(Info("add plugin: " + className))
     })
+  }
+
+  protected[fab] def makePluginClasspath()(implicit talk: Conversation) = {
+
+    if (!File(".brzy/plugins").exists) {
+      val buffer = new ListBuffer[BaseConfig]()
+      val scriptsDir = File("scripts")
+      
+      if (scriptsDir.exists) {
+        scriptsDir.listFiles.foreach(script => {
+          if (script.getName.endsWith("Dependencies.b.yml")) {
+            buffer += new BaseConfig(Yaml(script))
+            talk.say(Info("add plugin deps: " + script))
+          }
+        })
+      }
+
+      val plugins = Files(".brzy/modules/*/scripts/*Dependencies.b.yml")
+      plugins.foreach(script => {
+        buffer += new BaseConfig(Yaml(script))
+        talk.say(Info("add plugin deps: " + script))
+      })
+      val baseConfig = buffer.foldLeft(new BaseConfig(Map[String,AnyRef]()))((a,b) => a << b)
+      PluginResolver(baseConfig)
+    }
+
+    Classpath(Files(".brzy/plugins/*.jar").map(_.getAbsolutePath))
   }
 }

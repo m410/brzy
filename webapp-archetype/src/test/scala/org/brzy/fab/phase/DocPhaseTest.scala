@@ -16,13 +16,14 @@ package org.brzy.fab.phase
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
+import org.junit.Ignore
 import org.junit.Assert._
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.file.File
 import org.brzy.fab.print.Conversation
 
 class DocPhaseTest extends JUnitSuite {
-  @Test def testDocs = {
+  @Test @Ignore def testDocs = {
     val line = new Conversation(false,false)
     val context = new BuildContext(
         environment = "test",

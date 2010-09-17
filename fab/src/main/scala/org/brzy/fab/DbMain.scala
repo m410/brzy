@@ -42,7 +42,7 @@ object DbMain {
 
     if (cmd.hasOption("version")) {
       println("Brzy Fab(ricate) Database Manager, Version: 0.2")
-      println("Brzy Fab(ricate) Home: " + System.getenv("BRZY_HOME"))
+      println("Brzy Home: " + System.getenv("BRZY_HOME"))
       println("Java: " + System.getProperty("java.vm.name") + " ( build " + System.getProperty("java.runtime.version") + ")")
       println("Java Home: " + System.getenv("JAVA_HOME"))
       println("Scala: " + util.Properties.versionString)

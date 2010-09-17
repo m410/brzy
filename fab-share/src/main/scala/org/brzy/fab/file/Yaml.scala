@@ -1,4 +1,4 @@
-package org.brzy.config.file
+package org.brzy.fab.file
 
 import java.io.File
 

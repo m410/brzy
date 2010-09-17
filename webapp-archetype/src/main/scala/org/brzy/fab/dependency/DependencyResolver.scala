@@ -39,11 +39,11 @@ import javax.xml.transform.{TransformerFactory, Transformer, Source}
  */
 object DependencyResolver {
   val retrievePattern = ".brzy/app/lib/[conf]/[artifact]-[revision](-[classifier]).[type]"
+  val base = File(".brzy/app")
+  val settingsFile = File(".brzy/app/ivysettings.xml")
+  val ivyFile = File(".brzy/app/ivy.xml")
 
   def apply(webappConfig: WebAppConfig)(implicit line: Conversation) {
-    val base = File(".brzy/app")
-    val settingsFile = File(".brzy/app/ivysettings.xml")
-    val ivyFile = File(".brzy/app/ivy.xml")
 
     if (!base.exists)
       base.mkdirs
@@ -55,23 +55,8 @@ object DependencyResolver {
     val ivyXml = new IvyXml(webappConfig)
     ivyXml.saveToFile(ivyFile.getAbsolutePath)
 
-    //    val ivy = new Ivy() {
-    //      val logEngine = new MessageLoggerEngine {
-    //        override def error(p1: String) = line.endWithError(p1)
-    //        override def warn(p1: String) = line.say(Warn(p1))
-    //        override def rawinfo(p1: String) = line.say(Debug(p1))
-    //        override def info(p1: String) = line.say(Info(p1))
-    //        override def deprecated(p1: String) = line.say(Warn(p1))
-    //        override def verbose(p1: String) = line.say(Debug(p1))
-    //        override def debug(p1: String) = line.say(Debug(p1))
-    //      }
-    //      override def getLoggerEngine = logEngine
-    //    }
-    //    ivy.bind
-    //    ivy.execute(new IvyCallback() {
-    //      def doInIvyContext(ivy: Ivy, context: IvyContext): java.lang.Object = {
-
     doInIvyCallback((ivy: Ivy, context: IvyContext) => {
+      context.set("ivy.project.dir",File("").getAbsolutePath)
       ivy.configure(settingsFile)
       ivy.getResolveEngine.resolve(ivyFile)
       val org = webappConfig.application.org.get
@@ -82,25 +67,17 @@ object DependencyResolver {
       null
     })
 
-    //      }
-    //    })
   }
 
   def doInIvyCallback(callback: (Ivy, IvyContext) => java.lang.Object)(implicit line: Conversation) = {
     val ivy = new Ivy() {
       val logEngine = new MessageLoggerEngine {
         override def error(p1: String) = line.endWithError(p1)
-
         override def warn(p1: String) = line.say(Warn(p1))
-
         override def rawinfo(p1: String) = line.say(Debug(p1))
-
         override def info(p1: String) = line.say(Info(p1))
-
         override def deprecated(p1: String) = line.say(Warn(p1))
-
         override def verbose(p1: String) = line.say(Debug(p1))
-
         override def debug(p1: String) = line.say(Debug(p1))
       }
 

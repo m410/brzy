@@ -28,18 +28,16 @@ import org.scalatest.tools.Runner
  */
 @Phase(name = "test", desc = "Compile and run unit tests", defaultTask = "test-task", dependsOn = Array("compile"))
 class TestPhase(ctx: BuildContext) {
+
   @Task(name = "process-test-resources", desc = "Unit test pre processing")
   def processTestResources = {
     ctx.line.say(Debug("process-test-resources"))
-
     val classes = File(ctx.targetDir, "test-classes")
     classes.mkdirs
-
     val resources = File(ctx.testDir, "resources")
 
     if (resources.exists)
       resources.listFiles.foreach(_.copyTo(classes))
-    
   }
 
   @Task(name = "test-compile", desc = "Compile Unit tests", dependsOn = Array("process-test-resources"))
@@ -50,7 +48,7 @@ class TestPhase(ctx: BuildContext) {
     val classpath = Files(ctx.testDir, "resources/*") ++ Files(ctx.targetDir, "classes") ++ jars
     val outputDir = File(ctx.targetDir, "test-classes")
     val sourceDir = File(ctx.testDir, "scala")
-    ctx.line.say(Debug("classpath: " + classpath))
+    classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))
     ctx.line.say(Debug("source: " + sourceDir))
     ctx.line.say(Debug("target: " + outputDir))
     compiler.compile(sourceDir, outputDir, classpath.toArray)
@@ -60,9 +58,9 @@ class TestPhase(ctx: BuildContext) {
   def testPhase = {
     ctx.line.say(Debug("test-task"))
     val classpath = List(File(ctx.targetDir, "classes")) ++
-            List(File(ctx.targetDir, "test-classes")) //++
-//            Files(".brzy/app/lib/test/*.jar")
-    ctx.line.say(Debug("test classpath: " + classpath))
+        List(File(ctx.targetDir, "test-classes")) ++
+        Files(".brzy/app/lib/test/*.jar")
+    classpath.foreach(cp=>ctx.line.say(Debug("test cp: " + cp)))
     Runner.run(Array("-o","-p",classpath.map(_.getAbsolutePath).mkString(" ")))
   }
 

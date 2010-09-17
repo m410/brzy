@@ -34,7 +34,8 @@ class ScalaCompiler(out:PrintWriter) extends Compiler {
 
     val list = findFiles(sourceDirectory)
     list.foreach(f=>out.write("src: " + f.getAbsolutePath + util.Properties.lineSeparator))
-    
+//    list.foreach(f=>println("src: " + f.getAbsolutePath + util.Properties.lineSeparator))
+
     ( new compiler.Run ).compile( list.map( _.toString ) )
 
     // Bail out if compilation failed
