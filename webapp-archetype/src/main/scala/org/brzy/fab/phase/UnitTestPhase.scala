@@ -22,12 +22,11 @@ import org.brzy.fab.compile.ScalaCompiler
 import org.brzy.fab.print.{Info, Warn, Debug}
 import org.scalatest.tools.Runner
 
-
 /**
  * @author Michael Fortin
  */
 @Phase(name = "test", desc = "Compile and run unit tests", defaultTask = "test-task", dependsOn = Array("compile"))
-class TestPhase(ctx: BuildContext) {
+class UnitTestPhase(ctx: BuildContext) {
 
   @Task(name = "process-test-resources", desc = "Unit test pre processing")
   def processTestResources = {
@@ -57,11 +56,21 @@ class TestPhase(ctx: BuildContext) {
   @Task(name = "test-task", desc = "Run unit tests", dependsOn = Array("test-compile"))
   def testPhase = {
     ctx.line.say(Debug("test-task"))
+
+    val output = File("target/test-reports/")
+    output.mkdirs
+    val outputDir = output.getAbsolutePath
+
     val classpath = List(File(ctx.targetDir, "classes")) ++
         List(File(ctx.targetDir, "test-classes")) ++
         Files(".brzy/app/lib/test/*.jar")
     classpath.foreach(cp=>ctx.line.say(Debug("test cp: " + cp)))
-    Runner.run(Array("-o","-p",classpath.map(_.getAbsolutePath).mkString(" ")))
+    val testArgs  = Array(
+        "-o",
+        "-f", File(output,"report.out.txt").getAbsolutePath,
+        "-u", output.getAbsolutePath,
+        "-p", classpath.map(_.getAbsolutePath).mkString(" "))
+    Runner.run(testArgs)
   }
 
   override def toString = "Test Phase"

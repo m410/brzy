@@ -1,6 +1,6 @@
 package org.brzy.fab.file
 
-import java.io.File
+import java.io.{File=>JFile}
 
 import collection.mutable.{ListBuffer, HashMap}
 import collection.JavaConversions._
@@ -13,7 +13,7 @@ import java.util.{Map => JMap, List => JList}
  * @author Michael Fortin
  */
 object Yaml {
-  def apply(file:File) = {
+  def apply(file:JFile) = {
     convertMap(JYaml.load(file).asInstanceOf[JMap[String, AnyRef]])
   }
 

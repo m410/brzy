@@ -79,10 +79,10 @@ class WebAppConfigTest extends JUnitSuite {
     assertNotNull(app.project.get)
     assertTrue(app.application.isEmpty)
     assertNotNull(app.dependencies.get)
-    assertEquals(10, app.dependencies.get.size)
+    assertEquals(14, app.dependencies.get.size)
     assertNotNull(app.dependencyExcludes.isEmpty)
     assertNotNull(app.repositories.get)
-    assertEquals(5, app.repositories.get.size)
+    assertEquals(6, app.repositories.get.size)
     assertTrue(app.modules.isEmpty)
     assertTrue(app.persistence.isEmpty)
     assertTrue(app.logging.isEmpty)
@@ -107,7 +107,7 @@ class WebAppConfigTest extends JUnitSuite {
     val defaultConfig = new BootConfig(convertMap(config2.asInstanceOf[JMap[String, AnyRef]]))
     assertNotNull(defaultConfig)
     assertNotNull(defaultConfig.dependencies.get)
-    assertEquals(10, defaultConfig.dependencies.get.size)
+    assertEquals(14, defaultConfig.dependencies.get.size)
 
     val merged = defaultConfig << webapp
 
@@ -115,7 +115,7 @@ class WebAppConfigTest extends JUnitSuite {
     assertEquals("development", merged.environment.get)
     assertNotNull(merged.application.get)
     assertNotNull(merged.repositories.get)
-    assertEquals(6, merged.repositories.get.size)
+    assertEquals(7, merged.repositories.get.size)
     assertNotNull(merged.modules.get)
     assertEquals(1, merged.modules.get.size)
     assertNotNull(merged.persistence.get)
@@ -129,7 +129,7 @@ class WebAppConfigTest extends JUnitSuite {
     assertNotNull(merged.webXml.get)
     assertEquals(12, merged.webXml.get.size)
     assertNotNull(merged.dependencies.get)
-    assertEquals(12, merged.dependencies.get.size)
+    assertEquals(16, merged.dependencies.get.size)
   }
 
 }

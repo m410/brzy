@@ -18,7 +18,7 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 
-class TestPhaseTest extends JUnitSuite {
+class UnitTestPhaseTest extends JUnitSuite {
   @Test def testRuningTests = {
     assertTrue(true)
   }

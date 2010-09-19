@@ -15,7 +15,7 @@ package org.brzy.fab
 
 
 import build.BuildContext
-import phase.{DocPhase, DependencyPhase, CompilePhase, PackagePhase, PublishPhase, TestPhase, CleanPhase}
+import phase.{DocPhase, DependencyPhase, CompilePhase, PackagePhase, PublishPhase, UnitTestPhase, CleanPhase}
 import print._
 import file.File
 import plugin.BuildPlugin
@@ -57,7 +57,7 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
   val phases = List(
       new CleanPhase(ctx),
       new CompilePhase(ctx),
-      new TestPhase(ctx),
+      new UnitTestPhase(ctx),
       new PackagePhase(ctx),
       new DependencyPhase(ctx),
       new DocPhase(ctx),

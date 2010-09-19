@@ -44,7 +44,7 @@ class WebApp(val config: WebAppConfig) {
   val viewResource: WebAppViewResource = {
     log.debug("view: {}", config.views)
     log.trace("resource: {}", config.views.resourceClass.getOrElse("null"))
-    if (config.views.resourceClass.isDefined)
+    if (config.views.resourceClass.isDefined && config.views.resourceClass.get != null)
       Construct[WebAppViewResource](config.views.resourceClass.get,Array(config.views))
     else
       null

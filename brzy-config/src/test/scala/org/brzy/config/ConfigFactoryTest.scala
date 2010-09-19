@@ -50,7 +50,7 @@ class ConfigFactoryTest extends JUnitSuite {
     assertNotNull(config.modules.get)
     assertEquals(1, config.modules.get.size)
 
-    assertEquals(12, config.dependencies.get.size)
+    assertEquals(16, config.dependencies.get.size)
     assertEquals(1, config.dependencyExcludes.get.size)
     assertEquals(12, config.webXml.get.size)
   }
