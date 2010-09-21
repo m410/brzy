@@ -16,8 +16,7 @@ package org.brzy.webapp.mock
 import org.brzy.webapp.action.args.Parameters
 
 import org.brzy.webapp.action.returns._
-import org.brzy.webapp.controller.{Action,Controller}
-import org.brzy.webapp.controller.{Action, Action, Controller}
+import org.brzy.webapp.controller.{Action, Controller}
 
 @Controller("users")
 class UserController {

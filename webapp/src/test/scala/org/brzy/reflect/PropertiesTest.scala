@@ -16,6 +16,7 @@ package org.brzy.reflect
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
+import org.brzy.fab.reflect.Properties
 
 
 class PropertiesTest extends JUnitSuite {

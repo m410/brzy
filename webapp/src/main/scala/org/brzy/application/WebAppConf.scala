@@ -119,9 +119,13 @@ class WebAppConf(val c:WebAppConfFile, val views: ViewMod, val persistence: List
  *
  */
 object WebAppConf {
+
+  val defaultConfigFile = "/brzy-webapp.default.b.yml"
+  val appConfigFile = "/brzy-webapp.b.yml"
+
   def apply(env: String) = {
-    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream("/brzy-webapp.default.b.yml")))
-    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream("/brzy-webapp.b.yml")))
+    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfigFile)))
+    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfigFile)))
 
     val envMap = appConf.map.get("environment_overrides") match {
       case Some(a) => a.asInstanceOf[Map[String,AnyRef]].get(env)
@@ -137,7 +141,7 @@ object WebAppConf {
     val view: ViewMod = runtimeConfig.views match {
       case Some(v) =>
         if (v != null)
-          makeRuntimeModule(runtimeConfig.views.get).asInstanceOf[ViewMod]
+          makeRuntimeMod(runtimeConfig.views.get).asInstanceOf[ViewMod]
         else
           null
       case _ => null
@@ -145,13 +149,13 @@ object WebAppConf {
 
     val persistence: List[PersistenceMod] = {
       if (runtimeConfig.persistence.isDefined)
-        runtimeConfig.persistence.get.map(makeRuntimeModule(_).asInstanceOf[PersistenceMod])
+        runtimeConfig.persistence.get.map(makeRuntimeMod(_).asInstanceOf[PersistenceMod])
       else
         Nil
     }
     val modules: List[RuntimeMod] = {
       if (runtimeConfig.modules.isDefined)
-        runtimeConfig.modules.get.map(makeRuntimeModule(_).asInstanceOf[RuntimeMod])
+        runtimeConfig.modules.get.map(makeRuntimeMod(_).asInstanceOf[RuntimeMod])
       else
         Nil
     }
@@ -160,8 +164,8 @@ object WebAppConf {
   }
   
   def buildtime(modBaseDir:File, env: String) = {
-    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream("/brzy-webapp.default.b.yml")))
-    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream("/brzy-webapp.b.yml")))
+    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfigFile)))
+    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfigFile)))
 
     val envMap = appConf.map.get("environment_overrides") match {
       case Some(a) => a.asInstanceOf[Map[String,AnyRef]].get(env)
@@ -177,7 +181,7 @@ object WebAppConf {
     val view: ViewMod = buildConfig.views match {
       case Some(v) =>
         if (v != null)
-          makeBuildTimeModule(buildConfig.views.get,modBaseDir).asInstanceOf[ViewMod]
+          makeBuildTimeMod(buildConfig.views.get,modBaseDir).asInstanceOf[ViewMod]
         else
           null
       case _ => null
@@ -185,13 +189,13 @@ object WebAppConf {
 
     val persistence: List[PersistenceMod] = {
       if (buildConfig.persistence.isDefined)
-        buildConfig.persistence.get.map(makeBuildTimeModule(_,modBaseDir).asInstanceOf[PersistenceMod])
+        buildConfig.persistence.get.map(makeBuildTimeMod(_,modBaseDir).asInstanceOf[PersistenceMod])
       else
         Nil
     }
     val modules: List[RuntimeMod] = {
       if (buildConfig.modules.isDefined)
-        buildConfig.modules.get.map(makeBuildTimeModule(_,modBaseDir).asInstanceOf[RuntimeMod])
+        buildConfig.modules.get.map(makeBuildTimeMod(_,modBaseDir).asInstanceOf[RuntimeMod])
       else
         Nil
     }
@@ -203,7 +207,7 @@ object WebAppConf {
   /**
    * Loads the application configuration from the classpath
    */
-  protected[application] def makeRuntimeModule(reference: Mod): Mod = {
+  protected[application] def makeRuntimeMod(reference: Mod): Mod = {
     val modResource: String = "modules/" + reference.name.get + "/brzy-module.b.yml"
     val cpUrl = getClass.getClassLoader.getResource(modResource)
     val yaml = Yaml(cpUrl.openStream)
@@ -222,7 +226,7 @@ object WebAppConf {
   /**
    * Loads the application configuration from the file system
    */
-  protected[application] def makeBuildTimeModule(reference: Mod, modResourceDir: File): Mod = {
+  protected[application] def makeBuildTimeMod(reference: Mod, modResourceDir: File): Mod = {
     val pFile = new File(modResourceDir, reference.name.get)
     val modFile = new File(pFile, "brzy-module.b.yml")
     val yaml = Yaml(modFile)

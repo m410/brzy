@@ -15,7 +15,6 @@ package org.brzy.webapp.controller
 
 import java.beans.ConstructorProperties
 import org.brzy.persistence.{MockPersistable, Persistent}
-import org.brzy.webapp.controller.Controller
 
 @ConstructorProperties(Array("id"))
 class User(val id: Long) extends Persistent[Long] {

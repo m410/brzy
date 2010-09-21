@@ -18,8 +18,6 @@ import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web.{MockServletConfig, MockServletContext, MockHttpServletResponse, MockHttpServletRequest}
 import org.brzy.application.WebApp
-import org.brzy.fab.conf.webapp.WebAppConfig
-import org.brzy.fab.conf.common.BootConfig
 import org.brzy.webapp.mock.MockModConfig
 
 class ServletTest extends JUnitSuite {
@@ -29,14 +27,14 @@ class ServletTest extends JUnitSuite {
       "fileExtension" -> ".ssp",
       "resource_class" -> "org.brzy.webapp.mock.MockModResource"
       ))
-    val boot = new BootConfig(Map[String, AnyRef](
-      "environment" -> "development",
-      "application" -> Map(
-        "name" -> "test",
-        "org" -> "org.brzy.webapp.mock")
-      ))
-    val config = new WebAppConfig(boot, view, Nil, Nil)
-    val webapp = new WebApp(config)
+//    val boot = new BootConfig(Map[String, AnyRef](
+//      "environment" -> "development",
+//      "application" -> Map(
+//        "name" -> "test",
+//        "org" -> "org.brzy.webapp.mock")
+//      ))
+//    val config = new WebAppConfig(boot, view, Nil, Nil)
+    val webapp = null.asInstanceOf[WebApp]//new WebApp(config)
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
     assertEquals(17,webapp.actions.size)
@@ -60,14 +58,14 @@ class ServletTest extends JUnitSuite {
       "fileExtension" -> ".ssp",
       "resource_class" -> "org.brzy.webapp.mock.MockModResource"
       ))
-    val boot = new BootConfig(Map[String, AnyRef](
-      "environment" -> "development",
-      "application" -> Map(
-        "name" -> "test",
-        "org" -> "org.brzy.webapp.mock")
-      ))
-    val config = new WebAppConfig(boot, view, Nil, Nil)
-    val webapp = new WebApp(config)
+//    val boot = new BootConfig(Map[String, AnyRef](
+//      "environment" -> "development",
+//      "application" -> Map(
+//        "name" -> "test",
+//        "org" -> "org.brzy.webapp.mock")
+//      ))
+//    val config = new WebAppConfig(boot, view, Nil, Nil)
+    val webapp = null.asInstanceOf[WebApp]//new WebApp(config)
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
     assertEquals(17,webapp.actions.size)

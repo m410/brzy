@@ -13,14 +13,12 @@
  */
 package org.brzy.webapp.mock
 
-import org.brzy.fab.conf.mod.Mod
+import org.brzy.fab.conf.Mod
 
 
 class MockModConfig(m:Map[String,AnyRef]) extends Mod(m) {
-  override val configurationName = "Mock Module"
 
-
-  override def <<(that: Mod) = {
+  def <<(that: Mod) = {
     if(that == null) {
       this
     }

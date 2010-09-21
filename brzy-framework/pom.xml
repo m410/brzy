@@ -43,7 +43,7 @@
 		</dependency>
     <dependency>
 			<groupId>org.brzy.fab</groupId>
-			<artifactId>fab</artifactId>
+			<artifactId>fab-cli</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

@@ -17,6 +17,7 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import java.beans.ConstructorProperties
+import org.brzy.fab.reflect.Build
 
 
 class BuildTest extends JUnitSuite {
