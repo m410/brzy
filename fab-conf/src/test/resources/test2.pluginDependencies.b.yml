@@ -1,0 +1,3 @@
+
+dependencies:
+  - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133", transitive: false}
