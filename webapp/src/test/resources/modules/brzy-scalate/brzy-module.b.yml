@@ -1,12 +1,13 @@
 #
 # scalate view pages
 #
+mod_type: view
 name: brzy-scalate
 org: org.brzy
 version: "0.2"
 file_extension: ".ssp"
 config_class: org.brzy.webapp.mock.MockModConfig
-resource_class: org.brzy.webapp.mock.MockModResource
+resource_class: org.brzy.webapp.mock.MockModProvider
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
   - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.2"}

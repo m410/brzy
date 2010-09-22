@@ -55,4 +55,42 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
         None
     case _ => None
   }
+
+
+  override def <<(it: BaseConf) = {
+    if(it == null)
+      this
+    else {
+      val that = it.asInstanceOf[WebAppConfFile]
+      new WebAppConfFile(Map[String, AnyRef](
+        "environment" -> this.environment.getOrElse(that.environment.getOrElse(null)),
+        "application" -> {this.application.getOrElse(that.application.get)}.map,
+        "project" -> {
+          if (this.project.isDefined && this.project.get != null)
+            {this.project.get << that.project.getOrElse(null)}.map
+          else if (that.project.isDefined && that.project.get != null)
+            that.project.get.map
+          else
+            null
+        },
+        "logging" -> {
+          if (this.logging.isDefined)
+            {this.logging.get << that.logging.getOrElse(null)}.map
+          else if (that.logging.isDefined)
+            that.logging.get.map
+          else
+            None
+        },
+        "web_xml" -> {
+          if (this.webXml.isDefined && that.webXml.isDefined)
+            this.webXml.get ++ that.webXml.get
+          else if (this.webXml.isDefined)
+            this.webXml.get
+          else if (that.webXml.isDefined)
+            that.webXml.get
+          else
+            None
+        }) ++ super.<<(that).map)
+    }
+  }
 }

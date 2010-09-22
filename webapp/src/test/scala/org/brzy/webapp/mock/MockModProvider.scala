@@ -16,7 +16,7 @@ package org.brzy.webapp.mock
 import org.brzy.fab.conf.ViewModProvider
 
 
-class MockModResource(c:MockModConfig) extends ViewModProvider {
+class MockModProvider(c:MockModConfig) extends ViewModProvider {
   val fileExtension = ".ssp"
   override val name = c.name.get
 }

@@ -19,12 +19,14 @@ package org.brzy.fab.conf
  * @author Michael Fortin
  */
 class RuntimeMod(override val map:Map[String,AnyRef]) extends Mod(map) {
+
   val modName: Option[String] = map.get("mod_name") match {
-    case Some(e) => e.asInstanceOf[Option[String]]
+    case Some(e) => Option(e.asInstanceOf[String])
     case _ => map.get("name").asInstanceOf[Option[String]].orElse(Option("Unknown"))
   }
 
   val configClass: Option[String] = map.get("config_class").asInstanceOf[Option[String]].orElse(None)
+
   val resourceClass: Option[String] = map.get("resource_class").asInstanceOf[Option[String]].orElse(None)
 
   override def <<(it: BaseConf) = {

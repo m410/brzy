@@ -8,7 +8,7 @@ application:
   name: Test app
   author: Fred
   description: Some Description
-  org: &group org.brzy.sample
+  org: &group org.brzy.webapp.mock
   artifact_id: sample-jpa
   application_class: org.brzy.webapp.mock.MockWebApp
   properties:
@@ -29,15 +29,15 @@ repositories:
   - id: fusesource
     url: http://someurl.com/test
 
-persistence:
-  - name: brzy-squeryl
-    org: org.brzy
-    version: "0.5"
-    scan_package: *group
-    driver: org.postgresql.Driver
-    user_name: test
-    password: ""
-    url: jdbc:postgresql://localhost/dev
+#persistence:
+#  - name: brzy-squeryl
+#    org: org.brzy
+#    version: "0.5"
+#    scan_package: *group
+#    driver: org.postgresql.Driver
+#    user_name: test
+#    password: ""
+#    url: jdbc:postgresql://localhost/dev
 
 #
 # Logging

@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.application
+package org.brzy.service
 
 import org.junit.Test
 import org.scalatest.junit.JUnitSuite
@@ -21,8 +21,7 @@ import org.brzy.webapp.interceptor.{ManagedThreadContext, ProxyFactory, Invoker}
 
 class AssemblyTest extends JUnitSuite {
 
-  @Test
-  def testInjectServiceToController = {
+  @Test def testInjectServiceToController = {
     val invoker: Invoker = new Invoker(List[ManagedThreadContext]())
 
     val service = ProxyFactory.make(classOf[MockService], invoker)
@@ -36,10 +35,10 @@ class AssemblyTest extends JUnitSuite {
 }  
 
 class MockService {
-    def doService = "Called"
-  }
+  def doService = "Called"
+}
 
-  class MockController(val s:MockService) {
-    def this() = this(null)
-    def callService =  s.doService
-  }
+class MockController(val s:MockService) {
+  def this() = this(null)
+  def callService =  s.doService
+}

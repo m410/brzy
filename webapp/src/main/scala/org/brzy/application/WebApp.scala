@@ -229,15 +229,15 @@ class WebApp(conf: WebAppConf) {
 object WebApp {
   private val log = LoggerFactory.getLogger(getClass)
 
-  def apply(env: String): WebApp = {
-    val config = WebAppConf(env)
-    log.debug("application class: {}", config.application.applicationClass.get)
+  def apply(env: String): WebApp = apply(WebAppConf(env))
+
+  def apply(config: WebAppConf): WebApp = {
+    log.debug("application class: {}", config.application.applicationClass.getOrElse("NA"))
 
     if (config.application.applicationClass.isDefined)
       Construct[WebApp](config.application.applicationClass.get, Array(config))
     else
       new WebApp(config)
   }
-
 
 }

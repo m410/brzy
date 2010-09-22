@@ -19,7 +19,9 @@ package org.brzy.fab.conf
  * @author Michael Fortin
  */
 class ViewMod(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
+
   val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
+
   val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
   override def <<(it: BaseConf) = {

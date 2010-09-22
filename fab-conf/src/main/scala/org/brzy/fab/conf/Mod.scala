@@ -77,11 +77,14 @@ class Mod(override val map: Map[String, AnyRef]) extends BaseConf(map) with Orde
 
 
   override def toString = new StringBuilder()
+          .append(this.getClass.getName)
+          .append("[")
           .append(name.getOrElse("?"))
           .append(", ")
           .append(org.getOrElse("?"))
           .append(", ")
           .append(version.getOrElse("?"))
+          .append("]")
           .toString
 }
 

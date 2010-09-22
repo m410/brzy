@@ -17,24 +17,11 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web.{MockServletConfig, MockServletContext, MockHttpServletResponse, MockHttpServletRequest}
-import org.brzy.application.WebApp
-import org.brzy.webapp.mock.MockModConfig
+import org.brzy.application.{WebAppConf, WebApp}
 
 class ServletTest extends JUnitSuite {
   @Test def testPath = {
-    val view = new MockModConfig(Map[String, AnyRef](
-      "name" -> "brzy-scalate",
-      "fileExtension" -> ".ssp",
-      "resource_class" -> "org.brzy.webapp.mock.MockModResource"
-      ))
-//    val boot = new BootConfig(Map[String, AnyRef](
-//      "environment" -> "development",
-//      "application" -> Map(
-//        "name" -> "test",
-//        "org" -> "org.brzy.webapp.mock")
-//      ))
-//    val config = new WebAppConfig(boot, view, Nil, Nil)
-    val webapp = null.asInstanceOf[WebApp]//new WebApp(config)
+    val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
     assertEquals(17,webapp.actions.size)
@@ -53,19 +40,7 @@ class ServletTest extends JUnitSuite {
 
 
   @Test def testPathWithParam = {
-    val view = new MockModConfig(Map[String, AnyRef](
-      "name" -> "brzy-scalate",
-      "fileExtension" -> ".ssp",
-      "resource_class" -> "org.brzy.webapp.mock.MockModResource"
-      ))
-//    val boot = new BootConfig(Map[String, AnyRef](
-//      "environment" -> "development",
-//      "application" -> Map(
-//        "name" -> "test",
-//        "org" -> "org.brzy.webapp.mock")
-//      ))
-//    val config = new WebAppConfig(boot, view, Nil, Nil)
-    val webapp = null.asInstanceOf[WebApp]//new WebApp(config)
+    val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
     assertEquals(17,webapp.actions.size)

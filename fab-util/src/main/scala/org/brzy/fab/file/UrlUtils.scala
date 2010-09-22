@@ -13,7 +13,7 @@
  */
 package org.brzy.fab.file
 
-import java.io.{BufferedInputStream, BufferedOutputStream, FileOutputStream, File}
+import java.io.{BufferedInputStream, BufferedOutputStream, FileOutputStream, File=>JFile}
 import java.net.URL
 
 /**
@@ -25,14 +25,14 @@ object UrlUtils {
 
   class UrlWrapper(url:URL) {
 
-    def downloadToDir(dir:File):File = {
+    def downloadToDir(dir:JFile):JFile = {
 
       if(!dir.exists)
         dir.mkdirs
 
       val urlStr = url.toString
       val filename = urlStr.substring(urlStr.lastIndexOf("/") + 1, urlStr.length)
-      val destinationFile = new File(dir, filename)
+      val destinationFile = new JFile(dir, filename)
 
       if (!destinationFile.exists)
         destinationFile.createNewFile

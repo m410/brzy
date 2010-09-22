@@ -24,14 +24,13 @@ import java.io.File
  *
  * @author Michael Fortin
  */
-class WebAppConf(val c:WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod]) {
-  
+class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod]) {
   val environment: String = c.environment.get
-  
+
   val application: Application = c.application.getOrElse(null)
-  
+
   val project: Project = c.project.getOrElse(null)
-  
+
   val logging: Logging = c.logging.getOrElse(null)
 
   val dependencies: SortedSet[Dependency] = {
@@ -119,23 +118,29 @@ class WebAppConf(val c:WebAppConfFile, val views: ViewMod, val persistence: List
  *
  */
 object WebAppConf {
-
   val defaultConfigFile = "/brzy-webapp.default.b.yml"
   val appConfigFile = "/brzy-webapp.b.yml"
 
-  def apply(env: String) = {
-    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfigFile)))
-    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfigFile)))
+  /**
+   *
+   */
+  def apply(env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
+    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfig)))
+    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 
     val envMap = appConf.map.get("environment_overrides") match {
-      case Some(a) => a.asInstanceOf[Map[String,AnyRef]].get(env)
+      case Some(a) => a.asInstanceOf[List[Map[String,AnyRef]]].find(_("environment") == env)
       case _ => None
     }
 
     val runtimeConfig = envMap match {
       case Some(e) =>
-        {defaultConf << appConf << new WebAppConfFile(e.asInstanceOf[Map[String,AnyRef]])}.asInstanceOf[WebAppConfFile]
-      case _ => {defaultConf << appConf}.asInstanceOf[WebAppConfFile]
+        val envConf = new WebAppConfFile(e.asInstanceOf[Map[String, AnyRef]])
+        val runConf =  envConf << appConf << defaultConf
+        runConf.asInstanceOf[WebAppConfFile]
+      case _ =>
+        val runConf = appConf << defaultConf
+        runConf.asInstanceOf[WebAppConfFile]
     }
 
     val view: ViewMod = runtimeConfig.views match {
@@ -159,29 +164,36 @@ object WebAppConf {
       else
         Nil
     }
-    
-    new WebAppConf(runtimeConfig,view,persistence,modules)
+
+    new WebAppConf(runtimeConfig, view, persistence, modules)
   }
-  
-  def buildtime(modBaseDir:File, env: String) = {
-    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfigFile)))
-    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfigFile)))
+
+  /**
+   *
+   */
+  def buildtime(modBaseDir: File, env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
+    val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfig)))
+    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 
     val envMap = appConf.map.get("environment_overrides") match {
-      case Some(a) => a.asInstanceOf[Map[String,AnyRef]].get(env)
+      case Some(a) => a.asInstanceOf[Map[String, AnyRef]].get(env)
       case _ => None
     }
 
-    val buildConfig:WebAppConfFile = envMap match {
+    val buildConfig: WebAppConfFile = envMap match {
       case Some(e) =>
-        {defaultConf << appConf << new WebAppConfFile(e.asInstanceOf[Map[String,AnyRef]])}.asInstanceOf[WebAppConfFile]
-      case _ => {defaultConf << appConf}.asInstanceOf[WebAppConfFile]
+        val envConf = new WebAppConfFile(e.asInstanceOf[Map[String, AnyRef]])
+        val runConf = envConf << appConf << defaultConf
+        runConf.asInstanceOf[WebAppConfFile]
+      case _ =>
+        val runConf = appConf << defaultConf
+        runConf.asInstanceOf[WebAppConfFile]
     }
 
     val view: ViewMod = buildConfig.views match {
       case Some(v) =>
         if (v != null)
-          makeBuildTimeMod(buildConfig.views.get,modBaseDir).asInstanceOf[ViewMod]
+          makeBuildTimeMod(buildConfig.views.get, modBaseDir).asInstanceOf[ViewMod]
         else
           null
       case _ => null
@@ -189,21 +201,21 @@ object WebAppConf {
 
     val persistence: List[PersistenceMod] = {
       if (buildConfig.persistence.isDefined)
-        buildConfig.persistence.get.map(makeBuildTimeMod(_,modBaseDir).asInstanceOf[PersistenceMod])
+        buildConfig.persistence.get.map(makeBuildTimeMod(_, modBaseDir).asInstanceOf[PersistenceMod])
       else
         Nil
     }
     val modules: List[RuntimeMod] = {
       if (buildConfig.modules.isDefined)
-        buildConfig.modules.get.map(makeBuildTimeMod(_,modBaseDir).asInstanceOf[RuntimeMod])
+        buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir).asInstanceOf[RuntimeMod])
       else
         Nil
     }
-    
-    new WebAppConf(buildConfig,view,persistence,modules)
-  } 
-  
-  
+
+    new WebAppConf(buildConfig, view, persistence, modules)
+  }
+
+
   /**
    * Loads the application configuration from the classpath
    */
@@ -213,8 +225,9 @@ object WebAppConf {
     val yaml = Yaml(cpUrl.openStream)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-      val modInst = Construct[Mod](configClass,Array(yaml))
+      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
+      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+      val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }
@@ -232,14 +245,15 @@ object WebAppConf {
     val yaml = Yaml(modFile)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val configClass: String = yaml.get("config_class").get.asInstanceOf[String]
-      val newModuleInstance = Construct[Mod](configClass,Array(yaml))
-      val mod = newModuleInstance << reference
+      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
+      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+      val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
+      val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }
     else {
       reference
     }
   }
-  
+
 }

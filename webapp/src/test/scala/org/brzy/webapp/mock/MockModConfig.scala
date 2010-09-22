@@ -13,17 +13,10 @@
  */
 package org.brzy.webapp.mock
 
-import org.brzy.fab.conf.Mod
+import org.brzy.fab.conf.ViewMod
 
+class MockModConfig(override val map:Map[String,AnyRef]) extends ViewMod(map) {
 
-class MockModConfig(m:Map[String,AnyRef]) extends Mod(m) {
+  def <<(that: ViewMod) = this
 
-  def <<(that: Mod) = {
-    if(that == null) {
-      this
-    }
-    else {
-      new MockModConfig(m)
-    }
-  }
 }
