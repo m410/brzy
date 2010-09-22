@@ -15,15 +15,14 @@ package org.brzy.fab.dependency
 
 
 import xml.XML
-import org.brzy.config.webapp.WebAppConfig
-import java.io.{File, FileWriter, BufferedWriter}
+import org.brzy.application.WebAppConf
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-class IvySettingsXml(config:WebAppConfig) {
+class IvySettingsXml(config:WebAppConf) {
 
   private val repos = config.repositories.toList
 /*
@@ -39,13 +38,13 @@ class IvySettingsXml(config:WebAppConfig) {
   <settings defaultResolver="default"/>
   <resolvers>
     <ibiblio name="maven-local" root="file://${user.home}/.m2/repository" m2compatible="true" />
-    {for(repo <- repos; if(repo.name.isDefined && repo.url.isDefined)) yield
-    <ibiblio m2compatible="true" name={repo.name.get} root={repo.url.get}  />
+    {for(repo <- repos; if(repo.id.isDefined && repo.url.isDefined)) yield
+    <ibiblio m2compatible="true" name={repo.id.get} root={repo.url.get}  />
     }
     <chain name="default">
       <resolver ref="maven-local"/>
-      {for(repo <- repos;if(repo.name.isDefined && repo.url.isDefined)) yield
-      <resolver ref={repo.name.get} />
+      {for(repo <- repos;if(repo.id.isDefined && repo.url.isDefined)) yield
+      <resolver ref={repo.id.get} />
       }
     </chain>
   </resolvers>

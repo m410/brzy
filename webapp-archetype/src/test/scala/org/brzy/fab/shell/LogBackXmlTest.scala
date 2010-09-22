@@ -17,18 +17,14 @@ package org.brzy.fab.shell
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.config.webapp.WebAppConfig
-import java.io.{File=>JFile}
-import org.brzy.config.ConfigFactory
 import org.brzy.fab.file.File
+import org.brzy.application.WebAppConf
 
 
-class LobBackXmlTest extends JUnitSuite {
+class LogBackXmlTest extends JUnitSuite {
   @Test def testCreateXml = {
-    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
-    val boot = ConfigFactory.makeBootConfig(new JFile(url.getFile), "test")
-    val config = new WebAppConfig(boot, null, Nil, Nil)
+    val config = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test1.b.yml")
     val logbackxml = new LogBackXml(config)
-    logbackxml.saveToFile(File("logback.xml").getAbsolutePath)
+    logbackxml.saveToFile(File("target/logback.xml").getAbsolutePath)
   }
 }

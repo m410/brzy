@@ -14,17 +14,15 @@
 package org.brzy.fab.dependency
 
 
-import xml._
-import org.brzy.config.webapp.WebAppConfig
-import java.io.{BufferedWriter, FileWriter}
-import java.io.File
+import org.brzy.application.WebAppConf
+import xml.XML
 
 /**
  * http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html
  * 
  * @author Michael Fortin
  */
-class IvyXml(config:WebAppConfig) {
+class IvyXml(config:WebAppConf) {
 
   // work around for bug with sorted sets and xml
   private val dependencies = config.dependencies.toList

@@ -24,7 +24,7 @@ import java.io.File
  * @author Michael Fortin
  */
 class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod]) {
-  val environment: String = c.environment.get
+  val environment: String = c.environment.getOrElse(null)
 
   val application: Application = c.application.getOrElse(null)
 

@@ -66,6 +66,16 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.brzy.fab</groupId>
+      <artifactId>fab-conf</artifactId>
+      <version>0.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.brzy.fab</groupId>
+      <artifactId>fab-util</artifactId>
+      <version>0.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.6.1</version>
@@ -74,11 +84,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.brzy.fab</groupId>
-      <artifactId>fab-conf</artifactId>
-      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.ivy</groupId>

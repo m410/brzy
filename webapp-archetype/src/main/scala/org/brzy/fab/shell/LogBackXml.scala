@@ -27,18 +27,15 @@
 package org.brzy.fab.shell
 
 
-import xml.transform.RuleTransformer
 import xml._
 import java.lang.String
-import org.brzy.config.common.Appender
-import collection.mutable.{ArrayBuffer, ListBuffer}
-import org.brzy.config.webapp.WebAppConfig
+import org.brzy.application.WebAppConf
 
 /**
  * Create the logback.xml configuration file
  * @author Michael Fortin
  */
-class LogBackXml(config: WebAppConfig) {
+class LogBackXml(config: WebAppConf) {
   
   val content =
 <configuration>

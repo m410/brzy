@@ -20,10 +20,10 @@ import org.brzy.fab.task.Task
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.doc.{Settings, DocFactory}
 import org.brzy.fab.dependency.DependencyResolver
-import org.brzy.config.webapp.WebAppConfig
 import org.brzy.fab.file.{Files, File}
 import collection.immutable.List
 import java.io.{File => JFile}
+import org.brzy.application.WebAppConf
 
 /**
  * Generates Javadoc and Scaladoc
@@ -68,7 +68,7 @@ class DocPhase(ctx: BuildContext) {
   @Task(name = "dependency-report", desc = "Generates an Ivy dependency report.", dependsOn = Array("pre-doc"))
   def dependecyReport = {
     ctx.line.say(Debug("doc-task"))
-    DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConfig])
+    DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
   }
 
   private def sourceFiles(root: JFile): List[JFile] = {

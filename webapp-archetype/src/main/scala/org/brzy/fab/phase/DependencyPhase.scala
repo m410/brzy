@@ -18,8 +18,8 @@ import org.brzy.fab.task.Task
 import org.brzy.fab.print.Debug
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.dependency.DependencyResolver
-import org.brzy.config.webapp.WebAppConfig
 import org.brzy.fab.file.File
+import org.brzy.application.WebAppConf
 
 /**
  * A build phase is a set of tasks, grouped together to accomplish a goal.  This is very
@@ -42,7 +42,7 @@ class DependencyPhase(ctx:BuildContext) {
   def packageProject = {
     ctx.line.say(Debug("resolve-task"))
     implicit val conversation = ctx.line
-    DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConfig])
+    DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
   }
 
   override def toString = "Dependency Resolution Phase"

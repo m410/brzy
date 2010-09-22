@@ -33,19 +33,6 @@ web_xml:
   - desription: Test Description
   - display-name: demo app
 
-environment_overrides:
-  - environment: developement
-    logging:
-      root:
-        ref: [STDOUT]
-    application:
-      webapp_context: devapp
-  - environment: test
-    application:
-      webapp_context: testapp
-  - environment: production
-    application:
-      webapp_context: prodapp
 
 
 

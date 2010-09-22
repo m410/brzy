@@ -15,18 +15,15 @@ package org.brzy.fab
 
 
 import build.BuildContext
-import phase.{DocPhase, DependencyPhase, CompilePhase, PackagePhase, PublishPhase, UnitTestPhase, CleanPhase}
+import phase._
 import print._
 import file.File
 import plugin.BuildPlugin
 
-import org.brzy.config.ConfigFactory._
-import org.brzy.config.webapp.WebAppConfig
-import org.brzy.config.common.BootConfig
-import org.brzy.config.mod.Mod
 
 import collection.mutable.ListBuffer
 import task.{SeqBuilder, TaskRunner}
+import org.brzy.application.WebAppConf
 
 /**
  *
@@ -40,8 +37,7 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
     error("No Configuration file at: " + configFile.getAbsolutePath)
 
   line.say(Debug("config: " + configFile.getAbsolutePath))
-  val buildBootConfig: BootConfig = makeBootConfig(configFile, ctx.environment)
-  val webAppConfig: WebAppConfig = makeWebAppConfig(buildBootConfig)
+  val webAppConfig = WebAppConf(ctx.environment)
   ctx.properties += "webAppConfig" -> webAppConfig
 
   // create phases & plugins
@@ -55,13 +51,13 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
   }
 
   val phases = List(
-      new CleanPhase(ctx),
-      new CompilePhase(ctx),
-      new UnitTestPhase(ctx),
-      new PackagePhase(ctx),
-      new DependencyPhase(ctx),
-      new DocPhase(ctx),
-      new PublishPhase(ctx))
+    new CleanPhase(ctx),
+    new CompilePhase(ctx),
+    new UnitTestPhase(ctx),
+    new PackagePhase(ctx),
+    new DependencyPhase(ctx),
+    new DocPhase(ctx),
+    new PublishPhase(ctx))
 
   def build(args: Array[String]): Unit = {
 
@@ -81,53 +77,15 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
   }
 
   def taskInfo(): Unit = {
-    line.subject(Phase("list")) {
-      line.subject(Task("tasks")) {
-        line.say(Info("actions"))
-        val tasks = SeqBuilder(plugins, phases)
-        tasks.taskList.foreach(info => {
-          line.say(Info(info.name + ": " +
-                  info.taskType + ": " +
-                  info.desc + ": depends" +
-                  info.seq.map(_.name).mkString("[",", ","]"), true))
-        })
-      }
+    line.subject(Task("tasks")) {
+      line.say(Info("actions"))
+      val tasks = SeqBuilder(plugins, phases)
+      tasks.taskList.foreach(info => {
+        line.say(Info(info.name + ": " +
+                info.taskType + ": " +
+                info.desc + ": depends" +
+                info.seq.map(_.name).mkString("[", ", ", "]"), true))
+      })
     }
   }
-
-  /**
-   * TODO this doesn't belong here, it was copied from brzy-config.  It belongs there.
-   */
-  protected def makeWebAppConfig(bootConfig: BootConfig) = {
-    val moduleBaseDir = File(".brzy/modules/")
-    val view: Mod = bootConfig.views match {
-      case Some(v) =>
-        if (v != null) {
-          val mod = bootConfig.views.get
-          makeBuildTimeModule(mod, moduleBaseDir)
-        }
-        else
-          null
-      case _ => null
-    }
-
-    val persistence: List[Mod] = {
-      if (bootConfig.persistence.isDefined)
-        bootConfig.persistence.get.map(persist => {
-          makeBuildTimeModule(persist, moduleBaseDir)
-        })
-      else
-        Nil
-    }
-    val modules: List[Mod] = {
-      if (bootConfig.modules.isDefined)
-        bootConfig.modules.get.map(mod => {
-          makeBuildTimeModule(mod, moduleBaseDir)
-        })
-      else
-        Nil
-    }
-    new WebAppConfig(bootConfig, view, persistence, modules)
-  }
-
 }

@@ -14,7 +14,6 @@
 package org.brzy.fab.dependency
 
 
-import org.brzy.config.webapp.WebAppConfig
 import org.brzy.fab.file.File
 import org.brzy.fab.print._
 
@@ -30,6 +29,7 @@ import java.io._
 import javax.xml.transform.stream.{StreamResult, StreamSource}
 import org.apache.ivy.core.module.id.ModuleRevisionId
 import javax.xml.transform.{TransformerFactory, Transformer, Source}
+import org.brzy.application.WebAppConf
 
 /**
  * This uses Ivy to download the application dependencies place them in a local cache director
@@ -43,7 +43,7 @@ object DependencyResolver {
   val settingsFile = File(".brzy/app/ivysettings.xml")
   val ivyFile = File(".brzy/app/ivy.xml")
 
-  def apply(webappConfig: WebAppConfig)(implicit line: Conversation) {
+  def apply(webappConfig: WebAppConf)(implicit line: Conversation) {
 
     if (!base.exists)
       base.mkdirs
@@ -94,7 +94,7 @@ object DependencyResolver {
   /**
    * https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyReport.java
    */
-  def generateReport(config: WebAppConfig) = {
+  def generateReport(config: WebAppConf) = {
 
     // output dir
     val targetDir = File("target/dependency-report")

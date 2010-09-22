@@ -18,10 +18,10 @@ import org.brzy.fab.build.BuildContext
 import org.brzy.fab.task.Task
 import org.brzy.fab.print.Debug
 import org.brzy.fab.file.FileUtils._
-import org.brzy.config.webapp.WebAppConfig
 import org.brzy.fab.shell.{WebXml, LogBackXml}
 
 import org.brzy.fab.file.{Files, File, Jar}
+import org.brzy.application.WebAppConf
 
 /**
  *
@@ -45,7 +45,7 @@ class PackagePhase(ctx: BuildContext) {
   @Task(name = "package-task", desc = "Package artifacts", dependsOn = Array("pre-package"))
   def packageProject = {
     ctx.line.say(Debug("package-task"))
-    val webAppConfig = ctx.properties("webAppConfig").asInstanceOf[WebAppConfig]
+    val webAppConfig = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
     val version = webAppConfig.application.version.get
     val artifact = webAppConfig.application.artifactId.get
     val destination = File(ctx.targetDir, artifact + "-" + version + ".jar")
@@ -63,7 +63,7 @@ class PackagePhase(ctx: BuildContext) {
   def makeLogbackXml = {
     ctx.line.say(Debug("makeLogbackXml"))
     val file = File(ctx.webappDir, "WEB-INF/classes/logback.xml")
-    val config = ctx.properties("webAppConfig").asInstanceOf[WebAppConfig]
+    val config = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
     val logBackXml = new LogBackXml(config)
     logBackXml.saveToFile(file.getAbsolutePath)
 
@@ -72,7 +72,7 @@ class PackagePhase(ctx: BuildContext) {
   def makeWebXml = {
     ctx.line.say(Debug("makeWebXml"))
     val file = File(ctx.webappDir, "WEB-INF/web.xml")
-    val config = ctx.properties("webAppConfig").asInstanceOf[WebAppConfig]
+    val config = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
     val webXml = new WebXml(config)
     webXml.saveToFile(file.getAbsolutePath)
   }

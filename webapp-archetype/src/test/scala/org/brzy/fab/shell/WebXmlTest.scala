@@ -17,19 +17,15 @@ package org.brzy.fab.shell
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.config.webapp.WebAppConfig
-import java.io.{File=>JFile}
-import org.brzy.config.ConfigFactory
 import org.brzy.fab.file.File
+import org.brzy.application.WebAppConf
 
 
 class WebXmlTest extends JUnitSuite {
   @Test def testCreateXml = {
-    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
-    val boot = ConfigFactory.makeBootConfig(new JFile(url.getFile), "test")
-    val config = new WebAppConfig(boot, null, Nil, Nil)
-    assertTrue(config.webXml.isDefined)
+    val config = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test1.b.yml")
+    assertNotNull(config.webXml)
     val webXml = new WebXml(config)
-    webXml.saveToFile(File("web.xml").getAbsolutePath)
+    webXml.saveToFile(File("target/web.xml").getAbsolutePath)
   }
 }

@@ -4,7 +4,7 @@ Brzy Web Framework is a Scala based, full stack application framework.  You Can 
 "http://wiki.github.com/m410/brzy/":http://wiki.github.com/m410/brzy/
 
 This is still a very early release but it's starting to take shape nicely.  Some of the
-most difficult issues I have left half to do with the build system.  The mvc portion of
+most difficult issues I have left have to do with the build system.  The mvc portion of
 the code is almost ready.
 
 Take a look at some of the modules here:
