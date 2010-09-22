@@ -75,9 +75,8 @@ class Mod(override val map: Map[String, AnyRef]) extends BaseConf(map) with Orde
           .append(version.getOrElse(null))
           .toHashCode
 
-
   override def toString = new StringBuilder()
-          .append(this.getClass.getName)
+          .append(this.getClass.getSimpleName)
           .append("[")
           .append(name.getOrElse("?"))
           .append(", ")
@@ -88,12 +87,22 @@ class Mod(override val map: Map[String, AnyRef]) extends BaseConf(map) with Orde
           .toString
 }
 
+/**
+ *
+ */
 object Mod {
+
   def apply(map: Map[String, AnyRef]) = map.get("mod_type") match {
     case Some("view") => new ViewMod(map)
     case Some("persistence") => new PersistenceMod(map)
     case Some("runtime") => new RuntimeMod(map)
     case Some("build") => new BuildMod(map)
     case _ => new Mod(map)
+  }
+
+  def fromYaml(map: Map[String, AnyRef]) = {
+    val c = Class.forName(map.get("config_class").get.asInstanceOf[String])
+    val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+    constructor.newInstance(map).asInstanceOf[Mod]
   }
 }

@@ -22,7 +22,10 @@ import org.brzy.fab.conf._
  */
 class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map) {
   
-	val environment: Option[String] = map.get("environment").asInstanceOf[Option[String]].orElse(None)
+	val environment: Option[String] = map.get("environment") match {
+    case Some(e) => if(e != null) Option(e.asInstanceOf[String]) else None
+    case _ => None
+  }
   
 	val application: Option[Application] = map.get("application") match {
     case s: Some[_] => Option(new Application(s.get.asInstanceOf[Map[String, String]]))

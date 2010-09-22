@@ -19,26 +19,27 @@ import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 
 class WebAppConfTest extends JUnitSuite {
+  @Test def testCreateConfiguration = {
+    val wac = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+    assertNotNull(wac)
+    assertNotNull(wac.application)
+    assertNotNull(wac.project)
+    assertNotNull(wac.logging)
+    assertNotNull(wac.logging.loggers)
+    assertNotNull(wac.logging.appenders)
+    assertNotNull(wac.logging.root)
+    assertEquals(1, wac.logging.root.get.ref.size)
+    assertNotNull(wac.dependencies)
+    assertEquals(17, wac.dependencies.size)
+    assertNotNull(wac.dependencyExcludes)
+    assertEquals(0, wac.dependencyExcludes.size)
+    assertNotNull(wac.repositories)
+    assertEquals(8, wac.repositories.size)
+    assertNotNull(wac.webXml)
+    assertNotNull(wac.environment)
+    assertEquals(12, wac.webXml.size)
 
-  @Test def testCreate = {
-    val webappConf = WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml")
-    assertNotNull(webappConf)
-    assertNotNull(webappConf.application)
-    assertNotNull(webappConf.project)
-    assertNotNull(webappConf.logging)
-    assertNotNull(webappConf.logging.loggers)
-    assertNotNull(webappConf.logging.appenders)
-    assertNotNull(webappConf.logging.root)
-    assertEquals(1,webappConf.logging.root.get.ref.size)
-    assertEquals("STDOUT",webappConf.logging.root.get.ref.get(0))
-    assertNotNull(webappConf.dependencies)
-    assertEquals(17,webappConf.dependencies.size)
-    assertNotNull(webappConf.dependencyExcludes)
-    assertEquals(0, webappConf.dependencyExcludes.size)
-    assertNotNull(webappConf.repositories)
-    assertEquals(8,webappConf.repositories.size)
-    assertNotNull(webappConf.webXml)
-    assertEquals(12,webappConf.webXml)
-    assertNotNull(webappConf.environment)
+    assertEquals(1, wac.logging.root.get.ref.size)
+    assertEquals("STDOUT", wac.logging.root.get.ref.get(0))
   }
 }

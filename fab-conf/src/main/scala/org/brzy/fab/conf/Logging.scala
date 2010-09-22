@@ -184,12 +184,10 @@ class Root(val map: Map[String, AnyRef]) extends Merge[Root] {
       new Root(Map[String, AnyRef](
         "level" -> that.level.getOrElse(this.level.get),
         "ref" -> {
-          if (this.ref.isDefined && that.ref.isDefined)
-            this.ref.get ++ that.ref.get
+          if (that.ref.isDefined)
+            that.ref.get
           else if (this.ref.isDefined)
             this.ref.get
-          else if (that.ref.isDefined)
-            that.ref.get
           else
             null
         }))

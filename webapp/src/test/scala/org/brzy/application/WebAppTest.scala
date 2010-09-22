@@ -21,10 +21,11 @@ import org.junit.Test
 
 class WebAppTest extends JUnitSuite {
 
-  @Test def testCreate = {
+  @Test def testCreateWebApp = {
     val webappConf = WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml")
-    val webapp = WebApp(webappConf)
+    assertNotNull(webappConf)
 
+    val webapp = WebApp(webappConf)
     assertNotNull(webapp)
 
     assertNotNull(webapp.serviceMap)

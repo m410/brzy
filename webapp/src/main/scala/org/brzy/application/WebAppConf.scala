@@ -16,7 +16,6 @@ package org.brzy.application
 import org.brzy.fab.conf._
 import collection.mutable.ListBuffer
 import collection.SortedSet
-import org.brzy.fab.reflect.Construct
 import java.io.File
 
 /**
@@ -92,7 +91,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     SortedSet(repositoryBuffer: _*)
   }
 
-  val webXml: Option[List[Map[String, AnyRef]]] = {
+  val webXml: List[Map[String, AnyRef]] = {
     val buf = ListBuffer[Map[String, AnyRef]]()
 
     if (views != null && views.isInstanceOf[WebXml] && views.asInstanceOf[WebXml].webXml.isDefined)
@@ -110,7 +109,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
       if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
         p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
     })
-    Some(buf.toList)
+    buf.toList
   }
 }
 
@@ -136,10 +135,10 @@ object WebAppConf {
     val runtimeConfig = envMap match {
       case Some(e) =>
         val envConf = new WebAppConfFile(e.asInstanceOf[Map[String, AnyRef]])
-        val runConf =  envConf << appConf << defaultConf
+        val runConf =  defaultConf << appConf << envConf
         runConf.asInstanceOf[WebAppConfFile]
       case _ =>
-        val runConf = appConf << defaultConf
+        val runConf = defaultConf << appConf
         runConf.asInstanceOf[WebAppConfFile]
     }
 
@@ -183,10 +182,10 @@ object WebAppConf {
     val buildConfig: WebAppConfFile = envMap match {
       case Some(e) =>
         val envConf = new WebAppConfFile(e.asInstanceOf[Map[String, AnyRef]])
-        val runConf = envConf << appConf << defaultConf
+        val runConf = defaultConf << appConf << envConf
         runConf.asInstanceOf[WebAppConfFile]
       case _ =>
-        val runConf = appConf << defaultConf
+        val runConf = defaultConf << appConf
         runConf.asInstanceOf[WebAppConfFile]
     }
 
@@ -225,9 +224,7 @@ object WebAppConf {
     val yaml = Yaml(cpUrl.openStream)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
-      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
-      val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
+      val modInst = Mod.fromYaml(yaml)
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }
@@ -245,9 +242,7 @@ object WebAppConf {
     val yaml = Yaml(modFile)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
-      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
-      val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
+      val modInst = Mod.fromYaml(yaml)
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }

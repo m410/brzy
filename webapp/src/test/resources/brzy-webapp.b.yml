@@ -76,6 +76,9 @@ environment_overrides:
   - environment: test
     application:
       webapp_context: testapp
+    logging:
+      root:
+        ref: [STDOUT]
   - environment: production
     application:
       webapp_context: prodapp
