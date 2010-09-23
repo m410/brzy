@@ -13,12 +13,12 @@
  */
 package org.brzy.scheduler
 
-import org.brzy.config.mod.ModProvider
 import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTypesScanner}
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
 import org.reflections.Reflections
 import collection.JavaConversions._
 import collection.mutable.{ListBuffer, HashMap}
+import org.brzy.fab.mod.ModProvider
 
 /**
  * Document Me..
@@ -45,8 +45,6 @@ class SchedulerModProvider(c: SchedulerModConfig) extends ModProvider {
     })
     list.toList
   }
-
-
 
   override val serviceMap = {
     val map = HashMap[String, AnyRef]()

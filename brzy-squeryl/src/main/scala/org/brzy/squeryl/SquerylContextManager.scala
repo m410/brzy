@@ -13,7 +13,6 @@
  */
 package org.brzy.squeryl
 
-import org.brzy.mvc.interceptor.ManagedThreadContext
 
 import org.squeryl.internals.DatabaseAdapter
 import org.squeryl.{SessionFactory, Session}
@@ -22,6 +21,7 @@ import org.squeryl.adapters._
 import java.sql.DriverManager
 import util.DynamicVariable
 import org.slf4j.LoggerFactory
+import org.brzy.fab.interceptor.ManagedThreadContext
 
 /**
  * Manages transactions for the Squeryl ORM with a ThreadLocal variable.

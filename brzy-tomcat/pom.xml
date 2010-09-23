@@ -54,9 +54,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.brzy</groupId>
-      <artifactId>brzy-config</artifactId>
-      <version>0.6-SNAPSHOT</version>
+      <groupId>org.brzy.fab</groupId>
+      <artifactId>fab-conf</artifactId>
+      <version>0.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

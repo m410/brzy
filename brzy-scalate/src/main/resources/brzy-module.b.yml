@@ -1,6 +1,7 @@
 #
 # scalate view pages
 #
+mod_type: view
 name: brzy-scalate
 org: org.brzy
 version: "0.5"

@@ -13,15 +13,11 @@
  */
 package org.brzy.jsp
 
-import org.brzy.config.mod.Mod
+import org.brzy.fab.mod.ViewMod
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-class JspModConfig(map: Map[String, AnyRef]) extends Mod(map) {
-  override val configurationName = "Email Configuration"
-
-  override def asMap = map
-}
+class JspModConfig(override val map: Map[String, AnyRef]) extends ViewMod(map)

@@ -91,9 +91,9 @@
       <version>1.6.1</version>
     </dependency>
     <dependency>
-      <groupId>org.brzy</groupId>
-      <artifactId>brzy-mvc</artifactId>
-      <version>0.6-SNAPSHOT</version>
+      <groupId>org.brzy.fab</groupId>
+      <artifactId>fab-conf</artifactId>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.scala-tools.testing</groupId>
@@ -107,7 +107,12 @@
       <version>4.7</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.brzy</groupId>
+      <artifactId>webapp</artifactId>
+      <version>0.6-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest</artifactId>

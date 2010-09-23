@@ -18,13 +18,9 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web._
-import org.brzy.config.webapp.WebAppConfig
-import org.brzy.config.common.BootConfig
-import org.brzy.config.mod.Mod
-import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
+import javax.servlet.{ServletRequest, ServletResponse}
 import java.lang.String
-import javax.servlet.http.HttpServletRequest
-import org.brzy.application.WebApp
+import org.brzy.application.WebAppConf
 
 class SecurityFilterTest extends JUnitSuite {
 
@@ -41,17 +37,8 @@ class SecurityFilterTest extends JUnitSuite {
         redirectCalled = true
       }
     }
-    val boot = new BootConfig(Map("environment" -> "development",
-      "application" -> Map(
-          "org" -> "org.brzy.security"
-        )))
-    val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
 
-    val securityMod = new SecurityModConfig(Map(
-      "resource_class" -> "org.brzy.security.SecurityModProvider",
-      "name" -> "brzy-security",
-      "default_path" -> "/security/authentication"))
-    val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
+    val webapp = new SecurityMockWebApp(WebAppConf("test"))
     session.getServletContext.setAttribute("application", webapp)
 
     val filter = new SecurityFilter
@@ -73,17 +60,7 @@ class SecurityFilterTest extends JUnitSuite {
     }
 
     val response = new MockHttpServletResponse
-    val boot = new BootConfig(Map("environment" -> "development",
-      "application" -> Map(
-          "org" -> "org.brzy.security"
-        )))
-    val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
-
-    val securityMod = new SecurityModConfig(Map(
-      "resource_class" -> "org.brzy.security.SecurityModProvider",
-      "name" -> "brzy-security",
-      "default_path" -> "/security/authentication"))
-    val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
+    val webapp = new SecurityMockWebApp(WebAppConf("test"))
     session.getServletContext.setAttribute("application", webapp)
     var doFilterCalled = false
 
@@ -118,19 +95,7 @@ class SecurityFilterTest extends JUnitSuite {
         doSendError = true
       }
     }
-    val boot = new BootConfig(Map(
-      "environment" -> "development",
-      "application" -> Map(
-          "org" -> "org.brzy.security"
-        )
-      ))
-    val view = new Mod(Map("name" -> "brzy-scalate", "default_path" -> "/login"))
-
-    val securityMod = new SecurityModConfig(Map(
-      "resource_class" -> "org.brzy.security.SecurityModProvider",
-      "name" -> "brzy-security",
-      "default_path" -> "/security/authentication"))
-    val webapp = new SecurityMockWebApp(new WebAppConfig(boot, view, Nil, List(securityMod)))
+    val webapp = new SecurityMockWebApp(WebAppConf("test"))
     session.getServletContext.setAttribute("application", webapp)
 
     val filter = new SecurityFilter

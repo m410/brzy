@@ -1,0 +1,15 @@
+#
+# squeryl object relational persistence
+#
+mod_type: runtime
+name: brzy-squeryl
+org: org.brzy
+version: "0.2"
+config_class: org.brzy.jms.JmsModConfig
+resource_class: org.brzy.jms.JmsModProvider
+
+connection_factory_class: ""
+connection_url: ""
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-jms, rev: "0.2", transitive: false}

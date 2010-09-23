@@ -79,7 +79,7 @@
     </dependency>
     <dependency>
       <groupId>org.brzy</groupId>
-      <artifactId>brzy-mvc</artifactId>
+      <artifactId>webapp</artifactId>
       <version>0.6-SNAPSHOT</version>
     </dependency>
     <dependency>

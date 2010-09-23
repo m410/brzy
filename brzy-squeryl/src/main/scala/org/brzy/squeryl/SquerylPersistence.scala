@@ -13,18 +13,15 @@
  */
 package org.brzy.squeryl
 
-import org.brzy.mvc.validator.Validation
-import org.brzy.mvc.action.args.Parameters
-
 import javax.validation.{Validation => jValidation}
 
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.PrimitiveTypeMode._
-import org.brzy.reflect.Construct
 import org.brzy.persistence.{PersistentCrudOps, Persistable}
 import java.lang.String
 import org.slf4j.LoggerFactory
 import reflect.Manifest
+import org.brzy.webapp.validator.Validation
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class

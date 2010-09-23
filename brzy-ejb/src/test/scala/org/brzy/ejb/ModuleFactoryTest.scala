@@ -16,30 +16,14 @@ package org.brzy.ejb
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import java.io.File
-import org.brzy.config.mod.Mod
-import org.brzy.config.ConfigFactory
+import org.brzy.application.WebAppConf
 
 class ModuleFactoryTest extends JUnitSuite {
   @Test def testAssemble = {
-    val url = getClass.getClassLoader.getResource("brzy-webapp.b.yml")
-    assertNotNull(url)
-    val bootConfig = ConfigFactory.makeBootConfig(new File(url.getFile), "development")
-    assertNotNull(bootConfig)
-    bootConfig.modules.get.foreach(p => {
-      val host = p.map("jndi")
-      assertNotNull(host)
-      assertEquals("localhost", host)
-    })
-    val modules: List[Mod] = {
-      if (bootConfig.modules.isDefined)
-        bootConfig.modules.get.map(ConfigFactory.makeRuntimeModule(_))
-      else
-        Nil
-    }
-    assertNotNull(modules)
-    assertEquals(1, modules.size)
-    modules.foreach(p => {
+    val conf = WebAppConf("test")
+    assertNotNull(conf.modules)
+    assertEquals(1, conf.modules.size)
+    conf.modules.foreach(p => {
       val email = p.asInstanceOf[EjbModConfig]
       val host = email.jndi.get
       assertNotNull(host)

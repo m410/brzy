@@ -13,16 +13,15 @@
  */
 package org.brzy.security
 
-import org.brzy.config.mod.Mod
-import org.brzy.config.webapp.WebXml
+import org.brzy.fab.conf.BaseConf
+import org.brzy.fab.mod.ViewMod
 
 /**
  * Defines the Security configuration.
  *
  * @author Michael Fortin
  */
-class SecurityModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
-  override val configurationName = "Security Configuration"
+class SecurityModConfig(override val map: Map[String, AnyRef]) extends ViewMod(map) {
   val authorityEntity: Option[String] = map.get("authority_entity").asInstanceOf[Option[String]].orElse(None)
   val userEntity: Option[String] = map.get("user_entity").asInstanceOf[Option[String]].orElse(None)
   val userEntityName: Option[String] = map.get("user_entity_name").asInstanceOf[Option[String]].orElse(None)
@@ -33,7 +32,7 @@ class SecurityModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
 
   override val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
-  override def <<(that: Mod): Mod = {
+  override def <<(that: BaseConf) = {
     if (that == null) {
       this
     }
@@ -57,7 +56,7 @@ class SecurityModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
             it.webXml.get
           else
             null
-        }) ++ super.<<(that).asMap)
+        }) ++ super.<<(that).map)
     }
     else {
       new SecurityModConfig(Map[String, AnyRef](
@@ -78,11 +77,7 @@ class SecurityModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
             that.map.get("web_xml").get
           else
             null
-        }) ++ super.<<(that).asMap)
+        }) ++ super.<<(that).map)
     }
   }
-
-  override def asMap: Map[String, AnyRef] = map
-
-
 }

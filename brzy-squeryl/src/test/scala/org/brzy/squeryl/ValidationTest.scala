@@ -18,8 +18,8 @@ import org.junit.Test
 import org.junit.Ignore
 import org.junit.Assert._
 import org.brzy.mock.Person
-import org.brzy.mvc.validator.Validation
 import javax.validation.{Validation => jValidation}
+import org.brzy.webapp.validator.Validation
 
 class ValidationTest extends JUnitSuite {
   @Test @Ignore def testValidation = {

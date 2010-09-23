@@ -13,20 +13,20 @@
  */
 package org.brzy.scalate
 
-import org.brzy.config.mod.Mod
-import org.brzy.config.webapp.WebXml
+import org.brzy.fab.mod.ViewMod
+import org.brzy.fab.conf.BaseConf
 
 
 /**
  * @author Michael Fortin
  */
-class ScalateModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
-  override val configurationName = "Scalate"
-  val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
+class ScalateModConfig(override val map: Map[String, AnyRef]) extends ViewMod(map) {
+
+  override val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
 
   override val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
-  override def <<(that: Mod): Mod = {
+  override def <<(that: BaseConf)= {
     if (that == null) {
       this
     }
@@ -44,7 +44,7 @@ class ScalateModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
             it.webXml.get
           else
             null
-        }) ++ super.<<(that).asMap)
+        }) ++ super.<<(that).map)
     }
     else {
       new ScalateModConfig(Map[String, AnyRef](
@@ -59,10 +59,7 @@ class ScalateModConfig(map: Map[String, AnyRef]) extends Mod(map) with WebXml {
             that.map.get("web_xml").get
           else
             null
-        }) ++ super.<<(that).asMap)
+        }) ++ super.<<(that).map)
     }
   }
-
-  override def asMap: Map[String, AnyRef] = map
-
 }

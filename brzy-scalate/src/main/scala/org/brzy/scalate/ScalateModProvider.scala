@@ -13,13 +13,13 @@
  */
 package org.brzy.scalate
 
-import org.brzy.config.webapp.WebAppViewResource
+import org.brzy.fab.mod.ViewModProvider
 
 /**
  * 
  * @author Michael Fortin
  */
-class ScalateModProvider(config:ScalateModConfig) extends WebAppViewResource(config){
+class ScalateModProvider(config:ScalateModConfig) extends ViewModProvider{
   override val fileExtension = config.fileExtension.get
   override val name = config.name.get
 

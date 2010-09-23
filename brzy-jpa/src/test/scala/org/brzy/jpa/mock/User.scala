@@ -18,7 +18,7 @@ import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
 import reflect.BeanProperty
 import java.beans.ConstructorProperties
-import org.brzy.mvc.action.args.Parameters
+import org.brzy.webapp.action.args.Parameters
 
 
 @serializable

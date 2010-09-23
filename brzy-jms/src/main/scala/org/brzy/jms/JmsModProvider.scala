@@ -13,14 +13,14 @@
  */
 package org.brzy.jms
 
-import org.brzy.config.mod.ModProvider
 import org.apache.activemq.{ActiveMQConnectionFactory, ActiveMQConnection}
-import javax.jms.{Session, MessageConsumer, ConnectionFactory}
+import javax.jms.{Session, ConnectionFactory}
 import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTypesScanner}
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
 import org.reflections.Reflections
 import collection.mutable.HashMap
 import collection.JavaConversions._
+import org.brzy.fab.mod.ModProvider
 
 /**
  * Document Me..

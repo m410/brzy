@@ -13,15 +13,13 @@
  */
 package org.brzy.jpa
 
-import org.brzy.mvc.validator.Validation
 import org.slf4j.LoggerFactory
-import org.brzy.mvc.action.args.Parameters
 import javax.validation.{Validator,  Validation=>jValidation}
-import java.lang.reflect.Method
 
-import org.brzy.util.ParameterConversion._
 import org.brzy.jpa.RichQuery._
-import org.brzy.reflect.Construct
+import org.brzy.webapp.validator.Validation
+import org.brzy.fab.reflect.Construct
+import org.brzy.webapp.action.args.Parameters
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/

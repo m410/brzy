@@ -1,6 +1,7 @@
 #
 # squeryl object relational persistence
 #
+mod_type: persistence
 name: brzy-squeryl
 org: org.brzy
 version: "0.5"

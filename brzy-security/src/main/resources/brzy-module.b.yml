@@ -1,6 +1,7 @@
 #
 # implement persistence for the cassandra nosql db
 #
+mod_type: runtime
 name: brzy-security
 org: org.brzy
 version: "0.4"

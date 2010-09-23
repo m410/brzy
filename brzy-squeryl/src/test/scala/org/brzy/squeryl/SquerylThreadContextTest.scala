@@ -16,8 +16,8 @@ package org.brzy.squeryl
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.mvc.interceptor.{Invoker, ProxyFactory}
 import org.squeryl.Session
+import org.brzy.webapp.interceptor.{Invoker, ProxyFactory}
 
 class SquerylThreadContextTest extends JUnitSuite {
   @Test def testContext = {

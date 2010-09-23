@@ -16,8 +16,7 @@ package org.brzy.tomcat
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.config.ConfigFactory
-import org.brzy.config.mod.Mod
+import org.brzy.fab.mod.Mod
 
 
 class LoadConfigTest extends JUnitSuite {
@@ -26,7 +25,7 @@ class LoadConfigTest extends JUnitSuite {
       "name" -> "brzy-tomcat",
       "version" -> "0.2",
       "org" -> "org.brzy"))
-    val tomcat: Mod = ConfigFactory.makeRuntimeModule(mod)
+    val tomcat: Mod = null//ConfigFactory.makeRuntimeModule(mod)
     assertTrue(tomcat.isInstanceOf[Mod])
   }
 }

@@ -13,13 +13,12 @@
  */
 package org.brzy.security.mock
 
-import org.brzy.application.WebApp
-import org.brzy.config.webapp.WebAppConfig
 import collection.immutable.SortedSet
-import org.brzy.mvc.action.Action
+import org.brzy.webapp.action.Action
+import org.brzy.application.{WebAppConf, WebApp}
 
 
-class SecurityMockWebApp(config:WebAppConfig) extends WebApp(config) {
+class SecurityMockWebApp(config:WebAppConf) extends WebApp(config) {
   override def makeServiceMap = Map()
   override def makeControllers = List(new PersonController)
   override lazy val actions = SortedSet(

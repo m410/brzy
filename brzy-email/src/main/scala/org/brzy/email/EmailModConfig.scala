@@ -13,15 +13,15 @@
  */
 package org.brzy.email
 
-import org.brzy.config.mod.Mod
+import org.brzy.fab.mod.Mod
+import org.brzy.fab.conf.BaseConf
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
-  override val configurationName = "Email Configuration"
+class EmailModConfig(override val map: Map[String, AnyRef]) extends Mod(map) {
   val smtpHost: Option[String] = map.get("smtp_host").asInstanceOf[Option[String]].orElse(None)
   val smtpAuth: Option[String] = map.get("smtp_auth").asInstanceOf[Option[String]].orElse(None)
 
@@ -35,7 +35,7 @@ class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
   val transportProtocol: Option[String] = map.get("mail_transport_protocol").asInstanceOf[Option[String]].orElse(None)
   val mailDebug: Option[String] = map.get("mail_debug").asInstanceOf[Option[String]].orElse(None)
 
-  override def <<(that: Mod): Mod = {
+  override def <<(that: BaseConf) = {
     if (that == null) {
       this
     }
@@ -49,7 +49,7 @@ class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
         "mail_from" -> it.mailFrom.getOrElse(this.mailFrom.getOrElse(null)),
         "mail_transport_protocol" -> it.transportProtocol.getOrElse(this.transportProtocol.getOrElse(null)),
         "mail_debug" -> it.mailDebug.getOrElse(this.mailDebug.getOrElse(null))
-        ) ++ super.<<(that).asMap)
+        ) ++ super.<<(that).map)
     }
     else {
       new EmailModConfig(Map[String, AnyRef](
@@ -60,9 +60,7 @@ class EmailModConfig(map: Map[String, AnyRef]) extends Mod(map) {
         "mail_from" -> that.map.get("mail_from").getOrElse(this.mailFrom.getOrElse(null)),
         "mail_transport_protocol" -> that.map.get("mail_transport_protocol").getOrElse(this.transportProtocol.getOrElse(null)),
         "mail_debug" -> that.map.get("mail_debug").getOrElse(this.mailDebug.getOrElse(null))
-        ) ++ super.<<(that).asMap)
+        ) ++ super.<<(that).map)
     }
   }
-
-  override def asMap = map
 }

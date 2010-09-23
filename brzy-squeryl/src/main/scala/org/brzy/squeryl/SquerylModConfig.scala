@@ -13,14 +13,14 @@
  */
 package org.brzy.squeryl
 
-import org.brzy.config.mod.Mod
+import org.brzy.fab.conf.BaseConf
+import org.brzy.fab.mod.PersistenceMod
+
 
 /**
  * @author Michael Fortin
  */
-class SquerylModConfig(map: Map[String, AnyRef]) extends Mod(map) {
-  override val configurationName = "Squeryl"
-
+class SquerylModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) {
   val driver: Option[String] = map.get("driver").asInstanceOf[Option[String]].orElse(None)
   val url: Option[String] = map.get("url").asInstanceOf[Option[String]].orElse(None)
   val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
@@ -28,7 +28,7 @@ class SquerylModConfig(map: Map[String, AnyRef]) extends Mod(map) {
   val adaptorName: Option[String] = map.get("adaptor_name").asInstanceOf[Option[String]].orElse(None)
 
 
-  override def <<(that: Mod):Mod  = {
+  override def <<(that: BaseConf) = {
     if (that == null) {
       this
     }
@@ -40,7 +40,7 @@ class SquerylModConfig(map: Map[String, AnyRef]) extends Mod(map) {
         "user_name" -> it.userName.getOrElse(this.userName.getOrElse(null)),
         "password" -> it.password.getOrElse(this.password.getOrElse(null)),
         "adaptor_name" -> it.adaptorName.getOrElse(this.adaptorName.getOrElse(null)))
-        ++ super.<<(that).asMap)
+        ++ super.<<(that).map)
     }
     else {
       new SquerylModConfig(Map[String, AnyRef](
@@ -49,9 +49,7 @@ class SquerylModConfig(map: Map[String, AnyRef]) extends Mod(map) {
         "user_name" -> that.map.get("user_name").getOrElse(this.userName.getOrElse(null)),
         "password" -> that.map.get("password").getOrElse(this.password.getOrElse(null)),
         "adaptor_name" -> that.map.get("adapter_name").getOrElse(this.adaptorName.getOrElse(null)))
-        ++ super.<<(that).asMap)
+        ++ super.<<(that).map)
     }
   }
-
-  override def asMap:Map[String,AnyRef] = map
 }

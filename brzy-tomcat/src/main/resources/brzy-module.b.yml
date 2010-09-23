@@ -1,6 +1,7 @@
 #
 # tomcat development web server
 #
+mod_type: build
 name: brzy-tomcat
 version: "0.4"
 org: org.brzy

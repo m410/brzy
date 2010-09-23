@@ -1,5 +1,6 @@
 #
 #
+mod_type: runtime
 name: brzy-email
 org: org.brzy
 version: "0.6"

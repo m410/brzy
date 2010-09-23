@@ -13,8 +13,8 @@
  */
 package org.brzy.mock
 
-import org.brzy.mvc.action.args.Parameters
-import org.brzy.mvc.controller.{Controller,Action}
+import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.action.args.Parameters
 
 @Controller("persons")
 class PersonController {

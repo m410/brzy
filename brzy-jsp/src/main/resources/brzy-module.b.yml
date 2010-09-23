@@ -1,5 +1,6 @@
 #
 #
+mod_type: view
 name: brzy-jsp
 org: org.brzy
 version: "0.2"

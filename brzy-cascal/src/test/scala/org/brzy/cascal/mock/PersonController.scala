@@ -13,9 +13,8 @@
  */
 package org.brzy.cascal.mock
 
-import org.brzy.mvc.controller.{Action, Controller}
-import org.brzy.mvc.action.args.Parameters
-
+import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.action.args.Parameters
 
 @Controller("persons")
 class PersonController {

@@ -13,10 +13,10 @@
  */
 package org.brzy.ejb
 
-import org.brzy.config.mod.ModProvider
 import collection.mutable.HashMap
 import javax.rmi.PortableRemoteObject
 import javax.naming.InitialContext
+import org.brzy.fab.mod.ModProvider
 
 /**
  * Document Me..

@@ -1,0 +1,16 @@
+#
+# squeryl object relational persistence
+#
+mod_type: persistence
+name: brzy-squeryl
+org: org.brzy
+version: "0.2"
+config_class: org.brzy.jpa.JpaModConfig
+resource_class: org.brzy.jpa.JpaModProvider
+
+persistence_unit: "my-unit"
+
+dependencies:
+  - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "3.4.0.GA"}
+  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
+  - {conf: compile, org: org.brzy, name: brzy-jpa, rev: "0.2", transitive: false}

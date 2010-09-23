@@ -13,10 +13,10 @@
  */
 package org.brzy.spring
 
-import org.brzy.config.mod.ModProvider
 import org.springframework.context.support.ClassPathXmlApplicationContext
 import collection.JavaConversions._
 import collection.mutable.LinkedHashMap
+import org.brzy.fab.mod.ModProvider
 
 /**
  * Creates a spring application context and adds all the beans to the application.

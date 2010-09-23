@@ -1,6 +1,7 @@
 #
 # hibernate persistence
 #
+mod_type: runtime
 name: brzy-jpa
 org: org.brzy
 version: "0.3"

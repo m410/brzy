@@ -1,5 +1,6 @@
 #
 #
+mod_type: runtime
 name: brzy-spring
 org: org.brzy
 version: "0.5"

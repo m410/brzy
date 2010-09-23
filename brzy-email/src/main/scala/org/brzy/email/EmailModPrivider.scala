@@ -13,7 +13,7 @@
  */
 package org.brzy.email
 
-import org.brzy.config.mod.ModProvider
+import org.brzy.fab.mod.ModProvider
 
 /**
  * Document Me..

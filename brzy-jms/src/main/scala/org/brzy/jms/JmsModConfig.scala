@@ -13,22 +13,22 @@
  */
 package org.brzy.jms
 
-import org.brzy.config.mod.Mod
+import org.brzy.fab.mod.Mod
+import org.brzy.fab.conf.BaseConf
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-class JmsModConfig(map: Map[String, AnyRef]) extends Mod(map) {
-  override val configurationName = "JMS Configuration"
+class JmsModConfig(override val map: Map[String, AnyRef]) extends Mod(map) {
   val connectionFactoryClass:Option[String] = map.get("connection_factory_class").asInstanceOf[Option[String]].orElse(None)
   val brokerUrl:Option[String] = map.get("broker_url").asInstanceOf[Option[String]].orElse(None)
   val userName:Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
   val password:Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
   val scanPackage:Option[String] = map.get("scan_package").asInstanceOf[Option[String]].orElse(None)
 
-  override def <<(that: Mod): Mod = {
+  override def <<(that: BaseConf) = {
     if (that == null) {
       this
     }
@@ -37,15 +37,13 @@ class JmsModConfig(map: Map[String, AnyRef]) extends Mod(map) {
       new JmsModConfig(Map[String, AnyRef](
         "connection_factory_class" -> it.connectionFactoryClass.getOrElse(this.connectionFactoryClass.getOrElse(null)),
         "broker_url" -> it.brokerUrl.getOrElse(this.brokerUrl.getOrElse(null)))
-              ++ super.<<(that).asMap)
+              ++ super.<<(that).map)
     }
     else {
       new JmsModConfig(Map[String, AnyRef](
         "connection_factory_class" -> that.map.get("connection_factory_class").getOrElse(this.connectionFactoryClass.getOrElse(null)),
         "broker_url" -> that.map.get("connection_url").getOrElse(this.brokerUrl.getOrElse(null)))
-              ++ super.<<(that).asMap)
+              ++ super.<<(that).map)
     }
   }
-
-  override def asMap = map
 }

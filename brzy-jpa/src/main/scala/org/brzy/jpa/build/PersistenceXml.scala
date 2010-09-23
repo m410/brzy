@@ -13,17 +13,17 @@
  */
 package org.brzy.jpa.build
 
-import org.brzy.config.common.BootConfig
 import xml._
 import collection.mutable.{ListBuffer, ArrayBuffer}
 import transform.{RewriteRule, RuleTransformer}
+import org.brzy.application.WebAppConf
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-class PersistenceXml(config:BootConfig) {
+class PersistenceXml(config: WebAppConf) {
   private val template = XML.load(getClass.getClassLoader.getResource("template.persistence.xml"))
   private val children = ListBuffer[Elem]()
   private val parentName = "persistence-unit"

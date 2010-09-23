@@ -13,18 +13,18 @@
  */
 package org.brzy.ejb
 
-import org.brzy.config.mod.Mod
 import collection.mutable.ListBuffer
 import java.lang.String
 import collection.immutable.Map
+import org.brzy.fab.mod.Mod
+import org.brzy.fab.conf.BaseConf
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-class EjbModConfig(map: Map[String, AnyRef]) extends Mod(map) {
-  override val configurationName = "Ejb Configuration"
+class EjbModConfig(override val map: Map[String, AnyRef]) extends Mod(map) {
   val jndi: Option[String] = map.get("jndi").asInstanceOf[Option[String]].orElse(None)
 
   val beans: List[EjbBean] = {
@@ -48,7 +48,7 @@ class EjbModConfig(map: Map[String, AnyRef]) extends Mod(map) {
      remote_interface: com.somecompany.service.MyServiceRemote
      jndi_name: java:comp/env/myservice
   */
-  override def <<(that: Mod): Mod = {
+  override def <<(that: BaseConf)= {
     if (that == null) {
       this
     }
@@ -56,14 +56,12 @@ class EjbModConfig(map: Map[String, AnyRef]) extends Mod(map) {
       val it = that.asInstanceOf[EjbModConfig]
       new EjbModConfig(Map[String, AnyRef](
         "jndi" -> it.jndi.getOrElse(this.jndi.getOrElse(null)))
-              ++ super.<<(that).asMap)
+              ++ super.<<(that).map)
     }
     else {
       new EjbModConfig(Map[String, AnyRef](
         "jndi" -> that.map.get("jndi").getOrElse(this.jndi.getOrElse(null)))
-              ++ super.<<(that).asMap)
+              ++ super.<<(that).map)
     }
   }
-
-  override def asMap = map
 }

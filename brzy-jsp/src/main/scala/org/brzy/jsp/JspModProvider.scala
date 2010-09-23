@@ -13,7 +13,7 @@
  */
 package org.brzy.jsp
 
-import org.brzy.config.mod.ModProvider
+import org.brzy.fab.mod.ViewModProvider
 
 /**
  * Creates a spring application context and adds all the beans to the application.
@@ -21,7 +21,7 @@ import org.brzy.config.mod.ModProvider
  * @see http ://static.springsource.org/spring/docs/3.0.3.RELEASE/spring-framework-reference/html/
  * @author Michael Fortin
  */
-class JspModProvider(c: JspModConfig) extends ModProvider {
-  val name = c.name.get
-  
+class JspModProvider(c: JspModConfig) extends ViewModProvider {
+  override val name = c.name.get
+  override val fileExtension = c.fileExtension.get  
 }

@@ -16,7 +16,7 @@ package org.brzy.scalate
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.config.mod.Mod
+import org.brzy.fab.mod.Mod
 
 
 class ScalateModConfigTest extends JUnitSuite {
