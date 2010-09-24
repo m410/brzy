@@ -13,7 +13,7 @@
  */
 package org.brzy.webapp.mock
 
-import org.brzy.fab.conf.ViewModProvider
+import org.brzy.fab.mod.ViewModProvider
 
 
 class MockModProvider(c:MockModConfig) extends ViewModProvider {

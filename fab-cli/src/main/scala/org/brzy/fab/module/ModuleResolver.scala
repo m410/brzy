@@ -22,10 +22,10 @@ import org.apache.ivy.core.module.id.ModuleRevisionId
 import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 
-import org.brzy.fab.conf.ModConf
 import org.brzy.fab.dependency.Ivy._
 
 import org.brzy.fab.print._
+import org.brzy.fab.mod.ModConf
 
 
 /**

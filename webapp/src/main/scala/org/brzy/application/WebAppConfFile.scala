@@ -14,6 +14,7 @@
 package org.brzy.application
 
 import org.brzy.fab.conf._
+import org.brzy.fab.mod.ModConf
 
 /**
  * Document Me..

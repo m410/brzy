@@ -21,6 +21,7 @@ import javassist.util.proxy.{MethodHandler, ProxyObject, ProxyFactory => PFactor
 import org.junit.Test
 import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder}
 import collection.immutable.List
+import org.brzy.fab.interceptor.ManagedThreadContext
 
 class InterceptorTest extends JUnitSuite {
   val filter = new MethodFilter {

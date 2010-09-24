@@ -14,6 +14,7 @@
 package org.brzy.fab
 
 import conf._
+import mod.ModConf
 import print._
 import file._
 import build.{BuildContext, ArchetypeDatabase}
@@ -134,6 +135,14 @@ object BuildMain {
 
     talk.end
     interpreter.close
+  }
+
+  /**
+   * This is a temporary hack job.  Running tomcat as a regular plugin doesn't work because
+   * of interpreter classloader issues. Once those are resolved, this will be removed.
+   */
+  protected[fab] def tomcat6 = {
+    // TODO add custom tomcat plugin
   }
 
   protected[fab] def loadBuildDependencies(cp: List[Classpath], settings: Settings)(implicit talk: Conversation) = {

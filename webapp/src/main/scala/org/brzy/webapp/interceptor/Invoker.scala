@@ -15,6 +15,7 @@ package org.brzy.webapp.interceptor
 
 import javassist.util.proxy.MethodHandler
 import java.lang.reflect.Method
+import org.brzy.fab.interceptor.ManagedThreadContext
 
 /**
  *  This is the javassist implementation of the methodHandler.  It's called on any controller

@@ -23,13 +23,14 @@ import java.beans.ConstructorProperties
 
 import org.brzy.webapp.action.Action
 import org.brzy.webapp.controller.{ControllerScanner, Controller, Action => ActionAnnotation}
-import org.brzy.webapp.interceptor.{ManagedThreadContext, InterceptorResource, Invoker}
+import org.brzy.fab.interceptor.{ManagedThreadContext, InterceptorProvider}
+import org.brzy.webapp.interceptor.Invoker
 import org.brzy.webapp.interceptor.ProxyFactory._
 
 import org.brzy.fab.reflect.Construct
-import org.brzy.fab.conf._
 
 import org.brzy.service.{ServiceScanner, PostCreate, PreDestroy}
+import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
 
 /**
  *
@@ -74,8 +75,8 @@ class WebApp(conf: WebAppConf) {
   protected[application] def makeInterceptor: Invoker = {
     val buffer = ListBuffer[ManagedThreadContext]()
     persistenceResources.foreach(pin => {
-      if (pin.isInstanceOf[InterceptorResource])
-        buffer += pin.asInstanceOf[InterceptorResource].interceptor
+      if (pin.isInstanceOf[InterceptorProvider])
+        buffer += pin.asInstanceOf[InterceptorProvider].interceptor
     })
     new Invoker(buffer.toList)
   }

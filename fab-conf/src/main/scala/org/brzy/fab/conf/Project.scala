@@ -24,8 +24,8 @@ import reflect.BeanProperty
  */
 class Project(val map: Map[String, AnyRef]) extends Merge[Project] {
 
-  val scalaVersion: Option[String] = map.get("scala_version").asInstanceOf[Option[String]].orElse(null)
-  val packageType: Option[String] = map.get("package_type").asInstanceOf[Option[String]].orElse(null)
+  val scalaVersion: Option[String] = map.get("scala_version").asInstanceOf[Option[String]].orElse(None)
+  val packageType: Option[String] = map.get("package_type").asInstanceOf[Option[String]].orElse(None)
 
   def <<(that: Project) = {
     if (that == null) {

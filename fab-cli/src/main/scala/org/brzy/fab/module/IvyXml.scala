@@ -15,7 +15,7 @@ package org.brzy.fab.module
 
 
 import xml._
-import org.brzy.fab.conf.ModConf
+import org.brzy.fab.mod.ModConf
 
 
 /**

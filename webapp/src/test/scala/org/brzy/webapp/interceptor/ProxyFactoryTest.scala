@@ -20,6 +20,7 @@ import org.scalatest.junit.JUnitSuite
 import util.DynamicVariable
 import java.lang.reflect.Method
 import collection.immutable.List
+import org.brzy.fab.interceptor.ManagedThreadContext
 
 
 class ProxyFactoryTest extends JUnitSuite {

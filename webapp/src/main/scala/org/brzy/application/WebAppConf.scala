@@ -17,6 +17,8 @@ import org.brzy.fab.conf._
 import collection.mutable.ListBuffer
 import collection.SortedSet
 import java.io.File
+import org.brzy.fab.mod.{Mod, PersistenceMod, RuntimeMod, ViewMod}
+import org.slf4j.LoggerFactory
 
 /**
  * Document Me..
@@ -106,7 +108,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     })
 
     modules.foreach(p => {
-      if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
+      if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined && p.asInstanceOf[WebXml].webXml.get != null)
         p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
     })
     buf.toList
@@ -117,6 +119,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
  *
  */
 object WebAppConf {
+  private val log = LoggerFactory.getLogger(getClass)
   val defaultConfigFile = "/brzy-webapp.default.b.yml"
   val appConfigFile = "/brzy-webapp.b.yml"
 
@@ -159,7 +162,7 @@ object WebAppConf {
     }
     val modules: List[RuntimeMod] = {
       if (runtimeConfig.modules.isDefined)
-        runtimeConfig.modules.get.map(makeRuntimeMod(_).asInstanceOf[RuntimeMod])
+        runtimeConfig.modules.get.map(makeRuntimeMod(_))
       else
         Nil
     }
@@ -220,6 +223,7 @@ object WebAppConf {
    */
   protected[application] def makeRuntimeMod(reference: Mod): Mod = {
     val modResource: String = "modules/" + reference.name.get + "/brzy-module.b.yml"
+    log.debug("module conf: '{}'", modResource)
     val cpUrl = getClass.getClassLoader.getResource(modResource)
     val yaml = Yaml(cpUrl.openStream)
 
