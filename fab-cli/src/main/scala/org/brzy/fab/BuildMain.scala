@@ -13,13 +13,12 @@
  */
 package org.brzy.fab
 
-import conf._
-import mod.ModConf
+import cli.mod.{Yaml, BaseConf, ModConf}
 import print._
 import file._
 import build.{BuildContext, ArchetypeDatabase}
-import plugin.PluginResolver
-import module.ModuleResolver
+import cli.plugin.PluginResolver
+import cli.module.ModuleResolver
 import org.apache.commons.cli._
 
 import java.io.{File => JFile}

@@ -1,4 +1,4 @@
-package org.brzy.fab.plugin
+package org.brzy.fab.cli.plugin
 
 import org.apache.ivy.core.retrieve.RetrieveOptions
 import org.apache.ivy.core.module.id.ModuleRevisionId
@@ -7,8 +7,8 @@ import org.apache.ivy.Ivy
 
 import org.brzy.fab.file.File
 import org.brzy.fab.print.Conversation
-import org.brzy.fab.dependency.Ivy._
-import org.brzy.fab.conf.BaseConf
+import org.brzy.fab.cli.dependency.Ivy._
+import org.brzy.fab.cli.mod.BaseConf
 
 /**
  * Document Me..

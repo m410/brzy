@@ -17,5 +17,5 @@ package org.brzy.fab.compile
 import java.io.File
 
 trait Compiler {
-  def compile(sourceDirectory: File, bytecodeDirectory: File, classpath:Array[File]): Unit
+  def compile(sourceDirectory: File, bytecodeDirectory: File, classpath:Array[File]): Boolean
 }

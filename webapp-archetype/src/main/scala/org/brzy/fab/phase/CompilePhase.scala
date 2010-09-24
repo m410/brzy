@@ -53,7 +53,9 @@ class CompilePhase(ctx:BuildContext) {
     classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))
     ctx.line.say(Debug("source: " + sourceDir))
     ctx.line.say(Debug("target: " + outputDir))
-    compiler.compile(sourceDir,outputDir,classpath.toArray)
+    
+    if(!compiler.compile(sourceDir,outputDir,classpath.toArray))
+      ctx.line.endWithError("Compilation Failed")
   }
 
 

@@ -47,7 +47,7 @@ class IvyXml(config:WebAppConf) {
     if(dp.excludes.isDefined)
     <dependency org={dp.org.get} name={dp.name.get} rev={dp.rev.get} conf={dp.conf.get} transitive={dp.transitive.getOrElse(true).toString}>
       {for(exclude <- dp.excludes.get) yield
-      <exclude org={exclude.org.get} name={exclude.name.get} />
+      <exclude org={exclude.org.get} name={exclude.name.get} conf={dp.conf.get}/>
       }
     </dependency>
     else

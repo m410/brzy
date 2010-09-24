@@ -33,8 +33,8 @@ class Project(val map: Map[String, AnyRef]) extends Merge[Project] {
     }
     else {
       new Project(Map[String,String](
-        "scala_version" -> that.scalaVersion.getOrElse(this.scalaVersion.getOrElse(null)),
-        "package_type" -> that.packageType.getOrElse(this.packageType.getOrElse(null))
+        "scala_version" -> that.scalaVersion.getOrElse(this.scalaVersion.orNull),
+        "package_type" -> that.packageType.getOrElse(this.packageType.orNull)
       ))
     }
   }

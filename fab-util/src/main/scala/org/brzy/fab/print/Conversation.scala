@@ -27,8 +27,9 @@ class Conversation(verbose: Boolean, debug: Boolean) {
   protected[print] val reader = new ConsoleReader
   protected[print] val startTime = System.currentTimeMillis
 
-  protected[print] var columnWidth = 10
-  protected[print] var whiteLine = {
+  protected[print] val columnWidth = 10
+
+  protected[print] val whiteLine = {
     val sb = new StringBuilder(reader.getTermwidth)
     for (space <- 0 to reader.getTermwidth - 1) sb.append(" ")
     sb.toString
@@ -45,7 +46,7 @@ class Conversation(verbose: Boolean, debug: Boolean) {
     loop {
       try {
         lineReader.readLine match {
-          case s: String => say(Debug(s))
+          case s: String => say(Warn(s))
           case _ => exit
         }
       }
@@ -158,6 +159,7 @@ class Conversation(verbose: Boolean, debug: Boolean) {
     println(if(e.getMessage != null) e.getMessage else "")
     e.printStackTrace
     close
+    System.exit(1)
   }
 
   def endWithError(e:String) = {
@@ -168,6 +170,7 @@ class Conversation(verbose: Boolean, debug: Boolean) {
     println("s ")
     println(e)
     close
+    System.exit(1)
   }
 
   def end: Unit = {

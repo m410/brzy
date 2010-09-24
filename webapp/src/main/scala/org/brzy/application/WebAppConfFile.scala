@@ -67,11 +67,11 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
     else {
       val that = it.asInstanceOf[WebAppConfFile]
       new WebAppConfFile(Map[String, AnyRef](
-        "environment" -> this.environment.getOrElse(that.environment.getOrElse(null)),
+        "environment" -> this.environment.getOrElse(that.environment.orNull),
         "application" -> {this.application.getOrElse(that.application.get)}.map,
         "project" -> {
           if (this.project.isDefined && this.project.get != null)
-            {this.project.get << that.project.getOrElse(null)}.map
+            {this.project.get << that.project.orNull}.map
           else if (that.project.isDefined && that.project.get != null)
             that.project.get.map
           else
@@ -79,7 +79,7 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
         },
         "logging" -> {
           if (this.logging.isDefined)
-            {this.logging.get << that.logging.getOrElse(null)}.map
+            {this.logging.get << that.logging.orNull}.map
           else if (that.logging.isDefined)
             that.logging.get.map
           else

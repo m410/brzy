@@ -1,4 +1,4 @@
-package org.brzy.fab.dependency
+package org.brzy.fab.cli.dependency
 
 import org.apache.ivy.core.IvyContext
 import org.brzy.fab.print.{Conversation, Info, Warn, Debug}

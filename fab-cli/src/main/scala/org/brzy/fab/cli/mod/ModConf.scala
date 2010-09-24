@@ -11,10 +11,9 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.fab.mod
+package org.brzy.fab.cli.mod
 
 import collection.mutable.ListBuffer
-import org.brzy.fab.conf.BaseConf
 
 /**
  * Document Me..
@@ -22,10 +21,10 @@ import org.brzy.fab.conf.BaseConf
  * @author Michael Fortin
  */
 class ModConf(override val map: Map[String, AnyRef]) extends BaseConf(map){
-  val views: Option[ViewMod] = map.get("views") match {
+  val views: Option[Mod] = map.get("views") match {
     case Some(s) =>
       if (s != null)
-        Option(new ViewMod(s.asInstanceOf[Map[String, AnyRef]]))
+        Option(new Mod(s.asInstanceOf[Map[String, AnyRef]]))
       else
         None
     case _ => None
@@ -45,12 +44,12 @@ class ModConf(override val map: Map[String, AnyRef]) extends BaseConf(map){
     case _ => None
   }
 
-  val persistence: Option[List[PersistenceMod]] = map.get("persistence") match {
+  val persistence: Option[List[Mod]] = map.get("persistence") match {
     case Some(s) =>
-      val buffer = new ListBuffer[PersistenceMod]()
+      val buffer = new ListBuffer[Mod]()
       if (s != null) {
         s.asInstanceOf[List[Map[String, AnyRef]]].foreach(map => {
-          buffer += new PersistenceMod(map)
+          buffer += new Mod(map)
         })
         Option(buffer.toList)
       }

@@ -32,7 +32,21 @@
       <!--<scope>runtime</scope>-->
       <excludes>
         <exclude>org.brzy:webapp-archetype</exclude>
-        <exclude>org.brzy:brzy-config</exclude>
+        <exclude>org.brzy:webapp</exclude>
+        <exclude>org.brzy.fab:fab-conf</exclude>
+        <exclude>org.reflections:reflections</exclude>
+        <exclude>org.aspectj:aspectjweaver</exclude>
+        <exclude>javax.validation:validation-api</exclude>
+        <exclude>org.slf4j:slf4j-api</exclude>
+        <exclude>org.slf4j:slf4j-simple</exclude>
+        <exclude>junit:junit</exclude>
+        <exclude>org.scalatest:scalatest</exclude>
+        <exclude>com.google.collections:google-collections</exclude>
+        <exclude>dom4j:dom4j</exclude>
+        <exclude>javassist:javassist</exclude>
+        <exclude>xml-apis:xml-apis</exclude>
+        <exclude>com.google.code.gson:gson</exclude>
+        <exclude>javax.servlet:servlet-api</exclude>
       </excludes>
     </dependencySet>
     <dependencySet>

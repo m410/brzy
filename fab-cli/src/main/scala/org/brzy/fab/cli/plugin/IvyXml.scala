@@ -11,11 +11,11 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.fab.plugin
+package org.brzy.fab.cli.plugin
 
 
 import xml._
-import org.brzy.fab.conf.{Dependency, BaseConf}
+import org.brzy.fab.cli.mod.{Dependency, BaseConf}
 
 /**
  * http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html

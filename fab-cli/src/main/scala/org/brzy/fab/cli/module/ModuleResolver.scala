@@ -6,12 +6,12 @@
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.fab.module
+package org.brzy.fab.cli.module
 
 
 import org.apache.ivy.Ivy
@@ -22,10 +22,10 @@ import org.apache.ivy.core.module.id.ModuleRevisionId
 import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 
-import org.brzy.fab.dependency.Ivy._
+import org.brzy.fab.cli.dependency.Ivy._
 
 import org.brzy.fab.print._
-import org.brzy.fab.mod.ModConf
+import org.brzy.fab.cli.mod.ModConf
 
 
 /**

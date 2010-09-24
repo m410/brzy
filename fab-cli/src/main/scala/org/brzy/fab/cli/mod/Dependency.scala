@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.fab.conf
+package org.brzy.fab.cli.mod
 
 import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder, CompareToBuilder}
 import collection.mutable.ListBuffer
@@ -23,7 +23,7 @@ import collection.mutable.ListBuffer
  * @author Michael Fortin
  */
 class Dependency(val map: Map[String, AnyRef]) extends Ordered[Dependency] {
-  
+
   val org: Option[String] = map.get("org").asInstanceOf[Option[String]].orElse(None)
   val name: Option[String] = map.get("name").asInstanceOf[Option[String]].orElse(None)
   val rev: Option[String] = map.get("rev").asInstanceOf[Option[String]].orElse(None)

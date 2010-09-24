@@ -37,7 +37,7 @@ class WebAppArchetype(ctx: BuildContext, actions: Option[Array[String]], pluginC
     error("No Configuration file at: " + configFile.getAbsolutePath)
 
   line.say(Debug("config: " + configFile.getAbsolutePath))
-  val webAppConfig = WebAppConf(ctx.environment)
+  val webAppConfig = WebAppConf.buildtime(File(".brzy/modules"),ctx.environment)
   ctx.properties += "webAppConfig" -> webAppConfig
 
   // create phases & plugins

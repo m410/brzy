@@ -26,13 +26,13 @@ import org.slf4j.LoggerFactory
  * @author Michael Fortin
  */
 class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod]) {
-  val environment: String = c.environment.getOrElse(null)
+  val environment: String = c.environment.orNull
 
-  val application: Application = c.application.getOrElse(null)
+  val application: Application = c.application.orNull
 
-  val project: Project = c.project.getOrElse(null)
+  val project: Project = c.project.orNull
 
-  val logging: Logging = c.logging.getOrElse(null)
+  val logging: Logging = c.logging.orNull
 
   val dependencies: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
@@ -162,7 +162,7 @@ object WebAppConf {
     }
     val modules: List[RuntimeMod] = {
       if (runtimeConfig.modules.isDefined)
-        runtimeConfig.modules.get.map(makeRuntimeMod(_))
+        runtimeConfig.modules.get.map(makeRuntimeMod(_).asInstanceOf[RuntimeMod])
       else
         Nil
     }
@@ -178,7 +178,7 @@ object WebAppConf {
     val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 
     val envMap = appConf.map.get("environment_overrides") match {
-      case Some(a) => a.asInstanceOf[Map[String, AnyRef]].get(env)
+      case Some(a) => a.asInstanceOf[List[Map[String,AnyRef]]].find(_("environment") == env)
       case _ => None
     }
 
@@ -228,7 +228,12 @@ object WebAppConf {
     val yaml = Yaml(cpUrl.openStream)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val modInst = Mod.fromYaml(yaml)
+      // this needs to be in this class, because of classloader scope issues.  Same
+      // with the duplicate code below.  This should remove this later once the build runner
+      // classloader is ironed out.
+      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
+      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+      val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }
@@ -246,7 +251,9 @@ object WebAppConf {
     val yaml = Yaml(modFile)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val modInst = Mod.fromYaml(yaml)
+      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
+      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+      val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }

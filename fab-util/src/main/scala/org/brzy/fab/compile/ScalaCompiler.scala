@@ -24,7 +24,7 @@ import scala.tools.nsc.reporters.ConsoleReporter
 
 class ScalaCompiler(out:PrintWriter) extends Compiler {
 
-  override def compile(sourceDirectory: File, bytecodeDirectory: File, classpath:Array[File]): Unit = {
+  override def compile(sourceDirectory: File, bytecodeDirectory: File, classpath:Array[File]): Boolean = {
     val messageCollector = new StringWriter
     val messageCollectorWrapper = new PrintWriter( messageCollector )
 
@@ -34,15 +34,16 @@ class ScalaCompiler(out:PrintWriter) extends Compiler {
 
     val list = findFiles(sourceDirectory)
     list.foreach(f=>out.write("src: " + f.getAbsolutePath + util.Properties.lineSeparator))
-//    list.foreach(f=>println("src: " + f.getAbsolutePath + util.Properties.lineSeparator))
 
     ( new compiler.Run ).compile( list.map( _.toString ) )
 
     // Bail out if compilation failed
     if(reporter.hasErrors) {
       reporter.printSummary
-      error( "Compilation failed: " + messageCollector.toString )
+      false
     }
+    else
+      true
   }
 
   private def error( message: String ): Unit = {

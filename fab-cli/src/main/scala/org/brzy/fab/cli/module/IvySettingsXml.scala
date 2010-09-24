@@ -11,35 +11,30 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.fab.plugin
+package org.brzy.fab.cli.module
 
 
 import xml.XML
-import org.brzy.fab.conf.{Repository, BaseConf}
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-class IvySettingsXml(config:BaseConf) {
-
-  private val repos = config.repositories.getOrElse(List.empty[Repository])
+class IvySettingsXml {
 
   val xml =
 <ivysettings>
   <property name="revision" value="SNAPSHOT" override="false"/>
   <settings defaultResolver="default"/>
   <resolvers>
-    <ibiblio name="maven-local" root="file://${user.home}/.m2/repository" m2compatible="true" />
-		{for(repo <- repos; if(repo.id.isDefined && repo.url.isDefined)) yield
-    <ibiblio m2compatible="true" name={repo.id.get} root={repo.url.get}  />
-    }
+    <ibiblio name="maven-local" m2compatible="true" root="file://${user.home}/.m2/repository"/>
+    <ibiblio name="brzy-nexus" m2compatible="true" root="http://brzy.org/nexus/content/repositories/releases"/>
+    <ibiblio name="brzy-nexus-snapshots" m2compatible="true" root="http://brzy.org/nexus/content/repositories/snapshots"/>
     <chain name="default">
       <resolver ref="maven-local"/>
-      {for(repo <- repos;if(repo.id.isDefined && repo.url.isDefined)) yield
-      <resolver ref={repo.id.get} />
-      }
+      <resolver ref="brzy-nexus"/>
+      <resolver ref="brzy-nexus-snapshots"/>
     </chain>
   </resolvers>
 </ivysettings>
