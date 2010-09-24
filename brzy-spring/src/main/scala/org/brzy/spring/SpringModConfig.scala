@@ -24,20 +24,11 @@ import org.brzy.fab.conf.BaseConf
 class SpringModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
   val applicationContext: Option[String] = map.get("application_context").asInstanceOf[Option[String]].orElse(None)
 
-  override def <<(that: BaseConf) = {
-    if (that == null) {
+  override def <<(that: BaseConf) =
+    if (that == null)
       this
-    }
-    else if (that.isInstanceOf[SpringModConfig]) {
-      val it = that.asInstanceOf[SpringModConfig]
+    else
       new SpringModConfig(Map[String, AnyRef](
-        "application_context" -> it.applicationContext.getOrElse(this.applicationContext.getOrElse(null)))
-              ++ super.<<(that).map)
-    }
-    else {
-      new SpringModConfig(Map[String, AnyRef](
-        "application_context" -> that.map.get("application_context").getOrElse(this.applicationContext.getOrElse(null)))
-              ++ super.<<(that).map)
-    }
-  }
+        "application_context" -> that.map.getOrElse("application_context", this.applicationContext.orNull)
+        ) ++ super.<<(that).map)
 }

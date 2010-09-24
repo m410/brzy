@@ -27,29 +27,15 @@ class SquerylModConfig(override val map: Map[String, AnyRef]) extends Persistenc
   val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
   val adaptorName: Option[String] = map.get("adaptor_name").asInstanceOf[Option[String]].orElse(None)
 
-
-  override def <<(that: BaseConf) = {
-    if (that == null) {
+  override def <<(that: BaseConf) =
+    if (that == null)
       this
-    }
-    else if(that.isInstanceOf[SquerylModConfig]) {
-      val it = that.asInstanceOf[SquerylModConfig]
+    else
       new SquerylModConfig(Map[String, AnyRef](
-        "driver" -> it.driver.getOrElse(this.driver.getOrElse(null)),
-        "url" -> it.url.getOrElse(this.url.getOrElse(null)),
-        "user_name" -> it.userName.getOrElse(this.userName.getOrElse(null)),
-        "password" -> it.password.getOrElse(this.password.getOrElse(null)),
-        "adaptor_name" -> it.adaptorName.getOrElse(this.adaptorName.getOrElse(null)))
-        ++ super.<<(that).map)
-    }
-    else {
-      new SquerylModConfig(Map[String, AnyRef](
-        "driver" -> that.map.get("driver").getOrElse(this.driver.getOrElse(null)),
-        "url" -> that.map.get("url").getOrElse(this.url.getOrElse(null)),
-        "user_name" -> that.map.get("user_name").getOrElse(this.userName.getOrElse(null)),
-        "password" -> that.map.get("password").getOrElse(this.password.getOrElse(null)),
-        "adaptor_name" -> that.map.get("adapter_name").getOrElse(this.adaptorName.getOrElse(null)))
-        ++ super.<<(that).map)
-    }
-  }
+        "driver" -> that.map.getOrElse("driver", this.driver.orNull),
+        "url" -> that.map.getOrElse("url", this.url.orNull),
+        "user_name" -> that.map.getOrElse("user_name", this.userName.orNull),
+        "password" -> that.map.getOrElse("password", this.password.orNull),
+        "adaptor_name" -> that.map.getOrElse("adapter_name", this.adaptorName.orNull)
+        ) ++ super.<<(that).map)
 }

@@ -36,37 +36,15 @@ class SecurityModConfig(override val map: Map[String, AnyRef]) extends ViewMod(m
     if (that == null) {
       this
     }
-    else if (that.isInstanceOf[SecurityModConfig]) {
-      val it = that.asInstanceOf[SecurityModConfig]
-      new SecurityModConfig(Map[String, AnyRef](
-        "authority_entity" -> it.authorityEntity.getOrElse(this.authorityEntity.getOrElse(null)),
-        "user_entity" -> it.userEntity.getOrElse(this.userEntity.getOrElse(null)),
-        "user_entity_name" -> it.userEntityName.getOrElse(this.userEntityName.getOrElse(null)),
-        "user_entity_pass" -> it.userEntityPass.getOrElse(this.userEntityPass.getOrElse(null)),
-        "algorithm" -> it.algorithm.getOrElse(this.algorithm.getOrElse(null)),
-        "default_path" -> it.defaultPath.getOrElse(this.defaultPath.getOrElse(null)),
-        "authority_field" -> it.authorityField.getOrElse(this.authorityField.getOrElse(null)),
-        "web_xml" -> {
-          if (this.webXml.isDefined && it.webXml.isDefined &&
-                  this.webXml.get != null && it.webXml.get != null)
-            this.webXml.get ++ it.webXml.get
-          else if (this.webXml.isDefined)
-            this.webXml.get
-          else if (it.webXml.isDefined)
-            it.webXml.get
-          else
-            null
-        }) ++ super.<<(that).map)
-    }
     else {
       new SecurityModConfig(Map[String, AnyRef](
-        "authority_entity" -> that.map.get("authority_entity").getOrElse(this.authorityEntity.getOrElse(null)),
-        "user_entity" -> that.map.get("user_entity").getOrElse(this.userEntity.getOrElse(null)),
-        "user_entity_name" -> that.map.get("user_entity_name").getOrElse(this.userEntityName.getOrElse(null)),
-        "user_entity_pass" -> that.map.get("user_entity_pass").getOrElse(this.userEntityPass.getOrElse(null)),
-        "algorithm" -> that.map.get("algorithm").getOrElse(this.algorithm.getOrElse(null)),
-        "default_path" -> that.map.get("default_path").getOrElse(this.defaultPath.getOrElse(null)),
-        "authority_field" -> that.map.get("authority_field").getOrElse(this.authorityField.getOrElse(null)),
+        "authority_entity" -> that.map.getOrElse("authority_entity", this.authorityEntity.orNull),
+        "user_entity" -> that.map.getOrElse("user_entity", this.userEntity.orNull),
+        "user_entity_name" -> that.map.getOrElse("user_entity_name", this.userEntityName.orNull),
+        "user_entity_pass" -> that.map.getOrElse("user_entity_pass", this.userEntityPass.orNull),
+        "algorithm" -> that.map.getOrElse("algorithm", this.algorithm.orNull),
+        "default_path" -> that.map.getOrElse("default_path", this.defaultPath.orNull),
+        "authority_field" -> that.map.getOrElse("authority_field", this.authorityField.orNull),
         "web_xml" -> {
           if (this.webXml.isDefined && this.webXml.get != null &&
                   that.map.get("web_xml").isDefined && that.map.get("web_xml").get != null)

@@ -16,7 +16,6 @@ package org.brzy.cascal
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.fab.conf.Yaml
 import org.brzy.application.WebAppConf
 
 class ModuleFactoryTest extends JUnitSuite {

@@ -31,21 +31,12 @@ class CascalModConf(override val map: Map[String, AnyRef]) extends PersistenceMo
     if (that == null) {
       this
     }
-    else if(that.isInstanceOf[CascalModConf]) {
-      val it = that.asInstanceOf[CascalModConf]
+    else  {
       new CascalModConf(Map[String, AnyRef](
-        "user_name" -> it.userName.getOrElse(this.userName.getOrElse(null)),
-        "password" -> it.password.getOrElse(this.password.getOrElse(null)),
-        "key_space" -> it.keySpace.getOrElse(this.keySpace.getOrElse(null)),
-        "key_family" -> it.keyFamily.getOrElse(this.keyFamily.getOrElse(null)))
-        ++ super.<<(that).map)
-    }
-    else {
-      new CascalModConf(Map[String, AnyRef](
-        "user_name" -> that.map.get("user_name").getOrElse(this.userName.getOrElse(null)),
-        "password" -> that.map.get("password").getOrElse(this.password.getOrElse(null)),
-        "key_space" -> that.map.get("key_space").getOrElse(this.keySpace.getOrElse(null)),
-        "key_family" -> that.map.get("key_family").getOrElse(this.keyFamily.getOrElse(null)))
+        "user_name" -> that.map.getOrElse("user_name",this.userName.orNull),
+        "password" -> that.map.getOrElse("password",this.password.orNull),
+        "key_space" -> that.map.getOrElse("key_space",this.keySpace.orNull),
+        "key_family" -> that.map.getOrElse("key_family",this.keyFamily.orNull))
         ++ super.<<(that).map)
     }
   }

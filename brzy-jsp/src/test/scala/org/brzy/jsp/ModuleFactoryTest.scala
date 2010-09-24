@@ -17,10 +17,11 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import java.io.File
+import org.brzy.application.WebAppConf
 
 class ModuleFactoryTest extends JUnitSuite {
   @Test def testAssemble = {
-    val viewResource = null//ConfigFactory.makeRuntimeModule(view)
-    assertNotNull(viewResource)
+    val conf = WebAppConf("test")
+    assertNotNull(conf.views)
   }
 }

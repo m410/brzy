@@ -1,0 +1,10 @@
+#
+# scalate view pages
+#
+mod_type: view
+mod_name: TestView
+name: brzy-scalate
+org: org.brzy
+version: "0.2"
+file_extension: ".ssp"
+  

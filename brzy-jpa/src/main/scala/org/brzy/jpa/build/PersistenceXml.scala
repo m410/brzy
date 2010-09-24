@@ -14,7 +14,7 @@
 package org.brzy.jpa.build
 
 import xml._
-import collection.mutable.{ListBuffer, ArrayBuffer}
+import collection.mutable.ListBuffer
 import transform.{RewriteRule, RuleTransformer}
 import org.brzy.application.WebAppConf
 

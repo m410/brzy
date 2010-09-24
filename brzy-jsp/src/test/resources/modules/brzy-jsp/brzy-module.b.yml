@@ -2,9 +2,13 @@
 mod_type: view
 name: brzy-jsp
 org: org.brzy
-version: "0.1"
+version: "0.3-SNAPSHOT"
 config_class: org.brzy.jsp.JspModConfig
 resource_class: org.brzy.jsp.JspModProvider
 
 dependencies:
   - {conf: compile, org: org.brzy, name: brzy-jsp, rev: "0.1", transitive: false}
+
+web_xml:
+  - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.fusesource.scalate.servlet.TemplateEngineServlet", load-on-startup: "1"}
+

@@ -16,15 +16,15 @@ package org.brzy.ejb
 import collection.mutable.ListBuffer
 import java.lang.String
 import collection.immutable.Map
-import org.brzy.fab.mod.Mod
 import org.brzy.fab.conf.BaseConf
+import org.brzy.fab.mod.RuntimeMod
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-class EjbModConfig(override val map: Map[String, AnyRef]) extends Mod(map) {
+class EjbModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
   val jndi: Option[String] = map.get("jndi").asInstanceOf[Option[String]].orElse(None)
 
   val beans: List[EjbBean] = {
@@ -52,16 +52,10 @@ class EjbModConfig(override val map: Map[String, AnyRef]) extends Mod(map) {
     if (that == null) {
       this
     }
-    else if (that.isInstanceOf[EjbModConfig]) {
-      val it = that.asInstanceOf[EjbModConfig]
-      new EjbModConfig(Map[String, AnyRef](
-        "jndi" -> it.jndi.getOrElse(this.jndi.getOrElse(null)))
-              ++ super.<<(that).map)
-    }
     else {
       new EjbModConfig(Map[String, AnyRef](
-        "jndi" -> that.map.get("jndi").getOrElse(this.jndi.getOrElse(null)))
-              ++ super.<<(that).map)
+        "jndi" -> that.map.getOrElse("jndi",this.jndi.orNull)
+        ) ++ super.<<(that).map)
     }
   }
 }

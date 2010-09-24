@@ -12,6 +12,7 @@ modules:
     org: org.brzy
     version: "0.3"
     authority_entity: Person
+    
 #
 # Logging
 #[logback,log4j,jul]

@@ -12,7 +12,7 @@ user_entity:
 user_entity_name:
 user_entity_pass:
 algorithm:
-default_path:
+default_path: /security/authentication
 authority_field:
 
 dependencies:

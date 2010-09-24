@@ -73,11 +73,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.brzy.fab</groupId>
+      <artifactId>fab-conf</artifactId>
+      <version>0.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>webapp</artifactId>
       <version>0.6-SNAPSHOT</version>
-    </dependency>
-    <dependency>
+      <scope>test</scope>
+    </dependency>    <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest</artifactId>
       <version>1.2</version>

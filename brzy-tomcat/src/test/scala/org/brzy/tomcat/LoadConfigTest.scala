@@ -16,16 +16,13 @@ package org.brzy.tomcat
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.fab.mod.Mod
+import org.brzy.application.WebAppConf
 
 
 class LoadConfigTest extends JUnitSuite {
   @Test def testLoadConfig = {
-    val mod = new Mod(Map(
-      "name" -> "brzy-tomcat",
-      "version" -> "0.2",
-      "org" -> "org.brzy"))
-    val tomcat: Mod = null//ConfigFactory.makeRuntimeModule(mod)
-    assertTrue(tomcat.isInstanceOf[Mod])
+    val config = WebAppConf("test")
+    assertEquals(1,config.modules.size)
+    assertEquals(1,config.modules.size)
   }
 }

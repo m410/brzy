@@ -30,7 +30,7 @@ import org.brzy.webapp.action.args.Parameters
 class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Manifest[PK]) {
   protected[jpa] val entityClass = man.erasure
   protected[jpa] val keyClass = pk.erasure
-  protected[jpa] val log = LoggerFactory.getLogger(entityClass)
+  private val log = LoggerFactory.getLogger(entityClass)
 
   protected[jpa] val validator:Validator = jValidation.buildDefaultValidatorFactory.getValidator
 

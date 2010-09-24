@@ -13,10 +13,9 @@
  */
 package org.brzy.tomcat
 
-import org.brzy.fab.mod.Mod
-
+import org.brzy.fab.mod.RuntimeMod
 
 /**
  * @author Michael Fortin
  */
-class TomcatModConfig(override val map:Map[String,AnyRef]) extends Mod(map) 
+class TomcatModConfig(override val map:Map[String,AnyRef]) extends RuntimeMod(map)

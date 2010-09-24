@@ -16,11 +16,11 @@ package org.brzy.email
 import javax.mail.internet.{InternetAddress, MimeMessage}
 import javax.mail.Authenticator
 import javax.mail.PasswordAuthentication
-import java.util.Properties
 import java.beans.ConstructorProperties
-import org.brzy.service.Service
 import javax.mail._
 import javax.mail.Message.RecipientType
+
+import org.brzy.service.Service
 
 /**
  * Sends a plain text email message. 
