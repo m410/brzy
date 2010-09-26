@@ -31,8 +31,8 @@
       <unpack>false</unpack>
       <!--<scope>runtime</scope>-->
       <excludes>
-        <exclude>org.brzy:webapp-archetype</exclude>
-        <exclude>org.brzy:webapp</exclude>
+        <exclude>org.brzy:brzy-webapp-archetype</exclude>
+        <exclude>org.brzy:brzy-webapp</exclude>
         <exclude>org.brzy.fab:fab-conf</exclude>
         <exclude>org.reflections:reflections</exclude>
         <exclude>org.aspectj:aspectjweaver</exclude>

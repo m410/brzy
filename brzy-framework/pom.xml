@@ -38,7 +38,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.brzy</groupId>
-      <artifactId>webapp-archetype</artifactId>
+      <artifactId>brzy-webapp-archetype</artifactId>
 			<version>0.2-SNAPSHOT</version>
 		</dependency>
     <dependency>

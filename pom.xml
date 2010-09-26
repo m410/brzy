@@ -15,12 +15,6 @@
     <module>fab-util</module>
     <module>fab-conf</module>
     <module>fab-cli</module>
-    <!-- <module>fab-share</module> -->
-    <!-- <module>fab</module> -->
-    <!-- <module>brzy-config</module>
-    <module>brzy-mvc</module> -->
-    <module>webapp</module>
-    <module>webapp-archetype</module>
     <module>brzy-framework</module>
   </modules>
   <build>
@@ -51,11 +45,11 @@
     <repository>
       <id>brzy-nexus</id>
       <name>Nexus Staging Repo</name>
-      <url>http://brzy.org/nexus/content/repositories/releases</url>
+      <url>http://repo.brzy.org/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
       <id>brzy-nexus-snapshot</id>
-      <url>http://brzy.org/nexus/content/repositories/snapshots</url>
+      <url>http://repo.brzy.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
   <reporting>
