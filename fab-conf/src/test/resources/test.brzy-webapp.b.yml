@@ -67,14 +67,14 @@ web_xml:
 environment_overrides:
   - environment: developement
     dependencies:
-      - {conf: runtime, org: com.h2database, name: h2, rev: "1.2.133"}
+      - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133"}
     logging:
       root:
         ref: [STDOUT]
   - environment: test
   - environment: production
     dependencies:
-      - {conf: runtime, org: postgresql, name: postgresql, rev: "8.4-701.jdbc4"}
+      - {conf: compile, org: postgresql, name: postgresql, rev: "8.4-701.jdbc4"}
     logging:
       root:
         ref: [FILE]

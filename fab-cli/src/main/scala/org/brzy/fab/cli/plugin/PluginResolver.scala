@@ -20,7 +20,7 @@ object PluginResolver {
   val base = File(".brzy/" + cacheName)
   val settingsFile = File(".brzy/"+cacheName+"/ivysettings.xml")
   val ivyFile = File(".brzy/"+cacheName+"/ivy.xml")
-  val retrievePattern = ".brzy/"+cacheName+"/[artifact]-[reversion]-([classifier]).[type]"
+  val retrievePattern = ".brzy/"+cacheName+"/[artifact]-[revision](-[classifier]).[type]"
 
   def apply(config: BaseConf)(implicit line: Conversation): Unit = {
 

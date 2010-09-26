@@ -35,8 +35,7 @@ repositories:
 dependencies:
   - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
   - {conf: provided, org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
-  - {conf: compile, org: org.brzy, name: brzy-mvc, rev: "0.6-SNAPSHOT", transitive: false}
-  - {conf: compile, org: org.brzy, name: brzy-config, rev: "0.6-SNAPSHOT", transitive: false}
+  - {conf: compile, org: org.brzy, name: webapp, rev: "0.6-SNAPSHOT", transitive: false}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA", transitive: false}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8", transitive: false}
   - {conf: compile, org: org.reflections, name: reflections, rev: "0.9.5-RC2", transitive: false}

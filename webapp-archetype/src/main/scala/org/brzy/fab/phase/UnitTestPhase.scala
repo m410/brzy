@@ -50,7 +50,9 @@ class UnitTestPhase(ctx: BuildContext) {
     classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))
     ctx.line.say(Debug("source: " + sourceDir))
     ctx.line.say(Debug("target: " + outputDir))
-    compiler.compile(sourceDir, outputDir, classpath.toArray)
+
+    if(!compiler.compile(sourceDir,outputDir,classpath.toArray))
+      ctx.line.endWithError("Compilation Failed")
   }
 
   @Task(name = "test-task", desc = "Run unit tests", dependsOn = Array("test-compile"))
@@ -62,8 +64,7 @@ class UnitTestPhase(ctx: BuildContext) {
     val outputDir = output.getAbsolutePath
 
     val classpath = List(File(ctx.targetDir, "classes")) ++
-        List(File(ctx.targetDir, "test-classes")) ++
-        Files(".brzy/app/lib/test/*.jar")
+        List(File(ctx.targetDir, "test-classes")) // ++ Files(".brzy/app/lib/test/*.jar")
     classpath.foreach(cp=>ctx.line.say(Debug("test cp: " + cp)))
     val testArgs  = Array(
         "-o",

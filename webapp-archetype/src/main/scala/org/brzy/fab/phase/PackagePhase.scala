@@ -83,7 +83,7 @@ class PackagePhase(ctx: BuildContext) {
     modConfigs.foreach(mc=>ctx.line.say(Debug("mod-config: " + mc)))
     modConfigs.foreach(config => {
       val modName = config.getParentFile.getName
-      config.copyTo(File(ctx.webappDir, "WEB-INF/classes/brzy-modules/" + modName))
+      config.copyTo(File(ctx.webappDir, "WEB-INF/classes/modules/" + modName))
     })
   }
 

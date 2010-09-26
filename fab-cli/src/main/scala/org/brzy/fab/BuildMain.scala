@@ -21,11 +21,11 @@ import cli.plugin.PluginResolver
 import cli.module.ModuleResolver
 import org.apache.commons.cli._
 
-import java.io.{File => JFile}
 import io.Source
 import scala.tools.nsc.{Interpreter, GenericRunnerSettings, Settings}
 import scala.Option
 import collection.mutable.ListBuffer
+import java.io.{File => JFile}
 
 /**
  * This runs the main build script.  Based on the configuration file in the current directory
@@ -66,9 +66,13 @@ object BuildMain {
       exit(0)
     }
 
-
     val talk = new Conversation(cmd.hasOption("debug") || cmd.hasOption("verbose"), cmd.hasOption("debug"))
     implicit val iTalk = talk
+
+    if(cmd.getArgs.length == 1 && cmd.getArgs()(0) == "tomcat6") {
+      tomcat6
+      System.exit(0)
+    }
 
     talk.begin(if (cmd.getArgs.length > 0) cmd.getArgs() else Array("default"))
     val workingDir = System.getProperty("user.dir")
@@ -110,7 +114,7 @@ object BuildMain {
     val pluginClasspath = makePluginClasspath
 
     talk.subject(Task("load-deps")) {
-      loadBuildDependencies(archetypeClasspath :: moduleClasspath :: pluginClasspath :: Nil, settings)
+      loadClasspath(archetypeClasspath :: moduleClasspath :: pluginClasspath :: Nil, settings)
     }
 
     var interpreter = new Interpreter(settings, talk.out)
@@ -140,11 +144,32 @@ object BuildMain {
    * This is a temporary hack job.  Running tomcat as a regular plugin doesn't work because
    * of interpreter classloader issues. Once those are resolved, this will be removed.
    */
-  protected[fab] def tomcat6 = {
-    // TODO add custom tomcat plugin
+  protected[fab] def tomcat6()(implicit talk: Conversation) = {
+    val settings = new GenericRunnerSettings(str => talk.say(Info(str)))
+    val cp1 = Classpath(Files(".brzy/plugins/*.jar").map(_.getAbsolutePath))
+    val cp2 = Classpath(Files(".brzy/app/lib/provided/*.jar").map(_.getAbsolutePath))
+    val brzyHome = File(util.Properties.envOrElse("BRZY_HOME", ""))
+    val cp3 = Classpath(Files(brzyHome,"lib/fab-*.jar").map(_.getAbsolutePath))
+    val tomcat6Script = File(".brzy/modules/brzy-tomcat/scripts/BrzyTomcat6Plugin.scala")
+
+    loadClasspath(List(cp1,cp2,cp3),settings)
+    val interpreter = new Interpreter(settings, talk.out)
+    interpreter.interpret("import org.brzy.fab.cli.build.PluginRunner")
+    interpreter.interpret("import org.brzy.fab.print._")
+    interpreter.interpret("import org.brzy.fab.plugin._")
+    interpreter.interpret("import org.brzy.fab.phase._")
+    interpreter.interpret("import org.brzy.fab.task._")
+    interpreter.interpret("import org.brzy.fab.build.BuildContext")
+    interpreter.interpret(Source.fromFile(tomcat6Script).mkString)
+    interpreter.bind("context", "org.brzy.fab.build.BuildContext", BuildContext("development", talk))
+    interpreter.interpret("val runner = new PluginRunner(\"runTomcat\",context,classOf[BrzyTomcat6Plugin])")
+    interpreter.interpret("runner.run")
+    interpreter.interpret("")
+    talk.end
+    interpreter.close
   }
 
-  protected[fab] def loadBuildDependencies(cp: List[Classpath], settings: Settings)(implicit talk: Conversation) = {
+  protected[fab] def loadClasspath(cp: List[Classpath], settings: Settings)(implicit talk: Conversation) = {
     talk.say(Debug("setup interpreter dependencies"))
     settings.classpath.value = ""
 

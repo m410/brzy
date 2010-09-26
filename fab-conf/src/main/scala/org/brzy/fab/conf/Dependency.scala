@@ -42,6 +42,7 @@ class Dependency(val map: Map[String, AnyRef]) extends Ordered[Dependency] {
 
   override def compare(that: Dependency) = {
     new CompareToBuilder()
+        .append(this.conf.orNull, that.conf.orNull)
         .append(this.org.orNull, that.org.orNull)
         .append(this.name.orNull, that.name.orNull)
         .toComparison
@@ -58,6 +59,7 @@ class Dependency(val map: Map[String, AnyRef]) extends Ordered[Dependency] {
       val rhs = p1.asInstanceOf[Dependency]
       new EqualsBuilder()
           .appendSuper(super.equals(p1))
+          .append(conf.orNull, rhs.conf.orNull)
           .append(org.orNull, rhs.org.orNull)
           .append(name.orNull, rhs.name.orNull)
           .isEquals
@@ -66,6 +68,7 @@ class Dependency(val map: Map[String, AnyRef]) extends Ordered[Dependency] {
 
   override def hashCode = {
     new HashCodeBuilder(19, 37)
+        .append(conf.orNull)
         .append(org.orNull)
         .append(name.orNull)
         .toHashCode

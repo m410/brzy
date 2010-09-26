@@ -161,8 +161,10 @@ object WebAppConf {
         Nil
     }
     val modules: List[RuntimeMod] = {
-      if (runtimeConfig.modules.isDefined)
-        runtimeConfig.modules.get.map(makeRuntimeMod(_).asInstanceOf[RuntimeMod])
+      if (runtimeConfig.modules.isDefined) {
+        val runMod= runtimeConfig.modules.get.map(makeRuntimeMod(_))
+        runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
+      }
       else
         Nil
     }
@@ -208,10 +210,13 @@ object WebAppConf {
         Nil
     }
     val modules: List[RuntimeMod] = {
-      if (buildConfig.modules.isDefined)
-        buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir).asInstanceOf[RuntimeMod])
-      else
+      if (buildConfig.modules.isDefined) {
+        val runMod =  buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir))
+        runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
+      }
+      else {
         Nil
+      }
     }
 
     new WebAppConf(buildConfig, view, persistence, modules)
