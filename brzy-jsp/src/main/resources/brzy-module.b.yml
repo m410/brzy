@@ -8,4 +8,4 @@ config_class: org.brzy.jsp.JspModConfig
 resource_class: org.brzy.jsp.JspModProvider
 
 dependencies:
-  - {conf: runtime, org: jstl, name: jstl, ref: "1.1.2"}
+  - {conf: provided, org: jstl, name: jstl, ref: "1.1.2"}

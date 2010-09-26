@@ -6,16 +6,13 @@ import org.apache.catalina.LifecycleException
 import org.apache.catalina.loader.WebappLoader
 import org.apache.catalina.startup.Embedded
 
-// import org.brzy.tomcat.{FileWatcher, ScalaCompiler}
-//import org.apache.catalina.realm.MemoryRealm
 import org.brzy.fab.file.{File,Files}
-
 
 @Plugin(name="tomcat-plugin", desc="Run a tomcat development server")
 class BrzyTomcat6Plugin(ctx:BuildContext) extends BuildPlugin(ctx) {
 
 	@Task(name="tomcat6",desc="Run tomcat")
-	def runTomcat(args:Array[String]) = {
+	def runTomcat() = {
 		ctx.line.say(Info("Run tomcat",true))
 	  val sourceDir = File(ctx.sourceDir,"scala")
 	  val classesDir = File(ctx.webappDir,"WEB-INF/classes")
