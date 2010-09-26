@@ -1,0 +1,27 @@
+name: MyScript
+type: [build,standalone]
+desc: A brief decription
+
+tasks:
+  - {name: taskName, desc: Another description, args: none}
+
+phases:
+  name: somePhase
+  tasks:
+    - {name: otherTask, desc: Another description, depends: []}
+    - {name: taskName, desc: Another description, depends: [otherTask]}
+
+repositories:
+  - {org: value}
+
+dependencies:
+  - {org: value}
+
+scala_class:
+
+scala_source:
+
+scala_script:
+  case class Foo {
+    def bar = println("I said foo bar baz")
+  }
