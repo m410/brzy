@@ -27,7 +27,7 @@
     <orderEntry type="library" name="Maven: org.brzy:brzy-config:0.3-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.scala-lang:scala-library:2.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
-    <orderEntry type="library" name="Maven: org.brzy:webapp:0.6-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.brzy:brzy-webapp:0.6-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.5-RC2" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.11.0.GA" level="project" />
