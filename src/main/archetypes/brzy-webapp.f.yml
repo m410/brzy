@@ -1,0 +1,137 @@
+#
+#
+#
+name: brzy-webapp
+description: Build the brzy webapp
+default_phase: package
+scala_version: $scalaVersion "2.8.0"
+
+dependencies:
+  - {org: org.brzy, name: brzy-webapp-archetype, rev: "0.2-SNAPSHOT", transitive: false}
+  - {org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
+  - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
+  - {org: org.brzy.fab, name: fab-conf, rev: "0.2-SNAPSHOT", transitive: false}
+  - {org: org.brzy.fab, name: fab-util, rev: "0.2-SNAPSHOT", transitive: false}
+  - {org: org.jyaml, name: jyaml, rev: "1.3", transitive: false}
+  - {org: commons-lang, name: commons-lang, rev: "2.5", transitive: false}
+  - {org: org.slf4j, name: slf4j-api, rev: "1.6.1", transitive: false}
+  - {org: org.slf4j, name: slf4j-simple, rev: "1.6.1", transitive: false}
+  - {org: org.apache.ivy, name: ivy, rev: "2.2.0-rc1", transitive: false}
+
+repositories:
+  - {id: brzy, url: http://repo.brzy.org/content/repositories/releases}
+  - {id: brzy, url: http://repo.brzy.org/content/repositories/snapshots}
+  - {id: java-net2, url: http://download.java.net/maven/2}
+  - {id: scala-tools, url: http://scala-tools.org/repo-releases}
+
+phases:
+  - name: clean
+    default_task: clean-task
+    class_name: org.brzy.fab.phase.CleanPhase
+    description: Clean Generated Artifacts
+    tasks:
+      - name: pre-clean
+        description: Pre-process resources
+        method_name: preClean
+      - name: clean-task
+        method_name: clean
+        description: Deletes build artifacts
+        depends: [pre-clean]
+      - name: clean-cache
+        description: Deletes build artifacts and deletes the build cache.
+        method_name: preClean
+        depends: [clean]
+
+  - name: compile
+    default_task: compile-task
+    class_name: org.brzy.fab.phase.CompilePhase
+    descrption: Compile code
+    tasks:
+      - name: process-resources
+        description: Process Resources
+        method_name: processResources
+      - name: compile-task
+        method_name: compile
+        description: Compile the source code
+        depends: [process-resources]
+    dependencies:
+      - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
+
+  - name: dependecy
+    default_task: dependency-task
+    class_name: org.brzy.fab.phase.DependencyPhase
+    tasks:
+      - name: pre-resolve
+        description: Pre Download
+        method_name: preResolve
+      - name: dependency-task
+        description: Download Dependencies
+        method_name: dependencies
+        depends: [pre-resolve]
+
+  - name: doc
+    default_task: doc-task
+    class_name: org.brzy.fab.cli.DocPhase
+    tasks:
+      - name: pre-doc
+        description: Pre Documemtation
+        method_name: preDocument
+      - name: doc-task
+        description: Generate ScalaDoc
+        method_name: doDocument
+        depends: [pre-doc]
+      - name: dependency-report
+        description: Generate Ivy Dependency Report
+        method_name: dependencyReport
+        depends: [pre-doc]
+
+  - name: package
+    default_task: post-package
+    class_name: org.brzy.fab.phase.PackagePhase
+    tasks:
+      - name: pre-package
+        description: Pre Package
+        method_name: prePackage
+      - name: package-task
+        description: Package the project
+        method_name: packageProject
+        depends: [pre-package]
+      - name: post-package
+        description: Post package cleanup
+        method_name: postPackate
+        depends: [package-task]
+
+  - name: publish
+    default_task: publish-task
+    class_name: org.brzy.fab.phase.PublishPhase
+    dependencies:
+      - {org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
+    tasks:
+      - name: publish-task
+        description: Publish the artifacts to a remote repository
+        method_name: publish
+
+  - name: test
+    default_task: test-task
+    class_name: org.brzy.fab.phase.UnitTestPhase
+    dependencies:
+      - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
+      - {org: junit, name: junit, rev: "4.8.1", transitive: false}
+      - {org: org.scalatest, name: scalatest, rev: "1.2", transitive: false}
+    tasks:
+      - name: process-test-resources
+        description: Pre Compile processing
+        method_name: processTestResources
+      - name: test-compile
+        description: Pre Compile processing
+        method_name: testCompile
+        depends: [process-test-resources]
+      - name: test-task
+        description: Pre Compile processing
+        method_name: testPhase
+        depends: [test-compile]
+
+
+
+
+
