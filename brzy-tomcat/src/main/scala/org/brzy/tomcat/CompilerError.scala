@@ -15,9 +15,7 @@ package org.brzy.tomcat
 
 import scala.util.parsing.input.{NoPosition, Position}
 
-/**
- * @author Michael Fortin
- */
+@deprecated
 case class CompilerError(
         file: String,
         message: String,

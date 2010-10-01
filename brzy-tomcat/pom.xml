@@ -60,6 +60,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.brzy.fab</groupId>
+      <artifactId>fab-util</artifactId>
+      <version>0.2-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
       <version>0.6-SNAPSHOT</version>
@@ -71,15 +77,6 @@
       <version>${scala.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <!-- download from http://jpathwatch.wordpress.com/download/ -->
-      <groupId>name.pachler</groupId>
-      <artifactId>jpathwatch</artifactId>
-      <version>0.92</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/jpathwatch-0-92a.jar</systemPath>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>annotations-api</artifactId>

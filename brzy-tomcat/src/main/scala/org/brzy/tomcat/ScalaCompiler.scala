@@ -19,11 +19,7 @@ import scala.util.parsing.input.OffsetPosition
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.{Settings, Global}
 
-/**
- * Compile scala code
- * 
- * @author Michael Fortin
- */
+@deprecated
 class ScalaCompiler(codeDir:File, outputDir:File, classpath:String) {
 
   private val settings = {
