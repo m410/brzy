@@ -33,13 +33,13 @@ import org.brzy.application.WebAppConf
 class DependencyPhase(ctx:BuildContext) {
 
   @Task(name="pre-resolve",desc="Prepares for Downloading dependencies")
-  def prePackage = {
+  def preResolve = {
     ctx.line.say(Debug("pre-resolve"))
     File(".brzy/app").mkdirs
   }
 
   @Task(name="resolve-task",desc="Resolve and download dependencies", dependsOn=Array("pre-resolve"))
-  def packageProject = {
+  def dependencies = {
     ctx.line.say(Debug("resolve-task"))
     implicit val conversation = ctx.line
     DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])

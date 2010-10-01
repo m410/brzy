@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.brzy.fab.dependency.DependencyResolverTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.085 sec
