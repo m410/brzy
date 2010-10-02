@@ -1,0 +1,6 @@
+name: brzy-scalate
+description: Added app configuration libraries to build
+dependencies_in_default_scope: true
+member_of_phase: compile
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.6-SNAPSHOT", transitive: false}

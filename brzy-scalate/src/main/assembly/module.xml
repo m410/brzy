@@ -37,13 +37,17 @@
 				<excludes>
 					<exclude>*-module.jar</exclude>
 				</excludes>
-			<outputDirectory></outputDirectory>
+			<outputDirectory>/</outputDirectory>
     </fileSet>
 	</fileSets>
 	<files>
 		<file>
 			<source>src/main/resources/brzy-module.b.yml</source>
-			<outputDirectory></outputDirectory>
+			<outputDirectory>/</outputDirectory>
+		</file>
+		<file>
+			<source>src/main/resources/fab-plugin.f.yml</source>
+			<outputDirectory>/</outputDirectory>
 		</file>
 	</files>
 </assembly>
