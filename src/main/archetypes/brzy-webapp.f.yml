@@ -79,7 +79,8 @@ phases:
     default_task: doc-task
     class_name: org.brzy.fab.phase.DocPhase
     description: Generate ScalaDoc documemtation.
-    depends: [dependency]
+    interpreter_scope: compile
+    depends: [init]
     tasks:
       - name: pre-doc
         description: Pre Documemtation
@@ -91,7 +92,7 @@ phases:
       - name: dependency-report
         description: Generate Ivy Dependency Report for application dependencies.
         method_name: dependencyReport
-        depends: [pre-doc]
+        depends: [init,pre-doc]
 
   - name: init
     default_task: init-task
