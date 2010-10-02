@@ -14,7 +14,6 @@
 package org.brzy.fab.phase
 
 
-import org.brzy.fab.task.Task
 import org.brzy.fab.print.Debug
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.dependency.DependencyResolver
@@ -29,20 +28,22 @@ import org.brzy.application.WebAppConf
  * 
  * @author Michael Fortin
  */
-@Phase(name="dependencies",desc="Resolve and download dependencies",defaultTask="resolve-task")
 class DependencyPhase(ctx:BuildContext) {
 
-  @Task(name="pre-resolve",desc="Prepares for Downloading dependencies")
   def preResolve = {
     ctx.line.say(Debug("pre-resolve"))
     File(".brzy/app").mkdirs
   }
 
-  @Task(name="resolve-task",desc="Resolve and download dependencies", dependsOn=Array("pre-resolve"))
   def dependencies = {
     ctx.line.say(Debug("resolve-task"))
     implicit val conversation = ctx.line
-    DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
+    try {
+      DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
+    }
+    catch {
+      case e:Exception => ctx.line.endWithError(e)
+    }
   }
 
   override def toString = "Dependency Resolution Phase"

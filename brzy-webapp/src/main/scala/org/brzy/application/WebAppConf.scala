@@ -176,6 +176,7 @@ object WebAppConf {
    *
    */
   def buildtime(modBaseDir: File, env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
+    // TODO should pull this from the file system, not classpath
     val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfig)))
     val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 

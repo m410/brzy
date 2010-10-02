@@ -38,10 +38,10 @@ import org.brzy.application.WebAppConf
  * @author Michael Fortin
  */
 object DependencyResolver {
-  val retrievePattern = ".brzy/app/lib/[conf]/[artifact]-[revision](-[classifier]).[type]"
+  val retrievePattern = ".brzy/app/[conf]/[artifact]-[revision](-[classifier]).[type]"
   val base = File(".brzy/app")
-  val settingsFile = File(".brzy/app/ivysettings.xml")
-  val ivyFile = File(".brzy/app/ivy.xml")
+  val settingsFile = File(".brzy/app-ivysettings.xml")
+  val ivyFile = File(".brzy/app-ivy.xml")
 
   def apply(webappConfig: WebAppConf)(implicit line: Conversation) {
 
@@ -56,7 +56,7 @@ object DependencyResolver {
     ivyXml.saveToFile(ivyFile.getAbsolutePath)
 
     doInIvyCallback((ivy: Ivy, context: IvyContext) => {
-      context.set("ivy.project.dir",File("").getAbsolutePath)
+//      context.set("ivy.project.dir",File("").getAbsolutePath)
       ivy.configure(settingsFile)
       ivy.getResolveEngine.resolve(ivyFile)
       val org = webappConfig.application.org.get

@@ -15,7 +15,6 @@ package org.brzy.fab.phase
 
 
 import org.brzy.fab.build.BuildContext
-import org.brzy.fab.task.Task
 import org.brzy.fab.print.Debug
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.shell.{WebXml, LogBackXml}
@@ -27,22 +26,24 @@ import org.brzy.application.WebAppConf
  *
  * @author Michael Fortin
  */
-@Phase(name = "package", desc = "Clean Generated Artifacts", defaultTask = "pub-local", dependsOn = Array("test"))
 class PackagePhase(ctx: BuildContext) {
-  @Task(name = "pre-package", desc = "Prepare for Packaging")
   def prePackage = {
     ctx.line.say(Debug("pre-package"))
     File(ctx.webappDir, "WEB-INF/classes").mkdirs
     File(ctx.webappDir, "WEB-INF/lib").mkdirs
-    makeLogbackXml
-    makeWebXml
-    copyModuleConfigs
-    copyWebAppConfig
-    copyLibs
-    copyClasses
+    try {
+      makeLogbackXml
+      makeWebXml
+      copyModuleConfigs
+      copyWebAppConfig
+      copyLibs
+      copyClasses
+    }
+    catch {
+      case e:Exception => ctx.line.endWithError(e)
+    }
   }
 
-  @Task(name = "package-task", desc = "Package artifacts", dependsOn = Array("pre-package"))
   def packageProject = {
     ctx.line.say(Debug("package-task"))
     val webAppConfig = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
@@ -54,7 +55,6 @@ class PackagePhase(ctx: BuildContext) {
     // do source, javadoc, scala doc?
   }
 
-  @Task(name = "pub-local", desc = "Publish artifacts locally", dependsOn = Array("package-task"))
   def postPackage = {
     ctx.line.say(Debug("pub-local"))
     // do a local publish to the local maven repository
@@ -96,7 +96,7 @@ class PackagePhase(ctx: BuildContext) {
 
   def copyLibs = {
     ctx.line.say(Debug("copyLibs"))
-    val libs = Files(".brzy/app/lib/compile/*.jar")
+    val libs = Files(".brzy/app/compile/*.jar")
     val destination = File(ctx.webappDir, "WEB-INF/lib")
     libs.foreach(_.copyTo(destination))
   }

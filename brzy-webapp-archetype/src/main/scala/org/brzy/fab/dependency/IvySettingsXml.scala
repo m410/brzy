@@ -23,19 +23,16 @@ import org.brzy.application.WebAppConf
  * @author Michael Fortin
  */
 class IvySettingsXml(config:WebAppConf) {
-
   private val repos = config.repositories.toList
-/*
-<filesystem name="libraries">
-      <artifact pattern="${ivy.project.dir}/lib/[artifact]-[revision]-([classifier]).[ext]" />
+/* <filesystem name="libraries">
+      <artifact pattern="${ivy.project.dir}/lib/[artifact]-[revision](-[classifier]).[ext]" />
     </filesystem>
-      <resolver ref="libraries"/>
-
- */
+      <resolver ref="libraries"/> */
   val xml =
 <ivysettings>
   <property name="revision" value="SNAPSHOT" override="false"/>
   <settings defaultResolver="default"/>
+  <caches defaultCacheDir="${ivy.basedir}/.brzy/ivy-cache" />
   <resolvers>
     <ibiblio name="maven-local" root="file://${user.home}/.m2/repository" m2compatible="true" />
     {for(repo <- repos; if(repo.id.isDefined && repo.url.isDefined)) yield

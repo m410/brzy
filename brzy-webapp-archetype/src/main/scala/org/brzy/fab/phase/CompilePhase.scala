@@ -15,7 +15,6 @@ package org.brzy.fab.phase
 
 
 import org.brzy.fab.build.BuildContext
-import org.brzy.fab.task.Task
 import org.brzy.fab.print.Debug
 import org.brzy.fab.file.FileUtils._
 import java.io.File
@@ -26,10 +25,8 @@ import org.brzy.fab.file.Files
  *	process-resources
  * @author Michael Fortin
  */
-@Phase(name="compile",desc="Compiles the source code",defaultTask="compile-task",dependsOn=Array("dependencies"))
 class CompilePhase(ctx:BuildContext) {
 
-  @Task(name="process-resources",desc="Process Resources")
   def processResources = {
     ctx.line.say(Debug("process-resources"))
 
@@ -43,11 +40,10 @@ class CompilePhase(ctx:BuildContext) {
     }
   }
 
-  @Task(name="compile-task",desc="Compile Source", dependsOn=Array("process-resources"))
   def compile = {
     ctx.line.say(Debug("compile-task"))
     val compiler = new ScalaCompiler(ctx.line.out)
-    val classpath = Files(".brzy/app/lib/compile/*.jar")
+    val classpath = Files(".brzy/app/compile/*.jar")
     val outputDir = new File(ctx.targetDir, "classes")
     val sourceDir = new File(ctx.sourceDir, "scala")
     classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))

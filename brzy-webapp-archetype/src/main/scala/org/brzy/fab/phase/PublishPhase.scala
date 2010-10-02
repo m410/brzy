@@ -16,17 +16,14 @@ package org.brzy.fab.phase
 
 import org.brzy.fab.print.Debug
 import org.brzy.fab.build.BuildContext
-import org.brzy.fab.task.Task
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-@Phase(name="publish",desc="Publish artifacts to remote repository",defaultTask="publish-task",dependsOn=Array("package"))
 class PublishPhase(ctx:BuildContext) {
 
-  @Task(name="publish-task",desc="Publishes the generated artifacts")
   def publish = {
     ctx.line.say(Debug("publish-task"))
     // publish library to remote maven or ivy repository

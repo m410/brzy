@@ -16,7 +16,6 @@ package org.brzy.fab.phase
 
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.print.Debug
-import org.brzy.fab.task.Task
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.doc.{Settings, DocFactory}
 import org.brzy.fab.dependency.DependencyResolver
@@ -30,9 +29,7 @@ import org.brzy.application.WebAppConf
  *
  * @author Michael Fortin
  */
-@Phase(name = "doc", desc = "Generate Documentation", defaultTask = "doc-task")
 class DocPhase(ctx: BuildContext) {
-  @Task(name = "pre-doc", desc = "Document preperation")
   def preDocument = {
     ctx.line.say(Debug("pre-doc"))
     File(ctx.targetDir, "dependency-report").mkdirs
@@ -42,18 +39,16 @@ class DocPhase(ctx: BuildContext) {
   /**
    * http://lampsvn.epfl.ch/trac/scala/wiki/Scaladoc
    */
-  @Task(name = "doc-task", desc = "Generates scaladoc and javadoc", dependsOn = Array("pre-doc"))
   def doDocument = {
     ctx.line.say(Debug("doc-task"))
     File("target/scala-doc").mkdirs
     val docSettings = new Settings((str: String) => { ctx.line.endWithError(str)})
     docSettings.d.value = File("target/scala-doc").getAbsolutePath
     docSettings.classpath.value = ""
-    val cp = Files(".brzy/app/lib/compile/*.jar")
+    val cp = Files(".brzy/app/compile/*.jar")
 
     cp.foreach(path => {
       val pathStr = path.getAbsolutePath
-      println("path: " + pathStr)
       docSettings.classpath.append(pathStr)
     })
      docSettings.classpath.append(File(ctx.targetDir,"classes").getAbsolutePath)
@@ -65,7 +60,6 @@ class DocPhase(ctx: BuildContext) {
     docProcessor.document(srcFiles.map(_.getAbsolutePath))
   }
 
-  @Task(name = "dependency-report", desc = "Generates an Ivy dependency report.", dependsOn = Array("pre-doc"))
   def dependecyReport = {
     ctx.line.say(Debug("doc-task"))
     DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])

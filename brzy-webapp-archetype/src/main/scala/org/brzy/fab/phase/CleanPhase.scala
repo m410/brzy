@@ -14,7 +14,6 @@
 package org.brzy.fab.phase
 
 
-import org.brzy.fab.task.Task
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.print.Debug
 import org.brzy.fab.file.FileUtils._
@@ -23,15 +22,12 @@ import java.io.File
 /**
  * @author Michael Fortin
  */
-@Phase(name="clean",desc="Clean Generated Artifacts",defaultTask="clean-task")
 class CleanPhase(ctx:BuildContext) {
 
-  @Task(name="pre-clean",desc="Pre-clean")
   def preClean = {
     ctx.line.say(Debug("pre-clean"))
   }
 
-  @Task(name="clean-task",desc="Deletes build artifacts", dependsOn=Array("pre-clean"))
   def clean = {
     ctx.line.say(Debug("clean-task"))
     ctx.targetDir.trash

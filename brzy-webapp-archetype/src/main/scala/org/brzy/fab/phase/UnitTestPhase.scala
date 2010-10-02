@@ -15,20 +15,17 @@ package org.brzy.fab.phase
 
 
 import org.brzy.fab.build.BuildContext
-import org.brzy.fab.task.Task
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.file.{File, Files}
 import org.brzy.fab.compile.ScalaCompiler
-import org.brzy.fab.print.{Info, Warn, Debug}
+import org.brzy.fab.print.Debug
 import org.scalatest.tools.Runner
 
 /**
  * @author Michael Fortin
  */
-@Phase(name = "test", desc = "Compile and run unit tests", defaultTask = "test-task", dependsOn = Array("compile"))
 class UnitTestPhase(ctx: BuildContext) {
 
-  @Task(name = "process-test-resources", desc = "Unit test pre processing")
   def processTestResources = {
     ctx.line.say(Debug("process-test-resources"))
     val classes = File(ctx.targetDir, "test-classes")
@@ -39,11 +36,10 @@ class UnitTestPhase(ctx: BuildContext) {
       resources.listFiles.foreach(_.copyTo(classes))
   }
 
-  @Task(name = "test-compile", desc = "Compile Unit tests", dependsOn = Array("process-test-resources"))
   def testCompile = {
     ctx.line.say(Debug("test-compile"))
     val compiler = new ScalaCompiler(ctx.line.out)
-    val jars = Files(".brzy/app/lib/test/*.jar")
+    val jars = Files(".brzy/app/test/*.jar")
     val classpath = Files(ctx.testDir, "resources/*") ++ Files(ctx.targetDir, "classes") ++ jars
     val outputDir = File(ctx.targetDir, "test-classes")
     val sourceDir = File(ctx.testDir, "scala")
@@ -55,7 +51,6 @@ class UnitTestPhase(ctx: BuildContext) {
       ctx.line.endWithError("Compilation Failed")
   }
 
-  @Task(name = "test-task", desc = "Run unit tests", dependsOn = Array("test-compile"))
   def testPhase = {
     ctx.line.say(Debug("test-task"))
 
@@ -64,7 +59,7 @@ class UnitTestPhase(ctx: BuildContext) {
     val outputDir = output.getAbsolutePath
 
     val classpath = List(File(ctx.targetDir, "classes")) ++
-        List(File(ctx.targetDir, "test-classes")) // ++ Files(".brzy/app/lib/test/*.jar")
+        List(File(ctx.targetDir, "test-classes")) // ++ Files(".brzy/app/test/*.jar")
     classpath.foreach(cp=>ctx.line.say(Debug("test cp: " + cp)))
     val testArgs  = Array(
         "-o",
