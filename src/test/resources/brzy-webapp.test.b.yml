@@ -14,7 +14,7 @@ views:
 
 repositories:
   - id: brzy
-    url: http://brzy.org/nexus/content/repositories/releases
+    url: http://repo.brzy.org/content/repositories/releases
   - id: java-net2
     url: http://download.java.net/maven/2
   - id: scala-tools
