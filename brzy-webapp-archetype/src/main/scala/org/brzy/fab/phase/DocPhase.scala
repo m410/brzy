@@ -60,7 +60,7 @@ class DocPhase(ctx: BuildContext) {
     docProcessor.document(srcFiles.map(_.getAbsolutePath))
   }
 
-  def dependecyReport = {
+  def dependencyReport = {
     ctx.line.say(Debug("doc-task"))
     DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
   }
