@@ -11,7 +11,7 @@ views:
   version: "0.6-SNAPSHOT"
 
 repositories:
-  - {id: brzy, url: http://brzy.org/nexus/content/repositories/releases}
+  - {id: brzy, url: http://repo.brzy.org/content/repositories/releases}
   - {id: java-net2, url: http://download.java.net/maven/2}
   - {id: scala-tools, url: http://scala-tools.org/repo-releases}
   - {id: jboss, url: http://repository.jboss.com/maven2}

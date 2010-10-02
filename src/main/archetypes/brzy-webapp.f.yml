@@ -8,6 +8,7 @@ scala_version: $scalaVersion "2.8.0"
 
 dependencies:
   - {org: org.brzy, name: brzy-webapp-archetype, rev: "0.2-SNAPSHOT", transitive: false}
+  - {org: org.brzy, name: brzy-webapp, rev: "0.6-SNAPSHOT", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
   - {org: org.brzy.fab, name: fab-conf, rev: "0.2-SNAPSHOT", transitive: false}
@@ -20,7 +21,7 @@ dependencies:
 
 repositories:
   - {id: brzy, url: http://repo.brzy.org/content/repositories/releases}
-  - {id: brzy, url: http://repo.brzy.org/content/repositories/snapshots}
+  - {id: brzy-snapshot, url: http://repo.brzy.org/content/repositories/snapshots}
   - {id: java-net2, url: http://download.java.net/maven/2}
   - {id: scala-tools, url: http://scala-tools.org/repo-releases}
 
@@ -35,7 +36,7 @@ phases:
         method_name: preClean
       - name: clean-task
         method_name: clean
-        description: Deletes build artifacts
+        description: Deletes all build artifacts.
         depends: [pre-clean]
       - name: clean-cache
         description: Deletes build artifacts and deletes the build cache.
@@ -45,10 +46,12 @@ phases:
   - name: compile
     default_task: compile-task
     class_name: org.brzy.fab.phase.CompilePhase
-    descrption: Compile code
+    description: Compile source code.
+    interpreter_scope: compile
+    depends: [dependency]
     tasks:
       - name: process-resources
-        description: Process Resources
+        description: Process Resources before compilation.
         method_name: processResources
       - name: compile-task
         method_name: compile
@@ -57,53 +60,73 @@ phases:
     dependencies:
       - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
 
-  - name: dependecy
+  - name: dependency
     default_task: dependency-task
     class_name: org.brzy.fab.phase.DependencyPhase
+    description: Downloads application dependencies and makes them available for compilation and packaging.
+    interpreter_scope: compile
+    depends: [init]
     tasks:
       - name: pre-resolve
-        description: Pre Download
+        description: Pre download preperation.
         method_name: preResolve
       - name: dependency-task
-        description: Download Dependencies
+        description: Download Dependencies.
         method_name: dependencies
         depends: [pre-resolve]
 
   - name: doc
     default_task: doc-task
-    class_name: org.brzy.fab.cli.DocPhase
+    class_name: org.brzy.fab.phase.DocPhase
+    description: Generate ScalaDoc documemtation.
+    depends: [dependency]
     tasks:
       - name: pre-doc
         description: Pre Documemtation
         method_name: preDocument
       - name: doc-task
-        description: Generate ScalaDoc
+        description: Generate ScalaDoc.
         method_name: doDocument
         depends: [pre-doc]
       - name: dependency-report
-        description: Generate Ivy Dependency Report
+        description: Generate Ivy Dependency Report for application dependencies.
         method_name: dependencyReport
         depends: [pre-doc]
 
+  - name: init
+    default_task: init-task
+    class_name: org.brzy.fab.phase.InitPhase
+    description: "Initialize the WebApp Configuration, used is later build phases."
+    interpreter_scope: compile
+    tasks:
+      - name: init-task
+        description: Initialize the Application Configuration.
+        method_name: init
+    
   - name: package
     default_task: post-package
     class_name: org.brzy.fab.phase.PackagePhase
+    description: "This is the default task, it compiles, tests, and packages the application."
+    interpreter_scope: compile
+    depends: [test]
     tasks:
       - name: pre-package
-        description: Pre Package
+        description: Pre Package resources.
         method_name: prePackage
       - name: package-task
-        description: Package the project
+        description: Package the project.
         method_name: packageProject
         depends: [pre-package]
       - name: post-package
-        description: Post package cleanup
-        method_name: postPackate
+        description: Post package cleanup.
+        method_name: postPackage
         depends: [package-task]
 
   - name: publish
     default_task: publish-task
     class_name: org.brzy.fab.phase.PublishPhase
+    description: Once the packaging of the application is complete this will upload to a remote repository.
+    depends: [package]
     dependencies:
       - {org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
     tasks:
@@ -114,6 +137,9 @@ phases:
   - name: test
     default_task: test-task
     class_name: org.brzy.fab.phase.UnitTestPhase
+    description: Runs unit testing on the application.
+    interpreter_scope: compile
+    depends: [compile]
     dependencies:
       - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
       - {org: junit, name: junit, rev: "4.8.1", transitive: false}
