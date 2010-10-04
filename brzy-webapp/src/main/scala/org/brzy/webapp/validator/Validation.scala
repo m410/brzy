@@ -18,6 +18,7 @@ import java.util.Set
 import collection.JavaConversions.JSetWrapper
 
 /**
+ * Wraps the java bean validation api error in another class.
  * @author Michael Fortin
  */
 class Validation[T](val violations:Array[ConstraintViolation[T]]) {
@@ -28,6 +29,9 @@ class Validation[T](val violations:Array[ConstraintViolation[T]]) {
   
 }
 
+/**
+ * Simple Factory companion class
+ */
 object Validation {
   def apply[T](constraints:Set[ConstraintViolation[T]]) = {
     new Validation[T](new JSetWrapper(constraints).toArray[ConstraintViolation[T]])

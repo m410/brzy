@@ -31,7 +31,7 @@ class IvyXml(config:WebAppConf) {
 <ivy-module version="2.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-  <info module={config.application.artifactId.get} organisation={config.application.org.get} revision={config.application.version.get} />
+  <info module={config.application.name.get} organisation={config.application.org.get} revision={config.application.version.get} />
   <configurations>
     <conf name="default" />
     <conf name="provided" extends="default"/>

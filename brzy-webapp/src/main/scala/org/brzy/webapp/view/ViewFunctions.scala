@@ -19,7 +19,7 @@ import java.text.{DecimalFormat, SimpleDateFormat}
 import java.net.URLEncoder
 
 /**
- * TODO, this belongs with the scalate module.
+ * TODO, this belongs with the scalate module.  It adds some basic view functions to the view.
  *
  * @author Michael Fortin
  */

@@ -48,7 +48,7 @@ class PackagePhase(ctx: BuildContext) {
     ctx.line.say(Debug("package-task"))
     val webAppConfig = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
     val version = webAppConfig.application.version.get
-    val artifact = webAppConfig.application.artifactId.get
+    val artifact = webAppConfig.application.name.get
     val destination = File(ctx.targetDir, artifact + "-" + version + ".jar")
     val source = ctx.webappDir
     Jar(source, destination, null)

@@ -14,7 +14,9 @@
 package org.brzy.persistence
 
 /**
- * Document Me..
+ * For the Crud controller to be able to implement all the actions in a generic fashion, it needs
+ * to know what the primary key is.  This trait enables that discovery no matter what is the
+ * underlying persistence api.
  * 
  * @author Michael Fortin
  */

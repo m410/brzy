@@ -62,7 +62,12 @@ class DocPhase(ctx: BuildContext) {
 
   def dependencyReport = {
     ctx.line.say(Debug("doc-task"))
-    DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
+    try {
+      DependencyResolver.generateReport(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
+    }
+    catch {
+      case e:Exception => ctx.line.endWithError(e)
+    }
   }
 
   private def sourceFiles(root: JFile): List[JFile] = {

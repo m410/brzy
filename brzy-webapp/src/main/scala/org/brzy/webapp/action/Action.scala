@@ -47,6 +47,9 @@ class Action(val path: String, val actionMethod: Method, val inst: AnyRef, val v
   val returnTypes = actionMethod.getReturnType
   val parameterTypes = actionMethod.getParameterTypes
 
+  /**
+   * the default view to display if needed.
+   */
   val defaultView = {
     val clazz = inst.getClass
     val folder: String =
@@ -95,6 +98,9 @@ object Action {
   private[this] val WizardClass = classOf[Wizard]
   private[this] val CookiesClass = classOf[Cookies]
 
+  /**
+   * Action factory method.
+   */
   def apply(path: String, actionMethod: Method, inst: AnyRef, viewType: String) = {
     new Action(path,actionMethod,inst,viewType)
   }
@@ -210,6 +216,9 @@ object Action {
        case _ => error("Unknown Data Type")
      }
 
+  /**
+   *  
+   */
    def buildArgs(action:Action, req:Request) = {
      val path = findActionPath(req.getRequestURI,req.getContextPath)
      val args = action.parameterTypes

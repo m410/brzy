@@ -17,7 +17,8 @@ import org.brzy.fab.conf._
 import org.brzy.fab.mod.ModConf
 
 /**
- * Document Me..
+ * This holds all the web-app.b.yml configuration elements before it's initialized.  It's very
+ * similar to the WebAppConf and used to initialize it.
  *
  * @author Michael Fortin
  */

@@ -14,9 +14,14 @@
 package org.brzy.webapp.action.args
 
 /**
- * Document Me..
+ * A Action argument class to read cookie information.  Use it like
+ * <pre>def myaction(c:Cookies) = {
+ *    val cookieObj = c("name")
+ * }
+ * </pre>
+ *
+ * It's not implemented yet.
  * 
  * @author Michael Fortin
  */
-
 class Cookies

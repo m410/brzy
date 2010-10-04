@@ -33,7 +33,12 @@ import org.brzy.service.{ServiceScanner, PostCreate, PreDestroy}
 import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
 
 /**
+ * WebApp is short for web application.  This assembles and configures the application at
+ * runtime.  It takes the web app configuration as a parameter.    This can be overriden by
+ * application writers to extend it's functionality but in most cases this one will suffice.
  *
+ *
+ * @author Michael Fortin
  */
 class WebApp(conf: WebAppConf) {
   private val log = LoggerFactory.getLogger(getClass)
@@ -41,7 +46,11 @@ class WebApp(conf: WebAppConf) {
   val application = conf.application
   val project = conf.project
 
-  val viewResource: ViewModProvider = {
+  /**
+   * The view resource provider for the application.  There is only one view provider for the
+   * application, configured in a module.
+   */
+  val viewProvider: ViewModProvider = {
     log.debug("view: {}", conf.views)
     log.trace("resource: {}", conf.views.resourceClass.getOrElse("null"))
     if (conf.views.resourceClass.isDefined && conf.views.resourceClass.get != null)
@@ -50,14 +59,22 @@ class WebApp(conf: WebAppConf) {
       null
   }
 
-  val persistenceResources: List[ModProvider] = {
+  /**
+   * The Persistence providers for the application.  There can be more than one.
+   */
+  val persistenceProviders: List[ModProvider] = {
     conf.persistence.map(persist => {
       log.debug("persistence: {}", persist)
       Construct[ModProvider](persist.resourceClass.get, Array(persist))
     }).toList
   }
 
-  val moduleResource: List[ModProvider] = {
+  /**
+   * Views and Persistes are modules, just special kinds of modules.  This allows for more
+   * generaic module injection into the application.  For example an email provider or jms
+   * provider.
+   */
+  val moduleProviders: List[ModProvider] = {
     val list = ListBuffer[ModProvider]()
     conf.modules.foreach(module => {
       log.debug("module: {}", module)
@@ -70,19 +87,33 @@ class WebApp(conf: WebAppConf) {
     list.toList
   }
 
+  /**
+   * This manages transaction interception for controller actions.  Interceptors are provided
+   * by modules to be added to the invoker that is managed by the contoller engine.
+   */
   val interceptor: Invoker = makeInterceptor
 
+  /**
+   * If you want to change how the invoker is created override this.
+   */
   protected[application] def makeInterceptor: Invoker = {
     val buffer = ListBuffer[ManagedThreadContext]()
-    persistenceResources.foreach(pin => {
+    persistenceProviders.foreach(pin => {
       if (pin.isInstanceOf[InterceptorProvider])
         buffer += pin.asInstanceOf[InterceptorProvider].interceptor
     })
     new Invoker(buffer.toList)
   }
 
+  /**
+   * The service map made available to all controllers
+   */
   val serviceMap: Map[String, _ <: AnyRef] = makeServiceMap
 
+  /**
+   * If you want to change how services are discovered and added to the service map, override
+   * this.
+   */
   protected[application] def makeServiceMap: Map[String, _ <: AnyRef] = {
     val map = WeakHashMap.empty[String, AnyRef]
 
@@ -96,13 +127,20 @@ class WebApp(conf: WebAppConf) {
       val clazz = sc.asInstanceOf[Class[_]]
       map += name(clazz) -> make(clazz, interceptor)
     })
-    persistenceResources.foreach(_.serviceMap.foreach(map + _))
-    moduleResource.foreach(_.serviceMap.foreach(map + _))
+    persistenceProviders.foreach(_.serviceMap.foreach(map + _))
+    moduleProviders.foreach(_.serviceMap.foreach(map + _))
     map.toMap
   }
 
+  /**
+   * The application controllers
+   */
   val controllers: List[_ <: AnyRef] = makeControllers
 
+  /**
+   * To change how the controllers are discovered and added to the controllers list or to
+   * programatically add controllers to the list, override this function.
+   */
   protected[application] def makeControllers: List[AnyRef] = {
     val buffer = ListBuffer[AnyRef]()
     val controllerClasses = ControllerScanner(conf.application.org.get).controllers
@@ -150,7 +188,8 @@ class WebApp(conf: WebAppConf) {
   }
 
   /**
-   * The controllers are proxies so you have to get the super class
+   * Actions are lazily assembled once the application is started.  The controllers can be
+   * proxies so you have to get the super class to add them to the list.
    */
   lazy val actions = {
     val list = new ListBuffer[Action]()
@@ -171,7 +210,7 @@ class WebApp(conf: WebAppConf) {
             else
               classPath.value + "/" + methodPath.value
 
-        val action = new Action(pathValue, method, ctl, viewResource.fileExtension)
+        val action = new Action(pathValue, method, ctl, viewProvider.fileExtension)
         log.debug("action: " + action)
         list += action
       }
@@ -179,11 +218,15 @@ class WebApp(conf: WebAppConf) {
     SortedSet[Action]() ++ list.toIterable
   }
 
+  /**
+   * This is called by the servlet applicationContext listener to start the application.  This
+   * in turn calls all the startup functions on all the modules.
+   */
   def startup = {
-    viewResource.startup
-    persistenceResources.foreach(_.startup)
-    moduleResource.foreach(_.startup)
-    viewResource.startup
+    viewProvider.startup
+    persistenceProviders.foreach(_.startup)
+    moduleProviders.foreach(_.startup)
+    viewProvider.startup
     serviceMap.values.foreach(lifeCycleCreate(_))
     log.info("application  : startup")
     log.debug("service map : {}", serviceMap.mkString(","))
@@ -191,11 +234,15 @@ class WebApp(conf: WebAppConf) {
     log.debug("actions     : {}", actions.mkString(","))
   }
 
+  /**
+   * This is called by the servlet applicationContext listener to close the application.  This in
+   * turn calles the shutdown methods of all the modules.
+   */
   def shutdown = {
     serviceMap.values.foreach(lifeCycleDestroy(_))
-    viewResource.shutdown
-    persistenceResources.foreach(_.shutdown)
-    moduleResource.foreach(_.shutdown)
+    viewProvider.shutdown
+    persistenceProviders.foreach(_.shutdown)
+    moduleProviders.foreach(_.shutdown)
     log.info("application shutdown")
   }
 
@@ -225,7 +272,7 @@ class WebApp(conf: WebAppConf) {
 }
 
 /**
- *
+ *  This is a factory class to assemble the appilcation at runtime.
  */
 object WebApp {
   private val log = LoggerFactory.getLogger(getClass)

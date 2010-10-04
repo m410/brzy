@@ -14,11 +14,11 @@
 package org.brzy.util
 
 /**
- * Document Me..
+ * This is a helper to convert strings to other data types.  Create it's meant to be an implicit
+ * value and used actions.
  * 
  * @author Michael Fortin
  */
-
 object ParameterConversion {
   private val StringClass = classOf[java.lang.String]
   private val IntegerClass = classOf[java.lang.Integer]

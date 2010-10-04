@@ -14,7 +14,8 @@
 package org.brzy.webapp.interceptor
 
 /**
- * Document Me..
+ * Used by modules that provide inteceptors so that the inteceptor manager can create and destroy
+ * request
  * 
  * @author Michael Fortin
  */

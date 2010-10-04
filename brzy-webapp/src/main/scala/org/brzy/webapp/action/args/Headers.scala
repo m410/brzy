@@ -16,7 +16,13 @@ package org.brzy.webapp.action.args
 import collection.mutable.HashMap
 
 /**
- * Document Me..
+ * A Action argument class to read header information.  Use it like
+ * <pre>def myaction(c:Headers) = {
+ *    val headerValue = c("name")
+ * }
+ * </pre>
+ *
+ * It's not implemented yet.
  * 
  * @author Michael Fortin
  */

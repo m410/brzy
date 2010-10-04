@@ -16,33 +16,59 @@ package org.brzy.webapp.action.returns
 //import com.twitter.json.{Json=>tJson}
 
 /**
- * Where you want to send the result of the action too.
+ * Where you want to send the result of the action.  Controller actions can only return one object
+ * that is a Direction type.
  * 
  * @author Michael Fortin
  */
 abstract class Direction 
 
-  case class View(path:String) extends Direction
+/**
+ * Override the default view.
+ */
+case class View(path:String) extends Direction
 
-  case class Forward(path:String) extends Direction
+/**
+ * Forward to another action without sending a redirect to the client.
+ */
+case class Forward(path:String) extends Direction
 
-  case class Redirect(path:String) extends Direction
+/**
+ * Send a 302 redirect to the cleint.
+ */
+case class Redirect(path:String) extends Direction
 
-  case class Xml(t:AnyRef) extends Direction with Parser {
-    def parse = {<class>{t.getClass.getSimpleName}</class>}.toString
-    val contentType = "text/xml"
-  }
+/**
+ * Return xml as the body of the response.
+ */
+case class Xml(t:AnyRef) extends Direction with Parser {
+  def parse = {<class>{t.getClass.getSimpleName}</class>}.toString
+  val contentType = "text/xml"
+}
 
-  case class Text(ref:AnyRef) extends Direction with Parser{
-    def parse = ref.toString
-    val contentType = "text"
-  }
+/**
+ * Returns plain text as the body of the response.
+ */
+case class Text(ref:AnyRef) extends Direction with Parser{
+  def parse = ref.toString
+  val contentType = "text"
+}
 
-  case class Binary(bytes:Array[Byte], contentType:String) extends Direction
+/**
+ * Returns binary data as the body of the response.  This is used to return files or images
+ * as the response.
+ */
+case class Binary(bytes:Array[Byte], contentType:String) extends Direction
 
-  case class Json(t:AnyRef) extends Direction with Parser {
-    def parse = "{}"//tJson.build(Map("class"->t.getClass.getSimpleName))
-    val contentType = "text/json"
-  }
+/**
+ * Return Json formatted text as the body of the response.
+ */
+case class Json(t:AnyRef) extends Direction with Parser {
+  def parse = "{}"//tJson.build(Map("class"->t.getClass.getSimpleName))
+  val contentType = "text/json"
+}
 
-  case class Error(code:Int, msg:String) extends Direction
+/**
+ * Return an error to the client, eg. 403.
+ */
+case class Error(code:Int, msg:String) extends Direction

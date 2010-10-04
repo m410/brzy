@@ -23,13 +23,13 @@ import org.apache.ivy.core.IvyContext
 import org.apache.ivy.Ivy.IvyCallback
 
 import org.apache.ivy.util.{FileUtil, MessageLoggerEngine}
-import org.apache.ivy.core.cache.ResolutionCacheManager
-
 import java.io._
 import javax.xml.transform.stream.{StreamResult, StreamSource}
 import org.apache.ivy.core.module.id.ModuleRevisionId
 import javax.xml.transform.{TransformerFactory, Transformer, Source}
 import org.brzy.application.WebAppConf
+import org.apache.ivy.core.settings.IvySettings
+import org.apache.ivy.core.cache.{RepositoryCacheManager, ResolutionCacheManager}
 
 /**
  * This uses Ivy to download the application dependencies place them in a local cache director
@@ -60,7 +60,7 @@ object DependencyResolver {
       ivy.configure(settingsFile)
       ivy.getResolveEngine.resolve(ivyFile)
       val org = webappConfig.application.org.get
-      val name = webappConfig.application.artifactId.get
+      val name = webappConfig.application.name.get
       val version = webappConfig.application.version.get
       val modId = ModuleRevisionId.newInstance(org, name, version)
       ivy.getRetrieveEngine.retrieve(modId, retrievePattern, new RetrieveOptions)
@@ -110,7 +110,10 @@ object DependencyResolver {
     val cssSourceStream = getClass.getResourceAsStream("/ivy-report.css")
     FileUtil.copy(cssSourceStream, css, null)
 
-    val ivy = Ivy.newInstance
+
+    val settings: IvySettings = new IvySettings
+    settings.setDefaultCache(File(".brzy/ivy-cache"))
+    val ivy = Ivy.newInstance(settings)
     val cacheMgr: ResolutionCacheManager = ivy.getResolutionCacheManager
 
     val org = config.application.org.get

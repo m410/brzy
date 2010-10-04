@@ -14,11 +14,8 @@
 package org.brzy.webapp.action.args
 
 /**
- * Document Me..
+ * This is not implemented yet.  It's used in secured controllers to access the caller principal.
  * 
  * @author Michael Fortin
  */
-
-class Principal{
-  
-}
+class Principal

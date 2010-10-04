@@ -21,19 +21,34 @@ import org.brzy.fab.mod.{Mod, PersistenceMod, RuntimeMod, ViewMod}
 import org.slf4j.LoggerFactory
 
 /**
- * Document Me..
+ * This is the main webapp configuration class.  It consists of all the parts configured
+ * in the brzy-webapp.b.yml configuration file.  The file is available at build time and
+ * at runtime.  See the companion class for the factory methods.
  *
  * @author Michael Fortin
  */
 class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod]) {
+
+  /**
+   * The developement environment
+   */
   val environment: String = c.environment.orNull
 
+  /**
+   * The application meta data, like author description and version.
+   */
   val application: Application = c.application.orNull
 
   val project: Project = c.project.orNull
 
+  /**
+   * logging information
+   */
   val logging: Logging = c.logging.orNull
 
+  /**
+   * library dependencies
+   */
   val dependencies: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
 
@@ -60,6 +75,9 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     SortedSet(dependencyBuffer: _*)
   }
 
+  /**
+   * Global library exclusions.
+   */
   val dependencyExcludes: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
 
@@ -69,9 +87,12 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     SortedSet(dependencyBuffer: _*)
   }
 
+  /**
+   * the repositories from where to retrieve the dependencies.
+   */
   val repositories: SortedSet[Repository] = {
     val repositoryBuffer = ListBuffer[Repository]()
-    // TODO, need to filter dependencies with same org, name, but dif revision
+
     if (c.repositories.isDefined)
       repositoryBuffer ++= c.repositories.get
 
@@ -93,6 +114,9 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     SortedSet(repositoryBuffer: _*)
   }
 
+  /**
+   * The Web.xml elements.
+   */
   val webXml: List[Map[String, AnyRef]] = {
     val buf = ListBuffer[Map[String, AnyRef]]()
 
@@ -116,7 +140,10 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
 }
 
 /**
+ * Factory methods to create a WebAppConf.  This can create a runtime configuration or a build
+ * time configuration.
  *
+ * @author Michael Fortin
  */
 object WebAppConf {
   private val log = LoggerFactory.getLogger(getClass)
@@ -124,7 +151,7 @@ object WebAppConf {
   val appConfigFile = "/brzy-webapp.b.yml"
 
   /**
-   *
+   *  Create the runtime configuration
    */
   def apply(env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
     val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfig)))
@@ -173,10 +200,9 @@ object WebAppConf {
   }
 
   /**
-   *
+   *  Create a build time configuration.
    */
   def buildtime(modBaseDir: File, env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
-    // TODO should pull this from the file system, not classpath
     val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfig)))
     val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 
