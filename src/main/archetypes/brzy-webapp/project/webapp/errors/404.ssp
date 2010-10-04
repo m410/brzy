@@ -14,14 +14,14 @@
 </head>
 <body>
 	<div id="background">
-		<div id="wrapper">	
+		<div id="wrapper">
 			<div id="wrapper2">
 			<div class="container">
 				<header class="span-24 bot-border">
 					<h1>Brzy App</h1>
 				</header>
 				<nav class="bot-border">
-					Navigation: 
+					Navigation:
 				</nav>
 				<h1>Brzy App: ERROR 404</h1>
 				<p>Error page</p>

@@ -1,9 +1,8 @@
 package $package$
 
-import org.brzy.config.webapp.WebAppConfig
-import org.brzy.application.WebApp
+import org.brzy.application.{WebAppConf,WebApp}
 
 /**
  * Application Class
  */
-class Application(config:WebAppConfig) extends WebApp(config)
+class Application(config:WebAppConf) extends WebApp(config)

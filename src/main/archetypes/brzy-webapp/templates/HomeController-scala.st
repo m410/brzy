@@ -1,11 +1,11 @@
 package $package$
 
-import org.brzy.controller.{Path,Controller}
-import org.brzy.mvc.action.returns.View
+import org.brzy.webapp.controller.{Action,Controller}
+import org.brzy.webapp.action.returns.View
 
 /**
  */
 @Controller("")
 class HomeController {
-  @Path("") def index = View("/index")
+  @Action("") def index = View("/index")
 }
