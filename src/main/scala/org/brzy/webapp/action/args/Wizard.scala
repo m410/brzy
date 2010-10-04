@@ -14,9 +14,8 @@
 package org.brzy.webapp.action.args
 
 /**
- * Document Me..
+ * Not used, this just a place holder for now for a possible form wizard helper.
  * 
  * @author Michael Fortin
  */
-
 class Wizard

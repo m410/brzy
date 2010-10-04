@@ -16,6 +16,7 @@ package org.brzy.webapp.action.args
 import collection.mutable.HashMap
 
 /**
+ * Used to access session attributes.
  * @author Michael Fortin
  */
 class Session extends HashMap[String, Any] {

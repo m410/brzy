@@ -16,6 +16,9 @@ package org.brzy.webapp.view
 import javax.servlet.http.HttpSession
 
 /**
+ * This is the session scope attribute that that holds a flash message and a reference to it's
+ * session.  Once it's called by the client, it removes itself from the http session.
+ * 
  * @author Michael Fortin
  */
 class FlashMessage(message:String,session:HttpSession) {

@@ -18,5 +18,4 @@ package org.brzy.webapp.validator
  * 
  * @author Michael Fortin
  */
-
 object Validator 

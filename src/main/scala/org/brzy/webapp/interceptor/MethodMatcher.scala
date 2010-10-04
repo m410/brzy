@@ -16,7 +16,7 @@ package org.brzy.webapp.interceptor
 import java.lang.reflect.Method
 
 /**
- * Document Me..
+ * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
  * 
  * @author Michael Fortin
  */

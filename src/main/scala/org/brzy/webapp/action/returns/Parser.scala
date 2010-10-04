@@ -13,14 +13,11 @@
  */
 package org.brzy.webapp.action.returns
 
-import xml.Elem
-
 /**
- * Document Me..
+ * Used by action return objects that need to parse some data. 
  * 
  * @author Michael Fortin
  */
-
 trait Parser {
   def parse:String
 }

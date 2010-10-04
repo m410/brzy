@@ -19,8 +19,12 @@ import org.brzy.persistence.{Persistable, Persistent}
 import java.lang.String
 
 /**
- * Document Me..
+ * Controller writers can extend this to get all the crud operations in their controller.  The
+ * controller has to be associated with a persistent class taht implements Persistent and has
+ * a companion class that implements Persistable.
  *
+ * @see org.brzy.persistence.Persistable
+ * @see org.brzy.persistence.Persistent
  * @author Michael Fortin
  */
 abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E]) {

@@ -20,6 +20,8 @@ import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTy
 import scala.collection.JavaConversions._
 
 /**
+ * Used by the WebApp to scan for services in the classpath.
+ * 
  * @author Michael Fortin
  */
 class ServiceScanner(val packageName:String) {
@@ -34,6 +36,9 @@ class ServiceScanner(val packageName:String) {
   val services = asSet(reflections.getTypesAnnotatedWith(classOf[Service]))
 }
 
+/**
+ * Construct a new instance of the scanner
+ */
 object ServiceScanner {
   def apply(config:String) = new ServiceScanner(config)
 }

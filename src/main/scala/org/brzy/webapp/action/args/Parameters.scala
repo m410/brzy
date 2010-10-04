@@ -16,6 +16,16 @@ package org.brzy.webapp.action.args
 import collection.immutable._
 
 /**
+ * This is the most frequently used action argument class.  It passes any request attributes
+ * plus any RESTful url attributes to the action.
+ *
+ * <pre>@Action("{id}") def myaction(p:Parameters) = {
+ *    val paramValue = p("id")
+ *    val asArray = p.array("id")
+ * }
+ * </pre>
+ *
+ * It's not implemented yet.
  * @author Michael Fortin
  */
 class Parameters(map:collection.Map[String,Array[String]])
