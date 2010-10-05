@@ -7,12 +7,12 @@ default_phase: package
 scala_version: $scalaVersion "2.8.0"
 
 dependencies:
-  - {org: org.brzy, name: brzy-webapp-archetype, rev: "0.2-SNAPSHOT", transitive: false}
-  - {org: org.brzy, name: brzy-webapp, rev: "0.6-SNAPSHOT", transitive: false}
+  - {org: org.brzy, name: brzy-webapp-archetype, rev: "0.2", transitive: false}
+  - {org: org.brzy, name: brzy-webapp, rev: "0.6", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
-  - {org: org.brzy.fab, name: fab-conf, rev: "0.2-SNAPSHOT", transitive: false}
-  - {org: org.brzy.fab, name: fab-util, rev: "0.2-SNAPSHOT", transitive: false}
+  - {org: org.brzy.fab, name: fab-conf, rev: "0.2", transitive: false}
+  - {org: org.brzy.fab, name: fab-util, rev: "0.2", transitive: false}
   - {org: org.jyaml, name: jyaml, rev: "1.3", transitive: false}
   - {org: commons-lang, name: commons-lang, rev: "2.5", transitive: false}
   - {org: org.slf4j, name: slf4j-api, rev: "1.6.1", transitive: false}

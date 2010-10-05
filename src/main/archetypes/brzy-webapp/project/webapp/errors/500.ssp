@@ -1,4 +1,4 @@
-<% import org.brzy.view.ViewFunctions._  %>
+<%  import org.brzy.webapp.view.ViewFunctions._  %>
 <% implicit val req = request %>
 <!DOCTYPE html>
 <html lang="en">

@@ -6,7 +6,7 @@
  	<groupId>org.brzy</groupId>
 	<artifactId>brzy-framework</artifactId>
 	<name>Brzy Framework</name>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6</version>
 	<packaging>pom</packaging>
 	<build>
 		<plugins>
@@ -34,12 +34,23 @@
 		<dependency>
 			<groupId>org.brzy</groupId>
       <artifactId>brzy-webapp-archetype</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.2</version>
 		</dependency>
     <dependency>
 			<groupId>org.brzy.fab</groupId>
 			<artifactId>fab-cli</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
+	<distributionManagement>
+    <repository>
+      <id>brzy-nexus</id>
+      <name>Nexus Staging Repo</name>
+      <url>http://repo.brzy.org/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>brzy-nexus-snapshot</id>
+      <url>http://repo.brzy.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
