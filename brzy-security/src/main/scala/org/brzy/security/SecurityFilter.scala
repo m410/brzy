@@ -32,7 +32,7 @@ class SecurityFilter extends Filter{
 
   def init(filterConfig: FilterConfig) = {
     app = filterConfig.getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    val option = app.moduleResource.find(_.name == "brzy-security")
+    val option = app.moduleProviders.find(_.name == "brzy-security")
     security = option match {
       case Some(mod) => mod.asInstanceOf[SecurityModProvider]
       case _ => error("No Security Module Found")

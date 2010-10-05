@@ -6,11 +6,11 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-jms</artifactId>
   <name>Brzy JMS Module</name>
-  <version>0.5-SNAPSHOT</version>
+  <version>0.5</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy-modules</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.6</version>
   </parent>
   <build>
     <plugins>
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2</version>
     </dependency>
     <dependency>
       <groupId>org.reflections</groupId>
@@ -85,7 +85,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.6-SNAPSHOT</version>
+      <version>0.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>

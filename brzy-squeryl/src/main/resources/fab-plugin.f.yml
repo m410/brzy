@@ -3,4 +3,4 @@ description: Added app configuration libraries to build
 dependencies_in_default_scope: true
 member_of_phase: compile
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.8-SNAPSHOT", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.8", transitive: false}
