@@ -18,6 +18,8 @@ import org.brzy.fab.conf.BaseConf
 
 
 /**
+ * Configuration for the scalate view resources.
+ * 
  * @author Michael Fortin
  */
 class ScalateModConfig(override val map: Map[String, AnyRef]) extends ViewMod(map) {

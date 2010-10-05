@@ -16,6 +16,7 @@ package org.brzy.scalate
 import org.brzy.fab.mod.ViewModProvider
 
 /**
+ * The resource provider for the Scalate View Module.
  * 
  * @author Michael Fortin
  */
