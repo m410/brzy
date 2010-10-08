@@ -12,11 +12,11 @@
     <artifactId>brzy-archetype</artifactId>
     <version>0.2-SNAPSHOT</version>
   </parent>
-	<scm>
+	<!-- <scm>
 		<connection>scm:git:git@github.com:m410/brzy-archetype.git</connection>
 		<url>scm:git:git@github.com:m410/brzy-archetype.git</url>
 		<developerConnection>scm:git:git@github.com:m410/brzy-archetype.git</developerConnection>	
-	  </scm>
+	  </scm> -->
   <build>
     <plugins>
 	   <plugin>
@@ -107,7 +107,7 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.2</version>
+      <version>0.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>
