@@ -11,7 +11,7 @@ persistence:
   - name: brzy-jpa
     org: org.brzy
     version: "0.3"
-    scan_package: org.brzy.jpa.mock
+    scan_package: org.brzy.mod.jpa.mock
     persistence_unit: my-unit
     properties:
       "hibernate.dialect": "org.hibernate.dialect.HSQLDialect"

@@ -4,8 +4,8 @@ mod_type: runtime
 name: brzy-jms
 org: org.brzy
 version: "0.4"
-config_class: org.brzy.jms.JmsModConfig
-resource_class: org.brzy.jms.JmsModProvider
+config_class: org.brzy.mod.jms.JmsModConfig
+resource_class: org.brzy.mod.jms.JmsModProvider
 
 #connection_factory_class:
 #broker_url:

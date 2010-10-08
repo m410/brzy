@@ -13,7 +13,7 @@ modules:
   - name: brzy-jms
     org: org.brzy
     version: "0.3"
-    connection_factory_class: org.brzy.jms
+    connection_factory_class: org.brzy.mod.jms
     connection_url: "tcp://someurl"
 
 logging:

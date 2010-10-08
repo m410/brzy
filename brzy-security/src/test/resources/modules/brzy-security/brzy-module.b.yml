@@ -4,8 +4,8 @@ mod_type: runtime
 name: brzy-security
 org: org.brzy
 version: "0.2"
-config_class: org.brzy.security.SecurityModConfig
-resource_class: org.brzy.security.SecurityModProvider
+config_class: org.brzy.mod.security.SecurityModConfig
+resource_class: org.brzy.mod.security.SecurityModProvider
 
 authority_entity: Person
 user_entity:

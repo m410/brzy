@@ -75,12 +75,12 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.2</version>
+      <version>0.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.6</version>
+      <version>0.7-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>    <dependency>
       <groupId>org.scalatest</groupId>

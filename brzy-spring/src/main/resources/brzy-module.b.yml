@@ -4,8 +4,8 @@ mod_type: runtime
 name: brzy-spring
 org: org.brzy
 version: "0.5"
-config_class: org.brzy.spring.SpringModConfig
-resource_class: org.brzy.spring.SpringModProvider
+config_class: org.brzy.mod.spring.SpringModConfig
+resource_class: org.brzy.mod.spring.SpringModProvider
 
 application_context: applicationContext.xml
 

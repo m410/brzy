@@ -17,7 +17,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.annotations.Column
 import org.squeryl.KeyedEntity
 import java.beans.ConstructorProperties
-import org.brzy.squeryl.SquerylPersistence
+import org.brzy.mod.squeryl.SquerylPersistence
 import javax.validation.constraints.{Size, NotNull}
 import org.brzy.persistence.Persistent
 

@@ -5,7 +5,7 @@
              version="1.0">
   <persistence-unit name="jpa-test" transaction-type="RESOURCE_LOCAL">
     <description>Brzy-jpa Testing</description>
-    <class>org.brzy.jpa.mock.User</class>
+    <class>org.brzy.mod.jpa.mock.User</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
       <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>

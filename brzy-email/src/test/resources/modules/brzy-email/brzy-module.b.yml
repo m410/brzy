@@ -3,8 +3,8 @@ mod_type: runtime
 name: brzy-email
 org: org.brzy
 version: "0.2"
-config_class: org.brzy.email.EmailModConfig
-resource_class: org.brzy.email.EmailModProvider
+config_class: org.brzy.mod.email.EmailModConfig
+resource_class: org.brzy.mod.email.EmailModProvider
 
 smtp_host: localhost
 user_name: ""
