@@ -8,15 +8,8 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
-			<directory>src/main/resources</directory>
-			<outputDirectory>resources</outputDirectory>
-			<excludes>
-				<exclude>*.yml</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
 			<directory>src/main/scripts</directory>
-			<outputDirectory>scripts</outputDirectory>
+			<outputDirectory>/</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/templates</directory>
@@ -44,10 +37,12 @@
 		<file>
 			<source>src/main/resources/brzy-module.b.yml</source>
 			<outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
 		</file>
 		<file>
 			<source>src/main/resources/fab-plugin.f.yml</source>
 			<outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
 		</file>
 	</files>
 </assembly>
