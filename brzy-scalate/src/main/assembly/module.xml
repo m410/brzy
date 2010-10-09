@@ -8,12 +8,11 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
-			<directory>src/main/scripts</directory>
-			<outputDirectory>/</outputDirectory>
-		</fileSet>
-		<fileSet>
 			<directory>src/main/templates</directory>
 			<outputDirectory>templates</outputDirectory>
+      <excludes>
+        <exclude>*.yml</exclude>
+      </excludes>
 		</fileSet>
 		<fileSet>
       <includes>
@@ -34,13 +33,17 @@
     </fileSet>
 	</fileSets>
 	<files>
+    <file>
+			<source>src/main/scripts/BrzyScalatePlugin.scala</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
 		<file>
-			<source>src/main/resources/brzy-module.b.yml</source>
+			<source>src/main/templates/brzy-module.b.yml</source>
 			<outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
 		</file>
 		<file>
-			<source>src/main/resources/fab-plugin.f.yml</source>
+			<source>src/main/templates/fab-plugin.f.yml</source>
 			<outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
 		</file>

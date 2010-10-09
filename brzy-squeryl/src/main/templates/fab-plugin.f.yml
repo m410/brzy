@@ -1,0 +1,9 @@
+name: brzy-squeryl
+description: Generate Domain Class
+source_file: .brzy/modules/brzy-squeryl/BrzySquerylPlugin.scala
+class_name: BrzySquerylPlugin
+tasks:
+  - name: squeryl-domain
+    method_name: createSquerylDomain
+    description: Generate A Squeryl Domain Class
+    args: The name of the domain Class

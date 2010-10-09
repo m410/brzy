@@ -44,16 +44,16 @@
     <orderEntry type="library" scope="TEST" name="Maven: javax.validation:validation-api:1.0.0.GA" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.scala-lang:scala-compiler:2.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.scala-lang:scala-library:2.8.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:annotations-api:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:catalina:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:servlet-api:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:juli:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:coyote:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:el-api:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:jasper:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:jsp-api:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:jasper-jdt:6.0.26" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.tomcat:jasper-el:6.0.26" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:annotations-api:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:catalina:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:servlet-api:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:juli:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:coyote:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:el-api:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:jasper:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:jsp-api:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:jasper-jdt:6.0.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:jasper-el:6.0.29" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2" level="project" />
   </component>

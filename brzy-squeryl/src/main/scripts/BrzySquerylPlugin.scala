@@ -1,9 +1,7 @@
 
 
-@Plugin(name="squeryl-plugin", desc="Generate Squeryl domain classes")
 class BrzySquerylPlugin(context:BuildContext) extends BuildPlugin(context) {
 
-	@Task(name="gen-squeryl-domain",desc="Create a Squeryl Domain Class")
 	def createSquerylDomain(args:Array[String]) = {
 		context.line.say(Info("Create a Squeryl Domain Class"))
 		// ask for package name & class name

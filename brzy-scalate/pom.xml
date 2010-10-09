@@ -110,10 +110,15 @@
       <version>${fab-conf-version}</version>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
       <version>${brzy-webapp-version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

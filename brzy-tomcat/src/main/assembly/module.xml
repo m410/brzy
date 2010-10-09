@@ -8,23 +8,8 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>src/main/resources</directory>
-      <outputDirectory>resources</outputDirectory>
-      <excludes>
-        <exclude>*.yml</exclude>
-      </excludes>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/scripts</directory>
-      <outputDirectory>scripts</outputDirectory>
-    </fileSet>
-    <fileSet>
       <directory>src/main/conf</directory>
       <outputDirectory>conf</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/templates</directory>
-      <outputDirectory>templates</outputDirectory>
     </fileSet>
     <fileSet>
       <includes>
@@ -46,21 +31,18 @@
   </fileSets>
   <files>
     <file>
-      <source>src/main/resources/brzy-module.b.yml</source>
+      <source>src/main/scripts/brzy-module.b.yml</source>
       <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
     </file>
 		<file>
-			<source>src/main/resources/fab-plugin.f.yml</source>
+			<source>src/main/scripts/fab-plugin.f.yml</source>
 			<outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
 		</file>
 		<file>
 			<source>src/main/scripts/BrzyTomcat6Plugin.scala</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
   </files>
-  <dependencySets>
-    <dependencySet>
-      <outputDirectory>lib</outputDirectory>
-    </dependencySet>
-  </dependencySets>
 </assembly>

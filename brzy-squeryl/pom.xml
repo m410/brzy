@@ -12,6 +12,9 @@
     <artifactId>brzy-modules</artifactId>
     <version>0.7-SNAPSHOT</version>
   </parent>
+  <properties>
+    <squeryl-version>0.9.4-RC2</squeryl-version>
+  </properties>
   <build>
     <plugins>
       <plugin>
@@ -74,7 +77,7 @@
     <dependency>
       <groupId>org.squeryl</groupId>
       <artifactId>squeryl_2.8.0</artifactId>
-      <version>0.9.4-RC1</version>
+      <version>0.9.4-RC2</version>
       <exclusions>
         <exclusion>
           <groupId>postgresql</groupId>

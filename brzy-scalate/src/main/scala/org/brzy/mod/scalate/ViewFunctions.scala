@@ -1,0 +1,56 @@
+package org.brzy.mod.scalate
+
+import javax.servlet.http.HttpServletRequest
+import java.util.Date
+import java.text.{SimpleDateFormat, DecimalFormat}
+import java.net.URLEncoder
+import org.brzy.webapp.view.FlashMessage
+
+/**
+ * Document Me..
+ * 
+ * @author Michael Fortin
+ */
+object ViewFunctions {
+
+  def resource(path:String,req:HttpServletRequest):String = {
+    val out = if(req.getContextPath == "/")
+        path
+      else
+        req.getContextPath + path
+
+    if(req.getSession(false) != null && !req.isRequestedSessionIdFromCookie) {
+        // todo url rewrite
+    }
+    out
+  }
+
+  def res(path:String)(implicit req:HttpServletRequest):String = resource(path,req)
+
+	def link(path:String)(implicit req:HttpServletRequest):String = resource(path,req)
+
+  def action(path:String)(implicit req:HttpServletRequest):String = resource(path,req)
+
+  def css(path:String)(implicit req:HttpServletRequest):String = resource( "/css" + path, req)
+
+  def js(path:String)(implicit req:HttpServletRequest):String = resource("/js" +path, req)
+
+  def img(path:String)(implicit req:HttpServletRequest):String = resource("/images" +path, req)
+
+  def date(date:Date,format:String):String = new SimpleDateFormat(format).format(date)
+
+  def number(num:Number,format:String):String = new DecimalFormat(format).format(num)
+
+  def encode(path:String) = URLEncoder.encode(path, "UTF-8")
+
+
+  def flash()(implicit req:HttpServletRequest):String = {
+    if(req.getSession.getAttribute("flash-message") != null)
+      req.getSession.getAttribute("flash-message").asInstanceOf[FlashMessage].show
+    else
+      ""
+  }
+
+  def hasFlash()(implicit req:HttpServletRequest):Boolean = req.getSession.getAttribute("flash-message") != null
+
+}
