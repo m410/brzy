@@ -6,7 +6,7 @@
  	<groupId>org.brzy</groupId>
 	<artifactId>brzy-framework</artifactId>
 	<name>Brzy Framework</name>
-  <version>0.6</version>
+  <version>0.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<build>
 		<plugins>
@@ -32,14 +32,16 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.brzy</groupId>
-      <artifactId>brzy-webapp-archetype</artifactId>
-			<version>0.2</version>
+			<groupId>org.brzy.archetype</groupId>
+      <artifactId>brzy-webapp-fab</artifactId>
+			<version>0.3-SNAPSHOT</version>
+      <classifier>archetype</classifier>
+      <type>zip</type>
 		</dependency>
     <dependency>
 			<groupId>org.brzy.fab</groupId>
 			<artifactId>fab-cli</artifactId>
-			<version>0.2</version>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
