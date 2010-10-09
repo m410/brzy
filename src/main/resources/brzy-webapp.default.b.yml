@@ -1,12 +1,12 @@
 project:
-  scala_version: 2.8.0
+  scala_version: ${scala.version}
   package_type: war
   module_resources: ".brzy/modules"
 
 views:
   name: brzy-scalate
   org: org.brzy
-  version: "0.6"
+  version: "${brzy-scalate-version}"
   config_class: org.brzy.module.ScalateModuleConfig
   file_extension: ".ssp"
 
@@ -19,10 +19,10 @@ repositories:
   - {id: maven-central, url: http://repo1.maven.org/maven2}
 
 dependencies:
-  - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
-  - {conf: provided, org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
-  - {conf: compile, org: org.brzy, name: brzy-webapp, rev: "0.6", transitive: false}
-  - {conf: compile, org: org.brzy.fab, name: fab-conf, rev: "0.2", transitive: false}
+  - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
+  - {conf: provided, org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
+  - {conf: compile, org: org.brzy.fab, name: fab-conf, rev: "${brzy-conf-version}", transitive: false}
   - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA", transitive: false}
   - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8", transitive: false}
   - {conf: compile, org: org.reflections, name: reflections, rev: "0.9.5-RC2", transitive: false}
