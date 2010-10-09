@@ -9,8 +9,26 @@
   <fileSets>
     <fileSet>
       <directory>src/main/templates</directory>
-      <outputDirectory>brzy-webapp</outputDirectory>
-      <filtered>true</filtered>
+      <outputDirectory>/</outputDirectory>
+      <excludes>
+        <exclude>*.yml</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
+  <files>
+		<file>
+			<source>src/main/scripts/BrzyWebAppArchetypePlugin.scala</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+    <file>
+      <source>src/main/templates/brzy-webapp.default.b.yml</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+    <file>
+      <source>src/main/templates/brzy-webapp.f.yml</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+	</files>
 </assembly>
