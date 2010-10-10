@@ -25,6 +25,13 @@ import java.lang.reflect.Method
 
 class XmlReturnTest  extends JUnitSuite {
 
+  @Test def testXml = {
+    val foo = Foo("bar")
+    val xml = Xml(foo)
+    assertNotNull(xml)
+    assertEquals("<Foo><bar>bar</bar></Foo>",xml.parse)
+  }
+
   @Test @Ignore def listMethods = {
     val ctlr = new UserController()
     var count = 0
@@ -52,3 +59,5 @@ class XmlReturnTest  extends JUnitSuite {
   }
 
 }
+
+case class Foo(bar:String)
