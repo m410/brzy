@@ -13,6 +13,8 @@
  */
 package org.brzy.webapp.action.returns
 
+import xml.Elem
+
 //import com.twitter.json.{Json=>tJson}
 
 /**
@@ -45,10 +47,13 @@ case class Xml(t:AnyRef) extends Direction with Parser {
   import org.brzy.fab.reflect.Properties._
 
   def parse = {
-    <class name={t.getClass.getSimpleName}>
-      {t.properties.map(p=> <property name={p._1}>{p._2}</property>)}
+    def node(name:String, elem:Elem) = elem.copy(label=name)
+    val tmp = <class>
+      {t.properties.map(p=> node({p._1}, <property>{p._2}</property>))}
     </class>
+    node(t.getClass.getSimpleName,tmp)
   }.toString
+
   val contentType = "text/xml"
 }
 

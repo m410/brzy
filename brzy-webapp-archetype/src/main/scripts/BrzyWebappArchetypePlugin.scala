@@ -1,19 +1,20 @@
 import java.io.{BufferedWriter, FileWriter}
+import org.brzy.fab.print.Question
 import org.clapper.scalasti.StringTemplateGroup
 import org.brzy.fab.file.{Files, File}
+import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.BuildContext
-import java.io.{File=>JFile}
 
 class BrzyWebAppArchetypePlugin(ctx:BuildContext) {
   def create(args:Array[String]) = {
-    val version = ""
-    val name = ""
-    val org = ""
+    val org = ctx.line.ask(Question("org: "))
+    val name = ctx.line.ask(Question("name: "))
+    val version = ctx.line.ask(Question("version: "))
 
     val dest = File(name)
     dest.mkdirs
-    val brzyHome = new JFile(System.getenv("BRZY_HOME"))
-    val sources = Files(brzyHome,"archetypes/brzy-webapp/project/*")
+    val brzyHome = File.sysPath(System.getenv("BRZY_HOME"))
+    val sources = Files(brzyHome,"archetypes/brzy-webapp/layout/*")
     sources.foreach(_.copyTo(dest))
 
     val group = new StringTemplateGroup("brzy", File(brzyHome, "archetypes/brzy-webapp/templates"))
