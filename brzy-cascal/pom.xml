@@ -12,6 +12,11 @@
     <artifactId>brzy-modules</artifactId>
     <version>0.7-SNAPSHOT</version>
   </parent>
+  <properties>
+    <brzy-webapp-version>0.7-SNAPSHOT</brzy-webapp-version>
+    <fab-conf-version>0.3-SNAPSHOT</fab-conf-version>
+    <scalate-version>1.3</scalate-version>
+  </properties>
   <build>
     <plugins>
       <plugin>
@@ -93,12 +98,12 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>${fab-conf-version}</version>
     </dependency>
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.7-SNAPSHOT</version>
+      <version>${brzy-webapp-version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
