@@ -33,7 +33,12 @@ class UserController {
 
   @Action("xml") def xml = Xml(this)
 
-  @Action("json") def json = Json(this)
+  @Action("json") def json = {
+    val user = new User()
+    user.id = 1
+    user.name = "hello"
+    Json(user)
+  }
 
   @Action("json2") def json2 = new Json(this) with Parser {
     override def parse = "{\"name\":\"value\"}"

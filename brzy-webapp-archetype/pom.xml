@@ -12,7 +12,6 @@
     <artifactId>brzy-archetype</artifactId>
     <version>0.2-SNAPSHOT</version>
   </parent>
-
   <build>
     <plugins>
       <plugin>

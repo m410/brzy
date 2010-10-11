@@ -75,9 +75,9 @@ case class Binary(bytes:Array[Byte], contentType:String) extends Direction
  * Return Json formatted text as the body of the response.
  */
 case class Json(t:AnyRef) extends Direction with Parser {
-  import org.brzy.fab.reflect.Properties._
 
   def parse = {
+    import org.brzy.fab.reflect.Properties._
     val sb = new StringBuilder()
     sb.append("{")
     t.properties.map(f=>{
@@ -85,7 +85,7 @@ case class Json(t:AnyRef) extends Direction with Parser {
       sb.append(f._1) // encode me too
       sb.append("\":\"")
       sb.append(f._2) // todo these need to be encoded
-      sb.append("\"")
+      sb.append("\",")
     })
     sb.append("}")
     sb.toString
