@@ -10,7 +10,7 @@ project:
 
 views:
   name: brzy-scalate
-  org: org.brzy
+  org: org.brzy.mod
   version: "${brzy-scalate-version}"
 
 repositories:

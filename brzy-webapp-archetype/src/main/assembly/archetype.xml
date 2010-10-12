@@ -30,5 +30,9 @@
       <outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
     </file>
+    <file>
+      <source>src/main/templates/brzy-webapp.new.f.yml</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
 	</files>
 </assembly>
