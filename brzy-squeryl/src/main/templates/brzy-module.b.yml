@@ -8,7 +8,7 @@ version: "${pom.version}"
 config_class: org.brzy.mod.squeryl.SquerylModConfig
 resource_class: org.brzy.mod.squeryl.SquerylModProvider
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "${pom.version}", transitive: false}
+  - {conf: compile, org: org.brzy.mod, name: brzy-squeryl, rev: "${pom.version}", transitive: false}
   - {conf: compile, org: org.squeryl, name: squeryl_2.8.0, rev: "${squeryl-version}", transitive: false}
   - {conf: compile, org: cglib, name: cglib-nodep, rev: "2.2", transitive: false}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "4.0.2.GA", transitive: false}

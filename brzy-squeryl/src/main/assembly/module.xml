@@ -21,16 +21,6 @@
         <include>${project.basedir}/NOTICE*</include>
       </includes>
     </fileSet>
-    <fileSet>
-      <directory>${project.build.directory}</directory>
-      <includes>
-        <include>*.jar</include>
-      </includes>
-				<excludes>
-					<exclude>*-module.jar</exclude>
-				</excludes>
-			<outputDirectory>/</outputDirectory>
-    </fileSet>
 	</fileSets>
 	<files>
     <file>

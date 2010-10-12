@@ -1,10 +1,16 @@
-name: brzy-scalate
-description: Generate Views for domain classes
-source_file: .brzy/modules/brzy-scalate/BrzyScalatePlugin.scala
-class_name: BrzyScalatePlugin
-tasks:
-  - name: scalate-views
-    method_name: genSspViews
-    description: Generate Views for domain class
-    args: The name of the domain Class
-
+plugins:
+  - name: brzy-scalate
+    description: Generate Views for domain classes
+    source_file: .brzy/modules/brzy-scalate/BrzyScalatePlugin.scala
+    class_name: BrzyScalatePlugin
+    tasks:
+      - name: scalate-views
+        method_name: genSspViews
+        description: Generate Views for domain class
+        args: The name of the domain Class
+  - name: brzy-scalate-default
+    description: Adds dependencies to the default interpreter scope.
+    dependencies_in_default_scope: true
+    member_of_phase: compile
+    dependencies:
+      - {conf: compile, org: org.brzy.mod, name: brzy-scalate, rev: "${pom.version}", transitive: false}

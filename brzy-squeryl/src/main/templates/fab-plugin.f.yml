@@ -1,9 +1,16 @@
-name: brzy-squeryl
-description: Generate Domain Class
-source_file: .brzy/modules/brzy-squeryl/BrzySquerylPlugin.scala
-class_name: BrzySquerylPlugin
-tasks:
-  - name: squeryl-domain
-    method_name: createSquerylDomain
-    description: Generate A Squeryl Domain Class
-    args: The name of the domain Class
+plugins:
+  - name: brzy-squeryl
+    description: Generate Domain Class
+    source_file: .brzy/modules/brzy-squeryl/BrzySquerylPlugin.scala
+    class_name: BrzySquerylPlugin
+    tasks:
+      - name: squeryl-domain
+        method_name: createSquerylDomain
+        description: Generate A Squeryl Domain Class
+        args: The name of the domain Class
+  - name: brzy-squeryl-default
+    description: Adds dependencies to the default interpreter scope.
+    dependencies_in_default_scope: true
+    member_of_phase: compile
+    dependencies:
+      - {conf: compile, org: org.brzy.mod, name: brzy-squeryl, rev: "${pom.version}", transitive: false}
