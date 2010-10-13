@@ -15,6 +15,6 @@ repositories:
   - id: fusesource.m2
     url: http://repo.fusesource.com/nexus/content/repositories/snapshots
 web_xml:
-  - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.fusesource.scalate.servlet.TemplateEngineServlet", load-on-startup: "1"}
+  - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.brzy.mod.scalate.BrzyScalateServlet", load-on-startup: "1"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.ssp"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.scaml"}

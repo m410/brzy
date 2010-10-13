@@ -7,7 +7,12 @@ plugins:
       - name: scalate-views
         method_name: genSspViews
         description: Generate Views for domain class
-        args: The name of the domain Class
+        takes_args: true
+    dependencies:
+      - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
+    repositories:
+      - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
+
   - name: brzy-scalate-default
     description: Adds dependencies to the default interpreter scope.
     dependencies_in_default_scope: true
