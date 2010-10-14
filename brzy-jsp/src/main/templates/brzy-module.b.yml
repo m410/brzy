@@ -8,6 +8,11 @@ config_class: org.brzy.mod.jsp.JspModConfig
 resource_class: org.brzy.mod.jsp.JspModProvider
 file_extension: ".jsp"
 dependencies:
-  - {conf: provided, org: jstl, name: jstl, ref: "1.1.2"}
+  - {conf: provided, org: jstl, name: jstl, rev: "1.1.2"}
   - {conf: compile, org: org.brzy.mod, name: brzy-jsp, rev: "${pom.version}", transitive: false}
+web_xml:
+  - error-page: { error-code: "404", location: "/errors/404.jsp"}
+  - error-page: { error-code: "500", location: "/errors/500.jsp"}
+  - error-page: {exception-type: java.lang.Throwable, location: "/errors/500.jsp"}
+
 
