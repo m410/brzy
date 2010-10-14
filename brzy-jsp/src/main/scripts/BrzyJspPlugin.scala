@@ -1,9 +1,12 @@
+import java.io.{BufferedWriter, FileWriter}
+import org.brzy.fab.print.{Question,Info}
+import org.clapper.scalasti.StringTemplateGroup
+import org.brzy.fab.file.{Files, File}
+import org.brzy.fab.file.FileUtils._
+import org.brzy.fab.build.BuildContext
 
+class BrzyJspPlugin(context:BuildContext) {
 
-@Plugin(name="jsp-plugin", desc="Generate JSP view pages")
-class BrzyJspPlugin(context:BuildContext) extends BuildPlugin(context) {
-
-	@Task(name="gen-jsp-views",desc="Create jsp crud pages for a domain class")
 	def genJspViews(args:Array[String]) = {
 		context.line.say(Info("Generate Views"))
 	}

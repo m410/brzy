@@ -17,7 +17,6 @@ import org.brzy.mod.jpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
 import reflect.BeanProperty
-import java.beans.ConstructorProperties
 import org.brzy.webapp.action.args.Parameters
 
 
@@ -26,7 +25,6 @@ import org.brzy.webapp.action.args.Parameters
 @Table(name="users")
 @NamedQueries(Array(new NamedQuery(name="list", query="select distinct u from User u")))
 @NamedQuery(name="test", query="select u from User u")
-@ConstructorProperties(Array("id","version","firstName","lastName"))
 class User {
   
   @BeanProperty @Id var id:Long = _
