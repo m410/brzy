@@ -29,11 +29,35 @@ import org.apache.ivy.core.module.id.ModuleRevisionId
 import javax.xml.transform.{TransformerFactory, Transformer, Source}
 import org.brzy.application.WebAppConf
 import org.apache.ivy.core.settings.IvySettings
-import org.apache.ivy.core.cache.{RepositoryCacheManager, ResolutionCacheManager}
+import org.apache.ivy.core.cache.ResolutionCacheManager
 
 /**
  * This uses Ivy to download the application dependencies place them in a local cache director
  * so the compiler and packager can access them. 
+ *
+ * From http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html
+ * In Ivy xml
+ *
+ * <publications>
+ * <artifact type="pom" ext="pom" conf="default"/>
+ * <artifact type="jar" ext="jar" conf="default"/>
+ * <artifact type="source" ext="jar" conf="sources" m:classifier="sources"/>
+ * </publications>
+ *
+ *
+ * in scala
+ * <ivy:makepom ivyfile="ivy.xml" pomfile="bin/poms/${ant.project.name}.pom">
+ *   <mapping conf="default" scope="compile"/>
+ * </ivy:makepom>
+ *
+ * <ivy:publish resolver="local-m2-publish" forcedeliver="true" overwrite="true" publishivy="false">
+ *   <artifacts pattern="bin/[type]s/[artifact].[ext]"/>
+ * </ivy:publish>
+ * <!-- snapshots only exist locally, so kick the cache. -->
+ * <delete>
+ *   <fileset dir="${ivy.cache.dir}/${ivy.organisation}/${ivy.module}" includes="[star][star]/[star]SNAPSHOT[star]"/>
+ * </delete>
+ *
  *
  * @author Michael Fortin
  */
@@ -69,6 +93,7 @@ object DependencyResolver {
 
   }
 
+  // TODO this needs to be replaced with org.brzy.fab.cli.Ivy but ivy in needs to be moved to util first
   def doInIvyCallback(callback: (Ivy, IvyContext) => java.lang.Object)(implicit line: Conversation) = {
     val ivy = new Ivy() {
       val logEngine = new MessageLoggerEngine {

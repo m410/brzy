@@ -16,11 +16,11 @@ views:
 repositories:
   - {id: brzy, url: http://repo.brzy.org/content/repositories/releases}
   - {id: brzy-snapshot, url: http://repo.brzy.org/content/repositories/snapshots}
-  - {id: java-net2, url: http://download.java.net/maven/2}
   - {id: scala-tools, url: http://scala-tools.org/repo-releases}
-  - {id: jboss, url: http://repository.jboss.com/maven2}
-  - {id: reflections-repo, url: http://reflections.googlecode.com/svn/repo}
   - {id: maven-central, url: http://repo1.maven.org/maven2}
+  - {id: reflections-repo, url: http://reflections.googlecode.com/svn/repo}
+  - {id: jboss, url: http://repository.jboss.com/maven2}
+  - {id: java-net2, url: http://download.java.net/maven/2}
 
 dependencies:
   - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
@@ -37,7 +37,10 @@ dependencies:
   - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.24",transitive: false}
   - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "0.9.24",transitive: false}
   - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
-
+  - {conf: test, org: junit, name: junit, rev: "4.8.1"}
+  - {conf: test, org: org.scalatest, name: scalatest, rev: "1.2", transitive: false}
+  - {conf: test, org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
+  
 web_xml:
   - context-param: { param-name : brzy-env, param-value: development}
   - listener: {listener-class: org.brzy.application.WebAppListener}
