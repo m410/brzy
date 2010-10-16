@@ -31,7 +31,7 @@ class UserController {
 
   @Action("save")
 	def save(params:Parameters)() = {
-	  def user:User = User.make(params)
+	  def user:User = User.construct(params)
  		val validity = user.validate()
 
 		if(validity.passes) {
@@ -47,7 +47,7 @@ class UserController {
 
 	@Action("{id}/update")
 	def update(params:Parameters) = {
-		def user = User.make(params)
+		def user = User.construct(params)
     val validity = user.validate()
 
 		if(validity.passes) {

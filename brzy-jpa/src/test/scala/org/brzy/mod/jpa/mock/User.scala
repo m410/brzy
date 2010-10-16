@@ -15,16 +15,15 @@ package org.brzy.mod.jpa.mock
 
 import org.brzy.mod.jpa.JpaPersistence
 import javax.validation.constraints.{NotNull,Size}
-import javax.persistence._
-import reflect.BeanProperty
-import org.brzy.webapp.action.args.Parameters
 
+import reflect.BeanProperty
+import org.hibernate.annotations.NamedQueries
+import javax.persistence._
 
 @serializable
 @Entity
 @Table(name="users")
-@NamedQueries(Array(new NamedQuery(name="list", query="select distinct u from User u")))
-@NamedQuery(name="test", query="select u from User u")
+//@NamedQueries(Array(new NamedQuery(name="list", query="select distinct u from User u")))
 class User {
   
   @BeanProperty @Id var id:Long = _
@@ -49,12 +48,12 @@ class User {
 }
 
 object User extends JpaPersistence[User,java.lang.Long] {
-  override def make(p: Parameters) = {
+  
+  override def construct(p: _root_.scala.Predef.Map[_root_.scala.Predef.String, Any]) = {
     val user = new User()
-    user.id= p("id").toLong
-    user.version = 1
-    user.firstName = p("firstName")
-    user.lastName = p("lastName")
+    user.id= p("id").asInstanceOf[String].toLong
+    user.firstName = p("firstName").asInstanceOf[String]
+    user.lastName = p("lastName").asInstanceOf[String]
     user
   }
 }

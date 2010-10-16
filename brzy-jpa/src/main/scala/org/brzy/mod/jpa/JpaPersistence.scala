@@ -14,12 +14,10 @@
 package org.brzy.mod.jpa
 
 import org.slf4j.LoggerFactory
-import javax.validation.{Validator,  Validation=>jValidation}
+import javax.validation.{Validation=>jValidation}
 
-import org.brzy.mod.jpa.RichQuery._
 import org.brzy.webapp.validator.Validation
 import org.brzy.fab.reflect.Construct
-import org.brzy.webapp.action.args.Parameters
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
@@ -27,12 +25,12 @@ import org.brzy.webapp.action.args.Parameters
  * another persistence api that may be easier to setup
  * http://max-l.github.com/Squeryl/getting-started.html
  */
-class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Manifest[PK]) {
+class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manifest[PK]) {
   protected[jpa] val entityClass = man.erasure
   protected[jpa] val keyClass = pk.erasure
   private val log = LoggerFactory.getLogger(entityClass)
 
-  protected[jpa] val validator:Validator = jValidation.buildDefaultValidatorFactory.getValidator
+  protected[jpa] val validator = jValidation.buildDefaultValidatorFactory.getValidator
 
   protected[jpa] val countQuery = "select count(t.id) from " + entityClass.getName + " t"
   protected[jpa] val listQuery = "select distinct t from " + entityClass.getName + " t"
@@ -47,23 +45,28 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Mani
       Validation[T](validator.validate(t))
     }
 
-    def save() = {
+    def save = {
       log.trace("save")
       val entityManager = JpaContext.value.get
       entityManager.persist(t)
     }
 
-    def saveAndCommit() = {
-      log.trace("save")
-      val entityManager = JpaContext.value.get
-      entityManager.persist(t)
-      entityManager.getTransaction.commit
-    }
-
-    def delete() = {
+    def delete = {
       log.trace("delete")
       val entityManager = JpaContext.value.get
       entityManager.remove(t)
+    }
+
+    def insert = {
+      log.trace("delete")
+      val entityManager = JpaContext.value.get
+      entityManager.persist(t)
+    }
+
+    def update = {
+      log.trace("delete")
+      val entityManager = JpaContext.value.get
+      entityManager.persist(t)      
     }
   }
 
@@ -80,22 +83,20 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef](implicit man:Manifest[T],pk:Mani
     entityManager.createQuery(countQuery).getSingleResult.asInstanceOf[Long]
 	}
 	
-	def list():List[T] = {
+	def list():java.util.List[T] = {
     val entityManager = JpaContext.value.get
-    entityManager.createQuery(listQuery).getResultList.toArray.toList.asInstanceOf[List[T]]
+    entityManager.createQuery(listQuery).getResultList.asInstanceOf[java.util.List[T]]
 	}
 	
-	def page(start:Int, size:Int):List[T] = {
+	def list(start:Int, size:Int):java.util.List[T] = {
     val entityManager = JpaContext.value.get
-    entityManager
-        .createQuery(listQuery)
+    entityManager.createQuery(listQuery)
         .setFirstResult(start)
-        .setMaxResults(size)
-        .getTypedList[T]
+        .setMaxResults(size).getResultList.asInstanceOf[java.util.List[T]]
 	}
 
-	def make(params:Parameters):T = {
+	def construct(params:Map[String,Any]):T = {
     log.debug("make with params: {}",params)
-    Construct.withCast[T](params)
+    Construct.withCast[T](params.asInstanceOf[Map[String,String]])
 	}
 }

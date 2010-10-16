@@ -15,6 +15,7 @@ package org.brzy.mod.jpa.build
 
 import xml._
 import org.brzy.application.WebAppConf
+import org.brzy.mod.jpa.JpaModConfig
 
 /**
  * Generates a Persistence.xml JPA configuration file from the applications configuration.
@@ -22,41 +23,37 @@ import org.brzy.application.WebAppConf
  * @author Michael Fortin
  */
 class PersistenceXml(config: WebAppConf) {
+  val jpaModConf = config.persistence.find(_.name.get == "brzy-jpa").get.asInstanceOf[JpaModConfig]
 
-  val entityClasses = List.empty[Class[_]]
-  val properties = Map.empty[String,String]
-  val transactionType = "RESOURCE_LOCAL"
+  val transactionType = jpaModConf.transactionType.getOrElse("RESOURCE_LOCAL")
+  val persistenceUnitName = jpaModConf.persistenceUnit.getOrElse("brzy-unit")
+  val properties = jpaModConf.properties.getOrElse(Map.empty[String,String])
+
+  val entityClasses:List[String] = 
+      if(jpaModConf.entityDiscovery == "list") {
+        val list = jpaModConf.entities match {
+          case Some(list) => list
+          case _ => List.empty[String]
+        }
+        list
+      }
+      else { // scan for entities
+        List.empty[String]
+      }
+
   
   val xml =
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
-  <persistence-unit name="brzy-webapp-persistence" transaction-type={transactionType}>
+  <persistence-unit name={persistenceUnitName} transaction-type={transactionType}>
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <!-- classes -->
-    {entityClasses.map(cls=>{
-    <class>{cls.getName}</class>
-    })}
+    {entityClasses.map(c=>{<class>{c}</class>})}
     <properties>
       {properties.map(nvp=>{
       <property name={nvp._1} value={nvp._2} />
       })}
-      <!--
-      <property name="hibernate.hbm2ddl.auto" value="create"/>
-      <property name="hibernate.archive.autodetection" value="class, hbm"/>
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-      <property name="hibernate.connection.password" value="<PASSWORD>"/>
-      <property name="hibernate.connection.url" value="jdbc:mysql://<HOST IP ADDRESS>/<DB NAME>"/>
-      <property name="hibernate.connection.username" value="<USERNAME>"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-      <property name="hibernate.c3p0.min_size" value="5"/>
-      <property name="hibernate.c3p0.max_size" value="20"/>
-      <property name="hibernate.c3p0.timeout" value="300"/>
-      <property name="hibernate.c3p0.max_statements" value="50"/>
-      <property name="hibernate.c3p0.idle_test_period" value="3000"/>
-      -->
     </properties>
   </persistence-unit>
 </persistence>

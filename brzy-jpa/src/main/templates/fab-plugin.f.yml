@@ -19,10 +19,10 @@ plugins:
     source_file: .brzy/modules/brzy-jpa/BrzyJpaPersistencePlugin.scala
     class_name: BrzyJpaPersistencePlugin
     member_of_phase: compile
-    belongs: pre-package
     tasks:
-      - name: generate-persistence-xml
+      - name: persistence-xml
         method_name: genPersistenceXml
         description: Generate A JPA persistence xml config
+        belongs: pre-package
     dependencies:
       - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}

@@ -7,7 +7,7 @@ org: org.brzy
 version: "${pom.version}"
 config_class: org.brzy.mod.jpa.JpaModConfig
 resource_class: org.brzy.mod.jpa.JpaModProvider
-persistence_unit: brzy-unit
+persistence_unit: brzy-webapp-persistence
 
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "${hibernate-version}"}

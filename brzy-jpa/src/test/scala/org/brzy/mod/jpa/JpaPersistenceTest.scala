@@ -30,7 +30,7 @@ class JpaPersistenceTest extends JUnitSuite {
     map.put("firstName",Array("john"))
     map.put("lastName",Array("Smith"))
 
-    val user = User.make(new Parameters(map))
+    val user = User.construct(new Parameters(map))
     assertNotNull(user)
     assertEquals("john",user.firstName)
   }

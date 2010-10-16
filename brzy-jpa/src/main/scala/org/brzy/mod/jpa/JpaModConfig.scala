@@ -23,13 +23,21 @@ import org.brzy.fab.mod.PersistenceMod
  */
 class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) {
   val persistenceUnit: Option[String] = map.get("persistence_unit").asInstanceOf[Option[String]].orElse(None)
+  val transactionType: Option[String] = map.get("transaction_type").asInstanceOf[Option[String]].orElse(None)
+  val entityDiscovery: String = map.getOrElse("entity_discovery","list").asInstanceOf[String] // or scan
+  val entities: Option[List[String]] = map.get("entities").asInstanceOf[Option[List[String]]].orElse(None)
+  val properties: Option[Map[String,String]] = map.get("properties").asInstanceOf[Option[Map[String,String]]].orElse(None)
 
   override def <<(that: BaseConf) =
     if (that == null)
       this
     else
       new JpaModConfig(Map[String, AnyRef](
-        "persistence_unit" -> that.map.getOrElse("persistence_unit", this.persistenceUnit.orNull)
+        "persistence_unit" -> that.map.getOrElse("persistence_unit", this.persistenceUnit.orNull),
+        "transaction_type" -> that.map.getOrElse("transaction_type", this.transactionType.orNull),
+        "entity_discovery" -> that.map.getOrElse("entity_discovery", this.entityDiscovery),
+        "entities" -> that.map.getOrElse("entities", this.entities.orNull),
+        "properties" -> that.map.getOrElse("properties", this.properties.orNull)
         ) ++ super.<<(that).map)
 
 }
