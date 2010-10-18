@@ -2,13 +2,15 @@
 #
 mod_type: view
 name: brzy-jsp
-org: org.brzy
+org: org.brzy.mod
 version: "${pom.version}"
+file_extension: ".jsp"
 config_class: org.brzy.mod.jsp.JspModConfig
 resource_class: org.brzy.mod.jsp.JspModProvider
-file_extension: ".jsp"
+
 dependencies:
-  - {conf: provided, org: jstl, name: jstl, rev: "1.1.2"}
+  - {conf: provided, org: jstl, name: jstl, rev: "1.1.2", transitive: false}
+  - {conf: provided, org: taglibs, name: standard, rev: "1.1.2", transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-jsp, rev: "${pom.version}", transitive: false}
 web_xml:
   - error-page: { error-code: "404", location: "/errors/404.jsp"}

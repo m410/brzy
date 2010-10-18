@@ -3,7 +3,7 @@
 #
 mod_type: view
 name: brzy-scalate
-org: org.brzy
+org: org.brzy.mod
 version: "${pom.version}"
 file_extension: ".ssp"
 config_class: org.brzy.mod.scalate.ScalateModConfig
@@ -18,3 +18,6 @@ web_xml:
   - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.brzy.mod.scalate.BrzyScalateServlet", load-on-startup: "1"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.ssp"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.scaml"}
+  - error-page: { error-code: "404", location: "/errors/404.ssp"}
+  - error-page: { error-code: "500", location: "/errors/500.ssp"}
+  - error-page: {exception-type: java.lang.Throwable, location: "/errors/500.ssp"}

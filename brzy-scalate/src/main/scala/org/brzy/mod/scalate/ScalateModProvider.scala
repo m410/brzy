@@ -23,5 +23,4 @@ import org.brzy.fab.mod.ViewModProvider
 class ScalateModProvider(config:ScalateModConfig) extends ViewModProvider{
   override val fileExtension = config.fileExtension.get
   override val name = config.name.get
-
 }

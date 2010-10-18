@@ -10,7 +10,7 @@ class BrzyJpaPersistencePlugin(context:BuildContext)  {
 
   // create a class from template
 	def genPersistenceXml = {
-		context.line.say(Info("Create a JPA Domain Class",true))
+		context.line.say(Info("Create a JPA Domain Class"))
     val webappConf = context.properties("webAppConfig").asInstanceOf[WebAppConf]
     val outFile = File(context.webappDir, "WEB-INF/classes/META-INF/persistence.xml")
     outFile.getParentFile.mkdirs

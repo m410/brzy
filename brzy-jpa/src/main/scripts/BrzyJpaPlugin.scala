@@ -9,7 +9,7 @@ class BrzyJpaPlugin(context:BuildContext)  {
 
   // create a class from template
 	def createJpaDomain(args:Array[String]) = {
-		context.line.say(Info("Create a JPA Domain Class"))
+		context.line.say(Info("Create a JPA Domain Class"),true)
     val packageAndClass = context.line.ask(Question("enter package & class: "))
 		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
