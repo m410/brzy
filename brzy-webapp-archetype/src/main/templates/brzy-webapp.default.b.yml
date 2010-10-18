@@ -49,7 +49,4 @@ web_xml:
   - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.webapp.action.Servlet, load-on-startup: "1"}
   - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
   - welcome-file-list: { welcome-file: "index.brzy"}
-  - error-page: { error-code: "404", location: "/errors/404.ssp"}
-  - error-page: { error-code: "500", location: "/errors/500.ssp"}
-  - error-page: {exception-type: java.lang.Throwable, location: "/errors/500.ssp"}
 

@@ -16,7 +16,6 @@ package org.brzy.webapp.controller
 import org.brzy.webapp.action.args.Parameters
 import org.brzy.webapp.action.returns.{Redirect, Flash, Model, View}
 import org.brzy.persistence.{Persistable, Persistent}
-import java.lang.String
 
 /**
  * Controller writers can extend this to get all the crud operations in their controller.  The

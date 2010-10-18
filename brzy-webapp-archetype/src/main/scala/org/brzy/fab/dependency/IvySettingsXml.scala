@@ -39,10 +39,10 @@ class IvySettingsXml(config:WebAppConf) {
     <ibiblio m2compatible="true" name={repo.id.get} root={repo.url.get}  />
     }
     <chain name="default">
-      <resolver ref="maven-local"/>
       {for(repo <- repos;if(repo.id.isDefined && repo.url.isDefined)) yield
       <resolver ref={repo.id.get} />
       }
+      <resolver ref="maven-local"/>
     </chain>
   </resolvers>
 </ivysettings>

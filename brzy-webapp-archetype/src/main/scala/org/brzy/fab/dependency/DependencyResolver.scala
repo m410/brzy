@@ -57,8 +57,7 @@ import org.apache.ivy.core.cache.ResolutionCacheManager
  * <delete>
  *   <fileset dir="${ivy.cache.dir}/${ivy.organisation}/${ivy.module}" includes="[star][star]/[star]SNAPSHOT[star]"/>
  * </delete>
- *
- *
+ * 
  * @author Michael Fortin
  */
 object DependencyResolver {
@@ -90,7 +89,6 @@ object DependencyResolver {
       ivy.getRetrieveEngine.retrieve(modId, retrievePattern, new RetrieveOptions)
       null
     })
-
   }
 
   // TODO this needs to be replaced with org.brzy.fab.cli.Ivy but ivy in needs to be moved to util first
@@ -117,7 +115,33 @@ object DependencyResolver {
   }
 
   /**
-   * https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyReport.java
+   * @see  https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyMakePom.java
+   */
+  def generatePom(config:WebAppConf) = {
+
+  }
+
+  /**
+   * @see https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyPublish.java
+   */
+  def publish(config: WebAppConf) = {
+
+    /*
+    public Collection publish(ModuleRevisionId mrid, Collection srcArtifactPattern,
+            String resolverName, PublishOptions options) throws IOException {
+        pushContext();
+        try {
+            return publishEngine.publish(mrid, srcArtifactPattern, resolverName, options);
+        } finally {
+            popContext();
+        }
+    }
+     */
+
+  }
+  
+  /**
+   *  @see https ://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyReport.java
    */
   def generateReport(config: WebAppConf) = {
 

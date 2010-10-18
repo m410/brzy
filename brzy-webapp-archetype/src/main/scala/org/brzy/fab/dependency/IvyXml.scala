@@ -39,8 +39,8 @@ class IvyXml(config:WebAppConf) {
     <conf name="test" extends="default" />
   </configurations>
   <publications>
-    <artifact type="pom" ext="pom" conf="default"/>
-    <artifact type="jar" ext="jar" conf="default"/>
+    <artifact type="pom" ext="pom" conf="compile"/>
+    <artifact type="jar" ext="jar" conf="compile"/>
   </publications>
   <dependencies defaultconfmapping="*->*,!sources,!javadoc" defaultconf="default">
     {for(dp <- dependencies) yield
