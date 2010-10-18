@@ -27,6 +27,7 @@ import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest =
 import scala.collection.JavaConversions._
 import collection.mutable.ListBuffer
 import java.util.Enumeration
+import java.lang.String
 
 
 /**
@@ -163,14 +164,16 @@ object Action {
    protected[action] def handleDirection(action:Action, direct:Direction, req:Request, res:Response) =
      direct match {
        case view:View =>
-         log.debug("view: {}",view)
-         req.getRequestDispatcher(view.path + action.viewType).forward(req,res)
+         val target: String = view.path + action.viewType
+         log.debug("view: {}",target)
+         req.getRequestDispatcher(target).forward(req,res)
        case f:Forward =>
          log.debug("forward: {}",f)
          req.getRequestDispatcher(f.path).forward(req,res)
        case s:Redirect =>
+         val target: String = req.getContextPath + s.path
          log.debug("redirect: {}",s)
-         res.sendRedirect(req.getContextPath + s.path)
+         res.sendRedirect(target)
        case s:Error =>
          log.debug("Error: {}",s)
          res.sendError(s.code,s.msg)

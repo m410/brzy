@@ -221,6 +221,7 @@ object WebAppConf {
         runConf.asInstanceOf[WebAppConfFile]
     }
 
+    // TODO, should probably be an Option, since it's possible to have a site without a view renderer
     val view: ViewMod = buildConfig.views match {
       case Some(v) =>
         if (v != null)
