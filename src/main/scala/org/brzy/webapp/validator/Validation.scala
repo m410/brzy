@@ -26,7 +26,8 @@ class Validation[T](val violations:Array[ConstraintViolation[T]]) {
   def this() = this(Array[ConstraintViolation[T]]())
   
   def passes:Boolean = violations.length <= 0
-  
+
+  override def toString = "Validation: " + violations.mkString("[",",","]")
 }
 
 /**

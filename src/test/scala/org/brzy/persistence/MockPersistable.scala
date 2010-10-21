@@ -14,13 +14,10 @@
 package org.brzy.persistence
 
 import java.lang.String
-import org.brzy.webapp.action.args.Parameters
 import org.brzy.fab.reflect.Construct
 
 
 class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
-
-  override def construct(p: Parameters)(implicit m:Manifest[E]) = Construct.withCast[E](p)
 
   def list(size: Int, offset: Int) = Nil
 

@@ -14,7 +14,6 @@
 package org.brzy.persistence
 
 import org.brzy.webapp.validator.Validation
-import org.brzy.webapp.action.args.Parameters
 import org.brzy.fab.reflect.Construct
 
 /**
@@ -35,8 +34,6 @@ trait Persistable[T,PK] {
 
   def construct(map:Map[String,Any])(implicit m:Manifest[T]):T = Construct[T](map)
 
-  def construct(params:Parameters)(implicit m:Manifest[T]):T = Construct.withCast[T](params)
-
   def construct()(implicit m:Manifest[T]):T = Construct[T]()
 
   /**
@@ -52,8 +49,9 @@ trait Persistable[T,PK] {
  * objects.  This needs to be created as an implicit value in the companion object.
  */
 class PersistentCrudOps[T](t:T) {
-  def insert():Unit = {}
-  def update():Unit = {}
-  def delete():Unit = {}
+  def insert() = {}
+  def commit() = {}
+  def update() = {}
+  def delete() = {}
   def validate():Validation[T] = new Validation[T]()
 }
