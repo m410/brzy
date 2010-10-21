@@ -47,7 +47,7 @@ class Servlet extends HttpServlet {
       }
       catch {
         case unknown =>
-          log.error("Exception:" + unknown,unknown)
+          log.error("Exception: " + unknown,unknown)
           res.sendError(500)
       }
     }

@@ -21,5 +21,5 @@ package org.brzy.persistence
  * @author Michael Fortin
  */
 trait Persistent[P] {
-  val id:P
+  def id:P
 }

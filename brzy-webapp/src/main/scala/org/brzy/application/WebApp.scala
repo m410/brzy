@@ -52,9 +52,9 @@ class WebApp(conf: WebAppConf) {
    */
   val viewProvider: ViewModProvider = {
     log.debug("view: {}", conf.views)
-    log.trace("resource: {}", conf.views.resourceClass.getOrElse("null"))
-    if (conf.views.resourceClass.isDefined && conf.views.resourceClass.get != null)
-      Construct[ViewModProvider](conf.views.resourceClass.get, Array(conf.views))
+    log.trace("resource: {}", conf.views.providerClass.getOrElse("null"))
+    if (conf.views.providerClass.isDefined && conf.views.providerClass.get != null)
+      Construct[ViewModProvider](conf.views.providerClass.get, Array(conf.views))
     else
       null
   }
@@ -65,7 +65,7 @@ class WebApp(conf: WebAppConf) {
   val persistenceProviders: List[ModProvider] = {
     conf.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      Construct[ModProvider](persist.resourceClass.get, Array(persist))
+      Construct[ModProvider](persist.providerClass.get, Array(persist))
     }).toList
   }
 
@@ -80,8 +80,8 @@ class WebApp(conf: WebAppConf) {
       log.debug("module: {}", module)
       val mod = module.asInstanceOf[RuntimeMod]
 
-      if (mod.resourceClass.isDefined && mod.resourceClass.get != null) {
-        list += Construct[ModProvider](mod.resourceClass.get, Array(mod))
+      if (mod.providerClass.isDefined && mod.providerClass.get != null) {
+        list += Construct[ModProvider](mod.providerClass.get, Array(mod))
       }
     })
     list.toList

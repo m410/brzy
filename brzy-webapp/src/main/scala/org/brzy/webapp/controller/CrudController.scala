@@ -47,11 +47,12 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
 
   @Action("save")
   def save(p: Parameters) = {
-    val entity = persist.construct(p)
+    val entity = persist.construct(p.toMap)
     val validation = entity.validate
 
     if (validation.passes) {
-      entity.insert
+      entity.insert()
+      entity.commit()
       (Redirect("/" + entityName + "s/" + entity.id), Flash("New "+entityName + " saved." , entityName + ".save"))
     }
     else {
@@ -64,15 +65,16 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
 
   @Action("{id}/update")
   def update(p: Parameters) = {
-    val entity = persist.construct(p)
+    val entity = persist.construct(p.toMap)
     val validation = entity.validate
 
     if (validation.passes) {
-      entity.update
+      entity.update()
+      entity.commit()
       (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + " updated." , entityName + ".update"))
     }
     else {
-      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "s/create"))
+      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
     }
   }
 
