@@ -6,7 +6,7 @@ name: brzy-squeryl
 org: org.brzy
 version: "0.2"
 config_class: org.brzy.mod.jms.JmsModConfig
-resource_class: org.brzy.mod.jms.JmsModProvider
+provider_class: org.brzy.mod.jms.JmsModProvider
 
 connection_factory_class: ""
 connection_url: ""

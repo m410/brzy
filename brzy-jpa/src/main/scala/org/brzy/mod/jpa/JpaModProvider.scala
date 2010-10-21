@@ -22,7 +22,7 @@ import org.brzy.fab.interceptor.InterceptorProvider
  * @author Michael Fortin
  */
 class JpaModProvider(c:JpaModConfig) extends ModProvider with InterceptorProvider {
-  def interceptor = new JpaContextManager(c.persistenceUnit.get)
+  val interceptor = new JpaContextManager(c.persistenceUnit.get)
   val name = c.name.get
 
 }

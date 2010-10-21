@@ -4,7 +4,7 @@ name: brzy-jsp
 org: org.brzy
 version: "0.3"
 config_class: org.brzy.mod.jsp.JspModConfig
-resource_class: org.brzy.mod.jsp.JspModProvider
+provider_class: org.brzy.mod.jsp.JspModProvider
 
 dependencies:
   - {conf: compile, org: org.brzy, name: brzy-jsp, rev: "0.1", transitive: false}

@@ -6,4 +6,4 @@ name: brzy-scheduler
 org: org.brzy
 version: "0.2"
 config_class: org.brzy.mod.scheduler.SchedulerModConfig
-resource_class: org.brzy.mod.scheduler.SchedulerModProvider
+provider_class: org.brzy.mod.scheduler.SchedulerModProvider

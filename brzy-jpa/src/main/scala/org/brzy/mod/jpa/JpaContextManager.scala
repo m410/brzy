@@ -15,6 +15,7 @@ package org.brzy.mod.jpa
 
 import javax.persistence.{EntityManager, Persistence}
 import org.brzy.fab.interceptor.ManagedThreadContext
+import org.slf4j.{LoggerFactory, Logger}
 
 /**
  * Implements the jps entity manager thread scope variable management.
@@ -22,6 +23,7 @@ import org.brzy.fab.interceptor.ManagedThreadContext
  * @author Michael Fortin
  */
 class JpaContextManager(unitName:String) extends ManagedThreadContext {
+  private[this] val log = LoggerFactory.getLogger(getClass())
   val entityManagerFactory = Persistence.createEntityManagerFactory(unitName)
   type T = Option[EntityManager]
 
@@ -29,14 +31,17 @@ class JpaContextManager(unitName:String) extends ManagedThreadContext {
 
   val context = JpaContext
 
-  def destroySession(s: T) = {
-    s.get.getTransaction.commit
-    s.get.close
-  }
-
   def createSession = {
     val entityManager:EntityManager = entityManagerFactory.createEntityManager
     entityManager.getTransaction.begin
+    log.trace("create session: {}",entityManager)
     Some(entityManager)
+
+  }
+
+  def destroySession(s: T) = {
+    log.trace("destroy session: {}",s)
+    s.get.getTransaction.commit
+    s.get.close
   }
 }

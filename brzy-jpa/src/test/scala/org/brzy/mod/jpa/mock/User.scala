@@ -48,8 +48,8 @@ class User {
 }
 
 object User extends JpaPersistence[User,java.lang.Long] {
-  
-  override def construct(p: _root_.scala.Predef.Map[_root_.scala.Predef.String, Any]) = {
+
+  override def construct(p: Map[String, Any]) = {
     val user = new User()
     user.id= p("id").asInstanceOf[String].toLong
     user.firstName = p("firstName").asInstanceOf[String]

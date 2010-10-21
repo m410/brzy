@@ -6,7 +6,7 @@ name: brzy-jpa
 org: org.brzy
 version: "${pom.version}"
 config_class: org.brzy.mod.jpa.JpaModConfig
-resource_class: org.brzy.mod.jpa.JpaModProvider
+provider_class: org.brzy.mod.jpa.JpaModProvider
 persistence_unit: brzy-webapp-persistence
 
 dependencies:

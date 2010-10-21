@@ -6,7 +6,7 @@ name: brzy-security
 org: org.brzy
 version: "0.4"
 config_class: org.brzy.mod.security.SecurityModConfig
-resource_class: org.brzy.mod.security.SecurityModProvider
+provider_class: org.brzy.mod.security.SecurityModProvider
 
 authority_entity: Person
 user_entity:

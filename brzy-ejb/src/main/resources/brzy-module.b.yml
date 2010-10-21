@@ -5,7 +5,7 @@ name: brzy-ejb
 org: org.brzy
 version: "0.5"
 config_class: org.brzy.mod.ejb.EjbModConfig
-resource_class: org.brzy.mod.ejb.EjbModProvider
+provider_class: org.brzy.mod.ejb.EjbModProvider
 
 #beans:
 #  - {remote_interface: "", service_name: "", jndi_name: ""}

@@ -31,11 +31,11 @@ class UserController {
 
   @Action("save")
 	def save(params:Parameters)() = {
-	  def user:User = User.construct(params)
+	  def user:User = User.construct(params.toMap)
  		val validity = user.validate()
 
 		if(validity.passes) {
-      user.save
+      user.insert
       (Redirect("/user/"+user.id), Flash("flash.1","User saved"), Model("user"->user))
     }
 		else
@@ -47,11 +47,11 @@ class UserController {
 
 	@Action("{id}/update")
 	def update(params:Parameters) = {
-		def user = User.construct(params)
+		def user = User.construct(params.toMap)
     val validity = user.validate()
 
 		if(validity.passes) {
-      user.save
+      user.update
       (Redirect("/users/" + user.id),Flash("flash.2","User updated"),Model("user"->user))
     }
 		else

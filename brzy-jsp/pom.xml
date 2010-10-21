@@ -7,6 +7,9 @@
   <artifactId>brzy-jsp</artifactId>
   <name>Brzy JSP Module</name>
   <version>0.3-SNAPSHOT</version>
+  <description>
+    While this works as a plugin, using the jstl tags with scala collections does not.
+  </description>
   <parent>
     <groupId>org.brzy.mod</groupId>
     <artifactId>brzy-modules</artifactId>

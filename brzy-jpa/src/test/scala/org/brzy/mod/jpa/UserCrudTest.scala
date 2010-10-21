@@ -30,7 +30,7 @@ class UserCrudTest extends JUnitSuite {
       val user = new User
       user.firstName = "John"
       user.lastName = "Smith"
-      user.save
+      user.insert
       println("saved: " + user)
     }
     ctx.destroySession(session)

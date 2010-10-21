@@ -3,4 +3,4 @@ name: brzy-tomcat
 version: "0.2"
 org: org.brzy
 config_class: org.brzy.tomcat.TomcatModConfig
-resource_class:
+provider_class:

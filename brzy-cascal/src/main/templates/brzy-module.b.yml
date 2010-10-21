@@ -6,7 +6,7 @@ name: brzy-cascal
 org: org.brzy
 version: "0.4"
 config_class: org.brzy.mod.cascal.CascalModConf
-resource_class: org.brzy.mod.cascal.CascalModProvider
+provider_class: org.brzy.mod.cascal.CascalModProvider
 defaultKeySpace: Keyspace1
 defaultKeyFamily: Standard1
 dependencies:

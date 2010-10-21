@@ -6,7 +6,7 @@ org: org.brzy.mod
 version: "${pom.version}"
 file_extension: ".jsp"
 config_class: org.brzy.mod.jsp.JspModConfig
-resource_class: org.brzy.mod.jsp.JspModProvider
+provider_class: org.brzy.mod.jsp.JspModProvider
 
 dependencies:
   - {conf: provided, org: jstl, name: jstl, rev: "1.1.2", transitive: false}

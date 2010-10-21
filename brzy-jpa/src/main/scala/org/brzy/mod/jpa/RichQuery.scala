@@ -14,14 +14,16 @@
 package org.brzy.mod.jpa
 
 import javax.persistence.Query
+import collection.JavaConversions._
 
 /**
- * Document Me..
+ * This was taken from an example on the scala-tools site.  It allows you to convert
+ * java.util.List to scala lists.
  * 
  * @author Michael Fortin
  */
 class RichQuery(query : Query) {
-  def getTypedList[T] = query.getResultList.asInstanceOf[List[T]]
+  def getTypedList[T] = query.getResultList.toList.asInstanceOf[List[T]]
 }
 
 object RichQuery {
