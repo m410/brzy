@@ -42,7 +42,6 @@ import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
  */
 class WebApp(conf: WebAppConf) {
   private val log = LoggerFactory.getLogger(getClass)
-
   val application = conf.application
   val project = conf.project
 
@@ -52,7 +51,7 @@ class WebApp(conf: WebAppConf) {
    */
   val viewProvider: ViewModProvider = {
     log.debug("view: {}", conf.views)
-    log.trace("resource: {}", conf.views.providerClass.getOrElse("null"))
+    log.trace("provider: {}", conf.views.providerClass.getOrElse("null"))
     if (conf.views.providerClass.isDefined && conf.views.providerClass.get != null)
       Construct[ViewModProvider](conf.views.providerClass.get, Array(conf.views))
     else

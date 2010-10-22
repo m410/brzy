@@ -24,7 +24,7 @@ import java.lang.reflect.Method
 
 class JsonReturnTest  extends JUnitSuite {
 
-  val expected = "{\"name\":\"hello\",\"count\":\"0\",\"version\":\"0\",\"id\":\"1\",\"list\":\"List()\",}"
+  val expected = """{"name":"hello","count":1,"version":0,"id":1,"list":[]}"""
 
   @Test def testReturnJson = {
     val ctlr = new UserController()
