@@ -16,11 +16,17 @@ package org.brzy.webapp.controller
 import org.junit.Test
 import org.junit.Assert._
 
+import org.brzy.webapp.mock.MockUser
 
 class UserControllerTest {
   @Test def testGet = {
     val controller = new UserController
     assertNotNull(controller)
     assertNotNull(controller.create)
+  }
+
+  @Test def testUser = {
+    assertNotNull(MockUser.list())
+    assertNotNull(MockUser.get(1))
   }
 }

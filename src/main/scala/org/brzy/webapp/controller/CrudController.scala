@@ -36,50 +36,37 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
     name.substring(0,1).toLowerCase + name.substring(1)
   }
 
-  @Action("")
-  def list = entityName + "sList" -> persist.list
+  @Action("") def list = entityName + "sList" -> persist.list
 
-  @Action("{id}")
-  def show(params: Parameters) = entityName -> persist.load(params("id"))
+  @Action("{id}") def show(params: Parameters) = entityName -> persist.load(params("id"))
 
-  @Action("create")
-  def create() = entityName -> persist.construct
+  @Action("create") def create() = entityName -> persist.construct
 
-  @Action("save")
-  def save(p: Parameters) = {
+  @Action("save") def save(p: Parameters) = {
     val entity = persist.construct(p.toMap)
-    val validation = entity.validate
-
-    if (validation.passes) {
-      entity.insert()
-      entity.commit()
-      (Redirect("/" + entityName + "s/" + entity.id), Flash("New "+entityName + " saved." , entityName + ".save"))
-    }
-    else {
-      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
+    entity.validate match {
+      case Some(violations) =>
+        (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/create"))
+      case _ =>
+        entity.insert(commit=true)
+        (Redirect("/" + entityName + "s/" + entity.id), Flash("New "+entityName + " saved." , entityName + ".save"))
     }
   }
 
-  @Action("{id}/edit")
-  def edit(params: Parameters) = entityName -> persist.load(params("id"))
+  @Action("{id}/edit") def edit(params: Parameters) = entityName -> persist.load(params("id"))
 
-  @Action("{id}/update")
-  def update(p: Parameters) = {
+  @Action("{id}/update") def update(p: Parameters) = {
     val entity = persist.construct(p.toMap)
-    val validation = entity.validate
-
-    if (validation.passes) {
-      entity.update()
-      entity.commit()
-      (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + " updated." , entityName + ".update"))
-    }
-    else {
-      (Model(entityName -> entity, "validation" -> validation), View("/" + entityName + "/create"))
+        entity.validate match {
+      case Some(violations) =>
+        (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/create"))
+      case _ =>
+        entity.update
+        (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + " updated." , entityName + ".update"))
     }
   }
 
-  @Action("{id}/delete")
-  def delete(p:Parameters) = {
+  @Action("{id}/delete") def delete(p:Parameters) = {
     val entity = persist.load(p("id"))
     entity.delete
     (Redirect("/" + entityName + "s"),Flash(entityName +  " was Deleted.",entityName + ".delete"))

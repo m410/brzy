@@ -21,7 +21,7 @@ import org.brzy.webapp.controller.{Action, Controller}
 @Controller("userArgs")
 class UserArgController(val userService:UserService) {
 
-  @Action("") def list = "userList"->User.list()
-  @Action("{id}") def get(prms:Parameters) = "user"->User.get(prms("id")(0).toLong)
+  @Action("") def list = "userList"->MockUser.list()
+  @Action("{id}") def get(prms:Parameters) = "user"->MockUser.get(prms("id")(0).toLong)
 	@Action("custom") def custom = "custom"->userService.someMethod
 }

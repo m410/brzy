@@ -15,7 +15,7 @@ package org.brzy.webapp.action.returns
 
 import xml.Elem
 
-//import com.twitter.json.{Json=>tJson}
+import com.twitter.json.{Json=>tJson}
 
 /**
  * Where you want to send the result of the action.  Controller actions can only return one object
@@ -78,17 +78,7 @@ case class Json(t:AnyRef) extends Direction with Parser {
 
   def parse = {
     import org.brzy.fab.reflect.Properties._
-    val sb = new StringBuilder()
-    sb.append("{")
-    t.properties.map(f=>{
-      sb.append("\"")
-      sb.append(f._1) // encode me too
-      sb.append("\":\"")
-      sb.append(f._2) // todo these need to be encoded
-      sb.append("\",")
-    })
-    sb.append("}")
-    sb.toString
+    tJson.build(t.properties).toString
   }
   val contentType = "text/json"
 }

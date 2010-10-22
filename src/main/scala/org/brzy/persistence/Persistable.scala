@@ -13,8 +13,9 @@
  */
 package org.brzy.persistence
 
-import org.brzy.webapp.validator.Validation
 import org.brzy.fab.reflect.Construct
+import javax.validation.ConstraintViolation
+import collection.immutable.Set
 
 /**
  * This is a persistent super class that can be used by persistence  modules to enable the
@@ -32,6 +33,8 @@ trait Persistable[T,PK] {
 
   def list(size:Int, offset:Int):List[T]
 
+  def count():Long
+
   def construct(map:Map[String,Any])(implicit m:Manifest[T]):T = Construct[T](map)
 
   def construct()(implicit m:Manifest[T]):T = Construct[T]()
@@ -39,19 +42,19 @@ trait Persistable[T,PK] {
   /**
    * Used by the abstract CrudController to to add persistence capability to the controller.
    */
-  def newPersistentCrudOps(t:T) = new PersistentCrudOps(t)
+  def newPersistentCrudOps(t:T):PersistentCrudOps[T] 
 
-  implicit def applyCrudOps(t:T) = new PersistentCrudOps(t)
+  implicit def applyCrudOps(t:T):PersistentCrudOps[T]
 }
 
 /**
  * Implements the crud operations that are applied directly to instances of persistent
  * objects.  This needs to be created as an implicit value in the companion object.
  */
-class PersistentCrudOps[T](t:T) {
-  def insert() = {}
-  def commit() = {}
-  def update() = {}
-  def delete() = {}
-  def validate():Validation[T] = new Validation[T]()
+abstract class PersistentCrudOps[T](t:T) {
+  def insert(commit:Boolean = false):Unit
+  def commit():Unit
+  def update():T
+  def delete():Unit
+  def validate():Option[Set[ConstraintViolation[T]]]
 }

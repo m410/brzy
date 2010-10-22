@@ -14,7 +14,8 @@
 package org.brzy.persistence
 
 import java.lang.String
-import org.brzy.fab.reflect.Construct
+import org.brzy.validator.Validator
+import javax.validation.ConstraintViolation
 
 
 class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
@@ -29,5 +30,16 @@ class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
 
   override implicit def applyCrudOps(t:E) = new MockCrudOps(t)
 
-  class MockCrudOps(t:E) extends PersistentCrudOps(t)
+  def newPersistentCrudOps(t: E) = new MockCrudOps(t)
+
+  def count():Long = 0
+
+  class MockCrudOps(t:E) extends PersistentCrudOps(t) {
+		def validate() = Validator(t).violations.asInstanceOf[Option[Set[ConstraintViolation[E]]]]
+    def insert(commit:Boolean = false) = {}
+    def commit = {}
+    def update():E = t
+    def delete = {}
+    def discard = {}
+  }
 }
