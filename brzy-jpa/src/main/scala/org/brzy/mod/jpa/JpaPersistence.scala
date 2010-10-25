@@ -16,10 +16,10 @@ package org.brzy.mod.jpa
 import org.slf4j.LoggerFactory
 import javax.validation.{Validation=>jValidation}
 
-import org.brzy.webapp.validator.Validation
 import org.brzy.fab.reflect.Construct
-import org.brzy.persistence.{PersistentCrudOps, Persistable}
 import org.brzy.mod.jpa.RichQuery._
+import collection.JavaConversions._
+import org.brzy.persistence.{PersistentCrudOps, Persistable}
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
@@ -43,7 +43,12 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Ma
 
     override def validate ={
       log.trace("validate")
-      Validation[T](validator.validate(t))
+      val set = validator.validate(t).toSet
+
+      if(set.size > 0)
+        Option(set)
+      else
+        None
     }
 
     override def delete = {
@@ -52,7 +57,7 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Ma
       entityManager.remove(t)
     }
 
-    override def insert = {
+    override def insert(commit:Boolean = false) = {
       log.trace("insert")
       val entityManager = JpaContext.value.get
       entityManager.persist(t)
@@ -61,7 +66,7 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Ma
     override def update = {
       log.trace("update")
       val entityManager = JpaContext.value.get
-      entityManager.persist(t)      
+      entityManager.merge(t)
     }
 
     override def commit = {

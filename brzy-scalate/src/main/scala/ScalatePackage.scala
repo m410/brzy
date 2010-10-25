@@ -7,7 +7,9 @@ import org.fusesource.scalate.support.TemplatePackage
  */
 class ScalatePackage extends TemplatePackage {
    def header(source: TemplateSource, bindings: List[Binding]) = """
-import org.brzy.webapp.view.ViewFunctions._
+import org.brzy.webapp.view.UrlFunctions._
+import org.brzy.webapp.view.FlashFunctions._
+import org.brzy.webapp.view.FormFunctions._
 import scala.collection.JavaConversions._
 implicit val req = request
 """

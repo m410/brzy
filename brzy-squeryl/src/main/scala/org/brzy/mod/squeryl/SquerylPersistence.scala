@@ -13,15 +13,15 @@
  */
 package org.brzy.mod.squeryl
 
-import javax.validation.{Validation => jValidation}
-
-import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.PrimitiveTypeMode._
-import org.brzy.persistence.{PersistentCrudOps, Persistable}
 import java.lang.String
 import org.slf4j.LoggerFactory
 import reflect.Manifest
-import org.brzy.webapp.validator.Validation
+import org.brzy.validator.Validator
+import org.squeryl.{Session, KeyedEntity, Schema}
+import javax.validation.ConstraintViolation
+import collection.immutable.Set
+import org.brzy.persistence.{PersistentCrudOps, Persistable}
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class
@@ -37,25 +37,34 @@ import org.brzy.webapp.validator.Validation
  */
 class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema with Persistable[T,Long]{
   val db = table[T]
-  val validationFactory = jValidation.buildDefaultValidatorFactory
   private[this] val log = LoggerFactory.getLogger(classOf[SquerylPersistence[_]])
   
   class EntityCrudOps(t: T) extends PersistentCrudOps(t){
-    override def validate() = Validation[T](validationFactory.getValidator.validate(t))
+    def validate = valid(t)
 
-    override def insert() = {
+    def insert(commit:Boolean = false) = {
       log.trace("insert: {}",t)
       db.insert(t)
     }
 
-    override def update() = db.update(t)
+    def update = {
+      db.update(t)
+      t
+    }
 
-    override def delete() = db.deleteWhere(e => e.id === t.id)
+    def commit = Session.currentSession.connection.commit
+
+    def delete() = db.deleteWhere(e => e.id === t.id)
   }
 
-  override def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
+  /**
+   * conveniences function used by the implicit operations on the entity
+   */
+  def valid(t:T) = Validator(t).violations.asInstanceOf[Option[Set[ConstraintViolation[T]]]]
 
-  override implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
+  implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
+
+  def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
 
   def get(id: Long):T = db.lookup(id).get
 
@@ -65,4 +74,5 @@ class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T
 
   def list(size:Int, offset:Int):List[T] = from(db)(a => select(a)).toList
 
+  def count = from(db)(a => compute(countDistinct(a.id)))
 }

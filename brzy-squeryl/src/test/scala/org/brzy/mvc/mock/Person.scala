@@ -16,17 +16,26 @@ package org.brzy.mock
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.annotations.Column
 import org.squeryl.KeyedEntity
+
 import java.beans.ConstructorProperties
+
 import org.brzy.mod.squeryl.SquerylPersistence
-import javax.validation.constraints.{Size, NotNull}
 import org.brzy.persistence.Persistent
+import org.brzy.validator.Validator
+import org.brzy.validator.constraints.{NotNull, Size}
+import javax.validation.ConstraintViolation
+import collection.immutable.Set
 
 @ConstructorProperties(Array("id", "firstName", "lastName"))
-class Person(override val id: Long,
-             @Column(name = "first_name") @NotNull @Size(min = 4, max = 24) val firstName: String,
-             @Column(name = "last_name") @NotNull @Size(min = 4, max = 24) val lastName: String)
-        extends KeyedEntity[Long] with Persistent[Long] {
-  def this() = this (0, "", "")
+class Person(override val id: Long = 0,
+    @Column(name = "first_name") val firstName: String = "",
+    @Column(name = "last_name") val lastName: String = "")
+    extends KeyedEntity[Long] with Persistent[Long] {
 }
 
-object Person extends SquerylPersistence[Person]
+object Person extends SquerylPersistence[Person] {
+  override def valid(t:Person) = Validator(t)
+      .check("firstName", NotNull, Size(2 to 36))
+      .check("lastName", NotNull, Size(2 to 36))
+      .violations.asInstanceOf[Option[Set[ConstraintViolation[Person]]]]
+}

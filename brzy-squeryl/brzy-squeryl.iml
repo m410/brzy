@@ -50,6 +50,7 @@
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:0.9.24" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.6.8" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:json:1.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easymock:easymock:2.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:3.0.0.RELEASE" level="project" />

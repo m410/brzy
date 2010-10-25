@@ -35,15 +35,9 @@ class JpaPersistenceTest extends JUnitSuite {
     assertEquals("john",user.firstName)
   }
 
-  @Test def testPersistenceValidate ={
-//    val map = new collection.mutable.HashMap[String, Array[String]]()
-//    map.put("id",Array("1"))
-//    map.put("version",Array("1"))
-//    map.put("lastName",Array("Smith"))
-//    map.put("firstName",Array("John"))
-//    val parameters = new Parameters(map)
+  @Test def testPersistenceValidate = {
     val user = new User
     val validity = user.validate()
-    assertTrue(!validity.passes)
+    assertNotNull(validity.orNull)
   }
 }

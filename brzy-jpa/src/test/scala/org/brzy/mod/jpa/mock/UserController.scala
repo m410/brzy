@@ -19,54 +19,53 @@ import org.brzy.webapp.action.args.Parameters
 
 @Controller("users")
 class UserController {
-
   @Action("")
-  def list() = "userList"->User.list()
+  def list() = "userList" -> User.list()
 
   @Action("{id}")
-	def get(prms:Parameters) = "user"->User.get(prms("id")(0).toLong)
+  def get(prms: Parameters) = "user" -> User.get(prms("id")(0).toLong)
 
-	@Action("create")
-	def create = "user"->new User()
+  @Action("create")
+  def create = "user" -> new User()
 
   @Action("save")
-	def save(params:Parameters)() = {
-	  def user:User = User.construct(params.toMap)
- 		val validity = user.validate()
+  def save(params: Parameters)() = {
+    def user = User.construct(params.toMap)
 
-		if(validity.passes) {
-      user.insert
-      (Redirect("/user/"+user.id), Flash("flash.1","User saved"), Model("user"->user))
+    user.validate match {
+      case Some(violations) =>
+        (View("/user/create.jsp"), Model("user" -> user, "violations" -> violations))
+      case _ =>
+        user.insert()
+        (Redirect("/user/" + user.id), Flash("flash.1", "User saved"), Model("user" -> user))
     }
-		else
-      (View("/user/create.jsp"),Model("user"->user, "errors"->validity))
-	}
+  }
 
-	@Action("{id}/edit")
-	def edit(params:Parameters) = "user"->User.get(params("id")(0).toLong)
+  @Action("{id}/edit")
+  def edit(params: Parameters) = "user" -> User.get(params("id")(0).toLong)
 
-	@Action("{id}/update")
-	def update(params:Parameters) = {
-		def user = User.construct(params.toMap)
-    val validity = user.validate()
+  @Action("{id}/update")
+  def update(params: Parameters) = {
+    def user = User.construct(params.toMap)
 
-		if(validity.passes) {
-      user.update
-      (Redirect("/users/" + user.id),Flash("flash.2","User updated"),Model("user"->user))
+    user.validate match {
+      case Some(violations) =>
+        (View("/user/edit.jsp"), Model("user" -> user, "violations" -> violations))
+      case _ =>
+        user.update()
+        (Redirect("/users/" + user.id), Flash("flash.2", "User updated"), Model("user" -> user))
     }
-		else
-      (View("/user/edit.jsp"),Model("user"->user, "errors"->validity))
-	}
+  }
 
-	@Action("{id}/delete")
-	def delete(params:Parameters) = {
+  @Action("{id}/delete")
+  def delete(params: Parameters) = {
     def user = User.get(params("id")(0).toLong)
-		user.delete
-    Flash("message2","user deleted")
-	}
-	
-	@Action("custom")
-	def custom() = {
-		(CookieAdd("id"->"1"),SessionAdd("id"->"x","id2"->"y"),SessionRemove("id2"),Flash("c","Hello"),View("/x/y"))
-	}
+    user.delete
+    Flash("message2", "user deleted")
+  }
+
+  @Action("custom")
+  def custom() = {
+    (CookieAdd("id" -> "1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
+  }
 }

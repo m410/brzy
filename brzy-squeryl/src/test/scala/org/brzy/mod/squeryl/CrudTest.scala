@@ -38,7 +38,7 @@ class CrudTest extends JUnitSuite {
     val session1 = ctx.createSession
     ctx.context.withValue(session1) {
       def person = new Person(0, "one", "two")
-      person.insert
+      person.insert()
     }
     ctx.destroySession(session1)
 
@@ -58,7 +58,7 @@ class CrudTest extends JUnitSuite {
     ctx.context.withValue(session3) {
       assertNotNull(Person.get(1))
       val p2 = new Person(1, "update first", "update last")
-      p2.update
+      p2.update()
     }
     ctx.destroySession(session3)
 
@@ -73,7 +73,7 @@ class CrudTest extends JUnitSuite {
     val session5 = ctx.createSession
     ctx.context.withValue(session5) {
       val person = Person.get(1)
-      person.delete
+      person.delete()
     }
     ctx.destroySession(session5)
   }

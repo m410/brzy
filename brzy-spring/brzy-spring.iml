@@ -51,6 +51,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.aspectj:aspectjweaver:1.6.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.validation:validation-api:1.0.0.GA" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.twitter:json:1.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest:1.2" level="project" />
   </component>
 </module>

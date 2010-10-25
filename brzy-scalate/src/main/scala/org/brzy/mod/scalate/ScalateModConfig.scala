@@ -23,7 +23,6 @@ import org.brzy.fab.conf.BaseConf
  * @author Michael Fortin
  */
 class ScalateModConfig(override val map: Map[String, AnyRef]) extends ViewMod(map) {
-
   override val fileExtension: Option[String] = map.get("file_extension").asInstanceOf[Option[String]].orElse(None)
   override val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
