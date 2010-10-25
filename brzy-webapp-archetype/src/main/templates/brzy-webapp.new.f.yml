@@ -1,8 +1,0 @@
-name: brzy-webapp-archetype
-description: Create a Brzy WebApp project from template.
-source_file: brzy-webapp/BrzyWebAppArchetypePlugin.scala
-class_name: BrzyWebAppArchetypePlugin
-tasks:
-  - name: create
-    method_name: create
-    description: Create new Brzy Webapp Archetype

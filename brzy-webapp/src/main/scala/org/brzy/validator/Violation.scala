@@ -15,7 +15,7 @@ class Violation[T<:AnyRef](target:T, value:AnyRef, message:String) extends Const
 
   def getLeafBean = null
 
-  def getRootBeanClass = target.getClass
+  def getRootBeanClass = target.getClass.asInstanceOf[Class[T]]
 
   def getRootBean = target
 

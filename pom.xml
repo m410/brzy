@@ -17,7 +17,7 @@
   </properties>
   <modules>
     <module>brzy-webapp</module>
-    <module>brzy-webapp-archetype</module>
+    <module>brzy-webapp-fab</module>
   </modules>
   <build>
     <plugins>

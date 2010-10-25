@@ -7,6 +7,6 @@ import javax.validation.ConstraintValidatorContext
  * 
  * @author Michael Fortin
  */
-trait ConstraintValidator {
-  def isValid(value:AnyRef, context:ConstraintValidatorContext ):Boolean
+case object Past extends ConstraintValidator {
+  def isValid(field: AnyRef, context: ConstraintValidatorContext) =  field != null
 }

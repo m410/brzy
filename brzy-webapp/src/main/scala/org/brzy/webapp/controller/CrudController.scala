@@ -31,6 +31,7 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
   implicit def applyCrudOps(e: E) = persist.newPersistentCrudOps(e)
 
   private[this] val entityClass = m.erasure
+
   private[this] val entityName = {
     val name = entityClass.getSimpleName
     name.substring(0,1).toLowerCase + name.substring(1)

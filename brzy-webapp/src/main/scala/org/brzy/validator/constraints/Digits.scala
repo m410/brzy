@@ -7,6 +7,6 @@ import javax.validation.ConstraintValidatorContext
  * 
  * @author Michael Fortin
  */
-case object NotNull extends ConstraintValidator {
+case class Digits(integer:Int, fraction:Int) extends ConstraintValidator {
   def isValid(field: AnyRef, context: ConstraintValidatorContext) =  field != null
 }
