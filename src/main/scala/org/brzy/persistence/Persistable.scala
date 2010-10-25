@@ -47,6 +47,7 @@ trait Persistable[T,PK] {
   implicit def applyCrudOps(t:T):PersistentCrudOps[T]
 }
 
+
 /**
  * Implements the crud operations that are applied directly to instances of persistent
  * objects.  This needs to be created as an implicit value in the companion object.
@@ -58,3 +59,4 @@ abstract class PersistentCrudOps[T](t:T) {
   def delete():Unit
   def validate():Option[Set[ConstraintViolation[T]]]
 }
+

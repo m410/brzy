@@ -13,7 +13,7 @@
  */
 package org.brzy.webapp.view
 
-import ViewFunctions._
+import UrlFunctions._
 import org.junit.Test
 import org.junit.Assert._
 import javax.servlet.ServletResponse

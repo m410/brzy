@@ -7,6 +7,6 @@ import javax.validation.ConstraintValidatorContext
  * 
  * @author Michael Fortin
  */
-trait ConstraintValidator {
-  def isValid(value:AnyRef, context:ConstraintValidatorContext ):Boolean
+case class Min(min:Long) extends ConstraintValidator {
+  def isValid(field: AnyRef, context: ConstraintValidatorContext) =  field != null
 }
