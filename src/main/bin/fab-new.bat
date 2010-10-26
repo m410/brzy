@@ -23,8 +23,8 @@
 
 @echo off
 
-set LAUNCHER=org.brzy.fab.BuildMain
-set JAVA_OPTS="-Xmx512m"
+set LAUNCHER=org.brzy.fab.NewMain
+set JAVA_OPTS=""
 
 @REM set %HOME% to equivalent of $HOME
 if "%HOME%" == "" (set "HOME=%HOMEDRIVE%%HOMEPATH%")
