@@ -7,6 +7,10 @@ import javax.validation.ConstraintValidatorContext
  * 
  * @author Michael Fortin
  */
-case object Future extends ConstraintValidator {
-  def isValid(field: AnyRef, context: ConstraintValidatorContext) =  field != null
+case class Future(
+    message:String = "{org.brzy.validator.constraints.Future.message}"
+  ) extends ConstraintValidator {
+
+  def isValid(field: AnyRef) =  field != null
+  
 }

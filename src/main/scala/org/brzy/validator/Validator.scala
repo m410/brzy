@@ -3,6 +3,7 @@ package org.brzy.validator
 import constraints.ConstraintValidator
 import javax.validation.{ConstraintValidatorContext, ConstraintViolation}
 import collection.immutable.Set
+import java.util.Locale
 
 /**
  * 
@@ -10,23 +11,23 @@ import collection.immutable.Set
  * @author Michael Fortin
  */
 class Validator[T<:AnyRef](target:T,
-    context:ConstraintValidatorContext = new DefaultConstraintValidatorContext,
-    val violations:Option[Set[ConstraintViolation[T]]] = None) {
+    val violations:Option[Set[ConstraintViolation[T]]] = None,
+    locale:Locale = Locale.getDefault) {
 
   def check(field:String, checks:ConstraintValidator*):Validator[T] = {
     val errors = checks.filter(constraint=>{
       val value = target.getClass.getMethod(field).invoke(target)
-      !constraint.isValid(value, context)
+      !constraint.isValid(value)
     }).map(constraint=>{
       val value = target.getClass.getMethod(field).invoke(target)
-      new Violation[T](target,value,"message")
+      Violation[T](target,value,field,constraint.interpolate(locale))
     })
 
     if(errors.isEmpty)
-      new Validator(target,context, violations)
+      new Validator(target, violations)
     else {
       val others = violations.getOrElse(Set.empty[ConstraintViolation[T]])
-      new Validator(target,context, Option(errors.toSet ++ others))
+      new Validator(target, Option(errors.toSet ++ others))
     }
   }
 }
