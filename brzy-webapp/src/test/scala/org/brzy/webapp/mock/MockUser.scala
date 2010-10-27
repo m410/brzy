@@ -16,7 +16,7 @@ package org.brzy.webapp.mock
 import javax.validation.constraints.{NotNull,Size}
 import org.brzy.validator.Validator
 import javax.validation.ConstraintViolation
-import org.brzy.persistence.{PersistentCrudOps, Persistable}
+import org.brzy.persistence.Persistable
 //import javax.persistence._
 
 

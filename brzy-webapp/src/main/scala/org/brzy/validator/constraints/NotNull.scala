@@ -1,12 +1,15 @@
 package org.brzy.validator.constraints
 
-import javax.validation.ConstraintValidatorContext
+import javax.validation.{Payload, ConstraintValidatorContext}
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-case object NotNull extends ConstraintValidator {
-  def isValid(field: AnyRef, context: ConstraintValidatorContext) =  field != null
+case class NotNull(
+        message:String = "{org.brzy.validator.constraints.NotNull.message}"
+    ) extends ConstraintValidator {
+  
+  def isValid(field: AnyRef) =  field != null
 }

@@ -1,19 +1,27 @@
 package org.brzy.validator
 
-import javax.validation.ConstraintViolation
+import javax.validation.{Path, ConstraintViolation}
 
 /**
  * @see http://download.oracle.com/javaee/6/api/javax/validation/ConstraintViolation.html
  */
-class Violation[T<:AnyRef](target:T, value:AnyRef, message:String) extends ConstraintViolation[T] {
+case class Violation[T<:AnyRef](
+        target:T,
+        rejectedValue:AnyRef,
+        path:String,
+        message:String)
+    extends ConstraintViolation[T] {
 
   def getConstraintDescriptor = null
 
-  def getInvalidValue = value
-
-  def getPropertyPath = null
-
   def getLeafBean = null
+
+  def getInvalidValue = rejectedValue
+
+  def getPropertyPath = new Path {
+    def iterator = null
+    override def toString = path
+  }
 
   def getRootBeanClass = target.getClass.asInstanceOf[Class[T]]
 
