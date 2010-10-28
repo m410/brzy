@@ -21,7 +21,7 @@ import org.brzy.validator.Validator
 import org.squeryl.{Session, KeyedEntity, Schema}
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
-import org.brzy.persistence.{PersistentCrudOps, Persistable}
+import org.brzy.persistence.Persistable
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class

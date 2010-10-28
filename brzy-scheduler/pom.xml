@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.brzy.mod</groupId>
     <artifactId>brzy-modules</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.7</version>
   </parent>
   <build>
     <plugins>
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.7-SNAPSHOT</version>
+      <version>0.7</version>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>

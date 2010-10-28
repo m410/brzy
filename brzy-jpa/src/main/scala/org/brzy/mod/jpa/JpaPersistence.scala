@@ -19,7 +19,7 @@ import javax.validation.{Validation=>jValidation}
 import org.brzy.fab.reflect.Construct
 import org.brzy.mod.jpa.RichQuery._
 import collection.JavaConversions._
-import org.brzy.persistence.{PersistentCrudOps, Persistable}
+import org.brzy.persistence.Persistable
 
 /**
  *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
@@ -61,6 +61,11 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Ma
       log.trace("insert")
       val entityManager = JpaContext.value.get
       entityManager.persist(t)
+
+      if(commit) {
+        entityManager.getTransaction.commit
+        entityManager.getTransaction.begin        
+      }
     }
 
     override def update = {

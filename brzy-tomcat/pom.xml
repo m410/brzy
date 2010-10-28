@@ -6,17 +6,17 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-tomcat</artifactId>
   <name>Brzy Tomcat Module</name>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6</version>
   <parent>
     <groupId>org.brzy.mod</groupId>
     <artifactId>brzy-modules</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.7</version>
   </parent>
   <properties>
     <tomcat-version>6.0.29</tomcat-version>
-    <fab-conf-version>0.3-SNAPSHOT</fab-conf-version>
-    <fab-util-version>0.3-SNAPSHOT</fab-util-version>
-    <brzy-webapp-version>0.7-SNAPSHOT</brzy-webapp-version>
+    <fab-conf-version>0.3</fab-conf-version>
+    <fab-util-version>0.3</fab-util-version>
+    <brzy-webapp-version>0.7</brzy-webapp-version>
   </properties>
   <build>
     <plugins>
