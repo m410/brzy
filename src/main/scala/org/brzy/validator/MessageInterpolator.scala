@@ -24,9 +24,9 @@ object MessageInterpolator {
       case PatternExtract(inner) =>
         val bundle = ResourceBundle.getBundle("i18n/messages", locale)
         if (bundle.getKeys.contains(inner))
-          replace(template.replaceAll("\\{" + inner + "\\}", bundle.getString(inner)), locale, p)
+          replace(template.replace("{" + inner + "}", bundle.getString(inner)), locale, p)
         else if(p.contains(inner))
-          replace(template.replaceAll("\\{" + inner + "\\}", p(inner).toString), locale, p)
+          replace(template.replace("{" + inner + "}", p(inner).toString), locale, p)
         else
           template
       case _ =>

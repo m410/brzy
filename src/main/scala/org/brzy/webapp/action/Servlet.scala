@@ -39,17 +39,9 @@ class Servlet extends HttpServlet {
     else {
       val action = app.actions.find(pathCompare(actionPath)).get
       log.debug("{} >> {}",req.getRequestURI, action)
-
-      try {
-        val args = buildArgs(action, req)
-        val result = executeAction(action, args)
-        handleResults(action,result,req,res)
-      }
-      catch {
-        case unknown =>
-          log.error("Exception: " + unknown,unknown)
-          res.sendError(500)
-      }
+      val args = buildArgs(action, req)
+      val result = executeAction(action, args)
+      handleResults(action,result,req,res)
     }
   }
 

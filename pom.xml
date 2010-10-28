@@ -6,11 +6,11 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-webapp</artifactId>
   <name>Brzy WebApp</name>
-  <version>0.7-SNAPSHOT</version>
+  <version>0.7</version>
   <parent>
     <groupId>org.brzy.archetype</groupId>
     <artifactId>brzy-archetype</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
   </parent>
 	<!-- <scm>
 		<connection>scm:git:git@github.com:m410/brzy-archetype.git</connection>
@@ -113,7 +113,7 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.3</version>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>
