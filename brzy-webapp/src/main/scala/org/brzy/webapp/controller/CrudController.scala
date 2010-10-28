@@ -28,13 +28,14 @@ import org.brzy.persistence.{Persistable, Persistent}
  */
 abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E]) {
   val persist: Persistable[E, PK]
+
   implicit def applyCrudOps(e: E) = persist.newPersistentCrudOps(e)
 
   private[this] val entityClass = m.erasure
 
   private[this] val entityName = {
     val name = entityClass.getSimpleName
-    name.substring(0,1).toLowerCase + name.substring(1)
+    name.substring(0, 1).toLowerCase + name.substring(1)
   }
 
   @Action("") def list = entityName + "sList" -> persist.list
@@ -49,8 +50,8 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
       case Some(violations) =>
         (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/create"))
       case _ =>
-        entity.insert(commit=true)
-        (Redirect("/" + entityName + "s/" + entity.id), Flash("New "+entityName + " saved." , entityName + ".save"))
+        entity.insert(commit = true)
+        (Redirect("/" + entityName + "s/" + entity.id), Flash("New " + entityName + " saved.", entityName + ".save"))
     }
   }
 
@@ -58,18 +59,18 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
 
   @Action("{id}/update") def update(p: Parameters) = {
     val entity = persist.construct(p.toMap)
-        entity.validate match {
+    entity.validate match {
       case Some(violations) =>
         (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/create"))
       case _ =>
-        entity.update
-        (Redirect("/" + entityName + "s/" + entity.id), Flash(entityName + " updated." , entityName + ".update"))
+        val updated = entity.update()
+        (Redirect("/" + entityName + "s/" + updated.id), Flash(entityName + " updated.", entityName + ".update"))
     }
   }
 
-  @Action("{id}/delete") def delete(p:Parameters) = {
+  @Action("{id}/delete") def delete(p: Parameters) = {
     val entity = persist.load(p("id"))
     entity.delete
-    (Redirect("/" + entityName + "s"),Flash(entityName +  " was Deleted.",entityName + ".delete"))
+    (Redirect("/" + entityName + "s"), Flash(entityName + " was Deleted.", entityName + ".delete"))
   }
 }

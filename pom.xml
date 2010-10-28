@@ -5,15 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy.archetype</groupId>
   <artifactId>brzy-archetype</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>pom</packaging>
   <name>Brzy Archetypes</name>
   <properties>
     <scala.version>2.8.0</scala.version>
-    <fab-conf-version>0.3-SNAPSHOT</fab-conf-version>
-    <fab-util-version>0.3-SNAPSHOT</fab-util-version>
-    <brzy-webapp-version>0.7-SNAPSHOT</brzy-webapp-version>
-    <brzy-scalate-version>0.7-SNAPSHOT</brzy-scalate-version>
+    <fab-conf-version>0.3</fab-conf-version>
+    <fab-util-version>0.3</fab-util-version>
+    <brzy-webapp-version>0.7</brzy-webapp-version>
+    <brzy-scalate-version>0.7</brzy-scalate-version>
   </properties>
   <modules>
     <module>brzy-webapp</module>
