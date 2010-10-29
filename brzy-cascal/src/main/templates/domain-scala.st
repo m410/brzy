@@ -12,3 +12,10 @@ case class $className$(
     @Value("State") val state:String,
     @Value("Created") val created:Date)
 
+object $className$ {
+  def get(keyId:String):$className$ = {
+    val session = Cascal.value.get
+    val results = session.list("Keyspace1" \ "Standard2" \ keyId)
+    Converter[Person](results)
+  }
+}

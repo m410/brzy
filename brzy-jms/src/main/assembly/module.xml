@@ -8,19 +8,11 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
-			<directory>src/main/resources</directory>
-			<outputDirectory>resources</outputDirectory>
-			<excludes>
-				<exclude>*.yml</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>src/main/scripts</directory>
-			<outputDirectory>scripts</outputDirectory>
-		</fileSet>
-		<fileSet>
 			<directory>src/main/templates</directory>
 			<outputDirectory>templates</outputDirectory>
+      <excludes>
+        <exclude>*.yml</exclude>
+      </excludes>
 		</fileSet>
 		<fileSet>
       <includes>
@@ -29,21 +21,21 @@
         <include>${project.basedir}/NOTICE*</include>
       </includes>
     </fileSet>
-    <fileSet>
-      <directory>${project.build.directory}</directory>
-      <includes>
-        <include>*.jar</include>
-      </includes>
-				<excludes>
-					<exclude>*-module.jar</exclude>
-				</excludes>
-			<outputDirectory></outputDirectory>
-    </fileSet>
 	</fileSets>
 	<files>
+    <file>
+			<source>src/main/scripts/BrzyJmsPlugin.scala</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
 		<file>
-			<source>src/main/resources/brzy-module.b.yml</source>
-			<outputDirectory></outputDirectory>
+			<source>src/main/templates/brzy-module.b.yml</source>
+			<outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+		</file>
+		<file>
+			<source>src/main/templates/fab-plugin.f.yml</source>
+			<outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
 		</file>
 	</files>
 </assembly>

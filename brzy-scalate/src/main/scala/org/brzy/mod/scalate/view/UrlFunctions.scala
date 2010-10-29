@@ -1,4 +1,4 @@
-package org.brzy.mod.scalate
+package org.brzy.mod.scalate.view
 
 import javax.servlet.http.HttpServletRequest
 import java.util.Date
@@ -11,7 +11,7 @@ import org.brzy.webapp.view.FlashMessage
  * 
  * @author Michael Fortin
  */
-object ViewFunctions {
+object UrlFunctions {
 
   def resource(path:String,req:HttpServletRequest):String = {
     val out = if(req.getContextPath == "/")

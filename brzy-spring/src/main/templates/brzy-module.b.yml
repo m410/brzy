@@ -3,7 +3,7 @@
 mod_type: runtime
 name: brzy-spring
 org: org.brzy
-version: "0.5"
+version: "${pom.version}"
 config_class: org.brzy.mod.spring.SpringModConfig
 provider_class: org.brzy.mod.spring.SpringModProvider
 
@@ -13,4 +13,4 @@ dependencies:
   - {conf: compile, org: org.springframework, name: spring-core, rev: "3.0.3.RELEASE"}
   - {conf: compile, org: org.springframework, name: spring-context, rev: "3.0.3.RELEASE"}
   - {conf: compile, org: org.springframework, name: spring-beans, rev: "3.0.3.RELEASE"}
-  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "0.5", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "${pom.version}", transitive: false}

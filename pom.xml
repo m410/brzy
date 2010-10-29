@@ -16,13 +16,13 @@
     <module>brzy-email</module>
     <module>brzy-jms</module>
     <module>brzy-jpa</module>
-    <module>brzy-jsp</module>
+    <!--<module>brzy-jsp</module>-->
     <module>brzy-scalate</module>
     <module>brzy-scheduler</module>
     <module>brzy-security</module>
     <module>brzy-squeryl</module>
     <module>brzy-tomcat</module>
-    <module>brzy-ejb</module>
+    <!--<module>brzy-ejb</module>-->
     <module>brzy-spring</module>
   </modules>
   <build>

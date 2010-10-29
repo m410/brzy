@@ -3,7 +3,7 @@
 mod_type: runtime
 name: brzy-ejb
 org: org.brzy
-version: "0.5"
+version: "${pom.version}"
 config_class: org.brzy.mod.ejb.EjbModConfig
 provider_class: org.brzy.mod.ejb.EjbModProvider
 
@@ -11,4 +11,4 @@ provider_class: org.brzy.mod.ejb.EjbModProvider
 #  - {remote_interface: "", service_name: "", jndi_name: ""}
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-ejb, rev: "0.5", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-ejb, rev: "${pom.version}", transitive: false}
