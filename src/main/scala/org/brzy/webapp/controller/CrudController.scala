@@ -16,6 +16,7 @@ package org.brzy.webapp.controller
 import org.brzy.webapp.action.args.Parameters
 import org.brzy.webapp.action.returns.{Redirect, Flash, Model, View}
 import org.brzy.persistence.{Persistable, Persistent}
+import org.slf4j.LoggerFactory
 
 /**
  * Controller writers can extend this to get all the crud operations in their controller.  The
@@ -27,6 +28,7 @@ import org.brzy.persistence.{Persistable, Persistent}
  * @author Michael Fortin
  */
 abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E]) {
+  val log = LoggerFactory.getLogger(this.getClass)
   val persist: Persistable[E, PK]
 
   implicit def applyCrudOps(e: E) = persist.newPersistentCrudOps(e)

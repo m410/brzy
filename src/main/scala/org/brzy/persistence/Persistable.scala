@@ -89,7 +89,7 @@ trait Persistable[T,PK] {
     def commit():Unit
     def update():T
     def delete():Unit
-    def validate():Option[Set[ConstraintViolation[T]]]
+    def validate():Option[Set[ConstraintViolation[AnyRef]]]
   }
 
 }
