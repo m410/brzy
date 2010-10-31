@@ -1,0 +1,5 @@
+<% import org.brzy.view.ViewFunctions._  %>
+<% implicit val req = request %>
+<nav class="bot-border">
+Navigation: <a href="${action("/")}">Home</a> | <a href="${action("/persons")}">Persons</a>
+</nav>

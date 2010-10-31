@@ -22,6 +22,6 @@ case class Size(
     case _ => false
   }
 
-  private[this] val map = Map("range"->range)
+  private[this] val map = Map("range"-> range.min + " - " + range.max)
   override def interpolate(locale: Locale) =  MessageInterpolator.interpolate(message,locale,map)
 }

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.brzy.archetype</groupId>
   <artifactId>brzy-archetype</artifactId>
@@ -9,15 +7,17 @@
   <packaging>pom</packaging>
   <name>Brzy Archetypes</name>
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
     <scala.version>2.8.0</scala.version>
-    <fab-conf-version>0.3</fab-conf-version>
-    <fab-util-version>0.3</fab-util-version>
+    <fab-conf-version>0.3-SNAPSHOT</fab-conf-version>
+    <fab-util-version>0.3-SNAPSHOT</fab-util-version>
     <brzy-webapp-version>0.7</brzy-webapp-version>
     <brzy-scalate-version>0.7</brzy-scalate-version>
   </properties>
   <modules>
     <module>brzy-webapp</module>
     <module>brzy-webapp-fab</module>
+    <module>validator</module>
   </modules>
   <build>
     <plugins>
