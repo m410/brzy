@@ -131,9 +131,9 @@
       <version>1.6.8</version>
     </dependency>
     <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
+      <groupId>org.brzy.validator</groupId>
+      <artifactId>validator</artifactId>
+      <version>${brzy-validator-version}</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
