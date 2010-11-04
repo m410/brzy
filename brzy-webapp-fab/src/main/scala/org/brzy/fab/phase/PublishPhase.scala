@@ -16,6 +16,8 @@ package org.brzy.fab.phase
 
 import org.brzy.fab.print.Debug
 import org.brzy.fab.build.BuildContext
+import org.brzy.application.WebAppConf
+import org.brzy.fab.dependency.DependencyResolver
 
 /**
  * Document Me..
@@ -24,9 +26,17 @@ import org.brzy.fab.build.BuildContext
  */
 class PublishPhase(ctx:BuildContext) {
 
-  def publish = {
+  def publish:Unit = {
     ctx.line.say(Debug("publish-task"))
-    // publish library to remote maven or ivy repository
+    implicit val conversation = ctx.line
+    
+    try {
+      val conf = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
+      DependencyResolver.publish(conf)
+    }
+    catch {
+      case e:Exception => ctx.line.endWithError(e)
+    }
   }
 
 

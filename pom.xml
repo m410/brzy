@@ -9,15 +9,15 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
     <scala.version>2.8.0</scala.version>
-    <fab-conf-version>0.3-SNAPSHOT</fab-conf-version>
-    <fab-util-version>0.3-SNAPSHOT</fab-util-version>
-    <brzy-webapp-version>0.7</brzy-webapp-version>
-    <brzy-scalate-version>0.7</brzy-scalate-version>
+    <fab-conf-version>0.4-SNAPSHOT</fab-conf-version>
+    <fab-util-version>0.4-SNAPSHOT</fab-util-version>
+    <brzy-webapp-version>0.8-SNAPSHOT</brzy-webapp-version>
+    <brzy-scalate-version>0.8-SNAPSHOT</brzy-scalate-version>
+    <brzy-validator-version>0.1-SNAPSHOT</brzy-validator-version>
   </properties>
   <modules>
     <module>brzy-webapp</module>
     <module>brzy-webapp-fab</module>
-    <module>validator</module>
   </modules>
   <build>
     <plugins>

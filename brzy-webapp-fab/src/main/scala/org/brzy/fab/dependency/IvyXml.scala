@@ -19,7 +19,7 @@ import xml.XML
 
 /**
  * http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html
- * 
+ *     <artifact type="source" ext="jar" conf="sources" m:classifier="sources"/>
  * @author Michael Fortin
  */
 class IvyXml(config:WebAppConf) {
@@ -30,7 +30,8 @@ class IvyXml(config:WebAppConf) {
   val ivy =
 <ivy-module version="2.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+    xmlns:m="http://ant.apache.org/ivy/maven">
   <info module={config.application.name.get} organisation={config.application.org.get} revision={config.application.version.get} />
   <configurations>
     <conf name="default" />

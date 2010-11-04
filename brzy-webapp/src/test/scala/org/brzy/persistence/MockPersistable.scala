@@ -35,7 +35,7 @@ class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
   def count():Long = 0
 
   class MockCrudOps(t:E) extends PersistentCrudOps(t) {
-		def validate() = Validator(t).violations.asInstanceOf[Option[Set[ConstraintViolation[E]]]]
+		def validate() = Validator(t).violations
     def insert(commit:Boolean = false) = {}
     def commit = {}
     def update():E = t

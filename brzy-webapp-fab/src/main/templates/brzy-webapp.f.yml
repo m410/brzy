@@ -17,7 +17,7 @@ dependencies:
   - {org: commons-lang, name: commons-lang, rev: "2.5", transitive: false}
   - {org: org.slf4j, name: slf4j-api, rev: "1.6.1", transitive: false}
   - {org: org.slf4j, name: slf4j-simple, rev: "1.6.1", transitive: false}
-  - {org: org.apache.ivy, name: ivy, rev: "2.2.0-rc1", transitive: false}
+  - {org: org.apache.ivy, name: ivy, rev: "2.2.0", transitive: false}
 
 repositories:
   - {id: brzy, url: http://repo.brzy.org/content/repositories/releases}
@@ -157,8 +157,18 @@ phases:
         description: Pre Compile processing
         method_name: testPhase
         depends: [test-compile]
-
-
-
-
-
+plugins:
+  - name: gen-controller
+    default_task: gen-controller
+    source_class: org.brzy.fab.phase.ControllerGenPlugin
+    class_name: ControllerGenPlugin
+    description: Create a Controller
+    dependencies:
+      - {org: org.scala-lang, name: scala-Library, rev: "${scala.version}", transitive: false}
+      - {org: org.brzy.archetype, name: brzy-webapp-fab, rev: "${project.version}", transitive: false}
+      - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
+    tasks:
+      - name: gen-controller
+        description: Generate a Controller Class
+        method_name: genController
+        takes_args: true

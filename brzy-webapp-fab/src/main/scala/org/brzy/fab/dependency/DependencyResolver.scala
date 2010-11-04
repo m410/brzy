@@ -16,47 +16,28 @@ package org.brzy.fab.dependency
 
 import org.brzy.fab.file.File
 import org.brzy.fab.print._
+import org.brzy.fab.build.Ivy._
+import org.brzy.application.WebAppConf
 
 import org.apache.ivy.Ivy
 import org.apache.ivy.core.retrieve.RetrieveOptions
 import org.apache.ivy.core.IvyContext
-import org.apache.ivy.Ivy.IvyCallback
-
-import org.apache.ivy.util.{FileUtil, MessageLoggerEngine}
-import java.io._
-import javax.xml.transform.stream.{StreamResult, StreamSource}
+import org.apache.ivy.util.FileUtil
 import org.apache.ivy.core.module.id.ModuleRevisionId
-import javax.xml.transform.{TransformerFactory, Transformer, Source}
-import org.brzy.application.WebAppConf
 import org.apache.ivy.core.settings.IvySettings
 import org.apache.ivy.core.cache.ResolutionCacheManager
+
+import java.io._
+import javax.xml.transform.stream.{StreamResult, StreamSource}
+import javax.xml.transform.{TransformerFactory, Transformer, Source}
+import org.apache.ivy.core.publish.PublishOptions
+import org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorParser
+import org.apache.ivy.plugins.parser.m2.{PomWriterOptions, PomModuleDescriptorWriter}
 
 /**
  * This uses Ivy to download the application dependencies place them in a local cache director
  * so the compiler and packager can access them. 
  *
- * From http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html
- * In Ivy xml
- *
- * <publications>
- * <artifact type="pom" ext="pom" conf="default"/>
- * <artifact type="jar" ext="jar" conf="default"/>
- * <artifact type="source" ext="jar" conf="sources" m:classifier="sources"/>
- * </publications>
- *
- *
- * in scala
- * <ivy:makepom ivyfile="ivy.xml" pomfile="bin/poms/${ant.project.name}.pom">
- *   <mapping conf="default" scope="compile"/>
- * </ivy:makepom>
- *
- * <ivy:publish resolver="local-m2-publish" forcedeliver="true" overwrite="true" publishivy="false">
- *   <artifacts pattern="bin/[type]s/[artifact].[ext]"/>
- * </ivy:publish>
- * <!-- snapshots only exist locally, so kick the cache. -->
- * <delete>
- *   <fileset dir="${ivy.cache.dir}/${ivy.organisation}/${ivy.module}" includes="[star][star]/[star]SNAPSHOT[star]"/>
- * </delete>
  * 
  * @author Michael Fortin
  */
@@ -65,6 +46,8 @@ object DependencyResolver {
   val base = File(".brzy/app")
   val settingsFile = File(".brzy/app-ivysettings.xml")
   val ivyFile = File(".brzy/app-ivy.xml")
+
+  val resolverName = "maven-local"
 
   def apply(webappConfig: WebAppConf)(implicit line: Conversation) {
 
@@ -79,67 +62,55 @@ object DependencyResolver {
     ivyXml.saveToFile(ivyFile.getAbsolutePath)
 
     doInIvyCallback((ivy: Ivy, context: IvyContext) => {
-//      context.set("ivy.project.dir",File("").getAbsolutePath)
       ivy.configure(settingsFile)
       ivy.getResolveEngine.resolve(ivyFile)
+
       val org = webappConfig.application.org.get
       val name = webappConfig.application.name.get
       val version = webappConfig.application.version.get
       val modId = ModuleRevisionId.newInstance(org, name, version)
+
       val retrieveOptions: RetrieveOptions = new RetrieveOptions
       retrieveOptions.setSync(true)
+      retrieveOptions.setUseOrigin(true)
+
       ivy.getRetrieveEngine.retrieve(modId, retrievePattern, retrieveOptions)
       null
     })
   }
 
-  // TODO this needs to be replaced with org.brzy.fab.cli.Ivy but ivy in needs to be moved to util first
-  def doInIvyCallback(callback: (Ivy, IvyContext) => java.lang.Object)(implicit line: Conversation) = {
-    val ivy = new Ivy() {
-      val logEngine = new MessageLoggerEngine {
-        override def error(p1: String) = line.endWithError(p1)
-        override def warn(p1: String) = line.say(Warn(p1))
-        override def rawinfo(p1: String) = line.say(Debug(p1))
-        override def info(p1: String) = line.say(Info(p1))
-        override def deprecated(p1: String) = line.say(Warn(p1))
-        override def verbose(p1: String) = line.say(Debug(p1))
-        override def debug(p1: String) = line.say(Debug(p1))
-      }
-
-      override def getLoggerEngine = logEngine
-    }
-    ivy.bind
-    ivy.execute(new IvyCallback() {
-      def doInIvyContext(ivy: Ivy, context: IvyContext): java.lang.Object = {
-        callback(ivy, context)
-      }
-    })
-  }
-
   /**
+   * From http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html
+   * In Ivy xml
+   *
    * @see  https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyMakePom.java
-   */
-  def generatePom(config:WebAppConf) = {
-
-  }
-
-  /**
    * @see https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyPublish.java
    */
-  def publish(config: WebAppConf) = {
+  def publish(webappConfig: WebAppConf)(implicit line: Conversation) = {
 
-    /*
-    public Collection publish(ModuleRevisionId mrid, Collection srcArtifactPattern,
-            String resolverName, PublishOptions options) throws IOException {
-        pushContext();
-        try {
-            return publishEngine.publish(mrid, srcArtifactPattern, resolverName, options);
-        } finally {
-            popContext();
-        }
-    }
-     */
+    doInIvyCallback((ivy: Ivy, context: IvyContext) => {
+      ivy.configure(settingsFile)
+      ivy.getResolveEngine.resolve(ivyFile)
 
+      val ivyUrl = ivyFile.toURI().toURL()
+      val md = XmlModuleDescriptorParser.getInstance().parseDescriptor(ivy.getSettings, ivyUrl, false)
+      val pomFile = File(".brzy/app/compile/app.pom")
+      PomModuleDescriptorWriter.write(md, pomFile, new PomWriterOptions)
+
+      val org = webappConfig.application.org.get
+      val name = webappConfig.application.name.get
+      val version = webappConfig.application.version.get
+      val mrid = ModuleRevisionId.newInstance(org, name, version)
+
+      val options = new PublishOptions()
+      options.setOverwrite(true)
+
+      val artifacts = new java.util.ArrayList[String]()
+      artifacts.add(retrievePattern)
+
+      ivy.getPublishEngine.publish(mrid, artifacts, resolverName, options)
+      null
+    })
   }
   
   /**

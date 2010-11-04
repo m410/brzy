@@ -13,7 +13,7 @@ class BrzyWebAppArchetypePlugin(ctx:BuildContext) {
 
     val dest = File(name)
     dest.mkdirs
-    val brzyHome = File.sysPath(System.getenv("BRZY_HOME"))
+    val brzyHome = ctx.brzyHomeDir
     val sources = Files(brzyHome,"archetypes/brzy-webapp/layout/*")
     sources.foreach(_.copyTo(dest))
 

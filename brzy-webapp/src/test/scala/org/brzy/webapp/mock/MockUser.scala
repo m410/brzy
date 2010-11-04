@@ -34,7 +34,7 @@ class MockUser {
 object MockUser extends Persistable[MockUser,Long]{
 
 	class EntityCrudOps(t:MockUser) extends PersistentCrudOps(t) {
-		def validate() = Validator(t).violations.asInstanceOf[Option[Set[ConstraintViolation[MockUser]]]]
+		def validate() = Validator(t).violations
     def insert(commit:Boolean  = false) = {}
     def commit = {}
     def update = new MockUser()

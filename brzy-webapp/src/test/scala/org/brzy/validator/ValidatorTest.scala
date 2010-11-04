@@ -32,7 +32,7 @@ class ValidatorTest extends JUnitSuite {
     val violation = violations.get.iterator.next
     assertEquals("toBeValidated", violation.getPropertyPath.toString)
     assertEquals(value, violation.getInvalidValue)
-    assertEquals("Must be in range 'Range(2, 3, 4, 5)' ", violation.getMessage)
+    assertEquals("Must be in range '2 - 5' ", violation.getMessage)
   }
 }
 

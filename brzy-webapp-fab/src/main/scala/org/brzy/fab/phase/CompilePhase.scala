@@ -13,32 +13,27 @@
  */
 package org.brzy.fab.phase
 
-
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.print.Debug
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.compile.ScalaCompiler
 import org.brzy.fab.file.Files
 import java.io._
-import actors.Exit
-import actors.Actor._
-import org.brzy.webapp.action.returns.Error
 
 /**
- *	process-resources
+ * 	process-resources
  * @author Michael Fortin
  */
-class CompilePhase(ctx:BuildContext) {
-
+class CompilePhase(ctx: BuildContext) {
   def processResources = {
     ctx.line.say(Debug("process-resources"))
 
     val classes = new File(ctx.targetDir, "classes")
     classes.mkdirs
 
-    val resources = new File(ctx.sourceDir,"resources")
+    val resources = new File(ctx.sourceDir, "resources")
 
-    if(resources.exists){
+    if (resources.exists) {
       resources.listFiles.foreach(_.copyTo(classes))
     }
   }
@@ -46,40 +41,25 @@ class CompilePhase(ctx:BuildContext) {
   def compile = {
     ctx.line.say(Debug("compile-task"))
 
-    val writer = new PipedWriter()
-    val reader = new PipedReader(writer)
-    val sb = new StringBuilder()
+    try {
+      val writer = new StringWriter()
+      val w = new PrintWriter(writer)
 
-    val bufWriter = actor {
-      loop {
-        case Exit =>
-          writer.close
-          reader.close
-          exit
-        case _ =>
-          var chr:Int = null
-          while({chr = reader.read;char} > 0)
-            sb.append(char.asInstanceOf[Char])
-      }
-    }.start
-    
-    val compiler = new ScalaCompiler(new PrintWriter(writer, true))
-    val classpath = Files(".brzy/app/compile/*.jar")
-    val outputDir = new File(ctx.targetDir, "classes")
-    val sourceDir = new File(ctx.sourceDir, "scala")
-    classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))
-    ctx.line.say(Debug("source: " + sourceDir))
-    ctx.line.say(Debug("target: " + outputDir))
-    
-    if(!compiler.compile(sourceDir,outputDir,classpath.toArray)) {
-      bufWriter ! Exit
-      ctx.line.say(Error(sb.toString))
-      ctx.line.endWithError("Compilation Failed")      
-    }
-    else {
-      bufWriter ! Exit
-    }
+      val compiler = new ScalaCompiler(w)
+//      val compiler = new ScalaCompiler(ctx.line.out)
+      val classpath = Files(".brzy/app/compile/*.jar")
+      val outputDir = new File(ctx.targetDir, "classes")
+      val sourceDir = new File(ctx.sourceDir, "scala")
+      classpath.foreach(cp => ctx.line.say(Debug("cp: " + cp)))
+      ctx.line.say(Debug("source: " + sourceDir))
+      ctx.line.say(Debug("target: " + outputDir))
 
+      if (!compiler.compile(sourceDir, outputDir, classpath.toArray))
+        ctx.line.endWithError(writer.toString)
+    }
+    catch {
+      case unknown:Exception => ctx.line.endWithError(unknown)
+    }
   }
 
 

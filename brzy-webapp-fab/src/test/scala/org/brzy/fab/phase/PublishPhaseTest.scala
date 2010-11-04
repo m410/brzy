@@ -16,10 +16,32 @@ package org.brzy.fab.phase
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.junit.Test
+import org.brzy.fab.file.File
+import org.brzy.fab.build.BuildContext
+import org.brzy.fab.print.Conversation
+import org.brzy.application.WebAppConf
+import org.junit.{Ignore, Test}
 
 class PublishPhaseTest extends JUnitSuite {
-  @Test def testPublish = {
-    assertTrue(true)
+  @Test @Ignore def testPublish = {
+    val config = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test1.b.yml")
+    val conversation = new Conversation(false, false)
+    val homeDir = File("target/test-temp")
+    homeDir.mkdirs
+    val targetDir = File("target/target-temp")
+    targetDir.mkdirs
+    val sourceDir = File("target/source-temp")
+    sourceDir.mkdirs
+
+    val ctx = BuildContext(
+        environment = "test",
+        line = conversation,
+        targetDir = targetDir,
+        sourceDir = sourceDir,
+        brzyHomeDir = homeDir)
+    ctx.properties("webAppConfig") = config
+
+    val phase = new PublishPhase(ctx)
+    phase.publish
   }
 }
