@@ -35,7 +35,8 @@ import org.brzy.persistence.Persistable
  * Also note that the entity class needs to be annotated with the ConstructorProperties
  * annotation for the java.bean api.
  */
-class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema with Persistable[T,Long]{
+class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T])
+        extends Schema with Persistable[T,Long]{
   val db = table[T]
   private[this] val log = LoggerFactory.getLogger(classOf[SquerylPersistence[_]])
   
@@ -60,7 +61,7 @@ class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T
   /**
    * conveniences function used by the implicit operations on the entity
    */
-  def valid(t:T) = Validator(t).violations.asInstanceOf[Option[Set[ConstraintViolation[T]]]]
+  def valid(t:T) = Validator(t).violations
 
   implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
 

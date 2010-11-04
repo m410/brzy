@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.7</version>
+      <version>${brzy-webapp-version}</version>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>

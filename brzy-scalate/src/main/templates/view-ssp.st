@@ -1,5 +1,5 @@
-<% val $attributeName$ = attribute[$fullClassName$]("$attributeName$") %>
 <% attributes("layout") = "/layouts/default.ssp" %>
+<%@ import val $attributeName$:$fullClassName$ %>
 <dl>
   <dt>id</dt>
   <dd>\${$attributeName$.id}</dd>

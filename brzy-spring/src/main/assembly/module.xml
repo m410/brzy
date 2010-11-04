@@ -23,10 +23,10 @@
     </fileSet>
 	</fileSets>
 	<files>
-    <file>
-			<source>src/main/scripts/BrzyEmailPlugin.scala</source>
-			<outputDirectory>/</outputDirectory>
-		</file>
+    <!--<file>-->
+			<!--<source>src/main/scripts/BrzySpringPlugin.scala</source>-->
+			<!--<outputDirectory>/</outputDirectory>-->
+		<!--</file>-->
 		<file>
 			<source>src/main/templates/brzy-module.b.yml</source>
 			<outputDirectory>/</outputDirectory>

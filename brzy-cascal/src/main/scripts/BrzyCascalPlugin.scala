@@ -5,7 +5,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.BuildContext
 
-class BrzyCascalPlugin(context:BuildContext) extends BuildPlugin(context) {
+class BrzyCascalPlugin(context:BuildContext) {
 
 	def cascalDomain(args:Array[String]) = {
 		context.line.say(Info("Create a Cascal Domain Class"))

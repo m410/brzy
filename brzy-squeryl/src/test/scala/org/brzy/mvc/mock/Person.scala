@@ -37,5 +37,5 @@ object Person extends SquerylPersistence[Person] {
   override def valid(t:Person) = Validator(t)
       .check("firstName", NotNull(), Size(2 to 36))
       .check("lastName", NotNull(), Size(2 to 36))
-      .violations.asInstanceOf[Option[Set[ConstraintViolation[Person]]]]
+      .violations
 }

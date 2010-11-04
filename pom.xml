@@ -10,6 +10,9 @@
   <name>Brzy Modules</name>
   <properties>
     <scala.version>2.8.0</scala.version>
+    <fab-conf-version>0.4-SNAPSHOT</fab-conf-version>
+    <fab-lib-version>0.4-SNAPSHOT</fab-lib-version>
+    <brzy-webapp-version>0.8-SNAPSHOT</brzy-webapp-version>
   </properties>
   <modules>
     <module>brzy-cascal</module>

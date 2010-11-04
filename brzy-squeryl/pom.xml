@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-squeryl</artifactId>
   <name>Brzy Squeryl Module</name>
-  <version>0.9</version>
+  <version>0.10-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy.mod</groupId>
     <artifactId>brzy-modules</artifactId>
@@ -77,7 +77,7 @@
     <dependency>
       <groupId>org.squeryl</groupId>
       <artifactId>squeryl_2.8.0</artifactId>
-      <version>0.9.4-RC2</version>
+      <version>${squeryl-version}</version>
       <exclusions>
         <exclusion>
           <groupId>postgresql</groupId>
@@ -103,7 +103,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.7</version>
+      <version>${brzy-webapp-version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

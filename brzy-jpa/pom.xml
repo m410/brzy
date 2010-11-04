@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-jpa</artifactId>
   <name>Brzy JPA Module</name>
-  <version>0.5</version>
+  <version>0.6-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy.mod</groupId>
     <artifactId>brzy-modules</artifactId>
@@ -84,7 +84,7 @@
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.7</version>
+      <version>${brzy-webapp-version}</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>

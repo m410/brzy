@@ -80,12 +80,12 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.3</version>
+      <version>${fab-conf-version}</version>
     </dependency>
     <dependency>
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
-      <version>0.7</version>
+      <version>${brzy-webapp-version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

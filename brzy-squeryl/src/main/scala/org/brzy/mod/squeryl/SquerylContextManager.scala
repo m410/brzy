@@ -18,10 +18,10 @@ import org.squeryl.internals.DatabaseAdapter
 import org.squeryl.{SessionFactory, Session}
 import org.squeryl.adapters._
 
-import java.sql.DriverManager
 import util.DynamicVariable
 import org.slf4j.LoggerFactory
 import org.brzy.fab.interceptor.ManagedThreadContext
+import java.sql.{Connection, DriverManager}
 
 /**
  * Manages transactions for the Squeryl ORM with a ThreadLocal variable.
@@ -56,6 +56,13 @@ class SquerylContextManager(driver:String, url:String, usr:String, pass:String) 
 
   def createSession = {
     log.trace("Create Session")
-    Some(Session.create(DriverManager.getConnection(url,usr,pass),adaptor))
+    val connection: Connection = DriverManager.getConnection(url, usr, pass)
+    connection.setAutoCommit(false)
+    val sess:Session = Session.create(connection, adaptor)
+
+    if(log.isTraceEnabled)
+      sess.setLogger((t:String)=>{log.trace("sql: {}", t)})
+    
+    Some(sess)
   }
 }
