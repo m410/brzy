@@ -39,7 +39,8 @@ class DependencyPhase(ctx:BuildContext) {
     ctx.line.say(Debug("resolve-task"))
     implicit val conversation = ctx.line
     try {
-      DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
+      if(ctx.installLibs)
+        DependencyResolver(ctx.properties("webAppConfig").asInstanceOf[WebAppConf])
     }
     catch {
       case e:Exception => ctx.line.endWithError(e)

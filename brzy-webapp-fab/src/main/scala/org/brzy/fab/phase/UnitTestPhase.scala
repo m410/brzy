@@ -20,12 +20,12 @@ import org.brzy.fab.file.{File, Files}
 import org.brzy.fab.compile.ScalaCompiler
 import org.brzy.fab.print.Debug
 import org.scalatest.tools.Runner
+import java.io.{PrintWriter, StringWriter}
 
 /**
  * @author Michael Fortin
  */
 class UnitTestPhase(ctx: BuildContext) {
-
   def processTestResources = {
     ctx.line.say(Debug("process-test-resources"))
     val classes = File(ctx.targetDir, "test-classes")
@@ -38,17 +38,28 @@ class UnitTestPhase(ctx: BuildContext) {
 
   def testCompile = {
     ctx.line.say(Debug("test-compile"))
-    val compiler = new ScalaCompiler(ctx.line.out)
-    val jars = Files(".brzy/app/test/*.jar")
-    val classpath = Files(ctx.testDir, "resources/*") ++ Files(ctx.targetDir, "classes") ++ jars
-    val outputDir = File(ctx.targetDir, "test-classes")
-    val sourceDir = File(ctx.testDir, "scala")
-    classpath.foreach(cp=>ctx.line.say(Debug("cp: " + cp)))
-    ctx.line.say(Debug("source: " + sourceDir))
-    ctx.line.say(Debug("target: " + outputDir))
 
-    if(!compiler.compile(sourceDir,outputDir,classpath.toArray))
-      ctx.line.endWithError("Compilation Failed")
+    try {
+      val writer = new StringWriter()
+      val w = new PrintWriter(writer)
+
+      val compiler = new ScalaCompiler(w)
+      val jars = Files(".brzy/app/test/*.jar")
+
+      val classpath = Files(ctx.testDir, "resources/*") ++ Files(ctx.targetDir, "classes") ++ jars
+      val outputDir = File(ctx.targetDir, "test-classes")
+      val sourceDir = File(ctx.testDir, "scala")
+
+      classpath.foreach(cp => ctx.line.say(Debug("cp: " + cp)))
+      ctx.line.say(Debug("source: " + sourceDir))
+      ctx.line.say(Debug("target: " + outputDir))
+
+      if (!compiler.compile(sourceDir, outputDir, classpath.toArray))
+        ctx.line.endWithError(writer.toString)
+    }
+    catch {
+      case unknown: Exception => ctx.line.endWithError(unknown)
+    }
   }
 
   def testPhase = {
@@ -59,13 +70,13 @@ class UnitTestPhase(ctx: BuildContext) {
     val outputDir = output.getAbsolutePath
 
     val classpath = List(File(ctx.targetDir, "classes")) ++
-        List(File(ctx.targetDir, "test-classes")) // ++ Files(".brzy/app/test/*.jar")
-    classpath.foreach(cp=>ctx.line.say(Debug("test cp: " + cp)))
-    val testArgs  = Array(
-        "-o",
-        "-f", File(output,"report.out.txt").getAbsolutePath,
-        "-u", output.getAbsolutePath,
-        "-p", classpath.map(_.getAbsolutePath).mkString(" "))
+            List(File(ctx.targetDir, "test-classes")) // ++ Files(".brzy/app/test/*.jar")
+    classpath.foreach(cp => ctx.line.say(Debug("test cp: " + cp)))
+    val testArgs = Array(
+      "-o",
+      "-f", File(output, "report.out.txt").getAbsolutePath,
+      "-u", output.getAbsolutePath,
+      "-p", classpath.map(_.getAbsolutePath).mkString(" "))
     Runner.run(testArgs)
   }
 

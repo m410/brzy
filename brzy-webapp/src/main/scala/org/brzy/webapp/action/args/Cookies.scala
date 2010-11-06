@@ -13,15 +13,29 @@
  */
 package org.brzy.webapp.action.args
 
+import javax.servlet.http.HttpServletRequest
+
 /**
  * A Action argument class to read cookie information.  Use it like
  * <pre>def myaction(c:Cookies) = {
- *    val cookieObj = c("name")
+ *    val cookie = c.cookies.find(_.name == "").get
  * }
  * </pre>
- *
- * It's not implemented yet.
  * 
  * @author Michael Fortin
  */
-class Cookies
+class Cookies(request:HttpServletRequest) {
+  val cookies = request.getCookies.map(c=>{
+    Cookie(c.getComment,c.getDomain,c.getMaxAge,c.getName,c.getPath,c.getSecure,c.getValue,c.getVersion)
+  })
+}
+
+case class Cookie(
+        comment:String,
+        domain:String,
+        maxAge:Int,
+        name:String,
+        path:String,
+        secure:Boolean,
+        value:String,
+        version:Int)

@@ -37,7 +37,7 @@ class IvyXml(config:WebAppConf) {
     <conf name="default" />
     <conf name="provided" extends="default"/>
     <conf name="compile" extends="provided"/>
-    <conf name="test" extends="default" />
+    <conf name="test" extends="compile" />
   </configurations>
   <publications>
     <artifact type="pom" ext="pom" conf="compile"/>
