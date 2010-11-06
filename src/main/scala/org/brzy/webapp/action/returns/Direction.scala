@@ -33,7 +33,14 @@ case class View(path:String) extends Direction
 /**
  * Forward to another action without sending a redirect to the client.
  */
-case class Forward(path:String) extends Direction
+case class Forward(path:String) extends Direction {
+  val contextPath = 
+    if(path.startsWith("/"))
+      path + ".brzy"
+    else
+      "/" + path + ".brzy" 
+
+}
 
 /**
  * Send a 302 redirect to the cleint.
@@ -74,11 +81,11 @@ case class Binary(bytes:Array[Byte], contentType:String) extends Direction
 /**
  * Return Json formatted text as the body of the response.
  */
-case class Json(t:AnyRef) extends Direction with Parser {
+case class Json(target:AnyRef) extends Direction with Parser {
 
   def parse = {
     import org.brzy.fab.reflect.Properties._
-    tJson.build(t.properties).toString
+    tJson.build(target.properties).toString
   }
   val contentType = "text/json"
 }

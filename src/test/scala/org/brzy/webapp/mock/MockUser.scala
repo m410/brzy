@@ -43,7 +43,8 @@ object MockUser extends Persistable[MockUser,Long]{
 
   def newPersistentCrudOps(t: MockUser) = new EntityCrudOps(t)
   implicit def applyCrudOps(t:MockUser) = new EntityCrudOps(t)
-	def get(id:Long) = new MockUser()
+	def get(id:Long) = Option(new MockUser())
+  def getOrElse(id: Long, alternate: MockUser) = alternate
   def count():Long = 1
   def list = List()
 	def list(start:Int, size:Int) = List()

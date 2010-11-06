@@ -142,7 +142,7 @@ object Action {
          handleDirection(action, d,req,res)
        case d:Data => // ignore it
        case (s:String, m:AnyRef) =>
-         log.debug("Direction default: {}",action.defaultView)
+         log.debug("tuple default: {}",action.defaultView)
          handleDirection(action, View(action.defaultView),req,res)
        case tup:(_,_) =>
          tup.productIterator.foreach(s=>matchDirection(s))
@@ -152,7 +152,9 @@ object Action {
          r.productIterator.foreach(s=>matchDirection(s))
        case r:(_,_,_,_,_) =>
          r.productIterator.foreach(s=>matchDirection(s))
-       case _ => // ignore
+       case _ =>
+         log.debug("default: {}",action.defaultView)
+         handleDirection(action, View(action.defaultView),req,res)
      }
 
      matchDirection(result)
@@ -169,11 +171,11 @@ object Action {
          req.getRequestDispatcher(target).forward(req,res)
        case f:Forward =>
          log.debug("forward: {}",f)
-         req.getRequestDispatcher(f.path).forward(req,res)
+         req.getRequestDispatcher(f.contextPath).forward(req,res)
        case s:Redirect =>
          val target: String = req.getContextPath + s.path
          log.debug("redirect: {}",s)
-         res.sendRedirect(target)
+         res.sendRedirect(req.getContextPath + target)
        case s:Error =>
          log.debug("Error: {}",s)
          res.sendError(s.code,s.msg)
@@ -247,11 +249,7 @@ object Action {
              session += e.nextElement->req.getAttribute(e.nextElement)
            list += session
          case HeadersClass =>
-           val headers = new Headers()
-           val e = req.getHeaderNames.asInstanceOf[Enumeration[String]]
-
-           while(e.hasMoreElements)
-             headers += e.nextElement->req.getHeader(e.nextElement)
+           val headers = new Headers(req)
            list += headers
          case WizardClass =>
            log.warn("wizard is not implemented")

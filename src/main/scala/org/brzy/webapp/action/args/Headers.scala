@@ -13,7 +13,10 @@
  */
 package org.brzy.webapp.action.args
 
-import collection.mutable.HashMap
+import collection.immutable.MapLike
+import javax.servlet.http.HttpServletRequest
+import collection.JavaConversions._
+
 
 /**
  * A Action argument class to read header information.  Use it like
@@ -21,9 +24,30 @@ import collection.mutable.HashMap
  *    val headerValue = c("name")
  * }
  * </pre>
- *
- * It's not implemented yet.
  * 
  * @author Michael Fortin
  */
-class Headers extends HashMap[String, String] 
+class Headers(request:HttpServletRequest) extends Map[String,String] with MapLike[String, String, Headers] {
+
+  protected[args] val internalMap = {
+    val map = collection.mutable.Map[String,String]()
+
+    if(request != null)
+      request.getHeaderNames.foreach(f=>{
+        val str = f.asInstanceOf[String]
+        map += str->request.getHeader(str).asInstanceOf[String]
+      })
+    
+    map.toMap
+  }
+
+  override def empty:Headers = new Headers(null)
+
+  def +[B1 >: String](kv: (String, B1)) = null
+
+  def -(key: String) = null
+
+  def iterator = internalMap.iterator
+
+  def get(key: String) = internalMap.get(key)
+}

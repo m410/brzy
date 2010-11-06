@@ -51,7 +51,7 @@ class UserController {
 
     user.validate match {
       case Some(violations) =>
-        (View("/user/create.jsp"), Model("user" -> user, "violations" -> violations))
+        (View("/user/create"), Model("user" -> user, "violations" -> violations))
       case _ =>
         user.insert()
         (Redirect("/user/" + user.id), Flash("flash.1", "User saved"), Model("user" -> user))
@@ -67,7 +67,7 @@ class UserController {
 
     user.validate match {
       case Some(violations) =>
-        (View("/user/edit.jsp"), Model("user" -> user, "violations" -> violations))
+        (View("/user/edit"), Model("user" -> user, "violations" -> violations))
       case _ =>
         user.update()
         (Redirect("/users/" + user.id), Flash("flash.2", "User updated"), Model("user" -> user))
@@ -76,9 +76,13 @@ class UserController {
 
   @Action("{id}/delete")
   def delete(params: Parameters) = {
-    def user = MockUser.get(params("id")(0).toLong)
-    user.delete
-    Flash("message2", "user deleted")
+    MockUser.get(params("id")(0).toLong) match {
+      case Some(user) =>
+        user.delete
+        Flash("message2", "user deleted")
+      case _ =>
+        Error(500,"No User found to delete")
+    }
   }
 
   @Action("custom")

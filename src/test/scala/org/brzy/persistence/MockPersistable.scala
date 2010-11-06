@@ -26,7 +26,9 @@ class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
 
   def load(id: String) = null.asInstanceOf[E]
 
-  def get(id: PK) = null.asInstanceOf[E]
+  def get(id: PK) = None
+
+  def getOrElse(id: PK, alternate: E) = alternate
 
   override implicit def applyCrudOps(t:E) = new MockCrudOps(t)
 

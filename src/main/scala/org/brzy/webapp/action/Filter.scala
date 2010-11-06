@@ -32,7 +32,8 @@ class Filter extends SFilter {
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
     val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
-
+    log.trace("uri    : {}",uri)
+    
     if(!(pattern findFirstMatchIn uri).isEmpty) { // pass it on if the url ends with any extension
       chain.doFilter(req,res)
     }
