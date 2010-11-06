@@ -72,7 +72,7 @@ class CrudTest extends JUnitSuite {
 
     val session5 = ctx.createSession
     ctx.context.withValue(session5) {
-      val person = Person.get(1)
+      val person = Person.getOrElse(1,null)
       person.delete()
     }
     ctx.destroySession(session5)

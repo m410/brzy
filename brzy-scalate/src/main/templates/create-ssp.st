@@ -2,8 +2,7 @@
 <% import org.brzy.validator.Violation %>
 <% import $fullClassName$ %>
 <% val $attributeName$ = attribute[$className$]("$attributeName$")  %>
-<% val violations = attributeOrElse[Set[Violation[$className$]]]("violations", Set.empty[Violation[$className$]])  %>
-
+<% val violations = attributeOrElse[Set[Violation[$shortClassName$]]]("violations", Set.empty[Violation[$shortClassName$]])  %>
 <h2>Create Person</h2>
 <form action="\${action("/$attributeName$s/save")}" method="post" accept-charset="utf-8">
   <fieldset id="create_$attributeName$">
@@ -16,14 +15,12 @@
          </ul>
      </div>
      #end
-    <div>
-      <label for="first_name">First Name</label>
-      <input type="text" name="firstName" value="\${$attributeName$.firstName}" id="first_name">
-    </div>
-    <div>
-      <label for="last_name">Last Name</label>
-      <input type="text" name="lastName" value="\${$attributeName$.lastName}" id="last_name">
-    </div>
+     $fields:{ field |
+     <div>
+      <label for="$field$">$field$</label>
+      <input type="text" name="$field$" value="\${$attributeName$.$field$}" id="$field$">
+     </div>
+     }$
     <div>
       <input type="submit" value="Save And Continue">
     </div>

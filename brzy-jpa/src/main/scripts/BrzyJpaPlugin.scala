@@ -20,7 +20,11 @@ class BrzyJpaPlugin(context:BuildContext)  {
 		val template = group.template("domain-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
-		val outputFile = File("src/scala/" + className + ".scala")
+
+    val outputDir = File("src/scala/" + packageName.split("\\.").foldLeft(_ + "/"))
+    outputDir.mkdirs
+    val outputFile = File(ouputDir, className + ".scala")
+
 		val writer = new BufferedWriter(new FileWriter(outputFile))
 		writer.write(template.toString)
 		writer.close

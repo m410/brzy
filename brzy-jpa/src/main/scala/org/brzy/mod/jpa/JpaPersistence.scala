@@ -80,34 +80,40 @@ class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Ma
     }
   }
 
+  protected[jpa] def entityManager = JpaContext.value.get
+
   override def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
 
   override implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
 
-  def get(id:PK):T = {
+  def get(id:PK):Option[T] = {
     log.trace("get: " + id)
-    val entityManager = JpaContext.value.get
-    entityManager.find(entityClass,id).asInstanceOf[T]
+    Option(entityManager.find(entityClass,id).asInstanceOf[T])
+  }
+
+  def getOrElse(id:PK,alternate:T):T = {
+    val result = entityManager.find(entityClass,id).asInstanceOf[T]
+    if(result != null)
+      result
+    else
+      alternate
   }
 
   def load(strId:String) = {
     log.trace("get: {}", strId)
-    val entityManager = JpaContext.value.get
+    // TODO remove hard coded long type
     entityManager.find(entityClass,strId.toLong).asInstanceOf[T]
   }
 
   def count = {
-		val entityManager = JpaContext.value.get
     entityManager.createQuery(countQuery).getSingleResult.asInstanceOf[Long]
 	}
 	
 	def list = {
-    val entityManager = JpaContext.value.get
     entityManager.createQuery(listQuery).getTypedList[T]
 	}
 	
 	def list(start:Int, size:Int) = {
-    val entityManager = JpaContext.value.get
     entityManager.createQuery(listQuery)
         .setFirstResult(start)
         .setMaxResults(size).getTypedList[T]

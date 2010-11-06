@@ -59,9 +59,13 @@ class UserController {
 
   @Action("{id}/delete")
   def delete(params: Parameters) = {
-    def user = User.get(params("id")(0).toLong)
-    user.delete
-    Flash("message2", "user deleted")
+    User.get(params("id")(0).toLong) match {
+      case Some(user) =>
+        user.delete
+        Flash("message2", "user deleted")
+      case _ =>
+        Error(500, "No entity found")
+    }
   }
 
   @Action("custom")

@@ -45,7 +45,7 @@ class UserCrudTest extends JUnitSuite {
 
     val session3 = ctx.createSession
     ctx.context.withValue(session3) {
-      val user = User.get(0)
+      val user = User.getOrElse(0,null)
       assertNotNull(user)
       user.firstName = "Michael"
     }
@@ -53,7 +53,7 @@ class UserCrudTest extends JUnitSuite {
 
     val session4 = ctx.createSession
     ctx.context.withValue(session4) {
-      val user = User.get(0)
+      val user = User.getOrElse(0,null)
       user.delete
     }
     ctx.destroySession(session4)
