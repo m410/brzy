@@ -12,7 +12,7 @@ import org.clapper.scalasti.StringTemplateGroup
  * @author Michael Fortin
  */
 class ControllerGenPlugin(ctx:BuildContext) {
-  def genController = {
+  def genController(args:Array[String]) = {
     ctx.line.say(Debug("gen-controller"))
     val packageAndClass = ctx.line.ask(Question("enter package & class: "))
 		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
@@ -25,9 +25,14 @@ class ControllerGenPlugin(ctx:BuildContext) {
 		val template = group.template("controller-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
-		val outputFile = File("src/scala/" + className + ".scala")
+    
+    val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
+    outputDir.mkdirs
+    val outputFile = File(outputDir, className + ".scala")
+
 		val writer = new BufferedWriter(new FileWriter(outputFile))
 		writer.write(template.toString)
+    writer.close
   }
 
   override def toString = "Generate Controller"

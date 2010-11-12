@@ -117,7 +117,7 @@ class WebApp(conf: WebAppConf) {
     val map = WeakHashMap.empty[String, AnyRef]
 
     def name(c: Class[_]): String = { // TODO also need to pull name from annotation
-      val in = c.getName
+      val in = c.getSimpleName
       in.charAt(0).toLower + in.substring(1, in.length)
     }
 
@@ -128,6 +128,7 @@ class WebApp(conf: WebAppConf) {
     })
     persistenceProviders.foreach(_.serviceMap.foreach(map + _))
     moduleProviders.foreach(_.serviceMap.foreach(map + _))
+    log.trace("services: {}", map)
     map.toMap
   }
 
@@ -169,7 +170,7 @@ class WebApp(conf: WebAppConf) {
 
   protected[application] def makeArgsByName(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
     val constructorProps = c.getAnnotation(classOf[ConstructorProperties])
-    constructorProps.value.map(services(_))
+    constructorProps.value.map(serviceMap(_))
   }
 
   protected[application] def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {

@@ -127,6 +127,7 @@ phases:
     default_task: publish-task
     class_name: org.brzy.fab.phase.PublishPhase
     description: Once the packaging of the application is complete this will upload to a remote repository.
+    interpreter_scope: compile
     depends: [package]
     dependencies:
       - {org: org.scala-lang, name: scala-library, rev: "${brzy-scalate-version}", transitive: false}
@@ -161,7 +162,7 @@ plugins:
   - name: gen-controller
     default_task: gen-controller
     source_class: org.brzy.fab.phase.ControllerGenPlugin
-    class_name: ControllerGenPlugin
+    class_name: org.brzy.fab.phase.ControllerGenPlugin
     description: Create a Controller
     dependencies:
       - {org: org.scala-lang, name: scala-Library, rev: "${scala.version}", transitive: false}
