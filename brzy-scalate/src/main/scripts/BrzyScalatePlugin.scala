@@ -1,5 +1,5 @@
 import java.io.{BufferedWriter, FileWriter}
-import org.brzy.fab.print.{Question,Info}
+import org.brzy.fab.print.{Question,Info,Warn}
 import org.clapper.scalasti.StringTemplateGroup
 import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
@@ -65,6 +65,7 @@ class BrzyScalatePlugin(context:BuildContext)  {
     listTemplate.setAttribute("fullClassName", packageAndClass)
     listTemplate.setAttribute("attributeName", name)
     listTemplate.setAttribute("fields", fields)
+    listTemplate.setAttribute("fieldsLength", fields.length)
     val listFile = File(outdir, "list.ssp")
     val writer4 = new BufferedWriter(new FileWriter(listFile))
     writer4.write(listTemplate.toString)

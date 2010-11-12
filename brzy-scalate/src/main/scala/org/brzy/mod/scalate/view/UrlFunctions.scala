@@ -42,15 +42,4 @@ object UrlFunctions {
   def number(num:Number,format:String):String = new DecimalFormat(format).format(num)
 
   def encode(path:String) = URLEncoder.encode(path, "UTF-8")
-
-
-  def flash()(implicit req:HttpServletRequest):String = {
-    if(req.getSession.getAttribute("flash-message") != null)
-      req.getSession.getAttribute("flash-message").asInstanceOf[FlashMessage].show
-    else
-      ""
-  }
-
-  def hasFlash()(implicit req:HttpServletRequest):Boolean = req.getSession.getAttribute("flash-message") != null
-
 }

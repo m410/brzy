@@ -21,9 +21,9 @@ class BrzyJmsPlugin(context:BuildContext)  {
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
 
-    val outputDir = File("src/scala/" + packageName.split("\\.").foldLeft(_ + "/"))
+    val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
     outputDir.mkdirs
-    val outputFile = File(ouputDir, className + ".scala")
+    val outputFile = File(outputDir, className + ".scala")    
 
 		val writer = new BufferedWriter(new FileWriter(outputFile))
 		writer.write(template.toString)

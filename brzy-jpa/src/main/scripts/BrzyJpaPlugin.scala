@@ -9,7 +9,7 @@ class BrzyJpaPlugin(context:BuildContext)  {
 
   // create a class from template
 	def createJpaDomain(args:Array[String]) = {
-		context.line.say(Info("Create a JPA Domain Class"),true)
+		context.line.say(Info("Create a JPA Domain Class"))
     val packageAndClass = context.line.ask(Question("enter package & class: "))
 		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
@@ -21,9 +21,9 @@ class BrzyJpaPlugin(context:BuildContext)  {
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
 
-    val outputDir = File("src/scala/" + packageName.split("\\.").foldLeft(_ + "/"))
+    val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
     outputDir.mkdirs
-    val outputFile = File(ouputDir, className + ".scala")
+    val outputFile = File(outputDir, className + ".scala")
 
 		val writer = new BufferedWriter(new FileWriter(outputFile))
 		writer.write(template.toString)

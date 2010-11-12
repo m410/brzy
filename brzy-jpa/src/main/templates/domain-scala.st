@@ -1,9 +1,11 @@
 package $packageName$
 
-import org.brzy.mod.jpa.JpaPersistence
-import javax.validation.constraints.{NotNull,Size}
 import javax.persistence._
+import javax.validation.constraints._
+import org.brzy.mod.jpa.JpaPersistence
 import reflect.BeanProperty
+import java.lang.{Long=>JLong,Integer=>JInt}
+import java.util.{List=>JList,Map=>JMap}
 
 /**
  *
@@ -11,10 +13,9 @@ import reflect.BeanProperty
 @Entity
 @Table(name="$className$")
 class $className$ {
-	@Id @BeanProperty var id:java.lang.Long = _
-	@Version @BeanProperty var id:java.lang.Integer = _
-	@NotNull @BeanProperty var firstName:String = _
-	@NotNull @BeanProperty var lastName:String = _
+	@BeanProperty @Id var id:JLong = _
+	@BeanProperty @Version var version:JInt = _
+	@BeanProperty @NotNull var name:String = _
 }
 
-object $className$ extends JpaPersistence
+object $className$ extends JpaPersistence[$className$,JLong]

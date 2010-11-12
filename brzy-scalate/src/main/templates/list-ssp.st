@@ -10,7 +10,7 @@
   </thead>
   <tfoot>
     <tr>
-      <td colspan="$fields.length$">Paging: <a href="\${link("/$attributeName$s/create")}">Create</a></td>
+      <td colspan="$fieldsLength$">Paging: <a href="\${link("/$attributeName$s/create")}">Create</a></td>
     </tr>
   </tfoot>
   <tbody>
