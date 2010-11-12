@@ -24,7 +24,7 @@ class User(val id: Long) extends Persistent[Long] {
 object User extends MockPersistable[User, Long]
 
 @Controller("users")
-class UserController extends CrudController[User,Long] {
+class UserController extends CrudController(User) {
   val persist = User
 }
 

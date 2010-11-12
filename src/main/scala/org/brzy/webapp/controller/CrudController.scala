@@ -27,11 +27,9 @@ import org.slf4j.LoggerFactory
  * @see org.brzy.persistence.Persistent
  * @author Michael Fortin
  */
-abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E]) {
+abstract class CrudController[E <: Persistent[_], PK](val dao:Persistable[E, PK])(implicit m: Manifest[E]) {
   val log = LoggerFactory.getLogger(this.getClass)
-  val persist: Persistable[E, PK]
-
-  implicit def applyCrudOps(e: E) = persist.newPersistentCrudOps(e)
+  private[this] implicit def applyCrudOps(e: E) = dao.newPersistentCrudOps(e)
 
   private[this] val entityClass = m.erasure
 
@@ -40,14 +38,14 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
     name.substring(0, 1).toLowerCase + name.substring(1)
   }
 
-  @Action("") def list = entityName + "sList" -> persist.list
+  @Action("") def list = entityName + "sList" -> dao.list
 
-  @Action("{id}") def show(params: Parameters) = entityName -> persist.load(params("id"))
+  @Action("{id}") def show(params: Parameters) = entityName -> dao.load(params("id"))
 
-  @Action("create") def create() = entityName -> persist.construct
+  @Action("create") def create() = entityName -> dao.construct
 
   @Action("save") def save(p: Parameters) = {
-    val entity = persist.construct(p.toMap)
+    val entity = dao.construct(p.toMap)
     entity.validate match {
       case Some(violations) =>
         (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/create"))
@@ -57,10 +55,10 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
     }
   }
 
-  @Action("{id}/edit") def edit(params: Parameters) = entityName -> persist.load(params("id"))
+  @Action("{id}/edit") def edit(params: Parameters) = entityName -> dao.load(params("id"))
 
   @Action("{id}/update") def update(p: Parameters) = {
-    val entity = persist.construct(p.toMap)
+    val entity = dao.construct(p.toMap)
     entity.validate match {
       case Some(violations) =>
         (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/create"))
@@ -71,7 +69,7 @@ abstract class CrudController[E <: Persistent[_], PK]()(implicit m: Manifest[E])
   }
 
   @Action("{id}/delete") def delete(p: Parameters) = {
-    val entity = persist.load(p("id"))
+    val entity = dao.load(p("id"))
     entity.delete
     (Redirect("/" + entityName + "s"), Flash(entityName + " was Deleted.", entityName + ".delete"))
   }
