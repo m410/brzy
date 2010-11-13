@@ -21,7 +21,7 @@ import org.brzy.validator.Validator
 import org.squeryl.{Session, KeyedEntity, Schema}
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
-import org.brzy.persistence.Persistable
+import org.brzy.persistence.Dao
 
 /**
  * Implements the basic CRUD operations on the entity.  The Entity's object companion class
@@ -35,10 +35,9 @@ import org.brzy.persistence.Persistable
  * Also note that the entity class needs to be annotated with the ConstructorProperties
  * annotation for the java.bean api.
  */
-class SquerylPersistence[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T])
-        extends Schema with Persistable[T,Long]{
+class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) extends Schema with Dao[T,Long]{
   val db = table[T]
-  private[this] val log = LoggerFactory.getLogger(classOf[SquerylPersistence[_]])
+  private[this] val log = LoggerFactory.getLogger(classOf[SquerylDao[_]])
   
   class EntityCrudOps(t: T) extends PersistentCrudOps(t){
     def validate = valid(t)

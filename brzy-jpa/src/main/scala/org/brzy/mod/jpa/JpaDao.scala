@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory
 import org.brzy.fab.reflect.Construct
 import org.brzy.mod.jpa.RichQuery._
 import collection.JavaConversions._
-import org.brzy.persistence.Persistable
+import org.brzy.persistence.Dao
 import javax.validation.{ConstraintViolation, Validation => jValidation}
 
 /**
@@ -25,7 +25,7 @@ import javax.validation.{ConstraintViolation, Validation => jValidation}
  * 
  * @author Michael Fortin
  */
-class JpaPersistence[T <: AnyRef, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manifest[PK]) extends Persistable[T,PK]{
+class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manifest[PK]) extends Dao[T,PK]{
   protected[jpa] val entityClass = man.erasure
   protected[jpa] val keyClass = pk.erasure
   private val log = LoggerFactory.getLogger(entityClass)

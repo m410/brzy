@@ -15,7 +15,8 @@ package org.brzy.mod.jpa
 
 import javax.persistence.{EntityManager, Persistence}
 import org.brzy.fab.interceptor.ManagedThreadContext
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.LoggerFactory
+import util.DynamicVariable
 
 /**
  * Implements the jps entity manager thread scope variable management.
@@ -45,3 +46,10 @@ class JpaContextManager(unitName:String) extends ManagedThreadContext {
     s.get.close
   }
 }
+
+/**
+ * Thread local context that holds the the entity manager.
+ *
+ * @author Michael Fortin
+ */
+object JpaContext extends DynamicVariable(Option[EntityManager](null))

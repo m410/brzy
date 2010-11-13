@@ -14,3 +14,7 @@ dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "3.4.0.GA"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
   - {conf: compile, org: org.brzy, name: brzy-jpa, rev: "0.2", transitive: false}
+
+web_xml:
+  - filter: {filter-name: BrzyJpaFilter, filter-class: org.brzy.mod.jpa.BrzyJpaFilter}
+  - filter-mapping: {filter-name: BrzyJpaFilter, url-pattern: "/*"}

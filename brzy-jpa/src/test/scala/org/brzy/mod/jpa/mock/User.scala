@@ -13,29 +13,38 @@
  */
 package org.brzy.mod.jpa.mock
 
-import org.brzy.mod.jpa.JpaPersistence
-import javax.validation.constraints.{NotNull,Size}
+import org.brzy.mod.jpa.JpaDao
+import javax.validation.constraints.{NotNull, Size}
 
 import reflect.BeanProperty
 import org.hibernate.annotations.NamedQueries
 import javax.persistence._
+import java.lang.{Long => JLong, Integer => JInt}
 
 @serializable
 @Entity
-@Table(name="users")
+@Table(name = "users")
 //@NamedQueries(Array(new NamedQuery(name="list", query="select distinct u from User u")))
 class User {
-  @BeanProperty @Id var id:Long = _
-  @BeanProperty @Version var version:Int = _
-  @BeanProperty @NotNull @Size(min=4,max=30) var firstName:String = _
-  @BeanProperty @NotNull @Size(min=4,max=30) var lastName:String = _
+  @BeanProperty @Id
+  @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_seq")
+  @SequenceGenerator(name="user_seq", sequenceName = "user_seq", allocationSize = 1, initialValue= 1)  
+  var id: JLong = _
+
+  @BeanProperty @Version
+  var version: JInt = _
+
+  @BeanProperty @NotNull @Size(min = 4, max = 30)
+  var firstName: String = _
+
+  @BeanProperty @NotNull @Size(min = 4, max = 30)
+  var lastName: String = _
 }
 
-object User extends JpaPersistence[User,java.lang.Long] {
-
+object User extends JpaDao[User, JLong] {
   override def construct(p: Map[String, Any]) = {
     val user = new User()
-    user.id= p("id").asInstanceOf[String].toLong
+    user.id = p("id").asInstanceOf[String].toLong
     user.firstName = p("firstName").asInstanceOf[String]
     user.lastName = p("lastName").asInstanceOf[String]
     user

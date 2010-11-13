@@ -15,6 +15,7 @@ package org.brzy.mod.jpa
 
 import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
+import org.brzy.fab.conf.WebXml
 
 /**
  * Document Me..
@@ -24,5 +25,4 @@ import org.brzy.fab.interceptor.InterceptorProvider
 class JpaModProvider(c:JpaModConfig) extends ModProvider with InterceptorProvider {
   val interceptor = new JpaContextManager(c.persistenceUnit.get)
   val name = c.name.get
-
 }

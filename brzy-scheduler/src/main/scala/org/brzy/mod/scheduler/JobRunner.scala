@@ -15,7 +15,7 @@ package org.brzy.mod.scheduler
 
 import actors.{Exit, Actor}
 import org.slf4j.LoggerFactory
-import org.brzy.webapp.interceptor.Invoker
+import org.brzy.interceptor.Invoker
 
 /**
  * Document Me..
