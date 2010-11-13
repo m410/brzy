@@ -16,7 +16,7 @@ package org.brzy.webapp.mock
 import javax.validation.constraints.{NotNull,Size}
 import org.brzy.validator.Validator
 import javax.validation.ConstraintViolation
-import org.brzy.persistence.Persistable
+import org.brzy.persistence.Dao
 //import javax.persistence._
 
 
@@ -31,7 +31,7 @@ class MockUser {
   var name:String = _
 }
 
-object MockUser extends Persistable[MockUser,Long]{
+object MockUser extends Dao[MockUser,Long]{
 
 	class EntityCrudOps(t:MockUser) extends PersistentCrudOps(t) {
 		def validate() = Validator(t).violations

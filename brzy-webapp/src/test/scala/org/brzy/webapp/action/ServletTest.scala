@@ -32,7 +32,7 @@ class ServletTest extends JUnitSuite {
     val context = new MockServletContext()
     context.setAttribute("application",webapp)
 
-    val servlet = new Servlet()
+    val servlet = new BrzyServlet()
     servlet.init(new MockServletConfig(context))
     servlet.service(request,response)
     assertEquals(200,response.getStatus)
@@ -51,7 +51,7 @@ class ServletTest extends JUnitSuite {
     val context = new MockServletContext()
     context.setAttribute("application",webapp)
 
-    val servlet = new Servlet()
+    val servlet = new BrzyServlet()
     servlet.init(new MockServletConfig(context))
     servlet.service(request,response)
     assertEquals(200,response.getStatus)

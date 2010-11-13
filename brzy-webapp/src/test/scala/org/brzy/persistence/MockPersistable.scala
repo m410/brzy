@@ -18,7 +18,7 @@ import org.brzy.validator.Validator
 import javax.validation.ConstraintViolation
 
 
-class MockPersistable[E<:Persistent[_],PK] extends Persistable[E,PK] {
+class MockPersistable[E<:{def id:PK},PK] extends Dao[E,PK] {
 
   def list(size: Int, offset: Int) = Nil
 

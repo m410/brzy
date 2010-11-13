@@ -23,8 +23,7 @@ import collection.immutable.Set
  *
  * @author Michael Fortin
  */
-trait Persistable[T, PK] {
-  type Persistent = {def id: PK}
+trait Dao[T <: {def id: PK}, PK] {
 
   /**
    * Retrieve a single entity by primary key.

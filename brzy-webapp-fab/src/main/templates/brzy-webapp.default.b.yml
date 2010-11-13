@@ -39,14 +39,13 @@ dependencies:
   - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
   - {conf: test, org: junit, name: junit, rev: "4.8.1"}
   - {conf: test, org: org.scalatest, name: scalatest, rev: "1.2", transitive: false}
-  - {conf: test, org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
   
 web_xml:
   - context-param: { param-name : brzy-env, param-value: development}
   - listener: {listener-class: org.brzy.application.WebAppListener}
-  - filter: {filter-name: BrzyFilter, filter-class: org.brzy.webapp.action.Filter}
+  - filter: {filter-name: BrzyFilter, filter-class: org.brzy.webapp.action.BrzyFilter}
   - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}
-  - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.webapp.action.Servlet, load-on-startup: "1"}
+  - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.webapp.action.BrzyServlet, load-on-startup: "1"}
   - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
   - welcome-file-list: { welcome-file: "index.brzy"}
 
