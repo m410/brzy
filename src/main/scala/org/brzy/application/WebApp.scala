@@ -24,8 +24,8 @@ import java.beans.ConstructorProperties
 import org.brzy.webapp.action.Action
 import org.brzy.webapp.controller.{ControllerScanner, Controller, Action => ActionAnnotation}
 import org.brzy.fab.interceptor.{ManagedThreadContext, InterceptorProvider}
-import org.brzy.webapp.interceptor.Invoker
-import org.brzy.webapp.interceptor.ProxyFactory._
+import org.brzy.interceptor.Invoker
+import org.brzy.interceptor.ProxyFactory._
 
 import org.brzy.fab.reflect.Construct
 

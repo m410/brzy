@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.interceptor
+package org.brzy.interceptor
 
 import java.lang.reflect.Method
 import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter}

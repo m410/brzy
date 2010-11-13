@@ -15,7 +15,7 @@ package org.brzy.webapp.controller
 
 import org.brzy.webapp.action.args.Parameters
 import org.brzy.webapp.action.returns.{Redirect, Flash, Model, View}
-import org.brzy.persistence.{Persistable, Persistent}
+import org.brzy.persistence.Dao
 import org.slf4j.LoggerFactory
 
 /**
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory
  * @see org.brzy.persistence.Persistent
  * @author Michael Fortin
  */
-abstract class CrudController[E <: Persistent[_], PK](val dao:Persistable[E, PK])(implicit m: Manifest[E]) {
+abstract class CrudController[E  <: {def id:PK}, PK](val dao:Dao[E, PK])(implicit m: Manifest[E]) {
   val log = LoggerFactory.getLogger(this.getClass)
   private[this] implicit def applyCrudOps(e: E) = dao.newPersistentCrudOps(e)
 

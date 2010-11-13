@@ -24,12 +24,12 @@ import javax.servlet.{ServletResponse, ServletRequest}
  * 
  * @author Michael Fortin
  */
-class Servlet extends HttpServlet {
-  private val log = LoggerFactory.getLogger(classOf[Servlet])
+class BrzyServlet extends HttpServlet {
+  private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
 
   private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    log.trace("request: {}",req.getRequestURI)
+    log.trace("request: {}",req.getServletPath)
     val actionPath = findActionPath(req.getRequestURI,req.getContextPath)
     log.trace("path: {}",actionPath)
     

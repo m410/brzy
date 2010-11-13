@@ -44,7 +44,7 @@ class FilterTest extends JUnitSuite {
       }
     }
 
-    val filter = new Filter
+    val filter = new BrzyFilter
     filter.doFilter(request,response,chain)
   }
 
@@ -70,7 +70,7 @@ class FilterTest extends JUnitSuite {
       }
     }
 
-    val filter = new Filter
+    val filter = new BrzyFilter
     filter.doFilter(request,response,chain)
   }
 }

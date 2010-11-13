@@ -16,18 +16,21 @@ package org.brzy.webapp.action
 import javax.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest, Filter => SFilter}
+import org.brzy.application.WebApp
 
 /**
  * Forwards only requests to brzy actions, lets all other pass through.
  *
  * @author Michael Fortin
  */
-class Filter extends SFilter {
-  private val log = LoggerFactory.getLogger(classOf[Filter])
+class BrzyFilter extends SFilter {
+  private val log = LoggerFactory.getLogger(classOf[BrzyFilter])
   val pattern = """\.([\w\d]{1,4})$""".r
+  var webapp:WebApp = _
 
   def init(config: FilterConfig) = {
     log.info("Init Filter: {}", config)
+    webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
@@ -39,6 +42,7 @@ class Filter extends SFilter {
     }
     else { // assume it's an action and append .brzy
       val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
+//      val webapp = req.getServletContext.getAttribute("webApp").asInstanceOf[WebApp]
       val forward =
         if(contextPath == "")
           uri.substring(0,uri.length)

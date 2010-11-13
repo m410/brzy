@@ -11,15 +11,15 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.persistence
+package org.brzy.interceptor
+
+import java.lang.reflect.Method
 
 /**
- * For the Crud controller to be able to implement all the actions in a generic fashion, it needs
- * to know what the primary key is.  This trait enables that discovery no matter what is the
- * underlying persistence api.
+ * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
  * 
  * @author Michael Fortin
  */
-trait Persistent[P] {
-  def id:P
+trait MethodMatcher {
+  def isMatch(a: AnyRef, m: Method): Boolean
 }

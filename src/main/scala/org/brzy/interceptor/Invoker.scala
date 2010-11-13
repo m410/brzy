@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.interceptor
+package org.brzy.interceptor
 
 import javassist.util.proxy.MethodHandler
 import java.lang.reflect.Method
@@ -25,7 +25,7 @@ import org.brzy.fab.interceptor.ManagedThreadContext
  * @author Michael Fortin
  */
 class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
-  override def invoke(self: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
+  override def invoke(itSelf: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
 
     // nested recursive call on the threadContext
     def traverse(it: Iterator[ManagedThreadContext]): AnyRef = {
@@ -33,7 +33,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
       var returnValue: AnyRef = null
       var nested = false
 
-      if (managedFactory.isManaged(self)) {
+      if (managedFactory.isManaged(itSelf)) {
         val ctx =
             if (managedFactory.context.value == managedFactory.empty)
               managedFactory.createSession
@@ -47,20 +47,19 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
             if (it.hasNext)
               returnValue = traverse(it)
             else
-              returnValue = m2.invoke(self, args: _*)
+              returnValue = m2.invoke(itSelf, args: _*)
           }
         }
         finally {
-          if (!nested) {
+          if (!nested)
             managedFactory.destroySession(ctx)
-          }
         }
       }
       else {
         if (it.hasNext)
           returnValue = traverse(it)
         else
-          returnValue = m2.invoke(self, args: _*)
+          returnValue = m2.invoke(itSelf, args: _*)
 
       }
       returnValue
@@ -71,7 +70,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
     if (iterator.hasNext)
       traverse(iterator)
     else
-      m2.invoke(self, args: _*)
+      m2.invoke(itSelf, args:_*)
   }
 
 }

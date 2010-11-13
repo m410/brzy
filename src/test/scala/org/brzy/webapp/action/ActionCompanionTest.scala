@@ -61,28 +61,28 @@ class ActionCompanionTest extends JUnitSuite {
   @Test def testFindActionPath = {
     val context = "/home"
     val uri = "/home/users"
-    val service = new Servlet
+    val service = new BrzyServlet
     assertEquals("/users", findActionPath(uri,context))
   }
 
   @Test def testFindActionPath2 = {
     val context = "/home"
     val uri = "/home/user.brzy"
-    val service = new Servlet
+    val service = new BrzyServlet
     assertEquals("/user", findActionPath(uri,context))
   }
 
   @Test def testFindActionPath3 = {
     val context = ""
     val uri = "/home/10/create.brzy"
-    val service = new Servlet
+    val service = new BrzyServlet
     assertEquals("/home/10/create", findActionPath(uri,context))
   }
 
   @Test def testFindActionPath4 = {
     val context = "/brzy"
     val uri = "/brzy/.brzy"
-    val service = new Servlet
+    val service = new BrzyServlet
     assertEquals("/", findActionPath(uri,context))
   }
 }
