@@ -18,13 +18,11 @@ import org.junit.Assert._
 import javax.servlet.{RequestDispatcher, ServletResponse, ServletRequest, FilterChain}
 import org.springframework.mock.web.{MockRequestDispatcher, MockServletContext, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
-
+import org.brzy.application.{WebAppConf, WebApp}
 
 class FilterTest extends JUnitSuite {
 
-
-  @Test
-  def testFilterForward = {
+  @Test def testFilterForward = {
     val request = new MockHttpServletRequest(new MockServletContext,"GET", "/users/10") {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
@@ -40,16 +38,16 @@ class FilterTest extends JUnitSuite {
 
     val chain = new FilterChain(){
       def doFilter(p1: ServletRequest, p2: ServletResponse) = {
-        fail("Should not be called")
+//        fail("Should not be called")
       }
     }
 
     val filter = new BrzyFilter
+    filter.webapp = WebApp("test")
     filter.doFilter(request,response,chain)
   }
 
-  @Test
-  def testFilterPass = {
+  @Test def testFilterPass = {
     val request = new MockHttpServletRequest(new MockServletContext,"GET", "/users/get.jsp") {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
@@ -71,6 +69,7 @@ class FilterTest extends JUnitSuite {
     }
 
     val filter = new BrzyFilter
+    filter.webapp = WebApp("test")
     filter.doFilter(request,response,chain)
   }
 }
