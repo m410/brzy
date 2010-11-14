@@ -21,7 +21,7 @@ import org.brzy.fab.conf.{WebXml, BaseConf}
  *
  * @author Michael Fortin
  */
-class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) with WebXml {
+class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) {
   val persistenceUnit: Option[String] = map.get("persistence_unit").asInstanceOf[Option[String]].orElse(None)
   val transactionType: Option[String] = map.get("transaction_type").asInstanceOf[Option[String]].orElse(None)
   val entityDiscovery: String = map.getOrElse("entity_discovery","list").asInstanceOf[String] // or scan
@@ -38,17 +38,7 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
         "transaction_type" -> that.map.getOrElse("transaction_type", this.transactionType.orNull),
         "entity_discovery" -> that.map.getOrElse("entity_discovery", this.entityDiscovery),
         "entities" -> that.map.getOrElse("entities", this.entities.orNull),
-        "properties" -> that.map.getOrElse("properties", this.properties.orNull),
-        "web_xml" -> {
-          if (this.webXml.isDefined && this.webXml.get != null &&
-                  that.map.get("web_xml").isDefined && that.map.get("web_xml").get != null)
-            this.webXml.get ++ that.map.get("web_xml").get.asInstanceOf[List[_]]
-          else if (this.webXml.isDefined)
-            this.webXml.get.asInstanceOf[List[_]]
-          else if (that.map.get("web_xml").isDefined)
-            that.map.get("web_xml").get
-          else
-            null}      
-        ) ++ super.<<(that).map)
+        "properties" -> that.map.getOrElse("properties", this.properties.orNull)
+      ) ++ super.<<(that).map)
 
 }

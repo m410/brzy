@@ -22,9 +22,9 @@ import org.brzy.interceptor.{Invoker, ProxyFactory}
 class SquerylThreadContextTest extends JUnitSuite {
   @Test def testContext = {
     val ctx = new SquerylContextManager("org.h2.Driver", "jdbc:h2:squery-test", "sa", "")
-    val ctlr = ProxyFactory.make(classOf[MockController], new Invoker(List(ctx)))
+    val ctlr = ProxyFactory.make(classOf[MockController], new Invoker(List(ctx))).asInstanceOf[MockController]
     assertNotNull(ctlr)
-    assertEquals("hello Mike", ctlr.asInstanceOf[MockController].doit("Mike"))
+    assertEquals("hello Mike", ctlr.doit("Mike"))
 //    assertEquals(None,Session.currentSession) // throws Runtime exception as expected
   }
 }
