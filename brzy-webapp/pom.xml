@@ -113,7 +113,7 @@
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
-      <version>0.3</version>
+      <version>${fab-conf-version}</version>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>

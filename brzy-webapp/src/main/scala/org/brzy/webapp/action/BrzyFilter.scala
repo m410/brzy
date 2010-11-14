@@ -42,7 +42,6 @@ class BrzyFilter extends SFilter {
     }
     else { // assume it's an action and append .brzy
       val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
-//      val webapp = req.getServletContext.getAttribute("webApp").asInstanceOf[WebApp]
       val forward =
         if(contextPath == "")
           uri.substring(0,uri.length)
@@ -50,7 +49,10 @@ class BrzyFilter extends SFilter {
           uri.substring(contextPath.length,uri.length)
       
       log.trace("forward: {}",forward)
-      req.getRequestDispatcher(forward + ".brzy").forward(req,res)
+      webapp.interceptor.doIn(() => {
+        req.getRequestDispatcher(forward + ".brzy").forward(req,res)
+        null
+      }) 
     }
   }
 

@@ -28,7 +28,6 @@ dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133", transitive: false}
   - {conf: test, org: junit, name: junit, rev: "4.8.1"}
   - {conf: test, org: org.scalatest, name: scalatest, rev: "1.2", transitive: false}
-  - {conf: test, org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
 
 modules:
   - name: brzy-tomcat

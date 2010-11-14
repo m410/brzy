@@ -25,52 +25,60 @@ import org.brzy.fab.interceptor.ManagedThreadContext
  * @author Michael Fortin
  */
 class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
-  override def invoke(itSelf: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
 
-    // nested recursive call on the threadContext
-    def traverse(it: Iterator[ManagedThreadContext]): AnyRef = {
-      val managedFactory = it.next
-      var returnValue: AnyRef = null
-      var nested = false
-
-      if (managedFactory.isManaged(itSelf)) {
-        val ctx =
-            if (managedFactory.context.value == managedFactory.empty)
-              managedFactory.createSession
-            else {
-              nested = true
-              managedFactory.context.value
-            }
-
-        try {
-          managedFactory.context.withValue(ctx) {
-            if (it.hasNext)
-              returnValue = traverse(it)
-            else
-              returnValue = m2.invoke(itSelf, args: _*)
-          }
-        }
-        finally {
-          if (!nested)
-            managedFactory.destroySession(ctx)
-        }
-      }
-      else {
-        if (it.hasNext)
-          returnValue = traverse(it)
-        else
-          returnValue = m2.invoke(itSelf, args: _*)
-
-      }
-      returnValue
-    }
-
+  def doIn(body: () => AnyRef): Unit = {
     val iterator = factories.iterator
 
     if (iterator.hasNext)
-      traverse(iterator)
+      traverse(iterator, None)(body)
     else
-      m2.invoke(itSelf, args:_*)
+      body()
   }
 
+  override def invoke(itSelf: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
+    val iterator = factories.iterator
+    val fun = {() => m2.invoke(itSelf, args: _*)}
+
+    if (iterator.hasNext)
+      traverse(iterator, Option(itSelf))(fun)
+    else
+      fun()
+  }
+
+  protected[interceptor] def traverse(it: Iterator[ManagedThreadContext], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
+    val managedFactory = it.next
+    var returnValue: AnyRef = null
+    var nested = false
+
+    if (itSelf.isEmpty || managedFactory.isManaged(itSelf.get)) {
+      val ctx =
+          if (managedFactory.context.value == managedFactory.empty)
+            managedFactory.createSession
+          else {
+            nested = true
+            managedFactory.context.value
+          }
+
+      try {
+        managedFactory.context.withValue(ctx) {
+          if (it.hasNext)
+            returnValue = traverse(it, itSelf)(target)
+          else
+            returnValue = target()
+        }
+      }
+      finally {
+        if (!nested)
+          managedFactory.destroySession(ctx)
+      }
+    }
+    else {
+      if (it.hasNext)
+        returnValue = traverse(it, itSelf)(target)
+      else
+        returnValue = target()
+
+    }
+    returnValue 
+  }
 }
