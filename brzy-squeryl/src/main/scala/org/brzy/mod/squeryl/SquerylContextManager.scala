@@ -52,6 +52,7 @@ class SquerylContextManager(driver:String, url:String, usr:String, pass:String) 
     log.trace("Destroy Session: {}",s)
     s.get.connection.commit
     s.get.close
+    context.value = empty
   }
 
   def createSession = {

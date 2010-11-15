@@ -44,6 +44,7 @@ class JpaContextManager(unitName:String) extends ManagedThreadContext {
     log.trace("destroy session: {}",s)
     s.get.getTransaction.commit
     s.get.close
+    context.value = empty/**/
   }
 }
 
