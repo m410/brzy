@@ -38,6 +38,10 @@ class IvySettingsXml(config:WebAppConf) {
     {for(repo <- repos; if(repo.id.isDefined && repo.url.isDefined)) yield
     <ibiblio m2compatible="true" name={repo.id.get} root={repo.url.get}  />
     }
+    <filesystem name="local-publish" m2compatible="true">
+      <artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+    </filesystem>
+
     <chain name="default">
       {for(repo <- repos;if(repo.id.isDefined && repo.url.isDefined)) yield
       <resolver ref={repo.id.get} />

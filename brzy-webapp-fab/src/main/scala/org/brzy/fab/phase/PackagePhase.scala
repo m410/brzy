@@ -49,7 +49,7 @@ class PackagePhase(ctx: BuildContext) {
     val webAppConfig = ctx.properties("webAppConfig").asInstanceOf[WebAppConf]
     val version = webAppConfig.application.version.get
     val artifact = webAppConfig.application.name.get
-    val destination = File(ctx.targetDir, artifact + "-" + version + ".jar")
+    val destination = File(ctx.targetDir, artifact + "-" + version + ".war")
     val source = ctx.webappDir
     Jar(source, destination, null)
     // do source, javadoc, scala doc?

@@ -15,6 +15,7 @@ package org.brzy.fab.dependency
 
 
 import org.brzy.fab.file.File
+import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.print._
 import org.brzy.fab.build.Ivy._
 import org.brzy.application.WebAppConf
@@ -38,16 +39,17 @@ import org.apache.ivy.plugins.parser.m2.{PomWriterOptions, PomModuleDescriptorWr
  * This uses Ivy to download the application dependencies place them in a local cache director
  * so the compiler and packager can access them. 
  *
- * 
+ *
  * @author Michael Fortin
  */
 object DependencyResolver {
   val retrievePattern = ".brzy/app/[conf]/[artifact]-[revision](-[classifier]).[type]"
+  val publisherPattern = "target/[artifact]-[revision](-[classifier]).[type]"
   val base = File(".brzy/app")
   val settingsFile = File(".brzy/app-ivysettings.xml")
   val ivyFile = File(".brzy/app-ivy.xml")
 
-  val resolverName = "maven-local"
+  val resolverName = "local-publish"
 
   def apply(webappConfig: WebAppConf)(implicit line: Conversation) {
 
@@ -83,8 +85,8 @@ object DependencyResolver {
    * From http://draconianoverlord.com/2010/07/18/publishing-to-maven-repos-with-ivy.html
    * In Ivy xml
    *
-   * @see  https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyMakePom.java
-   * @see https://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyPublish.java
+   * @see https ://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyMakePom.java
+   * @see https ://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyPublish.java
    */
   def publish(webappConfig: WebAppConf)(implicit line: Conversation) = {
 
@@ -92,29 +94,33 @@ object DependencyResolver {
       ivy.configure(settingsFile)
       ivy.getResolveEngine.resolve(ivyFile)
 
-      val ivyUrl = ivyFile.toURI().toURL()
-      val md = XmlModuleDescriptorParser.getInstance().parseDescriptor(ivy.getSettings, ivyUrl, false)
-      val pomFile = File(".brzy/app/compile/app.pom")
-      PomModuleDescriptorWriter.write(md, pomFile, new PomWriterOptions)
-
       val org = webappConfig.application.org.get
       val name = webappConfig.application.name.get
       val version = webappConfig.application.version.get
+
+      val ivyUrl = ivyFile.toURI().toURL()
+      val md = XmlModuleDescriptorParser.getInstance().parseDescriptor(ivy.getSettings, ivyUrl, false)
+      val pomFile = File("target/" + name + "-" + version + ".pom")
+
+      val pom = new PomWriterOptions
+      pom.setArtifactPackaging("war")
+      pom.setPrintIvyInfo(true)
+      PomModuleDescriptorWriter.write(md, pomFile, pom)
+
       val mrid = ModuleRevisionId.newInstance(org, name, version)
 
       val options = new PublishOptions()
       options.setOverwrite(true)
 
       val artifacts = new java.util.ArrayList[String]()
-      artifacts.add(retrievePattern)
-
+      artifacts.add(publisherPattern)
       ivy.getPublishEngine.publish(mrid, artifacts, resolverName, options)
       null
     })
   }
-  
+
   /**
-   *  @see https ://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyReport.java
+   * @see https ://svn.apache.org/repos/asf/ant/ivy/core/trunk/src/java/org/apache/ivy/ant/IvyReport.java
    */
   def generateReport(config: WebAppConf) = {
 
