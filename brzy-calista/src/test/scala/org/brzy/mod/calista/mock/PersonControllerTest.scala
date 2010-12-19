@@ -15,25 +15,29 @@ package org.brzy.mod.calista.mock
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.brzy.mod.calista.{Calista, CalistaContextManager}
-import com.shorrockin.calista.utils.Conversions._
 import org.junit.{Ignore, Test}
-
+import org.brzy.mod.calista.{CalistaModConf, CalistaContextManager}
+import org.brzy.calista.ocm.Calista
+import java.util.UUID
 
 class PersonControllerTest extends JUnitSuite {
-  // works but needs a running external database.
+  val keyId = UUID.randomUUID
+
   @Test @Ignore def testGet = {
-    val manager = new CalistaContextManager
+    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
+    val session = manager.createSession
+
     val controller = new PersonController
 
     val setup = manager.createSession
-    val keyId: String = "myKey"
+
 
     manager.context.withValue(setup) {
       val session = Calista.value.get
-      if (session.count("Keyspace1"\"Standard2"\keyId) == 0) {
+      import org.brzy.calista.schema.Conversions._
+      if (session.count("Standard2"|keyId) == 0) {
         println("setup data in space")
-        session.insert("Keyspace1"\"Standard2"\keyId\"firstName"\"Bob")
+        session.insert("Standard2"|keyId|("firstName","Bob"))
       }
     }
     manager.destroySession(setup)

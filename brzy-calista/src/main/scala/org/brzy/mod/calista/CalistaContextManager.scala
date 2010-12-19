@@ -17,18 +17,18 @@ import org.brzy.calista.Session
 import org.brzy.calista.SessionManager
 
 import org.brzy.fab.interceptor.ManagedThreadContext
-import util.DynamicVariable
+import org.brzy.calista.ocm.Calista
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-class CalistaContextManager(host:String = "localhost") extends ManagedThreadContext {
+class CalistaContextManager(c:CalistaModConf) extends ManagedThreadContext {
 	type T = Option[Session]
   val empty:T = None
   val context = Calista
-	val sessionManager = new SessionManager()
+	val sessionManager = new SessionManager(keyspace = c.keySpace.get,url = c.host.get,port = c.port.get)
 
   def destroySession(target: Option[Session]) = {
 		target.get.close
@@ -37,8 +37,3 @@ class CalistaContextManager(host:String = "localhost") extends ManagedThreadCont
 
   def createSession = Option(sessionManager.createSession)
 }
-
-/**
- * Document Me..
- */
-object Calista extends DynamicVariable(Option[Session](null))

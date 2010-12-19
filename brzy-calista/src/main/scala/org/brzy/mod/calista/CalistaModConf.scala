@@ -25,13 +25,17 @@ class CalistaModConf(override val map: Map[String, AnyRef]) extends PersistenceM
   val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
   val password: Option[String] = map.get("password").asInstanceOf[Option[String]].orElse(None)
   val keySpace: Option[String] = map.get("key_space").asInstanceOf[Option[String]].orElse(None)
-  
+  val host: Option[String] = map.get("host").asInstanceOf[Option[String]].orElse(None)
+  val port: Option[Int] = map.get("port").asInstanceOf[Option[Int]].orElse(Option(9160))
+
   override def <<(that: BaseConf) = {
     if (that == null) {
       this
     }
     else  {
       new CalistaModConf(Map[String, AnyRef](
+        "host" -> that.map.getOrElse("host",this.host.orNull),
+        "port" -> that.map.getOrElse("port",this.port),
         "user_name" -> that.map.getOrElse("user_name",this.userName.orNull),
         "password" -> that.map.getOrElse("password",this.password.orNull),
         "key_space" -> that.map.getOrElse("key_space",this.keySpace.orNull))

@@ -15,11 +15,12 @@ package org.brzy.mod.calista.mock
 
 import org.brzy.webapp.controller.{Action, Controller}
 import org.brzy.webapp.action.args.Parameters
+import java.util.UUID
 
 @Controller("persons")
 class PersonController {
 
   @Action("") def list =  {}
-  @Action("{id}") def show(p:Parameters) = "person"->Person.get(p("id"))
+  @Action("{id}") def show(p:Parameters) = "person"->Person.get(UUID.fromString(p("id")))
 
 }

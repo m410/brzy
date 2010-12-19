@@ -15,20 +15,18 @@ package org.brzy.mod.calista
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import com.shorrockin.calista.session._
-import com.shorrockin.calista.utils.Conversions._
 import org.junit.{Ignore, Test}
+import org.brzy.calista.SessionManager
 
 
 class ConnectionTest extends JUnitSuite {
   // needs to have the database running to work
   @Test @Ignore def testConnect = {
-    val hosts = Host("localhost", 9160, 250) :: Nil
-    val params = new PoolParams(10, ExhaustionPolicy.Fail, 500L, 6, 2)
-    val pool = new SessionPool(hosts, params, Consistency.One)
+    import org.brzy.calista.schema.Conversions._
+    val manager = new SessionManager()
 
-    pool.borrow { session =>
-      assertEquals(0,session.count("Keyspace1" \ "Standard2" \ "1"))
+    manager.doWith { session =>
+      assertEquals(0,session.count("Standard2"|"1"))
     }
   }
 }

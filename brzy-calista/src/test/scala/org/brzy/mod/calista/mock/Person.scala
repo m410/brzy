@@ -13,36 +13,23 @@
  */
 package org.brzy.mod.calista.mock
 
-import org.brzy.mod.calista.Calista
+import org.brzy.calista.ocm.{ColumnMapping, Dao, KeyedEntity,Attribute}
+import java.util.UUID
+import org.brzy.calista.serializer.{UuidType, Utf8Type}
 
 /**
  *
  */
-case class Person extends KeyedEntity(
-    key:String,
-		firstName:String)
+case class Person (key:UUID, firstName:String)extends KeyedEntity[UUID]
 
 /**
  *
  */
-object Person {
-	
-	def session = Calista.value.get
-	
-  def get(keyId:String):Person = {
-		val columns = session.list(mapper.family | keyId)
-
-		if(columns.size > 0)
-    	Option(mapper.newInstance(columns))
-		else
-			Option(null)
-  }
-
-	def save(p:Person) = session.batch(mapper.toMutations(p))
-	
-
-	val mapper = new Mapper[Person](family="Standard2",key="key")
-			.attributes(nameSerializer=Utf8Type, columns=List(
-				Column(property="firstName", column="firstName", valueSerializer=Utf8Type)))
+object Person extends Dao[UUID,Person]{
+  def columnMapping = new ColumnMapping[Person]()
+      .attributes(Utf8Type,Array(
+        Attribute("key",true,UuidType),
+        Attribute("firstName")
+      ))
 }
 

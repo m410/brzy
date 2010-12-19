@@ -15,69 +15,44 @@ package org.brzy.mod.calista
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-
-// import com.shorrockin.calista.serialization.Converter
-// import com.shorrockin.calista.session.Insert
-// import com.shorrockin.calista.utils.Conversions._
-// import com.shorrockin.calista.serialization.annotations._
-
-import collection.mutable.{ListBuffer, ArrayBuffer}
-import java.lang.reflect.Method
-import java.util.{Arrays, UUID, Date}
-
-//import org.apache.cassandra.service.EmbeddedCassandraService
-
 import org.junit._
 
+import java.util.{UUID, Date}
+import org.brzy.calista.ocm.{KeyedEntity, ColumnMapping, Dao, Attribute,Calista}
+import org.brzy.calista.serializer.{DateType, UuidType, Utf8Type}
+
 class PersistenceTest extends JUnitSuite {
-  val key = "9fb38a59-c239-44a0-9d8e-7fa09044823b"
-  val insertKey = "9fb38a59-c239-44a0-9d8e-7fa090448333"
-//  var thread:Thread = _
+  val key = UUID.randomUUID
+  val insertKey = UUID.randomUUID
+  import org.brzy.calista.schema.Conversions._
 
-//  @Before def startup = {
-//    println("### startup")
-//    System.setProperty("storage-config", "cassandra")
-//    val cassandra = new EmbeddedCassandraService
-//    cassandra.init
-//    thread = new Thread(cassandra)
-//    thread.setDaemon(true)
-//    thread.start()
-//  }
 //
-//  @After def shutdown = {
-//    println("### shutdown")
+//  @Test @Ignore def testGetObject = {
+//    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
+//    val session = manager.createSession
+//    manager.context.withValue(session) {
+//      val s = Calista.value.get
 //
+//      if (s.count(Person.family | key) < 3) {
+//        val firstColumn = Insert(Person.family | key |("firstName" , "Fred"))
+//        val lastColumn = Insert(Person.family | key |("lastName", "Doe"))
+//        val createdColumn = Insert(Person.family | key |("created", new Date))
+//        s.batch(firstColumn :: lastColumn :: createdColumn)
+//      }
+//      val person = Person.get(key)
+//      assertNotNull(person)
+//    }
+//    manager.destroySession(session)
 //  }
-
-  @Test @Ignore def testGetObject = {
-    val manager = new CalistaContextManager
-    val session = manager.createSession
-
-    manager.context.withValue(session) {
-      val s = Calista.value.get
-      
-      if (s.count(Person.keyspace \ Person.family \ key) < 3) {
-        val firstColumn = Insert(Person.keyspace \ Person.family \ key \ "firstName" \ "Fred")
-        val lastColumn = Insert(Person.keyspace \ Person.family \ key \ "lastName" \ "Doe")
-        val createdColumn = Insert(Person.keyspace \ Person.family \ key \ "created" \ new Date)
-        s.batch(firstColumn :: lastColumn :: createdColumn)
-      }
-      val person = Person.get(key)
-      assertNotNull(person)
-    }
-    manager.destroySession(session)
-  }
 
   @Test @Ignore def testSaveObject = {
-    val manager = new CalistaContextManager
-
-    // check if it's in from a previous test
+    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
     val session = manager.createSession
     manager.context.withValue(session) {
       val s = Calista.value.get
 
-      if(s.count(Person.keyspace \ Person.family \ insertKey) > 1) {
-        s.remove(Person.keyspace \ Person.family \ insertKey)
+      if(s.count(Person.family | insertKey) > 1) {
+        s.remove(Person.family | insertKey)
         println("removed key")
       }
     }
@@ -87,9 +62,9 @@ class PersistenceTest extends JUnitSuite {
     val session2 = manager.createSession
     manager.context.withValue(session2) {
       val s = Calista.value.get
-      assertTrue(s.count(Person.keyspace \ Person.family \ insertKey) == 0)
+      assertTrue(s.count(Person.family | insertKey) == 0)
       val person = Person(insertKey, "Fred", "Smith", new Date)
-      Person.insert(person)
+      person.save
     }
     manager.destroySession(session2)
 
@@ -97,47 +72,35 @@ class PersistenceTest extends JUnitSuite {
     val session3 = manager.createSession
     manager.context.withValue(session3) {
       val s = Calista.value.get
-      val count = s.count(Person.keyspace \ Person.family \ insertKey)
+      val count = s.count(Person.family | insertKey)
       println("count=" + count)
       assertTrue(count == 3) // todo ????
     }
     manager.destroySession(session3)
   }
 
-  @Test @Ignore def countObject = {
-    val manager = new CalistaContextManager
-    val session = manager.createSession
-    manager.context.withValue(session) {
-      val count = Person.count(insertKey)
-      assertNotNull(count)
-      assertEquals(3,count) //?
-    }
-    manager.destroySession(session)
-  }
+//  @Test @Ignore def countObject = {
+//    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
+//    val session = manager.createSession
+//
+//    manager.context.withValue(session) {
+//      val count = Person.count(insertKey)
+//      assertNotNull(count)
+//      assertEquals(3,count) //?
+//    }
+//    manager.destroySession(session)
+//  }
 }
 
-@Keyspace("Keyspace1")
-@Family("Standard2")
-case class Person(@Key val id: UUID,
-    @Value("firstName") val firstName: String,
-    @Value("lastName") val lastName: String,
-    @Value("created") val created: Date)
+case class Person(key: UUID, firstName: String, lastName: String, created: Date)
+        extends KeyedEntity[UUID]
 
-object Person {
-  val keyspace: String = "Keyspace1"
-  val family: String = "Standard2"
-
-  def get(key: String): Person = Converter[Person](Calista.value.get.list(keyspace \ family \ key))
-
-  def insert(person: Person) = {
-    val buffer = new ListBuffer[Insert]()
-    val key = person.id
-    buffer += Insert(keyspace \ family \ key \ "firstName" \ person.firstName)
-    buffer += Insert(keyspace \ family \ key \ "lastName" \ person.lastName)
-    buffer += Insert(keyspace \ family \ key \ "created" \ person.created)
-    Calista.value.get.batch(buffer.toSeq)
-  }
-
-  def count(key:String) = Calista.value.get.count(Person.keyspace \ Person.family \ key)
-  
+object Person extends Dao[UUID,Person]{
+  val columnMapping = new ColumnMapping[Person]()
+      .attributes(Utf8Type,Array(
+        Attribute("key",true, UuidType),
+        Attribute("firstName"),
+        Attribute("lastName"),
+        Attribute("created",false,DateType)))
+  val family = columnMapping.family
 }

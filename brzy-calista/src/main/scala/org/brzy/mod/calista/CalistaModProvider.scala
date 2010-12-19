@@ -23,5 +23,5 @@ import org.brzy.fab.interceptor.InterceptorProvider
  */
 class CalistaModProvider(c:CalistaModConf) extends ModProvider with InterceptorProvider {
   val name = c.name.get
-  def interceptor = new CalistaContextManager
+  def interceptor = new CalistaContextManager(c)
 }
