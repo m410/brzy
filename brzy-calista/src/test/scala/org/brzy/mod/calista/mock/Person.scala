@@ -15,7 +15,7 @@ package org.brzy.mod.calista.mock
 
 import org.brzy.calista.ocm.{ColumnMapping, Dao, KeyedEntity,Attribute}
 import java.util.UUID
-import org.brzy.calista.serializer.{UuidType, Utf8Type}
+import org.brzy.calista.serializer.{UUIDSerializer, UTF8Serializer}
 
 /**
  *
@@ -27,8 +27,8 @@ case class Person (key:UUID, firstName:String)extends KeyedEntity[UUID]
  */
 object Person extends Dao[UUID,Person]{
   def columnMapping = new ColumnMapping[Person]()
-      .attributes(Utf8Type,Array(
-        Attribute("key",true,UuidType),
+      .attributes(UTF8Serializer,Array(
+        Attribute("key",true,UUIDSerializer),
         Attribute("firstName")
       ))
 }

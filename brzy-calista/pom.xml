@@ -13,7 +13,7 @@
     <version>0.7</version>
   </parent>
   <properties>
-    <calista-version>0.2</calista-version>
+    <calista-version>0.3-SNAPSHOT</calista-version>
   </properties>
   <build>
     <plugins>

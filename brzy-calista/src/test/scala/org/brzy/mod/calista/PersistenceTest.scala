@@ -19,7 +19,7 @@ import org.junit._
 
 import java.util.{UUID, Date}
 import org.brzy.calista.ocm.{KeyedEntity, ColumnMapping, Dao, Attribute,Calista}
-import org.brzy.calista.serializer.{DateType, UuidType, Utf8Type}
+import org.brzy.calista.serializer.{DateSerializer, UUIDSerializer, UTF8Serializer}
 
 class PersistenceTest extends JUnitSuite {
   val key = UUID.randomUUID
@@ -97,10 +97,10 @@ case class Person(key: UUID, firstName: String, lastName: String, created: Date)
 
 object Person extends Dao[UUID,Person]{
   val columnMapping = new ColumnMapping[Person]()
-      .attributes(Utf8Type,Array(
-        Attribute("key",true, UuidType),
+      .attributes(UTF8Serializer,Array(
+        Attribute("key",true, UUIDSerializer),
         Attribute("firstName"),
         Attribute("lastName"),
-        Attribute("created",false,DateType)))
+        Attribute("created",false,DateSerializer)))
   val family = columnMapping.family
 }

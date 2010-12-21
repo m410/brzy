@@ -7,11 +7,9 @@ org: org.brzy
 version: "0.2"
 config_class: org.brzy.mod.calista.CalistaModConf
 provider_class: org.brzy.mod.calista.CalistaModProvider
-defaultKeySpace: Keyspace1
-defaultKeyFamily: Standard1
+key_space: Keyspace1
 dependencies:
-  - {conf: compile, org: com.shorrockin, name: calista, rev: "1.1"}
-  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
+  - {conf: compile, org: org.brzy, name: calista, rev: "0.3-SNAPSHOT"}
   - {conf: compile, org: org.brzy, name: brzy-calista, rev: "0.2", transitive: false}
 repositories:
   - id: "shorrockin"

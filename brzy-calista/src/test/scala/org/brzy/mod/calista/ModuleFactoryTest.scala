@@ -27,7 +27,7 @@ class ModuleFactoryTest extends JUnitSuite {
     config.persistence.foreach( p => {
       val calista = p.asInstanceOf[CalistaModConf]
       assertEquals("Keyspace1", calista.keySpace.get)
-      assertEquals(3,calista.dependencies.get.size)
+      assertEquals(2,calista.dependencies.get.size)
     })
   }
 }

@@ -7,11 +7,7 @@ org: org.brzy
 version: "${pom.version}"
 config_class: org.brzy.mod.calista.CalistaModConf
 provider_class: org.brzy.mod.calista.CalistaModProvider
-defaultKeySpace: Keyspace1
-defaultKeyFamily: Standard1
+key_space: Test
 dependencies:
-  - {conf: compile, org: com.shorrockin, name: calista, rev: "${calista-version}"}
+  - {conf: compile, org: org.brzy, name: calista, rev: "${calista-version}"}
   - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "${pom.version}", transitive: false}
-repositories:
-  - id: "shorrockin"
-    url: http://maven.shorrockin.com/

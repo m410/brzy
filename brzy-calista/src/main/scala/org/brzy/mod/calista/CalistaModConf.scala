@@ -35,7 +35,7 @@ class CalistaModConf(override val map: Map[String, AnyRef]) extends PersistenceM
     else  {
       new CalistaModConf(Map[String, AnyRef](
         "host" -> that.map.getOrElse("host",this.host.orNull),
-        "port" -> that.map.getOrElse("port",this.port),
+        "port" -> that.map.getOrElse("port",Integer.valueOf(9160)),
         "user_name" -> that.map.getOrElse("user_name",this.userName.orNull),
         "password" -> that.map.getOrElse("password",this.password.orNull),
         "key_space" -> that.map.getOrElse("key_space",this.keySpace.orNull))

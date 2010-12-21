@@ -24,14 +24,15 @@ import org.brzy.calista.ocm.Calista
  *
  * @author Michael Fortin
  */
-class CalistaContextManager(c:CalistaModConf) extends ManagedThreadContext {
-	type T = Option[Session]
-  val empty:T = None
+class CalistaContextManager(c: CalistaModConf) extends ManagedThreadContext {
+  type T = Option[Session]
+  val empty: T = None
   val context = Calista
-	val sessionManager = new SessionManager(keyspace = c.keySpace.get,url = c.host.get,port = c.port.get)
+
+  val sessionManager = new SessionManager(keyspace = c.keySpace.get, url = c.host.get, port = c.port.get)
 
   def destroySession(target: Option[Session]) = {
-		target.get.close
+    target.get.close
     context.value = empty
   }
 
