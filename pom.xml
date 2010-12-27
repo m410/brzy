@@ -6,17 +6,12 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-webapp</artifactId>
   <name>Brzy WebApp</name>
-  <version>0.8-SNAPSHOT</version>
+  <version>0.8</version>
   <parent>
-    <groupId>org.brzy.archetype</groupId>
-    <artifactId>brzy-archetype</artifactId>
-    <version>0.2</version>
+    <groupId>org.brzy</groupId>
+    <artifactId>brzy</artifactId>
+    <version>0.8</version>
   </parent>
-	<!-- <scm>
-		<connection>scm:git:git@github.com:m410/brzy-archetype.git</connection>
-		<url>scm:git:git@github.com:m410/brzy-archetype.git</url>
-		<developerConnection>scm:git:git@github.com:m410/brzy-archetype.git</developerConnection>	
-	  </scm> -->
   <build>
     <resources>
       <resource>
