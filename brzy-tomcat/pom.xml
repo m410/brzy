@@ -14,9 +14,6 @@
   </parent>
   <properties>
     <tomcat-version>6.0.29</tomcat-version>
-    <fab-conf-version>0.3</fab-conf-version>
-    <fab-util-version>0.3</fab-util-version>
-    <brzy-webapp-version>0.7</brzy-webapp-version>
   </properties>
   <build>
     <plugins>

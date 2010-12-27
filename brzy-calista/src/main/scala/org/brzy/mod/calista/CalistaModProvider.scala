@@ -15,6 +15,7 @@ package org.brzy.mod.calista
 
 import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
+import org.slf4j.LoggerFactory
 
 /**
  * Document Me..
@@ -22,6 +23,16 @@ import org.brzy.fab.interceptor.InterceptorProvider
  * @author Michael Fortin
  */
 class CalistaModProvider(c:CalistaModConf) extends ModProvider with InterceptorProvider {
+  val log = LoggerFactory.getLogger(classOf[CalistaModProvider])
   val name = c.name.get
   def interceptor = new CalistaContextManager(c)
+
+  override def startup = {
+    log.info("Cassandra Version: {}",interceptor.sessionManager.version)
+    log.info("Cassandra Cluster Name: {}",interceptor.sessionManager.clusterName)
+    log.info("Cassandra Keyspace: {}",interceptor.sessionManager.keyspaceDefinition)
+//    if(c.createSchema) {
+//      log.info("Creating Schema for keyspace {}",c.keySpace)
+//    }
+  }
 }
