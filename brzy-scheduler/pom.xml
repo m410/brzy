@@ -6,11 +6,11 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-scheduler</artifactId>
   <name>Brzy Scheduler Module</name>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6</version>
   <parent>
-    <groupId>org.brzy.mod</groupId>
-    <artifactId>brzy-modules</artifactId>
-    <version>0.7</version>
+    <groupId>org.brzy</groupId>
+    <artifactId>brzy</artifactId>
+    <version>0.8</version>
   </parent>
   <build>
     <plugins>

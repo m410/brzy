@@ -6,14 +6,14 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-scalate</artifactId>
   <name>Brzy Scalate Module</name>
-  <version>0.8-SNAPSHOT</version>
+  <version>0.8</version>
   <parent>
-    <groupId>org.brzy.mod</groupId>
-    <artifactId>brzy-modules</artifactId>
-    <version>0.7</version>
+    <groupId>org.brzy</groupId>
+    <artifactId>brzy</artifactId>
+    <version>0.8</version>
   </parent>
   <properties>
-    <scalate-version>1.3.1</scalate-version>
+    <scalate-version>1.3.2</scalate-version>
   </properties>
   <build>
     <plugins>

@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory
  * 
  * @author Michael Fortin
  */
-case class Action[F <: Function[_] :Manifest](path:String, action:F) {
+case class Action[F <: Function[_,_] :Manifest](path:String, action:F) {
   val log = LoggerFactory.getLogger(classOf[Action[_]])
   val manifestObject = manifest[F]
-  log.debug(manifestObject)
+  log.debug(manifestObject.toString)
 }
