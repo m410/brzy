@@ -1,8 +1,5 @@
-<%  import org.brzy.webapp.view.ViewFunctions._
-import org.brzy.application.WebApp
-import scala.collection.JavaConversions._
-import javax.servlet.http.HttpServletRequest %>
-<%implicit val req = request %>
+<% import org.brzy.application.WebApp %>
+import scala.collection.JavaConversions._ %>
 <!DOCTYPE html>
 <html lang="en">
 <head>

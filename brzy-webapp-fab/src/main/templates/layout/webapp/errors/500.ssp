@@ -1,5 +1,3 @@
-<%  import org.brzy.webapp.view.ViewFunctions._  %>
-<% implicit val req = request %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,21 +11,21 @@
 	<link rel="stylesheet" href="${css("/brzy.css")}" type="text/css" media="screen, projection">
 </head>
 <body>
-	<div id="background">
-		<div id="wrapper">
-			<div id="wrapper2">
-			<div class="container">
-				<header class="span-24 bot-border">
-					<h1>Brzy App</h1>
-				</header>
-				<nav class="bot-border">
-					Navigation:
-				</nav>
-				<h1>Brzy App: ERROR 500</h1>
-				<p>Error page</p>
-			</div>
-		</div>
-	</div>
+<div id="background">
+<div id="wrapper">
+<div id="wrapper2">
+<div class="container">
+    <header class="span-24 bot-border">
+        <h1>Brzy App</h1>
+    </header>
+    <nav class="bot-border">
+        Navigation:
+    </nav>
+    <h1>Brzy App: ERROR 500</h1>
+    <p>Error page</p>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

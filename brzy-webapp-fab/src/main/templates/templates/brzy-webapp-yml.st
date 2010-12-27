@@ -12,8 +12,8 @@ application:
 
 persistence:
   - name: brzy-squeryl
-    org: org.brzy
-    version: "0.8"
+    org: org.brzy.mod
+    version: "0.9"
     driver: org.h2.Driver
     user_name: sa
     password: ""

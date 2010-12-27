@@ -24,10 +24,7 @@ import org.brzy.application.WebAppConf
  */
 class IvySettingsXml(config:WebAppConf) {
   private val repos = config.repositories.toList
-/* <filesystem name="libraries">
-      <artifact pattern="${ivy.project.dir}/lib/[artifact]-[revision](-[classifier]).[ext]" />
-    </filesystem>
-      <resolver ref="libraries"/> */
+
   val xml =
 <ivysettings>
   <property name="revision" value="SNAPSHOT" override="false"/>
