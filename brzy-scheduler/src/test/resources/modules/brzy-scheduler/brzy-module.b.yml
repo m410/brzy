@@ -1,0 +1,9 @@
+#
+# squeryl object relational persistence
+#
+mod_type: runtime
+name: brzy-scheduler
+org: org.brzy
+version: "0.2"
+config_class: org.brzy.mod.scheduler.SchedulerModConfig
+provider_class: org.brzy.mod.scheduler.SchedulerModProvider

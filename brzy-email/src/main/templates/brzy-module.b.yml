@@ -1,0 +1,22 @@
+#
+#
+mod_type: runtime
+name: brzy-email
+org: org.brzy
+version: "${pom.version}"
+config_class: org.brzy.mod.email.EmailModConfig
+provider_class: org.brzy.mod.email.EmailModProvider
+
+smtp_host: localhost
+smtp_auth: false
+#user_name:
+#password:
+#mail_from:
+#mail_user:
+#mail_store_protocol:
+mail_transport_protocol: smtp
+mail_debug: false
+
+dependencies:
+  - {conf: compile, org: javax.mail, name: mail, rev: "1.4"}
+  - {conf: compile, org: org.brzy, name: brzy-email, rev: "${pom.version}", transitive: false}

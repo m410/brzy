@@ -1,0 +1,11 @@
+#
+#
+mod_type: runtime
+name: brzy-scheduler
+org: org.brzy
+version: "${pom.version}"
+config_class: org.brzy.mod.scheduler.SchedulerModConfig
+provider_class: org.brzy.mod.scheduler.SchedulerModProvider
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-scheduler, rev: "${pom.version}", transitive: false}

@@ -1,0 +1,16 @@
+#
+# hibernate persistence
+#
+mod_type: runtime
+name: brzy-jpa
+org: org.brzy
+version: "${pom.version}"
+config_class: org.brzy.mod.jpa.JpaModConfig
+provider_class: org.brzy.mod.jpa.JpaModProvider
+persistence_unit: brzy-webapp-persistence
+
+dependencies:
+  - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "${hibernate-version}"}
+  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "${validator-version}"}
+  - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}
+

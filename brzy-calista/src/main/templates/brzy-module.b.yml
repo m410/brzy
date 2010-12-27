@@ -1,0 +1,13 @@
+#
+# implement persistence for the cassandra nosql db
+#
+mod_type: persistence
+name: brzy-calista
+org: org.brzy
+version: "${pom.version}"
+config_class: org.brzy.mod.calista.CalistaModConf
+provider_class: org.brzy.mod.calista.CalistaModProvider
+key_space: Test
+dependencies:
+  - {conf: compile, org: org.brzy, name: calista, rev: "${calista-version}"}
+  - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "${pom.version}", transitive: false}

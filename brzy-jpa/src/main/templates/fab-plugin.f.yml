@@ -1,0 +1,28 @@
+plugins:
+  - name: brzy-jpa
+    description: Generate JPA Domain Class
+    source_file: .brzy/modules/brzy-jpa/BrzyJpaPlugin.scala
+    class_name: BrzyJpaPlugin
+    tasks:
+      - name: jpa-domain
+        method_name: createJpaDomain
+        description: Generate A JPA Domain Class
+        takes_args: true
+    dependencies:
+      - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
+    repositories:
+      - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
+
+  - name: brzy-jpa-default
+    description: Adds dependencies and persistence.xml parsing to the default interpreter scope.
+    dependencies_in_default_scope: true
+    source_file: .brzy/modules/brzy-jpa/BrzyJpaPersistencePlugin.scala
+    class_name: BrzyJpaPersistencePlugin
+    member_of_phase: compile
+    tasks:
+      - name: persistence-xml
+        method_name: genPersistenceXml
+        description: Generate A JPA persistence xml config
+        belongs: pre-package
+    dependencies:
+      - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}

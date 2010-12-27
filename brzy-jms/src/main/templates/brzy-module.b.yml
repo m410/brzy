@@ -1,0 +1,17 @@
+#
+#
+mod_type: runtime
+name: brzy-jms
+org: org.brzy
+version: "${pom.version}"
+config_class: org.brzy.mod.jms.JmsModConfig
+provider_class: org.brzy.mod.jms.JmsModProvider
+
+#connection_factory_class:
+#broker_url:
+#user_name:
+#password:
+#scan_package: 
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-jms, rev: "${pom.version}", transitive: false}

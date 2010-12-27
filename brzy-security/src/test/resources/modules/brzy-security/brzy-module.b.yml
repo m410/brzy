@@ -1,0 +1,21 @@
+#
+#
+mod_type: runtime
+name: brzy-security
+org: org.brzy
+version: "0.2"
+config_class: org.brzy.mod.security.SecurityModConfig
+provider_class: org.brzy.mod.security.SecurityModProvider
+
+authority_entity: Person
+user_entity:
+user_entity_name:
+user_entity_pass:
+algorithm:
+default_path: /security/authentication
+authority_field:
+
+dependencies:
+  - {conf: compile, org: org.brzy, name: brzy-security, rev: "0.2", transitive: false}
+
+web_xml:

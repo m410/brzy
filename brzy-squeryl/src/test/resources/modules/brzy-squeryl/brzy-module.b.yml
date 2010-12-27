@@ -1,0 +1,16 @@
+#
+# squeryl object relational persistence
+#
+mod_type: persistence
+name: brzy-squeryl
+org: org.brzy
+version: "0.2"
+config_class: org.brzy.mod.squeryl.SquerylModConfig
+provider_class: org.brzy.mod.squeryl.SquerylModProvider
+dependencies:
+  - {conf: compile, org: org.squeryl, name: squeryl_2.8.0, rev: "0.9.4beta8"}
+  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
+  - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.2"}
+repositories:
+  - id: "fusesource.m2"
+    url: http://repo.fusesource.com/nexus/content/repositories/public

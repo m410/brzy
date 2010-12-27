@@ -1,0 +1,23 @@
+#
+# scalate view pages
+#
+mod_type: view
+name: brzy-scalate
+org: org.brzy.mod
+version: "${pom.version}"
+file_extension: ".ssp"
+config_class: org.brzy.mod.scalate.ScalateModConfig
+provider_class: org.brzy.mod.scalate.ScalateModProvider
+dependencies:
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "${scalate-version}", transitive: false}
+  - {conf: compile, org: org.brzy.mod, name: brzy-scalate, rev: "${pom.version}", transitive: false}
+repositories:
+  - id: fusesource.m2
+    url: http://repo.fusesource.com/nexus/content/repositories/snapshots
+web_xml:
+  - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.fusesource.scalate.servlet.TemplateEngineServlet", load-on-startup: "1"}
+  - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.ssp"}
+  - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.scaml"}
+  - error-page: { error-code: "404", location: "/errors/404.ssp"}
+  - error-page: { error-code: "500", location: "/errors/500.ssp"}
+  - error-page: {exception-type: java.lang.Throwable, location: "/errors/500.ssp"}

@@ -1,0 +1,21 @@
+plugins:
+  - name: brzy-calista
+    description: Generate Cassandra Access Domain
+    source_file: .brzy/modules/brzy-calista/BrzyCalistaPlugin.scala
+    class_name: BrzyCalistaPlugin
+    tasks:
+      - name: calista-domain
+        method_name: calistaDomain
+        description: Generate a calista domain class
+        takes_args: true
+    dependencies:
+      - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
+    repositories:
+      - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
+
+  - name: brzy-scalate-default
+    description: Adds dependencies to the default interpreter scope.
+    dependencies_in_default_scope: true
+    member_of_phase: compile
+    dependencies:
+      - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "${pom.version}", transitive: false}
