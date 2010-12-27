@@ -173,9 +173,13 @@ object Action {
          log.debug("forward: {}",f)
          req.getRequestDispatcher(f.contextPath).forward(req,res)
        case s:Redirect =>
-         val target: String = req.getContextPath + s.path
          log.debug("redirect: {}",s)
-         res.sendRedirect(req.getContextPath + target)
+         val target: String =
+           if(s.path.startsWith("http"))
+             s.path
+           else
+            req.getContextPath + s.path
+         res.sendRedirect(target)
        case s:Error =>
          log.debug("Error: {}",s)
          res.sendError(s.code,s.msg)

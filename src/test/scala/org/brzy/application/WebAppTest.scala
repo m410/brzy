@@ -35,6 +35,6 @@ class WebAppTest extends JUnitSuite {
     assertEquals(2, webapp.controllers.size)
 
     assertNotNull(webapp.actions)
-    assertEquals(17, webapp.actions.size)
+    assertEquals(18, webapp.actions.size)
   }
 }

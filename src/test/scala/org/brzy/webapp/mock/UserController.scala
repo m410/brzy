@@ -32,6 +32,8 @@ class UserController {
 
   @Action("xml") def xml = Xml(this)
 
+  @Action("redirect") def redirect = Redirect("http://o2l.co")
+
   @Action("json") def json = {
     val user = new MockUser()
     user.id = 1
