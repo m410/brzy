@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-calista</artifactId>
   <name>Brzy Calista Module</name>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>

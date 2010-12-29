@@ -1,5 +1,7 @@
-<% import org.brzy.application.WebApp %>
-import scala.collection.JavaConversions._ %>
+<% escapeMarkup = false %>
+<% attributes("layout") = "/layouts/default.ssp" %>
+<% attributes("title") = "Home" %>
+<%@ import org.brzy.application.WebApp %>
 <!DOCTYPE html>
 <html lang="en">
 <head>

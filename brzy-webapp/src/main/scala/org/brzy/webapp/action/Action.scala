@@ -171,7 +171,7 @@ object Action {
          req.getRequestDispatcher(target).forward(req,res)
        case f:Forward =>
          log.debug("forward: {}",f)
-         req.getRequestDispatcher(f.contextPath).forward(req,res)
+         req.getRequestDispatcher(f.path).forward(req,res)
        case s:Redirect =>
          log.debug("redirect: {}",s)
          val target: String =
