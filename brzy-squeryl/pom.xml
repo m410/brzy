@@ -76,7 +76,7 @@
     </dependency>
     <dependency>
       <groupId>org.squeryl</groupId>
-      <artifactId>squeryl_2.8.0</artifactId>
+      <artifactId>squeryl_2.8.1</artifactId>
       <version>${squeryl-version}</version>
       <exclusions>
         <exclusion>

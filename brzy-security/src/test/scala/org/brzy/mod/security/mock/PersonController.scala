@@ -15,14 +15,11 @@ package org.brzy.mod.security.mock
 
 import org.brzy.mod.security.Secured
 import org.brzy.webapp.action.args.Parameters
-import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.controller.{Secured, Controller}
+import org.brzy.webapp.action.Action
 
-
-@Controller("persons")
-@Secured(Array("ROLE_USER","ROLE_ADMIN"))
-class PersonController {
-
-  @Action("") def list =  {}
-  @Action("{id}") def show(p:Parameters) = "person"->Person.get(p("id"))
-
+class PersonController extends Controller("persons") with Secured {
+  val actions = List(Action("","list",list _),Action("{id}","show",show _))
+  def list =  {}
+  def show(p:Parameters) = "person"->Person.get(p("id"))
 }

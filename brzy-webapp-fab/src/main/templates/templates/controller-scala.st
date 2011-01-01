@@ -1,11 +1,14 @@
 package $package$
 
-import org.brzy.webapp.controller.{Action,Controller}
-import org.brzy.webapp.action.returns.View
+import org.brzy.webapp.controller.Controller
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.returns._
+import org.brzy.webapp.action.args._
 
 /**
+ *
  */
-@Controller("")
-class $className$ {
-  @Action("") def index = View("/index")
+class $className$ extends Controller("$className$s"){
+  val actions = List(Action("","index", index _))
+  def index = "name" -> "value"
 }

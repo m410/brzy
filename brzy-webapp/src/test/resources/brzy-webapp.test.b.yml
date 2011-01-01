@@ -37,8 +37,8 @@ dependencies:
   - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
   - {conf: compile, org: org.jyaml, name: jyaml, rev: "1.3"}
   - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
-  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.24",transitive: false}
-  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "0.9.24",transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "${logback-version}",transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "${logback-version}",transitive: false}
   - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
 
 web_xml:

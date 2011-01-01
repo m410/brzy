@@ -20,12 +20,10 @@ import org.scalatest.junit.JUnitSuite
 
 
 class ControllerScannerTest extends JUnitSuite {
-
-  val scanner = new ControllerScanner("org.brzy.webapp.mock")
-
-  @Test
-  def testControllerScanner = {
+  @Test  def testControllerScanner = {
+    val scanner = ControllerScanner("org.brzy.webapp.mock")
     val result = scanner.controllers
+    println(result)
     assertNotNull(result)
     assertEquals(2,result.size)
   }

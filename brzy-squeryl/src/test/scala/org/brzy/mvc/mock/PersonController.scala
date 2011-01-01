@@ -13,33 +13,33 @@
  */
 package org.brzy.mock
 
-import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.controller.Controller
+import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.args.Parameters
 
-@Controller("persons")
-class PersonController {
+class PersonController extends Controller("persons"){
+  val actions = List(
+    Action("","list",list _),
+    Action("{id}","view",get _),
+    Action("create","form",create _),
+    Action("save","form",save _),
+    Action("{id}/edit","form",edit _),
+    Action("{id}/update","form",update _))
 
-  @Action("")
   def list =  "personsList"->Person.list()
 
-  @Action("{id}")
   def get(params:Parameters) =  "person"->Person.get(params("id").toLong)
 
-  @Action("create")
   def create() = "person"->new Person
 
-  @Action("save")
   def save(p:Parameters) = {
     val person = new Person(0, p("firstName"), p("lastName"))
 		person.insert()
     "person"->person
   }
 
-  @Action("{id}/edit")
   def edit(params:Parameters) =  "person"->Person.get(params("id").toLong)
 
-
-  @Action("{id}/update")
   def update(p:Parameters) = {
 		val person = new Person(p("id")(0).toLong, p("firstName"), p("lastName"))
 		person.update()

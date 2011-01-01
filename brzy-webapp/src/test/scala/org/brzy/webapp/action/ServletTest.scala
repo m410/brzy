@@ -24,7 +24,7 @@ class ServletTest extends JUnitSuite {
     val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
-    assertEquals(18,webapp.actions.size)
+    assertEquals(19,webapp.actions.size)
 
     val request = new MockHttpServletRequest("GET", "//users.brzy")
     val response = new MockHttpServletResponse()
@@ -43,7 +43,7 @@ class ServletTest extends JUnitSuite {
     val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
-    assertEquals(18,webapp.actions.size)
+    assertEquals(19,webapp.actions.size)
 
     val request = new MockHttpServletRequest("GET", "//users/10.brzy")
     val response = new MockHttpServletResponse()

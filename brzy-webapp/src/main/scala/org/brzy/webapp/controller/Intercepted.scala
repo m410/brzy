@@ -1,4 +1,4 @@
-package org.brzy.webapp.exp
+package org.brzy.webapp.controller
 
 /**
  *
@@ -6,4 +6,3 @@ package org.brzy.webapp.exp
 trait Intercepted {
 	def intercept(action:()=>AnyRef, actionArgs:List[AnyRef]):AnyRef = action()
 }
-

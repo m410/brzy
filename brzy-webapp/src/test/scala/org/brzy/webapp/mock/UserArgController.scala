@@ -15,13 +15,16 @@ package org.brzy.webapp.mock
 
 import org.brzy.webapp.action.args.Parameters
 
-import org.brzy.webapp.action.returns._
-import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.controller.Controller
+import org.brzy.webapp.action.Action
 
-@Controller("userArgs")
-class UserArgController(val userService:UserService) {
+class UserArgController(val userService:UserService) extends Controller("userArgs"){
+  val actions = List(
+    Action("","list",list _),
+    Action("{id}","view",get _),
+    Action("custom","custom",custom _))
 
-  @Action("") def list = "userList"->MockUser.list()
-  @Action("{id}") def get(prms:Parameters) = "user"->MockUser.get(prms("id")(0).toLong)
-	@Action("custom") def custom = "custom"->userService.someMethod
+  def list = "userList"->MockUser.list()
+  def get(prms:Parameters) = "user"->MockUser.get(prms("id")(0).toLong)
+	def custom = "custom"->userService.someMethod
 }

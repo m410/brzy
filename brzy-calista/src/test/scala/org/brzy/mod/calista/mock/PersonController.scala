@@ -13,14 +13,13 @@
  */
 package org.brzy.mod.calista.mock
 
-import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.controller.Controller
+import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.args.Parameters
 import java.util.UUID
 
-@Controller("persons")
-class PersonController {
-
-  @Action("") def list =  {}
-  @Action("{id}") def show(p:Parameters) = "person"->Person.get(UUID.fromString(p("id")))
-
+class PersonController extends Controller("persons"){
+  val actions = List(Action("","list",list _),Action("{id}","show",show _))
+  def list =  {}
+  def show(p:Parameters) = "person"->Person.get(UUID.fromString(p("id")))
 }

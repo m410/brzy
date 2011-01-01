@@ -26,88 +26,99 @@ import org.scalatest.junit.JUnitSuite
 
 class ActionTest extends JUnitSuite {
 
-  @Test
-  def testCompare = {
+  @Test def testCompare = {
     val ctlr = new UserController()
-    val clazz = ctlr.getClass
-    val method = clazz.getMethods()(0)
-    val action: Action = new Action("/users", method, ctlr, ".jsp")
-    val action1: Action = new Action("/users/{id}/companies/{cid}", method, ctlr, ".jsp")
-    val action2: Action = new Action("/users/save", method, ctlr, ".jsp")
-    val action3: Action = new Action("/users/create", method, ctlr, ".jsp")
-    val action4: Action = new Action("/users/{id}/delete", method, ctlr, ".jsp")
-    val action5: Action = new Action("/users/{id}/update", method, ctlr, ".jsp")
-    val action6: Action = new Action("/users/{id}/edit", method, ctlr, ".jsp")
-    val action7: Action = new Action("/users/{id}", method, ctlr, ".jsp")
-    val actions = SortedSet(action, action1, action2, action3, action4, action5, action6, action7)
-
-    val array = new Array[Action](8)
-    actions.copyToArray(array)
-    assertEquals(8, array.size)
+//    val clazz = ctlr.getClass
+//    val method = clazz.getMethods()(0)
+    val action = ctlr.actions.find(_.actionPath == "").get
+    val action1 = ctlr.actions.find(_.actionPath == "{id}/companies/{cid}").get //: Action = new Action("/users/{id}/companies/{cid}", method, ctlr, ".jsp")
+    val action2 = ctlr.actions.find(_.actionPath == "save").get // = ctlr.actions.find(_.actionPath == "").get //: Action = new Action("/users/save", method, ctlr, ".jsp")
+    val action3 = ctlr.actions.find(_.actionPath == "create").get //: Action = new Action("/users/create", method, ctlr, ".jsp")
+    val action4 = ctlr.actions.find(_.actionPath == "{id}/delete").get //: Action = new Action("/users/{id}/delete", method, ctlr, ".jsp")
+    val action5 = ctlr.actions.find(_.actionPath == "{id}/update").get //: Action = new Action("/users/{id}/update", method, ctlr, ".jsp")
+    val action6 = ctlr.actions.find(_.actionPath == "{id}/edit").get //: Action = new Action("/users/{id}/edit", method, ctlr, ".jsp")
+    val action7 = ctlr.actions.find(_.actionPath == "{id}").get //: Action = new Action("/users/{id}", method, ctlr, ".jsp")
+    val action8 = ctlr.actions.find(_.actionPath == "custom").get //: Action = new Action("/users/{id}", method, ctlr, ".jsp")
+    val action9 = ctlr.actions.find(_.actionPath == "error").get //: Action = new Action("/users/{id}", method, ctlr, ".jsp")
+    val action10 = ctlr.actions.find(_.actionPath == "json").get //: Action = new Action("/users/{id}", method, ctlr, ".jsp")
+    val action11 = ctlr.actions.find(_.actionPath == "json2").get //: Action = new Action("/users/{id}", method, ctlr, ".jsp")
+    val action12 = ctlr.actions.find(_.actionPath == "other").get //: Action = new Action("/users/{id}", method, ctlr, ".jsp")
+//    val actions = SortedSet(action, action1, action2, action3, action4, action5, action6, action7)
+//
+//    val array = new Array[Action](8)
+//    actions.copyToArray(array)
+    val array = SortedSet(ctlr.actions:_*).toArray
+    assertEquals(16, array.size)
     assertEquals(action, array(0))  // users
     assertEquals(action3, array(1)) // users/create
-    assertEquals(action2, array(2)) // users/save
-    assertEquals(action7, array(3)) // users/id
-    assertEquals(action1, array(4)) // users/id/companies/id
-    assertEquals(action4, array(5)) // users/id/delete
-    assertEquals(action6, array(6)) // users/id/edit
-    assertEquals(action5, array(7)) // users/id/update
+    assertEquals(action8, array(2)) // users/custom
+    assertEquals(action9, array(3)) // users/error
+    assertEquals(action10, array(4)) // users/json
+    assertEquals(action11, array(5)) // users/json2
+    assertEquals(action12, array(6)) // users/other
+//    assertEquals(action7, array(7)) // users/id
+//    assertEquals(action1, array(8)) // users/id/companies/id
+//    assertEquals(action4, array(9)) // users/id/delete
+//    assertEquals(action6, array(10)) // users/id/edit
+//    assertEquals(action5, array(11)) // users/id/update
+//    assertEquals(action2, array(12)) // users/save
+
   }
 
-  @Test
-  def testDefaultView = {
+  @Test def testDefaultView = {
     val ctlr = new UserController()
-    val clazz = ctlr.getClass
-    val method = clazz.getMethods()(1)
-    val action: Action = new Action("users/", method, ctlr, ".jsp")
+    val action = ctlr.actions.find(_.actionPath == "").get
     assertEquals("/user/list",action.defaultView)
   }
 
-  @Test
-  def testMatchPath = {
-    val ctlr = new UserController()
-    val clazz = ctlr.getClass
-    val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/{id}/items/{item}", method, ctlr, ".jsp")
-
-    val path = "users/1232/items/234543"
-    val result = action.pattern.findFirstIn(path)
-    assertTrue(!result.isEmpty)
-    assertEquals(path, result.get)
-
-    val path2 = "users/"
-    val result2 = action.pattern.findFirstIn(path2)
-    assertTrue(result2.isEmpty)
+  @Test def testParseActionPath = {
+    assertEquals("/users",Action.parseActionPath("/users.brzy",""))
+    assertEquals("/users",Action.parseActionPath("/users.brzy","/"))
+    assertEquals("/users",Action.parseActionPath("/home/users.brzy","/home"))
+    assertEquals("/users/1/edit",Action.parseActionPath("/users/1/edit.brzy",""))
+    assertEquals("/",Action.parseActionPath("/.brzy",""))
+    assertEquals("/",Action.parseActionPath("/.brzy","/"))
+    assertEquals("/",Action.parseActionPath("/one/.brzy","/one"))
+    assertEquals("/",Action.parseActionPath("//.brzy",""))
   }
 
-  @Test
-  def testParameterExtract = {
+  @Test def testParameterExtract = {
     val ctlr = new UserController()
-    val clazz = ctlr.getClass
-    val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/{id}/items/{item}", method, ctlr, ".jsp")
+    val action = ctlr.actions.find(_.actionPath == "{id}/companies/{cid}").get
 
-    val path = "users/1232/items/234543"
-    val result = action.matchParameters(path)
+    val path = "/users/1232/companies/234543"
+    assertTrue(action.path.isMatch(path))
+
+    val result = action.path.extractParameterValues(path)
     assertNotNull(result)
     assertEquals(2, result.size)
     assertEquals("1232", result(0))
     assertEquals("234543", result(1))
   }
 
-  @Test
-  def testParameterMapExtraction = {
+  @Test def testEmptyPath = {
     val ctlr = new UserController()
-    val clazz = ctlr.getClass
-    val method = clazz.getMethods()(0)
-    val action: Action = new Action("users/{id}/items/{item}", method, ctlr, ".jsp")
+    val action = ctlr.actions.find(_.actionPath == "").get
 
-    val path = "users/1232/items/234543"
-    val result = action.matchParameterIds
+    val path = "/users"
+    assertTrue(action.path.isMatch(path))
+
+    val result = action.path.extractParameterValues(path)
+    assertNotNull(result)
+    assertEquals(0, result.size)
+  }
+
+  @Test def testParameterMapExtraction = {
+    val ctlr = new UserController()
+    val action = ctlr.actions.find(_.actionPath == "{id}/companies/{cid}").get
+    
+    val path = "/users/1232/companies/234543"
+    assertTrue(action.path.isMatch(path))
+    
+    val result = action.path.parameterNames
     assertNotNull(result)
     assertEquals(2, result.size)
     assertEquals("id", result(0))
-    assertEquals("item", result(1))
+    assertEquals("cid", result(1))
   }
-
 }

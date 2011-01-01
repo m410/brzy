@@ -24,15 +24,21 @@ import org.brzy.application.WebApp
  * @author Michael Fortin
  */
 class BrzyFilter extends SFilter {
-  private val log = LoggerFactory.getLogger(classOf[BrzyFilter])
-  val pattern = """\.([\w\d]{1,4})$""".r
-  var webapp:WebApp = _
+  protected[action] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
+  protected[action] val pattern = """\.([\w\d]{1,4})$""".r
+  protected[action] var webapp:WebApp = _
 
+  /**
+   *
+   */
   def init(config: FilterConfig) = {
     log.info("Init Filter: {}", config)
     webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
+  /**
+   *
+   */
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
     val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
     log.trace("uri    : {}",uri)
@@ -47,7 +53,8 @@ class BrzyFilter extends SFilter {
           uri.substring(0,uri.length)
         else
           uri.substring(contextPath.length,uri.length)
-      
+
+      // the aop interceptors are run here so that the view rendering is also within the transaction
       log.trace("forward: {}",forward)
       webapp.interceptor.doIn(() => {
         req.getRequestDispatcher(forward + ".brzy").forward(req,res)
@@ -56,6 +63,9 @@ class BrzyFilter extends SFilter {
     }
   }
 
+  /**
+   *
+   */
   def destroy = {
     log.debug("Destroy")
   }

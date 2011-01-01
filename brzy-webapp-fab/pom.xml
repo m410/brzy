@@ -6,7 +6,7 @@
   <groupId>org.brzy.archetype</groupId>
   <artifactId>brzy-webapp-fab</artifactId>
   <name>Brzy WebApp Archetype</name>
-  <version>0.4</version>
+  <version>0.5-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>

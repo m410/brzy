@@ -28,12 +28,12 @@ class JsonReturnTest  extends JUnitSuite {
 
   @Test def testReturnJson = {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "json").get
-    val action = new Action("/users/json", method, ctlr, ".ssp")
+//    val method: Method = ctlr.getClass.getMethods.find(_.getName == "json").get
+    val action = ctlr.actions.find(_.actionPath == "json").get//new Action("/users/json", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
     assertEquals("/user/json", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
@@ -46,11 +46,11 @@ class JsonReturnTest  extends JUnitSuite {
   @Test def testReturnJson2 = {
     val ctlr = new UserController()
     val method: Method = ctlr.getClass.getMethods.find(_.getName == "json2").get
-    val action = new Action("/users/json2", method, ctlr, ".ssp")
+    val action = ctlr.actions.find(_.actionPath == "json2").get//new Action("/users/json2", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
     assertEquals("/user/json2", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())

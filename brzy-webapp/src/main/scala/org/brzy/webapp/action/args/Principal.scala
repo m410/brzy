@@ -13,9 +13,11 @@
  */
 package org.brzy.webapp.action.args
 
+import org.brzy.webapp.controller.Roles
+
 /**
  * This is not implemented yet.  It's used in secured controllers to access the caller principal.
  * 
  * @author Michael Fortin
  */
-class Principal
+case class Principal(name:String, roles:Roles)

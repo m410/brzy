@@ -42,7 +42,7 @@ class SecurityFilter extends Filter{
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
     val request = req.asInstanceOf[HttpServletRequest]
     val response = res.asInstanceOf[HttpServletResponse]
-    val actionPath = findActionPath(request.getRequestURI,request.getContextPath)
+    val actionPath = parseActionPath(request.getRequestURI,request.getContextPath)
     log.debug("actionPath: " + actionPath)
     log.debug("s: 1")
 

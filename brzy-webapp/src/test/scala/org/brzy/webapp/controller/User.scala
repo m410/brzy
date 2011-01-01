@@ -15,6 +15,9 @@ package org.brzy.webapp.controller
 
 import java.beans.ConstructorProperties
 import org.brzy.persistence.MockPersistable
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.returns.Model
 
 @ConstructorProperties(Array("id"))
 class User(val id: Long) {
@@ -23,6 +26,8 @@ class User(val id: Long) {
 
 object User extends MockPersistable[User, Long]
 
-@Controller("users")
-class UserController extends CrudController(User) 
+class UserController extends CrudController("users",User) {
+  override val actions = super.actions ++ List(Action("{id}/items/{iid}","itmes",sub _))
+  def sub(p:Parameters) = Model("a"->"b")
+}
 

@@ -13,22 +13,29 @@
  */
 package org.brzy.mod.jpa.mock
 
-import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.controller.Controller
+import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.returns._
 import org.brzy.webapp.action.args.Parameters
 
-@Controller("users")
-class UserController {
-  @Action("")
+
+class UserController extends Controller("users"){
+  val actions = List(
+    Action("","list",list _),
+    Action("{id}","view",get _),
+    Action("create","form",create _),
+    Action("save","form",save _),
+    Action("{id}/edit","form",edit _),
+    Action("{id}/update","form",update _),
+    Action("{id}/delete","form",delete _),
+    Action("custom","custom",custom _))
+
   def list() = "userList" -> User.list()
 
-  @Action("{id}")
   def get(prms: Parameters) = "user" -> User.get(prms("id")(0).toLong)
 
-  @Action("create")
   def create = "user" -> new User()
 
-  @Action("save")
   def save(params: Parameters)() = {
     def user = User.construct(params.toMap)
 
@@ -41,10 +48,8 @@ class UserController {
     }
   }
 
-  @Action("{id}/edit")
   def edit(params: Parameters) = "user" -> User.get(params("id")(0).toLong)
 
-  @Action("{id}/update")
   def update(params: Parameters) = {
     def user = User.construct(params.toMap)
 
@@ -57,7 +62,6 @@ class UserController {
     }
   }
 
-  @Action("{id}/delete")
   def delete(params: Parameters) = {
     User.get(params("id")(0).toLong) match {
       case Some(user) =>
@@ -68,7 +72,6 @@ class UserController {
     }
   }
 
-  @Action("custom")
   def custom() = {
     (CookieAdd("id" -> "1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
   }
