@@ -14,26 +14,30 @@
 package org.brzy.webapp.controller
 
 import org.reflections.Reflections
-import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
-import org.reflections.scanners.TypeAnnotationsScanner
 
 import collection.immutable.List
 import collection.JavaConversions._
+import org.reflections.scanners.SubTypesScanner
+import org.reflections.util.{ClasspathHelper, ConfigurationBuilder}
+import org.slf4j.LoggerFactory
 
 /**
  *   http://code.google.com/p/reflections/
  * 
  * @author Michael Fortin
  */
-class ControllerScanner(val packageName:String) {
+case class ControllerScanner(packageName:String) {
 
-  private val reflections = new Reflections(new ConfigurationBuilder()
-      .setUrls(ClasspathHelper.getUrlsForPackagePrefix(packageName))
-      .setScanners(new TypeAnnotationsScanner()))
+  private[this] val log = LoggerFactory.getLogger(classOf[ControllerScanner])
+  
+  private[this] val reflections = new Reflections(new ConfigurationBuilder()
+        .setUrls(ClasspathHelper.getUrlsForPackagePrefix(packageName))
+        .setScanners(new SubTypesScanner()))
 
-  val controllers:List[Class[_]] = reflections.getTypesAnnotatedWith(classOf[Controller]).toList
-}
-
-object ControllerScanner {
-  def apply(config:String) =  new ControllerScanner(config)
+  val controllers:List[Class[_]] = {
+    val ctls =reflections.getSubTypesOf(classOf[Controller]).toList.filter(_.getName.indexOf("$") < 0) ++
+        reflections.getSubTypesOf(classOf[CrudController[_,_]]).toList.filter(_.getName.indexOf("$") < 0)
+    log.debug("controllers: {}",ctls)
+    ctls
+  }
 }

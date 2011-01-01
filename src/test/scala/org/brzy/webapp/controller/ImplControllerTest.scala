@@ -1,20 +1,27 @@
-package org.brzy.webapp.exp
+package org.brzy.webapp.controller
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.junit.Test
 import org.brzy.webapp.action.returns.{Model, View}
 import org.brzy.webapp.action.args.{Headers, Parameters}
+import org.brzy.webapp.action.Action
+import collection.JavaConversions._
 
 class ImplControllerTest extends JUnitSuite {
   @Test def testLoadController = {
     val controller = new ImplController
     assertNotNull(controller)
     assertEquals(2, controller.actions.size)
-    controller.actions.foreach(a => {
-      println("args:" + a.argTypes.toString)
-      println("return:" + a.returnType.toString)
-    })
+//    controller.actions.foreach(a => {
+//      println("args:" + a.argTypes.toString)
+//      a.argTypes.foreach(t=>{
+//        println("*** type:" + t)
+//        println("*** class:"+ t.getClass)
+//        println("*** methods:"+ t.getClass.getMethods.mkString("[",", ","]"))
+//      })
+//      println("return:" + a.returnType.toString)
+//    })
   }
 
   @Test def testAction = {
@@ -50,6 +57,8 @@ class ImplControllerTest extends JUnitSuite {
     assertTrue(result.isInstanceOf[Model])
   }
 }
+
+
 
 class ImplController extends Controller("impls") with Secured with Intercepted {
   val actions = Action("list", "list", list _, Roles("SUPER")) ::

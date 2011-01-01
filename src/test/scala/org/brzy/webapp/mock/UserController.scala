@@ -14,40 +14,58 @@
 package org.brzy.webapp.mock
 
 import org.brzy.webapp.action.args.Parameters
-
 import org.brzy.webapp.action.returns._
-import org.brzy.webapp.controller.{Action, Controller}
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.controller.Controller
 
-@Controller("users")
-class UserController {
-  @Action("") def list() = "userList" -> MockUser.list()
+class UserController extends Controller("users") {
+  val actions = List(
+    Action("","list",list _),
+    Action("{id}","view",get _),
+    Action("create","create",create _),
+    Action("other","other",someOther _),
+    Action("other2","other2",someOther2 _),
+    Action("xml","xml",xml _),
+    Action("redirect","redirect",redirect _),
+    Action("json","json",json _),
+    Action("json2","json2",json2 _),
+    Action("error","error",error _),
+    Action("save","save",save _),
+    Action("{id}/edit","edit",edit _),
+    Action("{id}/update","update",update _),
+    Action("{id}/delete","delete",delete _),
+    Action("{id}/companies/{cid}","companie",company _),
+    Action("custom","custom",custom _))
+  
+  def list() = "userList" -> MockUser.list()
 
-  @Action("{id}") def get(p: Parameters) = "user" -> MockUser.get(p("id").toLong)
+  def get(p: Parameters) = "user" -> MockUser.get(p("id").toLong)
 
-  @Action("create") def create = "user" -> new MockUser()
+  def company(p: Parameters) = "user" -> MockUser.get(p("id").toLong)
 
-  @Action("other") def someOther = View("/index")
+  def create = "user" -> new MockUser()
 
-  @Action("other2") def someOther2 = View("/users/page")
+  def someOther = View("/index")
 
-  @Action("xml") def xml = Xml(this)
+  def someOther2 = View("/users/page")
 
-  @Action("redirect") def redirect = Redirect("http://o2l.co")
+  def xml = Xml(UserMock("John"))
 
-  @Action("json") def json = {
+  def redirect = Redirect("http://o2l.co")
+
+  def json = {
     val user = new MockUser()
     user.id = 1
     user.name = "hello"
     Json(user)
   }
 
-  @Action("json2") def json2 = new Json(this) with Parser {
+  def json2 = new Json(this) with Parser {
     override def parse = "{\"name\":\"value\"}"
   }
 
-  @Action("error") def error = Error(404, "Not Found")
+  def error = Error(404, "Not Found")
 
-  @Action("save")
   def save(params: Parameters)() = {
     def user: MockUser = MockUser.construct(params)
 
@@ -60,10 +78,8 @@ class UserController {
     }
   }
 
-  @Action("{id}/edit")
   def edit(params: Parameters) = "user" -> MockUser.get(params("id")(0).toLong)
 
-  @Action("{id}/update")
   def update(params: Parameters) = {
     def user = MockUser.construct(params)
 
@@ -76,7 +92,6 @@ class UserController {
     }
   }
 
-  @Action("{id}/delete")
   def delete(params: Parameters) = {
     MockUser.get(params("id")(0).toLong) match {
       case Some(user) =>
@@ -87,8 +102,9 @@ class UserController {
     }
   }
 
-  @Action("custom")
   def custom() = {
     (CookieAdd("id" -> "1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
   }
 }
+
+case class UserMock(name:String)

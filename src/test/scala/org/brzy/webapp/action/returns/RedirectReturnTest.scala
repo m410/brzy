@@ -14,12 +14,12 @@ class RedirectReturnTest extends JUnitSuite {
 
   @Test def testRedirect = {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "redirect").get
-    val action = new Action("/users", method, ctlr, ".ssp")
+//    val method: Method = ctlr.getClass.getMethods.find(_.getName == "redirect").get
+    val action = ctlr.actions.find(_.actionPath == "redirect").get//new Action("/users", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
     assertEquals("/user/redirect", action.defaultView)
-    val result = executeAction(action, Array[AnyRef]())
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())

@@ -28,7 +28,9 @@ class XmlReturnTest  extends JUnitSuite {
   val fooXml = """<Foo>
       <bar>bar</bar>
     </Foo>"""
-  
+  val expectedXml = """<UserMock>
+      <name>John</name>
+    </UserMock>"""
   @Test def testXml = {
     val foo = Foo("bar")
     val xml = Xml(foo)
@@ -36,32 +38,22 @@ class XmlReturnTest  extends JUnitSuite {
     assertEquals(fooXml,xml.parse)
   }
 
-  @Test @Ignore def listMethods = {
-    val ctlr = new UserController()
-    var count = 0
-    ctlr.getClass.getMethods.foreach(f=>{
-      println("method["+count+"] - "+f.getName)
-      count = count + 1
-    })
-  }
 
-  @Ignore @Test def testDefaultWithNoReturn = {
+  @Test def testDefaultWithNoReturn = {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "xml").get
-    val action = new Action("/users/xml", ctlr.getClass.getMethods.find(_.getName == "xml").get, ctlr, ".ssp")
+    val action = ctlr.actions.find(_.actionPath == "xml").get
 
     assertNotNull(action.defaultView)
     assertEquals("/user/xml", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    val result = action.execute(List[AnyRef]())
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
     handleResults(action,result,request,response)
     assertEquals("text/xml",response.getContentType)
-    assertEquals("<class>UserController</class>",response.getContentAsString)
+    assertEquals(expectedXml,response.getContentAsString)
   }
-
 }
 
 case class Foo(bar:String)

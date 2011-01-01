@@ -29,7 +29,7 @@ class ActionCompanionTest extends JUnitSuite {
     val request = new MockHttpServletRequest("GET", "/users/10.brzy")
 
     val ctlr = new UserController()
-    val action = new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
+    val action = ctlr.actions.find(_.actionPath == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
 
     val result = buildArgs(action,request)
     assertNotNull(result)
@@ -43,7 +43,7 @@ class ActionCompanionTest extends JUnitSuite {
     val request = new MockHttpServletRequest(new MockServletContext()) {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
-          assertEquals("/user/get.jsp",path)
+          assertEquals("/user/view.ssp",path)
 					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
 						assertTrue("Correct rc attribute", fwdReq.getAttribute("rc") == null)
 					}
@@ -53,7 +53,7 @@ class ActionCompanionTest extends JUnitSuite {
 
     val tup = ("attributeKey","attributeValue")
     val ctlr = new UserController()
-    val action = new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
+    val action = ctlr.actions.find(_.actionPath == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
     handleResults(action, tup, request, null)
     assertNotNull(request.getAttribute("attributeKey"))
   }
@@ -62,27 +62,27 @@ class ActionCompanionTest extends JUnitSuite {
     val context = "/home"
     val uri = "/home/users"
     val service = new BrzyServlet
-    assertEquals("/users", findActionPath(uri,context))
+    assertEquals("/users", parseActionPath(uri,context))
   }
 
   @Test def testFindActionPath2 = {
     val context = "/home"
     val uri = "/home/user.brzy"
     val service = new BrzyServlet
-    assertEquals("/user", findActionPath(uri,context))
+    assertEquals("/user", parseActionPath(uri,context))
   }
 
   @Test def testFindActionPath3 = {
     val context = ""
     val uri = "/home/10/create.brzy"
     val service = new BrzyServlet
-    assertEquals("/home/10/create", findActionPath(uri,context))
+    assertEquals("/home/10/create", parseActionPath(uri,context))
   }
 
   @Test def testFindActionPath4 = {
     val context = "/brzy"
     val uri = "/brzy/.brzy"
     val service = new BrzyServlet
-    assertEquals("/", findActionPath(uri,context))
+    assertEquals("/", parseActionPath(uri,context))
   }
 }

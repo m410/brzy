@@ -1,10 +1,12 @@
-package org.brzy.webapp.exp
+package org.brzy.webapp.controller
+
+import org.brzy.webapp.action.Action
 
 /**
  * 
  */
 abstract class Controller(val basePath:String) extends Ordered[Controller] {
-	val actions:List[Action]
+	implicit def selfReference = this
+  def actions:List[Action]
   def compare(that: Controller) = basePath.compareTo(that.basePath)
-  implicit def selfReference = this
 }

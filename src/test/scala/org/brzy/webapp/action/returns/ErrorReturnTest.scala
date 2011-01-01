@@ -27,11 +27,11 @@ class ErrorReturnTest extends JUnitSuite {
   @Test def testError404 = {
     val ctlr = new UserController()
     val method: Method = ctlr.getClass.getMethods.find(_.getName == "error").get
-    val action = new Action("/users/error", method, ctlr, ".ssp")
+    val action = ctlr.actions.find(_.actionPath == "error").get//new Action("/users/error", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
     assertEquals("/user/error", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())

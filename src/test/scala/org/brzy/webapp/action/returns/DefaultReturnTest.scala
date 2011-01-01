@@ -28,12 +28,12 @@ class DefaultReturnTest  extends JUnitSuite {
   @Test
   def testDefaultWithNoReturn = {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "list").get
-    val action = new Action("/users", method, ctlr, ".ssp")
+//    val method: Method = ctlr.getClass.getMethods.find(_.getName == "list").get
+    val action = ctlr.actions.find(_.actionPath == "").get//new Action("/users", method, ctlr, ".ssp")
 
     assertNotNull(action.defaultView)
     assertEquals("/user/list", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
     var callCount = 0
@@ -53,11 +53,11 @@ class DefaultReturnTest  extends JUnitSuite {
 
   @Test def testReturnView = {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther").get
-    val action = new Action("/users/other", method, ctlr, ".ssp")
+//    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther").get
+    val action = ctlr.actions.find(_.actionPath == "other").get//new Action("/users/other", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
-    assertEquals("/user/someOther", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    assertEquals("/user/other", action.defaultView)
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
     var callCount = 0
@@ -77,11 +77,11 @@ class DefaultReturnTest  extends JUnitSuite {
 
   @Test def testReturnView2 = {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther2").get
-    val action = new Action("/users/some2", method, ctlr, ".ssp")
+//    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther2").get
+    val action = ctlr.actions.find(_.actionPath == "other2").get//new Action("/users/some2", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
-    assertEquals("/user/someOther2", action.defaultView)
-    val result = executeAction(action,Array[AnyRef]())
+    assertEquals("/user/other2", action.defaultView)
+    val result = action.execute(List.empty[AnyRef])
     assertNotNull(result)
 
 

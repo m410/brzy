@@ -22,7 +22,7 @@ import java.lang.reflect.Constructor
 import java.beans.ConstructorProperties
 
 import org.brzy.webapp.action.Action
-import org.brzy.webapp.controller.{ControllerScanner, Controller, Action => ActionAnnotation}
+import org.brzy.webapp.controller.{ControllerScanner, Controller}
 import org.brzy.fab.interceptor.{ManagedThreadContext, InterceptorProvider}
 import org.brzy.interceptor.Invoker
 import org.brzy.interceptor.ProxyFactory._
@@ -135,14 +135,14 @@ class WebApp(conf: WebAppConf) {
   /**
    * The application controllers
    */
-  val controllers: List[_ <: AnyRef] = makeControllers
+  val controllers: List[_ <: Controller] = makeControllers
 
   /**
    * To change how the controllers are discovered and added to the controllers list or to
    * programatically add controllers to the list, override this function.
    */
-  protected[application] def makeControllers: List[AnyRef] = {
-    val buffer = ListBuffer[AnyRef]()
+  protected[application] def makeControllers: List[Controller] = {
+    val buffer = ListBuffer[Controller]()
     val controllerClasses = ControllerScanner(conf.application.org.get).controllers
     controllerClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
@@ -155,10 +155,10 @@ class WebApp(conf: WebAppConf) {
         else
           makeArgsByType(clazz, serviceMap)
 
-        buffer += make(clazz, constructorArgs, interceptor)
+        buffer += make(clazz, constructorArgs, interceptor).asInstanceOf[Controller]
       }
       else {
-        buffer += make(clazz, interceptor)
+        buffer += make(clazz, interceptor).asInstanceOf[Controller]
       }
     })
     buffer.toList
@@ -196,24 +196,25 @@ class WebApp(conf: WebAppConf) {
 
     controllers.foreach(ctl => {
       log.debug("load actions from controller: {}", ctl)
-      val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
-
-      for (method <- ctl.getClass.getSuperclass.getMethods
-           if method.getAnnotation(classOf[ActionAnnotation]) != null) {
-        val methodPath = method.getAnnotation(classOf[ActionAnnotation])
-        log.debug("controllerPath : " + classPath)
-        log.debug("methodPath     : " + methodPath)
-
-        val pathValue =
-            if (methodPath.value.equals(""))
-              classPath.value
-            else
-              classPath.value + "/" + methodPath.value
-
-        val action = new Action(pathValue, method, ctl, viewProvider.fileExtension)
-        log.debug("action: " + action)
-        list += action
-      }
+      ctl.actions.foreach(a=> list += a)
+//      val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
+      // TODO pull from controllers
+//      for (method <- ctl.getClass.getSuperclass.getMethods
+//           if method.getAnnotation(classOf[ActionAnnotation]) != null) {
+//        val methodPath = method.getAnnotation(classOf[ActionAnnotation])
+//        log.debug("controllerPath : " + classPath)
+//        log.debug("methodPath     : " + methodPath)
+//
+//        val pathValue =
+//            if (methodPath.value.equals(""))
+//              classPath.value
+//            else
+//              classPath.value + "/" + methodPath.value
+//
+//        val action = new Action(pathValue, method, ctl, viewProvider.fileExtension)
+//        log.debug("action: " + action)
+//        list += action
+//      }
     })
     SortedSet[Action]() ++ list.toIterable
   }

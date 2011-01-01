@@ -21,32 +21,30 @@ import javax.servlet.{ServletResponse, ServletRequest}
 
 /**
  * The basic servlet implementation.
- * 
+ *
  * @author Michael Fortin
  */
 class BrzyServlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
 
+  override def service(req: ServletRequest, res: ServletResponse) = {
+    internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
+  }
+
   private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    log.trace("request: {}",req.getServletPath)
-    val actionPath = findActionPath(req.getRequestURI,req.getContextPath)
-    log.trace("path: {}",actionPath)
-    
-    if(!app.actions.exists(pathCompare(actionPath))) {
-      res.sendError(404)
-    }
-    else {
-      val action = app.actions.find(pathCompare(actionPath)).get
-      log.debug("{} >> {}",req.getRequestURI, action)
-      val args = buildArgs(action, req)
-      val result = executeAction(action, args)
-      handleResults(action,result,req,res)
+    log.trace("request: {}, contet: {}", req.getServletPath, req.getContextPath)
+    val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
+    log.trace("action-path: {}", actionPath)
+
+    app.actions.find(_.path.isMatch(actionPath)) match {
+      case Some(action) =>
+        log.debug("{} >> {}", req.getRequestURI, action)
+        val args = buildArgs(action, req)
+        val result = action.execute(args)
+        handleResults(action, result, req, res)
+      case _ =>
+        res.sendError(404)
     }
   }
-
-  override def service(req: ServletRequest, res: ServletResponse) = {
-    internal(req.asInstanceOf[HttpServletRequest],res.asInstanceOf[HttpServletResponse])
-  }
-
 }
