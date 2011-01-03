@@ -15,7 +15,9 @@ case class Path(base: String, sub: String) extends Ordered[Path] {
 
   protected[controller] val path = {
     val combined =
-      if (!sub.startsWith("/"))
+      if(sub.equals(""))
+        base
+      else if (!sub.startsWith("/"))
         base + "/" + sub
       else
         base + sub

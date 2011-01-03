@@ -15,30 +15,23 @@ package org.brzy.service
 
 import org.reflections.Reflections
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
-import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTypesScanner}
+import org.reflections.scanners.SubTypesScanner
 
 import scala.collection.JavaConversions._
+import org.slf4j.LoggerFactory
 
 /**
  * Used by the WebApp to scan for services in the classpath.
- * 
+ *
  * @author Michael Fortin
  */
-class ServiceScanner(val packageName:String) {
+case class ServiceScanner(packageName: String) {
+  private[this] val log = LoggerFactory.getLogger(classOf[ServiceScanner])
 
-  val reflections = new Reflections(new ConfigurationBuilder()
-        .setUrls(ClasspathHelper.getUrlsForPackagePrefix(packageName))
-        .setScanners(
-            new ResourcesScanner(),
-            new TypeAnnotationsScanner(),
-            new SubTypesScanner()))
+  private[this] val reflections = new Reflections(new ConfigurationBuilder()
+      .setUrls(ClasspathHelper.getUrlsForPackagePrefix(packageName))
+      .setScanners(new SubTypesScanner()))
 
-  val services = asSet(reflections.getTypesAnnotatedWith(classOf[Service]))
-}
-
-/**
- * Construct a new instance of the scanner
- */
-object ServiceScanner {
-  def apply(config:String) = new ServiceScanner(config)
+  val services =
+      reflections.getSubTypesOf(classOf[Service]).toList.filter(_.getName.indexOf("$") < 0)
 }

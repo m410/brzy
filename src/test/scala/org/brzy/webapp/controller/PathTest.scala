@@ -37,6 +37,23 @@ class PathTest extends JUnitSuite {
     assertEquals("id", result(0))
   }
 
+  @Test def testParentVarPath = {
+     val actionPath = Path("users/{parent}/items", "")
+    val path = "/users/1232/items"
+
+    assertTrue(actionPath.isMatch(path))
+
+    val result = actionPath.parameterNames
+    assertTrue(!result.isEmpty)
+    assertEquals(1, result.size)
+    assertEquals("parent", result(0))
+
+    val values = actionPath.extractParameterValues(path)
+    assertTrue(!values.isEmpty)
+    assertEquals(1, values.size)
+    assertEquals("1232", values(0))
+  }
+
   @Test def testExtractParametersBase = {
     val actionPath = Path("users", "/")
     val path = "/users"

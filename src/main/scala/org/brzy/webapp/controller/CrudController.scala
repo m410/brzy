@@ -42,10 +42,10 @@ abstract class CrudController[E <: {def id : PK}, PK](
 
   def actions = Action("", "list", list _) ::
           Action("{id}", "view", view _) ::
-          Action("create", "form", create _) ::
-          Action("save", "save", save _) ::
-          Action("{id}/edit", "form", edit _) ::
-          Action("{id}/update", "form", update _) ::
+          Action("create", "create", create _) ::
+          Action("save", "create", save _) ::
+          Action("{id}/edit", "edit", edit _) ::
+          Action("{id}/update", "edit", update _) ::
           Action("{id}/delete", "delete", delete _) ::
           Nil
 
@@ -59,10 +59,12 @@ abstract class CrudController[E <: {def id : PK}, PK](
     val entity = dao.construct(p.toMap)
     entity.validate match {
       case Some(violations) =>
-        (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/form"))
+        Model(entityName -> entity, "violations" -> violations)
       case _ =>
         entity.insert(commit = true)
-        (Redirect("/" + entityName + "s/" + entity.id), Flash("New " + entityName + " saved.", entityName + ".save"))
+        val redirect = Redirect("/" + entityName + "s/" + entity.id)
+        val flash = Flash("New " + entityName + " saved.", entityName + ".save")
+        (redirect, flash)
     }
   }
 
@@ -72,16 +74,20 @@ abstract class CrudController[E <: {def id : PK}, PK](
     val entity = dao.construct(p.toMap)
     entity.validate match {
       case Some(violations) =>
-        (Model(entityName -> entity, "violations" -> violations), View("/" + entityName + "/form"))
+        Model(entityName -> entity, "violations" -> violations)
       case _ =>
         val updated = entity.update()
-        (Redirect("/" + entityName + "s/" + updated.id), Flash(entityName + " updated.", entityName + ".update"))
+        val redirect = Redirect("/" + entityName + "s/" + updated.id)
+        val flash = Flash(entityName + " updated.", entityName + ".update")
+        (redirect, flash)
     }
   }
 
   def delete(p: Parameters) = {
     val entity = dao.load(p("id"))
     entity.delete
-    (Redirect("/" + entityName + "s"), Flash(entityName + " was Deleted.", entityName + ".delete"))
+    val redirect = Redirect("/" + entityName + "s")
+    val flash = Flash(entityName + " was Deleted.", entityName + ".delete")
+    (redirect, flash)
   }
 }
