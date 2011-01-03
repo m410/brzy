@@ -385,6 +385,8 @@ object Action {
     val path = parseActionPath(req.getRequestURI, req.getContextPath)
     val args = action.argTypes
     val list = new ListBuffer[AnyRef]()
+    log.debug("action:",args)
+    log.debug("args types: {}, path: {}",args,path)
 
     args.toList.foreach(arg => arg match {
       case ParametersClass =>

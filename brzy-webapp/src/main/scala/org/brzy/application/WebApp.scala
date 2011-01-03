@@ -29,8 +29,8 @@ import org.brzy.interceptor.ProxyFactory._
 
 import org.brzy.fab.reflect.Construct
 
-import org.brzy.service.{ServiceScanner, PostCreate, PreDestroy}
 import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
+import org.brzy.service.{Service, ServiceScanner}
 
 /**
  * WebApp is short for web application.  This assembles and configures the application at
@@ -116,15 +116,16 @@ class WebApp(conf: WebAppConf) {
   protected[application] def makeServiceMap: Map[String, _ <: AnyRef] = {
     val map = WeakHashMap.empty[String, AnyRef]
 
-    def name(c: Class[_]): String = { // TODO also need to pull name from annotation
-      val in = c.getSimpleName
-      in.charAt(0).toLower + in.substring(1, in.length)
-    }
+//    def name(c: Class[_]): String = {
+//      val in = c.getSimpleName
+//      in.charAt(0).toLower + in.substring(1, in.length)
+//    }
 
     val serviceClasses = ServiceScanner(conf.application.org.get).services
     serviceClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
-      map += name(clazz) -> make(clazz, interceptor)
+      val instance = make(clazz, interceptor).asInstanceOf[Service]
+      map += instance.serviceName -> instance
     })
     persistenceProviders.foreach(_.serviceMap.foreach(map + _))
     moduleProviders.foreach(_.serviceMap.foreach(map + _))
@@ -144,6 +145,7 @@ class WebApp(conf: WebAppConf) {
   protected[application] def makeControllers: List[Controller] = {
     val buffer = ListBuffer[Controller]()
     val controllerClasses = ControllerScanner(conf.application.org.get).controllers
+
     controllerClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
       val constructor: Constructor[_] = clazz.getConstructors.find(_ != null).get // should only be one
@@ -197,24 +199,6 @@ class WebApp(conf: WebAppConf) {
     controllers.foreach(ctl => {
       log.debug("load actions from controller: {}", ctl)
       ctl.actions.foreach(a=> list += a)
-//      val classPath = ctl.getClass.getSuperclass.getAnnotation(classOf[Controller])
-      // TODO pull from controllers
-//      for (method <- ctl.getClass.getSuperclass.getMethods
-//           if method.getAnnotation(classOf[ActionAnnotation]) != null) {
-//        val methodPath = method.getAnnotation(classOf[ActionAnnotation])
-//        log.debug("controllerPath : " + classPath)
-//        log.debug("methodPath     : " + methodPath)
-//
-//        val pathValue =
-//            if (methodPath.value.equals(""))
-//              classPath.value
-//            else
-//              classPath.value + "/" + methodPath.value
-//
-//        val action = new Action(pathValue, method, ctl, viewProvider.fileExtension)
-//        log.debug("action: " + action)
-//        list += action
-//      }
     })
     SortedSet[Action]() ++ list.toIterable
   }
@@ -248,27 +232,31 @@ class WebApp(conf: WebAppConf) {
   }
 
   protected[application] def lifeCycleCreate(service: AnyRef) = {
-    val clazz =
-    if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
-    else service.getClass
-
-    val option = clazz.getMethods.find(_.getAnnotation(classOf[PostCreate]) != null)
-    option match {
-      case Some(m) => m.invoke(service, Array(): _*)
-      case _ =>
-    }
+    if(service.isInstanceOf[Service])
+      service.asInstanceOf[Service].initializeService
+//    val clazz =
+//    if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
+//    else service.getClass
+//
+//    val option = clazz.getMethods.find(_.getAnnotation(classOf[PostCreate]) != null)
+//    option match {
+//      case Some(m) => m.invoke(service, Array(): _*)
+//      case _ =>
+//    }
   }
 
   protected[application] def lifeCycleDestroy(service: AnyRef) = {
-    val clazz =
-    if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
-    else service.getClass
-
-    val option = clazz.getMethods.find(_.getAnnotation(classOf[PreDestroy]) != null)
-    option match {
-      case Some(m) => m.invoke(service, Array(): _*)
-      case _ =>
-    }
+    if(service.isInstanceOf[Service])
+      service.asInstanceOf[Service].destroyService
+//    val clazz =
+//    if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
+//    else service.getClass
+//
+//    val option = clazz.getMethods.find(_.getAnnotation(classOf[PreDestroy]) != null)
+//    option match {
+//      case Some(m) => m.invoke(service, Array(): _*)
+//      case _ =>
+//    }
   }
 }
 

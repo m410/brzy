@@ -9,7 +9,7 @@
   <properties>	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.4</fab-conf-version>
+    <fab-conf-version>0.5-SNAPSHOT</fab-conf-version>
     <fab-util-version>0.4</fab-util-version>
     <brzy-webapp-version>0.9-SNAPSHOT</brzy-webapp-version>
     <brzy-scalate-version>0.8</brzy-scalate-version>
@@ -18,7 +18,6 @@
   </properties>
   <modules>
   	<module>brzy-webapp</module>
-  	<module>brzy-webapp-fab</module>
 	  <module>brzy-calista</module>
     <module>brzy-email</module>
     <module>brzy-jms</module>

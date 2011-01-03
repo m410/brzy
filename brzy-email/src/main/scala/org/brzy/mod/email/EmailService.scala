@@ -27,9 +27,8 @@ import org.brzy.service.Service
  *
  * @author Michael Fortin
  */
-@Service
 @ConstructorProperties(Array("emailModConfig"))
-class EmailService(config:EmailModConfig) {
+class EmailService(config:EmailModConfig) extends Service{
 
   private val mailConfig = {
     val p = new java.util.Properties

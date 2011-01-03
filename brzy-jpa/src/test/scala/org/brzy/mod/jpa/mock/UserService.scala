@@ -15,8 +15,6 @@ package org.brzy.mod.jpa.mock
 
 import org.brzy.service.Service
 
-
-@Service
-class UserService {
+class UserService extends Service{
   def someMethod = "Service Method Called"
 }
