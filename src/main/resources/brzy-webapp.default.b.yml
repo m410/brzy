@@ -1,4 +1,4 @@
-project:
+build:
   scala_version: ${scala.version}
   package_type: war
   module_resources: ".brzy/modules"
