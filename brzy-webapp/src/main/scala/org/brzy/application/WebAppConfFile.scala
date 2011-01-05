@@ -34,10 +34,10 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
     case _ => None
   }
   
-  val project: Option[Project] = map.get("project") match {
+  val build: Option[Build] = map.get("build") match {
     case Some(s) =>
       if (s != null)
-        Option(new Project(s.asInstanceOf[Map[String, String]]))
+        Option(new Build(s.asInstanceOf[Map[String, String]]))
       else
         None
     case _ => None
@@ -70,11 +70,11 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
       new WebAppConfFile(Map[String, AnyRef](
         "environment" -> this.environment.getOrElse(that.environment.orNull),
         "application" -> {this.application.getOrElse(that.application.get)}.map,
-        "project" -> {
-          if (this.project.isDefined && this.project.get != null)
-            {this.project.get << that.project.orNull}.map
-          else if (that.project.isDefined && that.project.get != null)
-            that.project.get.map
+        "build" -> {
+          if (this.build.isDefined && this.build.get != null)
+            {this.build.get << that.build.orNull}.map
+          else if (that.build.isDefined && that.build.get != null)
+            that.build.get.map
           else
             null
         },

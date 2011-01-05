@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory
  *
  * @author Michael Fortin
  */
-class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod]) {
+class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod])
+    extends Configuration {
 
   /**
    * The developement environment
@@ -39,7 +40,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
    */
   val application: Application = c.application.orNull
 
-  val project: Project = c.project.orNull
+  val build: Build = c.build.orNull
 
   /**
    * logging information

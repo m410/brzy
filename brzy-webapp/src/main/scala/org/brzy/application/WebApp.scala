@@ -43,7 +43,7 @@ import org.brzy.service.{Service, ServiceScanner}
 class WebApp(conf: WebAppConf) {
   private val log = LoggerFactory.getLogger(getClass)
   val application = conf.application
-  val project = conf.project
+  val build = conf.build
 
   /**
    * The view resource provider for the application.  There is only one view provider for the

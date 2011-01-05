@@ -23,7 +23,7 @@ class WebAppConfTest extends JUnitSuite {
     val wac = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     assertNotNull(wac)
     assertNotNull(wac.application)
-    assertNotNull(wac.project)
+    assertNotNull(wac.build)
     assertNotNull(wac.logging)
     assertNotNull(wac.logging.loggers)
     assertNotNull(wac.logging.appenders)
