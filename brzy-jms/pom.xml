@@ -76,6 +76,12 @@
       <groupId>org.reflections</groupId>
       <artifactId>reflections</artifactId>
       <version>0.9.5-RC2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.reflections</groupId>
+          <artifactId>reflections</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.brzy.fab</groupId>

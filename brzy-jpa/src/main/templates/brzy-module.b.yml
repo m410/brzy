@@ -9,6 +9,9 @@ config_class: org.brzy.mod.jpa.JpaModConfig
 provider_class: org.brzy.mod.jpa.JpaModProvider
 persistence_unit: brzy-webapp-persistence
 
+repositories:
+  - {id: jboss-groups, url: https://repository.jboss.org/nexus/content/groups/public}
+  
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "${hibernate-version}"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "${validator-version}"}

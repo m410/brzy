@@ -43,6 +43,11 @@
   </build>
   <repositories>
     <repository>
+      <id>brzy-nexus</id>
+      <name>Nexus Staging Repo</name>
+      <url>http://repo.brzy.org/content/repositories/releases</url>
+    </repository>
+    <repository>
       <id>scala-tools.snapshot</id>
       <url>http://scala-tools.org/repo-snapshots</url>
       <releases>

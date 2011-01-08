@@ -115,9 +115,18 @@ class BrzyTomcat6Plugin(ctx:BuildContext) {
 	  ctx.line.say(Info(" -- source   : " + sourceDir))
 	  ctx.line.say(Info(" -- classes  : " + classesDir))
 	  ctx.line.say(Info(" -- libs     : " + libsDir))
-	  // TODO copy files to web-inf
-	  new RunWebApp("",8080)
-	  new FileWatcher(sourceDir,classesDir, libsDir, new ScalaCompiler(new PrintWriter(System.out)))
+
+	  try {
+			new RunWebApp("",8080)
+		  new FileWatcher(sourceDir,classesDir, libsDir, new ScalaCompiler(new PrintWriter(System.out)))
+		}
+		catch {
+			case e:Exception => 
+				println(e.getMessage)
+				e.printStackTrace
+				ctx.line.endWithError(e)
+		}
+	
 	  Thread.sleep(100000000) // TODO there's probably a better way to do this
 	}
 }
