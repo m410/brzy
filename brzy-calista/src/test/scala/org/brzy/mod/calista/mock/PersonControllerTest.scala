@@ -45,9 +45,13 @@ class PersonControllerTest extends JUnitSuite {
 
     val some = manager.createSession
     manager.context.withValue(some) {
-      val person = Person.get(keyId)
-      assertNotNull(person)
-      assertEquals("Bob", person.firstName)
+      Person.get(keyId) match {
+        case Some(person) =>
+          assertNotNull(person)
+          assertEquals("Bob", person.firstName)
+        case _ => fail("No person found")
+      }
+
     }
     manager.destroySession(some)
   }

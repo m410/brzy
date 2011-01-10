@@ -374,7 +374,7 @@ object Action {
         req.getSession.removeAttribute(s.attr)
       case s: CookieAdd =>
         log.debug("cookieAdd: {}", s)
-        res.addCookie(new Cookie(s.attrs._1, s.attrs._2.asInstanceOf[String]))
+        res.addCookie(new Cookie(s.attrs._1, s.attrs._2.toString))
       case _ => error("Unknown Data Type")
     }
 
@@ -408,7 +408,7 @@ object Action {
           session += e.nextElement -> req.getAttribute(e.nextElement)
         list += session
       case HeadersClass =>
-        val headers = new Headers(req)
+        val headers = Headers(req)
         list += headers
       case WizardClass =>
         log.warn("wizard is not implemented")

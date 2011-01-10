@@ -50,7 +50,7 @@ case class Redirect(path:String) extends Direction
 /**
  * Return xml as the body of the response.
  */
-case class Xml(t:AnyRef) extends Direction with Parser {
+case class Xml(t:AnyRef,contentType:String = "text/xml") extends Direction with Parser {
   import org.brzy.fab.reflect.Properties._
 
   def parse = {
@@ -60,16 +60,13 @@ case class Xml(t:AnyRef) extends Direction with Parser {
     </class>
     node(t.getClass.getSimpleName,tmp)
   }.toString
-
-  val contentType = "text/xml"
 }
 
 /**
  * Returns plain text as the body of the response.
  */
-case class Text(ref:AnyRef) extends Direction with Parser{
+case class Text(ref:AnyRef, contentType:String = "text/plain") extends Direction with Parser{
   def parse = ref.toString
-  val contentType = "text"
 }
 
 /**
@@ -81,13 +78,13 @@ case class Binary(bytes:Array[Byte], contentType:String) extends Direction
 /**
  * Return Json formatted text as the body of the response.
  */
-case class Json(target:AnyRef) extends Direction with Parser {
+case class Json(target:AnyRef, contentType:String = "text/json") extends Direction with Parser {
 
   def parse = {
     import org.brzy.fab.reflect.Properties._
     tJson.build(target.properties).toString
   }
-  val contentType = "text/json"
+
 }
 
 /**

@@ -4,7 +4,7 @@ plugins:
     source_file: .brzy/modules/brzy-calista/BrzyCalistaPlugin.scala
     class_name: BrzyCalistaPlugin
     tasks:
-      - name: calista-domain
+      - name: gen-calista-domain
         method_name: calistaDomain
         description: Generate a calista domain class
         takes_args: true

@@ -10,15 +10,15 @@ dependencies:
   - {org: org.brzy.fab, name: fab-util, rev: "${fab-util-version}", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
-  - {org: org.apache.tomcat, name: annotations-api, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: catalina, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: coyote, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: el-api, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: jasper, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: jasper-el, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: jasper-jdt, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: jsp-api, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: juli, rev: "${tomcat-version}"}
-  - {org: org.apache.tomcat, name: servlet-api, rev: "${tomcat-version}"}
+  - {org: org.apache.tomcat, name: annotations-api, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: catalina, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: coyote, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: el-api, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: jasper, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: jasper-el, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: jasper-jdt, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: jsp-api, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: juli, rev: "${tomcat-version}", transitive: false}
+  - {org: org.apache.tomcat, name: servlet-api, rev: "${tomcat-version}", transitive: false}
 repositories:
   - {id: maven-central, url: http://repo1.maven.org/maven2 }
