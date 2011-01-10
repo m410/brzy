@@ -20,4 +20,5 @@ package org.brzy.webapp.action.returns
  */
 trait Parser {
   def parse:String
+  def contentType:String
 }

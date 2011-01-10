@@ -107,7 +107,7 @@ class WebApp(conf: WebAppConf) {
   /**
    * The service map made available to all controllers
    */
-  val serviceMap: Map[String, _ <: AnyRef] = makeServiceMap
+  lazy val serviceMap: Map[String, _ <: AnyRef] = makeServiceMap
 
   /**
    * If you want to change how services are discovered and added to the service map, override
@@ -129,14 +129,14 @@ class WebApp(conf: WebAppConf) {
     })
     persistenceProviders.foreach(_.serviceMap.foreach(map + _))
     moduleProviders.foreach(_.serviceMap.foreach(map + _))
-    log.trace("services: {}", map)
+    log.debug("services: {}", map)
     map.toMap
   }
 
   /**
    * The application controllers
    */
-  val controllers: List[_ <: Controller] = makeControllers
+  lazy val controllers: List[_ <: Controller] = makeControllers
 
   /**
    * To change how the controllers are discovered and added to the controllers list or to
@@ -214,7 +214,7 @@ class WebApp(conf: WebAppConf) {
     viewProvider.startup
     serviceMap.values.foreach(lifeCycleCreate(_))
     log.info("application  : startup")
-    log.debug("service map : {}", serviceMap.mkString(","))
+    log.debug("services : {}", serviceMap.mkString(","))
     log.debug("controllers : {}", controllers.mkString(","))
     log.debug("actions     : {}", actions.mkString(","))
   }

@@ -24,24 +24,12 @@ import collection.JavaConversions._
  *    val headerValue = c("name")
  * }
  * </pre>
- * 
+ *
  * @author Michael Fortin
  */
-class Headers(request:HttpServletRequest) extends Map[String,String] with MapLike[String, String, Headers] {
+class Headers(internalMap: Map[String, String]) extends Map[String, String] with MapLike[String, String, Headers] {
 
-  protected[args] val internalMap = {
-    val map = collection.mutable.Map[String,String]()
-
-    if(request != null)
-      request.getHeaderNames.foreach(f=>{
-        val str = f.asInstanceOf[String]
-        map += str->request.getHeader(str).asInstanceOf[String]
-      })
-    
-    map.toMap
-  }
-
-  override def empty:Headers = new Headers(null)
+  override def empty: Headers = new Headers(Map.empty[String, String])
 
   def +[B1 >: String](kv: (String, B1)) = null
 
@@ -50,4 +38,21 @@ class Headers(request:HttpServletRequest) extends Map[String,String] with MapLik
   def iterator = internalMap.iterator
 
   def get(key: String) = internalMap.get(key)
+}
+
+object Headers {
+
+  def apply(map: Map[String, String]) = new Headers(map)
+
+  def apply(request: HttpServletRequest) = {
+    val map = collection.mutable.Map[String, String]()
+
+    if (request != null)
+      request.getHeaderNames.foreach(f => {
+        val str = f.asInstanceOf[String]
+        map += str -> request.getHeader(str).asInstanceOf[String]
+      })
+
+    new Headers(map.toMap)
+  }
 }
