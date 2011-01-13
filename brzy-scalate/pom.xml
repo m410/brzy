@@ -13,7 +13,7 @@
     <version>0.8</version>
   </parent>
   <properties>
-    <scalate-version>1.3.2</scalate-version>
+    <scalate-version>1.3.1</scalate-version>
   </properties>
   <build>
     <plugins>
