@@ -13,8 +13,8 @@
     <version>0.8</version>
   </parent>
   <properties>
-    <hibernate-version>3.5.1-Final</hibernate-version>
-    <validator-version>4.0.2.GA</validator-version>
+    <hibernate-version>3.6.0.Final</hibernate-version>
+    <validator-version>4.1.0.Final</validator-version>
   </properties>
   <build>
     <plugins>
@@ -60,7 +60,7 @@
     <repository>
       <id>jboss.maven</id>
       <name>Jboss Maven Rep</name>
-      <url>http://repository.jboss.com/maven2</url>
+      <url>https://repository.jboss.org/nexus/content/groups/public</url>
     </repository>
   </repositories>
   <dependencies>

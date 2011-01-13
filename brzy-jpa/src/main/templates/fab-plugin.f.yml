@@ -4,7 +4,7 @@ plugins:
     source_file: .brzy/modules/brzy-jpa/BrzyJpaPlugin.scala
     class_name: BrzyJpaPlugin
     tasks:
-      - name: jpa-domain
+      - name: gen-jpa-domain
         method_name: createJpaDomain
         description: Generate A JPA Domain Class
         takes_args: true

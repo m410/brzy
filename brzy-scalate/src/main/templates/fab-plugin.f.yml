@@ -5,7 +5,7 @@ plugins:
     class_name: BrzyScalatePlugin
     include_app_classpath: true
     tasks:
-      - name: scalate-views
+      - name: gen-scalate-views
         method_name: genSspViews
         description: Generate Views for domain class
         takes_args: true

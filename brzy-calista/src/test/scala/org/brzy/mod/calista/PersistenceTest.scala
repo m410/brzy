@@ -64,7 +64,7 @@ class PersistenceTest extends JUnitSuite {
       val s = Calista.value.get
       assertTrue(s.count(Person.family | insertKey) == 0)
       val person = Person(insertKey, "Fred", "Smith", new Date)
-      person.save
+      person.insert
     }
     manager.destroySession(session2)
 
