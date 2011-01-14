@@ -20,9 +20,10 @@ import org.brzy.persistence.Dao
 
 
 /**
- * Controller writers can extend this to get all the crud operations in their controller.  The
- * controller has to be associated with a persistent class that implements Persistent and has
- * a companion class that implements Persistable.
+ * Controller writers can extend this to get all the crud operations in their
+ * controller.  The controller has to be associated with a persistent class
+ * that implements Persistent and has a companion class that implements
+ * Persistable.
  *
  * @see org.brzy.persistence.Persistable
  * @see org.brzy.persistence.Persistent
@@ -35,6 +36,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
 
   private[this] implicit def applyCrudOps(e: E) = dao.newPersistentCrudOps(e)
 
+  // TODO convert words that end with a 'y'
   private[this] val entityName = {
     val name = m.erasure.getSimpleName
     name.substring(0, 1).toLowerCase + name.substring(1)
@@ -46,7 +48,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
           Action("save", "create", save _) ::
           Action("{id}/edit", "edit", edit _) ::
           Action("{id}/update", "edit", update _) ::
-          Action("{id}/delete", "delete", delete _) ::
+          Action("{id}/delete", "list", delete _) ::
           Nil
 
   def list = entityName + "sList" -> dao.list
@@ -62,7 +64,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
         Model(entityName -> entity, "violations" -> violations)
       case _ =>
         entity.insert(commit = true)
-        val redirect = Redirect("/" + entityName + "s/" + entity.id)
+        val redirect = Redirect("/" + basePath + "/" + entity.id)
         val flash = Flash("New " + entityName + " saved.", entityName + ".save")
         (redirect, flash)
     }
@@ -77,7 +79,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
         Model(entityName -> entity, "violations" -> violations)
       case _ =>
         val updated = entity.update()
-        val redirect = Redirect("/" + entityName + "s/" + updated.id)
+        val redirect = Redirect("/" + basePath + "/" + updated.id)
         val flash = Flash(entityName + " updated.", entityName + ".update")
         (redirect, flash)
     }
@@ -86,7 +88,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
   def delete(p: Parameters) = {
     val entity = dao.load(p("id"))
     entity.delete
-    val redirect = Redirect("/" + entityName + "s")
+    val redirect = Redirect("/" + basePath )
     val flash = Flash(entityName + " was Deleted.", entityName + ".delete")
     (redirect, flash)
   }

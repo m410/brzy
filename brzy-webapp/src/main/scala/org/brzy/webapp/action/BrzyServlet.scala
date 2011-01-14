@@ -13,6 +13,7 @@
  */
 package org.brzy.webapp.action
 
+import args.Principal
 import org.brzy.application.WebApp
 import Action._
 import org.slf4j.LoggerFactory
@@ -40,8 +41,18 @@ class BrzyServlet extends HttpServlet {
     app.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
         log.debug("{} >> {}", req.getRequestURI, action)
+
+        // check is secured
+        if (action.isSecure) {
+          val session = req.getSession(false)
+          val principal = session.getAttribute("brzy_principal").asInstanceOf[Principal]
+          log.debug("authorized: {}", action.authorize(principal))
+          // false = login page, true = continue to action
+        }
+
         val args = buildArgs(action, req)
         val result = action.execute(args)
+
         handleResults(action, result, req, res)
       case _ =>
         res.sendError(404)

@@ -10,7 +10,13 @@ class BrzyScalatePlugin(context:BuildContext)  {
 
 	def genSspViews(args:Array[String]) = {
 		context.line.say(Info("Generate views for domain"))
-		val packageAndClass = context.line.ask(Question("enter package & class: "))
+
+    val packageAndClass =
+      if(args.length == 1)
+        args(0)
+      else
+        context.line.ask(Question("enter package & class: "))
+
 		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
     val name = className.substring(0,1).toLowerCase + className.substring(1)

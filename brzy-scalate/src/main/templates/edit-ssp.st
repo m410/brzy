@@ -1,8 +1,11 @@
+<% escapeMarkup = false %>
 <% attributes("layout") = "/layouts/default.ssp" %>
-<% import org.brzy.validator.Violation %>
+<% attributes("title") = "$shortClassName$" %>
+<% import javax.validation.ConstraintViolation %>
 <% import $fullClassName$ %>
-<% val $attributeName$ = attribute[$className$]("$attributeName$")  %>
-<% val violations = attributeOrElse[Set[Violation[$shortClassName$]]]("violations", Set.empty[Violation[$shortClassName$]])  %>
+<% val $attributeName$ = attribute[$shortClassName$]("$attributeName$")  %>
+<% val violations = attributeOrElse[Set[ConstraintViolation[$shortClassName$]]]("violations", Set.empty[ConstraintViolation[$shortClassName$]])  %>
+#if(hasFlash()) <div class="success">\${flash()}</div> #end
 <h2>Edit $shortClassName$</h2>
 <form action="\${action("/$attributeName$s/"+$attributeName$.id+"/update")}" method="post" accept-charset="utf-8">
   <fieldset id="edit_$attributeName$">

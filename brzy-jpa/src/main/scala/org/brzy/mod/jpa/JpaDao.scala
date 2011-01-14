@@ -40,6 +40,8 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
    */
   class EntityCrudOps[T](t:T) extends PersistentCrudOps(t) {
 
+    protected[jpa] def entityManager = JpaContext.value.get
+
     override def validate ={
       log.trace("validate")
       val set = validator.validate(t).toSet
@@ -52,13 +54,12 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
 
     override def delete = {
       log.trace("delete")
-      val entityManager = JpaContext.value.get
       entityManager.remove(t)
     }
 
     override def insert(commit:Boolean = false) = {
       log.trace("insert")
-      val entityManager = JpaContext.value.get
+
       entityManager.persist(t)
 
       if(commit) {
@@ -69,13 +70,11 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
 
     override def update = {
       log.trace("update")
-      val entityManager = JpaContext.value.get
       entityManager.merge(t)
     }
 
     override def commit = {
       log.trace("commit")
-      val entityManager = JpaContext.value.get
       entityManager.getTransaction.commit
     }
   }

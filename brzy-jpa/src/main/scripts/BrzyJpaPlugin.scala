@@ -10,8 +10,14 @@ class BrzyJpaPlugin(context:BuildContext)  {
   // create a class from template
 	def createJpaDomain(args:Array[String]) = {
 		context.line.say(Info("Create a JPA Domain Class"))
-    val packageAndClass = context.line.ask(Question("enter package & class: "))
-		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
+
+    val packageAndClass =
+      if(args.length == 1)
+        args(0)
+      else
+        context.line.ask(Question("enter package & class: "))
+
+    val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
 		// ask if you want to add the controller
 		// ask to create unit test
@@ -20,6 +26,7 @@ class BrzyJpaPlugin(context:BuildContext)  {
 		val template = group.template("domain-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
+		template.setAttribute("attributeName", attributeName(className))
 
     val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
     outputDir.mkdirs
@@ -29,4 +36,14 @@ class BrzyJpaPlugin(context:BuildContext)  {
 		writer.write(template.toString)
 		writer.close
 	}
+
+  def attributeName(name:String) = {
+    val base = name.substring(0,1).toLowerCase + name.substring(1,name.length)
+
+    if(base.endsWith("y"))
+      base.substring(0,base.length -1) + "ies"
+    else
+      base + "s"
+  }
+
 }
