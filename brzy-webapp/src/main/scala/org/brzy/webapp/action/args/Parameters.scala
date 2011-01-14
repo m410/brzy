@@ -50,3 +50,7 @@ class Parameters(map:collection.Map[String,Array[String]])
   override def -(key: String): Parameters =  this
 }
 
+object Parameters {
+  def apply(map:collection.Map[String,Array[String]]) = new Parameters(map)
+}
+

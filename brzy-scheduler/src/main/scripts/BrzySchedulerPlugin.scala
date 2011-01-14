@@ -10,7 +10,13 @@ class BrzySchedulerPlugin(context:BuildContext) {
 
 	def createScheduler(args:Array[String]) = {
 		context.line.say(Info("Create a scheduler service"))
-		val packageAndClass = context.line.ask(Question("enter package & class: "))
+
+		val packageAndClass =
+      if(args.length == 1)
+        args(0)
+      else
+        context.line.ask(Question("enter package & class: "))
+
 		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
 		// ask if you want to add the controller

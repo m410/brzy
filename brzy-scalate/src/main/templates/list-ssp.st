@@ -1,8 +1,11 @@
+<% escapeMarkup = false %>
 <% attributes("layout") = "/layouts/default.ssp" %>
-<%@ import val $attributeName$sList: List[$fullClassName$]  %>
+<% attributes("title") = "$attributeName$" %>
+<% import com.offer2lead.core.company.Company  %>
+<% val $attributeName$sList$ = attribute[List[$fullClassName$]]("$attributeName$sList$") %>
 #if(hasFlash()) <div class="success">\${flash()}</div> #end
 <table>
-  <caption>Person List</caption>
+  <caption>$attributeName$ List</caption>
   <thead>
     <tr>
     $fields:{ field |     <th>$field$</th>$\n$}$

@@ -108,6 +108,13 @@ class ActionTest extends JUnitSuite {
     assertEquals(0, result.size)
   }
 
+  @Test def testDefaultReturnPath = {
+    val ctlr = new UserController()
+    val action = ctlr.actions.find(_.actionPath == "save").get
+    def result = action.execute(List(Parameters(Map("id"->Array("1")))))
+
+  }
+
   @Test def testParameterMapExtraction = {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "{id}/companies/{cid}").get
