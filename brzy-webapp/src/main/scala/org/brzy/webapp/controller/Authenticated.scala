@@ -1,4 +1,4 @@
-package org.brzy.service
+package org.brzy.webapp.controller
 
 /**
  * Document Me..
