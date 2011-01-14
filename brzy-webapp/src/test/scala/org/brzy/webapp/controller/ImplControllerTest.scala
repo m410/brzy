@@ -4,7 +4,7 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.junit.Test
 import org.brzy.webapp.action.returns.{Model, View}
-import org.brzy.webapp.action.args.{Headers, Parameters}
+import org.brzy.webapp.action.args.{Principal, Headers, Parameters}
 import org.brzy.webapp.action.Action
 import collection.JavaConversions._
 
@@ -60,11 +60,11 @@ class ImplControllerTest extends JUnitSuite {
 
 
 
-class ImplController extends Controller("impls") with Secured with Intercepted {
+class ImplController extends Controller("impls") with Secured {
   val actions = Action("list", "list", list _, Roles("SUPER")) ::
           Action("showMore", "show", showMore _) :: Nil
 
-  override def intercept(action: () => AnyRef, actionArgs: List[AnyRef]) = {
+  override def intercept(action: () => AnyRef, actionArgs: List[AnyRef],principal:Option[Principal] = None) = {
     val paramsOption = actionArgs.find(_.isInstanceOf[Parameters])
     assertTrue(paramsOption.isDefined)
     val result = action()

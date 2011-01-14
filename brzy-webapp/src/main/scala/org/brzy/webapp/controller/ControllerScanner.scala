@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory
 /**
  *   http://code.google.com/p/reflections/
  * 
+ * Document Me..
+ *
  * @author Michael Fortin
  */
 case class ControllerScanner(packageName:String) {
