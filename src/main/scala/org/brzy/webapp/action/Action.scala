@@ -49,16 +49,21 @@ trait Action extends Ordered[Action] {
   val path = Path(controller.basePath, actionPath)
 
   def authorize(p: Principal) = {
-    val sec = controller.asInstanceOf[Secured]
-    p.roles.allowed.find(role => sec.roles.allowed.contains(role)).isDefined ||
-            constraints.find(c => {
-              if (c.isInstanceOf[Roles]) {
-                val roles = c.asInstanceOf[Roles]
-                p.roles.allowed.find(role => roles.allowed.contains(role)).isDefined
-              }
-              else
-                false
-            }).isDefined
+    if (p == null) {
+      false
+    }
+    else {
+      val sec = controller.asInstanceOf[Secured]
+      p.roles.allowed.find(role => sec.roles.allowed.contains(role)).isDefined ||
+              constraints.find(c => {
+                if (c.isInstanceOf[Roles]) {
+                  val roles = c.asInstanceOf[Roles]
+                  p.roles.allowed.find(role => roles.allowed.contains(role)).isDefined
+                }
+                else
+                  false
+              }).isDefined
+    }
   }
 
   def isSecure = controller.isInstanceOf[Secured]
@@ -262,7 +267,8 @@ object Action {
   /**
    * TODO need to hand the three return types, data, direction and stream
    */
-  def handleResults(action: Action, result: AnyRef, req: Request, res: Response): Unit = {
+  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response): Unit = {
+    log.debug("results: {}", actionResult)
 
     def matchData(result: Any): Unit = result match {
       case (s: String, m: AnyRef) =>
@@ -283,13 +289,13 @@ object Action {
       case r: (_, _, _, _, _) =>
         log.debug("tuple: {}", r)
         r.productIterator.foreach(s => matchData(s))
-      case _ => //ignore
+      case _ => //ignore and Direction in the list
     }
 
-    matchData(result)
+    matchData(actionResult)
 
     // need to handle the direction after the data or a servlet error doesn't happen
-    def matchDirection(result: Any): Unit = result match {
+    def matchDirection(directionResult: Any): Unit = directionResult match {
       case d: Direction =>
         log.debug("Direction: {}", d)
         handleDirection(action, d, req, res)
@@ -310,7 +316,12 @@ object Action {
         handleDirection(action, View(action.defaultView), req, res)
     }
 
-    matchDirection(result)
+    actionResult match {
+      case d: Data =>
+        handleDirection(action, View(action.defaultView), req, res)
+      case _ =>
+        matchDirection(actionResult)
+    }
   }
 
   /**
@@ -385,8 +396,8 @@ object Action {
     val path = parseActionPath(req.getRequestURI, req.getContextPath)
     val args = action.argTypes
     val list = new ListBuffer[AnyRef]()
-    log.debug("action:",args)
-    log.debug("args types: {}, path: {}",args,path)
+    log.debug("action:", args)
+    log.debug("args types: {}, path: {}", args, path)
 
     args.toList.foreach(arg => arg match {
       case ParametersClass =>
@@ -423,8 +434,8 @@ object Action {
 
   def parseActionPath(uri: String, ctx: String) = {
     val newuri =
-      if(uri.startsWith("//"))
-        uri.substring(1,uri.length)
+      if (uri.startsWith("//"))
+        uri.substring(1, uri.length)
       else
         uri
 
@@ -435,6 +446,6 @@ object Action {
     else if (!newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
       newuri.substring(ctx.length, newuri.length)
     else
-      newuri 
+      newuri
   }
 }

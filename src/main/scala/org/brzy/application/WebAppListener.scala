@@ -15,6 +15,8 @@ package org.brzy.application
 
 import javax.servlet.{ServletContextEvent, ServletContextListener}
 import org.slf4j.LoggerFactory
+import ch.qos.logback.core.util.StatusPrinter
+import ch.qos.logback.classic.LoggerContext
 
 /**
  * Web application listener placed in the web.xml to initialize and destroy the 
@@ -27,6 +29,15 @@ class WebAppListener extends ServletContextListener {
   private[this] val log = LoggerFactory.getLogger(classOf[WebAppListener])
 
   def contextInitialized(servletContextEvent: ServletContextEvent) = {
+    val lc = LoggerFactory.getILoggerFactory()
+
+    if(lc.isInstanceOf[LoggerContext])
+      StatusPrinter.print(lc.asInstanceOf[LoggerContext])
+    else {
+      val factory = LoggerFactory.getILoggerFactory
+      println("### LoggerFactory is instance of %s".format(factory.getClass.toString))
+    }
+
     val env = servletContextEvent.getServletContext.getInitParameter("brzy-env")
     log.info("Brzy Environment  : {}", env)
     val app = WebApp(env)
