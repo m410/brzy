@@ -20,11 +20,14 @@ import org.brzy.webapp.action.args.Parameters
 import org.brzy.webapp.action.returns.Model
 
 @ConstructorProperties(Array("id"))
-class User(val id: Long) {
-  def this() = this(0)
+class User(val id: Long, val userName:String, val password:String) extends Authenticated {
+  def this() = this(0,"","")
+	def authenticatedRoles = Array.empty[String]
 }
 
-object User extends MockPersistable[User, Long]
+object User extends MockPersistable[User, Long] with Authenticator[User] {
+	def login(user:String,pass:String) = None
+}
 
 class UserController extends CrudController("users",User) {
   override val actions = super.actions ++ List(Action("{id}/items/{iid}","itmes",sub _))
