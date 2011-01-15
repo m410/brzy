@@ -116,7 +116,7 @@ trait Action extends Ordered[Action] {
 object Action {
   private[this] val log = LoggerFactory.getLogger(getClass)
   private[this] val ParametersClass = classOf[Parameters]
-  private[this] val SessionClass = classOf[Parameters]
+  private[this] val SessionClass = classOf[Session]
   private[this] val HeadersClass = classOf[Headers]
   private[this] val WizardClass = classOf[Wizard]
   private[this] val CookiesClass = classOf[Cookies]
@@ -335,7 +335,7 @@ object Action {
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
         log.debug("forward: {}", f)
-        req.getRequestDispatcher(f.path).forward(req, res)
+        req.getRequestDispatcher(f.path + ".brzy").forward(req, res)
       case s: Redirect =>
         log.debug("redirect: {}", s)
         val target: String =
@@ -415,8 +415,11 @@ object Action {
         val session = new Session()
         val e = req.getSession.getAttributeNames.asInstanceOf[Enumeration[String]]
 
-        while (e.hasMoreElements)
-          session += e.nextElement -> req.getAttribute(e.nextElement)
+        while (e.hasMoreElements) {
+          val name = e.nextElement
+          session += name -> req.getAttribute(name)
+        }
+
         list += session
       case HeadersClass =>
         val headers = Headers(req)

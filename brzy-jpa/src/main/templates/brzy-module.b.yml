@@ -14,6 +14,12 @@ repositories:
   
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "${hibernate-version}"}
+  - {conf: compile, org: antlr, name: antlr, rev: "2.7.6"}
+  - {conf: compile, org: commons-collections, name: commons-collections, rev: "3.1"}
+  - {conf: compile, org: dom4j, name: dom4j, rev: "1.6.1"}
+  - {conf: compile, org: javassist, name: javassist, rev: "3.12.0.GA"}
+  - {conf: compile, org: javax.transaction, name: jta, rev: "1.1"}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "${validator-version}"}
+  - {conf: compile, org: javax.validation, name: validation-api, rev: "1.0.0.GA"}
   - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}
 

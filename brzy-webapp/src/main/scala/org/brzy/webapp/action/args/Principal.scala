@@ -20,4 +20,5 @@ import org.brzy.webapp.controller.Roles
  * 
  * @author Michael Fortin
  */
+@serializable
 case class Principal(name:String, roles:Roles)
