@@ -20,7 +20,7 @@ package org.brzy.webapp.action.returns
  * </pre>
  * @author Michael Fortin
  */
-abstract class Data
+trait Data
 
 /**
  *  Add a name value pair to the servlet request attributes.
