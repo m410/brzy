@@ -19,7 +19,7 @@ import Action._
 import org.slf4j.LoggerFactory
 import javax.servlet.http._
 import javax.servlet.{ServletResponse, ServletRequest}
-import returns.{Error,Redirect,Flash}
+import returns.{Error,Redirect,Flash,SessionAdd}
 
 /**
  * The basic servlet implementation.
@@ -35,7 +35,7 @@ class BrzyServlet extends HttpServlet {
 
   private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    log.trace("request: {}, contet: {}", req.getServletPath, req.getContextPath)
+    log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
@@ -54,8 +54,11 @@ class BrzyServlet extends HttpServlet {
               else
                 Error(403, "Not Autorized")
             }
-            else
-              (Redirect("/login"),Flash("session.end","Session ended, log in again"))
+            else{
+              val flash = Flash("session.end", "Session ended, log in again")
+              val add = SessionAdd("last_view"->req.getRequestURI)
+              (Redirect("/login"),flash)
+            }
           }
           else {
             action.execute(args)
