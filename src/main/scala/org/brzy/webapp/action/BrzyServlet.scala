@@ -19,6 +19,7 @@ import Action._
 import org.slf4j.LoggerFactory
 import javax.servlet.http._
 import javax.servlet.{ServletResponse, ServletRequest}
+import returns.{Error,Redirect,Flash,SessionAdd}
 
 /**
  * The basic servlet implementation.
@@ -34,24 +35,34 @@ class BrzyServlet extends HttpServlet {
 
   private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
-    log.trace("request: {}, contet: {}", req.getServletPath, req.getContextPath)
+    log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
     app.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
         log.debug("{} >> {}", req.getRequestURI, action)
-
-        // check is secured
-        if (action.isSecure) {
-          val session = req.getSession(false)
-          val principal = session.getAttribute("brzy_principal").asInstanceOf[Principal]
-          log.debug("authorized: {}", action.authorize(principal))
-          // false = login page, true = continue to action
-        }
-
         val args = buildArgs(action, req)
-        val result = action.execute(args)
+
+        val result =
+          if (action.isSecure) {
+            if (req.getSession(false) != null) {
+              val session = req.getSession
+              val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
+              if (action.authorize(p))
+                action.execute(args)
+              else
+                Error(403, "Not Autorized")
+            }
+            else{
+              val flash = Flash("session.end", "Session ended, log in again")
+              val add = SessionAdd("last_view"->req.getRequestURI)
+              (Redirect("/login"),flash)
+            }
+          }
+          else {
+            action.execute(args)
+          }
 
         handleResults(action, result, req, res)
       case _ =>

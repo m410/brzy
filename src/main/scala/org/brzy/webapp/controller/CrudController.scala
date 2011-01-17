@@ -51,7 +51,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
           Action("{id}/delete", "list", delete _) ::
           Nil
 
-  def list(p:Pameters) = entityName + "sList" -> dao.list
+  def list(p:Parameters) = entityName + "sList" -> dao.list
 
   def view(params: Parameters) = entityName -> dao.load(params("id"))
 
