@@ -22,3 +22,9 @@ package org.brzy.webapp.controller
 trait Constraint
 
 case class Roles(allowed:String*) extends Constraint
+
+case class HttpMethods(allowed:String*) extends Constraint
+
+case class Secure(secure:Boolean = false) extends Constraint
+
+case class ContentTypes(allowed:String*) extends Constraint
