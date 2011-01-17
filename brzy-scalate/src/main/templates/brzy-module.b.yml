@@ -18,6 +18,7 @@ web_xml:
   - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.fusesource.scalate.servlet.TemplateEngineServlet", load-on-startup: "1"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.ssp"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.scaml"}
+  - error-page: { error-code: "403", location: "/errors/403.ssp"}
   - error-page: { error-code: "404", location: "/errors/404.ssp"}
   - error-page: { error-code: "500", location: "/errors/500.ssp"}
   - error-page: {exception-type: java.lang.Throwable, location: "/errors/500.ssp"}

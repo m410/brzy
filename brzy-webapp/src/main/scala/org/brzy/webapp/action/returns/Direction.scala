@@ -23,7 +23,7 @@ import com.twitter.json.{Json=>tJson}
  * 
  * @author Michael Fortin
  */
-abstract class Direction 
+trait Direction
 
 /**
  * Override the default view.

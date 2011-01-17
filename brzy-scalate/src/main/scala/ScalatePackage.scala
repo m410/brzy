@@ -10,6 +10,7 @@ class ScalatePackage extends TemplatePackage {
 import org.brzy.mod.scalate.view.UrlFunctions._
 import org.brzy.mod.scalate.view.FlashFunctions._
 import org.brzy.mod.scalate.view.FormFunctions._
+import org.brzy.mod.scalate.view.SecureFunctions._
 import org.brzy.mod.scalate.view.InternationalizationFunctions._
 import scala.collection.JavaConversions._
 implicit val req = request

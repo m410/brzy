@@ -19,5 +19,5 @@ package org.brzy.webapp.controller
  * @author Michael Fortin
  */
 trait Secured extends Intercepted {
-  val roles = Roles("ROLE_ADMIN","ROLE_USER")
+  val roles = Roles("ADMIN","USER")
 }
