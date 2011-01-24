@@ -11,10 +11,12 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.controller
+package org.brzy.webapp.action
+
+import HttpMethod._
 
 /**
- * Document Me..
+ * Set constraints upon actions to refine the action selection process.
  * 
  * @author Michael Fortin
  * @version $Id: $
@@ -23,8 +25,9 @@ trait Constraint
 
 case class Roles(allowed:String*) extends Constraint
 
-case class HttpMethods(allowed:String*) extends Constraint
+case class HttpMethods(allowed:HttpMethod*) extends Constraint
 
 case class Secure(secure:Boolean = false) extends Constraint
 
 case class ContentTypes(allowed:String*) extends Constraint
+

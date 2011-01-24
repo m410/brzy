@@ -13,6 +13,8 @@
  */
 package org.brzy.webapp.controller
 
+import org.brzy.webapp.action.Roles
+
 /**
  * Document Me..
  * //  def secure(action:()=>AnyRef, principal:SecurityPrincipal):AnyRef = action()

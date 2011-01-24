@@ -120,6 +120,7 @@ object Action {
   private[this] val HeadersClass = classOf[Headers]
   private[this] val WizardClass = classOf[Wizard]
   private[this] val CookiesClass = classOf[Cookies]
+  private[this] val PrincipalClass = classOf[Principal]
 
   /**
    *
@@ -397,7 +398,7 @@ object Action {
     val args = action.argTypes
     val list = new ListBuffer[AnyRef]()
     log.debug("action:", args)
-    log.debug("args types: {}, path: {}", args, path)
+    log.debug("arg types: {}, path: {}", args, path)
 
     args.toList.foreach(arg => arg match {
       case ParametersClass =>
@@ -405,7 +406,7 @@ object Action {
         val paramMap = new collection.mutable.HashMap[String, Array[String]]()
 
         for (i <- 0 to urlParams.size - 1) {
-          log.debug("add embeded param: ({},{})", action.path.parameterNames(i), urlParams(i))
+          log.debug("add uri param: ({},{})", action.path.parameterNames(i), urlParams(i))
           paramMap.put(action.path.parameterNames(i), Array(urlParams(i)))
         }
         val jParams = req.getParameterMap.asInstanceOf[java.util.Map[String, Array[String]]]
@@ -424,10 +425,10 @@ object Action {
       case HeadersClass =>
         val headers = Headers(req)
         list += headers
-      case WizardClass =>
-        log.warn("wizard is not implemented")
       case CookiesClass =>
-        log.warn("cookies is not implemented")
+        new Cookies(req)
+      case PrincipalClass =>
+        req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
       case _ =>
         error("unknown action argument type: " + arg)
     })

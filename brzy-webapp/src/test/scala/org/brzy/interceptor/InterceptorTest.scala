@@ -17,7 +17,7 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import util.DynamicVariable
 import java.lang.reflect.Method
-import javassist.util.proxy.{MethodHandler, ProxyObject, ProxyFactory => PFactory, MethodFilter}
+import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter}
 import org.junit.Test
 import collection.immutable.List
 import org.brzy.fab.interceptor.ManagedThreadContext
@@ -127,7 +127,6 @@ class MySession(var txt: String) {
     val that = p1.asInstanceOf[MySession]
     this.txt.equals(that.txt)
   }
-
 }
 
 object MySession extends DynamicVariable[MySession](new MySession("nil"))
