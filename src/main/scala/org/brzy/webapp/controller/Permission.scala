@@ -14,6 +14,7 @@
 package org.brzy.webapp.controller
 
 import org.brzy.webapp.action.args.Principal
+import org.brzy.webapp.action.Roles
 
 import java.security.MessageDigest
 import java.nio.charset.Charset

@@ -5,7 +5,7 @@ import org.junit.Assert._
 import org.junit.Test
 import org.brzy.webapp.action.returns.{Model, View}
 import org.brzy.webapp.action.args.{Principal, Headers, Parameters}
-import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.{Action,Roles}
 import collection.JavaConversions._
 
 class ImplControllerTest extends JUnitSuite {
