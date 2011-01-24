@@ -57,7 +57,7 @@ class BrzyServlet extends HttpServlet {
             else{
               val flash = Flash("session.end", "Session ended, log in again")
               val add = SessionAdd("last_view"->req.getRequestURI)
-              (Redirect("/login"),flash)
+              (Redirect("/auth"),flash)
             }
           }
           else {

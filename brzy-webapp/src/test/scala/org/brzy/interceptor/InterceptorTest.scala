@@ -17,9 +17,8 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import util.DynamicVariable
 import java.lang.reflect.Method
-import javassist.util.proxy.{MethodHandler, ProxyObject, ProxyFactory => PFactory, MethodFilter}
+import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter}
 import org.junit.Test
-import org.apache.commons.lang.builder.{HashCodeBuilder, EqualsBuilder}
 import collection.immutable.List
 import org.brzy.fab.interceptor.ManagedThreadContext
 
@@ -126,15 +125,7 @@ class MySession(var txt: String) {
 
   override def equals(p1: Any) = {
     val that = p1.asInstanceOf[MySession]
-    new EqualsBuilder()
-            .append(this.txt, that.txt)
-            .isEquals()
-  }
-
-  override def hashCode = {
-    new HashCodeBuilder(1, 3)
-            .append(this.txt)
-            .toHashCode
+    this.txt.equals(that.txt)
   }
 }
 
@@ -163,15 +154,7 @@ class My2Session(var txt: String) {
 
   override def equals(p1: Any) = {
     val that = p1.asInstanceOf[My2Session]
-    new EqualsBuilder()
-            .append(this.txt, that.txt)
-            .isEquals()
-  }
-
-  override def hashCode = {
-    new HashCodeBuilder(1, 3)
-            .append(this.txt)
-            .toHashCode
+    this.txt.equals(that.txt)
   }
 }
 

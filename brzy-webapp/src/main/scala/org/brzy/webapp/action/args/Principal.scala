@@ -13,7 +13,7 @@
  */
 package org.brzy.webapp.action.args
 
-import org.brzy.webapp.controller.Roles
+import org.brzy.webapp.action.Roles
 
 /**
  * This is not implemented yet.  It's used in secured controllers to access the caller principal.
