@@ -116,11 +116,6 @@ class WebApp(conf: WebAppConf) {
   protected[application] def makeServiceMap: Map[String, _ <: AnyRef] = {
     val map = WeakHashMap.empty[String, AnyRef]
 
-//    def name(c: Class[_]): String = {
-//      val in = c.getSimpleName
-//      in.charAt(0).toLower + in.substring(1, in.length)
-//    }
-
     val serviceClasses = ServiceScanner(conf.application.org.get).services
     serviceClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
@@ -129,7 +124,6 @@ class WebApp(conf: WebAppConf) {
     })
     persistenceProviders.foreach(_.serviceMap.foreach(map + _))
     moduleProviders.foreach(_.serviceMap.foreach(map + _))
-    log.debug("services: {}", map)
     map.toMap
   }
 
@@ -195,11 +189,7 @@ class WebApp(conf: WebAppConf) {
    */
   lazy val actions = {
     val list = new ListBuffer[Action]()
-
-    controllers.foreach(ctl => {
-      log.debug("load actions from controller: {}", ctl)
-      ctl.actions.foreach(a=> list += a)
-    })
+    controllers.foreach(ctl => { ctl.actions.foreach(a=> list += a)})
     SortedSet[Action]() ++ list.toIterable
   }
 
@@ -214,14 +204,14 @@ class WebApp(conf: WebAppConf) {
     viewProvider.startup
     serviceMap.values.foreach(lifeCycleCreate(_))
     log.info("application  : startup")
-    log.debug("services : {}", serviceMap.mkString(","))
-    log.debug("controllers : {}", controllers.mkString(","))
-    log.debug("actions     : {}", actions.mkString(","))
+    serviceMap.foreach(a=>log.debug("service: {}",a))
+    controllers.foreach(a=>log.debug("controllers: {}",a))
+    actions.foreach(a=>log.debug("actions: {}",a))
   }
 
   /**
-   * This is called by the servlet applicationContext listener to close the application.  This in
-   * turn calles the shutdown methods of all the modules.
+   * This is called by the servlet applicationContext listener to close the application.
+   * This in turn calles the shutdown methods of all the modules.
    */
   def shutdown = {
     serviceMap.values.foreach(lifeCycleDestroy(_))
@@ -234,29 +224,11 @@ class WebApp(conf: WebAppConf) {
   protected[application] def lifeCycleCreate(service: AnyRef) = {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].initializeService
-//    val clazz =
-//    if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
-//    else service.getClass
-//
-//    val option = clazz.getMethods.find(_.getAnnotation(classOf[PostCreate]) != null)
-//    option match {
-//      case Some(m) => m.invoke(service, Array(): _*)
-//      case _ =>
-//    }
   }
 
   protected[application] def lifeCycleDestroy(service: AnyRef) = {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].destroyService
-//    val clazz =
-//    if (service.isInstanceOf[ProxyObject]) service.getClass.getSuperclass
-//    else service.getClass
-//
-//    val option = clazz.getMethods.find(_.getAnnotation(classOf[PreDestroy]) != null)
-//    option match {
-//      case Some(m) => m.invoke(service, Array(): _*)
-//      case _ =>
-//    }
   }
 }
 
