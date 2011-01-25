@@ -9,5 +9,8 @@ config_class: org.brzy.mod.calista.CalistaModConf
 provider_class: org.brzy.mod.calista.CalistaModProvider
 key_space: Test
 dependencies:
-  - {conf: compile, org: org.brzy, name: calista, rev: "${calista-version}"}
+  - {conf: compile, org: org.brzy, name: calista, rev: "${calista-version}", transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "${pom.version}", transitive: false}
+  - {conf: compile, org: com.eaio.uuid, name: uuid, rev: "3.1", transitive: false}
+  - {conf: compile, org: org.apache.cassandra, name: cassandra, rev: "${cassandra.version}", transitive: false}
+  - {conf: compile, org: org.apache.thrift, name: libthrift, rev: "0.5", transitive: false}

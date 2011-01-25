@@ -6,14 +6,15 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-calista</artifactId>
   <name>Brzy Calista Module</name>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>
     <version>0.8</version>
   </parent>
   <properties>
-    <calista-version>0.3</calista-version>
+    <calista-version>0.4-SNAPSHOT</calista-version>
+    <cassandra.version>0.7.0</cassandra.version>
   </properties>
   <build>
     <plugins>
