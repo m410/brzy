@@ -111,7 +111,7 @@ class ActionTest extends JUnitSuite {
   @Test def testDefaultReturnPath = {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "save").get
-    def result = action.execute(List(Parameters(Map("id"->Array("1")))))
+    def result = action.execute(List(Parameters(Map("id"->Array("1")))),None)
 
   }
 

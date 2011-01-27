@@ -45,7 +45,7 @@ class XmlReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/xml", action.defaultView)
-    val result = action.execute(List[AnyRef]())
+    val result = action.execute(List[AnyRef](),None)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())

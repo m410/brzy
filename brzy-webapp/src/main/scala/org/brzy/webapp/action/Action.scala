@@ -38,7 +38,7 @@ trait Action extends Ordered[Action] {
 
   def returnType: AnyRef
 
-  def execute(args: List[AnyRef]): AnyRef
+  def execute(args: List[AnyRef],principal:Option[Principal]): AnyRef
 
   def controller: Controller
 
@@ -184,12 +184,12 @@ object Action {
 
     def argTypes: List[AnyRef] = List.empty[AnyRef]
 
-    def execute(args: List[AnyRef]) = {
+    def execute(args: List[AnyRef],principal:Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply().asInstanceOf[AnyRef]
         }
-        controller.asInstanceOf[Intercepted].intercept(wrap, args)
+        controller.asInstanceOf[Intercepted].intercept(wrap, args, principal)
       }
       else {
         action.apply().asInstanceOf[AnyRef]
@@ -207,12 +207,12 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 1))
 
-    def execute(args: List[AnyRef]) = {
+    def execute(args: List[AnyRef],principal:Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A]).asInstanceOf[AnyRef]
         }
-        controller.asInstanceOf[Intercepted].intercept(wrap, args)
+        controller.asInstanceOf[Intercepted].intercept(wrap, args, principal)
       }
       else {
         action.apply(args(0).asInstanceOf[A]).asInstanceOf[AnyRef]
@@ -230,12 +230,12 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 2))
 
-    def execute(args: List[AnyRef]) = {
+    def execute(args: List[AnyRef],principal:Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2]).asInstanceOf[AnyRef]
         }
-        controller.asInstanceOf[Intercepted].intercept(wrap, args)
+        controller.asInstanceOf[Intercepted].intercept(wrap, args, principal)
       }
       else
         action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2]).asInstanceOf[AnyRef]
@@ -252,12 +252,12 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 3))
 
-    def execute(args: List[AnyRef]) = {
+    def execute(args: List[AnyRef],principal:Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3]).asInstanceOf[AnyRef]
         }
-        controller.asInstanceOf[Intercepted].intercept(wrap, args)
+        controller.asInstanceOf[Intercepted].intercept(wrap, args, principal)
       }
       else
         action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3]).asInstanceOf[AnyRef]
@@ -426,9 +426,9 @@ object Action {
         val headers = Headers(req)
         list += headers
       case CookiesClass =>
-        new Cookies(req)
+        list += new Cookies(req)
       case PrincipalClass =>
-        req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
+        list += req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
       case _ =>
         error("unknown action argument type: " + arg)
     })

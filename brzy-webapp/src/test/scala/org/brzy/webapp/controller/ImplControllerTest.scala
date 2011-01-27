@@ -52,7 +52,7 @@ class ImplControllerTest extends JUnitSuite {
     val action = controller.actions.find(_.actionPath == "list").get
     // need to create parameters from
     val args = List[AnyRef](parameters)
-    val result = action.execute(args)
+    val result = action.execute(args,None)
     assertNotNull(result)
     assertTrue(result.isInstanceOf[Model])
   }

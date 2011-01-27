@@ -31,7 +31,7 @@ class ErrorReturnTest extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/error", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
