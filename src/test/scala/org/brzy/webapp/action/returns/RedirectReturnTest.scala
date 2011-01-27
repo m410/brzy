@@ -4,8 +4,6 @@ import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
 import org.brzy.webapp.mock.UserController
-import java.lang.reflect.Method
-import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.Action._
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
 
@@ -19,7 +17,7 @@ class RedirectReturnTest extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/redirect", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())

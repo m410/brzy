@@ -33,7 +33,7 @@ class JsonReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/json", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
@@ -50,7 +50,7 @@ class JsonReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/json2", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())

@@ -33,7 +33,7 @@ class DefaultReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/list", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
     var callCount = 0
@@ -57,7 +57,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val action = ctlr.actions.find(_.actionPath == "other").get//new Action("/users/other", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
     assertEquals("/user/other", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
     var callCount = 0
@@ -81,7 +81,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val action = ctlr.actions.find(_.actionPath == "other2").get//new Action("/users/some2", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
     assertEquals("/user/other2", action.defaultView)
-    val result = action.execute(List.empty[AnyRef])
+    val result = action.execute(List.empty[AnyRef],None)
     assertNotNull(result)
 
 

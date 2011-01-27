@@ -78,7 +78,7 @@ case class Binary(bytes:Array[Byte], contentType:String) extends Direction
 /**
  * Return Json formatted text as the body of the response.
  */
-case class Json(target:AnyRef, contentType:String = "text/json") extends Direction with Parser {
+case class Json(target:AnyRef = null, contentType:String = "text/json") extends Direction with Parser {
 
   def parse = {
     import org.brzy.fab.reflect.Properties._

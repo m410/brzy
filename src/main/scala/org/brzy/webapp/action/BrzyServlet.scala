@@ -50,7 +50,7 @@ class BrzyServlet extends HttpServlet {
               val session = req.getSession
               val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
               if (action.authorize(p))
-                action.execute(args)
+                action.execute(args,Option(p))
               else
                 Error(403, "Not Autorized")
             }
@@ -61,7 +61,9 @@ class BrzyServlet extends HttpServlet {
             }
           }
           else {
-            action.execute(args)
+            val session = req.getSession
+            val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
+            action.execute(args,Option(p))
           }
 
         handleResults(action, result, req, res)

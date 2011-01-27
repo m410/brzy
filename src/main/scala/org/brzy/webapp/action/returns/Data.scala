@@ -47,3 +47,6 @@ case class SessionRemove(attr:String) extends Data
  * request by the client.
  */
 case class Flash(code:String,default:String) extends Data
+
+// TODO need to to programmatically pass errors to the view
+case class ValidationErrors(code:String,default:String) extends Data
