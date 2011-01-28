@@ -1,0 +1,6 @@
+mod_type: build
+name: brzy-jetty
+version: "0.1-SNAPSHOT"
+org: org.brzy
+config_class: org.brzy.mod.jetty.JettyModConfig
+provider_class:

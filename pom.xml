@@ -20,6 +20,7 @@
   	<module>brzy-webapp</module>
 	  <module>brzy-calista</module>
     <module>brzy-email</module>
+    <module>brzy-jetty</module>
     <module>brzy-jms</module>
     <module>brzy-jpa</module>
     <module>brzy-scalate</module>
