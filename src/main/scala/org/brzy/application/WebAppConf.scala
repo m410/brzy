@@ -272,6 +272,7 @@ object WebAppConf {
       mod.asInstanceOf[Mod]
     }
     else {
+      log.warn("No config_class for mod: {}",reference)
       reference
     }
   }

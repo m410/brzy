@@ -69,20 +69,21 @@ class WebApp(conf: WebAppConf) {
   }
 
   /**
-   * Views and Persistes are modules, just special kinds of modules.  This allows for more
-   * generaic module injection into the application.  For example an email provider or jms
+   * Views and Persistence are modules, just special kinds of modules.  This allows for more
+   * generic module injection into the application.  For example an email provider or jms
    * provider.
    */
   val moduleProviders: List[ModProvider] = {
     val list = ListBuffer[ModProvider]()
     conf.modules.foreach(module => {
-      log.debug("module: {}", module)
+      log.debug("module config: {}", module)
       val mod = module.asInstanceOf[RuntimeMod]
 
       if (mod.providerClass.isDefined && mod.providerClass.get != null) {
         list += Construct[ModProvider](mod.providerClass.get, Array(mod))
       }
     })
+    log.debug("modules: {}", list)
     list.toList
   }
 
@@ -122,8 +123,8 @@ class WebApp(conf: WebAppConf) {
       val instance = make(clazz, interceptor).asInstanceOf[Service]
       map += instance.serviceName -> instance
     })
-    persistenceProviders.foreach(_.serviceMap.foreach(map + _))
-    moduleProviders.foreach(_.serviceMap.foreach(map + _))
+    persistenceProviders.foreach(_.serviceMap.foreach(map += _))
+    moduleProviders.foreach(_.serviceMap.foreach(map += _))
     map.toMap
   }
 
