@@ -32,10 +32,10 @@
 			<outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
 		</file>
-		<!--<file>-->
-			<!--<source>src/main/templates/fab-plugin.f.yml</source>-->
-			<!--<outputDirectory>/</outputDirectory>-->
-      <!--<filtered>true</filtered>-->
-		<!--</file>-->
+		<file>
+			<source>src/main/templates/fab-plugin.f.yml</source>
+			<outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+		</file>
 	</files>
 </assembly>

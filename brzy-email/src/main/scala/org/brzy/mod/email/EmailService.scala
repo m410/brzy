@@ -40,7 +40,8 @@ class EmailService(config:EmailModConfig) extends Service{
   }
 
   private val auth:Authenticator = 
-      if(config.smtpAuth.get.equalsIgnoreCase("true")) {
+
+      if("true".equalsIgnoreCase(config.smtpAuth.orNull.toString)) {
         new Authenticator {
           override def getPasswordAuthentication:PasswordAuthentication = {
              new PasswordAuthentication(config.userName.get, config.password.get)

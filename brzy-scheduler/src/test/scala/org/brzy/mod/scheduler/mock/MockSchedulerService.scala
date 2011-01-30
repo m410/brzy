@@ -13,11 +13,13 @@
  */
 package org.brzy.mod.scheduler.mock
 
-import org.brzy.mod.scheduler.Cron
 import java.util.Date
+import org.brzy.service.Service
+import org.brzy.mod.scheduler.{Cron, CronOld}
 
-@Cron("0/5 * * * * ?")
-class MockSchedulerService {
+class MockSchedulerService extends Service with Cron {
+  override val expression = "0/5 * * * * ?"
+
   def execute = {
     val date: Date = new Date()
     println("#### Execute Called at: " + date +" ("+ date.getTime +")")

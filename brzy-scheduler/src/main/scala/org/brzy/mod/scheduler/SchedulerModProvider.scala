@@ -28,20 +28,18 @@ import org.brzy.fab.mod.ModProvider
 class SchedulerModProvider(c: SchedulerModConfig) extends ModProvider {
   val name = c.name.get
 
-  private val reflections = new Reflections(new ConfigurationBuilder()
-          .setUrls(ClasspathHelper.getUrlsForPackagePrefix(c.scanPackage.get))
-          .setScanners(
-    new ResourcesScanner(),
-    new TypeAnnotationsScanner(),
-    new SubTypesScanner()))
+    private[this] val reflections = new Reflections(new ConfigurationBuilder()
+      .setUrls(ClasspathHelper.getUrlsForPackagePrefix(c.scanPackage.get))
+      .setScanners(new SubTypesScanner()))
+
+  val services =
+      reflections.getSubTypesOf(classOf[Cron]).toList.filter(_.getName.indexOf("$") < 0)
 
   val jobs = {
-    val services = asSet(reflections.getTypesAnnotatedWith(classOf[Cron]))
     val list = ListBuffer[Schedule]()
     services.foreach(s=> {
-      val instance = s.newInstance.asInstanceOf[AnyRef]
-      val annotation = s.getAnnotation(classOf[Cron])
-      list += Schedule(new JobRunner(instance, null),annotation.value)
+      val instance = s.newInstance.asInstanceOf[Cron]
+      list += Schedule(new JobRunner(instance),instance.expression)
     })
     list.toList
   }

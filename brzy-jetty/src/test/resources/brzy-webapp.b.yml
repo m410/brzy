@@ -18,7 +18,7 @@ application:
 modules:
   - name: brzy-jetty
     version: "0.1-SNAPSHOT"
-    org: org.brzy
+    org: org.brzy.mod
 
 #
 # Logging

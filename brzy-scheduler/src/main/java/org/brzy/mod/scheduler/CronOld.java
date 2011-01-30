@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Michael Fortin
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cron {
+public @interface CronOld {
     String value() default "* * * * *";// every second
     String method() default "execute";
 }

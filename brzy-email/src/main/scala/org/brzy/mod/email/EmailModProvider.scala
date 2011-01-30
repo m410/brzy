@@ -11,16 +11,16 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.jetty
+package org.brzy.mod.email
 
-import org.junit.Test
-import org.junit.Assert._
-import org.scalatest.junit.JUnitSuite
+import org.brzy.fab.mod.ModProvider
 
-
-class FileWatcherTest extends JUnitSuite {
-
-  @Test def someTest = {
-    assertTrue(true)
-  }
+/**
+ * Document Me..
+ * 
+ * @author Michael Fortin
+ */
+class EmailModProvider(c:EmailModConfig) extends ModProvider {
+  val name = c.name.get
+  override val serviceMap = Map("emailService" -> new EmailService(c))
 }

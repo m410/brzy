@@ -2,12 +2,13 @@ package $packageName$
 
 import org.brzy.mod.scheduler.Cron
 import java.util.Date
+import org.slf4j.LoggerFactory
 
 /**
  * $className$ Scheduled Service
  */
-@Cron("0/5 * * * * ?")
-class $className$ {
+class $className$ extends Cron {
+  override val expression = "0/5 * * * * ?"
   val log = LoggerFactory.getLogger(classOf[$className$])
 
   def execute = {

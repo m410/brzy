@@ -6,21 +6,17 @@
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.email
+package org.brzy.mod.jetty
 
-import org.brzy.fab.mod.ModProvider
+
+import org.brzy.fab.mod.RuntimeMod
 
 /**
- * Document Me..
- * 
  * @author Michael Fortin
  */
-class EmailModPrivider(c:EmailModConfig) extends ModProvider {
-  val name = c.name.get
-  override val serviceMap = Map("emailService" -> new EmailService(c))
-}
+class JettyModConfig(override val map:Map[String,AnyRef]) extends RuntimeMod(map)

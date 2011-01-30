@@ -14,6 +14,7 @@
 package org.brzy.mod.scheduler
 
 import org.brzy.fab.mod.RuntimeMod
+import org.brzy.fab.conf.BaseConf
 
 /**
  * Document Me..
@@ -22,4 +23,14 @@ import org.brzy.fab.mod.RuntimeMod
  */
 class SchedulerModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
   val scanPackage:Option[String] = map.get("scan_package").asInstanceOf[Option[String]].orElse(None)
+
+  override def <<(that: BaseConf) = {
+    if (that == null)
+      this
+    else {
+      new SchedulerModConfig(Map[String, AnyRef](
+        "scan_package" -> that.map.getOrElse("scan_package", this.scanPackage.orNull)
+        ) ++ super.<<(that).map)
+    }
+  }
 }

@@ -1,0 +1,6 @@
+name: brzy-email-default
+description: Adds dependencies to the default interpreter scope.
+dependencies_in_default_scope: true
+member_of_phase: compile
+dependencies:
+  - {conf: compile, org: org.brzy.mod, name: brzy-email, rev: "${pom.version}", transitive: false}

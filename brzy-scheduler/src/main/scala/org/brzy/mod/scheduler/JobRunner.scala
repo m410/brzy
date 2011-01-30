@@ -22,12 +22,8 @@ import org.brzy.interceptor.Invoker
  *
  * @author Michael Fortin
  */
-class JobRunner(val service: AnyRef, val invoker:Invoker) extends Actor {
+class JobRunner(val service: Cron) extends Actor {
   private val log = LoggerFactory.getLogger(classOf[JobRunner])
-
-  val cron = service.getClass.getAnnotation(classOf[Cron])
-
-  val method = service.getClass.getMethod(cron.method)
 
   val serviceName = {
     val className = service.getClass.getSimpleName
@@ -37,8 +33,8 @@ class JobRunner(val service: AnyRef, val invoker:Invoker) extends Actor {
   def act() = loop {
     react {
         case Execute =>
-          log.trace("execute: {} on {}",method.getName, service)
-          method.invoke(service)
+          log.debug("execute: {}",service)
+          service.execute
 	    	case Exit => exit
     }
   }
