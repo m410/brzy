@@ -33,22 +33,21 @@ abstract class CrudController[E <: {def id : PK}, PK](
         override val basePath: String,
         val dao: Dao[E, PK])(implicit m: Manifest[E])
         extends Controller(basePath) {
-
+  val viewBasePath = ""
   private[this] implicit def applyCrudOps(e: E) = dao.newPersistentCrudOps(e)
 
-  // TODO convert words that end with a 'y'
   private[this] val entityName = {
     val name = m.erasure.getSimpleName
     name.substring(0, 1).toLowerCase + name.substring(1)
   }
 
-  def actions = Action("", "list", list _) ::
-          Action("{id}", "view", view _) ::
-          Action("create", "create", create _) ::
-          Action("save", "create", save _) ::
-          Action("{id}/edit", "edit", edit _) ::
-          Action("{id}/update", "edit", update _) ::
-          Action("{id}/delete", "list", delete _) ::
+  def actions = Action("", viewBasePath + "list", list _) ::
+          Action("{id}", viewBasePath + "view", view _) ::
+          Action("create", viewBasePath + "create", create _) ::
+          Action("save", viewBasePath + "create", save _) ::
+          Action("{id}/edit", viewBasePath + "edit", edit _) ::
+          Action("{id}/update", viewBasePath + "edit", update _) ::
+          Action("{id}/delete", viewBasePath + "list", delete _) ::
           Nil
 
   def list(p:Parameters) = entityName + "sList" -> dao.list
