@@ -78,13 +78,40 @@ case class Binary(bytes:Array[Byte], contentType:String) extends Direction
 /**
  * Return Json formatted text as the body of the response.
  */
-case class Json(target:AnyRef = null, contentType:String = "text/json") extends Direction with Parser {
+case class Json(target:AnyRef, contentType:String = "application/json") extends Direction with Parser {
 
-  def parse = {
-    import org.brzy.fab.reflect.Properties._
-    tJson.build(target.properties).toString
+  def parse = target match {
+    case s:String =>
+      s
+    case l:List[_] =>
+      tJson.build(l).toString
+    case m:Map[_,_] =>
+      tJson.build(m).toString
+    case _ =>
+       import org.brzy.fab.reflect.Properties._
+      tJson.build(target.properties).toString
   }
+}
 
+case class Jsonp(callback:String, target:AnyRef,contentType:String = "application/json") extends Direction with Parser {
+  def parse = {
+    val sb = new StringBuilder()
+    sb.append(callback)
+    sb.append("(")
+    sb.append(target match {
+      case s:String =>
+        s
+      case l:List[_] =>
+        tJson.build(l).toString
+      case m:Map[_,_] =>
+        tJson.build(m).toString
+      case _ =>
+         import org.brzy.fab.reflect.Properties._
+        tJson.build(target.properties).toString
+    })
+    sb.append(")")
+    sb.toString
+  }
 }
 
 /**
