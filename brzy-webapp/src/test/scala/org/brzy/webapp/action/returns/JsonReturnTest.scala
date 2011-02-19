@@ -39,7 +39,7 @@ class JsonReturnTest  extends JUnitSuite {
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
     handleResults(action,result,request,response)
-    assertEquals("text/json",response.getContentType)
+    assertEquals("application/json",response.getContentType)
     assertEquals(expected,response.getContentAsString)
   }
 
@@ -56,7 +56,7 @@ class JsonReturnTest  extends JUnitSuite {
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
     handleResults(action,result,request,response)
-    assertEquals("text/json",response.getContentType)
+    assertEquals("application/json",response.getContentType)
     assertEquals("{\"name\":\"value\"}",response.getContentAsString)
   }
 }
