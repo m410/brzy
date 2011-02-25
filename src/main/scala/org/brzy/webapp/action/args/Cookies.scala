@@ -25,9 +25,14 @@ import javax.servlet.http.HttpServletRequest
  * @author Michael Fortin
  */
 class Cookies(request:HttpServletRequest) {
-  val cookies = request.getCookies.map(c=>{
-    Cookie(c.getComment,c.getDomain,c.getMaxAge,c.getName,c.getPath,c.getSecure,c.getValue,c.getVersion)
-  })
+  val cookies = {
+    if(request.getCookies == null || request.getCookies.length == 0)
+      List.empty[Cookie]
+    else
+      request.getCookies.map(c=>{
+        Cookie(c.getComment,c.getDomain,c.getMaxAge,c.getName,c.getPath,c.getSecure,c.getValue,c.getVersion)
+      }).toList
+  }
 }
 
 case class Cookie(
