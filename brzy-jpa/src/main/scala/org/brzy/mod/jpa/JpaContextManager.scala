@@ -26,9 +26,9 @@ import util.DynamicVariable
 class JpaContextManager(unitName:String) extends ManagedThreadContext {
   private[this] val log = LoggerFactory.getLogger(getClass())
   val entityManagerFactory = Persistence.createEntityManagerFactory(unitName)
-  type T = Option[EntityManager]
+  type T = EntityManager
 
-  val empty:T = None
+  val empty:T = null
 
   val context = JpaContext
 
@@ -36,14 +36,13 @@ class JpaContextManager(unitName:String) extends ManagedThreadContext {
     val entityManager:EntityManager = entityManagerFactory.createEntityManager
     entityManager.getTransaction.begin
     log.trace("create session: {}",entityManager)
-    Some(entityManager)
-
+    entityManager
   }
 
   def destroySession(s: T) = {
     log.trace("destroy session: {}",s)
-    s.get.getTransaction.commit
-    s.get.close
+    s.getTransaction.commit
+    s.close
     context.value = empty/**/
   }
 }
@@ -53,4 +52,4 @@ class JpaContextManager(unitName:String) extends ManagedThreadContext {
  *
  * @author Michael Fortin
  */
-object JpaContext extends DynamicVariable(Option[EntityManager](null))
+object JpaContext extends DynamicVariable[EntityManager](null)

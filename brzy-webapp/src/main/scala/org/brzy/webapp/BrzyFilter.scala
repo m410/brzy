@@ -11,11 +11,13 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action
+package org.brzy.webapp
 
-import javax.servlet.http.HttpServletRequest
-import org.slf4j.LoggerFactory
 import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest, Filter => SFilter}
+import javax.servlet.http.HttpServletRequest
+
+import org.slf4j.LoggerFactory
+
 import org.brzy.application.WebApp
 
 /**
@@ -24,9 +26,9 @@ import org.brzy.application.WebApp
  * @author Michael Fortin
  */
 class BrzyFilter extends SFilter {
-  protected[action] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
-  protected[action] val pattern = """\.([\w\d]{1,4})$""".r
-  protected[action] var webapp:WebApp = _
+  protected[webapp] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
+  protected[webapp] val pattern = """\.([\w\d]{1,4})$""".r
+  protected[webapp] var webapp:WebApp = _
 
   /**
    *

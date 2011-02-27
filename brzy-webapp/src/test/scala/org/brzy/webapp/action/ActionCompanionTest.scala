@@ -15,9 +15,12 @@ package org.brzy.webapp.action
 
 import args.Parameters
 import org.brzy.webapp.mock.UserController
+import Action._
+import org.brzy.webapp.BrzyServlet
+
 import org.junit.Test
 import org.junit.Assert._
-import Action._
+
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest}
 import org.scalatest.junit.JUnitSuite

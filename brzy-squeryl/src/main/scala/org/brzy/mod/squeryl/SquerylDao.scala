@@ -66,6 +66,8 @@ class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) exten
 
   def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
 
+  def apply(id: Long):T = db.lookup(id).get
+
   def get(id: Long):Option[T] = db.lookup(id)
 
   def getOrElse(id: Long, alternate:T) =  db.lookup(id) match {

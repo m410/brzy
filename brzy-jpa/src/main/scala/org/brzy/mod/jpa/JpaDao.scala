@@ -40,7 +40,7 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
    */
   class EntityCrudOps[T](t:T) extends PersistentCrudOps(t) {
 
-    protected[jpa] def entityManager = JpaContext.value.get
+    protected[jpa] def entityManager = JpaContext.value
 
     override def validate ={
       log.trace("validate")
@@ -79,11 +79,16 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
     }
   }
 
-  protected[jpa] def entityManager = JpaContext.value.get
+  protected[jpa] def entityManager = JpaContext.value
 
   override def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
 
   override implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
+
+  def apply(id:PK):T = {
+    log.trace("get: " + id)
+    entityManager.find(entityClass,id).asInstanceOf[T]
+  }
 
   def get(id:PK):Option[T] = {
     log.trace("get: " + id)

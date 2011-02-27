@@ -26,6 +26,11 @@ import collection.immutable.Set
 trait Dao[T <: {def id: PK}, PK] {
 
   /**
+   * Retrieve the object by it's primary key
+   */
+  def apply(id:PK):T
+  
+  /**
    * Retrieve a single entity by primary key.
    */
   def get(id: PK): Option[T]
