@@ -26,6 +26,8 @@ class MockPersistable[E<:{def id:PK},PK] extends Dao[E,PK] {
 
   def load(id: String) = null.asInstanceOf[E]
 
+  def apply(id: PK) = null.asInstanceOf[E]
+
   def get(id: PK) = None
 
   def getOrElse(id: PK, alternate: E) = alternate

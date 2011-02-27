@@ -43,6 +43,7 @@ object MockUser extends Dao[MockUser,Long]{
 
   def newPersistentCrudOps(t: MockUser) = new EntityCrudOps(t)
   implicit def applyCrudOps(t:MockUser) = new EntityCrudOps(t)
+	def apply(id:Long) = new MockUser()
 	def get(id:Long) = Option(new MockUser())
   def getOrElse(id: Long, alternate: MockUser) = alternate
   def count():Long = 1

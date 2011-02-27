@@ -11,15 +11,18 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action
+package org.brzy.webapp
 
-import args.Principal
 import org.brzy.application.WebApp
-import Action._
+
+import action.Action
+import action.Action._
+import action.returns.{Error,Redirect,Flash,SessionAdd}
+import action.args.Principal
+
 import org.slf4j.LoggerFactory
 import javax.servlet.http._
 import javax.servlet.{ServletResponse, ServletRequest}
-import returns.{Error,Redirect,Flash,SessionAdd}
 
 /**
  * The basic servlet implementation.
