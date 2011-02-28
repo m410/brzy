@@ -13,7 +13,7 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.args.Principal
+import org.brzy.webapp.action.Principal
 import org.brzy.webapp.action.Roles
 
 import java.security.MessageDigest

@@ -1,7 +1,7 @@
 package org.brzy.mod.scalate.view
 
 import javax.servlet.http.HttpServletRequest
-import org.brzy.webapp.action.args.Principal
+import org.brzy.webapp.action.Principal
 
 /**
  * Document Me..

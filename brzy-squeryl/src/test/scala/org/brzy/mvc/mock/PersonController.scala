@@ -14,8 +14,7 @@
 package org.brzy.mock
 
 import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.Action
-import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.{Action,Parameters}
 
 class PersonController extends Controller("persons"){
   val actions = List(

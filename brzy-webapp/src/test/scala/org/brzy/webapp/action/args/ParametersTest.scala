@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action.args
+package org.brzy.webapp.action
 
 import org.junit.Assert._
 import org.junit.Test
@@ -27,9 +27,8 @@ class ParametersTest extends JUnitSuite {
   map.put("firstName",Array("john"))
   map.put("other",Array("yes","no"))
 
-  val jMap = new java.util.HashMap[String, Array[String]]()
-  jMap.put("id",Array("12321"))
-  val parameters = new Parameters(new JMapWrapper(jMap) ++ map)
+  val jMap = Map("id"->Array("12321"))
+  val parameters = new Parameters(jMap ++ map.toMap)
 
   @Test def testMixedParams ={
     assertNotNull(parameters.get("id"))
@@ -40,7 +39,7 @@ class ParametersTest extends JUnitSuite {
     assertEquals(1,parameters.array("id").get.length)
     assertEquals("12321",parameters("id"))
 
-    assertEquals(true,parameters.contains("id"))
+    assertEquals(true,parameters.map.contains("id"))
     assertEquals("12321",parameters("id"))
     assertTrue(parameters.array("id").isDefined)
     assertEquals("12321",parameters.array("id").get(0))
@@ -55,29 +54,28 @@ class ParametersTest extends JUnitSuite {
 
   @Test def testForeach = {
     var count = 0
-    parameters.foreach(x => count = count+1)
+    parameters.map.foreach(x => count = count+1)
     assertEquals(4,count)
   }
 
   @Test def testExists = {
-    assertTrue(parameters.exists(p => p._1 == "id"))
+    assertTrue(parameters.map.exists(p => p._1 == "id"))
   }
 
   @Test def testAddString = {
-    val map = new java.util.HashMap[String, Array[String]]
-    map.put("test",Array("value"))
+    val map = Map("test"->Array("value"))
     val parameters = new Parameters(map)
     assertNotNull(parameters)
-    assertEquals(1,parameters.size)
-    assertEquals("test",parameters.keysIterator.next)
+    assertEquals(1,parameters.map.size)
+    assertEquals("test",parameters.map.keysIterator.next)
     assertEquals("value",parameters("test"))
   }
 
   @Test def testIterate = {
     var called = false
-    parameters.foreach(f => {
+    parameters.map.foreach(f => {
       if(f._1 == "id") {
-        assertEquals("12321",f._2)
+        assertEquals("12321",f._2(0))
         called = true
       }
     })

@@ -13,9 +13,9 @@
  */
 package org.brzy.webapp.action
 
-import args.Parameters
-import org.brzy.webapp.mock.UserController
 import Action._
+
+import org.brzy.webapp.mock.UserController
 import org.brzy.webapp.BrzyServlet
 
 import org.junit.Test
@@ -38,7 +38,7 @@ class ActionCompanionTest extends JUnitSuite {
     assertNotNull(result)
     assertEquals(1,result.length)
     val parameters: Parameters = result(0).asInstanceOf[Parameters]
-    assertEquals(1,parameters.size)
+    assertEquals(1,parameters.map.size)
     assertEquals("10",parameters("id"))
   }
 

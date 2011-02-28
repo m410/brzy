@@ -17,5 +17,10 @@ package org.brzy.webapp
  *
  */
 package object action {
-	
+	val ParametersClass = classOf[Parameters]
+  val SessionClass = classOf[Session]
+  val HeadersClass = classOf[Headers]
+  //val WizardClass = classOf[Wizard]
+  val CookiesClass = classOf[Cookies]
+  val PrincipalClass = classOf[Principal]
 }

@@ -13,10 +13,8 @@
  */
 package org.brzy.webapp.mock
 
-import org.brzy.webapp.action.args.Parameters
-
 import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.{Action,Parameters}
 
 class UserArgController(val userService:UserService) extends Controller("userArgs"){
   val actions = List(

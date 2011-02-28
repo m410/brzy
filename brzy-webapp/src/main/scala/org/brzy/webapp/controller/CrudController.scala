@@ -12,10 +12,7 @@
  * language governing permissions and limitations under the License.
  */
 package org.brzy.webapp.controller
-
-import org.brzy.webapp.action.args._
-import org.brzy.webapp.action.returns._
-import org.brzy.webapp.action.Action
+import org.brzy.webapp.action._
 import org.brzy.persistence.Dao
 
 
@@ -57,7 +54,8 @@ abstract class CrudController[E <: {def id : PK}, PK](
   def create() = entityName -> dao.construct
 
   def save(p: Parameters) = {
-    val entity = dao.construct(p.toMap)
+    val cmap:Map[String,String] = p.map.map(n=>{n._1->n._2(0)})
+    val entity = dao.construct(cmap)
     entity.validate match {
       case Some(violations) =>
         Model(entityName -> entity, "violations" -> violations)
@@ -72,7 +70,8 @@ abstract class CrudController[E <: {def id : PK}, PK](
   def edit(params: Parameters) = entityName -> dao.load(params("id"))
 
   def update(p: Parameters) = {
-    val entity = dao.construct(p.toMap)
+    val cmap:Map[String,String] = p.map.map(n=>{n._1->n._2(0)})
+    val entity = dao.construct(cmap)
     entity.validate match {
       case Some(violations) =>
         Model(entityName -> entity, "violations" -> violations)

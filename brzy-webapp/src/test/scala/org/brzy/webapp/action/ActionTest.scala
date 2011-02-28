@@ -13,7 +13,6 @@
  */
 package org.brzy.webapp.action
 
-import args.Parameters
 import org.springframework.mock.web.MockHttpServletRequest
 import org.junit.Test
 import org.junit.Assert._

@@ -18,7 +18,6 @@ import org.junit.Assert._
 import org.brzy.mod.jpa.mock.User
 import collection.JavaConversions._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.webapp.action.args.Parameters
 
 
 class JpaPersistenceTest extends JUnitSuite {
@@ -30,7 +29,8 @@ class JpaPersistenceTest extends JUnitSuite {
     map.put("firstName",Array("john"))
     map.put("lastName",Array("Smith"))
 
-    val user = User.construct(new Parameters(map).toMap)
+    val cmap:Map[String,Any] = map.map(kv=>{kv._1->kv._2(0)}).toMap
+    val user = User.construct(cmap)
     assertNotNull(user)
     assertEquals("john",user.firstName)
   }

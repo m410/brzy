@@ -3,9 +3,8 @@ package org.brzy.webapp.mock2
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.{Action,Parameters}
 import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.args.Parameters
 
 class SubPathControllerTest extends JUnitSuite {
   @Test def testAll = {

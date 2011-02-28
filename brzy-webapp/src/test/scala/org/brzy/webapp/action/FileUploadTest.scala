@@ -1,6 +1,5 @@
 package org.brzy.webapp.action
 
-import args.PostBody
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import java.io.FileInputStream
@@ -9,12 +8,6 @@ import org.springframework.mock.web.{MockHttpServletRequest, MockMultipartHttpSe
 import io.Source
 import org.junit.{Ignore, Test}
 
-/**
- * Document Me..
- *
- * @author Michael Fortin
- * @version $Id : $
- */
 
 class FileUploadTest extends JUnitSuite {
   val boundary = "AaB03x"

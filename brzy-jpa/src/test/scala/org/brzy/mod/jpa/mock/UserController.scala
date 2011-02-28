@@ -14,9 +14,7 @@
 package org.brzy.mod.jpa.mock
 
 import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.Action
-import org.brzy.webapp.action.returns._
-import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action._
 
 
 class UserController extends Controller("users"){
@@ -37,7 +35,7 @@ class UserController extends Controller("users"){
   def create = "user" -> new User()
 
   def save(params: Parameters)() = {
-    def user = User.construct(params.toMap)
+    def user = User.construct(params.map)
 
     user.validate match {
       case Some(violations) =>
@@ -51,7 +49,7 @@ class UserController extends Controller("users"){
   def edit(params: Parameters) = "user" -> User.get(params("id")(0).toLong)
 
   def update(params: Parameters) = {
-    def user = User.construct(params.toMap)
+    def user = User.construct(params.map)
 
     user.validate match {
       case Some(violations) =>
