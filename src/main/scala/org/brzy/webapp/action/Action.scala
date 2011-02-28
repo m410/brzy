@@ -15,8 +15,7 @@ package org.brzy.webapp.action
 
 
 import org.slf4j.LoggerFactory
-import org.brzy.webapp.action.args._
-import org.brzy.webapp.action.returns._
+
 import org.brzy.webapp.controller._
 import org.brzy.webapp.view.FlashMessage
 
@@ -24,7 +23,7 @@ import collection.JavaConversions.JMapWrapper
 import collection.mutable.ListBuffer
 
 import java.util.Enumeration
-import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie}
+import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie=>JCookie}
 
 /**
  * Document Me..
@@ -115,12 +114,6 @@ trait Action extends Ordered[Action] {
  */
 object Action {
   private[this] val log = LoggerFactory.getLogger(getClass)
-  private[this] val ParametersClass = classOf[Parameters]
-  private[this] val SessionClass = classOf[Session]
-  private[this] val HeadersClass = classOf[Headers]
-  private[this] val WizardClass = classOf[Wizard]
-  private[this] val CookiesClass = classOf[Cookies]
-  private[this] val PrincipalClass = classOf[Principal]
 
   /**
    *
@@ -386,7 +379,7 @@ object Action {
         req.getSession.removeAttribute(s.attr)
       case s: CookieAdd =>
         log.debug("cookieAdd: {}", s)
-        res.addCookie(new Cookie(s.attrs._1, s.attrs._2.toString))
+        res.addCookie(new JCookie(s.attrs._1, s.attrs._2.toString))
       case _ => error("Unknown Data Type")
     }
 
@@ -405,28 +398,19 @@ object Action {
         val urlParams = action.path.extractParameterValues(path) //.matchParameters(path)
         val paramMap = new collection.mutable.HashMap[String, Array[String]]()
 
-        for (i <- 0 to urlParams.size - 1) {
-          log.debug("add uri param: ({},{})", action.path.parameterNames(i), urlParams(i))
+        for (i <- 0 to urlParams.size - 1)
           paramMap.put(action.path.parameterNames(i), Array(urlParams(i)))
-        }
+        
         val jParams = req.getParameterMap.asInstanceOf[java.util.Map[String, Array[String]]]
         val wrappedMap = new JMapWrapper[String, Array[String]](jParams)
-        list += new Parameters(wrappedMap ++ paramMap)
+        list += new Parameters(wrappedMap.toMap ++ paramMap.toMap)
       case SessionClass =>
-        val session = new Session()
-        val e = req.getSession.getAttributeNames.asInstanceOf[Enumeration[String]]
-
-        while (e.hasMoreElements) {
-          val name = e.nextElement
-          session += name -> req.getAttribute(name)
-        }
-
-        list += session
+        list += Session(req)
       case HeadersClass =>
         val headers = Headers(req)
         list += headers
       case CookiesClass =>
-        list += new Cookies(req)
+        list += Cookies(req).asInstanceOf[AnyRef]
       case PrincipalClass =>
         list += req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
       case _ =>

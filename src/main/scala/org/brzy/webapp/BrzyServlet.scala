@@ -15,10 +15,9 @@ package org.brzy.webapp
 
 import org.brzy.application.WebApp
 
-import action.Action
+import action._
 import action.Action._
-import action.returns.{Error,Redirect,Flash,SessionAdd}
-import action.args.Principal
+import action.Principal
 
 import org.slf4j.LoggerFactory
 import javax.servlet.http._

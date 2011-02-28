@@ -11,12 +11,10 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action.tmp
+package org.brzy.webapp.action
 
 import javax.servlet.http.HttpServletRequest
 import collection.JavaConversions._
-import collection.immutable._
-
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory
 import org.apache.commons.fileupload.servlet.ServletFileUpload
@@ -26,14 +24,13 @@ import io.Source
 import xml.XML
 import com.twitter.json.{Json=>tJson}
 
-import org.brzy.webapp.action.Roles
 
 /**
  * Document Me..
  *
  * @author Michael Fortin
  */
-sealed trait Args
+sealed class Args
 
 /**
  *
@@ -82,18 +79,10 @@ case class ServerPort(value: String) extends Args
  * }
  * </pre>
  */
-case class Headers(internalMap: Map[String, String]) extends Map[String, String] with MapLike[String, String, Headers] with Args {
+case class Headers(map: Map[String, String]) extends Args {
 
-  override def empty: Headers = new Headers(Map.empty[String, String])
-
-  def +[B1 >: String](kv: (String, B1)) = null
-
-  def -(key: String) = null
-
-  def iterator = internalMap.iterator
-
-  def get(key: String) = internalMap.get(key)
-}
+  def get(key: String) = map.get(key)
+} 
 
 /**
  *
@@ -122,31 +111,43 @@ case class Principal(name: String, roles: Roles)
 /**
  *
  */
-case class Session extends HashMap[String, Any] with Args
+case class Session(map:Map[String,AnyRef]) extends Args {
+
+  def get(key: String) = map.get(key)
+}
+
+object Session {
+
+  def apply(request: HttpServletRequest) = {
+    val map = collection.mutable.Map[String, String]()
+
+    if (request != null && request.getSession(false) != null)
+      request.getSession.getAttributeNames.foreach(f => {
+        val str = f.asInstanceOf[String]
+        map += str -> request.getHeader(str).asInstanceOf[String]
+      })
+
+    new Session(map.toMap)
+  }
+}
 
 /**
  *
  */
-case class Parameters(map: collection.Map[String, Array[String]])
-        extends Map[String, String] with MapLike[String, String, Parameters] with Args {
+case class Parameters(map: Map[String, Array[String]]) extends Args {
 
-  override def empty: Parameters = new Parameters(Map[String, Array[String]]())
-
-  override def get(key: String): Option[String] =
+  def apply(k:String) = map.get(k) match {
+    case Some(a)=>a(0)
+    case _ => null
+  }
+  
+  def get(key: String): Option[String] =
     if (map.contains(key))
       Option(map(key)(0))
     else
       None
 
   def array(key: String): Option[Array[String]] = map.get(key)
-
-  override def iterator: Iterator[(String, String)] = Iterator(map.map(f => f._1 -> f._2(0)).toArray: _*)
-
-  // does nothing
-  override def +[B1 >: String](kv: (String, B1)): Parameters = this
-
-  // does nothing
-  override def -(key: String): Parameters = this
 }
 
 /**

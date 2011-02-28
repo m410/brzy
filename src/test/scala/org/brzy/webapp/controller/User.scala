@@ -15,9 +15,7 @@ package org.brzy.webapp.controller
 
 import java.beans.ConstructorProperties
 import org.brzy.persistence.MockPersistable
-import org.brzy.webapp.action.Action
-import org.brzy.webapp.action.args.Parameters
-import org.brzy.webapp.action.returns.Model
+import org.brzy.webapp.action.{Action,Parameters,Model}
 
 @ConstructorProperties(Array("id"))
 class User(val id: Long, val userName:String, val password:String) extends Authenticated {

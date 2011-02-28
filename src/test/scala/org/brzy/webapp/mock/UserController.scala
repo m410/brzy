@@ -13,9 +13,7 @@
  */
 package org.brzy.webapp.mock
 
-import org.brzy.webapp.action.args.Parameters
-import org.brzy.webapp.action.returns._
-import org.brzy.webapp.action.Action
+import org.brzy.webapp.action._
 import org.brzy.webapp.controller.Controller
 
 class UserController extends Controller("users") {
@@ -67,7 +65,7 @@ class UserController extends Controller("users") {
   def error = Error(404, "Not Found")
 
   def save(params: Parameters)() = {
-    def user: MockUser = MockUser.construct(params)
+    def user: MockUser = MockUser.construct(params.map.map(n=>{n._1->n._2(0)}))
 
     user.validate match {
       case Some(violations) =>
@@ -81,7 +79,7 @@ class UserController extends Controller("users") {
   def edit(params: Parameters) = "user" -> MockUser.get(params("id")(0).toLong)
 
   def update(params: Parameters) = {
-    def user = MockUser.construct(params)
+    def user = MockUser.construct(params.map.map(n=>{n._1->n._2(0)}))
 
     user.validate match {
       case Some(violations) =>
