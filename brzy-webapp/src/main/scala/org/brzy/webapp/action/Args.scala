@@ -81,7 +81,15 @@ case class ServerPort(value: String) extends Args
  */
 case class Headers(map: Map[String, String]) extends Args {
 
-  def get(key: String) = map.get(key)
+  def apply(k:String):String = map.get(k) match {
+    case Some(a)=>a
+    case _ => null
+  }
+
+  def get(key: String):Option[String] = map.get(key)
+
+
+  def getOrElse(key:String,alt:String):String = map.getOrElse(key,alt)
 } 
 
 /**
@@ -146,6 +154,13 @@ case class Parameters(map: Map[String, Array[String]]) extends Args {
       Option(map(key)(0))
     else
       None
+
+  def getOrElse(key:String,alt:String) = {
+    if (map.contains(key))
+      map(key)(0)
+    else
+      alt
+  }
 
   def array(key: String): Option[Array[String]] = map.get(key)
 }
