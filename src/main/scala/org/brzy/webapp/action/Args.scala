@@ -15,6 +15,7 @@ package org.brzy.webapp.action
 
 import javax.servlet.http.HttpServletRequest
 import collection.JavaConversions._
+import java.util.Locale
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory
 import org.apache.commons.fileupload.servlet.ServletFileUpload
@@ -35,42 +36,36 @@ sealed class Args
 /**
  *
  */
-case class Protocol(value: String) extends Args
-
-/**
- *
- */
-case class ContentType(value: String) extends Args
-
-/**
- *
- */
-case class RemoteHost(value: String) extends Args
-
-/**
- *
- */
-case class RemoteAddr(value: String) extends Args
-
-/**
- *
- */
-case class Schema(value: String) extends Args
-
-/**
- *
- */
-case class IsSecure(value: Boolean) extends Args
-
-/**
- *
- */
-case class ServerName(value: String) extends Args
-
-/**
- *
- */
 case class ServerPort(value: String) extends Args
+
+case class RequestAttributes(
+        scheme:String,
+        secure:Boolean,
+        serverName:String,
+        remoteAddr:String,
+        remoteHost:String,
+        contentType:String,
+        protocol:String,
+        locales:Array[Locale],
+        serverPort:Int) extends Args
+
+/**
+ *
+ */
+object RequestAttributes {
+  def apply(request: HttpServletRequest) = 
+   new RequestAttributes(
+     scheme=request.getScheme,
+     secure=request.isSecure,
+     serverName=request.getServerName,
+     remoteAddr=request.getRemoteAddr,
+     remoteHost=request.getRemoteHost,
+     contentType=request.getContentType,
+     protocol=request.getProtocol,
+     locales=request.getLocales.map(_.asInstanceOf[Locale]).toArray,
+     serverPort=request.getServerPort)
+
+}
 
 /**
  * A Action argument class to read header information.  Use it like
@@ -178,7 +173,7 @@ case class Cookies(list: List[Cookie]) extends Args
  *
  */
 object Cookies {
-  def apply(request: HttpServletRequest) {
+  def apply(request: HttpServletRequest):Cookies = {
     val cookies = {
       if (request.getCookies == null || request.getCookies.length == 0)
         List.empty[Cookie]
