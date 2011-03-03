@@ -163,8 +163,21 @@ object Action {
         controller,
         constraints.toList)
     }
+    else if (action.isInstanceOf[Function4[_,_, _, _, _]]) {
+      val t5 = m.typeArguments(4)
+      val t4 = m.typeArguments(3)
+      val t3 = m.typeArguments(2)
+      val t2 = m.typeArguments(1)
+      val t1 = m.typeArguments(0)
+      new Action4[t1.type, t2.type, t3.type, t4.type, t5.type, Function4[t1.type, t2.type, t3.type, t4.type, t5.type]](
+        path,
+        view,
+        action.asInstanceOf[Function4[t1.type, t2.type, t3.type, t4.type, t5.type]],
+        controller,
+        constraints.toList)
+    }
     else
-      error("Unknown argument signauture")
+      error("To many arguments, only 4 arguments are allowed currently")
   }
 
   /**
@@ -254,6 +267,31 @@ object Action {
       }
       else
         action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3]).asInstanceOf[AnyRef]
+    }
+  }
+
+  /**
+   *
+   */
+  class Action4[A1, A2, A3, A4, R, F <: Function4[A1, A2, A3, A4, R]](
+          val actionPath: String,
+          val view: String,
+          val action: F,
+          val controller: Controller,
+          val constraints: List[Constraint]) (implicit m: Manifest[F]) extends Action {
+    def returnType: AnyRef = m.typeArguments(4)
+
+    def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 4))
+
+    def execute(args: List[AnyRef],principal:Option[Principal]) = {
+      if (controller.isInstanceOf[Intercepted]) {
+        val wrap = () => {
+          action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3], args(3).asInstanceOf[A4]).asInstanceOf[AnyRef]
+        }
+        controller.asInstanceOf[Intercepted].intercept(wrap, args, principal)
+      }
+      else
+        action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3], args(3).asInstanceOf[A4]).asInstanceOf[AnyRef]
     }
   }
 
@@ -406,11 +444,13 @@ object Action {
         list += new Parameters(wrappedMap.toMap ++ paramMap.toMap)
       case SessionClass =>
         list += Session(req)
+      case RequestAttributesClass =>
+        list += RequestAttributes(req)
       case HeadersClass =>
         val headers = Headers(req)
         list += headers
       case CookiesClass =>
-        list += Cookies(req).asInstanceOf[AnyRef]
+        list += Cookies(req)
       case PrincipalClass =>
         list += req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
       case _ =>
