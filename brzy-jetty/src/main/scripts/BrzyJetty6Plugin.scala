@@ -58,49 +58,28 @@ class FileWatcher(baseDir: JFile, destDir: JFile, libDir: JFile, compiler: SComp
   Runs tomcat
  */
 class RunWebApp(contextName:String, port:Int) {
-	println("Running Web Application")
-  // val appBase = "webapp"
-  // 	val container = new Embedded
-  // 	val catalinaHome = File(".brzy/modules/brzy-tomcat")
-  // 	container.setCatalinaHome(catalinaHome.getAbsolutePath)
-  //  val loader = new WebappLoader(this.getClass.getClassLoader)
-  // 	val targetDir = File("")
-  // 	val targetPath = targetDir.getAbsolutePath
-  //  val host = container.createHost("localhost", targetPath)
-  // 
-  // 	val context = container.createContext("/" + contextName, appBase)
-  //  context.setLoader(loader)
-  //  context.setReloadable(true)
-  //  host.addChild(context)
-  // 
-  //  val engine = container.createEngine()
-  //  engine.setName("engine")
-  //  engine.addChild(host)
-  //  engine.setDefaultHost(host.getName())
-  //  container.addEngine(engine)
-  // 
-  //  val httpConnector = container.createConnector(null.asInstanceOf[InetAddress], port, false)
-  //  container.addConnector(httpConnector)
-  // 
-  //  container.setAwait(true)
-  //  container.start
-  // 
-  // 	Runtime.getRuntime.addShutdownHook(new Thread() {
-  // 		override def run = {
-  // 			try {
-  // 				if (container != null)
-  // 					container.stop
-  // 				println("Shutdown...")
-  //        // TODO delete web-inf
-  // 			}
-  // 			catch {
-  // 				case e:LifecycleException =>
-  // 					println("exception: " + e)
-  // 				case _ =>
-  // 					println("Unknown Exception" )
-  // 			}
-  // 		}
-  // 	})
+	
+	protected[this] val server = new Server();
+	protected[this] val connector = new SelectChannelConnector();
+	connector.setPort(port);
+	connector.setHost("127.0.0.1");
+	server.addConnector(connector);
+
+	protected[this] val wac = new WebAppContext();
+	wac.setContextPath(contextName);
+	wac.setWar("./web");    // this is path to .war OR TO expanded, existing webapp; WILL FIND web.xml and parse it
+	server.setHandler(wac);
+	server.setStopAtShutdown(true);
+	
+	def start = {
+		println("Starting.....")
+		server.start
+	}
+	
+	def stop = {
+		println("Stopping.....")
+		server.stop
+	}
 }
 
 

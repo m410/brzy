@@ -373,8 +373,10 @@ object Action {
         val target: String =
           if (s.path.startsWith("http"))
             s.path
-          else
-            req.getContextPath + s.path
+          else if(req.getContextPath.endsWith("/") && s.path.startsWith("/")  )
+						req.getContextPath + s.path.substring(1,s.path.length)
+					else
+						req.getContextPath + s.path
         res.sendRedirect(target)
       case s: Error =>
         log.debug("Error: {}", s)

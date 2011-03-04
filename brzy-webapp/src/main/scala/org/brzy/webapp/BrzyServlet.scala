@@ -70,9 +70,13 @@ class BrzyServlet extends HttpServlet {
             }
           }
           else {
-            val session = req.getSession
-            val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
-            action.execute(args,Option(p))
+            val principal = {
+								if(req.getSession(false) != null)
+									req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
+								else
+									null
+						}
+            action.execute(args,Option(principal))
           }
 
         handleResults(action, result, req, res)
