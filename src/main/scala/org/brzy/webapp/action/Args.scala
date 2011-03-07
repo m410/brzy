@@ -23,7 +23,7 @@ import org.apache.commons.fileupload.FileItem
 
 import io.Source
 import xml.XML
-import com.twitter.json.{Json=>tJson}
+import com.twitter.json.{Json => tJson}
 
 
 /**
@@ -36,34 +36,46 @@ sealed class Args
 /**
  *
  */
-case class ServerPort(value: String) extends Args
-
 case class RequestAttributes(
-        scheme:String,
-        secure:Boolean,
-        serverName:String,
-        remoteAddr:String,
-        remoteHost:String,
-        contentType:String,
-        protocol:String,
-        locales:Array[Locale],
-        serverPort:Int) extends Args
+        scheme: String,
+        secure: Boolean,
+        serverName: String,
+        serverPort: Int,
+        remoteAddr: String,
+        remoteHost: String,
+        remotePort: Int,
+        localAddr: String,
+        localName: String,
+        localPort: Int,
+        contentLength: Int,
+        contentType: String,
+        characterEncoding: String,
+        protocol: String,
+        locale: Locale,
+        locales: Array[Locale]) extends Args
 
 /**
  *
  */
 object RequestAttributes {
-  def apply(request: HttpServletRequest) = 
-   new RequestAttributes(
-     scheme=request.getScheme,
-     secure=request.isSecure,
-     serverName=request.getServerName,
-     remoteAddr=request.getRemoteAddr,
-     remoteHost=request.getRemoteHost,
-     contentType=request.getContentType,
-     protocol=request.getProtocol,
-     locales=request.getLocales.map(_.asInstanceOf[Locale]).toArray,
-     serverPort=request.getServerPort)
+  def apply(request: HttpServletRequest) =
+    new RequestAttributes(
+      scheme = request.getScheme,
+      secure = request.isSecure,
+      contentLength = request.getContentLength,
+      contentType = request.getContentType,
+      characterEncoding = request.getCharacterEncoding,
+      protocol = request.getProtocol,
+      serverName = request.getServerName,
+      serverPort = request.getServerPort,
+      remoteAddr = request.getRemoteAddr,
+      remoteHost = request.getRemoteHost,
+      remotePort = request.getRemotePort,
+      localAddr = request.getLocalAddr,
+      localName = request.getLocalName,
+      localPort = request.getLocalPort,
+      locale = request.getLocale,
+      locales = request.getLocales.map(_.asInstanceOf[Locale]).toArray)
 
 }
 
@@ -76,16 +88,16 @@ object RequestAttributes {
  */
 case class Headers(map: Map[String, String]) extends Args {
 
-  def apply(k:String):String = map.get(k) match {
-    case Some(a)=>a
+  def apply(k: String): String = map.get(k) match {
+    case Some(a) => a
     case _ => null
   }
 
-  def get(key: String):Option[String] = map.get(key)
+  def get(key: String): Option[String] = map.get(key)
 
 
-  def getOrElse(key:String,alt:String):String = map.getOrElse(key,alt)
-} 
+  def getOrElse(key: String, alt: String): String = map.getOrElse(key, alt)
+}
 
 /**
  *
@@ -114,7 +126,7 @@ case class Principal(name: String, roles: Roles)
 /**
  *
  */
-case class Session(map:Map[String,AnyRef]) extends Args {
+case class Session(map: Map[String, AnyRef]) extends Args {
 
   def get(key: String) = map.get(key)
 }
@@ -139,18 +151,18 @@ object Session {
  */
 case class Parameters(map: Map[String, Array[String]]) extends Args {
 
-  def apply(k:String) = map.get(k) match {
-    case Some(a)=>a(0)
+  def apply(k: String) = map.get(k) match {
+    case Some(a) => a(0)
     case _ => null
   }
-  
+
   def get(key: String): Option[String] =
     if (map.contains(key))
       Option(map(key)(0))
     else
       None
 
-  def getOrElse(key:String,alt:String) = {
+  def getOrElse(key: String, alt: String) = {
     if (map.contains(key))
       map(key)(0)
     else
@@ -173,7 +185,7 @@ case class Cookies(list: List[Cookie]) extends Args
  *
  */
 object Cookies {
-  def apply(request: HttpServletRequest):Cookies = {
+  def apply(request: HttpServletRequest): Cookies = {
     val cookies = {
       if (request.getCookies == null || request.getCookies.length == 0)
         List.empty[Cookie]

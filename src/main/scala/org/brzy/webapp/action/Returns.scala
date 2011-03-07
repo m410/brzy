@@ -15,6 +15,7 @@ package org.brzy.webapp.action
 
 import xml.Elem
 import com.twitter.json.{Json=>tJson}
+import java.io.OutputStream
 
 /**
  * Document Me..
@@ -48,6 +49,13 @@ case class SessionRemove(attr:String) extends Data
  * request by the client.
  */
 case class Flash(code:String,default:String) extends Data
+
+/**
+ *
+ */
+case class ResponseHeaders(headers:(String,String)*) extends Data
+
+
 
 
 

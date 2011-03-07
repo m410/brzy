@@ -397,7 +397,10 @@ object Action {
         log.debug("json: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
-      case _ => error("Unknown Direction Type")
+      case j: Jsonp =>
+        log.debug("jsonp: {}", j)
+        res.setContentType(j.contentType)
+        res.getWriter.write(j.parse)
     }
 
   /**
@@ -414,13 +417,15 @@ object Action {
       case s: Flash =>
         log.debug("flash: {}", s)
         new FlashMessage(s.code, req.getSession)
-      case s: SessionRemove =>
-        log.debug("sessionRemove: {}", s)
-        req.getSession.removeAttribute(s.attr)
       case s: CookieAdd =>
         log.debug("cookieAdd: {}", s)
         res.addCookie(new JCookie(s.attrs._1, s.attrs._2.toString))
-      case _ => error("Unknown Data Type")
+      case h: ResponseHeaders =>
+        log.debug("response headers: {}", h)
+        h.headers.foreach(r=>{res.setHeader(r._1,r._2)})
+      case s: SessionRemove =>
+        log.debug("sessionRemove: {}", s)
+        req.getSession.removeAttribute(s.attr)
     }
 
   /**
