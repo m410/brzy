@@ -401,6 +401,7 @@ object Action {
         log.debug("jsonp: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
+      case _ => error("Unknown Driection: %s".format(direct))
     }
 
   /**
@@ -426,6 +427,7 @@ object Action {
       case s: SessionRemove =>
         log.debug("sessionRemove: {}", s)
         req.getSession.removeAttribute(s.attr)
+      case _ => error("Unknown Data: %s".format(data))
     }
 
   /**
@@ -458,6 +460,8 @@ object Action {
         list += headers
       case CookiesClass =>
         list += Cookies(req)
+      case PostBodyClass =>
+        list += PostBody(req)
       case PrincipalClass =>
         list += req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
       case _ =>

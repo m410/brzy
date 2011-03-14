@@ -175,12 +175,17 @@ class WebApp(conf: WebAppConf) {
     constructor.getParameterTypes.map((argClass: Class[_]) => {
       serviceMap.values.find((s: AnyRef) => {
         val serviceClass =
-        if (isProxy(s))
-          s.getClass.getSuperclass
-        else
-          s.getClass
+            if (isProxy(s))
+              s.getClass.getSuperclass
+            else
+              s.getClass
         argClass.equals(serviceClass)
-      }).get
+      }) match {
+        case Some(e) => e
+        case _ =>
+          log.warn("No service for type '{}' on class {}",argClass, c)
+          null
+      }
     })
   }
 
