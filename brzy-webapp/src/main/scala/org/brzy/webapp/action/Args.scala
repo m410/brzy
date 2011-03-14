@@ -24,6 +24,7 @@ import org.apache.commons.fileupload.FileItem
 import io.Source
 import xml.XML
 import com.twitter.json.{Json => tJson}
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -212,9 +213,10 @@ case class Cookie(comment: String, domain: String, maxAge: Int, name: String,
  * @author Michael Fortin
  */
 case class PostBody(request: HttpServletRequest) extends Args {
-  val maxSize = 100000
-  val tempDir = new java.io.File(util.Properties.tmpDir)
-  val sizeThreshold = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD
+  private[this] val log = LoggerFactory.getLogger(classOf[PostBody])
+  protected[this] val maxSize = 100000
+  protected[this] val tempDir = new java.io.File(util.Properties.tmpDir)
+  protected[this] val sizeThreshold = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD
 
   def asText = Source.fromInputStream(request.getInputStream).mkString
 
@@ -223,21 +225,26 @@ case class PostBody(request: HttpServletRequest) extends Args {
   def asJson = tJson.parse(asText)
 
   def asBytes(name: String): Array[Byte] = {
-    val factory = new DiskFileItemFactory()
-    factory.setSizeThreshold(sizeThreshold)
-    factory.setRepository(tempDir)
-    val upload = new ServletFileUpload(factory)
-    upload.setSizeMax(maxSize)
-    val items = upload.parseRequest(request)
+    if (ServletFileUpload.isMultipartContent(request)) {
+      val factory = new DiskFileItemFactory()
+      factory.setSizeThreshold(sizeThreshold)
+      factory.setRepository(tempDir)
+      val upload = new ServletFileUpload(factory)
+      upload.setSizeMax(maxSize)
+      val items = upload.parseRequest(request)
+      log.debug("items: {}",items.mkString("[",",","]"))
+      val item = items.find(x => {
+        val i = x.asInstanceOf[FileItem]
+        !i.isFormField && i.getFieldName == name
+      })
 
-    val item = items.find(x => {
-      val i = x.asInstanceOf[FileItem]
-      i.isFormField && i.getFieldName == name
-    })
-
-    item match {
-      case Some(i) => i.asInstanceOf[FileItem].get
-      case _ => error("Not a byte array.")
+      item match {
+        case Some(i) => i.asInstanceOf[FileItem].get
+        case _ => error("Not a byte array.")
+      }
+    }
+    else {
+      error("Not a multipart upload")
     }
   }
 }

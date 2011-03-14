@@ -32,6 +32,9 @@ case class ServiceScanner(packageName: String) {
       .setUrls(ClasspathHelper.getUrlsForPackagePrefix(packageName))
       .setScanners(new SubTypesScanner()))
 
-  val services =
-      reflections.getSubTypesOf(classOf[Service]).toList.filter(_.getName.indexOf("$") < 0)
+  val services = {
+    val list = reflections.getSubTypesOf(classOf[Service]).toList
+    list.filter(_.getName.indexOf("$") < 0)
+  }
+
 }

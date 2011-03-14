@@ -23,4 +23,5 @@ package object action {
   val RequestAttributesClass = classOf[RequestAttributes]
   val CookiesClass = classOf[Cookies]
   val PrincipalClass = classOf[Principal]
+  val PostBodyClass = classOf[PostBody]
 }

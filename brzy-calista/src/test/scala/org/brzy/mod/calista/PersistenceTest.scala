@@ -18,40 +18,42 @@ import org.junit.Assert._
 import org.junit._
 
 import java.util.{UUID, Date}
-import org.brzy.calista.ocm.{KeyedEntity, ColumnMapping, Dao, Attribute,Calista}
 import org.brzy.calista.serializer.{DateSerializer, UUIDSerializer, UTF8Serializer}
+import org.brzy.calista.ocm._
 
 class PersistenceTest extends JUnitSuite {
   val key = UUID.randomUUID
   val insertKey = UUID.randomUUID
+
   import org.brzy.calista.schema.Conversions._
 
-//
-//  @Test @Ignore def testGetObject = {
-//    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
-//    val session = manager.createSession
-//    manager.context.withValue(session) {
-//      val s = Calista.value.get
-//
-//      if (s.count(Person.family | key) < 3) {
-//        val firstColumn = Insert(Person.family | key |("firstName" , "Fred"))
-//        val lastColumn = Insert(Person.family | key |("lastName", "Doe"))
-//        val createdColumn = Insert(Person.family | key |("created", new Date))
-//        s.batch(firstColumn :: lastColumn :: createdColumn)
-//      }
-//      val person = Person.get(key)
-//      assertNotNull(person)
-//    }
-//    manager.destroySession(session)
-//  }
+  //
+  //  @Test @Ignore def testGetObject = {
+  //    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
+  //    val session = manager.createSession
+  //    manager.context.withValue(session) {
+  //      val s = Calista.value.get
+  //
+  //      if (s.count(Person.family | key) < 3) {
+  //        val firstColumn = Insert(Person.family | key |("firstName" , "Fred"))
+  //        val lastColumn = Insert(Person.family | key |("lastName", "Doe"))
+  //        val createdColumn = Insert(Person.family | key |("created", new Date))
+  //        s.batch(firstColumn :: lastColumn :: createdColumn)
+  //      }
+  //      val person = Person.get(key)
+  //      assertNotNull(person)
+  //    }
+  //    manager.destroySession(session)
+  //  }
 
-  @Test @Ignore def testSaveObject = {
-    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
+  @Test
+  @Ignore def testSaveObject = {
+    val manager = new CalistaContextManager(new CalistaModConf(Map("host" -> "localhost")))
     val session = manager.createSession
     manager.context.withValue(session) {
       val s = Calista.value.get
 
-      if(s.count(Person.family | insertKey) > 1) {
+      if (s.count(Person.family | insertKey) > 1) {
         s.remove(Person.family | insertKey)
         println("removed key")
       }
@@ -79,28 +81,29 @@ class PersistenceTest extends JUnitSuite {
     manager.destroySession(session3)
   }
 
-//  @Test @Ignore def countObject = {
-//    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
-//    val session = manager.createSession
-//
-//    manager.context.withValue(session) {
-//      val count = Person.count(insertKey)
-//      assertNotNull(count)
-//      assertEquals(3,count) //?
-//    }
-//    manager.destroySession(session)
-//  }
+  //  @Test @Ignore def countObject = {
+  //    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
+  //    val session = manager.createSession
+  //
+  //    manager.context.withValue(session) {
+  //      val count = Person.count(insertKey)
+  //      assertNotNull(count)
+  //      assertEquals(3,count) //?
+  //    }
+  //    manager.destroySession(session)
+  //  }
 }
 
 case class Person(key: UUID, firstName: String, lastName: String, created: Date)
-        extends KeyedEntity[UUID]
+        extends StandardEntity[UUID]
 
-object Person extends Dao[UUID,Person]{
-  val columnMapping = new ColumnMapping[Person]()
-      .attributes(UTF8Serializer,Array(
-        Attribute("key",true, UUIDSerializer),
-        Attribute("firstName"),
-        Attribute("lastName"),
-        Attribute("created",false,DateSerializer)))
-  val family = columnMapping.family
+object Person extends StandardDao[UUID, Person] {
+  val mapping = Mapping[Person](
+    "Person",
+    UTF8Serializer,
+    Key(UUIDSerializer),
+    Column("firstName"),
+    Column("lastName"),
+    Column("created", DateSerializer))
+  val family = mapping.family
 }

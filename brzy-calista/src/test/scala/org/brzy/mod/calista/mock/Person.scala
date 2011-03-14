@@ -13,23 +13,23 @@
  */
 package org.brzy.mod.calista.mock
 
-import org.brzy.calista.ocm.{ColumnMapping, Dao, KeyedEntity,Attribute}
 import java.util.UUID
 import org.brzy.calista.serializer.{UUIDSerializer, UTF8Serializer}
+import org.brzy.calista.ocm._
 
 /**
  *
  */
-case class Person (key:UUID, firstName:String)extends KeyedEntity[UUID]
+case class Person (key:UUID, firstName:String)extends StandardEntity[UUID]
 
 /**
  *
  */
-object Person extends Dao[UUID,Person]{
-  def columnMapping = new ColumnMapping[Person]()
-      .attributes(UTF8Serializer,Array(
-        Attribute("key",true,UUIDSerializer),
-        Attribute("firstName")
-      ))
+object Person extends StandardDao[UUID,Person]{
+  def mapping = Mapping[Person](
+      "Person",
+      UTF8Serializer,
+      Key(UUIDSerializer),
+      Column("firstName"))
 }
 
