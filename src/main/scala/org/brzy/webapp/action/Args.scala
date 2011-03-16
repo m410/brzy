@@ -28,16 +28,19 @@ import org.slf4j.LoggerFactory
 
 
 /**
- * Document Me..
+ * These are the eligable arguments to a controller action.
  *
  * @author Michael Fortin
  */
 sealed class Args
 
 /**
- *
+ *  Captures the request attributes and passes them on to the action.
  */
 case class RequestAttributes(
+				requestURI:String,
+				requestURL:StringBuffer,
+				queryString:String,
         scheme: String,
         secure: Boolean,
         serverName: String,
@@ -56,11 +59,14 @@ case class RequestAttributes(
         locales: Array[Locale]) extends Args
 
 /**
- *
+ *	Constructs a RequestAttribute class from the servlet request.
  */
 object RequestAttributes {
   def apply(request: HttpServletRequest) =
     new RequestAttributes(
+			requestURI = request.getRequestURI,
+			requestURL = request.getRequestURL,
+			queryString = request.getQueryString,
       scheme = request.getScheme,
       secure = request.isSecure,
       contentLength = request.getContentLength,
@@ -101,7 +107,7 @@ case class Headers(map: Map[String, String]) extends Args {
 }
 
 /**
- *
+ * Constructs a Headers class from the request.
  */
 object Headers {
 
@@ -119,19 +125,25 @@ object Headers {
 }
 
 /**
- *
+ *	The Logged in name and the roles the user posseses.  Similar to HttpServletRequest.getUserPrincipal().
+ * @param name the user name. 
+ * @param roles the roles the user has 
  */
 @serializable
 case class Principal(name: String, roles: Roles)
 
 /**
- *
+ * The current session.  If a session does not exist, this will not create one, it will just return
+ * an empty map.
  */
 case class Session(map: Map[String, AnyRef]) extends Args {
 
   def get(key: String) = map.get(key)
 }
 
+/**
+ * Constructs a Session arg from the servlet request.
+ */
 object Session {
 
   def apply(request: HttpServletRequest) = {
@@ -148,7 +160,7 @@ object Session {
 }
 
 /**
- *
+ * The request parameters and the parameters embedded in the url.
  */
 case class Parameters(map: Map[String, Array[String]]) extends Args {
 
@@ -183,7 +195,7 @@ case class Parameters(map: Map[String, Array[String]]) extends Args {
 case class Cookies(list: List[Cookie]) extends Args
 
 /**
- *
+ *  Constructs the cookies from the servlet request.
  */
 object Cookies {
   def apply(request: HttpServletRequest): Cookies = {
@@ -200,13 +212,13 @@ object Cookies {
 }
 
 /**
- *
+ * An individual cookie from the servlet request.
  */
 case class Cookie(comment: String, domain: String, maxAge: Int, name: String,
         path: String, secure: Boolean, value: String, version: Int)
 
 /**
- * This is not implemented yet.  This enables access to the the body of the post as a plain
+ * This enables access to the the body of the post as a plain
  * text object to be used in parsing text, xml or json post data.
  *
  * @see http ://commons.apache.org/fileupload/using.html
@@ -224,6 +236,12 @@ case class PostBody(request: HttpServletRequest) extends Args {
 
   def asJson = tJson.parse(asText)
 
+	/**
+	 * This uses the apache commons fileupload api to digest the multipart content of the body.  This
+	 * is used when uploading a file.  
+	 *
+	 * @param name The name of the parameter the data is uploaded as.
+	 */
   def asBytes(name: String): Array[Byte] = {
     if (ServletFileUpload.isMultipartContent(request)) {
       val factory = new DiskFileItemFactory()
@@ -233,6 +251,7 @@ case class PostBody(request: HttpServletRequest) extends Args {
       upload.setSizeMax(maxSize)
       val items = upload.parseRequest(request)
       log.debug("items: {}",items.mkString("[",",","]"))
+
       val item = items.find(x => {
         val i = x.asInstanceOf[FileItem]
         !i.isFormField && i.getFieldName == name
