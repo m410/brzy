@@ -23,6 +23,7 @@ import collection.JavaConversions.JMapWrapper
 import collection.mutable.ListBuffer
 
 import java.util.Enumeration
+import java.io.ByteArrayInputStream
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie=>JCookie}
 
 /**
@@ -392,7 +393,11 @@ object Action {
       case b: Binary =>
         log.debug("bytes: {}", b)
         res.setContentType(b.contentType)
-        res.getOutputStream.write(b.bytes)
+				res.setHeader("content-length",b.bytes.length.toString)
+				val input = new ByteArrayInputStream(b.bytes)
+				var inRead = 0
+				while({inRead = input.read;inRead} >= 0)
+        	res.getOutputStream.write(inRead)
       case j: Json =>
         log.debug("json: {}", j)
         res.setContentType(j.contentType)
