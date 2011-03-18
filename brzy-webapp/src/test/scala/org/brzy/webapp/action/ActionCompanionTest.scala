@@ -22,7 +22,7 @@ import org.junit.Test
 import org.junit.Assert._
 
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
-import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest}
+import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
 
 
@@ -43,6 +43,7 @@ class ActionCompanionTest extends JUnitSuite {
   }
 
   @Test def testParseResults = {
+		val response = new MockHttpServletResponse()
     val request = new MockHttpServletRequest(new MockServletContext()) {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
@@ -57,7 +58,7 @@ class ActionCompanionTest extends JUnitSuite {
     val tup = ("attributeKey","attributeValue")
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
-    handleResults(action, tup, request, null)
+    handleResults(action, tup, request, response)
     assertNotNull(request.getAttribute("attributeKey"))
   }
 

@@ -365,6 +365,7 @@ object Action {
       case view: View =>
         val target: String = view.path + ".ssp" //action.viewType
         log.debug("view: {}", target)
+				res.setHeader("Content-Type","text/html; charset=utf-8") // TODO Should be set by the view and overridable by the controller
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
         log.debug("forward: {}", f)
