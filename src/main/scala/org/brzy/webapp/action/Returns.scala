@@ -14,12 +14,12 @@
 package org.brzy.webapp.action
 
 import xml.Elem
-import com.twitter.json.{Json=>tJson}
+import com.twitter.json.{Json => tJson}
 import java.io.OutputStream
 
 /**
  * Document Me..
- * 
+ *
  * @author Michael Fortin
  */
 sealed class Data
@@ -27,36 +27,37 @@ sealed class Data
 /**
  *  Add a name value pair to the servlet request attributes.
  */
-case class Model(attrs:Tuple2[String,AnyRef]*) extends Data
+case class Model(attrs: Tuple2[String, AnyRef]*) extends Data
 
 /**
  * Add a cookie to the return headers.
  */
-case class CookieAdd(attrs:Tuple2[String,AnyRef]) extends Data
+case class CookieAdd(name: String,
+        value: String,
+        path: Option[String] = None,
+        maxAge: Int = -1,
+        domain: Option[String] = None) extends Data
 
 /**
  * add an attribute to the httpSession.
  */
-case class SessionAdd(attrs:Tuple2[String,AnyRef]*) extends Data
+case class SessionAdd(attrs: Tuple2[String, AnyRef]*) extends Data
 
 /**
  * Remove an attribute for the http session.
  */
-case class SessionRemove(attr:String) extends Data
+case class SessionRemove(attr: String) extends Data
 
 /**
  * Add an attribute to the http session that is only available for a single
  * request by the client.
  */
-case class Flash(code:String,default:String) extends Data
+case class Flash(code: String, default: String) extends Data
 
 /**
  *
  */
-case class ResponseHeaders(headers:(String,String)*) extends Data
-
-
-
+case class ResponseHeaders(headers: (String, String)*) extends Data
 
 
 sealed class Direction
@@ -65,14 +66,14 @@ sealed class Direction
 /**
  * Override the default view.
  */
-case class View(path:String) extends Direction
+case class View(path: String) extends Direction
 
 /**
  * Forward to another action without sending a redirect to the client.
  */
-case class Forward(path:String) extends Direction {
+case class Forward(path: String) extends Direction {
   val contextPath =
-    if(path.startsWith("/"))
+    if (path.startsWith("/"))
       path + ".brzy"
     else
       "/" + path + ".brzy"
@@ -82,27 +83,28 @@ case class Forward(path:String) extends Direction {
 /**
  * Send a 302 redirect to the cleint.
  */
-case class Redirect(path:String) extends Direction
+case class Redirect(path: String) extends Direction
 
 /**
  * Return xml as the body of the response.
  */
-case class Xml(t:AnyRef,contentType:String = "text/xml") extends Direction with Parser {
+case class Xml(t: AnyRef, contentType: String = "text/xml") extends Direction with Parser {
+
   import org.brzy.fab.reflect.Properties._
 
   def parse = {
-    def node(name:String, elem:Elem) = elem.copy(label=name)
+    def node(name: String, elem: Elem) = elem.copy(label = name)
     val tmp = <class>
-      {t.properties.map(p=> node({p._1}, <property>{p._2}</property>))}
+      {t.properties.map(p => node({p._1}, <property>{p._2}</property>))}
     </class>
-    node(t.getClass.getSimpleName,tmp)
+    node(t.getClass.getSimpleName, tmp)
   }.toString
 }
 
 /**
  * Returns plain text as the body of the response.
  */
-case class Text(ref:AnyRef, contentType:String = "text/plain") extends Direction with Parser{
+case class Text(ref: AnyRef, contentType: String = "text/plain") extends Direction with Parser {
   def parse = ref.toString
 }
 
@@ -110,40 +112,40 @@ case class Text(ref:AnyRef, contentType:String = "text/plain") extends Direction
  * Returns binary data as the body of the response.  This is used to return files or images
  * as the response.
  */
-case class Binary(bytes:Array[Byte], contentType:String) extends Direction
+case class Binary(bytes: Array[Byte], contentType: String) extends Direction
 
 /**
  * Return Json formatted text as the body of the response.
  */
-case class Json(target:AnyRef, contentType:String = "application/json") extends Direction with Parser {
+case class Json(target: AnyRef, contentType: String = "application/json") extends Direction with Parser {
 
   def parse = target match {
-    case s:String =>
+    case s: String =>
       s
-    case l:List[_] =>
+    case l: List[_] =>
       tJson.build(l).toString
-    case m:Map[_,_] =>
+    case m: Map[_, _] =>
       tJson.build(m).toString
     case _ =>
-       import org.brzy.fab.reflect.Properties._
+      import org.brzy.fab.reflect.Properties._
       tJson.build(target.properties).toString
   }
 }
 
-case class Jsonp(callback:String, target:AnyRef,contentType:String = "application/json") extends Direction with Parser {
+case class Jsonp(callback: String, target: AnyRef, contentType: String = "application/json") extends Direction with Parser {
   def parse = {
     val sb = new StringBuilder()
     sb.append(callback)
     sb.append("(")
     sb.append(target match {
-      case s:String =>
+      case s: String =>
         s
-      case l:List[_] =>
+      case l: List[_] =>
         tJson.build(l).toString
-      case m:Map[_,_] =>
+      case m: Map[_, _] =>
         tJson.build(m).toString
       case _ =>
-         import org.brzy.fab.reflect.Properties._
+        import org.brzy.fab.reflect.Properties._
         tJson.build(target.properties).toString
     })
     sb.append(")")
@@ -154,6 +156,6 @@ case class Jsonp(callback:String, target:AnyRef,contentType:String = "applicatio
 /**
  * Return an error to the client, eg. 403.
  */
-case class Error(code:Int, msg:String) extends Direction
+case class Error(code: Int, msg: String) extends Direction
 
 

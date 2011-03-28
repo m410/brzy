@@ -37,7 +37,6 @@ dependencies:
   - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
 
 web_xml:
-  - context-param: { param-name : brzy-env, param-value: development}
   - listener: {listener-class: org.brzy.application.WebAppListener}
   - filter: {filter-name: BrzyFilter, filter-class: org.brzy.webapp.BrzyFilter}
   - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}

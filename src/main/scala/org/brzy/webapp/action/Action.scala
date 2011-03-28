@@ -426,7 +426,17 @@ object Action {
         new FlashMessage(s.code, req.getSession)
       case s: CookieAdd =>
         log.debug("cookieAdd: {}", s)
-        res.addCookie(new JCookie(s.attrs._1, s.attrs._2.toString))
+        val cookie = new JCookie(s.name, s.value)
+        cookie.setPath( s.path match {
+          case Some(p)=> p
+          case _ => req.getContextPath
+        })
+        cookie.setMaxAge(s.maxAge)
+        cookie.setDomain(s.domain match {
+          case Some(domain) => domain
+          case _ => req.getServerName
+        })
+        res.addCookie(cookie)
       case h: ResponseHeaders =>
         log.debug("response headers: {}", h)
         h.headers.foreach(r=>{res.setHeader(r._1,r._2)})
