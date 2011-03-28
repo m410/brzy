@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action
+package org.brzy.webapp.action.returns
 
 import org.springframework.mock.web.{MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
 
@@ -22,6 +22,7 @@ import org.junit.Assert._
 
 import org.brzy.webapp.mock.UserController
 import org.brzy.webapp.action.Action._
+import org.brzy.webapp.action.Xml
 
 class XmlReturnTest  extends JUnitSuite {
 

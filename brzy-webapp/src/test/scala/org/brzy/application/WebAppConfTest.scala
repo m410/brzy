@@ -37,7 +37,7 @@ class WebAppConfTest extends JUnitSuite {
     assertEquals(8, wac.repositories.size)
     assertNotNull(wac.webXml)
     assertNotNull(wac.environment)
-    assertEquals(12, wac.webXml.size)
+    assertEquals(11, wac.webXml.size)
 
     assertEquals(1, wac.logging.root.get.ref.size)
     assertEquals("STDOUT", wac.logging.root.get.ref.get(0))

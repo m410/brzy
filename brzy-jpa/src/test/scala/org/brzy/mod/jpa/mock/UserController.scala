@@ -71,6 +71,6 @@ class UserController extends Controller("users"){
   }
 
   def custom() = {
-    (CookieAdd("id" -> "1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
+    (CookieAdd("id", "1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
   }
 }
