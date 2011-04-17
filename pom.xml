@@ -6,7 +6,7 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-webapp</artifactId>
   <name>Brzy WebApp</name>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.9</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>
