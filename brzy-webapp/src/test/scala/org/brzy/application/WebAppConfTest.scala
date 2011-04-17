@@ -19,7 +19,7 @@ import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 
 class WebAppConfTest extends JUnitSuite {
-  @Test def testCreateConfiguration = {
+  @Test def testCreateConfiguration() {
     val wac = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     assertNotNull(wac)
     assertNotNull(wac.application)
@@ -41,5 +41,33 @@ class WebAppConfTest extends JUnitSuite {
 
     assertEquals(1, wac.logging.root.get.ref.size)
     assertEquals("STDOUT", wac.logging.root.get.ref.get(0))
+  }
+
+  @Test def testJson() {
+    val wac = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+    val json = wac.toJson
+    assertNotNull(json)
+    val wacFromJson = WebAppConf.fromJson(json)
+    assertNotNull(wacFromJson)
+    
+    assertNotNull(wacFromJson.application)
+    assertNotNull(wacFromJson.build)
+    assertNotNull(wacFromJson.logging)
+    assertNotNull(wacFromJson.logging.loggers)
+    assertNotNull(wacFromJson.logging.appenders)
+    assertNotNull(wacFromJson.logging.root)
+    assertEquals(1, wacFromJson.logging.root.get.ref.size)
+    assertNotNull(wacFromJson.dependencies)
+    assertEquals(16, wacFromJson.dependencies.size)
+    assertNotNull(wacFromJson.dependencyExcludes)
+    assertEquals(0, wacFromJson.dependencyExcludes.size)
+    assertNotNull(wacFromJson.repositories)
+    assertEquals(8, wacFromJson.repositories.size)
+    assertNotNull(wacFromJson.webXml)
+    assertNotNull(wacFromJson.environment)
+    assertEquals(11, wacFromJson.webXml.size)
+
+    assertEquals(1, wacFromJson.logging.root.get.ref.size)
+    assertEquals("STDOUT", wacFromJson.logging.root.get.ref.get(0))
   }
 }
