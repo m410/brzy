@@ -19,6 +19,7 @@ import collection.SortedSet
 import java.io.File
 import org.brzy.fab.mod.{Mod, PersistenceMod, RuntimeMod, ViewMod}
 import org.slf4j.LoggerFactory
+import com.twitter.json.Json
 
 /**
  * This is the main webapp configuration class.  It consists of all the parts configured
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory
  * @author Michael Fortin
  */
 class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod])
-    extends Configuration {
+        extends Configuration {
 
   /**
    * The developement environment
@@ -138,6 +139,14 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     })
     buf.toList
   }
+
+  def toJson = {
+    val data = Map("webAppConfigFile" -> c.map,
+      "views" -> Map("viewClass"->views.getClass.getName,"view"->views.map),
+      "persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}),
+      "modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
+    Json.build(data).toString()
+  }
 }
 
 /**
@@ -159,14 +168,14 @@ object WebAppConf {
     val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 
     val envMap = appConf.map.get("environment_overrides") match {
-      case Some(a) => a.asInstanceOf[List[Map[String,AnyRef]]].find(_("environment") == env)
+      case Some(a) => a.asInstanceOf[List[Map[String, AnyRef]]].find(_("environment") == env)
       case _ => None
     }
 
     val runtimeConfig = envMap match {
       case Some(e) =>
         val envConf = new WebAppConfFile(e.asInstanceOf[Map[String, AnyRef]])
-        val runConf =  defaultConf << appConf << envConf
+        val runConf = defaultConf << appConf << envConf
         runConf.asInstanceOf[WebAppConfFile]
       case _ =>
         val runConf = defaultConf << appConf
@@ -190,7 +199,7 @@ object WebAppConf {
     }
     val modules: List[RuntimeMod] = {
       if (runtimeConfig.modules.isDefined) {
-        val runMod= runtimeConfig.modules.get.map(makeRuntimeMod(_))
+        val runMod = runtimeConfig.modules.get.map(makeRuntimeMod(_))
         runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
       }
       else
@@ -208,7 +217,7 @@ object WebAppConf {
     val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
 
     val envMap = appConf.map.get("environment_overrides") match {
-      case Some(a) => a.asInstanceOf[List[Map[String,AnyRef]]].find(_("environment") == env)
+      case Some(a) => a.asInstanceOf[List[Map[String, AnyRef]]].find(_("environment") == env)
       case _ => None
     }
 
@@ -240,7 +249,7 @@ object WebAppConf {
     }
     val modules: List[RuntimeMod] = {
       if (buildConfig.modules.isDefined) {
-        val runMod =  buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir))
+        val runMod = buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir))
         runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
       }
       else {
@@ -266,13 +275,13 @@ object WebAppConf {
       // with the duplicate code below.  This should remove this later once the build runner
       // classloader is ironed out.
       val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
-      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+      val constructor = c.getConstructor(Array(classOf[Map[_, _]]): _*)
       val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }
     else {
-      log.warn("No config_class for mod: {}",reference)
+      log.warn("No config_class for mod: {}", reference)
       reference
     }
   }
@@ -287,7 +296,7 @@ object WebAppConf {
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
       val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
-      val constructor = c.getConstructor(Array(classOf[Map[_,_]]):_*)
+      val constructor = c.getConstructor(Array(classOf[Map[_, _]]): _*)
       val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
@@ -297,4 +306,30 @@ object WebAppConf {
     }
   }
 
+  def fromJson(json: String) = {
+    val data = Json.parse(json).asInstanceOf[Map[String,AnyRef]]
+    val conf = new WebAppConfFile(data("webAppConfigFile").asInstanceOf[Map[String,AnyRef]])
+
+    val v = data("views").asInstanceOf[Map[String,AnyRef]]
+    val views = inst[ViewMod](v("viewClass").asInstanceOf[String],v("view").asInstanceOf[Map[String,AnyRef]])
+
+    val persistenceList = data("persistence").asInstanceOf[List[Map[String, AnyRef]]]
+    val persistence = persistenceList.map(p=>{
+      val v = p.asInstanceOf[Map[String,AnyRef]]
+      inst[PersistenceMod](v("persistClass").asInstanceOf[String],v("persist").asInstanceOf[Map[String,AnyRef]])
+    })
+
+    val modList = data("modules").asInstanceOf[List[Map[String, AnyRef]]]
+    val modules = modList.map(p=>{
+      val v = p.asInstanceOf[Map[String,AnyRef]]
+      inst[RuntimeMod](v("modClass").asInstanceOf[String],v("mod").asInstanceOf[Map[String,AnyRef]])
+    })
+    new WebAppConf(conf, views, persistence, modules)
+  }
+
+  protected[application] def inst[T](className:String,args:Map[String,AnyRef]) = {
+    val clazz = Class.forName(className)
+    val constructor = clazz.getConstructor(classOf[Map[String,AnyRef]])
+    constructor.newInstance(args).asInstanceOf[T]
+  }
 }
