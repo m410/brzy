@@ -13,7 +13,7 @@
     <version>0.8</version>
   </parent>
   <properties>
-    <calista-version>0.4-SNAPSHOT</calista-version>
+    <calista-version>0.4</calista-version>
     <cassandra.version>0.7.0</cassandra.version>
   </properties>
   <build>
