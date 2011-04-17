@@ -9,9 +9,9 @@
   <properties>	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.5-SNAPSHOT</fab-conf-version>
+    <fab-conf-version>0.5</fab-conf-version>
     <fab-util-version>0.4</fab-util-version>
-    <brzy-webapp-version>0.9-SNAPSHOT</brzy-webapp-version>
+    <brzy-webapp-version>0.9</brzy-webapp-version>
     <brzy-scalate-version>0.8</brzy-scalate-version>
     <brzy-validator-version>0.1</brzy-validator-version>
     <logback-version>0.9.27</logback-version>

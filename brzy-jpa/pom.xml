@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-jpa</artifactId>
   <name>Brzy JPA Module</name>
-  <version>0.7-SNAPSHOT</version>
+  <version>0.7</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>
