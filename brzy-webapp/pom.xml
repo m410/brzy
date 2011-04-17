@@ -122,7 +122,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>${logback-version}</version>
+      <version>0.9.27</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
