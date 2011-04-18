@@ -9,7 +9,7 @@ class BrzyJpaPersistencePlugin extends Task  {
   // create a class from template
 	def genPersistenceXml() {
 		messenger.info("Create a JPA Domain Class")
-    val webappConf = context.properties("webAppConfig").asInstanceOf[WebAppConf]
+    val webappConf = WebAppConf.fromJson(context.property("webAppConfig"))
     val outFile = File(context.webappDir, "WEB-INF/classes/META-INF/persistence.xml")
     outFile.getParentFile.mkdirs
     val persistenceXml = new PersistenceXml(webappConf)
