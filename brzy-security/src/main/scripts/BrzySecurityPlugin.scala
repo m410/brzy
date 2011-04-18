@@ -1,12 +1,12 @@
+import org.brzy.fab.build.Task
 
-
-class BrzySecurityPlugin(context:BuildContext) {
+class BrzySecurityPlugin extends Task {
 
 	def genLogin(args:Array[String]) = {
-		talk.say(Info("Generate a login"))
+		messenger.info("Generate a login")
 	}
 
 	def genRegistration(args:Array[String]) = {
-		talk.say(Info("Generate a registration page"))
+		messenger.info("Generate a registration page")
 	}
 }

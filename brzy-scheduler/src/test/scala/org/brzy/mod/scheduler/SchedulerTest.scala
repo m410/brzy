@@ -20,7 +20,7 @@ import java.util.Calendar
 
 
 class SchedulerTest extends JUnitSuite {
-  @Test def testSchedule = {
+  @Test def testSchedule() {
     val config = new SchedulerModConfig(Map(
       "name" -> "Scheduler",
       "scan_package" -> "org.brzy.mod.scheduler.mock"

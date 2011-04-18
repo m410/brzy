@@ -1,21 +1,20 @@
 
 import java.io.{BufferedWriter, FileWriter}
-import org.brzy.fab.print.{Question,Info}
 import org.clapper.scalasti.StringTemplateGroup
 import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
-import org.brzy.fab.build.BuildContext
+import org.brzy.fab.build.Task
 
-class BrzySquerylPlugin(context:BuildContext)  {
+class BrzySquerylPlugin extends Task  {
 
-	def createSquerylDomain(args:Array[String]) = {
-		context.line.say(Info("Create a Squeryl Domain Class"))
+	def createSquerylDomain(args:Array[String]) {
+		messenger.info("Create a Squeryl Domain Class")
 
 		val packageAndClass =
       if(args.length == 1)
         args(0)
       else
-        context.line.ask(Question("enter package & class: "))
+        messenger.ask("enter package & class: ")
 
 		val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))

@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-spring</artifactId>
   <name>Brzy Spring Module</name>
-  <version>0.6</version>
+  <version>0.7-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzy</artifactId>

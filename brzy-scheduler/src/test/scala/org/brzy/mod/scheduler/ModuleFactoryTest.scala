@@ -20,7 +20,7 @@ import org.brzy.application.WebAppConf
 
 class ModuleFactoryTest extends JUnitSuite {
 
-  @Test def testAssemble = {
+  @Test def testAssemble() {
     val config = WebAppConf("test")
     assertNotNull(config.modules)
     assertEquals(1, config.modules.size)

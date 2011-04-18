@@ -6,14 +6,13 @@ import org.apache.catalina.LifecycleException
 import org.apache.catalina.loader.WebappLoader
 import org.apache.catalina.startup.Embedded
 
-import org.brzy.fab.build.BuildContext
-import org.brzy.fab.print.Info
 import org.brzy.fab.file.{File,Files}
 import org.brzy.fab.compile.ScalaCompiler
 import org.brzy.fab.compile.{Compiler=>SCompiler}
 import actors.Actor._
 import actors.{Exit, TIMEOUT}
 import java.io.{PrintWriter, File=>JFile}
+import org.brzy.fab.build.Task
 
 /*
  * watch the source directory for changes
@@ -104,27 +103,24 @@ class RunWebApp(contextName:String, port:Int) {
 }
 
 
-class BrzyTomcat6Plugin(ctx:BuildContext) {
+class BrzyTomcat6Plugin extends Task {
 
-	def runTomcat = {
-		ctx.line.say(Info("Run tomcat",true))
+	def runTomcat() {
+		messenger.info("Run tomcat")
 	  val sourceDir = File(ctx.sourceDir,"scala")
 	  val classesDir = File(ctx.webappDir,"WEB-INF/classes")
 	  val libsDir = File(ctx.webappDir,"WEB-INF/lib")
 
-	  ctx.line.say(Info(" -- source   : " + sourceDir))
-	  ctx.line.say(Info(" -- classes  : " + classesDir))
-	  ctx.line.say(Info(" -- libs     : " + libsDir))
+	  messenger.info(" -- source   : " + sourceDir)
+	  messenger.info(" -- classes  : " + classesDir)
+	  messenger.info(" -- libs     : " + libsDir)
 
 	  try {
 			new RunWebApp("",8080)
 		  new FileWatcher(sourceDir,classesDir, libsDir, new ScalaCompiler(new PrintWriter(System.out)))
 		}
 		catch {
-			case e:Exception => 
-				println(e.getMessage)
-				e.printStackTrace
-				ctx.line.endWithError(e)
+			case e:Exception => messenger.info(e.getMessage,e)
 		}
 	
 	  Thread.sleep(100000000) // TODO there's probably a better way to do this
