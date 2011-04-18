@@ -75,7 +75,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
-      <version>0.9.28</version>
+      <version>0.9.27</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
