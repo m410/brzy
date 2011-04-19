@@ -36,7 +36,7 @@ class FileWatcher(baseDir: JFile, destDir: JFile, libDir: JFile, compiler: SComp
         case Exit => exit()
       }
     }
-  }.start
+  }.start()
 
   private def findFiles(root: JFile): List[JFile] = {
     if (root.isFile && root.getName.endsWith(".scala"))
@@ -75,20 +75,20 @@ class RunWebApp(contextName:String, port:Int) {
   val engine = container.createEngine()
   engine.setName("engine")
   engine.addChild(host)
-  engine.setDefaultHost(host.getName())
+  engine.setDefaultHost(host.getName)
   container.addEngine(engine)
 
   val httpConnector = container.createConnector(null.asInstanceOf[InetAddress], port, false)
   container.addConnector(httpConnector)
 
   container.setAwait(true)
-  container.start
+  container.start()
 
 	Runtime.getRuntime.addShutdownHook(new Thread() {
-		override def run = {
+		override def run() {
 			try {
 				if (container != null)
-					container.stop
+					container.stop()
 				println("Shutdown...")
         // TODO delete web-inf
 			}
@@ -107,9 +107,9 @@ class BrzyTomcat6Plugin extends Task {
 
 	def runTomcat() {
 		messenger.info("Run tomcat")
-	  val sourceDir = File(ctx.sourceDir,"scala")
-	  val classesDir = File(ctx.webappDir,"WEB-INF/classes")
-	  val libsDir = File(ctx.webappDir,"WEB-INF/lib")
+	  val sourceDir = File(configuration.sourceDir,"scala")
+	  val classesDir = File(configuration.webappDir,"WEB-INF/classes")
+	  val libsDir = File(configuration.webappDir,"WEB-INF/lib")
 
 	  messenger.info(" -- source   : " + sourceDir)
 	  messenger.info(" -- classes  : " + classesDir)
@@ -120,7 +120,7 @@ class BrzyTomcat6Plugin extends Task {
 		  new FileWatcher(sourceDir,classesDir, libsDir, new ScalaCompiler(new PrintWriter(System.out)))
 		}
 		catch {
-			case e:Exception => messenger.info(e.getMessage,e)
+			case e:Exception => messenger.warn(e.getMessage,e)
 		}
 	
 	  Thread.sleep(100000000) // TODO there's probably a better way to do this
