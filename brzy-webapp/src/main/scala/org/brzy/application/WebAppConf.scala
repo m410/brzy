@@ -212,9 +212,9 @@ object WebAppConf {
   /**
    *  Create a build time configuration.
    */
-  def buildtime(modBaseDir: File, env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
+  def buildtime(modBaseDir: File, env: String, appConfigPath: String, defaultConfig: String = defaultConfigFile) = {
     val defaultConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(defaultConfig)))
-    val appConf = new WebAppConfFile(Yaml(getClass.getResourceAsStream(appConfig)))
+    val appConf = new WebAppConfFile(Yaml(new File(appConfigPath)))
 
     val envMap = appConf.map.get("environment_overrides") match {
       case Some(a) => a.asInstanceOf[List[Map[String, AnyRef]]].find(_("environment") == env)
