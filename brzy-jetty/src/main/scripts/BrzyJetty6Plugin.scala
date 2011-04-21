@@ -2,9 +2,10 @@
 
 import java.net.InetAddress
 
-// import org.apache.catalina.LifecycleException
-// import org.apache.catalina.loader.WebappLoader
-// import org.apache.catalina.startup.Embedded
+import org.mortbay.jetty.Server
+import org.mortbay.jetty.handler._
+import org.mortbay.jetty.servlet.Context
+import org.mortbay.xml.XmlConfiguration
 
 import org.brzy.fab.build.BuildContext
 import org.brzy.fab.print.Info
@@ -59,17 +60,17 @@ class FileWatcher(baseDir: JFile, destDir: JFile, libDir: JFile, compiler: SComp
  */
 class RunWebApp(contextName:String, port:Int) {
 	
-	protected[this] val server = new Server();
-	protected[this] val connector = new SelectChannelConnector();
-	connector.setPort(port);
-	connector.setHost("127.0.0.1");
-	server.addConnector(connector);
+	protected[this] val server = new Server()
+	protected[this] val connector = new SelectChannelConnector()
+	connector.setPort(port)
+	connector.setHost("127.0.0.1")
+	server.addConnector(connector)
 
-	protected[this] val wac = new WebAppContext();
-	wac.setContextPath(contextName);
-	wac.setWar("./web");    // this is path to .war OR TO expanded, existing webapp; WILL FIND web.xml and parse it
-	server.setHandler(wac);
-	server.setStopAtShutdown(true);
+	protected[this] val wac = new WebAppContext()
+	wac.setContextPath(contextName)
+	wac.setWar("webapp")
+	server.setHandler(wac)
+	server.setStopAtShutdown(true)
 	
 	def start = {
 		println("Starting.....")

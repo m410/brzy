@@ -47,7 +47,7 @@ class PersistenceTest extends JUnitSuite {
   //  }
 
   @Test
-  @Ignore def testSaveObject = {
+  @Ignore def testSaveObject() {
     val manager = new CalistaContextManager(new CalistaModConf(Map("host" -> "localhost")))
     val session = manager.createSession
     manager.context.withValue(session) {

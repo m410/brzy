@@ -42,7 +42,7 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
 
     protected[jpa] def entityManager = JpaContext.value
 
-    override def validate ={
+    override def validate() ={
       log.trace("validate")
       val set = validator.validate(t).toSet
 
@@ -52,30 +52,30 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
         None
     }
 
-    override def delete = {
+    override def delete() {
       log.trace("delete")
       entityManager.remove(t)
     }
 
-    override def insert(commit:Boolean = false) = {
+    override def insert(commit:Boolean = false) {
       log.trace("insert")
 
       entityManager.persist(t)
 
       if(commit) {
-        entityManager.getTransaction.commit
-        entityManager.getTransaction.begin        
+        entityManager.getTransaction.commit()
+        entityManager.getTransaction.begin()
       }
     }
 
-    override def update = {
+    override def update():T = {
       log.trace("update")
       entityManager.merge(t)
     }
 
-    override def commit = {
+    override def commit() {
       log.trace("commit")
-      entityManager.getTransaction.commit
+      entityManager.getTransaction.commit()
     }
   }
 
@@ -122,11 +122,11 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
     entityManager.find(entityClass,id).asInstanceOf[T]
   }
 
-  def count = {
+  def count() = {
     entityManager.createQuery(countQuery).getSingleResult.asInstanceOf[Long]
 	}
 	
-	def list = {
+	def list() = {
     entityManager.createQuery(listQuery).getTypedList[T]
 	}
 	
@@ -136,7 +136,7 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
         .setMaxResults(size).getTypedList[T]
 	}
 
-	def construct(params:Map[String,Any]):T = {
+	def construct(params:Map[String,AnyRef]):T = {
     log.debug("make with params: {}",params)
     Construct.withCast[T](params.asInstanceOf[Map[String,String]])
 	}

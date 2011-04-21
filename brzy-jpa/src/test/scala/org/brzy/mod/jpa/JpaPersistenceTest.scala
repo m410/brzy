@@ -22,20 +22,20 @@ import org.scalatest.junit.JUnitSuite
 
 class JpaPersistenceTest extends JUnitSuite {
 
-  @Test def testPersistenceMake ={
+  @Test def testPersistenceMake(){
     val map = new collection.mutable.HashMap[String, Array[String]]()
     map.put("id",Array("1"))
     map.put("version",Array("1"))
     map.put("firstName",Array("john"))
     map.put("lastName",Array("Smith"))
 
-    val cmap:Map[String,Any] = map.map(kv=>{kv._1->kv._2(0)}).toMap
+    val cmap:Map[String,AnyRef] = map.map(kv=>{kv._1->kv._2(0)}).toMap
     val user = User.construct(cmap)
     assertNotNull(user)
     assertEquals("john",user.firstName)
   }
 
-  @Test def testPersistenceValidate = {
+  @Test def testPersistenceValidate() {
     val user = new User
     val validity = user.validate()
     assertNotNull(validity.orNull)
