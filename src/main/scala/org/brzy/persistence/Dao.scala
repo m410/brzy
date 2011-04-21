@@ -66,7 +66,7 @@ trait Dao[T <: {def id: PK}, PK] {
    *
    * @See org.brzy.fab.reflect.Construct
    */
-  def construct(map: Map[String, Any])(implicit m: Manifest[T]): T = {
+  def construct(map: Map[String, AnyRef])(implicit m: Manifest[T]): T = {
     Construct.withCast[T](map.asInstanceOf[Map[String, String]])
   }
 
@@ -92,13 +92,13 @@ trait Dao[T <: {def id: PK}, PK] {
    * objects.  This needs to be created as an implicit value in the companion object.
    */
   abstract class PersistentCrudOps[T](t: T) {
-    def insert(commit: Boolean = false): Unit
+    def insert(commit: Boolean = false)
 
-    def commit(): Unit
+    def commit()
 
     def update(): T
 
-    def delete(): Unit
+    def delete()
 
     def validate(): Option[Set[ConstraintViolation[AnyRef]]]
   }
