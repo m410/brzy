@@ -136,8 +136,4 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
         .setMaxResults(size).getTypedList[T]
 	}
 
-	def construct(params:Map[String,AnyRef]):T = {
-    log.debug("make with params: {}",params)
-    Construct.withCast[T](params.asInstanceOf[Map[String,String]])
-	}
 }

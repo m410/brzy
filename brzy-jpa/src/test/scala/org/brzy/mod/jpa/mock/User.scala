@@ -42,7 +42,7 @@ class User {
 }
 
 object User extends JpaDao[User, JLong] {
-  override def construct(p: Map[String, AnyRef]) = {
+  override def construct(p: Map[String, AnyRef])(implicit m:Manifest[User]) = {
     val user = new User()
     user.id = p("id").asInstanceOf[String].toLong
     user.firstName = p("firstName").asInstanceOf[String]

@@ -47,7 +47,7 @@ class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) exten
       db.insert(t)
     }
 
-    def update = {
+    def update() = {
       db.update(t)
       t
     }
