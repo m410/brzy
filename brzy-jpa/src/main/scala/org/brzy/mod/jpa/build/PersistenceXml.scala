@@ -44,9 +44,8 @@ class PersistenceXml(config: WebAppConf) {
   
   val xml =
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
-        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
   <persistence-unit name={persistenceUnitName} transaction-type={transactionType}>
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     {entityClasses.map(c=>{<class>{c}</class>})}
