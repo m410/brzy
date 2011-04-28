@@ -3,6 +3,7 @@ plugins:
     description: Generate Domain Class
     source_file: .brzy/modules/brzy-squeryl/BrzySquerylPlugin.scala
     class_name: BrzySquerylPlugin
+    extends_default: true
     tasks:
       - name: gen-squeryl-domain
         method_name: createSquerylDomain

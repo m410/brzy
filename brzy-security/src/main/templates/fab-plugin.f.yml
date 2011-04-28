@@ -3,6 +3,7 @@ plugins:
     description: Generate Views for domain classes
     source_file: .brzy/modules/brzy-security/BrzySecurityPlugin.scala
     class_name: BrzySecurityPlugin
+    extends_default: true
     tasks:
       - name: gen-login
         method_name: genLogin

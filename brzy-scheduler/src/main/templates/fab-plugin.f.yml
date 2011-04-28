@@ -3,6 +3,7 @@ plugins:
     description: Generate Scheduler Service
     source_file: .brzy/modules/brzy-scheduler/BrzySchedulerPlugin.scala
     class_name: BrzySchedulerPlugin
+    extends_default: true
     tasks:
       - name: gen-scheduler-service
         method_name: createScheduler

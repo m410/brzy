@@ -3,6 +3,7 @@ plugins:
     description: Generate JPA Domain Class
     source_file: .brzy/modules/brzy-jpa/BrzyJpaPlugin.scala
     class_name: BrzyJpaPlugin
+    extends_default: true
     tasks:
       - name: gen-jpa-domain
         method_name: createJpaDomain
@@ -26,3 +27,4 @@ plugins:
         belongs: pre-package
     dependencies:
       - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}
+      - {conf: compile, org: org.brzy, name: brzy-webapp, rev: "0.10-SNAPSHOT"}

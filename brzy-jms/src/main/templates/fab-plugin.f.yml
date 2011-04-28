@@ -3,6 +3,7 @@ plugins:
     description: Generate Jms Service
     source_file: .brzy/modules/brzy-jms/BrzyJmsPlugin.scala
     class_name: BrzyJmsPlugin
+    extends_default: true
     tasks:
       - name: gen-jms-service
         method_name: createJms

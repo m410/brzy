@@ -3,6 +3,7 @@ plugins:
     description: Generate Cassandra Access Domain
     source_file: .brzy/modules/brzy-calista/BrzyCalistaPlugin.scala
     class_name: BrzyCalistaPlugin
+    extends_default: true
     tasks:
       - name: gen-calista-domain
         method_name: calistaDomain
