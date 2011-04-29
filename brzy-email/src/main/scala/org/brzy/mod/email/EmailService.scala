@@ -21,6 +21,7 @@ import javax.mail._
 import javax.mail.Message.RecipientType
 
 import org.brzy.service.Service
+import org.brzy.mod.email.{Message => EMessage}
 
 /**
  * Sends a plain text email message. 
@@ -28,37 +29,36 @@ import org.brzy.service.Service
  * @author Michael Fortin
  */
 @ConstructorProperties(Array("emailModConfig"))
-class EmailService(config:EmailModConfig) extends Service{
+class EmailService(config: EmailModConfig) extends Service {
 
-  private val mailConfig = {
+  protected[this] val mailConfig = {
     val p = new java.util.Properties
     p.put("mail.transport.protocol", config.transportProtocol.get)
     p.put("mail.smtp.auth", config.smtpAuth.get)
-    p.put("mail.smtp.host",config.smtpHost.get)
-    p.put("mail.debug",config.mailDebug.get)
+    p.put("mail.smtp.host", config.smtpHost.get)
+    p.put("mail.debug", config.mailDebug.get)
     p
   }
 
-  private val auth:Authenticator = 
-
-      if("true".equalsIgnoreCase(config.smtpAuth.orNull.toString)) {
-        new Authenticator {
-          override def getPasswordAuthentication:PasswordAuthentication = {
-             new PasswordAuthentication(config.userName.get, config.password.get)
-          }
+  protected[this] val auth: Authenticator =
+    if ("true".equalsIgnoreCase(config.smtpAuth.getOrElse("false"))) {
+      new Authenticator {
+        override def getPasswordAuthentication: PasswordAuthentication = {
+          new PasswordAuthentication(config.userName.get, config.password.get)
         }
       }
-      else {
-        null
-      }
+    }
+    else {
+      null
+    }
 
   val fromAddress = config.mailFrom.get
 
-  def send(msg: Message) = {
+  def send(msg: EMessage) {
     val session: Session = Session.getDefaultInstance(mailConfig, auth)
     val message: MimeMessage = new MimeMessage(session)
     message.setFrom(new InternetAddress(fromAddress))
-    msg.to.map(a=> message.addRecipient(RecipientType.TO, new InternetAddress(a)))
+    msg.to.map(a => message.addRecipient(RecipientType.TO, new InternetAddress(a)))
     message.setSubject(msg.subject)
     message.setText(msg.body)
     Transport.send(message)

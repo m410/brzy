@@ -2,12 +2,13 @@ name: brzy-tomcat6
 description: Adds ability to run a web application inside tomcat6.
 source_file: .brzy/modules/brzy-tomcat/BrzyTomcat6Plugin.scala
 class_name: BrzyTomcat6Plugin
-extends_default: true
+extends_default: false
 tasks:
   - name: tomcat6
     method_name: runTomcat
     description: Run Tomcat
 dependencies:
+  - {org: org.brzy.fab, name: fab-conf, rev: "${fab-conf-version}", transitive: false}
   - {org: org.brzy.fab, name: fab-util, rev: "${fab-util-version}", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}

@@ -1,0 +1,22 @@
+plugins:
+#  - name: brzy-spring
+#    description: Generate Scheduler Service
+#    source_file: .brzy/modules/brzy-scheduler/BrzySchedulerPlugin.scala
+#    class_name: BrzySchedulerPlugin
+#    extends_default: true
+#    tasks:
+#      - name: gen-scheduler-service
+#        method_name: createScheduler
+#        description: Generate Scheduler Service class
+#        takes_args: true
+#    dependencies:
+#      - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
+#    repositories:
+#      - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
+
+  - name: brzy-spring-default
+    description: Adds dependencies to the default interpreter scope.
+    dependencies_in_default_scope: true
+    member_of_phase: compile
+    dependencies:
+      - {conf: compile, org: org.brzy.mod, name: brzy-spring, rev: "${pom.version}", transitive: false}

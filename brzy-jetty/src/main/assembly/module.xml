@@ -31,12 +31,12 @@
   </fileSets>
   <files>
     <file>
-      <source>src/main/scripts/brzy-module.b.yml</source>
+      <source>src/main/templates/brzy-module.b.yml</source>
       <outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
     </file>
 		<file>
-			<source>src/main/scripts/fab-plugin.f.yml</source>
+			<source>src/main/templates/fab-plugin.f.yml</source>
 			<outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
 		</file>

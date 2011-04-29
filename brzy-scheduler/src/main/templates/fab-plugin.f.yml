@@ -13,6 +13,7 @@ plugins:
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
     repositories:
       - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
+
   - name: brzy-scheduler-default
     description: Adds dependencies to the default interpreter scope.
     dependencies_in_default_scope: true
