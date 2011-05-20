@@ -58,15 +58,16 @@ class BrzyServlet extends HttpServlet {
             if (req.getSession(false) != null) {
               val session = req.getSession
               val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
-              if (action.authorize(p))
+           
+   						if (action.authorize(p))
                 action.execute(args,Option(p))
               else
                 Error(403, "Not Autorized")
             }
             else{
               val flash = Flash("session.end", "Session ended, log in again")
-              val add = SessionAdd("last_view"->req.getRequestURI)
-              (Redirect("/auth"),flash)
+              val sessionParam = SessionAdd("last_view"->req.getRequestURI)
+              (Redirect("/auth"), flash, sessionParam)
             }
           }
           else {
