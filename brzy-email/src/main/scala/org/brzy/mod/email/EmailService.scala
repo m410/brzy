@@ -14,8 +14,6 @@
 package org.brzy.mod.email
 
 import javax.mail.internet.{InternetAddress, MimeMessage}
-import javax.mail.Authenticator
-import javax.mail.PasswordAuthentication
 import java.beans.ConstructorProperties
 import javax.mail._
 import javax.mail.Message.RecipientType
@@ -40,8 +38,21 @@ class EmailService(config: EmailModConfig) extends Service {
     p
   }
 
-  protected[this] val auth: Authenticator =
-    if ("true".equalsIgnoreCase(config.smtpAuth.getOrElse("false"))) {
+  protected[this] val auth: Authenticator = {
+
+    val authValue = config.smtpAuth match {
+      case Some(e) =>
+        if(e.isInstanceOf[String])
+          e.asInstanceOf[String].toBoolean
+        else if(e.isInstanceOf[Boolean])
+          e.asInstanceOf[Boolean]
+        else
+          false
+      case _ =>
+        false
+    }
+
+    if (authValue) {
       new Authenticator {
         override def getPasswordAuthentication: PasswordAuthentication = {
           new PasswordAuthentication(config.userName.get, config.password.get)
@@ -51,6 +62,9 @@ class EmailService(config: EmailModConfig) extends Service {
     else {
       null
     }
+  }
+
+
 
   val fromAddress = config.mailFrom.get
 
