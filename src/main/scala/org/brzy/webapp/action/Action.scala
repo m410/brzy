@@ -22,9 +22,8 @@ import org.brzy.webapp.view.FlashMessage
 import collection.JavaConversions.JMapWrapper
 import collection.mutable.ListBuffer
 
-import java.util.Enumeration
 import java.io.ByteArrayInputStream
-import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie=>JCookie}
+import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie => JCookie}
 
 /**
  * Document Me..
@@ -38,7 +37,7 @@ trait Action extends Ordered[Action] {
 
   def returnType: AnyRef
 
-  def execute(args: List[AnyRef],principal:Option[Principal]): AnyRef
+  def execute(args: List[AnyRef], principal: Option[Principal]): AnyRef
 
   def controller: Controller
 
@@ -89,7 +88,7 @@ trait Action extends Ordered[Action] {
               .append(folder.substring(1))
               .append("/")
               .append(view)
-              .toString
+              .toString()
     }
   }
 
@@ -107,7 +106,7 @@ trait Action extends Ordered[Action] {
   override def toString = new StringBuilder().
           append("Action('").append(actionPath).
           append("', ").append(controller.getClass.getSimpleName).
-          append("[").append(actionPath).append("])").toString
+          append("[").append(actionPath).append("])").toString()
 }
 
 /**
@@ -122,22 +121,22 @@ object Action {
   def apply[F <: AnyRef](path: String, view: String, action: F, constraints: Constraint*)
           (implicit m: Manifest[F], controller: Controller): Action = {
 
-    if (action.isInstanceOf[Function0[_]]) {
+    if (action.isInstanceOf[() => _]) {
       val t1 = m.typeArguments(0)
-      new Action0[t1.type, Function0[t1.type]](
+      new Action0[t1.type, () => t1.type](
         path,
         view,
-        action.asInstanceOf[Function0[t1.type]],
+        action.asInstanceOf[() => t1.type],
         controller,
         constraints.toList)
     }
-    else if (action.isInstanceOf[Function1[_, _]]) {
+    else if (action.isInstanceOf[(_) => _]) {
       val t2 = m.typeArguments(1)
       val t1 = m.typeArguments(0)
-      new Action1[t1.type, t2.type, Function1[t1.type, t2.type]](
+      new Action1[t1.type, t2.type, (t1.type) => t2.type](
         path,
         view,
-        action.asInstanceOf[Function1[t1.type, t2.type]],
+        action.asInstanceOf[(t1.type) => t2.type],
         controller,
         constraints.toList)
     }
@@ -164,7 +163,7 @@ object Action {
         controller,
         constraints.toList)
     }
-    else if (action.isInstanceOf[Function4[_,_, _, _, _]]) {
+    else if (action.isInstanceOf[Function4[_, _, _, _, _]]) {
       val t5 = m.typeArguments(4)
       val t4 = m.typeArguments(3)
       val t3 = m.typeArguments(2)
@@ -191,7 +190,7 @@ object Action {
 
     def argTypes: List[AnyRef] = List.empty[AnyRef]
 
-    def execute(args: List[AnyRef],principal:Option[Principal]) = {
+    def execute(args: List[AnyRef], principal: Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply().asInstanceOf[AnyRef]
@@ -214,7 +213,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 1))
 
-    def execute(args: List[AnyRef],principal:Option[Principal]) = {
+    def execute(args: List[AnyRef], principal: Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A]).asInstanceOf[AnyRef]
@@ -237,7 +236,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 2))
 
-    def execute(args: List[AnyRef],principal:Option[Principal]) = {
+    def execute(args: List[AnyRef], principal: Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2]).asInstanceOf[AnyRef]
@@ -259,7 +258,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 3))
 
-    def execute(args: List[AnyRef],principal:Option[Principal]) = {
+    def execute(args: List[AnyRef], principal: Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3]).asInstanceOf[AnyRef]
@@ -279,12 +278,12 @@ object Action {
           val view: String,
           val action: F,
           val controller: Controller,
-          val constraints: List[Constraint]) (implicit m: Manifest[F]) extends Action {
+          val constraints: List[Constraint])(implicit m: Manifest[F]) extends Action {
     def returnType: AnyRef = m.typeArguments(4)
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 4))
 
-    def execute(args: List[AnyRef],principal:Option[Principal]) = {
+    def execute(args: List[AnyRef], principal: Option[Principal]) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3], args(3).asInstanceOf[A4]).asInstanceOf[AnyRef]
@@ -300,7 +299,7 @@ object Action {
   /**
    * TODO need to hand the three return types, data, direction and stream
    */
-  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response): Unit = {
+  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response) {
     log.debug("results: {}", actionResult)
 
     def matchData(result: Any): Unit = result match {
@@ -365,7 +364,7 @@ object Action {
       case view: View =>
         val target: String = view.path + ".ssp" //action.viewType
         log.debug("view: {}", target)
-				res.setHeader("Content-Type","text/html; charset=utf-8") // TODO Should be set by the view and overridable by the controller
+        res.setHeader("Content-Type", "text/html; charset=utf-8") // TODO Should be set by the view and overridable by the controller
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
         log.debug("forward: {}", f)
@@ -375,10 +374,10 @@ object Action {
         val target: String =
           if (s.path.startsWith("http"))
             s.path
-          else if(req.getContextPath.endsWith("/") && s.path.startsWith("/")  )
-						req.getContextPath + s.path.substring(1,s.path.length)
-					else
-						req.getContextPath + s.path
+          else if (req.getContextPath.endsWith("/") && s.path.startsWith("/"))
+            req.getContextPath + s.path.substring(1, s.path.length)
+          else
+            req.getContextPath + s.path
         res.sendRedirect(target)
       case s: Error =>
         log.debug("Error: {}", s)
@@ -394,11 +393,13 @@ object Action {
       case b: Binary =>
         log.debug("bytes: {}", b)
         res.setContentType(b.contentType)
-				res.setHeader("content-length",b.bytes.length.toString)
-				val input = new ByteArrayInputStream(b.bytes)
-				var inRead = 0
-				while({inRead = input.read;inRead} >= 0)
-        	res.getOutputStream.write(inRead)
+        res.setHeader("content-length", b.bytes.length.toString)
+        val input = new ByteArrayInputStream(b.bytes)
+        var inRead = 0
+        while ( {
+          inRead = input.read; inRead
+        } >= 0)
+          res.getOutputStream.write(inRead)
       case j: Json =>
         log.debug("json: {}", j)
         res.setContentType(j.contentType)
@@ -427,8 +428,8 @@ object Action {
       case s: CookieAdd =>
         log.debug("cookieAdd: {}", s)
         val cookie = new JCookie(s.name, s.value)
-        cookie.setPath( s.path match {
-          case Some(p)=> p
+        cookie.setPath(s.path match {
+          case Some(p) => p
           case _ => req.getContextPath
         })
         cookie.setMaxAge(s.maxAge)
@@ -439,7 +440,9 @@ object Action {
         res.addCookie(cookie)
       case h: ResponseHeaders =>
         log.debug("response headers: {}", h)
-        h.headers.foreach(r=>{res.setHeader(r._1,r._2)})
+        h.headers.foreach(r => {
+          res.setHeader(r._1, r._2)
+        })
       case s: SessionRemove =>
         log.debug("sessionRemove: {}", s)
         req.getSession.removeAttribute(s.attr)
@@ -463,7 +466,7 @@ object Action {
 
         for (i <- 0 to urlParams.size - 1)
           paramMap.put(action.path.parameterNames(i), Array(urlParams(i)))
-        
+
         val jParams = req.getParameterMap.asInstanceOf[java.util.Map[String, Array[String]]]
         val wrappedMap = new JMapWrapper[String, Array[String]](jParams)
         list += new Parameters(wrappedMap.toMap ++ paramMap.toMap)

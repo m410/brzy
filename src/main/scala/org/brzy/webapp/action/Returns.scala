@@ -15,7 +15,6 @@ package org.brzy.webapp.action
 
 import xml.Elem
 import com.twitter.json.{Json => tJson}
-import java.io.OutputStream
 
 /**
  * Document Me..
@@ -123,12 +122,12 @@ case class Json(target: AnyRef, contentType: String = "application/json") extend
     case s: String =>
       s
     case l: List[_] =>
-      tJson.build(l).toString
+      tJson.build(l).toString()
     case m: Map[_, _] =>
-      tJson.build(m).toString
+      tJson.build(m).toString()
     case _ =>
       import org.brzy.fab.reflect.Properties._
-      tJson.build(target.properties).toString
+      tJson.build(target.properties).toString()
   }
 }
 
@@ -141,12 +140,12 @@ case class Jsonp(callback: String, target: AnyRef, contentType: String = "applic
       case s: String =>
         s
       case l: List[_] =>
-        tJson.build(l).toString
+        tJson.build(l).toString()
       case m: Map[_, _] =>
-        tJson.build(m).toString
+        tJson.build(m).toString()
       case _ =>
         import org.brzy.fab.reflect.Properties._
-        tJson.build(target.properties).toString
+        tJson.build(target.properties).toString()
     })
     sb.append(")")
     sb.toString

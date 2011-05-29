@@ -147,12 +147,12 @@ case class Session(map: Map[String, AnyRef]) extends Args {
 object Session {
 
   def apply(request: HttpServletRequest) = {
-    val map = collection.mutable.Map[String, String]()
+    val map = collection.mutable.Map[String, AnyRef]()
 
     if (request != null && request.getSession(false) != null)
       request.getSession.getAttributeNames.foreach(f => {
         val str = f.asInstanceOf[String]
-        map += str -> request.getHeader(str).asInstanceOf[String]
+        map += str -> request.getSession.getAttribute(str)
       })
 
     new Session(map.toMap)
