@@ -22,10 +22,10 @@ import org.reflections.util.{ClasspathHelper, ConfigurationBuilder}
 import org.slf4j.LoggerFactory
 
 /**
- *   http://code.google.com/p/reflections/
- * 
- * Document Me..
+ * Scans the project class hierarchy for classes that implement Controller.  This uses the
+ * Reflections api under the hood.
  *
+ * @see http://code.google.com/p/reflections/
  * @author Michael Fortin
  */
 case class ControllerScanner(packageName:String) {

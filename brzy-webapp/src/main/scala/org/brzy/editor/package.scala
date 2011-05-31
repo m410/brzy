@@ -3,8 +3,10 @@ package org.brzy
 import java.text.DecimalFormat
 
 /**
- * Document Me..
- * 
+ * This package houses an api that resembles the java beans property editors.  Note this will be
+ * changed in future releases.  Instead of using reflection it will be converted
+ * to use the scalabeans api.
+ *
  * @author Michael Fortin
  */
 package object editor {

@@ -27,27 +27,58 @@ import java.io.ByteArrayInputStream
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie=>JCookie}
 
 /**
- * Document Me..
+ * An action is an entry point into the application.  A controller will have one or more actions.
+ * Actions
+ * <code>
+ * class MyController extends Controller("path"){
+ *   def actions = List(Action("","",view _))
+ *   def view = "name"->"value
+ * }
+ * </code>
  *
  * @author Michael Fortin
  */
 trait Action extends Ordered[Action] {
   def actionPath: String
 
+  /**
+   * A list of arguments types needed to execute the action.  The argument types must be a subclass
+   * of Args.
+   */
   def argTypes: List[AnyRef]
 
+  /**
+   * The return type of the action.  The return type must be a subclass of either Data or
+   * Direction.
+   */
   def returnType: AnyRef
 
   def execute(args: List[AnyRef],principal:Option[Principal]): AnyRef
 
+  /**
+   * The reference to the parent controller
+   */
   def controller: Controller
 
+  /**
+   * The default view to render if not explicitly set in the return types.
+   */
   def view: String
 
+  /**
+   * A list of constraints to be applied to the action.  A constraint will allow or disallow the
+   * execution of the action.
+   */
   def constraints: List[Constraint]
 
+  /**
+   * The RESTful like path called by a client to execute this action.
+   */
   val path = Path(controller.basePath, actionPath)
 
+  /**
+   * For secure actions, this is called to test the users permission to execute it.
+   */
   def authorize(p: Principal) = {
     if (p == null) {
       false
@@ -66,6 +97,9 @@ trait Action extends Ordered[Action] {
     }
   }
 
+  /**
+   * Determines if this action requires authentication or not.
+   */
   def isSecure = controller.isInstanceOf[Secured]
 
   /**
@@ -111,13 +145,13 @@ trait Action extends Ordered[Action] {
 }
 
 /**
- *
+ * Factory methods for constructing Actions
  */
 object Action {
   private[this] val log = LoggerFactory.getLogger(getClass)
 
   /**
-   *
+   * Construct an action depending on how many arguments there are.
    */
   def apply[F <: AnyRef](path: String, view: String, action: F, constraints: Constraint*)
           (implicit m: Manifest[F], controller: Controller): Action = {
@@ -182,7 +216,7 @@ object Action {
   }
 
   /**
-   *
+   * An Action that takes no arguments
    */
   class Action0[R, F <: Function0[R]](val actionPath: String, val view: String, val action: F,
           val controller: Controller, val constraints: List[Constraint])
@@ -205,7 +239,7 @@ object Action {
   }
 
   /**
-   *
+   * An action with a single argument that implements Args.
    */
   class Action1[A, R, F <: Function1[A, R]](val actionPath: String, val view: String, val action: F,
           val controller: Controller, val constraints: List[Constraint])
@@ -228,7 +262,7 @@ object Action {
   }
 
   /**
-   *
+   * An action with two arguments.  All arguments must be a subclass of Args.
    */
   class Action2[A1, A2, R, F <: Function2[A1, A2, R]](val actionPath: String, val view: String, val action: F,
           val controller: Controller, val constraints: List[Constraint])
@@ -250,7 +284,7 @@ object Action {
   }
 
   /**
-   *
+   * An action with three arguments.  All arguments must be a subclass of Args.
    */
   class Action3[A1, A2, A3, R, F <: Function3[A1, A2, A3, R]](val actionPath: String, val view: String, val action: F,
           val controller: Controller, val constraints: List[Constraint])
@@ -272,8 +306,9 @@ object Action {
   }
 
   /**
-   *
+   * An action with four arguments.  All arguments must be a subclass of Args.
    */
+
   class Action4[A1, A2, A3, A4, R, F <: Function4[A1, A2, A3, A4, R]](
           val actionPath: String,
           val view: String,
@@ -298,9 +333,10 @@ object Action {
 
 
   /**
-   * TODO need to hand the three return types, data, direction and stream
+   * Handles the return type of the action.  This performs duties like setting session variables
+   * in the HttpSession.
    */
-  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response): Unit = {
+  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response) {
     log.debug("results: {}", actionResult)
 
     def matchData(result: Any): Unit = result match {
@@ -358,14 +394,16 @@ object Action {
   }
 
   /**
-   * there can only be one direction
+   * An Action can only return one instance of a Direction.  This will execute it.  For example
+   * a Redirect will be run as an 'HttpServletResponse.sendRedirect(target)'.
    */
   protected[action] def handleDirection(action: Action, direct: Direction, req: Request, res: Response) =
     direct match {
       case view: View =>
         val target: String = view.path + ".ssp" //action.viewType
         log.debug("view: {}", target)
-				res.setHeader("Content-Type","text/html; charset=utf-8") // TODO Should be set by the view and overridable by the controller
+        // TODO Should be set by the view and overridable by the controller
+				res.setHeader("Content-Type","text/html; charset=utf-8")
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
         log.debug("forward: {}", f)
@@ -411,7 +449,8 @@ object Action {
     }
 
   /**
-   * There can be several data types
+   * While an action can only return zero or one Direction, it can return zero or more Data
+   * subclasses.  This Handles their execution.
    */
   protected[action] def handleData(data: Data, req: Request, res: Response) =
     data match {
@@ -447,7 +486,8 @@ object Action {
     }
 
   /**
-   *
+   * This converts the http servlet request parameters and attributes into the action Arg types
+   * required for each action to execute.
    */
   def buildArgs(action: Action, req: Request) = {
     val path = parseActionPath(req.getRequestURI, req.getContextPath)
@@ -487,6 +527,9 @@ object Action {
     list.toList
   }
 
+  /**
+   * Converts the RESTful uri to and internal representation.
+   */
   def parseActionPath(uri: String, ctx: String) = {
     val newuri =
       if (uri.startsWith("//"))

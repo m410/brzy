@@ -6,9 +6,7 @@ import org.brzy.application.WebApp
  * Document Me..
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
-
 object TestWebApp {
 //  def apply = {
 //    val config =

@@ -26,6 +26,9 @@ import org.brzy.fab.interceptor.ManagedThreadContext
  */
 class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
 
+  /**
+   * Execute a function inside a session context.
+   */
   def doIn(body: () => AnyRef): Unit = {
     val iterator = factories.iterator
 
@@ -45,6 +48,9 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
       fun()
   }
 
+  /**
+   * Recursive method to call each ThreadLocal session context.
+   */
   protected[interceptor] def traverse(it: Iterator[ManagedThreadContext], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
     val managedFactory = it.next
     var returnValue: AnyRef = null
