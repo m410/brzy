@@ -16,10 +16,14 @@ package org.brzy.webapp.controller
 import org.brzy.webapp.action.Roles
 
 /**
- * Document Me..
- * //  def secure(action:()=>AnyRef, principal:SecurityPrincipal):AnyRef = action()
+ * Marks a controller as a secure controller using role based authentication.
+ * 
  * @author Michael Fortin
  */
 trait Secured extends Intercepted {
+
+  /**
+   * Sets the roles default allowed for the controller.
+   */
   val roles = Roles("ADMIN","USER")
 }

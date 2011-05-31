@@ -1,7 +1,7 @@
 package org.brzy.webapp.action
 
 /**
- * Document Me..
+ * Http Method values used in the HttpMethods Constraint.
  * 
  * @author Michael Fortin
  */

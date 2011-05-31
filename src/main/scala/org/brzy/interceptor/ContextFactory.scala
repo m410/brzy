@@ -14,12 +14,19 @@
 package org.brzy.interceptor
 
 /**
- * Used by modules that provide inteceptors so that the inteceptor manager can create and destroy
- * request
+ * Used by modules that provide session management for each request interceptor.
  * 
  * @author Michael Fortin
  */
 trait ContextFactory[T] {
+
+  /**
+   * Create an instance of a session.
+   */
   def create: T
+
+  /**
+   * Destroy the instance of the session.
+   */
   def destroy(s: T)
 }

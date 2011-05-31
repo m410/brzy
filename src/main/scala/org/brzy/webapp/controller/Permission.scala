@@ -17,11 +17,11 @@ import org.brzy.webapp.action.Principal
 import org.brzy.webapp.action.Roles
 
 import java.security.MessageDigest
-import java.nio.charset.Charset
 
 
 /**
- * Document Me..
+ * This trait should be implemented by a SecurityService class to be used to authenticate a
+ * user.
  *
  * @author Michael Fortin
  */

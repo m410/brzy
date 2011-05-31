@@ -23,11 +23,26 @@ import HttpMethod._
  */
 trait Constraint
 
+/**
+ * Defines the rules that a user must posses to be able to execute an action this constraint
+ * is assigned too.
+ */
 case class Roles(allowed:String*) extends Constraint
 
+/**
+ * Defines the allowed Http methods ('GET','POST',etc) that this constraint is assigned too.
+ */
 case class HttpMethods(allowed:HttpMethod*) extends Constraint
 
+/**
+ * This constraint will define wiether the action must be called while in a secure request over an
+ * SSL socket.
+ */
 case class Secure(secure:Boolean = false) extends Constraint
 
+/**
+ * Defines the allowed Content type that this action accepts.  For example a content type of
+ * 'text/xml' says an action with this constraint will only accept xml content type.
+ */
 case class ContentTypes(allowed:String*) extends Constraint
 
