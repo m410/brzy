@@ -14,7 +14,7 @@
 package org.brzy.mod.email
 
 /**
- * Document Me..
+ * A simple email message.  This sends a simple plain text message.
  * 
  * @author Michael Fortin
  */

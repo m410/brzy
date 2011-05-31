@@ -18,7 +18,7 @@ import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
 
 /**
- * Document Me..
+ * Squeryl database persistence module provider.
  * 
  * @author Michael Fortin
  */

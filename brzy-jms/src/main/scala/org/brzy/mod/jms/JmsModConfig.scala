@@ -17,7 +17,7 @@ import org.brzy.fab.mod.RuntimeMod
 import org.brzy.fab.conf.BaseConf
 
 /**
- * Document Me..
+ * Module Configuration for the JMS Module.
  *
  * @author Michael Fortin
  */

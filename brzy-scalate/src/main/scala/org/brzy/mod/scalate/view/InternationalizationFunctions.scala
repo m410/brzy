@@ -3,7 +3,7 @@ package org.brzy.mod.scalate.view
 import javax.servlet.http.HttpServletRequest
 
 /**
- * Document Me..
+ * Provides internationalization support to views.
  * 
  * @author Michael Fortin
  */

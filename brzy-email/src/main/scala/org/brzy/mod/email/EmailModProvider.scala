@@ -16,7 +16,7 @@ package org.brzy.mod.email
 import org.brzy.fab.mod.ModProvider
 
 /**
- * Document Me..
+ * Email Module provider.  That provides an EmailService to send email messages.
  * 
  * @author Michael Fortin
  */

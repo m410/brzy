@@ -18,7 +18,7 @@ import org.brzy.fab.interceptor.InterceptorProvider
 import org.slf4j.LoggerFactory
 
 /**
- * Document Me..
+ * Module Provider for Calista to brzy.
  * 
  * @author Michael Fortin
  */

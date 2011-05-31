@@ -18,7 +18,7 @@ import Actor._
 import java.util.Date
 
 /**
- * Document Me..
+ * Schedule the execution of a JobRunner
  *
  * @author Michael Fortin
  */
@@ -32,19 +32,19 @@ case class Schedule(actOn: JobRunner, pattern: String) {
     loop {
       reactWithin(nextExecution(pattern)) {
         case TIMEOUT => actOn ! Execute
-        case Exit => exit
+        case Exit => exit()
       }
     }
   }
 
-  def stop: Unit = {
+  def stop() {
     executor ! Exit
     actOn ! Exit
   }
 
-  def start: Unit = {
-    actOn.start
-    executor.start
+  def start()  = {
+    actOn.start()
+    executor.start()
   }
 
   def nextExecution(pattern: String): Long = {

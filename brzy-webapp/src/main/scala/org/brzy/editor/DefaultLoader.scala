@@ -1,10 +1,11 @@
 package org.brzy.editor
 
 /**
- * Document Me..
- * 
+ * Loads an instance of a scala bean.
+ *
  * @author Michael Fortin
  */
+@deprecated
 class DefaultLoader[T] extends Loader[T]{
 
   def init(argTypes: Array[Class[_]], args: Array[AnyRef])(implicit m:Manifest[T]) = {

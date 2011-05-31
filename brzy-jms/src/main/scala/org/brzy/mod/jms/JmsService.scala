@@ -16,7 +16,7 @@ package org.brzy.mod.jms
 import javax.jms._
 
 /**
- * Document Me..
+ * A Service that can be injected into other services and controllers to send jms messages.
  *
  * @author Michael Fortin
  */

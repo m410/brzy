@@ -21,7 +21,7 @@ import collection.mutable.{ListBuffer, HashMap}
 import org.brzy.fab.mod.ModProvider
 
 /**
- * Document Me..
+ * Cron scheduler service provider.
  *
  * @author Michael Fortin
  */

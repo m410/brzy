@@ -3,7 +3,7 @@ package org.brzy.mod.scalate.view
 import javax.servlet.http.HttpServletRequest
 
 /**
- * Document Me..
+ * Form helpers for Scalate.
  * 
  * @author Michael Fortin
  */

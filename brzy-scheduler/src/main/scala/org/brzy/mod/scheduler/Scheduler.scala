@@ -15,10 +15,11 @@ package org.brzy.mod.scheduler
 
 import scala.actors.{Actor, Exit, TIMEOUT}
 import scala.actors.Actor._
-import java.util.{Date, Calendar}
+import java.util.Date
 
 /**
- * Document Me..
+ * Schedules the cron execution.  This will case an action to pause execution until the
+ * react time has been reached.
  *
  * @author Michael Fortin
  */
@@ -29,12 +30,12 @@ object Scheduler {
       loop {
         reactWithin(time) {
           case TIMEOUT => actOn!Execute
-          case Exit => exit
+          case Exit => exit()
         }
       }
     }
 
-    def stop =  {
+    def stop()  {
       executor!Exit
       actOn!Exit
     }
@@ -46,12 +47,12 @@ object Scheduler {
       loop {
         reactWithin(nextExecution(pattern)) {
           case TIMEOUT => actOn!Execute
-          case Exit => exit
+          case Exit => exit()
         }
       }
     }
 
-    def stop:Unit =  {
+    def stop() {
       executor!Exit
       actOn!Exit
     }
