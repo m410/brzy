@@ -3,7 +3,7 @@ package org.brzy.test
 import org.brzy.application.WebApp
 
 /**
- * Document Me..
+ * Initializes a WebApp for testing purposes using the test configuration.
  * 
  * @author Michael Fortin
  */

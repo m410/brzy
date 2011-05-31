@@ -14,7 +14,7 @@
 package org.brzy.webapp.controller
 
 /**
- * Document Me..
+ * Should be implemented by entities that are authenticated by the application.
  * 
  * @author Michael Fortin
  */

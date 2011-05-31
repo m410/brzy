@@ -3,10 +3,11 @@ package org.brzy.editor
 import collection.mutable.ListBuffer
 
 /**
- * Document Me..
+ * 
  *
  * @author Michael Fortin
  */
+@deprecated
 case class Bean[T: Manifest](editors: List[Editor[_]], loader: Loader[T] = new DefaultLoader[T]) {
   val m = manifest[T]
   val constructorProperties = editors.filter(_.isConstructor).sortBy(_.index)

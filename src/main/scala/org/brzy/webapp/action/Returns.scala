@@ -15,10 +15,9 @@ package org.brzy.webapp.action
 
 import xml.Elem
 import com.twitter.json.{Json => tJson}
-import java.io.OutputStream
 
 /**
- * Document Me..
+ * A Data class is one of the two possible return types of an action.  
  *
  * @author Michael Fortin
  */
