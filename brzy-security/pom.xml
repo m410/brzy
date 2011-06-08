@@ -9,7 +9,7 @@
   <version>0.5</version>
   <parent>
     <groupId>org.brzy</groupId>
-    <artifactId>brzy</artifactId>
+    <artifactId>brzywebapp</artifactId>
     <version>0.8</version>
   </parent>
   <build>

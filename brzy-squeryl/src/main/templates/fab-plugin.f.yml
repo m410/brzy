@@ -11,7 +11,7 @@ plugins:
         takes_args: true
     dependencies:
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
-#      - {org: org.brzy.fab, name: fab-util, rev: "0.6-SNAPSHOT", transitive: false}
+#      - {org: org.brzy.fab, name: fab-util, rev: "0.6", transitive: false}
     repositories:
       - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
   - name: brzy-squeryl-default
