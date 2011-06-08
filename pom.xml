@@ -6,10 +6,10 @@
   <groupId>org.brzy</groupId>
   <artifactId>brzy-webapp</artifactId>
   <name>Brzy WebApp</name>
-  <version>0.10-SNAPSHOT</version>
+  <version>0.10</version>
   <parent>
     <groupId>org.brzy</groupId>
-    <artifactId>brzy</artifactId>
+    <artifactId>brzywebapp</artifactId>
     <version>0.8</version>
   </parent>
   <build>
