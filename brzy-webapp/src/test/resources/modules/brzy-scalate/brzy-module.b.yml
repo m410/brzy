@@ -12,7 +12,7 @@ provider_class: org.brzy.webapp.mock.MockModProvider
 
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
-  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.2"}
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.9"}
 
 repositories:
   - id: "fusesource.m2"

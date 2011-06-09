@@ -10,7 +10,7 @@ config_class: org.brzy.mod.scalate.ScalateModConfig
 provider_class: org.brzy.mod.scalate.ScalateModProvider
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
-  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.9", transitive: false}
 repositories:
   - id: "fusesource.m2"
     url: http://repo.fusesource.com/nexus/content/repositories/public

@@ -8,6 +8,7 @@ import java.util.{ResourceBundle, Locale}
  * @author Michael Fortin
  */
 object MessageResolver {
+  val locale = Locale.getDefault
   val bundle = ResourceBundle.getBundle("i18n/messages", locale)
 
   def message(ref:String,locale:Locale = Locale.getDefault) = if(bundle.containsKey(ref))
