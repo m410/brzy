@@ -17,7 +17,7 @@ import org.brzy.fab.conf.BaseConf
 import org.brzy.fab.mod.RuntimeMod
 
 /**
- * Document Me..
+ * Email Module Configuration.
  *
  * @author Michael Fortin
  */

@@ -14,8 +14,9 @@
 package org.brzy.webapp.controller
 
 import org.brzy.webapp.action.Principal
+
 /**
- * Document Me..
+ * Adds action interceptor support to a controller.
  *
  * @author Michael Fortin
  */

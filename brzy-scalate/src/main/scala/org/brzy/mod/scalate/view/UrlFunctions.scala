@@ -7,7 +7,7 @@ import java.net.URLEncoder
 import org.brzy.webapp.view.FlashMessage
 
 /**
- * Document Me..
+ * Helper view functions for links, number and date formatting.
  * 
  * @author Michael Fortin
  */

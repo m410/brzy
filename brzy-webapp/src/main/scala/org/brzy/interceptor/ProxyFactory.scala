@@ -17,7 +17,7 @@ import java.lang.reflect.Method
 import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter}
 
 /**
- * Creates an instance of a javassist proxy around a controller or serivce.
+ * Creates an instance of a javassist proxy around a controller or service.
  * @author Michael Fortin
  */
 object ProxyFactory {

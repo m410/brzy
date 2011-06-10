@@ -21,7 +21,8 @@ import org.brzy.persistence.Dao
 import javax.validation.{ConstraintViolation, Validation => jValidation}
 
 /**
- *	TODO read very helpful http://faler.wordpress.com/2009/08/10/scala-jpa-some-gotchas-to-be-aware-of/
+ * Implement's the brzy DAO trait for JPA based entities.  This should be implemented by
+ * the object companion class to jpa entities.
  * 
  * @author Michael Fortin
  */

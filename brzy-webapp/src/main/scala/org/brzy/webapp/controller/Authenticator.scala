@@ -14,7 +14,7 @@
 package org.brzy.webapp.controller
 
 /**
- * Document Me..
+ * Services that authenticate
  * 
  * @author Michael Fortin
  */

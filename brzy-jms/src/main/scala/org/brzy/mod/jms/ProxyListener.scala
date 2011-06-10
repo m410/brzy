@@ -18,7 +18,7 @@ import javax.jms._
 import collection.JavaConversions._
 
 /**
- * Document Me..
+ * Create a listener that sends messages to the implementing service class.
  * 
  * @author Michael Fortin
  */

@@ -4,7 +4,8 @@ import java.util.Date
 import java.text.{ParsePosition, DecimalFormat, SimpleDateFormat}
 
 /**
- * Document Me..
+ * Basic java bean property editor for scala beans.  Note that this will change in the next
+ * release and will use the scalabeans api instead of straight reflection.
  *
  * @author Michael Fortin
  */
@@ -28,7 +29,7 @@ trait Editor[T] {
 }
 
 /**
- *
+ * Default property editor implementation.
  */
 abstract class PropertyEditor[T:Manifest] extends Editor[T] {
   val m = manifest[T]

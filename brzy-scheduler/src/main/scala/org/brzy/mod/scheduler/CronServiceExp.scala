@@ -1,9 +1,8 @@
 package org.brzy.mod.scheduler
 
-//import org.brzy.service.Service
 
 /**
- * Document Me..
+ * Cron Service expression
  * 
  * @author Michael Fortin
  */

@@ -14,7 +14,7 @@
 package org.brzy.mod.jms
 
 /**
- * Document Me..
+ * A JMS message body
  * 
  * @author Michael Fortin
  */

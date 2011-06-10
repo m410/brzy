@@ -9,7 +9,7 @@ config_class: org.brzy.mod.calista.CalistaModConf
 provider_class: org.brzy.mod.calista.CalistaModProvider
 key_space: Keyspace1
 dependencies:
-  - {conf: compile, org: org.brzy, name: calista, rev: "0.3"}
+  - {conf: compile, org: org.brzy, name: calista, rev: "0.4"}
   - {conf: compile, org: org.brzy, name: brzy-calista, rev: "0.2", transitive: false}
 repositories:
   - id: "shorrockin"

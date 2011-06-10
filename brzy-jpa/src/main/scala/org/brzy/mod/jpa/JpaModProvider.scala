@@ -15,10 +15,9 @@ package org.brzy.mod.jpa
 
 import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
-import org.brzy.fab.conf.WebXml
 
 /**
- * Document Me..
+ * JPA module provider.  This adds the jpa context manager to the application as the interceptor.
  * 
  * @author Michael Fortin
  */

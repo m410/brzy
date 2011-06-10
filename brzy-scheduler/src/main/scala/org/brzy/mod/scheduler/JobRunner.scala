@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 import org.brzy.interceptor.Invoker
 
 /**
- * Document Me..
+ * The scala Actor that runs the Cron job for a single cron service.
  *
  * @author Michael Fortin
  */
@@ -27,15 +27,18 @@ class JobRunner(val service: Cron) extends Actor {
 
   val serviceName = {
     val className = service.getClass.getSimpleName
-    className.charAt(0).toLower + className.substring(1,className.length)
+    className.charAt(0).toLower + className.substring(1, className.length)
   }
 
-  def act() = loop {
-    react {
+  def act() {
+    loop {
+      react {
         case Execute =>
-          log.debug("execute: {}",service)
-          service.execute
-	    	case Exit => exit
+          log.debug("execute: {}", service)
+          service.execute()
+        case Exit =>
+          exit()
+      }
     }
   }
 }

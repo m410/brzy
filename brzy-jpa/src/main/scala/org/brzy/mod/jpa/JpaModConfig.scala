@@ -17,7 +17,7 @@ import org.brzy.fab.mod.PersistenceMod
 import org.brzy.fab.conf.{WebXml, BaseConf}
 
 /**
- * Document Me..
+ * JPA module configuration parameters.
  *
  * @author Michael Fortin
  */

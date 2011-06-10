@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest
 import org.brzy.webapp.action.Principal
 
 /**
- * Document Me..
+ * Helpers view functions for security
  * 
  * @author Michael Fortin
  */

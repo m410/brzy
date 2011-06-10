@@ -23,7 +23,7 @@ import collection.JavaConversions._
 import org.brzy.fab.mod.ModProvider
 
 /**
- * Document Me..
+ * Module provider for JMS.  This will scan for services that implement the QueueService Trait.
  *
  * @author Michael Fortin
  */

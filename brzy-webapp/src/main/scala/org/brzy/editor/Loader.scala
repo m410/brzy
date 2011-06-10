@@ -1,7 +1,7 @@
 package org.brzy.editor
 
 /**
- * Document Me..
+ * Loads an instance of a bean from a data store.
  * 
  * @author Michael Fortin
  */

@@ -16,7 +16,7 @@ package org.brzy.mod.security
 import org.brzy.fab.mod.ModProvider
 
 /**
- * Document Me..
+ * Provides security related functions to the application.
  * 
  * @author Michael Fortin
  */

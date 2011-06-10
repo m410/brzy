@@ -20,7 +20,9 @@ import org.brzy.fab.interceptor.ManagedThreadContext
 import org.brzy.calista.ocm.Calista
 
 /**
- * Document Me..
+ * Provided by the Module, this manages session creation and destruction for connecting to
+ * a Cassandra datastore using Calista.  It's used to managed a ThreadLocal variable for each
+ * request.
  *
  * @author Michael Fortin
  */

@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest
 import org.brzy.webapp.view.FlashMessage
 
 /**
- * Document Me..
+ * Scalate built in view functions.  This provides a simple way to view flash messages.
  * 
  * @author Michael Fortin
  */

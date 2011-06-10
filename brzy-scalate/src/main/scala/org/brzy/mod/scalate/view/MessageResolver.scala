@@ -3,17 +3,17 @@ package org.brzy.mod.scalate.view
 import java.util.{ResourceBundle, Locale}
 
 /**
- * Document Me..
+ * Resolves internationalized messages.
  * 
  * @author Michael Fortin
  */
 object MessageResolver {
-  def message(ref:String,locale:Locale = Locale.getDefault) = {
-    val bundle = ResourceBundle.getBundle("i18n/messages", locale)
+  val locale = Locale.getDefault
+  val bundle = ResourceBundle.getBundle("i18n/messages", locale)
 
-    if(bundle.containsKey(ref))
+  def message(ref:String,locale:Locale = Locale.getDefault) = if(bundle.containsKey(ref))
       bundle.getString(ref)
     else
       ref
-  }
+
 }

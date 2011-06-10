@@ -12,7 +12,7 @@
     <fab-conf-version>0.6</fab-conf-version>
     <fab-util-version>0.6</fab-util-version>
     <brzy-webapp-version>0.10</brzy-webapp-version>
-    <brzy-scalate-version>0.8</brzy-scalate-version>
+    <brzy-scalate-version>0.9</brzy-scalate-version>
     <brzy-validator-version>0.1</brzy-validator-version>
     <logback-version>0.9.27</logback-version>
   </properties>

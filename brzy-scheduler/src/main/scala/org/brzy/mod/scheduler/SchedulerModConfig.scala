@@ -17,7 +17,7 @@ import org.brzy.fab.mod.RuntimeMod
 import org.brzy.fab.conf.BaseConf
 
 /**
- * Document Me..
+ * Scheduler configuration
  * 
  * @author Michael Fortin
  */
