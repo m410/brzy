@@ -18,7 +18,8 @@ import java.util.regex.Pattern
 import org.slf4j.LoggerFactory
 
 /**
- * Document Me..
+ * A representation of a RESTful like path.  This is used to compare paths of actions to see
+ * if they're eligible for execution on that action.
  *
  * @author Michael Fortin
  */

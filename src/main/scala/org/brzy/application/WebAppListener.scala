@@ -28,7 +28,7 @@ class WebAppListener extends ServletContextListener {
 
   private[this] val log = LoggerFactory.getLogger(classOf[WebAppListener])
 
-  def contextInitialized(servletContextEvent: ServletContextEvent) = {
+  def contextInitialized(servletContextEvent: ServletContextEvent) {
     val lc = LoggerFactory.getILoggerFactory()
 
     if(lc.isInstanceOf[LoggerContext])

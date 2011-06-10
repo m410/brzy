@@ -17,7 +17,7 @@ import xml.Elem
 import com.twitter.json.{Json => tJson}
 
 /**
- * Document Me..
+ * A Data class is one of the two possible return types of an action.  
  *
  * @author Michael Fortin
  */

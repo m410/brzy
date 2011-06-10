@@ -239,7 +239,7 @@ class WebApp(conf: WebAppConf) {
 }
 
 /**
- *  This is a factory class to assemble the appilcation at runtime.
+ *  This is a factory class to assemble the application at runtime.
  */
 object WebApp {
   private val log = LoggerFactory.getLogger(getClass)
