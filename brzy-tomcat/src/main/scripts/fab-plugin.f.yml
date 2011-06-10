@@ -8,6 +8,7 @@ tasks:
     method_name: runTomcat
     description: Run Tomcat
 dependencies:
+  - {org: com.twitter, name: json, rev: "1.1.1", transitive: false}
   - {org: org.brzy.fab, name: fab-conf, rev: "${fab-conf-version}", transitive: false}
   - {org: org.brzy.fab, name: fab-util, rev: "${fab-util-version}", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
