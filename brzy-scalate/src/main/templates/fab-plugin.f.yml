@@ -4,11 +4,6 @@ plugins:
     source_file: .brzy/modules/brzy-scalate/BrzyScalatePlugin.scala
     class_name: BrzyScalatePlugin
     include_app_classpath: true
-    tasks:
-      - name: gen-scalate-views
-        method_name: genSspViews
-        description: Generate Views for domain class
-        takes_args: true
     dependencies:
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
       - {org: com.twitter, name: json, rev: "1.1.1", transitive: false}
@@ -17,10 +12,13 @@ plugins:
       - {org: org.brzy.archetype, name: brzy-webapp, rev: "0.10.1", transitive: false}
       - {org: org.scala-lang, name: scala-compiler, rev: "2.8.1", transitive: false}
       - {org: org.scala-lang, name: scala-library, rev: "2.8.1", transitive: false}
-
     repositories:
       - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
-
+    tasks:
+      - name: gen-scalate-views
+        method_name: genSspViews
+        description: Generate Views for domain class
+        takes_args: true
   - name: brzy-scalate-default
     description: Adds dependencies to the default interpreter scope.
     dependencies_in_default_scope: true

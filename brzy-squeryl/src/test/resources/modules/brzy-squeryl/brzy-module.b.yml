@@ -9,7 +9,7 @@ config_class: org.brzy.mod.squeryl.SquerylModConfig
 provider_class: org.brzy.mod.squeryl.SquerylModProvider
 dependencies:
   - {conf: compile, org: org.squeryl, name: squeryl_2.8.1, rev: "0.9.4-RC3"}
-  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
+  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "4.0.2.GA"}
   - {conf: compile, org: org.brzy, name: brzy-squeryl, rev: "0.2"}
 repositories:
   - id: "fusesource.m2"

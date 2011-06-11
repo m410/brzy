@@ -43,7 +43,7 @@ class BrzyScalatePlugin extends Task  {
     val viewFile = File(outdir, "view.ssp")
     val writer1 = new BufferedWriter(new FileWriter(viewFile))
     writer1.write(viewTemplate.toString)
-    writer1.close
+    writer1.close()
 
     val createTemplate = group.template("create-ssp")
     createTemplate.setAttribute("shortClassName", className)
@@ -53,7 +53,7 @@ class BrzyScalatePlugin extends Task  {
     val createFile = File(outdir, "create.ssp")
     val writer2 = new BufferedWriter(new FileWriter(createFile))
     writer2.write(createTemplate.toString)
-    writer2.close
+    writer2.close()
 
     val editTemplate = group.template("edit-ssp")
     editTemplate.setAttribute("shortClassName", className)
@@ -63,7 +63,7 @@ class BrzyScalatePlugin extends Task  {
     val editFile = File(outdir, "edit.ssp")
     val writer3 = new BufferedWriter(new FileWriter(editFile))
     writer3.write(editTemplate.toString)
-    writer3.close
+    writer3.close()
 
     val listTemplate = group.template("list-ssp")
     listTemplate.setAttribute("shortClassName", className)
@@ -74,6 +74,6 @@ class BrzyScalatePlugin extends Task  {
     val listFile = File(outdir, "list.ssp")
     val writer4 = new BufferedWriter(new FileWriter(listFile))
     writer4.write(listTemplate.toString)
-    writer4.close
+    writer4.close()
 	}
 }

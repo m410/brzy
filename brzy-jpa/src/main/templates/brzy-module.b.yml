@@ -26,5 +26,5 @@ dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "${validator-version}", transitive: false}
   - {conf: compile, org: javax.validation, name: validation-api, rev: "1.0.0.GA", transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}
-  - {conf: compile, org: org.brzy, name: brzy-webapp, rev: 0.10, transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-webapp, rev: "0.10", transitive: false}
 
