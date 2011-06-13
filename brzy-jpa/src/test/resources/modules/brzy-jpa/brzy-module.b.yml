@@ -12,7 +12,7 @@ persistence_unit: "my-unit"
 
 dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "3.4.0.GA"}
-  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: 4.0.2.GA}
+  - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "4.0.2.GA"}
   - {conf: compile, org: org.brzy, name: brzy-jpa, rev: "0.2", transitive: false}
 
 web_xml:
