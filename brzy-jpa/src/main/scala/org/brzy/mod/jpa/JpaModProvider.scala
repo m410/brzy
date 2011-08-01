@@ -15,6 +15,9 @@ package org.brzy.mod.jpa
 
 import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
+import java.sql.DriverManager
+import collection.JavaConversions._
+import org.slf4j.LoggerFactory
 
 /**
  * JPA module provider.  This adds the jpa context manager to the application as the interceptor.
@@ -22,6 +25,18 @@ import org.brzy.fab.interceptor.InterceptorProvider
  * @author Michael Fortin
  */
 class JpaModProvider(c:JpaModConfig) extends ModProvider with InterceptorProvider {
+  val log = LoggerFactory.getLogger(getClass)
   val interceptor = new JpaContextManager(c.persistenceUnit.get)
   val name = c.name.get
+
+  /**
+   * Deregister all drivers that the DriverManager is aware of.
+   */
+  override def shutdown {
+    val drivers = DriverManager.getDrivers
+    drivers.foreach(d=>{
+      log.debug("deregister: {}",d)
+      DriverManager.deregisterDriver(d)
+    })
+  }
 }

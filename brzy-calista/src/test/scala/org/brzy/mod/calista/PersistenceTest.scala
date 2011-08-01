@@ -20,19 +20,20 @@ import org.junit._
 import java.util.{UUID, Date}
 import org.brzy.calista.serializer.{DateSerializer, UUIDSerializer, UTF8Serializer}
 import org.brzy.calista.ocm._
+import org.brzy.calista.Calista
 
 class PersistenceTest extends JUnitSuite {
   val key = UUID.randomUUID
   val insertKey = UUID.randomUUID
 
-  import org.brzy.calista.schema.Conversions._
+  import org.brzy.calista.dsl.Conversions._
 
   //
   //  @Test @Ignore def testGetObject = {
   //    val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
   //    val session = manager.createSession
   //    manager.context.withValue(session) {
-  //      val s = Calista.value.get
+  //      val s = Calista.value
   //
   //      if (s.count(Person.family | key) < 3) {
   //        val firstColumn = Insert(Person.family | key |("firstName" , "Fred"))
@@ -51,7 +52,7 @@ class PersistenceTest extends JUnitSuite {
     val manager = new CalistaContextManager(new CalistaModConf(Map("host" -> "localhost")))
     val session = manager.createSession
     manager.context.withValue(session) {
-      val s = Calista.value.get
+      val s = Calista.value
 
       if (s.count(Person.family | insertKey) > 1) {
         s.remove(Person.family | insertKey)
@@ -63,17 +64,17 @@ class PersistenceTest extends JUnitSuite {
     // do the test
     val session2 = manager.createSession
     manager.context.withValue(session2) {
-      val s = Calista.value.get
+      val s = Calista.value
       assertTrue(s.count(Person.family | insertKey) == 0)
       val person = Person(insertKey, "Fred", "Smith", new Date)
-      person.insert
+      person.insert()
     }
     manager.destroySession(session2)
 
     // check to see if it's there
     val session3 = manager.createSession
     manager.context.withValue(session3) {
-      val s = Calista.value.get
+      val s = Calista.value
       val count = s.count(Person.family | insertKey)
       println("count=" + count)
       assertTrue(count == 3) // todo ????
@@ -95,13 +96,12 @@ class PersistenceTest extends JUnitSuite {
 }
 
 case class Person(key: UUID, firstName: String, lastName: String, created: Date)
-        extends StandardEntity[UUID]
 
 object Person extends StandardDao[UUID, Person] {
   val mapping = Mapping[Person](
     "Person",
     UTF8Serializer,
-    Key(UUIDSerializer),
+    Key("key",UUIDSerializer),
     Column("firstName"),
     Column("lastName"),
     Column("created", DateSerializer))

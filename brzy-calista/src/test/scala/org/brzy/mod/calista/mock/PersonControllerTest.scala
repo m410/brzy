@@ -17,13 +17,13 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.junit.{Ignore, Test}
 import org.brzy.mod.calista.{CalistaModConf, CalistaContextManager}
-import org.brzy.calista.ocm.Calista
+import org.brzy.calista.Calista
 import java.util.UUID
 
 class PersonControllerTest extends JUnitSuite {
   val keyId = UUID.randomUUID
 
-  @Test @Ignore def testGet = {
+  @Test @Ignore def testGet() {
     val manager = new CalistaContextManager(new CalistaModConf(Map("host"->"localhost")))
     val session = manager.createSession
 
@@ -33,8 +33,8 @@ class PersonControllerTest extends JUnitSuite {
 
 
     manager.context.withValue(setup) {
-      val session = Calista.value.get
-      import org.brzy.calista.schema.Conversions._
+      val session = Calista.value
+      import org.brzy.calista.dsl.Conversions._
       if (session.count("Standard2"|keyId) == 0) {
         println("setup data in space")
         session.insert("Standard2"|keyId|("firstName","Bob"))
