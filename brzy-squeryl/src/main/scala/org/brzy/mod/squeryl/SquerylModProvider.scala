@@ -16,6 +16,7 @@ package org.brzy.mod.squeryl
 import org.slf4j.LoggerFactory
 import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
+import java.sql.DriverManager
 
 /**
  * Squeryl database persistence module provider.
@@ -43,10 +44,17 @@ class SquerylModProvider(c:SquerylModConfig) extends ModProvider with Intercepto
 
   override def interceptor = new SquerylContextManager(c.driver.get,c.url.get,c.userName.get,c.password.get)
 
-  override def shutdown = {
+  /**
+   * Deregister all drivers that the DriverManager is aware of.
+   */
+  override def shutdown {
     log.debug("shutdown")
+    val drivers = DriverManager.getDrivers
+    drivers.foreach(d=>{
+      log.debug("deregister: {}",d)
+      DriverManager.deregisterDriver(d)
+    })
   }
-
   override def startup = {
     log.debug("startup")
   }

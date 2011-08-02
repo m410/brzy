@@ -20,7 +20,7 @@ import org.brzy.calista.ocm._
 /**
  *
  */
-case class Person (key:UUID, firstName:String)extends StandardEntity[UUID]
+case class Person (key:UUID, firstName:String)
 
 /**
  *
@@ -29,7 +29,7 @@ object Person extends StandardDao[UUID,Person]{
   def mapping = Mapping[Person](
       "Person",
       UTF8Serializer,
-      Key(UUIDSerializer),
+      Key("key",UUIDSerializer),
       Column("firstName"))
 }
 

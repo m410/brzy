@@ -27,7 +27,7 @@ class CalistaModProvider(c:CalistaModConf) extends ModProvider with InterceptorP
   val name = c.name.get
   def interceptor = new CalistaContextManager(c)
 
-  override def startup = {
+  override def startup {
     log.info("Cassandra Version: {}",interceptor.sessionManager.version)
     log.info("Cassandra Cluster Name: {}",interceptor.sessionManager.clusterName)
     log.info("Cassandra Keyspace: {}",interceptor.sessionManager.keyspaceDefinition)

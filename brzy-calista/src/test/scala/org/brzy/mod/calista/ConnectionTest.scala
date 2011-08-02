@@ -21,9 +21,9 @@ import org.brzy.calista.SessionManager
 
 class ConnectionTest extends JUnitSuite {
   // needs to have the database running to work
-  @Test @Ignore def testConnect = {
-    import org.brzy.calista.schema.Conversions._
-    val manager = new SessionManager()
+  @Test @Ignore def testConnect() {
+    import org.brzy.calista.dsl.Conversions._
+    val manager = new SessionManager("Test","localhost")
 
     manager.doWith { session =>
       assertEquals(0,session.count("Standard2"|"1"))

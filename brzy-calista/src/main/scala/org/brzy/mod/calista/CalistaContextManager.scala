@@ -17,7 +17,7 @@ import org.brzy.calista.Session
 import org.brzy.calista.SessionManager
 
 import org.brzy.fab.interceptor.ManagedThreadContext
-import org.brzy.calista.ocm.Calista
+import org.brzy.calista.Calista
 
 /**
  * Provided by the Module, this manages session creation and destruction for connecting to
@@ -27,16 +27,16 @@ import org.brzy.calista.ocm.Calista
  * @author Michael Fortin
  */
 class CalistaContextManager(c: CalistaModConf) extends ManagedThreadContext {
-  type T = Option[Session]
-  val empty: T = None
+  type T = Session
+  val empty: T = null
   val context = Calista
 
-  val sessionManager = new SessionManager(keyspace = c.keySpace.get, url = c.host.get, port = c.port.get)
+  val sessionManager = new SessionManager(c.keySpace.get, c.host.get, c.port.get)
 
-  def destroySession(target: Option[Session]) = {
-    target.get.close
+  def destroySession(target: Session) {
+    target.close()
     context.value = empty
   }
 
-  def createSession = Option(sessionManager.createSession)
+  def createSession = sessionManager.createSession
 }
