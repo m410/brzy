@@ -1,1 +1,5 @@
 */target/
+*/*.iml
+brzy.iml
+brzy.ipr
+brzy.iws

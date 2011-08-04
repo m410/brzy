@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory
 import org.brzy.fab.mod.ModProvider
 import org.brzy.fab.interceptor.InterceptorProvider
 import java.sql.DriverManager
+import collection.JavaConversions._
 
 /**
  * Squeryl database persistence module provider.
@@ -55,7 +56,7 @@ class SquerylModProvider(c:SquerylModConfig) extends ModProvider with Intercepto
       DriverManager.deregisterDriver(d)
     })
   }
-  override def startup = {
+  override def startup  {
     log.debug("startup")
   }
 
