@@ -16,7 +16,7 @@ dependencies:
   - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "${pom.version}", transitive: false}
   - {conf: compile, org: org.apache.cassandra, name: cassandra-all, rev: "${cassandra.version}", transitive: false}
   - {conf: compile, org: org.apache.cassandra, name: cassandra-thrift, rev: "0.8.2", transitive: false}
-  - {conf: compile, org: org.apache.thrift, name: libthrift, rev: "0.6.1"}
+  - {conf: compile, org: org.apache.thrift, name: libthrift, rev: "0.6.1", transitive: false}
   - {conf: compile, org: org.yaml, name: snakeyaml, rev: "1.6", transitive: false}
   - {conf: compile, org: com.github.stephenc.high-scale-lib, name: high-scale-lib, rev: "1.1.2", transitive: false}
   - {conf: compile, org: com.googlecode.concurrentlinkedhashmap, name: concurrentlinkedhashmap-lru, rev: "1.1", transitive: false}
