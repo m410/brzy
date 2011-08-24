@@ -30,7 +30,7 @@ class CalistaModProvider(c:CalistaModConf) extends ModProvider with InterceptorP
   override def startup {
     log.info("Cassandra Version: {}",interceptor.sessionManager.version)
     log.info("Cassandra Cluster Name: {}",interceptor.sessionManager.clusterName)
-    log.info("Cassandra Keyspace: {}",interceptor.sessionManager.keyspaceDefinition)
+    log.info("Cassandra Keyspace: {}",interceptor.sessionManager.keyspaceDefinition.logString)
 //    if(c.createSchema) {
 //      log.info("Creating Schema for keyspace {}",c.keySpace)
 //    }

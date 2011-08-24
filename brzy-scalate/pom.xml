@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-scalate</artifactId>
   <name>Brzy Scalate Module</name>
-  <version>0.9</version>
+  <version>0.10-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzywebapp</artifactId>
