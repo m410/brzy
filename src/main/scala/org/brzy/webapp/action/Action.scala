@@ -83,16 +83,13 @@ trait Action extends Ordered[Action] {
       false
     }
     else {
-      val sec = controller.asInstanceOf[Secured]
-      p.roles.allowed.find(role => sec.roles.allowed.contains(role)).isDefined ||
-              constraints.find(c => {
-                if (c.isInstanceOf[Roles]) {
-                  val roles = c.asInstanceOf[Roles]
-                  p.roles.allowed.find(role => roles.allowed.contains(role)).isDefined
-                }
-                else
-                  false
-              }).isDefined
+      constraints.find(_.isInstanceOf[Roles]) match {
+        case Some(r) =>
+          p.roles.allowed.find(role => r.asInstanceOf[Roles].allowed.contains(role)).isDefined
+        case _ =>
+          val secured = controller.asInstanceOf[Secured]
+          p.roles.allowed.find(role => secured.roles.allowed.contains(role)).isDefined
+      }
     }
   }
 
