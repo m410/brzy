@@ -31,11 +31,11 @@ object UrlFunctions {
 
   def action(path:String)(implicit req:HttpServletRequest):String = resource(path,req)
 
-  def css(path:String)(implicit req:HttpServletRequest):String = resource( "_/css" + path, req)
+  def css(path:String)(implicit req:HttpServletRequest):String = resource( "/_/css" + path, req)
 
-  def js(path:String)(implicit req:HttpServletRequest):String = resource("_/js" +path, req)
+  def js(path:String)(implicit req:HttpServletRequest):String = resource("/_/js" +path, req)
 
-  def img(path:String)(implicit req:HttpServletRequest):String = resource("_/images" +path, req)
+  def img(path:String)(implicit req:HttpServletRequest):String = resource("/_/images" +path, req)
 
   def date(date:Date,format:String):String = new SimpleDateFormat(format).format(date)
 
