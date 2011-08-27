@@ -31,7 +31,7 @@ import javax.servlet.{ServletResponse, ServletRequest}
 class BrzyServlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
 
-  override def service(req: ServletRequest, res: ServletResponse) = {
+  override def service(req: ServletRequest, res: ServletResponse) {
     try {
       internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
     }
@@ -42,7 +42,7 @@ class BrzyServlet extends HttpServlet {
     }
   }
 
-  private def internal(req: HttpServletRequest, res: HttpServletResponse) = {
+  private def internal(req: HttpServletRequest, res: HttpServletResponse) {
     val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
@@ -50,7 +50,7 @@ class BrzyServlet extends HttpServlet {
 
     app.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
-        log.debug("{} >> {}", req.getRequestURI, action)
+        log.debug("{} >>> {}", req.getRequestURI, action)
         val args = buildArgs(action, req)
 
         val result =
@@ -58,7 +58,7 @@ class BrzyServlet extends HttpServlet {
             if (req.getSession(false) != null) {
               val session = req.getSession
               val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
-           
+              log.debug("principal: {}",p)
    						if (action.authorize(p))
                 action.execute(args,Option(p))
               else

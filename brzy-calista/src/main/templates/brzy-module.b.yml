@@ -18,4 +18,3 @@ dependencies:
   - {conf: compile, org: org.apache.cassandra, name: cassandra-thrift, rev: "${cassandra.version}", transitive: false}
   - {conf: compile, org: org.apache.thrift, name: libthrift, rev: "0.6.1", transitive: false}
   - {conf: compile, org: com.github.stephenc.high-scale-lib, name: high-scale-lib, rev: "1.1.2", transitive: false}
-#  - {conf: compile, org: com.googlecode.concurrentlinkedhashmap, name: concurrentlinkedhashmap-lru, rev: "1.1", transitive: false}

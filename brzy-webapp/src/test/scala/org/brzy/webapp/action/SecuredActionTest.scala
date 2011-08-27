@@ -8,19 +8,27 @@ import org.brzy.webapp.controller.{Secured, Controller}
 class SecuredActionTest extends JUnitSuite {
 	
 	val controller = new Controller("") with Secured {
-		override val roles = Roles("ADMIN","USER")
-		def actions = List(Action("index","index",index _,Roles("ADMIN")))
+		override val roles = Roles("ADMIN")
+		def actions = List(
+      Action("index","index",index _,Roles("ADMIN","USER")),
+      Action("index2","index2",index2 _)
+    )
 		def index = "name" -> "value"
+		def index2 = "name" -> "value"
 	}
 	
   @Test def testNoPermission() {
 		val action = controller.actions(0) 
-		assertTrue(!action.authorize(Principal("me",Roles("USER"))))
+		assertTrue(action.authorize(Principal("me",Roles("USER"))))
 	}	
-	
+
+  @Test def testNoRolePermission() {
+		val action = controller.actions(1)
+		assertFalse(action.authorize(Principal("me",Roles("USER"))))
+	}
+
 	@Test def testHasPermission() {
 		val action = controller.actions(0) 
 		assertTrue(action.authorize(Principal("me",Roles("ADMIN"))))
 	}	
-  
 }
