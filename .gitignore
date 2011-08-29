@@ -1,5 +1,7 @@
 */target/
-*/*.iml
+*.iml
 brzy.iml
 brzy.ipr
 brzy.iws
+.idea
+*.db
