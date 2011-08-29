@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-squeryl</artifactId>
   <name>Brzy Squeryl Module</name>
-  <version>0.12</version>
+  <version>0.12.1</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzywebapp</artifactId>
