@@ -38,12 +38,6 @@ trait Dao[T <: {def id: PK}, PK] {
   def getOrElse(id: PK, alternate: T): T
 
   /**
-   * This is a convenience accessor to an entity, it does the casting, if necessage, from a string
-   * to the primary key's data type.
-   */
-  def load(id: String): T
-
-  /**
    * Returns a list of all entities.
    */
   def list(): List[T]
@@ -53,7 +47,7 @@ trait Dao[T <: {def id: PK}, PK] {
    * you should implement your own list function.
    *
    * @param size the size of the dataset to return
-   * @param offset the begining of the dataset
+   * @param offset the beginning of the dataset
    */
   def list(size: Int, offset: Int): List[T]
 
