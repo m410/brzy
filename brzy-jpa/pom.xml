@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-jpa</artifactId>
   <name>Brzy JPA Module</name>
-  <version>0.8.1</version>
+  <version>0.9-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzywebapp</artifactId>
@@ -15,6 +15,7 @@
   <properties>
     <hibernate-version>3.6.0.Final</hibernate-version>
     <validator-version>4.1.0.Final</validator-version>
+    <beanwrap-version>0.1-SNAPSHOT</beanwrap-version>
   </properties>
   <build>
     <plugins>
@@ -85,6 +86,11 @@
       <groupId>org.brzy</groupId>
       <artifactId>brzy-webapp</artifactId>
       <version>${brzy-webapp-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.brzy.beanwrap</groupId>
+      <artifactId>beanwrap</artifactId>
+      <version>${beanwrap-version}</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>

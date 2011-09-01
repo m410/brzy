@@ -15,6 +15,7 @@ package org.brzy.webapp.action
 
 import xml.Elem
 import com.twitter.json.{Json => tJson}
+import org.scalastuff.scalabeans.Preamble._
 
 /**
  * A Data class is one of the two possible return types of an action.  
@@ -116,7 +117,7 @@ case class Binary(bytes: Array[Byte], contentType: String) extends Direction
 /**
  * Return Json formatted text as the body of the response.
  */
-case class Json(target: AnyRef, contentType: String = "application/json") extends Direction with Parser {
+case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json") extends Direction with Parser {
 
   def parse = target match {
     case s: String =>
@@ -126,8 +127,11 @@ case class Json(target: AnyRef, contentType: String = "application/json") extend
     case m: Map[_, _] =>
       tJson.build(m).toString()
     case _ =>
-      import org.brzy.fab.reflect.Properties._
-      tJson.build(target.properties).toString()
+      val descriptor = descriptorOf[T]
+      val map = descriptor.properties.map(p=>{
+        p.name -> descriptor.get(target,p.name)
+      }).toMap
+      tJson.build(map).toString()
   }
 }
 

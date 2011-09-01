@@ -43,7 +43,7 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
 
     protected[jpa] def entityManager = JpaContext.value
 
-    override def validate() = {
+    override def validate = {
       log.trace("validate")
       val set = validator.validate(t).toSet
 
@@ -104,11 +104,30 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
       alternate
   }
 
-  def count() = {
+  protected[jpa] val StringClass = classOf[String]
+  protected[jpa] val JIntegerClass = classOf[java.lang.Integer]
+  protected[jpa] val JLongClass = classOf[java.lang.Long]
+  protected[jpa] val IntClass = classOf[Int]
+  protected[jpa] val LongClass = classOf[Long]
+
+
+  def load(strId:String) = {
+    log.trace("get: {}", strId)
+    val id = keyClass match {
+      case LongClass => strId.toLong
+      case JLongClass => java.lang.Long.valueOf(strId)
+      case JIntegerClass => java.lang.Integer.valueOf(strId)
+      case IntClass => strId.toInt
+      case _ => strId
+    }
+    entityManager.find(entityClass,id).asInstanceOf[T]
+  }
+
+  def count = {
     entityManager.createQuery(countQuery).getSingleResult.asInstanceOf[Long]
 	}
 	
-	def list() = {
+	def list = {
     entityManager.createQuery(listQuery).getTypedList[T]
 	}
 	

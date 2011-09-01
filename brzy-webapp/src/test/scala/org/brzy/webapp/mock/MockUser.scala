@@ -27,18 +27,17 @@ import org.brzy.persistence.Dao
 class MockUser {
   var id:Long = _
   var version:Int = _
-  @NotNull @Size(max=30)
-  var name:String = _
+  @NotNull @Size(max=30) var name:String = _
 }
 
 object MockUser extends Dao[MockUser,Long]{
 
 	class EntityCrudOps(t:MockUser) extends PersistentCrudOps(t) {
-		def validate() = Validator(t).violations
-    def insert(commit:Boolean  = false) = {}
-    def commit = {}
-    def update = new MockUser()
-    def delete = {}
+		def validate = Validator(t).violations
+    def insert(commit:Boolean  = false) {}
+    def commit() {}
+    def update() = new MockUser()
+    def delete() {}
 	}
 
   def newPersistentCrudOps(t: MockUser) = new EntityCrudOps(t)
@@ -46,7 +45,7 @@ object MockUser extends Dao[MockUser,Long]{
 	def apply(id:Long) = new MockUser()
 	def get(id:Long) = Option(new MockUser())
   def getOrElse(id: Long, alternate: MockUser) = alternate
-  def count():Long = 1
+  def count:Long = 1
   def list = List()
 	def list(start:Int, size:Int) = List()
   def load(id:String) = new MockUser()

@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-squeryl</artifactId>
   <name>Brzy Squeryl Module</name>
-  <version>0.12.1</version>
+  <version>0.13-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy</groupId>
     <artifactId>brzywebapp</artifactId>
@@ -14,6 +14,7 @@
   </parent>
   <properties>
     <squeryl-version>0.9.4-RC3</squeryl-version>
+    <beanwrap-version>0.1-SNAPSHOT</beanwrap-version>
   </properties>
   <build>
     <plugins>

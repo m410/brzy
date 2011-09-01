@@ -18,9 +18,11 @@ import org.brzy.persistence.MockPersistable
 import org.brzy.webapp.action.{Action,Parameters,Model}
 
 @ConstructorProperties(Array("id"))
-class User(val id: Long, val userName:String, val password:String) extends Authenticated {
-  def this() = this(0,"","")
-	def authenticatedRoles = Array.empty[String]
+class User(
+    val id: Long = 0,
+    val userName:String = "",
+    val password:String = "") extends Authenticated {
+  def authenticatedRoles = Array.empty[String]
 }
 
 object User extends MockPersistable[User, Long] with Authenticator[User] {

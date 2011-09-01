@@ -40,6 +40,7 @@ class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) exten
   private[this] val log = LoggerFactory.getLogger(classOf[SquerylDao[_]])
   
   class EntityCrudOps(t: T) extends PersistentCrudOps(t){
+    
     def validate = valid(t)
 
     def insert(commit:Boolean = false) = {
@@ -52,7 +53,9 @@ class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) exten
       t
     }
 
-    def commit = Session.currentSession.connection.commit
+    def commit() {
+      Session.currentSession.connection.commit()
+    }
 
     def delete() = db.deleteWhere(e => e.id === t.id)
   }
@@ -76,7 +79,25 @@ class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) exten
   }
 
 
-  def load(id: String) = db.lookup(id.toLong).get
+
+  protected[jpa] val StringClass = classOf[String]
+  protected[jpa] val JIntegerClass = classOf[java.lang.Integer]
+  protected[jpa] val JLongClass = classOf[java.lang.Long]
+  protected[jpa] val IntClass = classOf[Int]
+  protected[jpa] val LongClass = classOf[Long]
+
+
+  def load(strId:String) = {
+    log.trace("get: {}", strId)
+    val id = keyClass match {
+      case LongClass => strId.toLong
+      case JLongClass => java.lang.Long.valueOf(strId)
+      case JIntegerClass => java.lang.Integer.valueOf(strId)
+      case IntClass => strId.toInt
+      case _ => strId
+    }
+    db.lookup(id).get
+  }
 
   def list():List[T] = from(db)(a => select(a)).toList
 

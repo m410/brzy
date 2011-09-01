@@ -35,7 +35,7 @@ class UserController extends Controller("users") {
     Action("{id}/companies/{cid}","companie",company _),
     Action("custom","custom",custom _))
   
-  def list() = "userList" -> MockUser.list()
+  def list() = "userList" -> MockUser.list
 
   def get(p: Parameters) = "user" -> MockUser.get(p("id").toLong)
 
