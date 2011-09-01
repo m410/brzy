@@ -24,9 +24,9 @@ import java.lang.reflect.Method
 
 class JsonReturnTest  extends JUnitSuite {
 
-  val expected = """{"name":"hello","count":1,"version":0,"id":1,"list":[]}"""
+  val expected = """{"id":1,"version":0,"name":"hello"}"""
 
-  @Test def testReturnJson = {
+  @Test def testReturnJson() {
     val ctlr = new UserController()
 //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "json").get
     val action = ctlr.actions.find(_.actionPath == "json").get//new Action("/users/json", method, ctlr, ".ssp")
@@ -43,7 +43,7 @@ class JsonReturnTest  extends JUnitSuite {
     assertEquals(expected,response.getContentAsString)
   }
 
-  @Test def testReturnJson2 = {
+  @Test def testReturnJson2() {
     val ctlr = new UserController()
     val method: Method = ctlr.getClass.getMethods.find(_.getName == "json2").get
     val action = ctlr.actions.find(_.actionPath == "json2").get//new Action("/users/json2", method, ctlr, ".ssp")

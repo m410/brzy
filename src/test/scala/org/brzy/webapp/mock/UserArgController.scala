@@ -22,7 +22,7 @@ class UserArgController(val userService:UserService) extends Controller("userArg
     Action("{id}","view",get _),
     Action("custom","custom",custom _))
 
-  def list = "userList"->MockUser.list()
+  def list = "userList"->MockUser.list
   def get(prms:Parameters) = "user"->MockUser.get(prms("id")(0).toLong)
 	def custom = "custom"->userService.someMethod
 }

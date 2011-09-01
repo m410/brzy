@@ -435,7 +435,7 @@ object Action {
           inRead = input.read; inRead
         } >= 0)
           res.getOutputStream.write(inRead)
-      case j: Json =>
+      case j: Json[_] =>
         log.debug("json: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)

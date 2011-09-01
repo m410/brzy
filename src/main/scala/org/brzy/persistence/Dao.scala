@@ -16,6 +16,7 @@ package org.brzy.persistence
 import org.brzy.fab.reflect.Construct
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
+import org.brzy.beanwrap.{Build, Editors}
 
 /**
  * This is a persistent super class that can be used by persistence  modules to enable the
@@ -38,9 +39,15 @@ trait Dao[T <: {def id: PK}, PK] {
   def getOrElse(id: PK, alternate: T): T
 
   /**
+   * This is a convenience accessor to an entity, it does the casting, if necessage, from a string
+   * to the primary key's type.
+   */
+  def load(id: String): T
+
+  /**
    * Returns a list of all entities.
    */
-  def list(): List[T]
+  def list: List[T]
 
   /**
    * This implements basic paging.  It does not sort or order the returned list.  To do that
@@ -54,20 +61,24 @@ trait Dao[T <: {def id: PK}, PK] {
   /**
    * Returns a count of the number of entities in the data store.
    */
-  def count(): Long
+  def count: Long
 
   /**
+   * Build the entity from a map of name value pairs.  This depends on the editors setup in the
+   * editors repository.
    *
    * @See org.brzy.fab.reflect.Construct
    */
   def construct(map: Map[String, AnyRef])(implicit m: Manifest[T]): T = {
-    Construct.withCast[T](map.asInstanceOf[Map[String, String]])
+    Build[T](map.asInstanceOf[Map[String,String]], editors).make
   }
 
   /**
    * This creates and instance of the entity using a default no-args constructor.
    */
-  def construct()(implicit m: Manifest[T]): T = Construct[T]()
+  def construct()(implicit m: Manifest[T]): T = Build[T](Map.empty[String,String], editors).make
+
+  def editors = Editors()
 
   /**
    * Used by the abstract CrudController to to add persistence capability to the controller.  I'm
@@ -86,15 +97,31 @@ trait Dao[T <: {def id: PK}, PK] {
    * objects.  This needs to be created as an implicit value in the companion object.
    */
   abstract class PersistentCrudOps[T](t: T) {
+
+    /**
+     * Insert the entity, with an optional commit immediately parameter.
+     */
     def insert(commit: Boolean = false)
 
+    /**
+     * Commit the current transaction.
+     */
     def commit()
 
+    /**
+     * Update the entity in the db, and return the new instance.
+     */
     def update(): T
 
+    /**
+     * Delete the entity from the database.
+     */
     def delete()
 
-    def validate(): Option[Set[ConstraintViolation[AnyRef]]]
+    /**
+     * validate the instance.
+     */
+    def validate: Option[Set[ConstraintViolation[AnyRef]]]
   }
 
 }
