@@ -33,15 +33,15 @@ class BrzyFilter extends SFilter {
   /**
    *
    */
-  def init(config: FilterConfig) = {
-    log.info("Init Filter: {}", config)
+  def init(config: FilterConfig) {
+    log.debug("Init Filter: {}", config)
     webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
   /**
    *
    */
-  def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) = {
+  def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
     val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
     log.trace("uri    : {}",uri)
     
@@ -68,7 +68,7 @@ class BrzyFilter extends SFilter {
   /**
    *
    */
-  def destroy = {
-    log.debug("Destroy")
+  def destroy() {
+    log.trace("Destroy")
   }
 }
