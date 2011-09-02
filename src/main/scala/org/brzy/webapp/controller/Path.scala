@@ -46,6 +46,7 @@ case class Path(base: String, sub: String) extends Ordered[Path] {
   }
 
   protected[controller] val strPattern = "^" + path.replaceAll("""\{.*?\}""", """(.*?)""") + "$"
+  // todo add an id pattern map.
   protected[controller] val pattern = strPattern.r
 
   def isMatch(contextPath: String) = {

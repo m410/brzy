@@ -36,7 +36,7 @@ class BrzyServlet extends HttpServlet {
       internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
     }
     catch {
-      case t:Throwable =>
+      case t: Throwable =>
         log.error(t.getMessage, t)
         throw t
     }
@@ -57,27 +57,28 @@ class BrzyServlet extends HttpServlet {
           if (action.isSecure) {
             if (req.getSession(false) != null) {
               val session = req.getSession
-              val p = session.getAttribute("brzy_principal").asInstanceOf[Principal]
-              log.debug("principal: {}",p)
-   						if (action.authorize(p))
-                action.execute(args,Option(p))
+              val principal = session.getAttribute("brzy_principal").asInstanceOf[Principal]
+              log.debug("principal: {}", principal)
+
+              if (action.authorize(principal))
+                action.execute(args, Option(principal))
               else
                 Error(403, "Not Autorized")
             }
-            else{
+            else {
               val flash = Flash("session.end", "Session ended, log in again")
-              val sessionParam = SessionAdd("last_view"->req.getRequestURI)
+              val sessionParam = SessionAdd("last_view" -> req.getRequestURI)
               (Redirect("/auth"), flash, sessionParam)
             }
           }
           else {
-            val principal = {
-								if(req.getSession(false) != null)
-									req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
-								else
-									null
-						}
-            action.execute(args,Option(principal))
+            val principalOption = Option(
+              if (req.getSession(false) != null)
+                req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
+              else
+                null
+            )
+            action.execute(args, principalOption)
           }
 
         handleResults(action, result, req, res)
