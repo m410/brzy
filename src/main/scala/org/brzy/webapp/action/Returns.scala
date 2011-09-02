@@ -88,17 +88,19 @@ case class Redirect(path: String) extends Direction
 /**
  * Return xml as the body of the response.
  */
-case class Xml(t: AnyRef, contentType: String = "text/xml") extends Direction with Parser {
-
-  import org.brzy.fab.reflect.Properties._
+case class Xml[T<:AnyRef:Manifest](t: T, contentType: String = "text/xml") extends Direction with Parser {
 
   def parse = {
+    val descriptor = descriptorOf[T]
+    val map = descriptor.properties.map(p=>{
+      p.name -> descriptor.get(t,p.name)
+    }).toMap
     def node(name: String, elem: Elem) = elem.copy(label = name)
     val tmp = <class>
-      {t.properties.map(p => node({p._1}, <property>{p._2}</property>))}
+      {map.map(p => node({p._1}, <property>{p._2}</property>))}
     </class>
     node(t.getClass.getSimpleName, tmp)
-  }.toString
+  }.toString()
 }
 
 /**
@@ -135,7 +137,7 @@ case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "applicatio
   }
 }
 
-case class Jsonp(callback: String, target: AnyRef, contentType: String = "application/json") extends Direction with Parser {
+case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json") extends Direction with Parser {
   def parse = {
     val sb = new StringBuilder()
     sb.append(callback)
@@ -148,11 +150,14 @@ case class Jsonp(callback: String, target: AnyRef, contentType: String = "applic
       case m: Map[_, _] =>
         tJson.build(m).toString()
       case _ =>
-        import org.brzy.fab.reflect.Properties._
-        tJson.build(target.properties).toString()
+        val descriptor = descriptorOf[T]
+      val map = descriptor.properties.map(p=>{
+        p.name -> descriptor.get(target,p.name)
+      }).toMap
+        tJson.build(map).toString()
     })
     sb.append(")")
-    sb.toString
+    sb.toString()
   }
 }
 

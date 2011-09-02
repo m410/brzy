@@ -63,12 +63,10 @@ class BrzyServlet extends HttpServlet {
               if (action.authorize(principal))
                 action.execute(args, Option(principal))
               else
-                Error(403, "Not Autorized")
+                toLogin(req)
             }
-            else {
-              val flash = Flash("session.end", "Session ended, log in again")
-              val sessionParam = SessionAdd("last_view" -> req.getRequestURI)
-              (Redirect("/auth"), flash, sessionParam)
+            else{
+              toLogin(req)
             }
           }
           else {
@@ -85,5 +83,12 @@ class BrzyServlet extends HttpServlet {
       case _ =>
         res.sendError(404)
     }
+  }
+
+
+  def toLogin(req: HttpServletRequest): (Redirect, Flash, SessionAdd) = {
+    val flash = Flash("session.end", "Session ended, log in again")
+    val sessionParam = SessionAdd("last_view" -> req.getRequestURI)
+    (Redirect("/auth"), flash, sessionParam)
   }
 }
