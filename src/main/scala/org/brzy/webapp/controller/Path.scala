@@ -45,8 +45,11 @@ case class Path(base: String, sub: String) extends Ordered[Path] {
     preSlash.replaceAll("//", "/")
   }
 
-  protected[controller] val strPattern = "^" + path.replaceAll("""\{.*?\}""", """(.*?)""") + "$"
-  // todo add an id pattern map.
+  protected[controller] val strPattern = {
+    // TODO strip out curlies, replace with embedded patter if it has a colon, otherwise use below
+    "^" + path.replaceAll("""\{.*?\}""", """(.*?)""") + "$"
+  }
+
   protected[controller] val pattern = strPattern.r
 
   def isMatch(contextPath: String) = {
@@ -80,6 +83,7 @@ case class Path(base: String, sub: String) extends Ordered[Path] {
     val buffer = Buffer[String]()
     val matcher = Pattern.compile("""\{(.*?)\}""").matcher(path)
 
+    // todo Pull out named parameters, up to an optional colon
     while (matcher.find)
       buffer += matcher.group(1)
 
