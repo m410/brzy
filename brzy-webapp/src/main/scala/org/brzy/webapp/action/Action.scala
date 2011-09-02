@@ -335,50 +335,54 @@ object Action {
   def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response) {
     log.debug("results: {}", actionResult)
 
-    def matchData(result: Any): Unit = result match {
-      case (s: String, m: AnyRef) =>
-        log.debug("tuple: ({},{})", s, m)
-        handleData(Model(s -> m), req, res)
-      case d: Data =>
-        log.debug("Data: {}", d)
-        handleData(d, req, res)
-      case tup: (_, _) =>
-        log.debug("tuple: {}", tup)
-        tup.productIterator.foreach(s => matchData(s))
-      case r: (_, _, _) =>
-        log.debug("tuple: {}", r)
-        r.productIterator.foreach(s => matchData(s))
-      case r: (_, _, _, _) =>
-        log.debug("tuple: {}", r)
-        r.productIterator.foreach(s => matchData(s))
-      case r: (_, _, _, _, _) =>
-        log.debug("tuple: {}", r)
-        r.productIterator.foreach(s => matchData(s))
-      case _ => //ignore and Direction in the list
+    def matchData(result: Any) {
+      result match {
+        case (s: String, m: AnyRef) =>
+          log.debug("tuple: ({},{})", s, m)
+          handleData(Model(s -> m), req, res)
+        case d: Data =>
+          log.debug("Data: {}", d)
+          handleData(d, req, res)
+        case tup: (_, _) =>
+          log.debug("tuple: {}", tup)
+          tup.productIterator.foreach(s => matchData(s))
+        case r: (_, _, _) =>
+          log.debug("tuple: {}", r)
+          r.productIterator.foreach(s => matchData(s))
+        case r: (_, _, _, _) =>
+          log.debug("tuple: {}", r)
+          r.productIterator.foreach(s => matchData(s))
+        case r: (_, _, _, _, _) =>
+          log.debug("tuple: {}", r)
+          r.productIterator.foreach(s => matchData(s))
+        case _ => //ignore and Direction in the list
+      }
     }
 
     matchData(actionResult)
 
     // need to handle the direction after the data or a servlet error doesn't happen
-    def matchDirection(directionResult: Any): Unit = directionResult match {
-      case d: Direction =>
-        log.debug("Direction: {}", d)
-        handleDirection(action, d, req, res)
-      case d: Data => // ignore it
-      case (s: String, m: AnyRef) =>
-        log.debug("tuple default: {}", action.defaultView)
-        handleDirection(action, View(action.defaultView), req, res)
-      case tup: (_, _) =>
-        tup.productIterator.foreach(s => matchDirection(s))
-      case r: (_, _, _) =>
-        r.productIterator.foreach(s => matchDirection(s))
-      case r: (_, _, _, _) =>
-        r.productIterator.foreach(s => matchDirection(s))
-      case r: (_, _, _, _, _) =>
-        r.productIterator.foreach(s => matchDirection(s))
-      case _ =>
-        log.debug("default: {}", action.defaultView)
-        handleDirection(action, View(action.defaultView), req, res)
+    def matchDirection(directionResult: Any) {
+      directionResult match {
+        case d: Direction =>
+          log.debug("Direction: {}", d)
+          handleDirection(action, d, req, res)
+        case d: Data => // ignore it
+        case (s: String, m: AnyRef) =>
+          log.debug("tuple default: {}", action.defaultView)
+          handleDirection(action, View(action.defaultView), req, res)
+        case tup: (_, _) =>
+          tup.productIterator.foreach(s => matchDirection(s))
+        case r: (_, _, _) =>
+          r.productIterator.foreach(s => matchDirection(s))
+        case r: (_, _, _, _) =>
+          r.productIterator.foreach(s => matchDirection(s))
+        case r: (_, _, _, _, _) =>
+          r.productIterator.foreach(s => matchDirection(s))
+        case _ =>
+          log.debug("default: {}", action.defaultView)
+          handleDirection(action, View(action.defaultView), req, res)
+      }
     }
 
     actionResult match {

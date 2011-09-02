@@ -37,7 +37,7 @@ class JpaPersistenceTest extends JUnitSuite {
 
   @Test def testPersistenceValidate() {
     val user = new User
-    val validity = user.validate()
+    val validity = user.validate
     assertNotNull(validity.orNull)
   }
 }

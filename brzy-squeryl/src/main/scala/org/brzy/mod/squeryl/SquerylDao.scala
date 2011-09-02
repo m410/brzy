@@ -78,28 +78,9 @@ class SquerylDao[T <: KeyedEntity[Long]]()(implicit manifest: Manifest[T]) exten
     case _ => alternate
   }
 
+  def load(strId:String) = db.lookup(strId.toLong).get
 
-
-  protected[jpa] val StringClass = classOf[String]
-  protected[jpa] val JIntegerClass = classOf[java.lang.Integer]
-  protected[jpa] val JLongClass = classOf[java.lang.Long]
-  protected[jpa] val IntClass = classOf[Int]
-  protected[jpa] val LongClass = classOf[Long]
-
-
-  def load(strId:String) = {
-    log.trace("get: {}", strId)
-    val id = keyClass match {
-      case LongClass => strId.toLong
-      case JLongClass => java.lang.Long.valueOf(strId)
-      case JIntegerClass => java.lang.Integer.valueOf(strId)
-      case IntClass => strId.toInt
-      case _ => strId
-    }
-    db.lookup(id).get
-  }
-
-  def list():List[T] = from(db)(a => select(a)).toList
+  def list:List[T] = from(db)(a => select(a)).toList
 
   def list(size:Int, offset:Int):List[T] = from(db)(a => select(a)).toList
 

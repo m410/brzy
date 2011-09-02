@@ -85,7 +85,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
 
   def delete(p: Parameters) = {
     val entity = dao.load(p("id"))
-    entity.delete
+    entity.delete()
     val redirect = Redirect("/" + basePath )
     val flash = Flash(entityName + " was Deleted.", entityName + ".delete")
     (redirect, flash)

@@ -28,7 +28,7 @@ class UserController extends Controller("users"){
     Action("{id}/delete","form",delete _),
     Action("custom","custom",custom _))
 
-  def list() = "userList" -> User.list()
+  def list() = "userList" -> User.list
 
   def get(prms: Parameters) = "user" -> User.get(prms("id")(0).toLong)
 

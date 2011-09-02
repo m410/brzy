@@ -64,7 +64,7 @@ class CrudTest extends JUnitSuite {
 
     val session4 = ctx.createSession
     ctx.context.withValue(session4) {
-      val persons = Person.list()
+      val persons = Person.list
       assertNotNull(persons)
       assertEquals(1, persons.size)
     }
@@ -79,7 +79,7 @@ class CrudTest extends JUnitSuite {
   }
 
 
-  @Test def testMake = {
+  @Test def testMake() {
     val person = Person.construct(Map("id" -> "1", "firstName" -> "fred", "lastName" -> "bob"))
     assertNotNull(person)
     assertEquals(1, person.id)

@@ -25,7 +25,7 @@ class PersonController extends Controller("persons"){
     Action("{id}/edit","form",edit _),
     Action("{id}/update","form",update _))
 
-  def list =  "personsList"->Person.list()
+  def list =  "personsList"->Person.list
 
   def get(params:Parameters) =  "person"->Person.get(params("id").toLong)
 
