@@ -34,7 +34,7 @@ class BrzyFilter extends SFilter {
    *
    */
   def init(config: FilterConfig) {
-    log.info("Init Filter: {}", config)
+    log.debug("Init Filter: {}", config)
     webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
@@ -69,6 +69,6 @@ class BrzyFilter extends SFilter {
    *
    */
   def destroy() {
-    log.debug("Destroy")
+    log.trace("Destroy")
   }
 }
