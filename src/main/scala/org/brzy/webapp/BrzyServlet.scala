@@ -32,14 +32,7 @@ class BrzyServlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
 
   override def service(req: ServletRequest, res: ServletResponse) {
-    try {
-      internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
-    }
-    catch {
-      case t: Throwable =>
-        log.error(t.getMessage, t)
-        throw t
-    }
+    internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
   }
 
   private def internal(req: HttpServletRequest, res: HttpServletResponse) {

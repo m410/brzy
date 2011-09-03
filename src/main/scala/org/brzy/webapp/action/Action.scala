@@ -421,7 +421,7 @@ object Action {
       case s: Error =>
         log.debug("Error: {}", s)
         res.sendError(s.code, s.msg)
-      case x: Xml =>
+      case x: Xml[_] =>
         log.debug("xml: {}", x)
         res.setContentType(x.contentType)
         res.getWriter.write(x.parse)
@@ -435,15 +435,13 @@ object Action {
         res.setHeader("content-length", b.bytes.length.toString)
         val input = new ByteArrayInputStream(b.bytes)
         var inRead = 0
-        while ( {
-          inRead = input.read; inRead
-        } >= 0)
+        while ( { inRead = input.read; inRead} >= 0)
           res.getOutputStream.write(inRead)
       case j: Json[_] =>
         log.debug("json: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
-      case j: Jsonp =>
+      case j: Jsonp[_] =>
         log.debug("jsonp: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)

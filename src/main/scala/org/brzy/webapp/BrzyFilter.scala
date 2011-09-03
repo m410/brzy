@@ -13,6 +13,7 @@
  */
 package org.brzy.webapp
 
+import action.Action
 import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest, Filter => SFilter}
 import javax.servlet.http.HttpServletRequest
 
@@ -21,14 +22,13 @@ import org.slf4j.LoggerFactory
 import org.brzy.application.WebApp
 
 /**
- * Forwards only requests to brzy actions, lets all other pass through.
+ * Forwards only requests to brzy actions, lets all other requests pass through.
  *
  * @author Michael Fortin
  */
 class BrzyFilter extends SFilter {
   protected[webapp] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
-  protected[webapp] val pattern = """\.([\w\d]{1,4})$""".r
-  protected[webapp] var webapp:WebApp = _
+  protected[webapp] var webapp: WebApp = _
 
   /**
    *
@@ -38,31 +38,38 @@ class BrzyFilter extends SFilter {
     webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
+  def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
+    val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
+    log.trace("uri    : {}", uri)
+    val q = req.asInstanceOf[HttpServletRequest]
+    val actionPath = Action.parseActionPath(q.getRequestURI, q.getContextPath)
+
+    webapp.actions.find(_.path.isMatch(actionPath)) match {
+      case Some(action) => // for action, don't continue
+        doAction(req, uri, res)
+      case _ => // pass it on if the url ends with any extension
+        chain.doFilter(req, res)
+    }
+  }
+
   /**
    *
    */
-  def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
-    val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
-    log.trace("uri    : {}",uri)
-    
-    if(!(pattern findFirstMatchIn uri).isEmpty) { // pass it on if the url ends with any extension
-      chain.doFilter(req,res)
-    }
-    else { // assume it's an action and append .brzy
-      val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
-      val forward =
-        if(contextPath == "")
-          uri.substring(0,uri.length)
-        else
-          uri.substring(contextPath.length,uri.length)
+  protected[brzy] def doAction(req: ServletRequest, uri: String, res: ServletResponse) {
+    val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
 
-      // the aop interceptors are run here so that the view rendering is also within the transaction
-      log.trace("forward: {}",forward)
-      webapp.interceptor.doIn(() => {
-        req.getRequestDispatcher(forward + ".brzy").forward(req,res)
-        null
-      }) 
-    }
+    val forward =
+      if (contextPath == "")
+        uri.substring(0, uri.length)
+      else
+        uri.substring(contextPath.length, uri.length)
+
+    // the aop interceptors are run here so that the view rendering is also within the transaction
+    log.trace("intercept: {}", forward)
+    webapp.interceptor.doIn(() => {
+      req.getRequestDispatcher(forward + ".brzy").forward(req, res)
+      None // the interceptor expects a return value
+    })
   }
 
   /**

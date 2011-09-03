@@ -17,7 +17,6 @@ import collection.SortedSet
 import collection.mutable.{WeakHashMap, ListBuffer}
 
 import org.slf4j.LoggerFactory
-import javassist.util.proxy.ProxyObject
 import java.lang.reflect.Constructor
 import java.beans.ConstructorProperties
 
@@ -203,7 +202,7 @@ class WebApp(conf: WebAppConf) {
    * This is called by the servlet applicationContext listener to start the application.  This
    * in turn calls all the startup functions on all the modules.
    */
-  def startup = {
+  def startup() {
     viewProvider.startup
     persistenceProviders.foreach(_.startup)
     moduleProviders.foreach(_.startup)
@@ -219,7 +218,7 @@ class WebApp(conf: WebAppConf) {
    * This is called by the servlet applicationContext listener to close the application.
    * This in turn calles the shutdown methods of all the modules.
    */
-  def shutdown = {
+  def shutdown() {
     serviceMap.values.foreach(lifeCycleDestroy(_))
     viewProvider.shutdown
     persistenceProviders.foreach(_.shutdown)
@@ -227,12 +226,12 @@ class WebApp(conf: WebAppConf) {
     log.info("application shutdown")
   }
 
-  protected[application] def lifeCycleCreate(service: AnyRef) = {
+  protected[application] def lifeCycleCreate(service: AnyRef) {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].initializeService
   }
 
-  protected[application] def lifeCycleDestroy(service: AnyRef) = {
+  protected[application] def lifeCycleDestroy(service: AnyRef) {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].destroyService
   }
