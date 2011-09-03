@@ -22,12 +22,12 @@ import org.brzy.application.{WebAppConf, WebApp}
 
 class FilterTest extends JUnitSuite {
 
-  @Test def testFilterForward = {
+  @Test def testFilterForward() {
     val request = new MockHttpServletRequest(new MockServletContext,"GET", "/users/10") {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
           assertEquals("/users/10.brzy",path)
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {
 						assertNotNull(fwdReq)
 						assertNotNull(fwdRes)
 					}
@@ -37,7 +37,7 @@ class FilterTest extends JUnitSuite {
     val response = new MockHttpServletResponse()
 
     val chain = new FilterChain(){
-      def doFilter(p1: ServletRequest, p2: ServletResponse) = {
+      def doFilter(p1: ServletRequest, p2: ServletResponse) {
 //        fail("Should not be called")
       }
     }
@@ -47,12 +47,12 @@ class FilterTest extends JUnitSuite {
     filter.doFilter(request,response,chain)
   }
 
-  @Test def testFilterPass = {
-    val request = new MockHttpServletRequest(new MockServletContext,"GET", "/users/get.jsp") {
+  @Test def testFilterPass() {
+    val request = new MockHttpServletRequest(new MockServletContext,"GET", "/companies/2") {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
           fail("Should not be called")
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {
 						assertNotNull(fwdReq)
 						assertNotNull(fwdRes)
 					}
@@ -62,14 +62,18 @@ class FilterTest extends JUnitSuite {
     val response = new MockHttpServletResponse()
 
     val chain = new FilterChain(){
-      def doFilter(p1: ServletRequest, p2: ServletResponse) = {
+      def doFilter(p1: ServletRequest, p2: ServletResponse) {
         assertNotNull(p1)
         assertNotNull(p2)
       }
     }
 
+    val app = WebApp("test")
+    app.actions.foreach(a => println("### action: " + a))
+    assertTrue(!app.actions.isEmpty)
+
     val filter = new BrzyFilter
-    filter.webapp = WebApp("test")
+    filter.webapp = app
     filter.doFilter(request,response,chain)
   }
 }
