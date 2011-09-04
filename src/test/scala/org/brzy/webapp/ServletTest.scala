@@ -20,7 +20,7 @@ import org.springframework.mock.web.{MockServletConfig, MockServletContext, Mock
 import org.brzy.application.{WebAppConf, WebApp}
 
 class ServletTest extends JUnitSuite {
-  @Test def testPath = {
+  @Test def testPath() {
     val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
@@ -38,8 +38,7 @@ class ServletTest extends JUnitSuite {
     assertEquals(200,response.getStatus)
   }
 
-
-  @Test def testPathWithParam = {
+  @Test def testPathWithParam() {
     val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
