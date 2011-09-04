@@ -13,7 +13,7 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.{Args, Constraint, Action}
 
 /**
  * Base class for all controllers.
@@ -22,8 +22,10 @@ import org.brzy.webapp.action.Action
  */
 abstract class Controller(val basePath:String) extends Ordered[Controller] {
 
+  val constraints:List[Constraint] = List.empty[Constraint]
+
   /**
-   * Umm, don't remember.
+   * Umm, not sure why this is needed, but the CrudController won't compile without it.
    */
   implicit def selfReference = this
 
@@ -31,6 +33,10 @@ abstract class Controller(val basePath:String) extends Ordered[Controller] {
    * List of actions for this controller
    */
   def actions:List[Action]
+
+
+  def inaction() {}
+
 
   /**
    * Compares the basePath

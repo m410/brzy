@@ -78,25 +78,43 @@ trait Action extends Ordered[Action] {
   /**
    * For secure actions, this is called to test the users permission to execute it.
    */
-  def authorize(p: Principal) = {
+  def isAuthorized(p: Principal) = {
     if (p == null) {
       false
     }
     else {
-      constraints.find(_.isInstanceOf[Roles]) match {
-        case Some(r) =>
-          p.roles.allowed.find(role => r.asInstanceOf[Roles].allowed.contains(role)).isDefined
-        case _ =>
-          val secured = controller.asInstanceOf[Secured]
-          p.roles.allowed.find(role => secured.roles.allowed.contains(role)).isDefined
-      }
+      if(!constraints.isEmpty)
+        secureConstraints(constraints,p)
+      else
+        secureConstraints(controller.constraints,p)
     }
   }
+
+  def isConstrained(r:Request) = {
+    nonSecureConstraints(constraints,r) && nonSecureConstraints(controller.constraints,r)
+  }
+
+  protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
+    constraints.forall(constraint => constraint match {
+      case Secure(allowed) => request.isSecure == allowed
+      case c:ContentTypes => c.allowed.contains(request.getContentType)
+      case h:HttpMethods => h.allowed.contains(HttpMethod.withName(request.getMethod))
+      case _ => true
+    })
+  }
+
+  protected[this] def secureConstraints(constraints:List[Constraint], p:Principal) = {
+    constraints.forall(constraint => constraint match {
+      case r:Roles => r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+      case _ => true
+    })
+  }
+
 
   /**
    * Determines if this action requires authentication or not.
    */
-  def isSecure = controller.isInstanceOf[Secured]
+  def isSecured = controller.isInstanceOf[Secured]
 
   /**
    * the default view to display if needed.
@@ -171,39 +189,39 @@ object Action {
         controller,
         constraints.toList)
     }
-    else if (action.isInstanceOf[Function2[_, _, _]]) {
+    else if (action.isInstanceOf[(_, _) => _]) {
       val t3 = m.typeArguments(2)
       val t2 = m.typeArguments(1)
       val t1 = m.typeArguments(0)
-      new Action2[t1.type, t2.type, t3.type, Function2[t1.type, t2.type, t3.type]](
+      new Action2[t1.type, t2.type, t3.type, (t1.type, t2.type) => t3.type](
         path,
         view,
-        action.asInstanceOf[Function2[t1.type, t2.type, t3.type]],
+        action.asInstanceOf[(t1.type, t2.type) => t3.type],
         controller,
         constraints.toList)
     }
-    else if (action.isInstanceOf[Function3[_, _, _, _]]) {
+    else if (action.isInstanceOf[(_, _, _) => _]) {
       val t4 = m.typeArguments(3)
       val t3 = m.typeArguments(2)
       val t2 = m.typeArguments(1)
       val t1 = m.typeArguments(0)
-      new Action3[t1.type, t2.type, t3.type, t4.type, Function3[t1.type, t2.type, t3.type, t4.type]](
+      new Action3[t1.type, t2.type, t3.type, t4.type, (t1.type, t2.type, t3.type) => t4.type](
         path,
         view,
-        action.asInstanceOf[Function3[t1.type, t2.type, t3.type, t4.type]],
+        action.asInstanceOf[(t1.type, t2.type, t3.type) => t4.type],
         controller,
         constraints.toList)
     }
-    else if (action.isInstanceOf[Function4[_, _, _, _, _]]) {
+    else if (action.isInstanceOf[(_, _, _, _) => _]) {
       val t5 = m.typeArguments(4)
       val t4 = m.typeArguments(3)
       val t3 = m.typeArguments(2)
       val t2 = m.typeArguments(1)
       val t1 = m.typeArguments(0)
-      new Action4[t1.type, t2.type, t3.type, t4.type, t5.type, Function4[t1.type, t2.type, t3.type, t4.type, t5.type]](
+      new Action4[t1.type, t2.type, t3.type, t4.type, t5.type, (t1.type, t2.type, t3.type, t4.type) => t5.type](
         path,
         view,
-        action.asInstanceOf[Function4[t1.type, t2.type, t3.type, t4.type, t5.type]],
+        action.asInstanceOf[(t1.type, t2.type, t3.type, t4.type) => t5.type],
         controller,
         constraints.toList)
     }
