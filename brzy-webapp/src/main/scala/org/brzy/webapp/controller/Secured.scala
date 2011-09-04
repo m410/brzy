@@ -13,17 +13,17 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.Roles
+import org.brzy.webapp.action.{Constraint, Roles}
 
 /**
  * Marks a controller as a secure controller using role based authentication.
  * 
  * @author Michael Fortin
  */
-trait Secured extends Intercepted {
+trait Secured extends Intercepted { self:Controller =>
 
   /**
    * Sets the roles default allowed for the controller.
    */
-  val roles = Roles("ADMIN","USER")
+  override val constraints: List[Constraint] = List(Roles("ADMIN","USER"))
 }

@@ -47,13 +47,13 @@ class BrzyServlet extends HttpServlet {
         val args = buildArgs(action, req)
 
         val result =
-          if (action.isSecure) {
+          if (action.isSecured) {
             if (req.getSession(false) != null) {
               val session = req.getSession
               val principal = session.getAttribute("brzy_principal").asInstanceOf[Principal]
               log.debug("principal: {}", principal)
 
-              if (action.authorize(principal))
+              if (action.isAuthorized(principal))
                 action.execute(args, Option(principal))
               else
                 toLogin(req)
@@ -63,13 +63,12 @@ class BrzyServlet extends HttpServlet {
             }
           }
           else {
-            val principalOption = Option(
+            action.execute(args, Option(
               if (req.getSession(false) != null)
                 req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
               else
                 null
-            )
-            action.execute(args, principalOption)
+            ))
           }
 
         handleResults(action, result, req, res)

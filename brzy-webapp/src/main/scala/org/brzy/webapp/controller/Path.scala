@@ -88,11 +88,11 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
 
   protected[this] def toPattern(a:String) = {
     val minusCurlies = a.substring(1,a.length() -1)
-    val p = if (minusCurlies.contains(":"))
+
+    if (minusCurlies.contains(":"))
       minusCurlies.substring(minusCurlies.indexOf(":")+1,minusCurlies.length()).r
     else
       "(.*?)".r
-    p
   }
 
   def extractParameterValues(contextPath: String) = {
@@ -103,14 +103,6 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
           buffer += matcher.group(i)        
       case _ =>
     }
-
-//
-//    val matcher = Pattern.compile(pathPattern).matcher(contextPath)
-//
-//    if (matcher.find)
-//      for (i <- 1 to matcher.groupCount)
-//        buffer += matcher.group(i)
-
     buffer.toArray
   }
 
@@ -119,10 +111,10 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
    */
   val parameterNames = {
     val buffer = Buffer[String]()
-    val matcher = Pattern.compile("""\{(.*?)\}""").matcher(path)
+    val curlyMatcher = Pattern.compile("""\{(.*?)\}""").matcher(path)
 
-    while (matcher.find) {
-      val id = matcher.group(1)
+    while (curlyMatcher.find) {
+      val id = curlyMatcher.group(1)
 
       if (id.contains(":"))
         buffer += id.substring(0,id.indexOf(":"))
