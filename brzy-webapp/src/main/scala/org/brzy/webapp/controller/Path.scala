@@ -23,18 +23,18 @@ import org.slf4j.LoggerFactory
  *
  * @author Michael Fortin
  */
-case class Path(base: String, sub: String) extends Ordered[Path] {
+case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
 
   protected[controller] val log = LoggerFactory.getLogger(classOf[Path])
 
   protected[controller] val path = {
     val combined =
-      if(sub.equals(""))
-        base
-      else if (!sub.startsWith("/"))
-        base + "/" + sub
+      if(actionBase.equals(""))
+        ctlrBase
+      else if (!actionBase.startsWith("/"))
+        ctlrBase + "/" + actionBase
       else
-        base + sub
+        ctlrBase + actionBase
 
     val preSlash =
       if (!combined.startsWith("/"))
@@ -45,47 +45,90 @@ case class Path(base: String, sub: String) extends Ordered[Path] {
     preSlash.replaceAll("//", "/")
   }
 
-  protected[controller] val strPattern = {
-    // TODO strip out curlies, replace with embedded patter if it has a colon, otherwise use below
-    "^" + path.replaceAll("""\{.*?\}""", """(.*?)""") + "$"
-  }
+  /**
+   *
+   */
+  protected[controller] val patternTokens = path.split("""\{|\}""").map(it=>{
+      if(!it.contains("/") && it.contains(":"))
+        "(" + it.split(":")(1) + ")"
+      else if(!it.contains("/"))
+        """(.*?)"""
+      else
+        it
+    })
 
-  protected[controller] val pattern = strPattern.r
+  protected[controller] val pathTokens = path.replaceAll("//", "/").split("/")
+
+  /**
+   * strip out curlies, replace with embedded patter if it has a colon, otherwise use below
+   */
+  protected[controller] val pathPattern = "^" + patternTokens.foldLeft("")((a,b)=>a+b) + "$"
+
+  protected[controller] val pathMatcher = pathPattern.r
 
   def isMatch(contextPath: String) = {
-    val actionTokens: Array[String] = path.split("/")
     val urlTokens: Array[String] = contextPath.replaceAll("//", "/").split("/")
 
-    if (actionTokens.size == urlTokens.size) {
-      var map = Map[String, String]()
-
-      for (x <- 0 to urlTokens.size - 1)
-        map += urlTokens(x) -> actionTokens(x)
-
-      map.forall((nvp) => nvp._1 == nvp._2 || nvp._2.startsWith("{"))
+    if (pathTokens.size == urlTokens.size) {
+      val tokens = pathTokens.zip(urlTokens)
+      tokens.forall({case (a,b) =>
+        if (isPattern(a))
+          toPattern(a).findFirstIn(b).isDefined
+        else if (a == b)
+          true
+        else
+          false
+      })
     }
     else
       false
   }
 
+  protected[this] def isPattern(a:String) = a.endsWith("}") && a.startsWith("{")
+
+  protected[this] def toPattern(a:String) = {
+    val minusCurlies = a.substring(1,a.length() -1)
+    val p = if (minusCurlies.contains(":"))
+      minusCurlies.substring(minusCurlies.indexOf(":")+1,minusCurlies.length()).r
+    else
+      "(.*?)".r
+    p
+  }
+
   def extractParameterValues(contextPath: String) = {
     val buffer = Buffer[String]()
-    val matcher = Pattern.compile(strPattern).matcher(contextPath)
+    pathMatcher.findFirstMatchIn(contextPath) match {
+      case Some(matcher) =>
+        for (i <- 1 to matcher.groupCount)
+          buffer += matcher.group(i)        
+      case _ =>
+    }
 
-    if (matcher.find)
-      for (i <- 1 to matcher.groupCount)
-        buffer += matcher.group(i)
+//
+//    val matcher = Pattern.compile(pathPattern).matcher(contextPath)
+//
+//    if (matcher.find)
+//      for (i <- 1 to matcher.groupCount)
+//        buffer += matcher.group(i)
 
     buffer.toArray
   }
 
+  /**
+   * Pull out named parameters, up to an optional colon
+   */
   val parameterNames = {
     val buffer = Buffer[String]()
     val matcher = Pattern.compile("""\{(.*?)\}""").matcher(path)
 
-    // todo Pull out named parameters, up to an optional colon
-    while (matcher.find)
-      buffer += matcher.group(1)
+    while (matcher.find) {
+      val id = matcher.group(1)
+
+      if (id.contains(":"))
+        buffer += id.substring(0,id.indexOf(":"))
+      else
+        buffer += id
+    }
 
     buffer.toArray
   }
