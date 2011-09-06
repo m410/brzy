@@ -38,7 +38,7 @@ case class HttpMethods(allowed:HttpMethod*) extends Constraint
  * This constraint will define wiether the action must be called while in a secure request over an
  * SSL socket.
  */
-case class Secure(secure:Boolean = false) extends Constraint
+case class Secure(secure:Boolean = true) extends Constraint
 
 /**
  * Defines the allowed Content type that this action accepts.  For example a content type of

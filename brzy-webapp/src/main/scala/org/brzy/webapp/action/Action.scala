@@ -24,6 +24,7 @@ import collection.mutable.ListBuffer
 
 import java.io.ByteArrayInputStream
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie => JCookie}
+import javax.management.remote.rmi._RMIConnection_Stub
 
 /**
  * An action is an entry point into the application.  A controller will have one or more actions.
@@ -96,17 +97,24 @@ trait Action extends Ordered[Action] {
 
   protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
     constraints.forall(constraint => constraint match {
-      case Secure(allowed) => request.isSecure == allowed
-      case c:ContentTypes => c.allowed.contains(request.getContentType)
-      case h:HttpMethods => h.allowed.contains(HttpMethod.withName(request.getMethod))
-      case _ => true
+      case Secure(allowed) =>
+        request.isSecure == allowed
+      case c:ContentTypes =>
+        !c.allowed.contains(request.getContentType)
+      case h:HttpMethods =>
+        val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
+        !h.allowed.find(_ == methodName).isDefined
+      case _ =>
+        true
     })
   }
 
   protected[this] def secureConstraints(constraints:List[Constraint], p:Principal) = {
     constraints.forall(constraint => constraint match {
-      case r:Roles => r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
-      case _ => true
+      case r:Roles =>
+        r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+      case _ =>
+        true
     })
   }
 

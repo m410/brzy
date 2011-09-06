@@ -1,3 +1,5 @@
+package org.brzy.webapp.action
+
 /*
  * Copyright 2010 Michael Fortin <mike@brzy.org>
  *
@@ -11,12 +13,8 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action
-
 import org.junit.Assert._
 import org.junit.Test
-import collection.JavaConversions._
-import collection.immutable.HashMap
 import org.scalatest.junit.JUnitSuite
 
 
@@ -30,7 +28,7 @@ class ParametersTest extends JUnitSuite {
   val jMap = Map("id"->Array("12321"))
   val parameters = new Parameters(jMap ++ map.toMap)
 
-  @Test def testMixedParams ={
+  @Test def testMixedParams() {
     assertNotNull(parameters.get("id"))
     assertNotNull(parameters.get("lastName"))
     assertNotNull(parameters.get("firstName"))
@@ -52,26 +50,26 @@ class ParametersTest extends JUnitSuite {
     assertEquals(2,parameters.array("other").get.length)
   }
 
-  @Test def testForeach = {
+  @Test def testForeach() {
     var count = 0
     parameters.map.foreach(x => count = count+1)
     assertEquals(4,count)
   }
 
-  @Test def testExists = {
+  @Test def testExists() {
     assertTrue(parameters.map.exists(p => p._1 == "id"))
   }
 
-  @Test def testAddString = {
+  @Test def testAddString() {
     val map = Map("test"->Array("value"))
     val parameters = new Parameters(map)
     assertNotNull(parameters)
     assertEquals(1,parameters.map.size)
-    assertEquals("test",parameters.map.keysIterator.next)
+    assertEquals("test",parameters.map.keysIterator.next())
     assertEquals("value",parameters("test"))
   }
 
-  @Test def testIterate = {
+  @Test def testIterate() {
     var called = false
     parameters.map.foreach(f => {
       if(f._1 == "id") {
