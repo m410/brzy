@@ -19,16 +19,16 @@ class SecuredActionTest extends JUnitSuite {
 	
   @Test def testNoPermission() {
 		val action = controller.actions(0) 
-		assertTrue(action.isAuthorized(Principal("me",Roles("USER"))))
+		assertTrue(action.isAuthorized(Option(Principal("me",Roles("USER")))))
 	}	
 
   @Test def testNoRolePermission() {
 		val action = controller.actions(1)
-		assertFalse(action.isAuthorized(Principal("me",Roles("USER"))))
+		assertFalse(action.isAuthorized(Option(Principal("me",Roles("USER")))))
 	}
 
 	@Test def testHasPermission() {
 		val action = controller.actions(0) 
-		assertTrue(action.isAuthorized(Principal("me",Roles("ADMIN"))))
+		assertTrue(action.isAuthorized(Option(Principal("me",Roles("ADMIN")))))
 	}	
 }
