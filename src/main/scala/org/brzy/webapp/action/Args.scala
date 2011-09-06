@@ -132,6 +132,17 @@ object Headers {
 @serializable
 case class Principal(name: String, roles: Roles)
 
+object Principal {
+  def get(request: HttpServletRequest) = {
+    Option(
+      if (request.getSession(false) != null)
+        request.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
+      else
+        null
+    )
+  }
+}
+
 /**
  * The current session.  If a session does not exist, this will not create one, it will just return
  * an empty map.

@@ -79,17 +79,15 @@ trait Action extends Ordered[Action] {
   /**
    * For secure actions, this is called to test the users permission to execute it.
    */
-  def isAuthorized(p: Principal) = {
-    if (p == null) {
-      false
-    }
-    else {
-      if(!constraints.isEmpty)
-        secureConstraints(constraints,p)
+  def isAuthorized(p: Option[Principal]) = p match {
+    case Some(principal) =>
+      if (constraints.find(_.isInstanceOf[Roles]).isDefined)
+        secureConstraints(constraints, principal)
       else
-        secureConstraints(controller.constraints,p)
-    }
+        secureConstraints(controller.constraints, principal)
+    case _ => false
   }
+
 
   def isConstrained(r:Request) = {
     nonSecureConstraints(constraints,r) && nonSecureConstraints(controller.constraints,r)
