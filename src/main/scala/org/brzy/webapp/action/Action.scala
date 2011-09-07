@@ -152,10 +152,17 @@ trait Action extends Ordered[Action] {
 
   override def compare(that: Action): Int = path.compare(that.path)
 
-  override def toString = new StringBuilder().
-          append("Action('").append(actionPath).
-          append("', ").append(controller.getClass.getSimpleName).
-          append("[").append(actionPath).append("])").toString()
+  override def toString = {
+    val buffer = new StringBuilder().
+          append("Action[").append(controller.basePath).
+          append(", ").append(actionPath)
+
+    if (!constraints.isEmpty)
+      buffer.append(", ").append(constraints)
+    
+    buffer.append("]")
+    buffer.toString()
+  }
 }
 
 /**

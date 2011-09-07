@@ -21,5 +21,8 @@ import org.brzy.webapp.action.Principal
  * @author Michael Fortin
  */
 trait Intercepted {
-	def intercept(action:()=>AnyRef, actionArgs:List[AnyRef],principal:Option[Principal] = None):AnyRef = action()
+  def intercept(
+          action: () => AnyRef,
+          actionArgs: List[AnyRef],
+          principal: Option[Principal] = None): AnyRef = action()
 }

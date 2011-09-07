@@ -21,64 +21,71 @@ import action.Principal
 
 import org.slf4j.LoggerFactory
 import javax.servlet.http._
-import javax.servlet.{ServletResponse, ServletRequest}
+import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
 
 /**
- * The basic servlet implementation.
+ * Http servlet that finds and call action requested. If the session is expired,
+ * then the login page is displayed.  This also checks the constraints on the
+ * action and checks them before calling the action.
  *
  * @author Michael Fortin
  */
 class BrzyServlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
+  protected[webapp] var webapp: WebApp = _
+
+  override def init(config: ServletConfig) {
+    webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+  }
 
   override def service(req: ServletRequest, res: ServletResponse) {
     internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
   }
 
-  private def internal(req: HttpServletRequest, res: HttpServletResponse) {
-    val app = getServletContext.getAttribute("application").asInstanceOf[WebApp]
+  protected[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
-    app.actions.find(_.path.isMatch(actionPath)) match {
+    webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
         log.debug("{} >>> {}", req.getRequestURI, action)
         val args = buildArgs(action, req)
-
-        val result =
-          if (action.isSecured) {
-            if (req.getSession(false) != null) {
-              val session = req.getSession
-              val principal = session.getAttribute("brzy_principal").asInstanceOf[Principal]
-              log.debug("principal: {}", principal)
-
-              if (action.isAuthorized(principal))
-                action.execute(args, Option(principal))
-              else
-                toLogin(req)
-            }
-            else{
-              toLogin(req)
-            }
-          }
-          else {
-            action.execute(args, Option(
-              if (req.getSession(false) != null)
-                req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
-              else
-                null
-            ))
-          }
-
+        // wrap in constraint check
+        val result = doAction(req, action, args)
         handleResults(action, result, req, res)
       case _ =>
         res.sendError(404)
     }
   }
 
+  protected[this] def doAction(req: HttpServletRequest, action: Action, args: List[AnyRef]): AnyRef = {
+    if (action.isSecured) {
+      principal(req) match {
+        case Some(p) =>
+          if (action.isAuthorized(p))
+            action.execute(args, Option(p))
+          else
+            toLogin(req)
+        case _ =>
+          toLogin(req)
+      }
+    }
+    else {
+      action.execute(args, principal(req))
+    }
+  }
 
-  def toLogin(req: HttpServletRequest): (Redirect, Flash, SessionAdd) = {
+  protected[this] def principal(req: HttpServletRequest) = {
+    Option(
+      if (req.getSession(false) != null)
+        req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
+      else
+        null
+    )
+  }
+
+  protected[this] def toLogin(req: HttpServletRequest): (Redirect, Flash, SessionAdd) = {
     val flash = Flash("session.end", "Session ended, log in again")
     val sessionParam = SessionAdd("last_view" -> req.getRequestURI)
     (Redirect("/auth"), flash, sessionParam)
