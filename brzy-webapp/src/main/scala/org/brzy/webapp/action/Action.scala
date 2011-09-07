@@ -24,6 +24,7 @@ import collection.mutable.ListBuffer
 
 import java.io.ByteArrayInputStream
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie => JCookie}
+import javax.management.remote.rmi._RMIConnection_Stub
 
 /**
  * An action is an entry point into the application.  A controller will have one or more actions.
@@ -78,35 +79,46 @@ trait Action extends Ordered[Action] {
   /**
    * For secure actions, this is called to test the users permission to execute it.
    */
-  def isAuthorized(p: Principal) = {
-    if (p == null) {
-      false
-    }
-    else {
-      if(!constraints.isEmpty)
-        secureConstraints(constraints,p)
+  def isAuthorized(p: Option[Principal]) = p match {
+    case Some(principal) =>
+      if (constraints.find(_.isInstanceOf[Roles]).isDefined)
+        secureConstraints(constraints, principal)
       else
-        secureConstraints(controller.constraints,p)
-    }
+        secureConstraints(controller.constraints, principal)
+    case _ => false
   }
 
+
   def isConstrained(r:Request) = {
-    nonSecureConstraints(constraints,r) && nonSecureConstraints(controller.constraints,r)
+    val y = nonSecureConstraints(constraints,r)
+    val x = nonSecureConstraints(controller.constraints,r)
+    y || x
   }
 
   protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
-    constraints.forall(constraint => constraint match {
-      case Secure(allowed) => request.isSecure == allowed
-      case c:ContentTypes => c.allowed.contains(request.getContentType)
-      case h:HttpMethods => h.allowed.contains(HttpMethod.withName(request.getMethod))
-      case _ => true
+    println("constraints="+constraints)
+    !constraints.forall(constraint => constraint match {
+      case Secure(allowed) =>
+        request.isSecure == allowed
+      case c:ContentTypes =>
+        c.allowed.contains(request.getContentType)
+      case h:HttpMethods =>
+        val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
+        h.allowed.find(_ == methodName).isDefined
+      case r:Roles =>
+        true
+      case _ =>
+        false
     })
   }
 
   protected[this] def secureConstraints(constraints:List[Constraint], p:Principal) = {
+    println("constraints="+constraints)
     constraints.forall(constraint => constraint match {
-      case r:Roles => r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
-      case _ => true
+      case r:Roles =>
+        r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+      case _ =>
+        true
     })
   }
 

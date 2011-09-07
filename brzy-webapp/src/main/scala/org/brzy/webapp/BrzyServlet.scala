@@ -42,7 +42,7 @@ class BrzyServlet extends HttpServlet {
     internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
   }
 
-  protected[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
+  protected[webapp]  def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
@@ -51,41 +51,39 @@ class BrzyServlet extends HttpServlet {
       case Some(action) =>
         log.debug("{} >>> {}", req.getRequestURI, action)
         val args = buildArgs(action, req)
-        // wrap in constraint check
-        val result = doAction(req, action, args)
-        handleResults(action, result, req, res)
+        val principalOption = Principal.get(req)
+
+        if (!action.isConstrained(req)) {
+          val result = callActionOrLogin(req, action, principalOption, args)
+          handleResults(action, result, req, res)
+        }
+        else {
+          res.sendError(500)
+        }
       case _ =>
         res.sendError(404)
     }
   }
 
-  protected[this] def doAction(req: HttpServletRequest, action: Action, args: List[AnyRef]): AnyRef = {
+  protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principalOption: Option[Principal], args: List[AnyRef]): AnyRef = {
     if (action.isSecured) {
-      principal(req) match {
-        case Some(p) =>
-          if (action.isAuthorized(p))
-            action.execute(args, Option(p))
-          else
-            toLogin(req)
-        case _ =>
+      if (req.getSession(false) != null) {
+
+        if (action.isAuthorized(principalOption))
+          action.execute(args, principalOption)
+        else
           toLogin(req)
+      }
+      else {
+        toLogin(req)
       }
     }
     else {
-      action.execute(args, principal(req))
+      action.execute(args, principalOption)
     }
   }
 
-  protected[this] def principal(req: HttpServletRequest) = {
-    Option(
-      if (req.getSession(false) != null)
-        req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
-      else
-        null
-    )
-  }
-
-  protected[this] def toLogin(req: HttpServletRequest): (Redirect, Flash, SessionAdd) = {
+  protected[webapp] def toLogin(req: HttpServletRequest): (Redirect, Flash, SessionAdd) = {
     val flash = Flash("session.end", "Session ended, log in again")
     val sessionParam = SessionAdd("last_view" -> req.getRequestURI)
     (Redirect("/auth"), flash, sessionParam)

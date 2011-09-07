@@ -20,10 +20,4 @@ import org.brzy.webapp.action.{Constraint, Roles}
  * 
  * @author Michael Fortin
  */
-trait Secured extends Intercepted { self:Controller =>
-
-  /**
-   * Sets the roles default allowed for the controller.
-   */
-  override val constraints: List[Constraint] = List(Roles("ADMIN","USER"))
-}
+trait Secured extends Intercepted { self:Controller => }
