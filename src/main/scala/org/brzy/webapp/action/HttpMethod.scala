@@ -7,5 +7,5 @@ package org.brzy.webapp.action
  */
 object HttpMethod extends Enumeration {
  type HttpMethod = Value
- val Post, Get, Put, Options, Head, Delete, Trace, Connect = Value
+ val POST, GET, PUT, OPTIONS, HEAD, DELETE, TRACE, CONNECT = Value
 }
