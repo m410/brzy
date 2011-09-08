@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.brzy</groupId>
-  <artifactId>brzywebapp</artifactId>
-  <version>0.8</version>
+  <groupId>org.brzy.webapp</groupId>
+  <artifactId>pom</artifactId>
+  <version>0.9</version>
   <packaging>pom</packaging>
   <name>Brzy</name>
-  <properties>	
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
-    <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.6</fab-conf-version>
-    <fab-util-version>0.6</fab-util-version>
-    <brzy-webapp-version>0.12-SNAPSHOT</brzy-webapp-version>
-    <brzy-scalate-version>0.9</brzy-scalate-version>
-    <brzy-validator-version>0.1</brzy-validator-version>
-    <logback-version>0.9.27</logback-version>
-  </properties>
   <modules>
   	<module>brzy-webapp</module>
 	  <module>brzy-calista</module>
@@ -25,7 +15,6 @@
     <module>brzy-jpa</module>
     <module>brzy-scalate</module>
     <module>brzy-scheduler</module>
-    <!--<module>brzy-security</module>-->
     <module>brzy-squeryl</module>
     <module>brzy-tomcat</module>
     <module>brzy-spring</module>

@@ -21,7 +21,7 @@ import org.brzy.application.WebAppConf
 
 class ModuleFactoryTest extends JUnitSuite {
 
-  @Test def testAssemble = {
+  @Test def testAssemble() {
     val bootConfig = WebAppConf("test")
     assertNotNull(bootConfig.views)
   }
