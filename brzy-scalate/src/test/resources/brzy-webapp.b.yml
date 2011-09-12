@@ -11,7 +11,7 @@ application:
   description: Some Description
 views:
   name: brzy-scalate
-  org: org.brzy
+  org: org.brzy.mod
   version: "0.12"
   config_class: org.brzy.module.ScalateModuleConfig
   file_extension: ".ssp"

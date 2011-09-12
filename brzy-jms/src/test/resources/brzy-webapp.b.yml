@@ -11,7 +11,7 @@ application:
 
 modules:
   - name: brzy-jms
-    org: org.brzy
+    org: org.brzy.mod
     version: "0.3"
     connection_factory_class: org.brzy.mod.jms
     connection_url: "tcp://someurl"

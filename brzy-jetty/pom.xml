@@ -87,7 +87,7 @@
  
 
     <dependency>
-      <groupId>org.brzy</groupId>
+      <groupId>org.brzy.webapp</groupId>
       <artifactId>brzy-webapp</artifactId>
       <version>${brzy-webapp-version}</version>
       <scope>test</scope>

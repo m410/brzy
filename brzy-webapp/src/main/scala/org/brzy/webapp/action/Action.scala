@@ -96,7 +96,6 @@ trait Action extends Ordered[Action] {
   }
 
   protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
-    println("constraints="+constraints)
     !constraints.forall(constraint => constraint match {
       case Secure(allowed) =>
         request.isSecure == allowed
@@ -113,7 +112,6 @@ trait Action extends Ordered[Action] {
   }
 
   protected[this] def secureConstraints(constraints:List[Constraint], p:Principal) = {
-    println("constraints="+constraints)
     constraints.forall(constraint => constraint match {
       case r:Roles =>
         r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
@@ -370,27 +368,27 @@ object Action {
    * in the HttpSession.
    */
   def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response) {
-    log.debug("results: {}", actionResult)
+    log.trace("results: {}", actionResult)
 
     def matchData(result: Any) {
       result match {
         case (s: String, m: AnyRef) =>
-          log.debug("tuple: ({},{})", s, m)
+          log.trace("tuple: ({},{})", s, m)
           handleData(Model(s -> m), req, res)
         case d: Data =>
-          log.debug("Data: {}", d)
+          log.trace("Data: {}", d)
           handleData(d, req, res)
         case tup: (_, _) =>
-          log.debug("tuple: {}", tup)
+          log.trace("tuple: {}", tup)
           tup.productIterator.foreach(s => matchData(s))
         case r: (_, _, _) =>
-          log.debug("tuple: {}", r)
+          log.trace("tuple: {}", r)
           r.productIterator.foreach(s => matchData(s))
         case r: (_, _, _, _) =>
-          log.debug("tuple: {}", r)
+          log.trace("tuple: {}", r)
           r.productIterator.foreach(s => matchData(s))
         case r: (_, _, _, _, _) =>
-          log.debug("tuple: {}", r)
+          log.trace("tuple: {}", r)
           r.productIterator.foreach(s => matchData(s))
         case _ => //ignore and Direction in the list
       }
@@ -402,11 +400,11 @@ object Action {
     def matchDirection(directionResult: Any) {
       directionResult match {
         case d: Direction =>
-          log.debug("Direction: {}", d)
+          log.trace("Direction: {}", d)
           handleDirection(action, d, req, res)
         case d: Data => // ignore it
         case (s: String, m: AnyRef) =>
-          log.debug("tuple default: {}", action.defaultView)
+          log.trace("tuple default: {}", action.defaultView)
           handleDirection(action, View(action.defaultView), req, res)
         case tup: (_, _) =>
           tup.productIterator.foreach(s => matchDirection(s))
@@ -417,7 +415,7 @@ object Action {
         case r: (_, _, _, _, _) =>
           r.productIterator.foreach(s => matchDirection(s))
         case _ =>
-          log.debug("default: {}", action.defaultView)
+          log.trace("default: {}", action.defaultView)
           handleDirection(action, View(action.defaultView), req, res)
       }
     }
@@ -438,15 +436,15 @@ object Action {
     direct match {
       case view: View =>
         val target: String = view.path + ".ssp" //action.viewType
-        log.debug("view: {}", target)
+        log.trace("view: {}", target)
         // TODO Should be set by the view and overridable by the controller
 	res.setHeader("Content-Type","text/html; charset=utf-8")
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
-        log.debug("forward: {}", f)
+        log.trace("forward: {}", f)
         req.getRequestDispatcher(f.path + ".brzy").forward(req, res)
       case s: Redirect =>
-        log.debug("redirect: {}", s)
+        log.trace("redirect: {}", s)
         val target: String =
           if (s.path.startsWith("http"))
             s.path
@@ -456,18 +454,18 @@ object Action {
             req.getContextPath + s.path
         res.sendRedirect(target)
       case s: Error =>
-        log.debug("Error: {}", s)
+        log.trace("Error: {}", s)
         res.sendError(s.code, s.msg)
       case x: Xml[_] =>
-        log.debug("xml: {}", x)
+        log.trace("xml: {}", x)
         res.setContentType(x.contentType)
         res.getWriter.write(x.parse)
       case t: Text =>
-        log.debug("text: {}", t)
+        log.trace("text: {}", t)
         res.setContentType(t.contentType)
         res.getWriter.write(t.parse)
       case b: Binary =>
-        log.debug("bytes: {}", b)
+        log.trace("bytes: {}", b)
         res.setContentType(b.contentType)
         res.setHeader("content-length", b.bytes.length.toString)
         val input = new ByteArrayInputStream(b.bytes)
@@ -475,11 +473,11 @@ object Action {
         while ( { inRead = input.read; inRead} >= 0)
           res.getOutputStream.write(inRead)
       case j: Json[_] =>
-        log.debug("json: {}", j)
+        log.trace("json: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
       case j: Jsonp[_] =>
-        log.debug("jsonp: {}", j)
+        log.trace("jsonp: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
       case _ => error("Unknown Driection: %s".format(direct))
@@ -492,16 +490,16 @@ object Action {
   protected[action] def handleData(data: Data, req: Request, res: Response) =
     data match {
       case model: Model =>
-        log.debug("model: {}", model)
+        log.trace("model: {}", model)
         model.attrs.foreach(s => req.setAttribute(s._1, s._2))
       case s: SessionAdd =>
-        log.debug("sessionAdd: {}", s)
+        log.trace("sessionAdd: {}", s)
         s.attrs.foreach(nvp => req.getSession.setAttribute(nvp._1, nvp._2))
       case s: Flash =>
-        log.debug("flash: {}", s)
+        log.trace("flash: {}", s)
         new FlashMessage(s.code, req.getSession)
       case s: CookieAdd =>
-        log.debug("cookieAdd: {}", s)
+        log.trace("cookieAdd: {}", s)
         val cookie = new JCookie(s.name, s.value)
         cookie.setPath(s.path match {
           case Some(p) => p
@@ -514,12 +512,12 @@ object Action {
         })
         res.addCookie(cookie)
       case h: ResponseHeaders =>
-        log.debug("response headers: {}", h)
+        log.trace("response headers: {}", h)
         h.headers.foreach(r => {
           res.setHeader(r._1, r._2)
         })
       case s: SessionRemove =>
-        log.debug("sessionRemove: {}", s)
+        log.trace("sessionRemove: {}", s)
         req.getSession.removeAttribute(s.attr)
       case _ => error("Unknown Data: %s".format(data))
     }
@@ -532,8 +530,8 @@ object Action {
     val path = parseActionPath(req.getRequestURI, req.getContextPath)
     val args = action.argTypes
     val list = new ListBuffer[AnyRef]()
-    log.debug("action:", args)
-    log.debug("arg types: {}, path: {}", args, path)
+    log.trace("action:", args)
+    log.trace("arg types: {}, path: {}", args, path)
 
     args.toList.foreach(arg => arg match {
       case ParametersClass =>
@@ -562,7 +560,7 @@ object Action {
       case _ =>
         error("unknown action argument type: " + arg)
     })
-    log.debug("args: {}", list)
+    log.trace("args: {}", list)
     list.toList
   }
 

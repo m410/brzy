@@ -2,7 +2,7 @@
 #
 mod_type: runtime
 name: brzy-jms
-org: org.brzy
+org: org.brzy.mod
 version: "${pom.version}"
 config_class: org.brzy.mod.jms.JmsModConfig
 provider_class: org.brzy.mod.jms.JmsModProvider
@@ -14,4 +14,4 @@ provider_class: org.brzy.mod.jms.JmsModProvider
 #scan_package: 
 
 dependencies:
-  - {conf: compile, org: org.brzy, name: brzy-jms, rev: "${pom.version}", transitive: false}
+  - {conf: compile, org: org.brzy.mod, name: brzy-jms, rev: "${pom.version}", transitive: false}

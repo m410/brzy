@@ -13,4 +13,4 @@ dependencies:
   - {conf: compile, org: org.springframework, name: spring-core, rev: "3.0.3.RELEASE"}
   - {conf: compile, org: org.springframework, name: spring-context, rev: "3.0.3.RELEASE"}
   - {conf: compile, org: org.springframework, name: spring-beans, rev: "3.0.3.RELEASE"}
-  - {conf: compile, org: org.brzy, name: brzy-spring, rev: "${pom.version}", transitive: false}
+  - {conf: compile, org: org.brzy.mod, name: brzy-spring, rev: "${pom.version}", transitive: false}

@@ -9,7 +9,7 @@ application:
   
 persistence:
   - name: brzy-jpa
-    org: org.brzy
+    org: org.brzy.mod
     version: "0.3"
     scan_package: org.brzy.mod.jpa.mock
     persistence_unit: my-unit

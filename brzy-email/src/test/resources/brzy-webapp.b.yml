@@ -11,7 +11,7 @@ application:
 
 modules:
   - name: brzy-email
-    org: org.brzy
+    org: org.brzy.mod
     version: "0.3"
     smtp_host: localhost
     user_name: ""

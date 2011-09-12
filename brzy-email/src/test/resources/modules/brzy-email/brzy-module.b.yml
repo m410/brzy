@@ -12,4 +12,4 @@ password: ""
 
 dependencies:
   - {conf: compile, org: javax.mail, name: mail, rev: "1.4"}
-  - {conf: compile, org: org.brzy, name: brzy-email, rev: "0.2", transitive: false}
+  - {conf: compile, org: org.brzy.mod, name: brzy-email, rev: "0.2", transitive: false}
