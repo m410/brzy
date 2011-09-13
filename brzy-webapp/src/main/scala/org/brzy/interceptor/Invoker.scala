@@ -29,7 +29,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
   /**
    * Execute a function inside a session context.
    */
-  def doIn(body: () => AnyRef): Unit = {
+  def doIn(body: () => AnyRef) {
     val iterator = factories.iterator
 
     if (iterator.hasNext)
@@ -52,7 +52,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
    * Recursive method to call each ThreadLocal session context.
    */
   protected[interceptor] def traverse(it: Iterator[ManagedThreadContext], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
-    val managedFactory = it.next
+    val managedFactory = it.next()
     var returnValue: AnyRef = null
     var nested = false
 

@@ -25,4 +25,6 @@ dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-commons-annotations, rev: "3.2.0.Final", transitive: false}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "${validator-version}", transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}
+  - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}"}
+
   

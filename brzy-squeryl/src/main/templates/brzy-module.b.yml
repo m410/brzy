@@ -7,6 +7,11 @@ org: org.brzy
 version: "${pom.version}"
 config_class: org.brzy.mod.squeryl.SquerylModConfig
 provider_class: org.brzy.mod.squeryl.SquerylModProvider
+
+repositories:
+  - id: "fusesource.m2"
+    url: http://repo.fusesource.com/nexus/content/repositories/public
+
 dependencies:
   - {conf: compile, org: org.brzy.mod, name: brzy-squeryl, rev: "${pom.version}", transitive: false}
   - {conf: compile, org: org.squeryl, name: squeryl_2.8.1, rev: "${squeryl-version}", transitive: false}
@@ -14,6 +19,5 @@ dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "4.0.2.GA", transitive: false}
   - {conf: compile, org: javax.validation, name: validation-api, rev: "1.0.0.GA", transitive: false}
   - {conf: compile, org: javax.xml.bind, name: jaxb-api, rev: "2.1", transitive: false}
-repositories:
-  - id: "fusesource.m2"
-    url: http://repo.fusesource.com/nexus/content/repositories/public
+  - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}"}
+
