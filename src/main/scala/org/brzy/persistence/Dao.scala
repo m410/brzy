@@ -13,7 +13,6 @@
  */
 package org.brzy.persistence
 
-import org.brzy.fab.reflect.Construct
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
 import org.brzy.beanwrap.{Build, Editors}
@@ -39,7 +38,7 @@ trait Dao[T <: {def id: PK}, PK] {
   def getOrElse(id: PK, alternate: T): T
 
   /**
-   * This is a convenience accessor to an entity, it does the casting, if necessage, from a string
+   * This is a convenience accessor to an entity, it does the casting, if necessary, from a string
    * to the primary key's type.
    */
   def load(id: String): T
@@ -78,6 +77,9 @@ trait Dao[T <: {def id: PK}, PK] {
    */
   def construct()(implicit m: Manifest[T]): T = Build[T](Map.empty[String,String], editors).make
 
+  /**
+   * sets the default editors for building an entity from the request parameters.
+   */
   def editors = Editors()
 
   /**

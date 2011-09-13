@@ -24,7 +24,6 @@ import collection.mutable.ListBuffer
 
 import java.io.ByteArrayInputStream
 import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie => JCookie}
-import javax.management.remote.rmi._RMIConnection_Stub
 
 /**
  * An action is an entry point into the application.  A controller will have one or more actions.
