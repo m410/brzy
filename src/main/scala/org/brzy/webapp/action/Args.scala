@@ -278,3 +278,32 @@ case class PostBody(request: HttpServletRequest) extends Args {
     }
   }
 }
+
+trait AttributesTrait {
+
+}
+
+case class Attributes(
+    url:Map[String,String],
+    request: Map[String,Array[String]],
+    session: Map[String,AnyRef],
+    application : Map[String,AnyRef]
+) extends Args
+
+object Attributes {
+  def apply(req: HttpServletRequest, url:Map[String,String]) = {
+    val session = if(req.getSession(false) != null)
+        for (name <- req.getSession.getAttributeNames) yield {
+          name.asInstanceOf[String] -> req.getSession.getAttribute(name.asInstanceOf[String])
+        }
+      else
+        Map.empty[String,AnyRef]
+
+    // todo this is using the wrong servlet api, and will create session if you don't want it too
+    val application = for (name <- req.getSession.getServletContext.getAttributeNames) yield {
+      name.asInstanceOf[String] -> req.getSession.getServletContext.getAttribute(name.asInstanceOf[String])
+    }
+    val request = req.getParameterMap.toMap.asInstanceOf[Map[String,Array[String]]]
+    new Attributes(url, request, session.toMap, application.toMap)
+  }
+}
