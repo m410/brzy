@@ -13,8 +13,6 @@
  */
 package org.brzy.mod.jpa
 
-import org.slf4j.LoggerFactory
-import org.brzy.fab.reflect.Construct
 import org.brzy.mod.jpa.RichQuery._
 import collection.JavaConversions._
 import org.brzy.persistence.Dao
@@ -29,7 +27,6 @@ import javax.validation.{ConstraintViolation, Validation => jValidation}
 class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manifest[PK]) extends Dao[T,PK]{
   protected[jpa] val entityClass = man.erasure
   protected[jpa] val keyClass = pk.erasure
-  private val log = LoggerFactory.getLogger(entityClass)
 
   protected[jpa] val validator = jValidation.buildDefaultValidatorFactory.getValidator
 
@@ -44,7 +41,6 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
     protected[jpa] def entityManager = JpaContext.value
 
     override def validate = {
-      log.trace("validate")
       val set = validator.validate(t).toSet
 
       if(set.size > 0)
@@ -54,13 +50,10 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
     }
 
     override def delete() {
-      log.trace("delete")
       entityManager.remove(t)
     }
 
     override def insert(commit:Boolean = false) {
-      log.trace("insert")
-
       entityManager.persist(t)
 
       if(commit) {
@@ -70,12 +63,10 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
     }
 
     override def update():T = {
-      log.trace("update")
       entityManager.merge(t)
     }
 
     override def commit() {
-      log.trace("commit")
       entityManager.getTransaction.commit()
     }
   }
@@ -87,12 +78,10 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
   override implicit def applyCrudOps(t: T) = new EntityCrudOps(t)
 
   def apply(id:PK):T = {
-    log.trace("get: " + id)
     entityManager.find(entityClass,id).asInstanceOf[T]
   }
 
   def get(id:PK):Option[T] = {
-    log.trace("get: " + id)
     Option(entityManager.find(entityClass,id).asInstanceOf[T])
   }
 
@@ -112,7 +101,6 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
 
 
   def load(strId:String) = {
-    log.trace("get: {}", strId)
     val id = keyClass match {
       case LongClass => strId.toLong
       case JLongClass => java.lang.Long.valueOf(strId)

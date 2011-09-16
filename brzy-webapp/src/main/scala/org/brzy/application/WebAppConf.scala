@@ -32,9 +32,16 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
         extends Configuration {
 
   /**
-   * The developement environment
+   * The development environment
    */
   val environment: String = c.environment.orNull
+
+  /**
+   * Used in conjunction with the Secured Constraint, when set to true it will send a redirect
+   * to the client to same url but over ssl.  It defaults to false, when not present and can
+   * be set to true for the production environment.
+   */
+  val useSsl: Boolean = c.useSsl.get
 
   /**
    * The application meta data, like author description and version.

@@ -28,7 +28,12 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
     case Some(e) => if(e != null) Option(e.asInstanceOf[String]) else None
     case _ => None
   }
-  
+
+  val useSsl: Option[Boolean] = map.get("use_ssl") match {
+    case Some(e) => if(e != null) Option(e.asInstanceOf[Boolean]) else Option(false)
+    case _ => Option(false)
+  }
+
 	val application: Option[Application] = map.get("application") match {
     case s: Some[_] => Option(new Application(s.get.asInstanceOf[Map[String, String]]))
     case _ => None

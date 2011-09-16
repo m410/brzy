@@ -24,11 +24,11 @@ class ConstraintsTest extends JUnitSuite {
   val controller = new Controller("") with Secured {
 		override val constraints = List(Roles("ADMIN"))
 		def actions = List(
-      Action("index0","index0",index _,Secure(),HttpMethods(HttpMethod.GET),ContentTypes("text/xml")),
-      Action("index1","index1",index _,Secure()),
-      Action("index2","index2",index _,HttpMethods(HttpMethod.GET)),
-      Action("index3","index3",index _,ContentTypes("text/xml")),
-      Action("index4","index4",index2 _)
+      Action("index0", "index0", index _ ,Ssl(),HttpMethods(HttpMethod.GET),ContentTypes("text/xml")),
+      Action("index1", "index1", index _ ,Ssl()),
+      Action("index2", "index2", index _ ,HttpMethods(HttpMethod.GET)),
+      Action("index3", "index3", index _ ,ContentTypes("text/xml")),
+      Action("index4", "index4", index2 _)
     )
 		def index = "name" -> "value"
 		def index2 = "name" -> "value"
@@ -66,11 +66,11 @@ class ConstraintsTest extends JUnitSuite {
     assertTrue("Should be true for http method", action.isConstrained(request))
   }
 
-  @Test def secureConstraintTest() {
+  @Test def requireSslConstraintTest() {
     val request = new MockHttpServletRequest("GET", "//users.brzy")
     request.setContentType("text/xml")
     request.setSecure(false)
     val action = controller.actions.find(_.actionPath == "index1").get
-    assertTrue("Should be true for secure", action.isConstrained(request))
+    assertTrue("Should be true for secure", action.requiresSsl)
   }
 }
