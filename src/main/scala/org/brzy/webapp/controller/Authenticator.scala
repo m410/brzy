@@ -14,7 +14,7 @@
 package org.brzy.webapp.controller
 
 /**
- * Services that authenticate
+ * Services that gets the authenticated entity form the database.
  * 
  * @author Michael Fortin
  */

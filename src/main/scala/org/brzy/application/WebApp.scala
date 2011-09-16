@@ -43,6 +43,7 @@ class WebApp(conf: WebAppConf) {
   private val log = LoggerFactory.getLogger(getClass)
   val application = conf.application
   val build = conf.build
+  val useSsl = conf.useSsl
 
   /**
    * The view resource provider for the application.  There is only one view provider for the

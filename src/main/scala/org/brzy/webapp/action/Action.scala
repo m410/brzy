@@ -96,17 +96,13 @@ trait Action extends Ordered[Action] {
 
   protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
     !constraints.forall(constraint => constraint match {
-      case Secure(allowed) =>
-        request.isSecure == allowed
-      case c:ContentTypes =>
-        c.allowed.contains(request.getContentType)
       case h:HttpMethods =>
         val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
         h.allowed.find(_ == methodName).isDefined
-      case r:Roles =>
-        true
-      case _ =>
-        false
+      case c:ContentTypes => c.allowed.contains(request.getContentType)
+      case Ssl(allowed) => true
+      case r:Roles => true
+      case _ => false
     })
   }
 
@@ -119,6 +115,9 @@ trait Action extends Ordered[Action] {
     })
   }
 
+  def requiresSsl = {
+    {constraints ++ controller.constraints}.find(_.isInstanceOf[Ssl]).isDefined
+  }
 
   /**
    * Determines if this action requires authentication or not.
