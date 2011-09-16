@@ -210,9 +210,9 @@ class WebApp(conf: WebAppConf) {
     viewProvider.startup
     serviceMap.values.foreach(lifeCycleCreate(_))
     log.info("application  : startup")
-    serviceMap.foreach(a=>log.debug("service: {}",a))
-    controllers.foreach(a=>log.debug("controllers: {}",a))
-    actions.foreach(a=>log.debug("actions: {}",a))
+    serviceMap.foreach(a=>log.trace("service: {}",a))
+    controllers.foreach(a=>log.trace("controller: {}",a))
+    actions.foreach(a=>log.debug("action: {}",a))
   }
 
   /**
