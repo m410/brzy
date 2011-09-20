@@ -46,7 +46,7 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
   }
 
   /**
-   *
+   * extracts the attribute patterns out of the url
    */
   protected[controller] val patternTokens = path.split("""\{|\}""").map(it=>{
       if(!it.contains("/") && it.contains(":"))
@@ -57,6 +57,9 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
         it
     })
 
+	/**
+	 * Splits the url into parts
+	 */
   protected[controller] val pathTokens = path.replaceAll("//", "/").split("/")
 
   /**
@@ -68,16 +71,13 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
 
   def isMatch(contextPath: String) = {
     val urlTokens: Array[String] = contextPath.replaceAll("//", "/").split("/")
-
     if (pathTokens.size == urlTokens.size) {
       val tokens = pathTokens.zip(urlTokens)
       tokens.forall({case (a,b) =>
-        if (isPattern(a))
+				if (isPattern(a))
           toPattern(a).findFirstIn(b).isDefined
-        else if (a == b)
-          true
-        else
-          false
+        else 
+					a == b
       })
     }
     else

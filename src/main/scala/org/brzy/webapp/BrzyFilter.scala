@@ -39,14 +39,13 @@ class BrzyFilter extends SFilter {
   }
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
-    val uri = req.asInstanceOf[HttpServletRequest].getRequestURI
-    log.trace("uri    : {}", uri)
     val q = req.asInstanceOf[HttpServletRequest]
+    log.trace("uri : {}", q.getRequestURI)
     val actionPath = Action.parseActionPath(q.getRequestURI, q.getContextPath)
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) => // for action, don't continue
-        doAction(req, uri, res)
+        doAction(q.getRequestURI, req, res)
       case _ => // pass it on if the url ends with any extension
         chain.doFilter(req, res)
     }
@@ -55,7 +54,7 @@ class BrzyFilter extends SFilter {
   /**
    *
    */
-  protected[brzy] def doAction(req: ServletRequest, uri: String, res: ServletResponse) {
+  protected[brzy] def doAction(uri: String, req: ServletRequest, res: ServletResponse) {
     val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
 
     val forward =
