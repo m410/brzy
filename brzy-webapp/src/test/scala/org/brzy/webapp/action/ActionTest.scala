@@ -75,6 +75,9 @@ class ActionTest extends JUnitSuite {
     assertEquals("/users",Action.parseActionPath("/users.brzy","/"))
     assertEquals("/users",Action.parseActionPath("/home/users.brzy","/home"))
     assertEquals("/users/1/edit",Action.parseActionPath("/users/1/edit.brzy",""))
+
+    assertEquals("/path/pixel.gif",Action.parseActionPath("/path/pixel.gif",""))
+
     assertEquals("/",Action.parseActionPath("/.brzy",""))
     assertEquals("/",Action.parseActionPath("/.brzy","/"))
     assertEquals("/",Action.parseActionPath("/one/.brzy","/one"))

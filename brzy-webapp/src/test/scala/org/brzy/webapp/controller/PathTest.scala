@@ -73,6 +73,12 @@ class PathTest extends JUnitSuite {
     assertFalse(path.isMatch(target))
   }
 
+  @Test def testPathWithExtensionMatch() {
+    val path = Path("", """path/pixel.gif""")
+    val target = "/path/pixel.gif"
+    assertTrue(path.isMatch(target))
+  }
+
   @Test def testExtractParametersBase() {
     val actionPath = Path("users", "/")
     val path = "/users"
