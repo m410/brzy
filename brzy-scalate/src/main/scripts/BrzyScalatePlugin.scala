@@ -5,7 +5,7 @@ import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.reflect.Properties
 import org.brzy.fab.build.Task
 
-class BrzyScalatePlugin extends Task  {
+class BrzyScalatePlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
 
 	def genSspViews(args:Array[String]) {
 		messenger.info("Generate views for domain")

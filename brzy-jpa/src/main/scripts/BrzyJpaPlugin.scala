@@ -4,7 +4,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 
-class BrzyJpaPlugin extends Task  {
+class BrzyJpaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
 
   // create a class from template
 	def createJpaDomain(args:Array[String]) {

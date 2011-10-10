@@ -4,7 +4,7 @@ import org.brzy.mod.jpa.build.PersistenceXml
 import org.brzy.application.WebAppConf
 import org.brzy.fab.build.Task
 
-class BrzyJpaPersistencePlugin extends Task {
+class BrzyJpaPersistencePlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
   // create a class from template
 	def genPersistenceXml() {
 		messenger.info("Create a JPA Domain Class")
