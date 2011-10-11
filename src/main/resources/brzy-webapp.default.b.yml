@@ -12,13 +12,13 @@ views:
   version: "${brzy-scalate-version}"
 
 repositories:
-  - {id: brzy, url: http://repo.brzy.org/content/repositories/releases}
-  - {id: brzy-snapshot, url: http://repo.brzy.org/content/repositories/snapshots}
-  - {id: java-net2, url: http://download.java.net/maven/2}
-  - {id: scala-tools, url: http://scala-tools.org/repo-releases}
-  - {id: jboss, url: http://repository.jboss.com/maven2}
-  - {id: reflections-repo, url: http://reflections.googlecode.com/svn/repo}
-  - {id: maven-central, url: http://repo1.maven.org/maven2}
+  - {id: brzy, url: "http://repo.brzy.org/content/repositories/releases"}
+  - {id: brzy-snapshot, url: "http://repo.brzy.org/content/repositories/snapshots"}
+  - {id: java-net2, url: "http://download.java.net/maven/2"}
+  - {id: scala-tools, url: "http://scala-tools.org/repo-releases"}
+  - {id: jboss, url: "http://repository.jboss.com/maven2"}
+  - {id: reflections-repo, url: "http://reflections.googlecode.com/svn/repo"}
+  - {id: maven-central, url: "http://repo1.maven.org/maven2"}
 
 dependencies:
   - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}

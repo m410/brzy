@@ -27,7 +27,7 @@ dependencies:
 # Dependency Management
 repositories:
   - id: fusesource
-    url: http://someurl.com/test
+    url: "http://someurl.com/test"
 
 #persistence:
 #  - name: brzy-squeryl

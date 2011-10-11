@@ -14,17 +14,17 @@ views:
 
 repositories:
   - id: brzy
-    url: http://repo.brzy.org/content/repositories/releases
+    url: "http://repo.brzy.org/content/repositories/releases"
   - id: java-net2
-    url: http://download.java.net/maven/2
+    url: "http://download.java.net/maven/2"
   - id: scala-tools
-    url: http://scala-tools.org/repo-releases
+    url: "http://scala-tools.org/repo-releases"
   - id: jboss
-    url: http://repository.jboss.com/maven2
+    url: "http://repository.jboss.com/maven2"
   - id: reflections-repo
-    url: http://reflections.googlecode.com/svn/repo
+    url: "http://reflections.googlecode.com/svn/repo"
   - id: maven-central
-    url: http://repo1.maven.org/maven2
+    url: "http://repo1.maven.org/maven2"
 
 dependencies:
   - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
