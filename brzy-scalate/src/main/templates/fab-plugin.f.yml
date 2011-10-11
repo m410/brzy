@@ -13,7 +13,7 @@ plugins:
       - {org: org.scala-lang, name: scala-compiler, rev: "2.8.1", transitive: false}
       - {org: org.scala-lang, name: scala-library, rev: "2.8.1", transitive: false}
     repositories:
-      - {id: scala-tools, url: http://nexus.scala-tools.org/content/repositories/releases}
+      - {id: scala-tools, url: "http://nexus.scala-tools.org/content/repositories/releases"}
     tasks:
       - name: gen-scalate-views
         method_name: genSspViews

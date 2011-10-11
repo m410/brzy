@@ -24,4 +24,4 @@ dependencies:
   - {org: org.apache.tomcat, name: juli, rev: "${tomcat-version}", transitive: false}
   - {org: org.apache.tomcat, name: servlet-api, rev: "${tomcat-version}", transitive: false}
 repositories:
-  - {id: maven-central, url: http://repo1.maven.org/maven2 }
+  - {id: maven-central, url: "http://repo1.maven.org/maven2" }

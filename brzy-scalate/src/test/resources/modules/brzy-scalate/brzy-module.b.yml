@@ -13,7 +13,7 @@ dependencies:
   - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.9", transitive: false}
 repositories:
   - id: "fusesource.m2"
-    url: http://repo.fusesource.com/nexus/content/repositories/public
+    url: "http://repo.fusesource.com/nexus/content/repositories/public"
 web_xml:
   - servlet: { servlet-name: "TemplateEngineServlet", servlet-class: "org.fusesource.scalate.servlet.TemplateEngineServlet", load-on-startup: "1"}
   - servlet-mapping: { servlet-name: "TemplateEngineServlet", url-pattern: "*.ssp"}

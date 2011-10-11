@@ -10,7 +10,7 @@ provider_class: org.brzy.mod.jpa.JpaModProvider
 persistence_unit: brzy-webapp-persistence
 
 repositories:
-  - {id: jboss-groups, url: http://repository.jboss.org/nexus/content/groups/public}
+  - {id: jboss-groups, url: "http://repository.jboss.org/nexus/content/groups/public"}
   
 dependencies:
   - {conf: compile, org: antlr, name: antlr, rev: "2.7.6", transitive: false}

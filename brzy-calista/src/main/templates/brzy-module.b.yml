@@ -10,7 +10,7 @@ provider_class: org.brzy.mod.calista.CalistaModProvider
 key_space: Test
 repositories:
   - {id: cloudera, url: https://repository.cloudera.com/content/repositories/releases}
-  - {id: javanet, url: http://download.java.net/maven/2}
+  - {id: javanet, url: "http://download.java.net/maven/2"}
 dependencies:
   - {conf: compile, org: org.brzy, name: calista, rev: "${calista-version}", transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "${pom.version}", transitive: false}

@@ -13,4 +13,4 @@ dependencies:
   - {conf: compile, org: org.brzy.mod, name: brzy-calista, rev: "0.2", transitive: false}
 repositories:
   - id: "shorrockin"
-    url: http://maven.shorrockin.com/ 
+    url: "http://maven.shorrockin.com/"
