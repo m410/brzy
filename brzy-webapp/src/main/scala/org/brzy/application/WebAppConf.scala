@@ -148,7 +148,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   }
 
   def toJson = {
-    val data = Map("webAppConfigFile" -> c.map,
+    val data = Map("config" -> c.map,
       "views" -> Map("viewClass"->views.getClass.getName,"view"->views.map),
       "persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}),
       "modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
@@ -315,7 +315,7 @@ object WebAppConf {
 
   def fromJson(json: String) = {
     val data = Json.parse(json).asInstanceOf[Map[String,AnyRef]]
-    val conf = new WebAppConfFile(data("webAppConfigFile").asInstanceOf[Map[String,AnyRef]])
+    val conf = new WebAppConfFile(data("config").asInstanceOf[Map[String,AnyRef]])
 
     val v = data("views").asInstanceOf[Map[String,AnyRef]]
     val views = inst[ViewMod](v("viewClass").asInstanceOf[String],v("view").asInstanceOf[Map[String,AnyRef]])
