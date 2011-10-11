@@ -2,12 +2,12 @@
 
 import java.net.InetAddress
 
+import org.brzy.fab.build.{Task, BuildContext}
 import org.mortbay.jetty.Server
 import org.mortbay.jetty.handler._
 import org.mortbay.jetty.servlet.Context
 import org.mortbay.xml.XmlConfiguration
 
-import org.brzy.fab.build.BuildContext
 import org.brzy.fab.print.Info
 import org.brzy.fab.file.{File,Files}
 import org.brzy.fab.compile.ScalaCompiler
@@ -84,7 +84,7 @@ class RunWebApp(contextName:String, port:Int) {
 }
 
 
-class BrzyJetty6Plugin(ctx:BuildContext) {
+class BrzyJetty6Plugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
 
 	def runJetty = {
 		ctx.line.say(Info("Run tomcat",true))

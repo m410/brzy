@@ -16,7 +16,8 @@
     <scalate-version>1.5.2-scala_2.8.1</scalate-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.6</fab-conf-version>
+    <fab-conf-version>0.7-SNAPSHOT</fab-conf-version>
+    <fab-util-version>0.7-SNAPSHOT</fab-util-version>
     <brzy-webapp-version>1.0.0.beta2-SNAPSHOT</brzy-webapp-version>
   </properties>
   <build>

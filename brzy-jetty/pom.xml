@@ -16,8 +16,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty-version>6.1.26</jetty-version>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.6</fab-conf-version>
-    <fab-util-version>0.6</fab-util-version>
+    <fab-conf-version>0.7-SNAPSHOT</fab-conf-version>
+    <fab-util-version>0.7-SNAPSHOT</fab-util-version>
     <brzy-webapp-version>1.0.0.beta1</brzy-webapp-version>
   </properties>
   <build>
