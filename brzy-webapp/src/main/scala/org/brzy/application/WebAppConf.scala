@@ -34,7 +34,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   /**
    * The development environment
    */
-  override val environment: String = c.environment
+  val environment: String = c.environment
 
   /**
    * Used in conjunction with the Secured Constraint, when set to true it will send a redirect
@@ -46,9 +46,9 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   /**
    * The application meta data, like author description and version.
    */
-  override val application: Option[Application] = c.application
+  val application: Option[Application] = c.application
 
-  override val build: Option[Build] = c.build
+  val build: Option[Build] = c.build
 
   /**
    * logging information
@@ -61,7 +61,10 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   val dependencies: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
     dependencyBuffer ++= c.dependencies
-    dependencyBuffer ++= views.dependencies
+
+    if(views != null) // may be null for testing
+      dependencyBuffer ++= views.dependencies
+
     persistence.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
     modules.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
     SortedSet(dependencyBuffer: _*)
@@ -82,7 +85,10 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   val repositories: SortedSet[Repository] = {
     val repositoryBuffer = ListBuffer[Repository]()
     repositoryBuffer ++= c.repositories
-    repositoryBuffer ++= views.repositories
+
+    if (views != null) // could be null for testing
+      repositoryBuffer ++= views.repositories
+    
     persistence.map(_.repositories.foreach(dep => repositoryBuffer += dep))
     modules.map(_.repositories.foreach(dep => repositoryBuffer += dep))
     SortedSet(repositoryBuffer: _*)

@@ -22,7 +22,7 @@ import org.brzy.fab.mod.Mod
 class ScalateModConfigTest extends JUnitSuite {
 
   @Test
-  def testMerge = {
+  def testMerge() {
     val p1 = new ScalateModConfig(Map[String, AnyRef](
       "name" -> "test",
       "version" -> "test",
@@ -36,9 +36,8 @@ class ScalateModConfigTest extends JUnitSuite {
       "dependencies" -> List(),
       "web_xml" -> List(Map("display-name"->"brzy servlet"))
       ))
-    assertTrue(p1.repositories.isDefined)
-    assertEquals(1,p1.repositories.get.size)
-    p1.repositories.get.foreach(d => assertEquals("repo",d.id.get))
+    assertEquals(1,p1.repositories.size)
+    p1.repositories.foreach(d => assertEquals("repo",d.id.get))
     
     val p2 = new ScalateModConfig(Map[String, AnyRef](
       "name" -> "test2",
@@ -55,16 +54,15 @@ class ScalateModConfigTest extends JUnitSuite {
       ))
     val merged = {p1 << p2}.asInstanceOf[ScalateModConfig]
     assertNotNull(merged)
-    assertTrue(merged.repositories.isDefined)
-    assertEquals(1,merged.repositories.get.size)
-    merged.repositories.get.foreach(d => assertEquals("repo",d.id.get))
+    assertEquals(1,merged.repositories.size)
+    merged.repositories.foreach(d => assertEquals("repo",d.id.get))
 
     assertEquals(2,merged.webXml.get.size)
   }
 
 
   @Test
-  def testMergeModule = {
+  def testMergeModule() {
     val mod = new Mod(Map[String, AnyRef](
       "name" -> "test",
       "version" -> "test",
@@ -78,9 +76,8 @@ class ScalateModConfigTest extends JUnitSuite {
       "dependencies" -> List(),
       "web_xml" -> List(Map("display-name"->"brzy servlet"))
       ))
-    assertTrue(mod.repositories.isDefined)
-    assertEquals(1,mod.repositories.get.size)
-    mod.repositories.get.foreach(d => assertEquals("repo",d.id.get))
+    assertEquals(1,mod.repositories.size)
+    mod.repositories.foreach(d => assertEquals("repo",d.id.get))
 
     val scalate = new ScalateModConfig(Map[String, AnyRef](
       "name" -> "test2",
@@ -97,9 +94,8 @@ class ScalateModConfigTest extends JUnitSuite {
       ))
     val merged = {scalate << mod}.asInstanceOf[ScalateModConfig]
     assertNotNull(merged)
-    assertTrue(merged.repositories.isDefined)
-    assertEquals(1,merged.repositories.get.size)
-    merged.repositories.get.foreach(d => assertEquals("repo",d.id.get))
+    assertEquals(1,merged.repositories.size)
+    merged.repositories.foreach(d => assertEquals("repo",d.id.get))
 
     assertTrue(merged.fileExtension.isDefined)
     assertEquals("test",merged.fileExtension.get)
@@ -108,7 +104,7 @@ class ScalateModConfigTest extends JUnitSuite {
   }
 
   @Test
-  def testInstanceOf = {
+  def testInstanceOf() {
     val plugin = new Mod(Map[String, AnyRef](
       "name" -> "test",
       "version" -> "test",
