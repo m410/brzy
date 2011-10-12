@@ -34,7 +34,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   /**
    * The development environment
    */
-  val environment: String = c.environment.orNull
+  override val environment: String = c.environment
 
   /**
    * Used in conjunction with the Secured Constraint, when set to true it will send a redirect
@@ -46,9 +46,9 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   /**
    * The application meta data, like author description and version.
    */
-  val application: Application = c.application.orNull
+  override val application: Option[Application] = c.application
 
-  val build: Build = c.build.orNull
+  override val build: Option[Build] = c.build
 
   /**
    * logging information
@@ -60,27 +60,10 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
    */
   val dependencies: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
-
-    if (c.dependencies.isDefined)
-      dependencyBuffer ++= c.dependencies.get
-
-    if (views != null && views.dependencies.isDefined)
-      dependencyBuffer ++= views.dependencies.get
-
-
-    persistence.map(mod => {
-      if (mod.dependencies.isDefined) {
-        val depsList: List[Dependency] = mod.dependencies.get
-        depsList.foreach(dep => dependencyBuffer += dep)
-      }
-    })
-
-    modules.map(mod => {
-      if (mod.dependencies.isDefined) {
-        val depsList: List[Dependency] = mod.dependencies.get
-        depsList.foreach(dep => dependencyBuffer += dep)
-      }
-    })
+    dependencyBuffer ++= c.dependencies
+    dependencyBuffer ++= views.dependencies
+    persistence.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
+    modules.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
     SortedSet(dependencyBuffer: _*)
   }
 
@@ -89,10 +72,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
    */
   val dependencyExcludes: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
-
-    if (c.dependencyExcludes.isDefined)
-      dependencyBuffer ++= c.dependencyExcludes.get
-
+    dependencyBuffer ++= c.dependencyExcludes
     SortedSet(dependencyBuffer: _*)
   }
 
@@ -101,25 +81,10 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
    */
   val repositories: SortedSet[Repository] = {
     val repositoryBuffer = ListBuffer[Repository]()
-
-    if (c.repositories.isDefined)
-      repositoryBuffer ++= c.repositories.get
-
-    if (views != null && views.repositories.isDefined)
-      repositoryBuffer ++= views.repositories.get
-
-    persistence.map(mod => {
-      if (mod.repositories.isDefined) {
-        val depsList: List[Repository] = mod.repositories.get
-        depsList.foreach(dep => repositoryBuffer += dep)
-      }
-    })
-    modules.map(mod => {
-      if (mod.repositories.isDefined) {
-        val depsList: List[Repository] = mod.repositories.get
-        depsList.foreach(dep => repositoryBuffer += dep)
-      }
-    })
+    repositoryBuffer ++= c.repositories
+    repositoryBuffer ++= views.repositories
+    persistence.map(_.repositories.foreach(dep => repositoryBuffer += dep))
+    modules.map(_.repositories.foreach(dep => repositoryBuffer += dep))
     SortedSet(repositoryBuffer: _*)
   }
 

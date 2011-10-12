@@ -24,9 +24,9 @@ import org.brzy.fab.mod.ModConf
  */
 class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map) {
   
-	val environment: Option[String] = map.get("environment") match {
-    case Some(e) => if(e != null) Option(e.asInstanceOf[String]) else None
-    case _ => None
+	override val environment: String = map.get("environment") match {
+    case Some(e) => e.asInstanceOf[String]
+    case _ => ""
   }
 
   val useSsl: Option[Boolean] = map.get("use_ssl") match {
@@ -34,12 +34,12 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
     case _ => Option(false)
   }
 
-	val application: Option[Application] = map.get("application") match {
+	override val application: Option[Application] = map.get("application") match {
     case s: Some[_] => Option(new Application(s.get.asInstanceOf[Map[String, String]]))
     case _ => None
   }
   
-  val build: Option[Build] = map.get("build") match {
+  override val build: Option[Build] = map.get("build") match {
     case Some(s) =>
       if (s != null)
         Option(new Build(s.asInstanceOf[Map[String, String]]))
@@ -73,7 +73,7 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
     else {
       val that = it.asInstanceOf[WebAppConfFile]
       new WebAppConfFile(Map[String, AnyRef](
-        "environment" -> this.environment.getOrElse(that.environment.orNull),
+        "environment" -> {if( this.environment != "") this.environment else that.environment},
         "application" -> {this.application.getOrElse(that.application.get)}.map,
         "build" -> {
           if (this.build.isDefined && this.build.get != null)

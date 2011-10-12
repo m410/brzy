@@ -117,7 +117,7 @@ class WebApp(conf: WebAppConf) {
   protected[application] def makeServiceMap: Map[String, _ <: AnyRef] = {
     val map = WeakHashMap.empty[String, AnyRef]
 
-    val serviceClasses = ServiceScanner(conf.application.org.get).services
+    val serviceClasses = ServiceScanner(conf.application.get.org.get).services
     serviceClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
       val instance = make(clazz, interceptor).asInstanceOf[Service]
@@ -139,7 +139,7 @@ class WebApp(conf: WebAppConf) {
    */
   protected[application] def makeControllers: List[Controller] = {
     val buffer = ListBuffer[Controller]()
-    val controllerClasses = ControllerScanner(conf.application.org.get).controllers
+    val controllerClasses = ControllerScanner(conf.application.get.org.get).controllers
 
     controllerClasses.foreach(sc => {
       val clazz = sc.asInstanceOf[Class[_]]
@@ -247,10 +247,10 @@ object WebApp {
   def apply(env: String): WebApp = apply(WebAppConf(env))
 
   def apply(config: WebAppConf): WebApp = {
-    log.debug("application class: {}", config.application.applicationClass.getOrElse("NA"))
+    log.debug("application class: {}", config.application.get.applicationClass.getOrElse("NA"))
 
-    if (config.application.applicationClass.isDefined)
-      Construct[WebApp](config.application.applicationClass.get, Array(config))
+    if (config.application.get.applicationClass.isDefined)
+      Construct[WebApp](config.application.get.applicationClass.get, Array(config))
     else
       new WebApp(config)
   }
