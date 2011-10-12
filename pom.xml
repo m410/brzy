@@ -117,11 +117,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.brzy.beanwrap</groupId>
-      <artifactId>beanwrap</artifactId>
-      <version>${beanwrap-version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-conf</artifactId>
       <version>${fab-conf-version}</version>
