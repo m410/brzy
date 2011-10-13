@@ -31,11 +31,10 @@ class PersistenceXml(config: WebAppConf) {
 
   val entityClasses:List[String] = 
       if(jpaModConf.entityDiscovery == "list") {
-        val list = jpaModConf.entities match {
+        jpaModConf.entities match {
           case Some(list) => list
           case _ => List.empty[String]
         }
-        list
       }
       else { // scan for entities
         List.empty[String]
