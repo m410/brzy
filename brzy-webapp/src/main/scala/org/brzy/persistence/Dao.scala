@@ -65,8 +65,6 @@ trait Dao[T <: {def id: PK}, PK] {
   /**
    * Build the entity from a map of name value pairs.  This depends on the editors setup in the
    * editors repository.
-   *
-   * @See org.brzy.fab.reflect.Construct
    */
   def construct(map: Map[String, AnyRef])(implicit m: Manifest[T]): T = {
     Build[T](map.asInstanceOf[Map[String,String]], editors).make
