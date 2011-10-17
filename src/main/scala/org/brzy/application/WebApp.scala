@@ -26,10 +26,9 @@ import org.brzy.fab.interceptor.{ManagedThreadContext, InterceptorProvider}
 import org.brzy.interceptor.Invoker
 import org.brzy.interceptor.ProxyFactory._
 
-import org.brzy.fab.reflect.Construct
-
 import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
 import org.brzy.service.{Service, ServiceScanner}
+import org.brzy.beanwrap.Build
 
 /**
  * WebApp is short for web application.  This assembles and configures the application at
@@ -53,7 +52,7 @@ class WebApp(conf: WebAppConf) {
     log.debug("view: {}", conf.views)
     log.trace("provider: {}", conf.views.providerClass.getOrElse("null"))
     if (conf.views.providerClass.isDefined && conf.views.providerClass.get != null)
-      Construct[ViewModProvider](conf.views.providerClass.get, Array(conf.views))
+      Build.reflect[ViewModProvider](conf.views.providerClass.get, Array(conf.views))
     else
       null
   }
@@ -64,7 +63,7 @@ class WebApp(conf: WebAppConf) {
   val persistenceProviders: List[ModProvider] = {
     conf.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      Construct[ModProvider](persist.providerClass.get, Array(persist))
+      Build.reflect[ModProvider](persist.providerClass.get, Array(persist))
     }).toList
   }
 
@@ -79,9 +78,8 @@ class WebApp(conf: WebAppConf) {
       log.debug("module config: {}", module)
       val mod = module.asInstanceOf[RuntimeMod]
 
-      if (mod.providerClass.isDefined && mod.providerClass.get != null) {
-        list += Construct[ModProvider](mod.providerClass.get, Array(mod))
-      }
+      if (mod.providerClass.isDefined)
+        list += mod.newProviderInstance
     })
     log.debug("modules: {}", list)
     list.toList
@@ -91,12 +89,7 @@ class WebApp(conf: WebAppConf) {
    * This manages transaction interception for controller actions.  Interceptors are provided
    * by modules to be added to the invoker that is managed by the contoller engine.
    */
-  val interceptor: Invoker = makeInterceptor
-
-  /**
-   * If you want to change how the invoker is created override this.
-   */
-  protected[application] def makeInterceptor: Invoker = {
+  val interceptor: Invoker  = {
     val buffer = ListBuffer[ManagedThreadContext]()
     persistenceProviders.foreach(pin => {
       if (pin.isInstanceOf[InterceptorProvider])
@@ -106,15 +99,10 @@ class WebApp(conf: WebAppConf) {
   }
 
   /**
-   * The service map made available to all controllers
+   * The service map made available to all controllers.  If you want to change how services are
+   * discovered and added to the service map, override this.
    */
-  lazy val serviceMap: Map[String, _ <: AnyRef] = makeServiceMap
-
-  /**
-   * If you want to change how services are discovered and added to the service map, override
-   * this.
-   */
-  protected[application] def makeServiceMap: Map[String, _ <: AnyRef] = {
+  lazy val serviceMap: Map[String, _ <: AnyRef] = {
     val map = WeakHashMap.empty[String, AnyRef]
 
     val serviceClasses = ServiceScanner(conf.application.get.org.get).services
@@ -129,15 +117,19 @@ class WebApp(conf: WebAppConf) {
   }
 
   /**
-   * The application controllers
+   * Wrap class with AOP interceptors provided by the modules, and creates an instance of
+   * the class.
    */
-  lazy val controllers: List[_ <: Controller] = makeControllers
+  def wrapWithInterceptor[T:Manifest](invoker:Invoker, clazz:Class[T], args:Array[AnyRef] = Array.empty[AnyRef]):T = {
+    make(clazz, args, invoker).asInstanceOf[T]
+  }
 
   /**
-   * To change how the controllers are discovered and added to the controllers list or to
-   * programatically add controllers to the list, override this function.
+   * The application controllers.  To change how the controllers are discovered and
+   * added to the controllers list or to pragmatically add controllers to the list,
+   * override this function.
    */
-  protected[application] def makeControllers: List[Controller] = {
+  lazy val controllers: List[_ <: Controller] = {
     val buffer = ListBuffer[Controller]()
     val controllerClasses = ControllerScanner(conf.application.get.org.get).controllers
 
@@ -161,37 +153,9 @@ class WebApp(conf: WebAppConf) {
     buffer.toList
   }
 
-  protected[application] def canFindByName(c: Class[_]): Boolean = {
-    c.getAnnotation(classOf[ConstructorProperties]) != null
-  }
-
-  protected[application] def makeArgsByName(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
-    val constructorProps = c.getAnnotation(classOf[ConstructorProperties])
-    constructorProps.value.map(serviceMap(_))
-  }
-
-  protected[application] def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
-    val constructor: Constructor[_] = c.getConstructors.find(_ != null).get
-    constructor.getParameterTypes.map((argClass: Class[_]) => {
-      serviceMap.values.find((s: AnyRef) => {
-        val serviceClass =
-            if (isProxy(s))
-              s.getClass.getSuperclass
-            else
-              s.getClass
-        argClass.equals(serviceClass)
-      }) match {
-        case Some(e) => e
-        case _ =>
-          log.warn("No service for type '{}' on class {}",argClass, c)
-          null
-      }
-    })
-  }
-
   /**
-   * Actions are lazily assembled once the application is started.  The controllers can be
-   * proxies so you have to get the super class to add them to the list.
+   * Actions are lazily assembled once the application is started. The actions are collected
+   * from the available controllers.
    */
   lazy val actions = {
     val list = new ListBuffer[Action]()
@@ -236,6 +200,34 @@ class WebApp(conf: WebAppConf) {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].destroyService
   }
+
+  protected[application] def canFindByName(c: Class[_]): Boolean = {
+    c.getAnnotation(classOf[ConstructorProperties]) != null
+  }
+
+  protected[application] def makeArgsByName(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
+    val constructorProps = c.getAnnotation(classOf[ConstructorProperties])
+    constructorProps.value.map(serviceMap(_))
+  }
+
+  protected[application] def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
+    val constructor: Constructor[_] = c.getConstructors.find(_ != null).get
+    constructor.getParameterTypes.map((argClass: Class[_]) => {
+      serviceMap.values.find((s: AnyRef) => {
+        val serviceClass =
+            if (isProxy(s))
+              s.getClass.getSuperclass
+            else
+              s.getClass
+        argClass.equals(serviceClass)
+      }) match {
+        case Some(e) => e
+        case _ =>
+          log.warn("No service for type '{}' on class {}",argClass, c)
+          null
+      }
+    })
+  }
 }
 
 /**
@@ -250,7 +242,7 @@ object WebApp {
     log.debug("application class: {}", config.application.get.applicationClass.getOrElse("NA"))
 
     if (config.application.get.applicationClass.isDefined)
-      Construct[WebApp](config.application.get.applicationClass.get, Array(config))
+      Build.reflect[WebApp](config.application.get.applicationClass.get, Array(config))
     else
       new WebApp(config)
   }
