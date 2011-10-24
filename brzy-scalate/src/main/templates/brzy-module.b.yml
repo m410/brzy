@@ -11,6 +11,7 @@ provider_class: org.brzy.mod.scalate.ScalateModProvider
 repositories:
   - {id: fusesource.m2, url: "http://repo.fusesource.com/nexus/content/repositories/public"}
 dependencies:
+  - {conf: compile, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "${scalate-version}", transitive: false}
   - {conf: compile, org: org.fusesource.scalate, name: scalate-util, rev: "${scalate-version}", transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-scalate, rev: "${pom.version}", transitive: false}
