@@ -35,7 +35,7 @@ dependencies:
   - {conf: compile, org: org.reflections, name: reflections, rev: "0.9.5-RC2", transitive: false}
   - {conf: compile, org: dom4j, name: dom4j, rev: "1.6.1", transitive: false}
   - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
-  - {conf: compile, org: org.jyaml, name: jyaml, rev: "1.3"}
+  - {conf: compile, org: org.yaml, name: snakeyaml, rev: "1.7"}
   - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
   - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "${logback-version}",transitive: false}
   - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "${logback-version}",transitive: false}
