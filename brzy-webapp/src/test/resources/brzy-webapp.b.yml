@@ -1,8 +1,6 @@
 #
 # application configuration
 #
-# http://bill.burkecentral.com/2008/01/14/scanning-java-annotations-at-runtime/
-# http://jyaml.sourceforge.net/
 application:
   version: 1.0.0
   name: Test app

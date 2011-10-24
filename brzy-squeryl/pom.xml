@@ -14,7 +14,7 @@
   </parent>
   <properties>
     <squeryl-version>0.9.4-RC3</squeryl-version>
-    <beanwrap-version>0.1</beanwrap-version>
+    <beanwrap-version>0.2-SNAPSHOT</beanwrap-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
     <fab-conf-version>0.7-SNAPSHOT</fab-conf-version>

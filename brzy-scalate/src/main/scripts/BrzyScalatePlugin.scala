@@ -1,12 +1,21 @@
 import java.io.{BufferedWriter, FileWriter}
+import java.lang.reflect.Method
+
 import org.clapper.scalasti.StringTemplateGroup
+
 import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
-import org.brzy.fab.reflect.Properties
 import org.brzy.fab.build.Task
 
 class BrzyScalatePlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
 
+  private[this] val ignore = Array("getClass", "toString", "equals", "hashCode", "notify",
+    "notifyAll", "wait", "clone", "finalize", "productArity", "productElements", "productPrefix",
+    "productIterator", "copy$default$1")
+
+  protected[this] def permit(f:Method) =
+      !ignore.contains(f.getName) && f.getParameterTypes.length == 0 && !f.getName.startsWith("get")
+  
 	def genSspViews(args:Array[String]) {
 		messenger.info("Generate views for domain")
 
@@ -22,7 +31,7 @@ class BrzyScalatePlugin(configPort:Int,messagePort:Int) extends Task(configPort,
 
     val fields =
       try {
-        Properties.listForName(packageAndClass)
+        Class.forName(packageAndClass).getMethods.filter(f=>{permit(f)}).map(_.getName)
       }
       catch {
         case unknown =>
