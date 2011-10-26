@@ -15,7 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.7-SNAPSHOT</fab-conf-version>
+    <fab-conf-version>0.7</fab-conf-version>
     <brzy-webapp-version>1.0.0.beta1</brzy-webapp-version>
   </properties>
   <build>

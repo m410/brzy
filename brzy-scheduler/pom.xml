@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-scheduler</artifactId>
   <name>Brzy Scheduler Module</name>
-  <version>1.0.0.beta2-SNAPSHOT</version>
+  <version>1.0.0.beta2</version>
   <parent>
     <groupId>org.brzy.webapp</groupId>
     <artifactId>pom</artifactId>
@@ -15,8 +15,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.7-SNAPSHOT</fab-conf-version>
-    <brzy-webapp-version>1.0.0.beta2-SNAPSHOT</brzy-webapp-version>
+    <fab-conf-version>0.7</fab-conf-version>
+    <brzy-webapp-version>1.0.0.beta2</brzy-webapp-version>
   </properties>
   <build>
     <plugins>
