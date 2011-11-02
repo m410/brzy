@@ -35,7 +35,8 @@ import org.brzy.beanwrap.Build
  * runtime.  It takes the web app configuration as a parameter.    This can be overriden by
  * application writers to extend it's functionality but in most cases this one will suffice.
  *
- *
+ * @param conf the configuration element for the web application.
+ * 
  * @author Michael Fortin
  */
 class WebApp(conf: WebAppConf) {
@@ -130,7 +131,7 @@ class WebApp(conf: WebAppConf) {
    *
    * @param args the arguments for the constructor of the class.
    */
-  def instance[T:Manifest](args:Array[AnyRef]):T = {
+  def proxyInstance[T:Manifest](args:Array[AnyRef]):T = {
     val clazz = manifest[T].erasure
     make(clazz, args, interceptor).asInstanceOf[T]
   }
@@ -139,7 +140,7 @@ class WebApp(conf: WebAppConf) {
    * Wrap class with AOP interceptors provided by the modules, and creates an instance of
    * the class.  This must be used to create instances of controllers and services.
    */
-  def instance[T:Manifest]:T = {
+  def proxyInstance[T:Manifest]:T = {
     val clazz = manifest[T].erasure
     make(clazz, Array.empty[AnyRef], interceptor).asInstanceOf[T]
   }
@@ -188,12 +189,12 @@ class WebApp(conf: WebAppConf) {
    * in turn calls all the startup functions on all the modules.
    */
   def startup() {
+    log.info("Startup: " + application.get.name.get + " - " + application.get.version.get)
     viewProvider.startup()
     persistenceProviders.foreach(_.startup())
     moduleProviders.foreach(_.startup())
     viewProvider.startup()
     serviceMap.values.foreach(lifeCycleCreate(_))
-    log.info("application  : startup")
     serviceMap.foreach(a=>log.trace("service: {}",a))
     controllers.foreach(a=>log.trace("controller: {}",a))
     actions.foreach(a=>log.debug("action: {}",a))
@@ -204,11 +205,11 @@ class WebApp(conf: WebAppConf) {
    * This in turn calles the shutdown methods of all the modules.
    */
   def shutdown() {
+    log.info("Shutdown: " + application.get.name.get + " - " + application.get.version.get)
     serviceMap.values.foreach(lifeCycleDestroy(_))
     viewProvider.shutdown()
     persistenceProviders.foreach(_.shutdown())
     moduleProviders.foreach(_.shutdown())
-    log.info("application shutdown")
   }
 
   protected[application] def lifeCycleCreate(service: AnyRef) {

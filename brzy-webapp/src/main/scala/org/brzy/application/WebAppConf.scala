@@ -16,10 +16,10 @@ package org.brzy.application
 import org.brzy.fab.conf._
 import collection.mutable.ListBuffer
 import collection.SortedSet
-import java.io.File
 import org.brzy.fab.mod.{Mod, PersistenceMod, RuntimeMod, ViewMod}
 import org.slf4j.LoggerFactory
 import com.twitter.json.Json
+import java.io.{PrintWriter, File}
 
 /**
  * This is the main webapp configuration class.  It consists of all the parts configured
@@ -31,9 +31,16 @@ import com.twitter.json.Json
 class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod])
         extends Configuration {
 
+
   /**
    * The development environment
    */
+  def archetype = c.archetype
+
+  def prettyPrint(tab: String, pw: PrintWriter) {}
+
+  def validate = List.empty[ConfigurationValidation]
+
   val environment: String = c.environment
 
   /**
