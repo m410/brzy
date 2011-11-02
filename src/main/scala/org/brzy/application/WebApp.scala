@@ -86,8 +86,8 @@ class WebApp(conf: WebAppConf) {
   }
 
   /**
-   * This manages transaction interception for controller actions.  Interceptors are provided
-   * by modules to be added to the invoker that is managed by the contoller engine.
+   * This manages transaction interception for controller actions and services.  Interceptors are
+   * provided by modules.
    */
   val interceptor: Invoker  = {
     val buffer = ListBuffer[ManagedThreadContext]()
@@ -99,10 +99,18 @@ class WebApp(conf: WebAppConf) {
   }
 
   /**
-   * The service map made available to all controllers.  If you want to change how services are
-   * discovered and added to the service map, override this.
+   * The service map made available to all controllers.  By default this uses class path scanning
+   * to find instances of the Service trait in the classpath under the application orginization
+   * package.  If you want to change how services are discovered and added to the service map,
+   * override this.  To add your services manually you should wrap in the interceptor by calling
+   * the instance method.
+   * {{{
+   *   override val serviceMap = Map(
+   *     "emailService" -> instance[EmailService]
+   *   )
+   * }}}
    */
-  lazy val serviceMap: Map[String, _ <: AnyRef] = {
+  val serviceMap: Map[String, _ <: AnyRef] = {
     val map = WeakHashMap.empty[String, AnyRef]
 
     val serviceClasses = ServiceScanner(conf.application.get.org.get).services
@@ -118,10 +126,22 @@ class WebApp(conf: WebAppConf) {
 
   /**
    * Wrap class with AOP interceptors provided by the modules, and creates an instance of
-   * the class.
+   * the class.  This must be used to create instances of controllers and services.
+   *
+   * @param args the arguments for the constructor of the class.
    */
-  def wrapWithInterceptor[T:Manifest](invoker:Invoker, clazz:Class[T], args:Array[AnyRef] = Array.empty[AnyRef]):T = {
-    make(clazz, args, invoker).asInstanceOf[T]
+  def instance[T:Manifest](args:Array[AnyRef]):T = {
+    val clazz = manifest[T].erasure
+    make(clazz, args, interceptor).asInstanceOf[T]
+  }
+
+  /**
+   * Wrap class with AOP interceptors provided by the modules, and creates an instance of
+   * the class.  This must be used to create instances of controllers and services.
+   */
+  def instance[T:Manifest]:T = {
+    val clazz = manifest[T].erasure
+    make(clazz, Array.empty[AnyRef], interceptor).asInstanceOf[T]
   }
 
   /**
@@ -129,7 +149,7 @@ class WebApp(conf: WebAppConf) {
    * added to the controllers list or to pragmatically add controllers to the list,
    * override this function.
    */
-  lazy val controllers: List[_ <: Controller] = {
+  val controllers: List[_ <: Controller] = {
     val buffer = ListBuffer[Controller]()
     val controllerClasses = ControllerScanner(conf.application.get.org.get).controllers
 
@@ -157,7 +177,7 @@ class WebApp(conf: WebAppConf) {
    * Actions are lazily assembled once the application is started. The actions are collected
    * from the available controllers.
    */
-  lazy val actions = {
+  val actions = {
     val list = new ListBuffer[Action]()
     controllers.foreach(ctl => { ctl.actions.foreach(a=> list += a)})
     SortedSet[Action]() ++ list.toIterable
@@ -168,10 +188,10 @@ class WebApp(conf: WebAppConf) {
    * in turn calls all the startup functions on all the modules.
    */
   def startup() {
-    viewProvider.startup
-    persistenceProviders.foreach(_.startup)
-    moduleProviders.foreach(_.startup)
-    viewProvider.startup
+    viewProvider.startup()
+    persistenceProviders.foreach(_.startup())
+    moduleProviders.foreach(_.startup())
+    viewProvider.startup()
     serviceMap.values.foreach(lifeCycleCreate(_))
     log.info("application  : startup")
     serviceMap.foreach(a=>log.trace("service: {}",a))
@@ -185,20 +205,20 @@ class WebApp(conf: WebAppConf) {
    */
   def shutdown() {
     serviceMap.values.foreach(lifeCycleDestroy(_))
-    viewProvider.shutdown
-    persistenceProviders.foreach(_.shutdown)
-    moduleProviders.foreach(_.shutdown)
+    viewProvider.shutdown()
+    persistenceProviders.foreach(_.shutdown())
+    moduleProviders.foreach(_.shutdown())
     log.info("application shutdown")
   }
 
   protected[application] def lifeCycleCreate(service: AnyRef) {
     if(service.isInstanceOf[Service])
-      service.asInstanceOf[Service].initializeService
+      service.asInstanceOf[Service].initializeService()
   }
 
   protected[application] def lifeCycleDestroy(service: AnyRef) {
     if(service.isInstanceOf[Service])
-      service.asInstanceOf[Service].destroyService
+      service.asInstanceOf[Service].destroyService()
   }
 
   protected[application] def canFindByName(c: Class[_]): Boolean = {
