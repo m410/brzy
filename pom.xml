@@ -17,7 +17,7 @@
     <scala.version>2.8.1</scala.version>
     <brzy-validator-version>0.1</brzy-validator-version>
     <beanwrap-version>0.2.1</beanwrap-version>
-    <fab-conf-version>0.7</fab-conf-version>
+    <fab-configuration-version>0.8-SNAPSHOT</fab-configuration-version>
   </properties>
   <build>
     <resources>
@@ -118,8 +118,8 @@
     </dependency>
     <dependency>
       <groupId>org.brzy.fab</groupId>
-      <artifactId>fab-conf</artifactId>
-      <version>${fab-conf-version}</version>
+      <artifactId>fab-configuration</artifactId>
+      <version>${fab-configuration-version}</version>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>

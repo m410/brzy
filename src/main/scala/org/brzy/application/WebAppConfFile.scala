@@ -15,6 +15,7 @@ package org.brzy.application
 
 import org.brzy.fab.conf._
 import org.brzy.fab.mod.ModConf
+import java.io.PrintWriter
 
 /**
  * This holds all the web-app.b.yml configuration elements before it's initialized.  It's very
@@ -23,29 +24,11 @@ import org.brzy.fab.mod.ModConf
  * @author Michael Fortin
  */
 class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map) {
-  
-	override val environment: String = map.get("environment") match {
-    case Some(e) => e.asInstanceOf[String]
-    case _ => ""
-  }
+ 
 
   val useSsl: Option[Boolean] = map.get("use_ssl") match {
     case Some(e) => if(e != null) Option(e.asInstanceOf[Boolean]) else Option(false)
     case _ => Option(false)
-  }
-
-	override val application: Option[Application] = map.get("application") match {
-    case s: Some[_] => Option(new Application(s.get.asInstanceOf[Map[String, String]]))
-    case _ => None
-  }
-  
-  override val build: Option[Build] = map.get("build") match {
-    case Some(s) =>
-      if (s != null)
-        Option(new Build(s.asInstanceOf[Map[String, String]]))
-      else
-        None
-    case _ => None
   }
 
   val logging: Option[Logging] = map.get("logging") match {
@@ -66,6 +49,23 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map)
     case _ => None
   }
 
+
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
+    pw.println("Use SSL: " + useSsl.getOrElse("<None>"))
+    pw.println("Logging")
+    logging match {
+      case Some(l) => l.prettyPrint(tab,pw)
+      case _ => pw.println("<None>")
+    }
+
+    pw.println("web.xml")
+    webXml match {
+      case Some(l) => pw.println(tab + l)
+      case _ => pw.println("<None>")
+    }
+  }
 
   override def <<(it: BaseConf) = {
     if(it == null)
