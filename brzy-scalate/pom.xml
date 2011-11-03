@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-scalate</artifactId>
   <name>Brzy Scalate Module</name>
-  <version>1.0.0.beta2</version>
+  <version>1.0.0.beta3-SNAPSHOT</version>
   <parent>
   <groupId>org.brzy.webapp</groupId>
   <artifactId>pom</artifactId>
@@ -16,8 +16,7 @@
     <scalate-version>1.5.2-scala_2.8.1</scalate-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.7</fab-conf-version>
-    <fab-util-version>0.7</fab-util-version>
+    <fab-configuration-version>0.8-SNAPSHOT</fab-configuration-version>
     <brzy-webapp-version>1.0.0.beta2</brzy-webapp-version>
   </properties>
   <build>
@@ -109,8 +108,8 @@
     </dependency>
     <dependency>
       <groupId>org.brzy.fab</groupId>
-      <artifactId>fab-conf</artifactId>
-      <version>${fab-conf-version}</version>
+      <artifactId>fab-configuration</artifactId>
+      <version>${fab-configuration-version}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

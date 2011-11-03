@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-jetty</artifactId>
   <name>Brzy Jetty Module</name>
-  <version>0.1.0</version>
+  <version>0.2-SNAPSHOT</version>
   <parent>
   <groupId>org.brzy.webapp</groupId>
   <artifactId>pom</artifactId>
@@ -16,8 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty-version>6.1.26</jetty-version>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.7</fab-conf-version>
-    <fab-util-version>0.7</fab-util-version>
+    <fab-configuration-version>0.8-SNAPSHOT</fab-configuration-version>
     <brzy-webapp-version>1.0.0.beta1</brzy-webapp-version>
   </properties>
   <build>
@@ -63,16 +62,16 @@
   <dependencies>
     <dependency>
     <groupId>org.brzy.fab</groupId>
-    <artifactId>fab-conf</artifactId>
-    <version>${fab-conf-version}</version>
+    <artifactId>fab-configuration</artifactId>
+    <version>${fab-configuration-version}</version>
     <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.brzy.fab</groupId>
-      <artifactId>fab-util</artifactId>
-      <version>${fab-util-version}</version>
-      <scope>provided</scope>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.brzy.fab</groupId>-->
+      <!--<artifactId>fab-util</artifactId>-->
+      <!--<version>${fab-util-version}</version>-->
+      <!--<scope>provided</scope>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>

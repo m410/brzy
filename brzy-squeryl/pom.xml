@@ -17,8 +17,7 @@
     <beanwrap-version>0.2.1</beanwrap-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.7</fab-conf-version>
-    <fab-util-version>0.7</fab-util-version>
+    <fab-configuration-version>0.8-SNAPSHOT</fab-configuration-version>
     <brzy-webapp-version>1.0.0.beta2</brzy-webapp-version>
   </properties>
   <build>

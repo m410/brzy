@@ -6,7 +6,7 @@
   <groupId>org.brzy.mod</groupId>
   <artifactId>brzy-jms</artifactId>
   <name>Brzy JMS Module</name>
-  <version>0.8.0</version>
+  <version>0.9-SNAPSHOT</version>
   <parent>
     <groupId>org.brzy.webapp</groupId>
     <artifactId>pom</artifactId>
@@ -15,7 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.8.1</scala.version>
-    <fab-conf-version>0.7</fab-conf-version>
+    <fab-configuration-version>0.8-SNAPSHOT</fab-configuration-version>
     <brzy-webapp-version>1.0.0.beta1</brzy-webapp-version>
   </properties>
   <build>
@@ -108,8 +108,8 @@
     </dependency>
     <dependency>
       <groupId>org.brzy.fab</groupId>
-      <artifactId>fab-conf</artifactId>
-      <version>${fab-conf-version}</version>
+      <artifactId>fab-configuration</artifactId>
+      <version>${fab-configuration-version}</version>
     </dependency>
     
     <dependency>
