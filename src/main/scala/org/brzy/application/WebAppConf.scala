@@ -26,48 +26,68 @@ import java.io.{PrintWriter, File}
  * in the brzy-webapp.b.yml configuration file.  The file is available at build time and
  * at runtime.  See the companion class for the factory methods.
  *
+ * @param confFile the main configuration file
+ * @param views the view configuration file
+ * @param persistence the persisnce configuration files
+ * @param modules the module configuration files
+ *
  * @author Michael Fortin
  */
-class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: List[PersistenceMod], val modules: List[RuntimeMod])
-        extends Configuration {
+class WebAppConf(
+      val confFile: WebAppConfFile,
+      val views: ViewMod,
+      val persistence: List[PersistenceMod],
+      val modules: List[RuntimeMod])
+    extends Configuration {
 
 
   /**
    * The development environment
    */
-  def archetype = c.archetype
+  def archetype = confFile.archetype
 
-  def prettyPrint(tab: String, pw: PrintWriter) {}
+  def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    pw.println("----")
+    confFile.prettyPrint(tab,pw)
+    pw.println("View Module")
+    views.prettyPrint(tab,pw)
+    pw.println("Persistence Modules")
+    persistence.foreach(_.prettyPrint(tab,pw))
+    pw.println("Build and Runtime Modules")
+    modules.foreach(_.prettyPrint(tab,pw))
+    pw.println("----")
+  }
 
   def validate = List.empty[ConfigurationValidation]
 
-  val environment: String = c.environment
+  val environment: String = confFile.environment
 
   /**
    * Used in conjunction with the Secured Constraint, when set to true it will send a redirect
    * to the client to same url but over ssl.  It defaults to false, when not present and can
    * be set to true for the production environment.
    */
-  val useSsl: Boolean = c.useSsl.get
+  val useSsl: Boolean = confFile.useSsl.get
 
   /**
    * The application meta data, like author description and version.
    */
-  val application: Option[Application] = c.application
+  val application: Option[Application] = confFile.application
 
-  val build: Option[Build] = c.build
+  val build: Option[Build] = confFile.build
 
   /**
    * logging information
    */
-  val logging: Logging = c.logging.orNull
+  val logging: Logging = confFile.logging.orNull
 
   /**
    * library dependencies
    */
   val dependencies: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
-    dependencyBuffer ++= c.dependencies
+    dependencyBuffer ++= confFile.dependencies
 
     if(views != null) // may be null for testing
       dependencyBuffer ++= views.dependencies
@@ -82,7 +102,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
    */
   val dependencyExcludes: SortedSet[Dependency] = {
     val dependencyBuffer = ListBuffer[Dependency]()
-    dependencyBuffer ++= c.dependencyExcludes
+    dependencyBuffer ++= confFile.dependencyExcludes
     SortedSet(dependencyBuffer: _*)
   }
 
@@ -91,7 +111,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
    */
   val repositories: SortedSet[Repository] = {
     val repositoryBuffer = ListBuffer[Repository]()
-    repositoryBuffer ++= c.repositories
+    repositoryBuffer ++= confFile.repositories
 
     if (views != null) // could be null for testing
       repositoryBuffer ++= views.repositories
@@ -110,8 +130,8 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
     if (views != null && views.isInstanceOf[WebXml] && views.asInstanceOf[WebXml].webXml.isDefined)
       buf ++= views.asInstanceOf[WebXml].webXml.get
 
-    if (c.webXml.isDefined)
-      buf ++= c.webXml.get
+    if (confFile.webXml.isDefined)
+      buf ++= confFile.webXml.get
 
     persistence.foreach(p => {
       if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
@@ -126,7 +146,7 @@ class WebAppConf(val c: WebAppConfFile, val views: ViewMod, val persistence: Lis
   }
 
   def toJson = {
-    val data = Map("config" -> c.map,
+    val data = Map("config" -> confFile.map,
       "views" -> Map("viewClass"->views.getClass.getName,"view"->views.map),
       "persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}),
       "modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
@@ -292,7 +312,15 @@ object WebAppConf {
   }
 
   def fromJson(json: String) = {
-    val data = Json.parse(json).asInstanceOf[Map[String,AnyRef]]
+    var data:Map[String, AnyRef] = Map.empty[String,AnyRef]
+
+    try {
+      data = Json.parse(json).asInstanceOf[Map[String, AnyRef]]
+    }
+    catch {
+      case e:Exception =>
+        throw new java.lang.RuntimeException("json:"+json,e)
+    }
     val conf = new WebAppConfFile(data("config").asInstanceOf[Map[String,AnyRef]])
 
     val v = data("views").asInstanceOf[Map[String,AnyRef]]
