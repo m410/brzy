@@ -39,10 +39,9 @@ import org.brzy.beanwrap.Build
  * 
  * @author Michael Fortin
  */
-class WebApp(conf: WebAppConf) {
+class WebApp(conf: WebAppConfiguration) {
   private val log = LoggerFactory.getLogger(getClass)
   val application = conf.application
-  val build = conf.build
   val useSsl = conf.useSsl
 
   /**
@@ -50,12 +49,16 @@ class WebApp(conf: WebAppConf) {
    * application, configured in a module.
    */
   val viewProvider: ViewModProvider = {
-    log.debug("view: {}", conf.views)
-    log.trace("provider: {}", conf.views.providerClass.getOrElse("null"))
-    if (conf.views.providerClass.isDefined && conf.views.providerClass.get != null)
-      Build.reflect[ViewModProvider](conf.views.providerClass.get, Array(conf.views))
-    else
-      null
+    log.debug("view: {}", conf.views.orNull)
+    conf.views match {
+      case Some(v) =>
+        log.trace("provider: {}", v.providerClass.getOrElse("null"))
+        if (v.providerClass.isDefined && v.providerClass.get != null)
+          Build.reflect[ViewModProvider](v.providerClass.get, Array(v))
+        else
+          null
+      case _ => null
+    }
   }
 
   /**
@@ -257,9 +260,9 @@ class WebApp(conf: WebAppConf) {
 object WebApp {
   private val log = LoggerFactory.getLogger(getClass)
 
-  def apply(env: String): WebApp = apply(WebAppConf(env))
+  def apply(env: String): WebApp = apply(WebAppConfiguration.runtime(env))
 
-  def apply(config: WebAppConf): WebApp = {
+  def apply(config: WebAppConfiguration): WebApp = {
     log.debug("application class: {}", config.application.get.applicationClass.getOrElse("NA"))
 
     if (config.application.get.applicationClass.isDefined)
