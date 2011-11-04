@@ -146,10 +146,12 @@ class WebAppConf(
   }
 
   def toJson = {
-    val data = Map("config" -> confFile.map,
+    val data = Map(
+      "config" -> confFile.map,
       "views" -> Map("viewClass"->views.getClass.getName,"view"->views.map),
       "persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}),
       "modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
+
     Json.build(data).toString()
   }
 }
