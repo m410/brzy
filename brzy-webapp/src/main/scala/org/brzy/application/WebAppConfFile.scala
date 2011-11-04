@@ -14,8 +14,8 @@
 package org.brzy.application
 
 import org.brzy.fab.conf._
-import org.brzy.fab.mod.ModConf
 import java.io.PrintWriter
+import org.brzy.fab.mod.ProjectModuleConfiguration
 
 /**
  * This holds all the web-app.b.yml configuration elements before it's initialized.  It's very
@@ -23,7 +23,7 @@ import java.io.PrintWriter
  *
  * @author Michael Fortin
  */
-class WebAppConfFile(override val map: Map[String, AnyRef]) extends ModConf(map) {
+class WebAppConfFile(override val map: Map[String, AnyRef]) extends ProjectModuleConfiguration(map) {
  
 
   val useSsl: Option[Boolean] = map.get("use_ssl") match {
