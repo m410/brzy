@@ -85,41 +85,44 @@ class WebAppConf(
   /**
    * library dependencies
    */
-  val dependencies: SortedSet[Dependency] = {
-    val dependencyBuffer = ListBuffer[Dependency]()
-    dependencyBuffer ++= confFile.dependencies
-
-    if(views != null) // may be null for testing
-      dependencyBuffer ++= views.dependencies
-
-    persistence.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
-    modules.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
-    SortedSet(dependencyBuffer: _*)
-  }
+  val dependencies: SortedSet[Dependency] = SortedSet.empty[Dependency]
+//  {
+//    val dependencyBuffer = ListBuffer[Dependency]()
+//    dependencyBuffer ++= confFile.dependencies
+//
+//    if(views != null) // may be null for testing
+//      dependencyBuffer ++= views.dependencies
+//
+//    persistence.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
+//    modules.map(_.dependencies.foreach(dep => dependencyBuffer += dep))
+//    SortedSet(dependencyBuffer: _*)
+//  }
 
   /**
    * Global library exclusions.
    */
-  val dependencyExcludes: SortedSet[Dependency] = {
-    val dependencyBuffer = ListBuffer[Dependency]()
-    dependencyBuffer ++= confFile.dependencyExcludes
-    SortedSet(dependencyBuffer: _*)
-  }
+  val dependencyExcludes: SortedSet[Dependency] = SortedSet.empty[Dependency]
+//  {
+//    val dependencyBuffer = ListBuffer[Dependency]()
+//    dependencyBuffer ++= confFile.dependencyExcludes
+//    SortedSet(dependencyBuffer: _*)
+//  }
 
   /**
    * the repositories from where to retrieve the dependencies.
    */
-  val repositories: SortedSet[Repository] = {
-    val repositoryBuffer = ListBuffer[Repository]()
-    repositoryBuffer ++= confFile.repositories
-
-    if (views != null) // could be null for testing
-      repositoryBuffer ++= views.repositories
-    
-    persistence.map(_.repositories.foreach(dep => repositoryBuffer += dep))
-    modules.map(_.repositories.foreach(dep => repositoryBuffer += dep))
-    SortedSet(repositoryBuffer: _*)
-  }
+  val repositories: SortedSet[Repository] = SortedSet.empty[Repository]
+//  {
+//    val repositoryBuffer = ListBuffer[Repository]()
+//    repositoryBuffer ++= confFile.repositories
+//
+//    if (views != null) // could be null for testing
+//      repositoryBuffer ++= views.repositories
+//
+//    persistence.map(_.repositories.foreach(dep => repositoryBuffer += dep))
+//    modules.map(_.repositories.foreach(dep => repositoryBuffer += dep))
+//    SortedSet(repositoryBuffer: _*)
+//  }
 
   /**
    * The Web.xml elements.
@@ -197,23 +200,24 @@ object WebAppConf {
           null
       case _ => null
     }
+//
+//    val persistence: List[PersistenceMod] = {
+//      if (runtimeConfig.persistence.isDefined)
+//        runtimeConfig.persistence.get.map(makeRuntimeMod(_).asInstanceOf[PersistenceMod])
+//      else
+//        Nil
+//    }
+//    val modules: List[RuntimeMod] = {
+//      if (runtimeConfig.modules.isDefined) {
+//        val runMod = runtimeConfig.modules.get.map(makeRuntimeMod(_))
+//        runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
+//      }
+//      else
+//        Nil
+//    }
 
-    val persistence: List[PersistenceMod] = {
-      if (runtimeConfig.persistence.isDefined)
-        runtimeConfig.persistence.get.map(makeRuntimeMod(_).asInstanceOf[PersistenceMod])
-      else
-        Nil
-    }
-    val modules: List[RuntimeMod] = {
-      if (runtimeConfig.modules.isDefined) {
-        val runMod = runtimeConfig.modules.get.map(makeRuntimeMod(_))
-        runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
-      }
-      else
-        Nil
-    }
-
-    new WebAppConf(runtimeConfig, view, persistence, modules)
+//    new WebAppConf(runtimeConfig, view, persistence, modules)
+    new WebAppConf(runtimeConfig, view, null, null)
   }
 
   /**
@@ -248,23 +252,24 @@ object WebAppConf {
       case _ => null
     }
 
-    val persistence: List[PersistenceMod] = {
-      if (buildConfig.persistence.isDefined)
-        buildConfig.persistence.get.map(makeBuildTimeMod(_, modBaseDir).asInstanceOf[PersistenceMod])
-      else
-        Nil
-    }
-    val modules: List[RuntimeMod] = {
-      if (buildConfig.modules.isDefined) {
-        val runMod = buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir))
-        runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
-      }
-      else {
-        Nil
-      }
-    }
+//    val persistence: List[PersistenceMod] = {
+//      if (buildConfig.persistence.isDefined)
+//        buildConfig.persistence.get.map(makeBuildTimeMod(_, modBaseDir).asInstanceOf[PersistenceMod])
+//      else
+//        Nil
+//    }
+//    val modules: List[RuntimeMod] = {
+//      if (buildConfig.modules.isDefined) {
+//        val runMod = buildConfig.modules.get.map(makeBuildTimeMod(_, modBaseDir))
+//        runMod.filter(_.isInstanceOf[RuntimeMod]).map(_.asInstanceOf[RuntimeMod])
+//      }
+//      else {
+//        Nil
+//      }
+//    }
 
-    new WebAppConf(buildConfig, view, persistence, modules)
+//    new WebAppConf(buildConfig, view, persistence, modules)
+    new WebAppConf(buildConfig, view, null, null)
   }
 
 

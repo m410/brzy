@@ -29,7 +29,7 @@ class WebAppListener extends ServletContextListener {
   private[this] val log = LoggerFactory.getLogger(classOf[WebAppListener])
 
   def contextInitialized(servletContextEvent: ServletContextEvent) {
-    val lc = LoggerFactory.getILoggerFactory()
+    val lc = LoggerFactory.getILoggerFactory
 
     if(lc.isInstanceOf[LoggerContext])
       StatusPrinter.print(lc.asInstanceOf[LoggerContext])
@@ -42,13 +42,13 @@ class WebAppListener extends ServletContextListener {
     log.info("Brzy Environment  : {}", env)
     val app = WebApp(env)
     servletContextEvent.getServletContext.setAttribute("application", app)
-    app.startup
+    app.startup()
   }
   
-  def contextDestroyed(servletContextEvent: ServletContextEvent) = {
+  def contextDestroyed(servletContextEvent: ServletContextEvent) {
     val app: Any = servletContextEvent.getServletContext.getAttribute("application")
     
     if(app != null)
-      app.asInstanceOf[WebApp].shutdown
+      app.asInstanceOf[WebApp].shutdown()
   }
 }
