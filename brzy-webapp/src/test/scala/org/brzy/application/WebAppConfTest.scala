@@ -20,15 +20,15 @@ import org.scalatest.junit.JUnitSuite
 
 class WebAppConfTest extends JUnitSuite {
   @Test def testCreateConfiguration() {
-    val wac = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+    val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     assertNotNull(wac)
-    assertNotNull(wac.application)
-    assertNotNull(wac.build)
-    assertNotNull(wac.logging)
-    assertNotNull(wac.logging.loggers)
-    assertNotNull(wac.logging.appenders)
-    assertNotNull(wac.logging.root)
-    assertEquals(1, wac.logging.root.get.ref.size)
+    assertTrue(wac.application.isDefined)
+    assertTrue(wac.build.isDefined)
+    assertTrue(wac.logging.isDefined)
+    assertNotNull(wac.logging.get.loggers)
+    assertNotNull(wac.logging.get.appenders)
+    assertNotNull(wac.logging.get.root)
+    assertEquals(1, wac.logging.get.root.get.ref.size)
     assertNotNull(wac.dependencies)
     assertEquals(16, wac.dependencies.size)
     assertNotNull(wac.dependencyExcludes)
@@ -39,24 +39,24 @@ class WebAppConfTest extends JUnitSuite {
     assertNotNull(wac.environment)
     assertEquals(11, wac.webXml.size)
 
-    assertEquals(1, wac.logging.root.get.ref.size)
-    assertEquals("STDOUT", wac.logging.root.get.ref.get(0))
+    assertEquals(1, wac.logging.get.root.get.ref.size)
+    assertEquals("STDOUT", wac.logging.get.root.get.ref.get(0))
   }
 
   @Test def testJson() {
-    val wac = WebAppConf(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+    val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     val json = wac.toJson
     assertNotNull(json)
-    val wacFromJson = WebAppConf.fromJson(json)
+    val wacFromJson = WebAppConfiguration.fromJson(json)
     assertNotNull(wacFromJson)
     
-    assertNotNull(wacFromJson.application)
-    assertNotNull(wacFromJson.build)
-    assertNotNull(wacFromJson.logging)
-    assertNotNull(wacFromJson.logging.loggers)
-    assertNotNull(wacFromJson.logging.appenders)
-    assertNotNull(wacFromJson.logging.root)
-    assertEquals(1, wacFromJson.logging.root.get.ref.size)
+    assertTrue(wacFromJson.application.isDefined)
+    assertTrue(wacFromJson.build.isDefined)
+    assertNotNull(wacFromJson.logging.isDefined)
+    assertTrue(wacFromJson.logging.get.loggers.isDefined)
+    assertTrue(wacFromJson.logging.get.appenders.isDefined)
+    assertTrue(wacFromJson.logging.get.root.isDefined)
+    assertEquals(1, wacFromJson.logging.get.root.get.ref.size)
     assertNotNull(wacFromJson.dependencies)
     assertEquals(16, wacFromJson.dependencies.size)
     assertNotNull(wacFromJson.dependencyExcludes)
@@ -67,7 +67,7 @@ class WebAppConfTest extends JUnitSuite {
     assertNotNull(wacFromJson.environment)
     assertEquals(11, wacFromJson.webXml.size)
 
-    assertEquals(1, wacFromJson.logging.root.get.ref.size)
-    assertEquals("STDOUT", wacFromJson.logging.root.get.ref.get(0))
+    assertEquals(1, wacFromJson.logging.get.root.get.ref.size)
+    assertEquals("STDOUT", wacFromJson.logging.get.root.get.ref.get(0))
   }
 }

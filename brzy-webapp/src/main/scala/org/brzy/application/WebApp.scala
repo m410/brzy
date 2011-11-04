@@ -42,7 +42,7 @@ import org.brzy.beanwrap.Build
 class WebApp(conf: WebAppConfiguration) {
   private val log = LoggerFactory.getLogger(getClass)
   val application = conf.application
-  val useSsl = conf.useSsl
+  val useSsl = conf.useSsl.getOrElse(false)
 
   /**
    * The view resource provider for the application.  There is only one view provider for the

@@ -17,11 +17,11 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web.{MockServletConfig, MockServletContext, MockHttpServletResponse, MockHttpServletRequest}
-import org.brzy.application.{WebAppConf, WebApp}
+import org.brzy.application.{WebAppConfiguration, WebAppConf, WebApp}
 
 class ServletTest extends JUnitSuite {
   @Test def testPath() {
-    val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
+    val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
     assertEquals(19,webapp.actions.size)
@@ -39,7 +39,7 @@ class ServletTest extends JUnitSuite {
   }
 
   @Test def testPathWithParam() {
-    val webapp = WebApp(WebAppConf(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
+    val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
     assertNotNull(webapp)
     assertEquals(2,webapp.controllers.size)
     assertEquals(19,webapp.actions.size)
