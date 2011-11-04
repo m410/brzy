@@ -68,11 +68,13 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
         null
     }
 
+    val superMap = super.merge(that).map
+
     val newData = Map[String, AnyRef](
       "use_ssl" -> mergedUseSsl,
       "logging" -> mergedLogging,
       "web_xml" -> mergedWebXml
-    ) ++ super.<<(that).map
+    ) ++ superMap
 
     instance(newData)
   }
