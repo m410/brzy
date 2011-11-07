@@ -1,4 +1,7 @@
-
+archetype:
+  name: any
+  version: any
+  org: any
 
 build:
   scala_version: 2.8.0

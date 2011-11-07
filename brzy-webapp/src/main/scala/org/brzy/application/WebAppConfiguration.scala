@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import com.twitter.json.Json
 
 import org.brzy.fab.mod.{Mod, ProjectModuleConfiguration}
-import org.brzy.fab.conf.{Yaml, Logging}
+import org.brzy.fab.conf.{BaseConf, Yaml, Logging}
 
 /**
  * Document Me..
@@ -53,7 +53,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
   }
 
 
-  override def merge(t: ProjectModuleConfiguration) = {
+  override def mergeConfiguration(t: ProjectModuleConfiguration) = {
     val that = t.asInstanceOf[WebAppConfiguration]
     val mergedWebXml = this.webXml ++ that.webXml
     val mergedUseSsl = this.useSsl.getOrElse(that.useSsl.getOrElse(false)).asInstanceOf[AnyRef]
@@ -68,7 +68,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
         null
     }
 
-    val superMap = super.merge(that).map
+    val superMap = super.mergeConfiguration(that).map
 
     val newData = Map[String, AnyRef](
       "use_ssl" -> mergedUseSsl,
@@ -80,7 +80,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
   }
 
   override def instance(m:Map[String,AnyRef]) = {
-    new WebAppConfiguration(map)
+    new WebAppConfiguration(m)
   }
 }
 
@@ -116,7 +116,8 @@ object WebAppConfiguration {
     }
     val persistenceModules = envConfig.persistence.map(makeRuntimeMod(_))
     val modules = envConfig.modules.map(makeRuntimeMod(_))
-    val m1 = baseConfig << runtimeConfig << viewModule
+    val m1a = baseConfig << runtimeConfig
+    val m1 = m1a << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
     val m4 = m3 << envConfig
@@ -192,6 +193,7 @@ object WebAppConfiguration {
   }
 
   def fromJson(json: String) = {
-    new WebAppConfiguration(Json.parse(json).asInstanceOf[Map[String, AnyRef]])
+    val m = Json.parse(json).asInstanceOf[Map[String, AnyRef]]
+    new WebAppConfiguration(m)
   }
 }
