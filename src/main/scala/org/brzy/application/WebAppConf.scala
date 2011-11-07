@@ -33,6 +33,7 @@ import java.io.{PrintWriter, File}
  *
  * @author Michael Fortin
  */
+@deprecated
 class WebAppConf(
       val confFile: WebAppConfFile,
       val views: ViewMod,

@@ -92,31 +92,30 @@ object WebAppConfiguration {
 
   val appConfigFile = "/brzy-webapp.b.yml"
 
-  private def search(a: AnyRef,env:String) = {
+  private def findEnv(a: AnyRef,env:String) = {
     a.asInstanceOf[Map[String, AnyRef]].find({
       case (k, v) => k == "environment" && v == env
     }).isDefined
   }
 
   def runtime(env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
-    val baseConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
-    val runtimeConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(appConfig)))
-    val envConfig = runtimeConfig.map.get("environment_overrides") match {
+    val archetypeConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
+    val projectConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(appConfig)))
+    val envConfig = projectConfig.map.get("environment_overrides") match {
       case Some(ec) =>
-        ec.asInstanceOf[List[Map[String,AnyRef]]].find(search(_,env)) match {
-          case Some(e) =>  new WebAppConfiguration(e.asInstanceOf[Map[String,AnyRef]])
-          case _ => new WebAppConfiguration(Map.empty[String,AnyRef])
+        ec.asInstanceOf[List[Map[String,AnyRef]]].find(findEnv(_,env)) match {
+          case Some(e) =>
+            new WebAppConfiguration(e.asInstanceOf[Map[String,AnyRef]])
+          case _ =>
+            new WebAppConfiguration(Map.empty[String,AnyRef])
         }
       case _ =>
         new WebAppConfiguration(Map.empty[String,AnyRef])
     }
-    val viewModule = runtimeConfig.views match {
-      case Some(v) => makeRuntimeMod(v)
-      case _ => null
-    }
+    val viewModule = makeRuntimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull))
     val persistenceModules = envConfig.persistence.map(makeRuntimeMod(_))
     val modules = envConfig.modules.map(makeRuntimeMod(_))
-    val m1a = baseConfig << runtimeConfig
+    val m1a = archetypeConfig << projectConfig
     val m1 = m1a << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
@@ -125,21 +124,23 @@ object WebAppConfiguration {
   }
 
   def buildtime(modBaseDir: File, env: String, appConfigPath: String, defaultConfig: String = defaultConfigFile) = {
-    val baseConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
-    val buildtimeConfig = new WebAppConfiguration(Yaml(new File(appConfigPath)))
-    val envConfig = buildtimeConfig.map.get("environment_overrides") match {
+    val archetypeConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
+    val projectConfig = new WebAppConfiguration(Yaml(new File(appConfigPath)))
+    val envConfig = projectConfig.map.get("environment_overrides") match {
       case Some(ec) =>
-        ec.asInstanceOf[List[Map[String,AnyRef]]].find(search(_,env)) match {
-          case Some(e) =>  new WebAppConfiguration(e.asInstanceOf[Map[String,AnyRef]])
-          case _ => new WebAppConfiguration(Map.empty[String,AnyRef])
+        ec.asInstanceOf[List[Map[String,AnyRef]]].find(findEnv(_,env)) match {
+          case Some(e) =>
+            new WebAppConfiguration(e.asInstanceOf[Map[String,AnyRef]])
+          case _ =>
+            new WebAppConfiguration(Map.empty[String,AnyRef])
         }
       case _ =>
         new WebAppConfiguration(Map.empty[String,AnyRef])
     }
-    val viewModule = makeBuildTimeMod(buildtimeConfig.views.get,modBaseDir)
+    val viewModule = makeBuildTimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull),modBaseDir)
     val persistenceModules = envConfig.persistence.map(makeBuildTimeMod(_,modBaseDir))
     val modules = envConfig.modules.map(makeBuildTimeMod(_,modBaseDir))
-    val m1 = baseConfig << buildtimeConfig << viewModule
+    val m1 = archetypeConfig << projectConfig << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
     val m4 = m3 << envConfig
@@ -194,6 +195,6 @@ object WebAppConfiguration {
 
   def fromJson(json: String) = {
     val m = Json.parse(json).asInstanceOf[Map[String, AnyRef]]
-    new WebAppConfiguration(m)
+    new WebAppConfiguration(m("config").asInstanceOf[Map[String, AnyRef]])
   }
 }
