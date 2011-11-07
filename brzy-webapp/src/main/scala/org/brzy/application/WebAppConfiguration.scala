@@ -161,7 +161,9 @@ object WebAppConfiguration {
       // this needs to be in this class, because of classloader scope issues.  Same
       // with the duplicate code below.  This should remove this later once the build runner
       // classloader is ironed out.
-      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
+      val configClassName = yaml.get("config_class").get.asInstanceOf[String]
+      log.debug("config_class for mod: {}", configClassName)
+      val c = Class.forName(configClassName)
       val constructor = c.getConstructor(Array(classOf[Map[_, _]]): _*)
       val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
@@ -182,13 +184,16 @@ object WebAppConfiguration {
     val yaml = Yaml(modFile)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {
-      val c = Class.forName(yaml.get("config_class").get.asInstanceOf[String])
+      val configClassName = yaml.get("config_class").get.asInstanceOf[String]
+      log.debug("config_class for mod: {}", configClassName)
+      val c = Class.forName(configClassName)
       val constructor = c.getConstructor(Array(classOf[Map[_, _]]): _*)
       val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]
       val mod = modInst << reference
       mod.asInstanceOf[Mod]
     }
     else {
+      log.warn("No config_class for mod: {}", reference)
       reference
     }
   }
