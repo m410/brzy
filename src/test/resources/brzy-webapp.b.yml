@@ -27,15 +27,14 @@ repositories:
   - id: fusesource
     url: "http://someurl.com/test"
 
-#persistence:
-#  - name: brzy-squeryl
-#    org: org.brzy
-#    version: "0.5"
-#    scan_package: *group
-#    driver: org.postgresql.Driver
-#    user_name: test
-#    password: ""
-#    url: jdbc:postgresql://localhost/dev
+persistence:
+  - name: brzy-squeryl
+    org: org.brzy.mod
+    version: 1.0.0.beta4-SNAPSHOT
+    driver: org.h2.Driver
+    user_name: sa
+    password: ""
+    url: "jdbc:h2:test_db"
 
 #
 # Logging
