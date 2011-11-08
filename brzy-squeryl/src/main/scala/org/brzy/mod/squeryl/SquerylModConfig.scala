@@ -43,15 +43,15 @@ class SquerylModConfig(override val map: Map[String, AnyRef]) extends Persistenc
   override def prettyPrint(t: String, pw: PrintWriter) {
     val tab = t + "  "
     super.prettyPrint(tab,pw)
-    pw.print("driver: ")
+    pw.print(tab +"driver: ")
     pw.println(driver.getOrElse("<None>"))
-    pw.print("url: ")
+    pw.print(tab +"url: ")
     pw.println(url.getOrElse("<None>"))
-    pw.print("user_name: ")
+    pw.print(tab +"user_name: ")
     pw.println(userName.getOrElse("<None>"))
-    pw.print("password: ")
+    pw.print(tab +"password: ")
     pw.println(password.getOrElse("<None>"))
-    pw.print("adaptor_name: ")
+    pw.print(tab +"adaptor_name: ")
     pw.println(adaptorName.getOrElse("<None>"))
   }
 }

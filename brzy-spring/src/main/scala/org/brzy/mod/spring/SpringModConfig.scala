@@ -36,7 +36,7 @@ class SpringModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(
   override def prettyPrint(t: String, pw: PrintWriter) {
     val tab = t + "  "
     super.prettyPrint(tab,pw)
-    pw.print("application_context: ")
+    pw.print(tab +"application_context: ")
     pw.println(applicationContext.getOrElse("<None>"))
   }
 }

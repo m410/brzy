@@ -151,9 +151,15 @@ object WebAppConfiguration {
     m4.asInstanceOf[WebAppConfiguration]
   }
 
-  protected[application] def isRuntime(mod: Mod):Boolean = mod.map.get("mod_type") match {
-    case Some(m) => m != "build"
-    case _ => true
+  protected[application] def isRuntime(mod: Mod):Boolean = {
+    val modResource: String = "modules/" + mod.name.get + "/brzy-module.b.yml"
+    val cpUrl = getClass.getClassLoader.getResource(modResource)
+    val yaml = Yaml(cpUrl.openStream)
+    log.debug("{} is runtime: ()", mod.name, yaml.get("mod_type"))
+    yaml.get("mod_type") match {
+      case Some(m) => m != "build"
+      case _ => true
+    }
   }
 
   /**

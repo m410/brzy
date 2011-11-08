@@ -45,15 +45,15 @@ class JmsModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map
     val tab = t + "  "
     super.prettyPrint(tab,pw)
 
-    pw.print("connection_factory_class: ")
+    pw.print(tab +"connection_factory_class: ")
     pw.println(connectionFactoryClass.getOrElse("<None>"))
-    pw.print("broker_url: ")
+    pw.print(tab +"broker_url: ")
     pw.println(brokerUrl.getOrElse("<None>"))
-    pw.print("user_name: ")
+    pw.print(tab +"user_name: ")
     pw.println(userName.getOrElse("<None>"))
-    pw.print("password: ")
+    pw.print(tab +"password: ")
     pw.println(password.getOrElse("<None>"))
-    pw.print("scan_package: ")
+    pw.print(tab +"scan_package: ")
     pw.println(scanPackage.getOrElse("<None>"))
   }
 }

@@ -45,17 +45,17 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
   override def prettyPrint(t: String, pw: PrintWriter) {
     val tab = t + "  "
     super.prettyPrint(tab,pw)
-    pw.print("presistence_unit: ")
+    pw.print(tab +"presistence_unit: ")
     pw.println(persistenceUnit.getOrElse("<None>"))
-    pw.print("transaction_type: ")
+    pw.print(tab +"transaction_type: ")
     pw.println(transactionType.getOrElse("<None>"))
-    pw.print("entity_discovery: ")
+    pw.print(tab +"entity_discovery: ")
     pw.println(entityDiscovery)
-    pw.print("entities: ")
+    pw.print(tab +"entities: ")
     pw.println(entities.getOrElse("<None>"))
-    pw.print("properties: ")
+    pw.print(tab +"properties: ")
     pw.println(properties.getOrElse("<None>"))
-    pw.print("web_xml: ")
+    pw.print(tab +"web_xml: ")
     pw.println(webXml.getOrElse("<None>"))
   }
 }

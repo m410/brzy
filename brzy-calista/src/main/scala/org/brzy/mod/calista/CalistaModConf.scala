@@ -52,17 +52,17 @@ class CalistaModConf(override val map: Map[String, AnyRef]) extends PersistenceM
   override def prettyPrint(t: String, pw: PrintWriter) {
     val tab = t + "  "
     super.prettyPrint(tab,pw)
-    pw.print("user_name: ")
+    pw.print(tab +"user_name: ")
     pw.println(userName.getOrElse("<None>"))
-    pw.print("password: ")
+    pw.print(tab +"password: ")
     pw.println(password.getOrElse("<None>"))
-    pw.print("key_space: ")
+    pw.print(tab +"key_space: ")
     pw.println(keySpace.getOrElse("<None>"))
-    pw.print("host: ")
+    pw.print(tab +"host: ")
     pw.println(host.getOrElse("<None>"))
-    pw.print("port: ")
+    pw.print(tab +"port: ")
     pw.println(port.getOrElse("<None>"))
-    pw.print("create_schema: ")
+    pw.print(tab +"create_schema: ")
     pw.println(createSchema.getOrElse("<None>"))
   }
 }
