@@ -113,8 +113,8 @@ object WebAppConfiguration {
         new WebAppConfiguration(Map.empty[String,AnyRef])
     }
     val viewModule = makeRuntimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull))
-    val persistenceModules = envConfig.persistence.map(makeRuntimeMod(_))
-    val modules = envConfig.modules.map(makeRuntimeMod(_))
+    val persistenceModules = projectConfig.persistence.map(makeRuntimeMod(_))
+    val modules = projectConfig.modules.map(makeRuntimeMod(_))
     val m1a = archetypeConfig << projectConfig
     val m1 = m1a << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
@@ -138,8 +138,8 @@ object WebAppConfiguration {
         new WebAppConfiguration(Map.empty[String,AnyRef])
     }
     val viewModule = makeBuildTimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull),modBaseDir)
-    val persistenceModules = envConfig.persistence.map(makeBuildTimeMod(_,modBaseDir))
-    val modules = envConfig.modules.map(makeBuildTimeMod(_,modBaseDir))
+    val persistenceModules = projectConfig.persistence.map(makeBuildTimeMod(_,modBaseDir))
+    val modules = projectConfig.modules.map(makeBuildTimeMod(_,modBaseDir))
     val m1 = archetypeConfig << projectConfig << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
@@ -193,7 +193,7 @@ object WebAppConfiguration {
       mod.asInstanceOf[Mod]
     }
     else {
-      log.warn("No config_class for mod: {}", reference)
+//      log.warn("No config_class for mod: {}", reference)
       reference
     }
   }
