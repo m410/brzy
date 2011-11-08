@@ -43,6 +43,8 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
       ) ++ super.<<(that).map)
 
   override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
     pw.print("presistence_unit: ")
     pw.println(persistenceUnit.getOrElse("<None>"))
     pw.print("transaction_type: ")

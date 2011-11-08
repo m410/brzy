@@ -16,13 +16,12 @@ package org.brzy.mod.squeryl
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.application.WebAppConf
+import org.brzy.application.WebAppConfiguration
 
 class ModuleFactoryTest extends JUnitSuite {
 
-  @Test
-  def testAssemble = {
-    val config = WebAppConf("test")
+  @Test def testAssemble() {
+    val config = WebAppConfiguration.runtime("test")
     assertNotNull(config.persistence)
     assertEquals(1,config.persistence.size)
     config.persistence.foreach( p => {

@@ -116,7 +116,7 @@ object WebAppConfiguration {
     }
     val viewModule = makeRuntimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull))
     val persistenceModules = projectConfig.persistence.map(makeRuntimeMod(_))
-    val modules = projectConfig.modules.map(makeRuntimeMod(_))
+    val modules = projectConfig.modules.filter(isRuntime(_)).map(makeRuntimeMod(_))
     val m1a = archetypeConfig << projectConfig
     val m1 = m1a << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => {
@@ -151,6 +151,10 @@ object WebAppConfiguration {
     m4.asInstanceOf[WebAppConfiguration]
   }
 
+  protected[application] def isRuntime(mod: Mod):Boolean = mod.map.get("mod_type") match {
+    case Some(m) => m != "build"
+    case _ => true
+  }
 
   /**
    * Loads the application configuration from the classpath
