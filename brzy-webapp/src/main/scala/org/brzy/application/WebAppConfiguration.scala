@@ -100,6 +100,8 @@ object WebAppConfiguration {
 
   def runtime(env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
     val archetypeConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
+
+    // todo persistence modules will have lost some information, they're not the right instance
     val projectConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(appConfig)))
     val envConfig = projectConfig.map.get("environment_overrides") match {
       case Some(ec) =>
@@ -117,7 +119,9 @@ object WebAppConfiguration {
     val modules = projectConfig.modules.map(makeRuntimeMod(_))
     val m1a = archetypeConfig << projectConfig
     val m1 = m1a << viewModule
-    val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
+    val m2 = persistenceModules.foldLeft(m1)((r,c) => {
+      r << c
+    })
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
     val m4 = m3 << envConfig
     m4.asInstanceOf[WebAppConfiguration]

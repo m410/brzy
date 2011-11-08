@@ -15,6 +15,7 @@ package org.brzy.mod.jpa
 
 import org.brzy.fab.mod.PersistenceMod
 import org.brzy.fab.conf.{WebXml, BaseConf}
+import java.io.PrintWriter
 
 /**
  * JPA module configuration parameters.
@@ -41,4 +42,18 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
         "properties" -> that.map.getOrElse("properties", this.properties.orNull)
       ) ++ super.<<(that).map)
 
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    pw.print("presistence_unit: ")
+    pw.println(persistenceUnit.getOrElse("<None>"))
+    pw.print("transaction_type: ")
+    pw.println(transactionType.getOrElse("<None>"))
+    pw.print("entity_discovery: ")
+    pw.println(entityDiscovery)
+    pw.print("entities: ")
+    pw.println(entities.getOrElse("<None>"))
+    pw.print("properties: ")
+    pw.println(properties.getOrElse("<None>"))
+    pw.print("web_xml: ")
+    pw.println(webXml.getOrElse("<None>"))
+  }
 }

@@ -265,8 +265,10 @@ object WebApp {
   def apply(config: WebAppConfiguration): WebApp = {
     log.debug("application class: {}", config.application.get.applicationClass.getOrElse("NA"))
 
-    if (config.application.get.applicationClass.isDefined)
-      Build.reflect[WebApp](config.application.get.applicationClass.get, Array(config))
+    if (config.application.get.applicationClass.isDefined) {
+      val projectApplicationClass = config.application.get.applicationClass.get
+      Build.reflect[WebApp](projectApplicationClass, Array(config))
+    }
     else
       new WebApp(config)
   }

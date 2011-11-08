@@ -15,8 +15,15 @@ package org.brzy.mod.jetty
 
 
 import org.brzy.fab.mod.RuntimeMod
+import java.io.PrintWriter
 
 /**
  * @author Michael Fortin
  */
-class JettyModConfig(override val map:Map[String,AnyRef]) extends RuntimeMod(map)
+class JettyModConfig(override val map:Map[String,AnyRef]) extends RuntimeMod(map) {
+
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
+  }
+}

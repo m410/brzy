@@ -15,6 +15,7 @@ package org.brzy.mod.jms
 
 import org.brzy.fab.mod.RuntimeMod
 import org.brzy.fab.conf.BaseConf
+import java.io.PrintWriter
 
 /**
  * Module Configuration for the JMS Module.
@@ -38,5 +39,21 @@ class JmsModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map
         "broker_url" -> that.map.getOrElse("connection_url", this.brokerUrl.orNull)
         ) ++ super.<<(that).map)
     }
+  }
+
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
+
+    pw.print("connection_factory_class: ")
+    pw.println(connectionFactoryClass.getOrElse("<None>"))
+    pw.print("broker_url: ")
+    pw.println(brokerUrl.getOrElse("<None>"))
+    pw.print("user_name: ")
+    pw.println(userName.getOrElse("<None>"))
+    pw.print("password: ")
+    pw.println(password.getOrElse("<None>"))
+    pw.print("scan_package: ")
+    pw.println(scanPackage.getOrElse("<None>"))
   }
 }

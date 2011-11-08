@@ -15,6 +15,7 @@ package org.brzy.mod.calista
 
 import org.brzy.fab.conf.BaseConf
 import org.brzy.fab.mod.PersistenceMod
+import java.io.PrintWriter
 
 /**
  *
@@ -46,5 +47,22 @@ class CalistaModConf(override val map: Map[String, AnyRef]) extends PersistenceM
         "key_space" -> that.map.getOrElse("key_space",this.keySpace.orNull))
         ++ super.<<(that).map)
     }
+  }
+
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
+    pw.print("user_name: ")
+    pw.println(userName.getOrElse("<None>"))
+    pw.print("password: ")
+    pw.println(password.getOrElse("<None>"))
+    pw.print("key_space: ")
+    pw.println(keySpace.getOrElse("<None>"))
+    pw.print("host: ")
+    pw.println(host.getOrElse("<None>"))
+    pw.print("port: ")
+    pw.println(port.getOrElse("<None>"))
+    pw.print("create_schema: ")
+    pw.println(createSchema.getOrElse("<None>"))
   }
 }

@@ -15,6 +15,7 @@ package org.brzy.mod.email
 
 import org.brzy.fab.conf.BaseConf
 import org.brzy.fab.mod.RuntimeMod
+import java.io.PrintWriter
 
 /**
  * Email Module Configuration.
@@ -50,5 +51,24 @@ class EmailModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(m
         "mail_debug" -> that.map.getOrElse("mail_debug", this.mailDebug.orNull)
         ) ++ super.<<(that).map)
     }
+  }
+
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
+    pw.print("smtp_host: ")
+    pw.println(smtpHost.getOrElse("<None>"))
+    pw.print("smtp_auth: ")
+    pw.println(smtpAuth.getOrElse("<None>"))
+    pw.print("user_name: ")
+    pw.println(userName.getOrElse("<None>"))
+    pw.print("password: ")
+    pw.println(password.getOrElse("<None>"))
+    pw.print("mail_from: ")
+    pw.println(mailFrom.getOrElse("<None>"))
+    pw.print("transport_protocol: ")
+    pw.println(transportProtocol.getOrElse("<None>"))
+    pw.print("mail_debug: ")
+    pw.println(mailDebug.getOrElse("<None>"))
   }
 }

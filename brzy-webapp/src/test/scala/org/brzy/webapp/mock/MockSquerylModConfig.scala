@@ -1,3 +1,5 @@
+package org.brzy.webapp.mock
+
 /*
  * Copyright 2010 Michael Fortin <mike@brzy.org>
  *
@@ -11,17 +13,10 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.squeryl
-
 import org.brzy.fab.conf.BaseConf
 import org.brzy.fab.mod.PersistenceMod
-import java.io.PrintWriter
 
-
-/**
- * @author Michael Fortin
- */
-class SquerylModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) {
+class MockSquerylModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) {
   val driver: Option[String] = map.get("driver").asInstanceOf[Option[String]].orElse(None)
   val url: Option[String] = map.get("url").asInstanceOf[Option[String]].orElse(None)
   val userName: Option[String] = map.get("user_name").asInstanceOf[Option[String]].orElse(None)
@@ -32,26 +27,11 @@ class SquerylModConfig(override val map: Map[String, AnyRef]) extends Persistenc
     if (that == null)
       this
     else
-      new SquerylModConfig(Map[String, AnyRef](
+      new MockSquerylModConfig(Map[String, AnyRef](
         "driver" -> that.map.getOrElse("driver", this.driver.orNull),
         "url" -> that.map.getOrElse("url", this.url.orNull),
         "user_name" -> that.map.getOrElse("user_name", this.userName.orNull),
         "password" -> that.map.getOrElse("password", this.password.orNull),
         "adaptor_name" -> that.map.getOrElse("adapter_name", this.adaptorName.orNull)
         ) ++ super.<<(that).map)
-
-  override def prettyPrint(t: String, pw: PrintWriter) {
-    val tab = t + "  "
-    super.prettyPrint(tab,pw)
-    pw.print("driver: ")
-    pw.println(driver.getOrElse("<None>"))
-    pw.print("url: ")
-    pw.println(url.getOrElse("<None>"))
-    pw.print("user_name: ")
-    pw.println(userName.getOrElse("<None>"))
-    pw.print("password: ")
-    pw.println(password.getOrElse("<None>"))
-    pw.print("adaptor_name: ")
-    pw.println(adaptorName.getOrElse("<None>"))
-  }
 }

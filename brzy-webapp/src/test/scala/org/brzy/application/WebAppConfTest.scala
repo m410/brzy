@@ -17,6 +17,7 @@ import org.junit.Assert._
 import org.junit.Test
 
 import org.scalatest.junit.JUnitSuite
+import org.brzy.webapp.mock.MockSquerylModConfig
 
 class WebAppConfTest extends JUnitSuite {
   @Test def testCreateConfiguration() {
@@ -30,11 +31,21 @@ class WebAppConfTest extends JUnitSuite {
     assertNotNull(wac.logging.get.root)
     assertEquals(1, wac.logging.get.root.get.ref.size)
     assertNotNull(wac.dependencies)
-    assertEquals(16, wac.dependencies.size)
+    assertEquals(23, wac.dependencies.size)
     assertNotNull(wac.dependencyExcludes)
     assertEquals(0, wac.dependencyExcludes.size)
     assertNotNull(wac.repositories)
     assertEquals(8, wac.repositories.size)
+    assertEquals(0, wac.modules.size)
+    assertEquals(1, wac.persistence.size)
+
+    val squeryl = wac.persistence.find(_.name.get == "brzy-squeryl")
+    assertTrue(squeryl.isDefined)
+    assertTrue(squeryl.get.isInstanceOf[MockSquerylModConfig])
+    val squerylConfig = squeryl.get.asInstanceOf[MockSquerylModConfig]
+    assertTrue(squerylConfig.driver.isDefined)
+    assertEquals("org.h2.Driver",squerylConfig.driver.get)
+
     assertNotNull(wac.webXml)
     assertNotNull(wac.environment)
     assertEquals(9, wac.webXml.size)
@@ -58,11 +69,13 @@ class WebAppConfTest extends JUnitSuite {
     assertTrue(wacFromJson.logging.get.root.isDefined)
     assertEquals(1, wacFromJson.logging.get.root.get.ref.size)
     assertNotNull(wacFromJson.dependencies)
-    assertEquals(16, wacFromJson.dependencies.size)
+    assertEquals(23, wacFromJson.dependencies.size)
     assertNotNull(wacFromJson.dependencyExcludes)
     assertEquals(0, wacFromJson.dependencyExcludes.size)
     assertNotNull(wacFromJson.repositories)
     assertEquals(8, wacFromJson.repositories.size)
+    assertEquals(0, wac.modules.size)
+    assertEquals(1, wac.persistence.size)
     assertNotNull(wacFromJson.webXml)
     assertNotNull(wacFromJson.environment)
     assertEquals(9, wacFromJson.webXml.size)

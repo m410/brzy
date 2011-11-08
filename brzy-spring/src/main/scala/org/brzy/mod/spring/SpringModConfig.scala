@@ -15,6 +15,7 @@ package org.brzy.mod.spring
 
 import org.brzy.fab.mod.RuntimeMod
 import org.brzy.fab.conf.BaseConf
+import java.io.PrintWriter
 
 /**
  * Spring module configuration.
@@ -31,4 +32,11 @@ class SpringModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(
       new SpringModConfig(Map[String, AnyRef](
         "application_context" -> that.map.getOrElse("application_context", this.applicationContext.orNull)
         ) ++ super.<<(that).map)
+
+  override def prettyPrint(t: String, pw: PrintWriter) {
+    val tab = t + "  "
+    super.prettyPrint(tab,pw)
+    pw.print("application_context: ")
+    pw.println(applicationContext.getOrElse("<None>"))
+  }
 }
