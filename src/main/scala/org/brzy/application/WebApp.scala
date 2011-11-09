@@ -80,10 +80,13 @@ class WebApp(conf: WebAppConfiguration) {
     val list = ListBuffer[ModProvider]()
     conf.modules.foreach(module => {
       log.debug("module config: {}", module)
-      val mod = module.asInstanceOf[RuntimeMod]
 
-      if (mod.providerClass.isDefined)
-        list += mod.newProviderInstance
+      if (module.isInstanceOf[RuntimeMod]) {
+        val mod = module.asInstanceOf[RuntimeMod]
+
+        if (mod.providerClass.isDefined)
+          list += mod.newProviderInstance
+      }
     })
     log.debug("modules: {}", list)
     list.toList
