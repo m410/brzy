@@ -116,7 +116,7 @@ object WebAppConfiguration {
     }
     val viewModule = makeRuntimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull))
     val persistenceModules = projectConfig.persistence.map(makeRuntimeMod(_))
-    val modules = projectConfig.modules.filter(isRuntime(_)).map(makeRuntimeMod(_))
+    val modules = projectConfig.modules.map(makeRuntimeMod(_))
     val m1a = archetypeConfig << projectConfig
     val m1 = m1a << viewModule
     val m2 = persistenceModules.foldLeft(m1)((r,c) => {
@@ -155,11 +155,12 @@ object WebAppConfiguration {
     val modResource: String = "modules/" + mod.name.get + "/brzy-module.b.yml"
     val cpUrl = getClass.getClassLoader.getResource(modResource)
     val yaml = Yaml(cpUrl.openStream)
-    log.debug("{} is runtime: ()", mod.name, yaml.get("mod_type"))
-    yaml.get("mod_type") match {
-      case Some(m) => m != "build"
-      case _ => true
+    val result = yaml.get("mod_type") match {
+      case Some(m) => m == "build"
+      case _ => false
     }
+    log.debug("{} is runtime: {}", mod.name, result)
+    result
   }
 
   /**
