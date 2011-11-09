@@ -16,13 +16,12 @@ package org.brzy.mod.scalate
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.application.WebAppConf
-
+import org.brzy.application.WebAppConfiguration
 
 class ModuleFactoryTest extends JUnitSuite {
 
   @Test def testAssemble() {
-    val bootConfig = WebAppConf("test")
+    val bootConfig = WebAppConfiguration.runtime("test")
     assertNotNull(bootConfig.views)
   }
 }

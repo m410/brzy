@@ -16,12 +16,11 @@ package org.brzy.tomcat
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.application.WebAppConf
-
+import org.brzy.application.WebAppConfiguration
 
 class LoadConfigTest extends JUnitSuite {
-  @Test def testLoadConfig = {
-    val config = WebAppConf("test")
+  @Test def testLoadConfig() {
+    val config = WebAppConfiguration.runtime("test")
     assertEquals(1,config.modules.size)
     assertEquals(1,config.modules.size)
   }

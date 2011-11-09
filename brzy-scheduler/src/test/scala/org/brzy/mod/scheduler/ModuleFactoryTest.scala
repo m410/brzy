@@ -16,12 +16,12 @@ package org.brzy.mod.scheduler
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.application.WebAppConf
+import org.brzy.application.WebAppConfiguration
 
 class ModuleFactoryTest extends JUnitSuite {
 
   @Test def testAssemble() {
-    val config = WebAppConf("test")
+    val config = WebAppConfiguration.runtime("test")
     assertNotNull(config.modules)
     assertEquals(1, config.modules.size)
   }
