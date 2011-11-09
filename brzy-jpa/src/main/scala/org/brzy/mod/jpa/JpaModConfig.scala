@@ -52,10 +52,10 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
     pw.print(tab +"entity_discovery: ")
     pw.println(entityDiscovery)
     pw.print(tab +"entities: ")
-    pw.println(entities.getOrElse("<None>"))
+    entities.foreach(e=>pw.println(tab + "  " + e))
     pw.print(tab +"properties: ")
-    pw.println(properties.getOrElse("<None>"))
+    properties.foreach(p=>pw.println(tab + "  " + p))
     pw.print(tab +"web_xml: ")
-    pw.println(webXml.getOrElse("<None>"))
+    webXml.foreach(w=>pw.println(tab + " " + w))
   }
 }

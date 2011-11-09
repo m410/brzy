@@ -16,8 +16,7 @@ package org.brzy.mod.scalate
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.fab.mod.Mod
-
+import org.brzy.fab.mod.{ViewMod, Mod}
 
 class ScalateModConfigTest extends JUnitSuite {
 
@@ -57,13 +56,13 @@ class ScalateModConfigTest extends JUnitSuite {
     assertEquals(1,merged.repositories.size)
     merged.repositories.foreach(d => assertEquals("repo",d.id.get))
 
-    assertEquals(2,merged.webXml.get.size)
+    assertEquals(2,merged.webXml.size)
   }
 
 
   @Test
   def testMergeModule() {
-    val mod = new Mod(Map[String, AnyRef](
+    val mod = new ViewMod(Map[String, AnyRef](
       "name" -> "test",
       "version" -> "test",
       "org" -> "test",
@@ -100,7 +99,7 @@ class ScalateModConfigTest extends JUnitSuite {
     assertTrue(merged.fileExtension.isDefined)
     assertEquals("test",merged.fileExtension.get)
 
-    assertEquals(2,merged.webXml.get.size)
+    assertEquals(2,merged.webXml.size)
   }
 
   @Test

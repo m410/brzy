@@ -32,7 +32,7 @@ class JpaModProvider(c:JpaModConfig) extends ModProvider with InterceptorProvide
   /**
    * Deregister all drivers that the DriverManager is aware of.
    */
-  override def shutdown {
+  override def shutdown() {
     val drivers = DriverManager.getDrivers
     drivers.foreach(d=>{
       log.debug("deregister: {}",d)

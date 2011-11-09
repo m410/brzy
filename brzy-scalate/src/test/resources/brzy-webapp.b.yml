@@ -12,9 +12,6 @@ views:
   name: brzy-scalate
   org: org.brzy.mod
   version: "0.12"
-  config_class: org.brzy.module.ScalateModuleConfig
-  file_extension: ".ssp"
-  html_version: html5
 logging:
   provider: logback
   appenders:

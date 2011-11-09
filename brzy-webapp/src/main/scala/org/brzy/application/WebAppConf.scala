@@ -131,20 +131,20 @@ class WebAppConf(
   val webXml: List[Map[String, AnyRef]] = {
     val buf = ListBuffer[Map[String, AnyRef]]()
 
-    if (views != null && views.isInstanceOf[WebXml] && views.asInstanceOf[WebXml].webXml.isDefined)
-      buf ++= views.asInstanceOf[WebXml].webXml.get
+    if (views != null && views.isInstanceOf[WebXml] )
+      buf ++= views.asInstanceOf[WebXml].webXml
 
     if (confFile.webXml.isDefined)
       buf ++= confFile.webXml.get
 
     persistence.foreach(p => {
-      if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined)
-        p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
+      if (p.isInstanceOf[WebXml] )
+        p.asInstanceOf[WebXml].webXml.foreach(xml => buf += xml)
     })
 
     modules.foreach(p => {
-      if (p.isInstanceOf[WebXml] && p.asInstanceOf[WebXml].webXml.isDefined && p.asInstanceOf[WebXml].webXml.get != null)
-        p.asInstanceOf[WebXml].webXml.get.foreach(xml => buf += xml)
+      if (p.isInstanceOf[WebXml] &&  p.asInstanceOf[WebXml].webXml != null)
+        p.asInstanceOf[WebXml].webXml.foreach(xml => buf += xml)
     })
     buf.toList
   }
@@ -166,6 +166,7 @@ class WebAppConf(
  *
  * @author Michael Fortin
  */
+@deprecated
 object WebAppConf {
   private val log = LoggerFactory.getLogger(getClass)
   val defaultConfigFile = "/brzy-webapp.default.b.yml"

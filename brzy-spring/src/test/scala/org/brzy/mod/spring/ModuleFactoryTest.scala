@@ -15,12 +15,12 @@ package org.brzy.mod.spring
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.brzy.application.WebAppConf
 import org.junit.{Ignore, Test}
+import org.brzy.application.WebAppConfiguration
 
 class ModuleFactoryTest extends JUnitSuite {
   @Test @Ignore def testAssemble() {
-    val config = WebAppConf("test")
+    val config = WebAppConfiguration.runtime("test")
     assertNotNull(config.modules)
     assertEquals(1, config.modules.size)
     config.modules.foreach(p => {
