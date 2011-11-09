@@ -15,13 +15,13 @@ package org.brzy.mod.jetty
 
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.application.WebAppConf
+import org.brzy.application.WebAppConfiguration
 import org.junit.{Ignore, Test}
 
 
 class LoadConfigTest extends JUnitSuite {
   @Test @Ignore def testLoadConfig() {
-    val config = WebAppConf("test")
+    val config = WebAppConfiguration.runtime("test")
     assertEquals(1,config.modules.size)
     assertEquals(1,config.modules.size)
   }

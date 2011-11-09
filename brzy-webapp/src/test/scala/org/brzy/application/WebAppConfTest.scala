@@ -48,6 +48,7 @@ class WebAppConfTest extends JUnitSuite {
 
     assertNotNull(wac.webXml)
     assertNotNull(wac.environment)
+    assertEquals("test",wac.environment)
     assertEquals(9, wac.webXml.size)
 
     assertTrue(wac.views.isDefined)
@@ -81,6 +82,7 @@ class WebAppConfTest extends JUnitSuite {
     assertEquals(1, wac.persistence.size)
     assertNotNull(wacFromJson.webXml)
     assertNotNull(wacFromJson.environment)
+    assertEquals("test",wac.environment)
     assertEquals(9, wacFromJson.webXml.size)
 
     assertEquals(1, wacFromJson.logging.get.root.get.ref.size)

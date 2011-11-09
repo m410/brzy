@@ -14,15 +14,15 @@
 package org.brzy.mod.jpa.build
 
 import xml._
-import org.brzy.application.WebAppConf
 import org.brzy.mod.jpa.JpaModConfig
+import org.brzy.application.WebAppConfiguration
 
 /**
  * Generates a Persistence.xml JPA configuration file from the applications configuration.
  * 
  * @author Michael Fortin
  */
-class PersistenceXml(config: WebAppConf) {
+class PersistenceXml(config: WebAppConfiguration) {
   val jpaModConf = config.persistence.find(_.name.get == "brzy-jpa").get.asInstanceOf[JpaModConfig]
 
   val transactionType = jpaModConf.transactionType.getOrElse("RESOURCE_LOCAL")

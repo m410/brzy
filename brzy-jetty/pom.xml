@@ -17,7 +17,7 @@
     <jetty-version>6.1.26</jetty-version>
     <scala.version>2.8.1</scala.version>
     <fab-configuration-version>0.8-SNAPSHOT</fab-configuration-version>
-    <brzy-webapp-version>1.0.0.beta1</brzy-webapp-version>
+    <brzy-webapp-version>1.0.0.beta4-SNAPSHOT</brzy-webapp-version>
   </properties>
   <build>
     <plugins>
