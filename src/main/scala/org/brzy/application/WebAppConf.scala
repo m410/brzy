@@ -166,6 +166,7 @@ class WebAppConf(
  *
  * @author Michael Fortin
  */
+@deprecated
 object WebAppConf {
   private val log = LoggerFactory.getLogger(getClass)
   val defaultConfigFile = "/brzy-webapp.default.b.yml"
