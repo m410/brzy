@@ -25,9 +25,9 @@ import java.io.PrintWriter
 class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod(map) {
   val persistenceUnit: Option[String] = map.get("persistence_unit").asInstanceOf[Option[String]].orElse(None)
   val transactionType: Option[String] = map.get("transaction_type").asInstanceOf[Option[String]].orElse(None)
-  val entityDiscovery: String = map.getOrElse("entity_discovery","list").asInstanceOf[String] // or scan
+  val entityDiscovery: String = map.getOrElse("entity_discovery", "list").asInstanceOf[String] // or scan
   val entities: Option[List[String]] = map.get("entities").asInstanceOf[Option[List[String]]].orElse(None)
-  val properties: Option[Map[String,String]] = map.get("properties").asInstanceOf[Option[Map[String,String]]].orElse(None)
+  val properties: Option[Map[String, String]] = map.get("properties").asInstanceOf[Option[Map[String, String]]].orElse(None)
   val webXml: Option[List[Map[String, AnyRef]]] = map.get("web_xml").asInstanceOf[Option[List[Map[String, AnyRef]]]].orElse(None)
 
   override def <<(that: BaseConf) =
@@ -43,19 +43,27 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
       ) ++ super.<<(that).map)
 
   override def prettyPrint(t: String, pw: PrintWriter) {
-    val tab = t + "  "
-    super.prettyPrint(tab,pw)
-    pw.print(tab +"presistence_unit: ")
+    val tab = t
+    super.prettyPrint(tab, pw)
+    pw.print(tab + "presistence_unit: ")
     pw.println(persistenceUnit.getOrElse("<None>"))
-    pw.print(tab +"transaction_type: ")
+    pw.print(tab + "transaction_type: ")
     pw.println(transactionType.getOrElse("<None>"))
-    pw.print(tab +"entity_discovery: ")
+    pw.print(tab + "entity_discovery: ")
     pw.println(entityDiscovery)
-    pw.print(tab +"entities: ")
-    entities.foreach(e=>pw.println(tab + "  " + e))
-    pw.print(tab +"properties: ")
-    properties.foreach(p=>pw.println(tab + "  " + p))
-    pw.print(tab +"web_xml: ")
-    webXml.foreach(w=>pw.println(tab + " " + w))
+    pw.println(tab + "entities: ")
+    entities.foreach(e => print(tab + "  ", e, pw))
+    pw.println(tab + "properties: ")
+    properties.foreach(e => print(tab + "  ", e, pw))
+    pw.println(tab + "web_xml: ")
+    webXml.foreach(w => print(tab + "  ", w, pw))
+  }
+
+  protected[this] def print(tab: String, a: AnyRef, pw: PrintWriter) {
+    a match {
+      case l: List[_] => l.foreach(i => pw.println(tab + i))
+      case l: Map[_, _] => l.foreach({case (x, y) => pw.println(tab + x + ": " + y)})
+      case _ => pw.println(tab + a)
+    }
   }
 }
