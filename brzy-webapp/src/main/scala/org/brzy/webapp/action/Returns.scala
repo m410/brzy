@@ -55,6 +55,11 @@ case class SessionRemove(attr: String) extends Data
 case class Flash(code: String, default: String) extends Data
 
 /**
+ * Add header or headers to the response.
+ */
+case class Header(name:String,value:String) extends Data
+
+/**
  *
  */
 case class ResponseHeaders(headers: (String, String)*) extends Data

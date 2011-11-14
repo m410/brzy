@@ -237,7 +237,7 @@ case class Cookie(comment: String, domain: String, maxAge: Int, name: String,
  */
 case class PostBody(request: HttpServletRequest) extends Args {
   private[this] val log = LoggerFactory.getLogger(classOf[PostBody])
-  protected[this] val maxSize = 100000
+  protected[this] val maxSize = 10000000
   protected[this] val tempDir = new java.io.File(util.Properties.tmpDir)
   protected[this] val sizeThreshold = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD
 
@@ -253,7 +253,7 @@ case class PostBody(request: HttpServletRequest) extends Args {
 	 *
 	 * @param name The name of the parameter the data is uploaded as.
 	 */
-  def asBytes(name: String): Array[Byte] = {
+  def uploadedFile(name: String): FileItem = {
     if (ServletFileUpload.isMultipartContent(request)) {
       val factory = new DiskFileItemFactory()
       factory.setSizeThreshold(sizeThreshold)
@@ -269,7 +269,7 @@ case class PostBody(request: HttpServletRequest) extends Args {
       })
 
       item match {
-        case Some(i) => i.asInstanceOf[FileItem].get
+        case Some(i) => i.asInstanceOf[FileItem]
         case _ => error("Not a byte array.")
       }
     }

@@ -31,7 +31,7 @@ class FileUploadTest extends JUnitSuite {
 
     println(request.getFileMap)
     val postbody = new PostBody(request)
-    val bytes = postbody.asBytes("file")
+    val bytes = postbody.uploadedFile("file")
     assertNotNull(bytes)
     //    assertEquals(content,text)
   }

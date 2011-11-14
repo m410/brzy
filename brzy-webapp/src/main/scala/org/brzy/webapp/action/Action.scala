@@ -496,6 +496,9 @@ object Action {
       case s: Flash =>
         log.trace("flash: {}", s)
         new FlashMessage(s.code, req.getSession)
+      case h: Header =>
+        log.trace("header: {}", h)
+        res.addHeader(h.name ,h.value)
       case s: CookieAdd =>
         log.trace("cookieAdd: {}", s)
         val cookie = new JCookie(s.name, s.value)
