@@ -436,7 +436,7 @@ object Action {
         val target: String = view.path + ".ssp" //action.viewType
         log.trace("view: {}", target)
         // TODO Should be set by the view and overridable by the controller
-	res.setHeader("Content-Type","text/html; charset=utf-8")
+	      res.setHeader("Content-Type","text/html; charset=utf-8")
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
         log.trace("forward: {}", f)
@@ -470,6 +470,9 @@ object Action {
         var inRead = 0
         while ( { inRead = input.read; inRead} >= 0)
           res.getOutputStream.write(inRead)
+      case s: Stream =>
+        res.setContentType(s.contentType)
+        s.io(res.getOutputStream)
       case j: Json[_] =>
         log.trace("json: {}", j)
         res.setContentType(j.contentType)
