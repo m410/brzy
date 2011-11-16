@@ -16,6 +16,7 @@ package org.brzy.webapp.action
 import xml.Elem
 import com.twitter.json.{Json => tJson}
 import org.scalastuff.scalabeans.Preamble._
+import java.io.OutputStream
 
 /**
  * A Data class is one of the two possible return types of an action.  
@@ -122,7 +123,26 @@ case class Text(ref: AnyRef, contentType: String = "text/plain") extends Directi
 case class Binary(bytes: Array[Byte], contentType: String) extends Direction
 
 /**
- * Return Json formatted text as the body of the response.
+ * Write to the response output stream.
+ *
+ * @param io The response output stream on loan.
+ * @param contentType the contentType header to set for the response.
+ */
+case class Stream(io: (OutputStream)=>Unit, contentType: String) extends Direction
+
+/**
+ * Return Json formatted text as the body of the response.  If you need to override how the target
+ * entity gets serialized mix-in the Parser trait.
+ * {{{
+ * new Json(target) with Parser {
+ *   override def parse = {
+ *    // custom parser here
+ *    ""
+ *   }
+ * }}}
+ *
+ * @param target The object to serialize into json
+ * @param contentType the content type header value to set.
  */
 case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json") extends Direction with Parser {
 
@@ -142,6 +162,13 @@ case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "applicatio
   }
 }
 
+/**
+ * Just like the json response, but wraps the json body with a javascript method call.
+ *
+ * @param callback The name of the javascript callback.
+ * @param target The target object to serialize into json.
+ * @param contentType Defaults to application/json, but can be overriden.
+ */
 case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json") extends Direction with Parser {
   def parse = {
     val sb = new StringBuilder()
