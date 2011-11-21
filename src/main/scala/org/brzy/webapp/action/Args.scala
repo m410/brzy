@@ -130,9 +130,23 @@ object Headers {
  * @param roles the roles the user has 
  */
 @serializable
-case class Principal(name: String, roles: Roles)
+case class Principal(name: String, roles: Roles) {
+  def isLoggedIn = name != null
+}
 
 object Principal {
+  def apply(request: HttpServletRequest) = {
+    val sessionProperty = if (request.getSession(false) != null)
+        request.getSession.getAttribute("brzy_principal")
+      else
+        null
+
+    if (sessionProperty != null)
+      sessionProperty.asInstanceOf[Principal]
+    else
+      new Principal(null,null)
+  }
+
   def get(request: HttpServletRequest) = {
     Option(
       if (request.getSession(false) != null)
