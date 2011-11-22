@@ -1,5 +1,6 @@
 package org.brzy.webapp.mock
 
-import org.brzy.application.{WebAppConfiguration, WebApp}
+import org.brzy.application.{WebAppAutoDiscoverImpl, WebAppConfiguration, WebApp}
 
-class MockWebApp(config:WebAppConfiguration) extends WebApp(config)
+
+class MockWebApp(config:WebAppConfiguration) extends WebAppAutoDiscoverImpl(config)
