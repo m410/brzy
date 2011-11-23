@@ -560,7 +560,7 @@ object Action {
       case PostBodyClass =>
         list += PostBody(req)
       case PrincipalClass =>
-        list += req.getSession.getAttribute("brzy_principal").asInstanceOf[Principal]
+        list += Principal(req)
       case _ =>
         error("unknown action argument type: " + arg)
     })
