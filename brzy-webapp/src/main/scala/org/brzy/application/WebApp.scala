@@ -137,18 +137,9 @@ class WebApp(conf: WebAppConfiguration) {
    *
    * @param args the arguments for the constructor of the class.
    */
-  def proxyInstance[T:Manifest](args:Array[AnyRef]):T = {
+  def proxyInstance[T:Manifest](args:AnyRef*):T = {
     val clazz = manifest[T].erasure
-    make(clazz, args, interceptor).asInstanceOf[T]
-  }
-
-  /**
-   * Wrap class with AOP interceptors provided by the modules, and creates an instance of
-   * the class.  This must be used to create instances of controllers and services.
-   */
-  def proxyInstance[T:Manifest]:T = {
-    val clazz = manifest[T].erasure
-    make(clazz, Array.empty[AnyRef], interceptor).asInstanceOf[T]
+    make(clazz, args.toArray, interceptor).asInstanceOf[T]
   }
 
   /**
