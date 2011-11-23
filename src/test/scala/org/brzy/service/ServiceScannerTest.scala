@@ -23,7 +23,7 @@ class ServiceScannerTest extends JUnitSuite {
   val scanner = new ServiceScanner("org.brzy.webapp.mock")
 
   @Test
-  def testServiceScanner = {
+  def testServiceScanner() {
     val result = scanner.services
     assertNotNull(result)
     assertEquals(1,result.size)

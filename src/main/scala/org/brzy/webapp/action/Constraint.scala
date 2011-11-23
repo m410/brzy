@@ -46,3 +46,9 @@ case class Ssl(must:Boolean = true) extends Constraint
  */
 case class ContentTypes(allowed:String*) extends Constraint
 
+
+///**
+// * Add fine grained transactional state to services, controlles, and actions
+// */
+//case class Transactional(isolation: String, propagation: String, readOnly: Boolean)
+

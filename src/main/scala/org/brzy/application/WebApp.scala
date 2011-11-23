@@ -14,20 +14,17 @@
 package org.brzy.application
 
 import collection.SortedSet
-import collection.mutable.{WeakHashMap, ListBuffer}
+import collection.mutable.ListBuffer
 
 import org.slf4j.LoggerFactory
-import java.lang.reflect.Constructor
-import java.beans.ConstructorProperties
 
-import org.brzy.webapp.action.Action
-import org.brzy.webapp.controller.{ControllerScanner, Controller}
 import org.brzy.fab.interceptor.{ManagedThreadContext, InterceptorProvider}
+import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.controller.Controller
 import org.brzy.interceptor.Invoker
 import org.brzy.interceptor.ProxyFactory._
-
-import org.brzy.fab.mod.{RuntimeMod, ModProvider, ViewModProvider}
-import org.brzy.service.{Service, ServiceScanner}
+import org.brzy.service.Service
 import org.brzy.beanwrap.Build
 
 /**
@@ -39,9 +36,12 @@ import org.brzy.beanwrap.Build
  * 
  * @author Michael Fortin
  */
-class WebApp(conf: WebAppConfiguration) {
-  private val log = LoggerFactory.getLogger(getClass)
+abstract class WebApp(conf: WebAppConfiguration) {
+
+  val log = LoggerFactory.getLogger(getClass)
+
   val application = conf.application
+
   val useSsl = conf.useSsl.getOrElse(false)
 
   /**
@@ -117,19 +117,13 @@ class WebApp(conf: WebAppConfiguration) {
    *   )
    * }}}
    */
-  val serviceMap: Map[String, _ <: AnyRef] = {
-    val map = WeakHashMap.empty[String, AnyRef]
+  val services: List[AnyRef] = makeServices
 
-    val serviceClasses = ServiceScanner(conf.application.get.org.get).services
-    serviceClasses.foreach(sc => {
-      val clazz = sc.asInstanceOf[Class[_]]
-      val instance = make(clazz, interceptor).asInstanceOf[Service]
-      map += instance.serviceName -> instance
-    })
-    persistenceProviders.foreach(_.serviceMap.foreach(map += _))
-    moduleProviders.foreach(_.serviceMap.foreach(map += _))
-    map.toMap
-  }
+
+  protected[application] def makeServices:List[AnyRef]
+
+
+  protected[application] def makeControllers:List[Controller]
 
   /**
    * Wrap class with AOP interceptors provided by the modules, and creates an instance of
@@ -147,29 +141,7 @@ class WebApp(conf: WebAppConfiguration) {
    * added to the controllers list or to pragmatically add controllers to the list,
    * override this function.
    */
-  val controllers: List[_ <: Controller] = {
-    val buffer = ListBuffer[Controller]()
-    val controllerClasses = ControllerScanner(conf.application.get.org.get).controllers
-
-    controllerClasses.foreach(sc => {
-      val clazz = sc.asInstanceOf[Class[_]]
-      val constructor: Constructor[_] = clazz.getConstructors.find(_ != null).get // should only be one
-
-      if (constructor.getParameterTypes.length > 0) {
-        val constructorArgs: Array[AnyRef] =
-        if (canFindByName(clazz))
-          makeArgsByName(clazz, serviceMap)
-        else
-          makeArgsByType(clazz, serviceMap)
-
-        buffer += make(clazz, constructorArgs, interceptor).asInstanceOf[Controller]
-      }
-      else {
-        buffer += make(clazz, interceptor).asInstanceOf[Controller]
-      }
-    })
-    buffer.toList
-  }
+  val controllers: List[_ <: Controller] = makeControllers
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected
@@ -191,8 +163,8 @@ class WebApp(conf: WebAppConfiguration) {
     persistenceProviders.foreach(_.startup())
     moduleProviders.foreach(_.startup())
     viewProvider.startup()
-    serviceMap.values.foreach(lifeCycleCreate(_))
-    serviceMap.foreach(a=>log.trace("service: {}",a))
+    services.foreach(lifeCycleCreate(_))
+    services.foreach(a=>log.trace("service: {}",a))
     controllers.foreach(a=>log.trace("controller: {}",a))
     actions.foreach(a=>log.debug("action: {}",a))
   }
@@ -203,7 +175,7 @@ class WebApp(conf: WebAppConfiguration) {
    */
   def shutdown() {
     log.info("Shutdown: " + application.get.name.get + " - " + application.get.version.get)
-    serviceMap.values.foreach(lifeCycleDestroy(_))
+    services.foreach(lifeCycleDestroy(_))
     viewProvider.shutdown()
     persistenceProviders.foreach(_.shutdown())
     moduleProviders.foreach(_.shutdown())
@@ -217,34 +189,6 @@ class WebApp(conf: WebAppConfiguration) {
   protected[application] def lifeCycleDestroy(service: AnyRef) {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].destroyService()
-  }
-
-  protected[application] def canFindByName(c: Class[_]): Boolean = {
-    c.getAnnotation(classOf[ConstructorProperties]) != null
-  }
-
-  protected[application] def makeArgsByName(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
-    val constructorProps = c.getAnnotation(classOf[ConstructorProperties])
-    constructorProps.value.map(serviceMap(_))
-  }
-
-  protected[application] def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
-    val constructor: Constructor[_] = c.getConstructors.find(_ != null).get
-    constructor.getParameterTypes.map((argClass: Class[_]) => {
-      serviceMap.values.find((s: AnyRef) => {
-        val serviceClass =
-            if (isProxy(s))
-              s.getClass.getSuperclass
-            else
-              s.getClass
-        argClass.equals(serviceClass)
-      }) match {
-        case Some(e) => e
-        case _ =>
-          log.warn("No service for type '{}' on class {}",argClass, c)
-          null
-      }
-    })
   }
 }
 
@@ -264,7 +208,7 @@ object WebApp {
       Build.reflect[WebApp](projectApplicationClass, Array(config))
     }
     else
-      new WebApp(config)
+      new WebAppAutoDiscoverImpl(config)
   }
 
 }
