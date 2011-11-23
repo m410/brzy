@@ -11,18 +11,25 @@ class WebAppProxySpec extends FlatSpec {
     val wc = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     val webapp = new TestWebapp(wc)
     assert(webapp != null, "webapp can't be null")
-    assert(webapp.myController != null,"myController is null")
-    assert(webapp.myController.fixtureService != null,"myController.fixture is null")
+
+    val ssize: Int = webapp.services.size
+    assert(1 == ssize, "Services.size must equal 1, but it was " + ssize)
+    
     val size: Int = webapp.controllers.size
-    assert(1 < size, "Controllers.size must equal 1, but it was " + size)
+    assert(1 == size, "Controllers.size must equal 1, but it was " + size)
+
   }
 }
 
 class TestWebapp(wc:WebAppConfiguration) extends WebApp(wc) {
-  val myService = proxyInstance[FixtureService]()
-  val myController = proxyInstance[FixtureController](myService)
+  private lazy val myService = proxyInstance[FixtureService]()
 
-//  override val controllers = List(myController)
+  def makeServices = List(myService)
+
+  def makeControllers = {
+    val myController = proxyInstance[FixtureController](myService)
+    List(myController)
+  }
 }
 
 class FixtureService extends Service {

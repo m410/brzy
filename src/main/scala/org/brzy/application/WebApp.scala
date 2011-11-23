@@ -120,10 +120,10 @@ abstract class WebApp(conf: WebAppConfiguration) {
   val services: List[AnyRef] = makeServices
 
 
-  protected[application] def makeServices:List[AnyRef]
+  def makeServices:List[AnyRef]
 
 
-  protected[application] def makeControllers:List[Controller]
+  def makeControllers:List[Controller]
 
   /**
    * Wrap class with AOP interceptors provided by the modules, and creates an instance of
