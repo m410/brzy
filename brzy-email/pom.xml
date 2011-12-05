@@ -86,7 +86,7 @@
       <groupId>org.brzy.webapp</groupId>
       <artifactId>brzy-webapp</artifactId>
       <version>${brzy-webapp-version}</version>
-      <scope>test</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
