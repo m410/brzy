@@ -30,7 +30,7 @@ repositories:
 persistence:
   - name: brzy-squeryl
     org: org.brzy.mod
-    version: 1.0.0.beta4
+    version: 1.0.0.beta1
     driver: org.h2.Driver
     user_name: sa
     password: ""
