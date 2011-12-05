@@ -1,11 +1,12 @@
 package org.brzy.service
 
 /**
- * Document Me..
+ * This trait can be applied to service classes to make is automatically discoverable at
+ * application startup.
  *
  * @author Michael Fortin
  */
-class Service {
+trait Service {
 
   def serviceName = {
     val name = this.getClass.getSimpleName
