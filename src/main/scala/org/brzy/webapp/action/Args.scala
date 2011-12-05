@@ -293,8 +293,25 @@ case class PostBody(request: HttpServletRequest) extends Args {
   }
 }
 
+/**
+ * this is not in use, but a template of how action arguments should be done.  The
+ * arguments should all be traits instead of case classes as to facilitate easier unit
+ * testing.  Unit testing should not depend on the use of the http servlet request object.  This
+ * would also combine several args objects into one.
+ */
 trait AttributesTrait {
+  def get(name:String):Option[AnyRef]
+  def apply(name:String):AnyRef
 
+  def url:Map[String, String]
+
+  def request:Map[String, Array[String]]
+
+  def application:Map[String, AnyRef]
+
+  def header:Map[String, String]
+
+  def session:Option[Map[String, AnyRef]]
 }
 
 case class Attributes(
