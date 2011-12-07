@@ -120,9 +120,14 @@ abstract class WebApp(conf: WebAppConfiguration) {
   val services: List[AnyRef] = makeServices
 
 
+  /**
+   * controllers declared as val's need to be declared lazy.
+   */
   def makeServices:List[AnyRef]
 
-
+  /**
+   *  document me
+   */
   def makeControllers:List[Controller]
 
   /**
