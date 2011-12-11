@@ -135,7 +135,7 @@ object ResponseHandler {
         log.trace("jsonp: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
-      case _ => error("Unknown Driection: %s".format(direct))
+      case _ => throw new UnknownActionDirectionException("Unknown Driection: %s".format(direct))
     }
   }
 
@@ -150,7 +150,9 @@ object ResponseHandler {
         model.attrs.foreach(s => req.setAttribute(s._1, s._2))
       case s: Session =>
         log.trace("session: {}", s)
-        s.attrs.foreach(nvp => req.getSession.setAttribute(nvp._1, nvp._2))
+        s.add.foreach(nvp => req.getSession.setAttribute(nvp._1, nvp._2))
+        s.remove.foreach(a => req.getSession.removeAttribute(a))
+        if (s.invalidate) req.getSession.invalidate()
       case s: Flash =>
         log.trace("flash: {}", s)
         new FlashMessage(s.code, req.getSession)
@@ -172,10 +174,8 @@ object ResponseHandler {
         h.headers.foreach(r => {
           res.setHeader(r._1, r._2)
         })
-      case s: SessionRemove =>
-        log.trace("sessionRemove: {}", s)
-        req.getSession.removeAttribute(s.attr)
-      case _ => error("Unknown Data: %s".format(data))
+      case _ =>
+        throw new UnknownActionDataException("Unknown Data: %s".format(data))
     }
   }
 }

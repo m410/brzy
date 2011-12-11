@@ -12,8 +12,10 @@
  * language governing permissions and limitations under the License.
  */
 package org.brzy.webapp.controller
-import org.brzy.webapp.action._
+import org.brzy.webapp.action.Action
 import org.brzy.persistence.Dao
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.response.{Flash, Redirect, Model}
 
 
 /**
@@ -49,12 +51,12 @@ abstract class CrudController[E <: {def id : PK}, PK](
 
   def list(p:Parameters) = entityName + "sList" -> dao.list
 
-  def view(params: Parameters) = entityName -> dao.load(params("id"))
+  def view(params: Parameters) = entityName -> dao.load(params("id").toString)
 
   def create() = entityName -> dao.construct
 
   def save(p: Parameters) = {
-    val cmap:Map[String,String] = p.map.map(n=>{n._1->n._2(0)})
+    val cmap:Map[String,String] = p.request.map(n=>{n._1->n._2(0)})
     val entity = dao.construct(cmap)
     entity.validate match {
       case Some(violations) =>
@@ -67,10 +69,10 @@ abstract class CrudController[E <: {def id : PK}, PK](
     }
   }
 
-  def edit(params: Parameters) = entityName -> dao.load(params("id"))
+  def edit(params: Parameters) = entityName -> dao.load(params("id").toString)
 
   def update(p: Parameters) = {
-    val cmap:Map[String,String] = p.map.map(n=>{n._1->n._2(0)})
+    val cmap:Map[String,String] = p.request.map(n=>{n._1->n._2(0)})
     val entity = dao.construct(cmap)
     entity.validate match {
       case Some(violations) =>
@@ -84,7 +86,7 @@ abstract class CrudController[E <: {def id : PK}, PK](
   }
 
   def delete(p: Parameters) = {
-    val entity = dao.load(p("id"))
+    val entity = dao.load(p("id").toString)
     entity.delete()
     val redirect = Redirect("/" + basePath )
     val flash = Flash(entityName + " was Deleted.", entityName + ".delete")

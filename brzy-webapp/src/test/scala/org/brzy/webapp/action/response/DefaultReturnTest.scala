@@ -11,22 +11,20 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action.returns
+package org.brzy.webapp.action.response
 
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
 import org.brzy.webapp.action.Action._
-import org.brzy.webapp.action.Action
 import org.brzy.webapp.mock.UserController
-import org.junit.{Ignore, Test}
+import org.junit.Test
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import org.springframework.mock.web.{MockRequestDispatcher, MockHttpServletResponse, MockHttpServletRequest, MockServletContext}
-import java.lang.reflect.Method
 
 class DefaultReturnTest  extends JUnitSuite {
 
   @Test
-  def testDefaultWithNoReturn = {
+  def testDefaultWithNoReturn() {
     val ctlr = new UserController()
 //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "list").get
     val action = ctlr.actions.find(_.actionPath == "").get//new Action("/users", method, ctlr, ".ssp")
@@ -42,7 +40,7 @@ class DefaultReturnTest  extends JUnitSuite {
 				new MockRequestDispatcher(path) {
           assertEquals("/user/list.ssp",path)
           callCount = callCount + 1
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {}
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ){}
 				}
 			}
 		}
@@ -51,7 +49,7 @@ class DefaultReturnTest  extends JUnitSuite {
     assertTrue(callCount == 1)
   }
 
-  @Test def testReturnView = {
+  @Test def testReturnView() {
     val ctlr = new UserController()
 //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther").get
     val action = ctlr.actions.find(_.actionPath == "other").get//new Action("/users/other", method, ctlr, ".ssp")
@@ -66,7 +64,7 @@ class DefaultReturnTest  extends JUnitSuite {
 				new MockRequestDispatcher(path) {
           assertEquals("/index.ssp",path)
           callCount = callCount + 1
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {}
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ){}
 				}
 			}
 		}
@@ -75,7 +73,7 @@ class DefaultReturnTest  extends JUnitSuite {
     assertTrue(callCount == 1)
   }
 
-  @Test def testReturnView2 = {
+  @Test def testReturnView2() {
     val ctlr = new UserController()
 //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther2").get
     val action = ctlr.actions.find(_.actionPath == "other2").get//new Action("/users/some2", method, ctlr, ".ssp")
@@ -91,7 +89,7 @@ class DefaultReturnTest  extends JUnitSuite {
 				new MockRequestDispatcher(path) {
           assertEquals("/users/page.ssp",path)
           callCount = callCount + 1
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {}
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {}
 				}
 			}
 		}

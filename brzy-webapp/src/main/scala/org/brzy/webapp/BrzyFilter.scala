@@ -14,6 +14,7 @@
 package org.brzy.webapp
 
 import action.Action
+import action.args.ArgsBuilder
 import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest, Filter => SFilter}
 import javax.servlet.http.HttpServletRequest
 
@@ -41,7 +42,7 @@ class BrzyFilter extends SFilter {
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
     val q = req.asInstanceOf[HttpServletRequest]
     log.trace("uri : {}", q.getRequestURI)
-    val actionPath = Action.parseActionPath(q.getRequestURI, q.getContextPath)
+    val actionPath = ArgsBuilder.parseActionPath(q.getRequestURI, q.getContextPath)
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) => // for action, don't continue

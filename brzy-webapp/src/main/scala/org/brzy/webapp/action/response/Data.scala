@@ -38,12 +38,18 @@ case class Cookie(name: String,
 /**
  * add an attribute to the httpSession.
  */
-case class Session(attrs: Tuple2[String, AnyRef]*) extends Data
+case class Session(add: List[(String, AnyRef)], remove: Array[String], invalidate: Boolean) extends Data
 
 /**
- * Remove an attribute for the http session.
+ * 
  */
-case class SessionRemove(attr: String) extends Data
+object Session {
+  def apply(attrs: (String, AnyRef)*) = new Session(List(attrs:_*), Array.empty[String], false)
+
+  def remove(attrs: String*) = new Session(List.empty[(String, AnyRef)], Array(attrs:_*), false)
+
+  def invalidate = new Session(List.empty[(String, AnyRef)], Array.empty[String], true)
+}
 
 /**
  * Add an attribute to the http session that is only available for a single

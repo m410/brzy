@@ -13,8 +13,10 @@
  */
 package org.brzy.webapp.mock
 
-import org.brzy.webapp.action._
 import org.brzy.webapp.controller.Controller
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.response._
+import org.brzy.webapp.action.{Parser, Action}
 
 class UserController extends Controller("users") {
   val actions = List(
@@ -37,9 +39,9 @@ class UserController extends Controller("users") {
   
   def list() = "userList" -> MockUser.list
 
-  def get(p: Parameters) = "user" -> MockUser.get(p("id").toLong)
+  def get(p: Parameters) = "user" -> MockUser.get(p("id").toString.toLong)
 
-  def company(p: Parameters) = "user" -> MockUser.get(p("id").toLong)
+  def company(p: Parameters) = "user" -> MockUser.get(p("id").toString.toLong)
 
   def create = "user" -> new MockUser()
 
@@ -65,7 +67,7 @@ class UserController extends Controller("users") {
   def error = Error(404, "Not Found")
 
   def save(params: Parameters)() = {
-    def user: MockUser = MockUser.construct(params.map.map(n=>{n._1->n._2(0)}))
+    def user: MockUser = MockUser.construct(params.request.map(n=>{n._1->n._2(0)}))
 
     user.validate match {
       case Some(violations) =>
@@ -76,10 +78,10 @@ class UserController extends Controller("users") {
     }
   }
 
-  def edit(params: Parameters) = "user" -> MockUser.get(params("id")(0).toLong)
+  def edit(params: Parameters) = "user" -> MockUser.get(params("id").toString.toLong)
 
   def update(params: Parameters) = {
-    def user = MockUser.construct(params.map.map(n=>{n._1->n._2(0)}))
+    def user = MockUser.construct(params.request.map(n=>{n._1->n._2(0)}))
 
     user.validate match {
       case Some(violations) =>
@@ -91,9 +93,9 @@ class UserController extends Controller("users") {
   }
 
   def delete(params: Parameters) = {
-    MockUser.get(params("id")(0).toLong) match {
+    MockUser.get(params("id").toString.toLong) match {
       case Some(user) =>
-        user.delete
+        user.delete()
         Flash("message2", "user deleted")
       case _ =>
         Error(500,"No User found to delete")
@@ -101,7 +103,8 @@ class UserController extends Controller("users") {
   }
 
   def custom() = {
-    (CookieAdd("id","1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
+    val session = Session(List("id" -> "x", "id2" -> "y"),Array("id2"),false)
+    (Cookie("id","1"), session, Flash("c", "Hello"), View("/x/y"))
   }
 }
 

@@ -14,16 +14,12 @@
 package org.brzy.webapp.action
 
 
+import args.{Arg, Principal}
 import org.slf4j.LoggerFactory
 
 import org.brzy.webapp.controller._
-import org.brzy.webapp.view.FlashMessage
 
-import collection.JavaConversions.JMapWrapper
-import collection.mutable.ListBuffer
-
-import java.io.ByteArrayInputStream
-import javax.servlet.http.{HttpServletResponse => Response, HttpServletRequest => Request, Cookie => JCookie}
+import javax.servlet.http.{HttpServletRequest => Request}
 
 /**
  * An action is an entry point into the application.  A controller will have one or more actions.
@@ -52,7 +48,7 @@ trait Action extends Ordered[Action] {
    */
   def returnType: AnyRef
 
-  def execute(args: List[AnyRef], principal: Option[Principal]): AnyRef
+  def execute(args: Array[Arg], principal: Principal): AnyRef
 
   /**
    * The reference to the parent controller
@@ -78,13 +74,11 @@ trait Action extends Ordered[Action] {
   /**
    * For secure actions, this is called to test the users permission to execute it.
    */
-  def isAuthorized(p: Option[Principal]) = p match {
-    case Some(principal) =>
-      if (constraints.find(_.isInstanceOf[Roles]).isDefined)
-        secureConstraints(constraints, principal)
-      else
-        secureConstraints(controller.constraints, principal)
-    case _ => false
+  def isAuthorized(principal: Principal) = {
+    if (constraints.find(_.isInstanceOf[Roles]).isDefined)
+      secureConstraints(constraints, principal)
+    else
+      secureConstraints(controller.constraints, principal)
   }
 
 
@@ -254,7 +248,7 @@ object Action {
 
     def argTypes: List[AnyRef] = List.empty[AnyRef]
 
-    def execute(args: List[AnyRef], principal: Option[Principal]) = {
+    def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply().asInstanceOf[AnyRef]
@@ -277,7 +271,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 1))
 
-    def execute(args: List[AnyRef], principal: Option[Principal]) = {
+    def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A]).asInstanceOf[AnyRef]
@@ -300,7 +294,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 2))
 
-    def execute(args: List[AnyRef], principal: Option[Principal]) = {
+    def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2]).asInstanceOf[AnyRef]
@@ -322,7 +316,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 3))
 
-    def execute(args: List[AnyRef], principal: Option[Principal]) = {
+    def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3]).asInstanceOf[AnyRef]
@@ -348,7 +342,7 @@ object Action {
 
     def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 4))
 
-    def execute(args: List[AnyRef], principal: Option[Principal]) = {
+    def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
         val wrap = () => {
           action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3], args(3).asInstanceOf[A4]).asInstanceOf[AnyRef]
@@ -359,232 +353,232 @@ object Action {
         action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3], args(3).asInstanceOf[A4]).asInstanceOf[AnyRef]
     }
   }
-
-
-  /**
-   * Handles the return type of the action.  This performs duties like setting session variables
-   * in the HttpSession.
-   */
-  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response) {
-    log.trace("results: {}", actionResult)
-
-    def matchData(result: Any) {
-      result match {
-        case (s: String, m: AnyRef) =>
-          log.trace("tuple: ({},{})", s, m)
-          handleData(Model(s -> m), req, res)
-        case d: Data =>
-          log.trace("Data: {}", d)
-          handleData(d, req, res)
-        case tup: (_, _) =>
-          log.trace("tuple: {}", tup)
-          tup.productIterator.foreach(s => matchData(s))
-        case r: (_, _, _) =>
-          log.trace("tuple: {}", r)
-          r.productIterator.foreach(s => matchData(s))
-        case r: (_, _, _, _) =>
-          log.trace("tuple: {}", r)
-          r.productIterator.foreach(s => matchData(s))
-        case r: (_, _, _, _, _) =>
-          log.trace("tuple: {}", r)
-          r.productIterator.foreach(s => matchData(s))
-        case _ => //ignore and Direction in the list
-      }
-    }
-
-    matchData(actionResult)
-
-    // need to handle the direction after the data or a servlet error doesn't happen
-    def matchDirection(directionResult: Any) {
-      directionResult match {
-        case d: Direction =>
-          log.trace("Direction: {}", d)
-          handleDirection(action, d, req, res)
-        case d: Data => // ignore it
-        case (s: String, m: AnyRef) =>
-          log.trace("tuple default: {}", action.defaultView)
-          handleDirection(action, View(action.defaultView), req, res)
-        case tup: (_, _) =>
-          tup.productIterator.foreach(s => matchDirection(s))
-        case r: (_, _, _) =>
-          r.productIterator.foreach(s => matchDirection(s))
-        case r: (_, _, _, _) =>
-          r.productIterator.foreach(s => matchDirection(s))
-        case r: (_, _, _, _, _) =>
-          r.productIterator.foreach(s => matchDirection(s))
-        case _ =>
-          log.trace("default: {}", action.defaultView)
-          handleDirection(action, View(action.defaultView), req, res)
-      }
-    }
-
-    actionResult match {
-      case d: Data =>
-        handleDirection(action, View(action.defaultView), req, res)
-      case _ =>
-        matchDirection(actionResult)
-    }
-  }
-
-  /**
-   * An Action can only return one instance of a Direction.  This will execute it.  For example
-   * a Redirect will be run as an 'HttpServletResponse.sendRedirect(target)'.
-   */
-  protected[action] def handleDirection(action: Action, direct: Direction, req: Request, res: Response) =
-    direct match {
-      case view: View =>
-        val target: String = view.path + ".ssp" //action.viewType
-        log.trace("view: {}", target)
-        // TODO Should be set by the view and overridable by the controller
-	      res.setHeader("Content-Type","text/html; charset=utf-8")
-        req.getRequestDispatcher(target).forward(req, res)
-      case f: Forward =>
-        log.trace("forward: {}", f)
-        req.getRequestDispatcher(f.path + ".brzy").forward(req, res)
-      case s: Redirect =>
-        log.trace("redirect: {}", s)
-        val target: String =
-          if (s.path.startsWith("http"))
-            s.path
-          else if (req.getContextPath.endsWith("/") && s.path.startsWith("/"))
-            req.getContextPath + s.path.substring(1, s.path.length)
-          else
-            req.getContextPath + s.path
-        res.sendRedirect(target)
-      case s: Error =>
-        log.trace("Error: {}", s)
-        res.sendError(s.code, s.msg)
-      case x: Xml[_] =>
-        log.trace("xml: {}", x)
-        res.setContentType(x.contentType)
-        res.getWriter.write(x.parse)
-      case t: Text =>
-        log.trace("text: {}", t)
-        res.setContentType(t.contentType)
-        res.getWriter.write(t.parse)
-      case b: Binary =>
-        log.trace("bytes: {}", b)
-        res.setContentType(b.contentType)
-        res.setHeader("content-length", b.bytes.length.toString)
-        val input = new ByteArrayInputStream(b.bytes)
-        var inRead = 0
-        while ( { inRead = input.read; inRead} >= 0)
-          res.getOutputStream.write(inRead)
-      case s: Stream =>
-        res.setContentType(s.contentType)
-        s.io(res.getOutputStream)
-      case j: Json[_] =>
-        log.trace("json: {}", j)
-        res.setContentType(j.contentType)
-        res.getWriter.write(j.parse)
-      case j: Jsonp[_] =>
-        log.trace("jsonp: {}", j)
-        res.setContentType(j.contentType)
-        res.getWriter.write(j.parse)
-      case _ => error("Unknown Driection: %s".format(direct))
-    }
-
-  /**
-   * While an action can only return zero or one Direction, it can return zero or more Data
-   * subclasses.  This Handles their execution.
-   */
-  protected[action] def handleData(data: Data, req: Request, res: Response) =
-    data match {
-      case model: Model =>
-        log.trace("model: {}", model)
-        model.attrs.foreach(s => req.setAttribute(s._1, s._2))
-      case s: SessionAdd =>
-        log.trace("sessionAdd: {}", s)
-        s.attrs.foreach(nvp => req.getSession.setAttribute(nvp._1, nvp._2))
-      case s: Flash =>
-        log.trace("flash: {}", s)
-        new FlashMessage(s.code, req.getSession)
-      case h: Header =>
-        log.trace("header: {}", h)
-        res.addHeader(h.name ,h.value)
-      case s: CookieAdd =>
-        log.trace("cookieAdd: {}", s)
-        val cookie = new JCookie(s.name, s.value)
-        cookie.setPath(s.path match {
-          case Some(p) => p
-          case _ => req.getContextPath
-        })
-        cookie.setMaxAge(s.maxAge)
-        cookie.setDomain(s.domain match {
-          case Some(domain) => domain
-          case _ => req.getServerName
-        })
-        res.addCookie(cookie)
-      case h: ResponseHeaders =>
-        log.trace("response headers: {}", h)
-        h.headers.foreach(r => {
-          res.setHeader(r._1, r._2)
-        })
-      case s: SessionRemove =>
-        log.trace("sessionRemove: {}", s)
-        req.getSession.removeAttribute(s.attr)
-      case _ => error("Unknown Data: %s".format(data))
-    }
-
-  /**
-   * This converts the http servlet request parameters and attributes into the action Arg types
-   * required for each action to execute.
-   */
-  def buildArgs(action: Action, req: Request) = {
-    val path = parseActionPath(req.getRequestURI, req.getContextPath)
-    val args = action.argTypes
-    val list = new ListBuffer[AnyRef]()
-    log.trace("action:", args)
-    log.trace("arg types: {}, path: {}", args, path)
-
-    args.toList.foreach(arg => arg match {
-      case ParametersClass =>
-        val urlParams = action.path.extractParameterValues(path) //.matchParameters(path)
-        val paramMap = new collection.mutable.HashMap[String, Array[String]]()
-
-        for (i <- 0 to urlParams.size - 1)
-          paramMap.put(action.path.parameterNames(i), Array(urlParams(i)))
-
-        val jParams = req.getParameterMap.asInstanceOf[java.util.Map[String, Array[String]]]
-        val wrappedMap = new JMapWrapper[String, Array[String]](jParams)
-        list += new Parameters(wrappedMap.toMap ++ paramMap.toMap)
-      case SessionClass =>
-        list += Session(req)
-      case RequestAttributesClass =>
-        list += RequestAttributes(req)
-      case HeadersClass =>
-        val headers = Headers(req)
-        list += headers
-      case CookiesClass =>
-        list += Cookies(req)
-      case PostBodyClass =>
-        list += PostBody(req)
-      case PrincipalClass =>
-        list += Principal(req)
-      case _ =>
-        error("unknown action argument type: " + arg)
-    })
-    log.trace("args: {}", list)
-    list.toList
-  }
-
-  /**
-   * Converts the RESTful uri to and internal representation.
-   */
-  def parseActionPath(uri: String, ctx: String) = {
-    val newuri =
-      if (uri.startsWith("//"))
-        uri.substring(1, uri.length)
-      else
-        uri
-
-    if (newuri.endsWith(".brzy") && (ctx == "" || ctx == "/"))
-      newuri.substring(0, newuri.length - 5)
-    else if (newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
-      newuri.substring(ctx.length, newuri.length - 5)
-    else if (!newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
-      newuri.substring(ctx.length, newuri.length)
-    else
-      newuri
-  }
+//
+//
+//  /**
+//   * Handles the return type of the action.  This performs duties like setting session variables
+//   * in the HttpSession.
+//   */
+//  def handleResults(action: Action, actionResult: AnyRef, req: Request, res: Response) {
+//    log.trace("results: {}", actionResult)
+//
+//    def matchData(result: Any) {
+//      result match {
+//        case (s: String, m: AnyRef) =>
+//          log.trace("tuple: ({},{})", s, m)
+//          handleData(Model(s -> m), req, res)
+//        case d: Data =>
+//          log.trace("Data: {}", d)
+//          handleData(d, req, res)
+//        case tup: (_, _) =>
+//          log.trace("tuple: {}", tup)
+//          tup.productIterator.foreach(s => matchData(s))
+//        case r: (_, _, _) =>
+//          log.trace("tuple: {}", r)
+//          r.productIterator.foreach(s => matchData(s))
+//        case r: (_, _, _, _) =>
+//          log.trace("tuple: {}", r)
+//          r.productIterator.foreach(s => matchData(s))
+//        case r: (_, _, _, _, _) =>
+//          log.trace("tuple: {}", r)
+//          r.productIterator.foreach(s => matchData(s))
+//        case _ => //ignore and Direction in the list
+//      }
+//    }
+//
+//    matchData(actionResult)
+//
+//    // need to handle the direction after the data or a servlet error doesn't happen
+//    def matchDirection(directionResult: Any) {
+//      directionResult match {
+//        case d: Direction =>
+//          log.trace("Direction: {}", d)
+//          handleDirection(action, d, req, res)
+//        case d: Data => // ignore it
+//        case (s: String, m: AnyRef) =>
+//          log.trace("tuple default: {}", action.defaultView)
+//          handleDirection(action, View(action.defaultView), req, res)
+//        case tup: (_, _) =>
+//          tup.productIterator.foreach(s => matchDirection(s))
+//        case r: (_, _, _) =>
+//          r.productIterator.foreach(s => matchDirection(s))
+//        case r: (_, _, _, _) =>
+//          r.productIterator.foreach(s => matchDirection(s))
+//        case r: (_, _, _, _, _) =>
+//          r.productIterator.foreach(s => matchDirection(s))
+//        case _ =>
+//          log.trace("default: {}", action.defaultView)
+//          handleDirection(action, View(action.defaultView), req, res)
+//      }
+//    }
+//
+//    actionResult match {
+//      case d: Data =>
+//        handleDirection(action, View(action.defaultView), req, res)
+//      case _ =>
+//        matchDirection(actionResult)
+//    }
+//  }
+//
+//  /**
+//   * An Action can only return one instance of a Direction.  This will execute it.  For example
+//   * a Redirect will be run as an 'HttpServletResponse.sendRedirect(target)'.
+//   */
+//  protected[action] def handleDirection(action: Action, direct: Direction, req: Request, res: Response) =
+//    direct match {
+//      case view: View =>
+//        val target: String = view.path + ".ssp" //action.viewType
+//        log.trace("view: {}", target)
+//        // TODO Should be set by the view and overridable by the controller
+//	      res.setHeader("Content-Type","text/html; charset=utf-8")
+//        req.getRequestDispatcher(target).forward(req, res)
+//      case f: Forward =>
+//        log.trace("forward: {}", f)
+//        req.getRequestDispatcher(f.path + ".brzy").forward(req, res)
+//      case s: Redirect =>
+//        log.trace("redirect: {}", s)
+//        val target: String =
+//          if (s.path.startsWith("http"))
+//            s.path
+//          else if (req.getContextPath.endsWith("/") && s.path.startsWith("/"))
+//            req.getContextPath + s.path.substring(1, s.path.length)
+//          else
+//            req.getContextPath + s.path
+//        res.sendRedirect(target)
+//      case s: Error =>
+//        log.trace("Error: {}", s)
+//        res.sendError(s.code, s.msg)
+//      case x: Xml[_] =>
+//        log.trace("xml: {}", x)
+//        res.setContentType(x.contentType)
+//        res.getWriter.write(x.parse)
+//      case t: Text =>
+//        log.trace("text: {}", t)
+//        res.setContentType(t.contentType)
+//        res.getWriter.write(t.parse)
+//      case b: Binary =>
+//        log.trace("bytes: {}", b)
+//        res.setContentType(b.contentType)
+//        res.setHeader("content-length", b.bytes.length.toString)
+//        val input = new ByteArrayInputStream(b.bytes)
+//        var inRead = 0
+//        while ( { inRead = input.read; inRead} >= 0)
+//          res.getOutputStream.write(inRead)
+//      case s: Stream =>
+//        res.setContentType(s.contentType)
+//        s.io(res.getOutputStream)
+//      case j: Json[_] =>
+//        log.trace("json: {}", j)
+//        res.setContentType(j.contentType)
+//        res.getWriter.write(j.parse)
+//      case j: Jsonp[_] =>
+//        log.trace("jsonp: {}", j)
+//        res.setContentType(j.contentType)
+//        res.getWriter.write(j.parse)
+//      case _ => error("Unknown Driection: %s".format(direct))
+//    }
+//
+//  /**
+//   * While an action can only return zero or one Direction, it can return zero or more Data
+//   * subclasses.  This Handles their execution.
+//   */
+//  protected[action] def handleData(data: Data, req: Request, res: Response) =
+//    data match {
+//      case model: Model =>
+//        log.trace("model: {}", model)
+//        model.attrs.foreach(s => req.setAttribute(s._1, s._2))
+//      case s: SessionAdd =>
+//        log.trace("sessionAdd: {}", s)
+//        s.attrs.foreach(nvp => req.getSession.setAttribute(nvp._1, nvp._2))
+//      case s: Flash =>
+//        log.trace("flash: {}", s)
+//        new FlashMessage(s.code, req.getSession)
+//      case h: Header =>
+//        log.trace("header: {}", h)
+//        res.addHeader(h.name ,h.value)
+//      case s: CookieAdd =>
+//        log.trace("cookieAdd: {}", s)
+//        val cookie = new JCookie(s.name, s.value)
+//        cookie.setPath(s.path match {
+//          case Some(p) => p
+//          case _ => req.getContextPath
+//        })
+//        cookie.setMaxAge(s.maxAge)
+//        cookie.setDomain(s.domain match {
+//          case Some(domain) => domain
+//          case _ => req.getServerName
+//        })
+//        res.addCookie(cookie)
+//      case h: ResponseHeaders =>
+//        log.trace("response headers: {}", h)
+//        h.headers.foreach(r => {
+//          res.setHeader(r._1, r._2)
+//        })
+//      case s: SessionRemove =>
+//        log.trace("sessionRemove: {}", s)
+//        req.getSession.removeAttribute(s.attr)
+//      case _ => error("Unknown Data: %s".format(data))
+//    }
+//
+//  /**
+//   * This converts the http servlet request parameters and attributes into the action Arg types
+//   * required for each action to execute.
+//   */
+//  def buildArgs(action: Action, req: Request) = {
+//    val path = parseActionPath(req.getRequestURI, req.getContextPath)
+//    val args = action.argTypes
+//    val list = new ListBuffer[AnyRef]()
+//    log.trace("action:", args)
+//    log.trace("arg types: {}, path: {}", args, path)
+//
+//    args.toList.foreach(arg => arg match {
+//      case ParametersClass =>
+//        val urlParams = action.path.extractParameterValues(path) //.matchParameters(path)
+//        val paramMap = new collection.mutable.HashMap[String, Array[String]]()
+//
+//        for (i <- 0 to urlParams.size - 1)
+//          paramMap.put(action.path.parameterNames(i), Array(urlParams(i)))
+//
+//        val jParams = req.getParameterMap.asInstanceOf[java.util.Map[String, Array[String]]]
+//        val wrappedMap = new JMapWrapper[String, Array[String]](jParams)
+//        list += new Parameters(wrappedMap.toMap ++ paramMap.toMap)
+//      case SessionClass =>
+//        list += Session(req)
+//      case RequestAttributesClass =>
+//        list += RequestAttributes(req)
+//      case HeadersClass =>
+//        val headers = Headers(req)
+//        list += headers
+//      case CookiesClass =>
+//        list += Cookies(req)
+//      case PostBodyClass =>
+//        list += PostBody(req)
+//      case PrincipalClass =>
+//        list += Principal(req)
+//      case _ =>
+//        error("unknown action argument type: " + arg)
+//    })
+//    log.trace("args: {}", list)
+//    list.toList
+//  }
+//
+//  /**
+//   * Converts the RESTful uri to and internal representation.
+//   */
+//  def parseActionPath(uri: String, ctx: String) = {
+//    val newuri =
+//      if (uri.startsWith("//"))
+//        uri.substring(1, uri.length)
+//      else
+//        uri
+//
+//    if (newuri.endsWith(".brzy") && (ctx == "" || ctx == "/"))
+//      newuri.substring(0, newuri.length - 5)
+//    else if (newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
+//      newuri.substring(ctx.length, newuri.length - 5)
+//    else if (!newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
+//      newuri.substring(ctx.length, newuri.length)
+//    else
+//      newuri
+//  }
 }

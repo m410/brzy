@@ -13,11 +13,11 @@
  */
 package org.brzy.webapp
 
+import action.Action
+import action.args.{Arg, ArgsBuilder, PrincipalRequest, Principal}
+import action.response.{ResponseHandler, Session, Flash, Redirect}
 import org.brzy.application.WebApp
 
-import action._
-import action.Action._
-import action.Principal
 
 import org.slf4j.LoggerFactory
 import javax.servlet.http._
@@ -44,18 +44,18 @@ class BrzyServlet extends HttpServlet {
 
   protected[webapp]  def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
-    val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
+    val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
         log.debug("{} >>> {}", req.getRequestURI, action)
-        val args = buildArgs(action, req)
-        val principalOption = Principal.get(req)
+        val args = ArgsBuilder(req,action)
+        val principal = new PrincipalRequest(req)
 
         if (!action.isConstrained(req)) {
-          val result = callActionOrLogin(req, action, principalOption, args)
-          handleResults(action, result, req, res)
+          val result = callActionOrLogin(req, action, principal, args)
+          ResponseHandler(action, result, req, res)
         }
         else {
           res.sendError(500)
@@ -65,7 +65,7 @@ class BrzyServlet extends HttpServlet {
     }
   }
 
-  protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principalOption: Option[Principal], args: List[AnyRef]): AnyRef = {
+  protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
     if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
       val redirect = req.getRequestURL.replace(0, 4, "https").toString
       log.debug("redirect: {}",redirect)
@@ -75,8 +75,8 @@ class BrzyServlet extends HttpServlet {
     else if (action.isSecured) {
       if (req.getSession(false) != null) {
 
-        if (action.isAuthorized(principalOption))
-          action.execute(args, principalOption)
+        if (action.isAuthorized(principal))
+          action.execute(args, principal)
         else
           toLogin(req)
       }
@@ -85,13 +85,13 @@ class BrzyServlet extends HttpServlet {
       }
     }
     else {
-      action.execute(args, principalOption)
+      action.execute(args, principal)
     }
   }
 
-  protected[webapp] def toLogin(req: HttpServletRequest): (Redirect, Flash, SessionAdd) = {
+  protected[webapp] def toLogin(req: HttpServletRequest): (Redirect, Flash, Session) = {
     val flash = Flash("session.end", "Session ended, log in again")
-    val sessionParam = SessionAdd("last_view" -> req.getRequestURI)
+    val sessionParam = Session("last_view" -> req.getRequestURI)
     (Redirect("/auth"), flash, sessionParam)
   }
 }
