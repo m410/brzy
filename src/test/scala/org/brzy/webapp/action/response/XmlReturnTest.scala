@@ -11,32 +11,50 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.webapp.action.returns
+package org.brzy.webapp.action.response
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.Test
-import org.junit.Assert._
-import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
-import org.brzy.webapp.mock.UserController
-import org.brzy.webapp.action.Action
-import org.brzy.webapp.action.Action._
+import org.springframework.mock.web.{MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
+
+import org.junit.{Ignore, Test}
 import java.lang.reflect.Method
+import org.scalatest.junit.JUnitSuite
+import org.junit.Assert._
 
-class ErrorReturnTest extends JUnitSuite {
+import org.brzy.webapp.mock.UserController
+import org.brzy.webapp.action.Action._
+import org.brzy.webapp.action.Xml
 
-  @Test def testError404 = {
+class XmlReturnTest  extends JUnitSuite {
+
+  val fooXml = """<Foo>
+      <bar>bar</bar>
+    </Foo>"""
+  val expectedXml = """<UserMock>
+      <name>John</name>
+    </UserMock>"""
+  @Test def testXml() {
+    val foo = Foo("bar")
+    val xml = Xml(foo)
+    assertNotNull(xml)
+    assertEquals(fooXml,xml.parse)
+  }
+
+
+  @Test def testDefaultWithNoReturn() {
     val ctlr = new UserController()
-    val method: Method = ctlr.getClass.getMethods.find(_.getName == "error").get
-    val action = ctlr.actions.find(_.actionPath == "error").get//new Action("/users/error", method, ctlr, ".ssp")
+    val action = ctlr.actions.find(_.actionPath == "xml").get
 
     assertNotNull(action.defaultView)
-    assertEquals("/user/error", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    assertEquals("/user/xml", action.defaultView)
+    val result = action.execute(List[AnyRef](),None)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
     handleResults(action,result,request,response)
-    assertEquals(404, response.getStatus)
+    assertEquals("text/xml",response.getContentType)
+    assertEquals(expectedXml,response.getContentAsString)
   }
 }
+
+case class Foo(bar:String)

@@ -13,7 +13,8 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.Principal
+import org.brzy.webapp.action.args.{Arg, Principal}
+
 
 /**
  * Adds action interceptor support to a controller.
@@ -21,8 +22,5 @@ import org.brzy.webapp.action.Principal
  * @author Michael Fortin
  */
 trait Intercepted {
-  def intercept(
-          action: () => AnyRef,
-          actionArgs: List[AnyRef],
-          principal: Option[Principal] = None): AnyRef = action()
+  def intercept(action: () => AnyRef, actionArgs: Array[Arg], principal: Principal): AnyRef = action()
 }

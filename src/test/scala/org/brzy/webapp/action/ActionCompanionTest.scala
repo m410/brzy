@@ -15,6 +15,7 @@ package org.brzy.webapp.action
 
 import Action._
 
+import args.{ArgsBuilder, Parameters}
 import org.brzy.webapp.mock.UserController
 import org.brzy.webapp.BrzyServlet
 
@@ -24,31 +25,32 @@ import org.junit.Assert._
 import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
+import response.ResponseHandler
 
 
 class ActionCompanionTest extends JUnitSuite {
 
-  @Test def testBuildArgs = {
+  @Test def testBuildArgs() {
     val request = new MockHttpServletRequest("GET", "/users/10.brzy")
 
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
 
-    val result = buildArgs(action,request)
+    val result = ArgsBuilder(request, action)
     assertNotNull(result)
     assertEquals(1,result.length)
     val parameters: Parameters = result(0).asInstanceOf[Parameters]
-    assertEquals(1,parameters.map.size)
+    assertEquals(1,parameters.url.size)
     assertEquals("10",parameters("id"))
   }
 
-  @Test def testParseResults = {
+  @Test def testParseResults() {
 		val response = new MockHttpServletResponse()
     val request = new MockHttpServletRequest(new MockServletContext()) {
 			override def getRequestDispatcher(path:String):RequestDispatcher = {
 				new MockRequestDispatcher(path) {
           assertEquals("/user/view.ssp",path)
-					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ):Unit = {
+					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {
 						assertTrue("Correct rc attribute", fwdReq.getAttribute("rc") == null)
 					}
 				}
@@ -58,35 +60,35 @@ class ActionCompanionTest extends JUnitSuite {
     val tup = ("attributeKey","attributeValue")
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
-    handleResults(action, tup, request, response)
+    ResponseHandler(action, tup, request, response)
     assertNotNull(request.getAttribute("attributeKey"))
   }
 
-  @Test def testFindActionPath = {
+  @Test def testFindActionPath() {
     val context = "/home"
     val uri = "/home/users"
     val service = new BrzyServlet
-    assertEquals("/users", parseActionPath(uri,context))
+    assertEquals("/users", ArgsBuilder.parseActionPath(uri,context))
   }
 
-  @Test def testFindActionPath2 = {
+  @Test def testFindActionPath2() {
     val context = "/home"
     val uri = "/home/user.brzy"
     val service = new BrzyServlet
-    assertEquals("/user", parseActionPath(uri,context))
+    assertEquals("/user", ArgsBuilder.parseActionPath(uri,context))
   }
 
-  @Test def testFindActionPath3 = {
+  @Test def testFindActionPath3() {
     val context = ""
     val uri = "/home/10/create.brzy"
     val service = new BrzyServlet
-    assertEquals("/home/10/create", parseActionPath(uri,context))
+    assertEquals("/home/10/create", ArgsBuilder.parseActionPath(uri,context))
   }
 
-  @Test def testFindActionPath4 = {
+  @Test def testFindActionPath4() {
     val context = "/brzy"
     val uri = "/brzy/.brzy"
     val service = new BrzyServlet
-    assertEquals("/", parseActionPath(uri,context))
+    assertEquals("/", ArgsBuilder.parseActionPath(uri,context))
   }
 }

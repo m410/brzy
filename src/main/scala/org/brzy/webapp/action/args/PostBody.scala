@@ -26,7 +26,7 @@ trait PostBody  extends Arg {
 }
 
 
-class PostBodyRequest(request:HttpServletRequest) extends PostBody {
+class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
   private[this] val log = LoggerFactory.getLogger(classOf[PostBody])
   protected[this] val maxSize = 10000000
   protected[this] val tempDir = new java.io.File(util.Properties.tmpDir)
@@ -60,7 +60,7 @@ class PostBodyRequest(request:HttpServletRequest) extends PostBody {
 
       item match {
         case Some(i) => i.asInstanceOf[FileItem]
-        case _ => error("Not a byte array.")
+        case _ => throw new NoFileWithNameException("No File parameter with name:"+name)
       }
     }
     else {

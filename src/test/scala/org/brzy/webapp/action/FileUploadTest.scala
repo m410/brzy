@@ -1,5 +1,6 @@
 package org.brzy.webapp.action
 
+import args.PostBodyRequest
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import java.io.FileInputStream
@@ -30,13 +31,13 @@ class FileUploadTest extends JUnitSuite {
     request.addFile(file)
 
     println(request.getFileMap)
-    val postbody = new PostBody(request)
+    val postbody = new PostBodyRequest(request)
     val bytes = postbody.uploadedFile("file")
     assertNotNull(bytes)
     //    assertEquals(content,text)
   }
 
-  @Test def testUploadText = {
+  @Test def testUploadText() {
     val request = new MockMultipartHttpServletRequest()
     request.setMethod("POST")
     request.addHeader("Content-length", content.getBytes.length.toString)
@@ -44,13 +45,13 @@ class FileUploadTest extends JUnitSuite {
     request.setContent(content.getBytes)
 
     request.setRequestURI("/files/upload")
-    val postbody = new PostBody(request)
+    val postbody = new PostBodyRequest(request)
     val text = postbody.asText
     assertNotNull(text)
     assertEquals(content, text)
   }
 
-  @Test def testUploadJson = {
+  @Test def testUploadJson() {
     val request = new MockMultipartHttpServletRequest()
     request.setMethod("POST")
     request.addHeader("Content-length", contentJson.getBytes.length.toString)
@@ -58,13 +59,13 @@ class FileUploadTest extends JUnitSuite {
     request.setContent(contentJson.getBytes)
 
     request.setRequestURI("/files/upload")
-    val postbody = new PostBody(request)
+    val postbody = new PostBodyRequest(request)
     val json = postbody.asJson
     assertNotNull(json)
     assertTrue(json.isInstanceOf[Map[_, _]])
   }
 
-  @Test def testUploadXml = {
+  @Test def testUploadXml() {
     val request = new MockMultipartHttpServletRequest()
     request.setMethod("POST")
     request.addHeader("Content-length", contentXml.getBytes.length.toString)
@@ -72,7 +73,7 @@ class FileUploadTest extends JUnitSuite {
     request.setContent(contentXml.getBytes)
 
     request.setRequestURI("/files/upload")
-    val postbody = new PostBody(request)
+    val postbody = new PostBodyRequest(request)
     val xml = postbody.asXml
     assertNotNull(xml)
     assertTrue(xml.isInstanceOf[Elem])

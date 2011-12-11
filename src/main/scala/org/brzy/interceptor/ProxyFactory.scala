@@ -39,7 +39,9 @@ object ProxyFactory {
     factory.setSuperclass(clazz)
     factory.setFilter(filter)
     val paramTypes = args.map(a => {
-      if (a.isInstanceOf[ProxyObject])
+      if (a == null)
+        null
+      else if (a.isInstanceOf[ProxyObject])
         a.getClass.getSuperclass
       else
         a.getClass

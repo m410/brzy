@@ -15,7 +15,7 @@ case class Cookie(comment: String, domain: String, maxAge: Int, name: String,
         path: String, secure: Boolean, value: String, version: Int)
 
 
-class CookiesRequest(request:HttpServletRequest) extends Cookies {
+class CookiesRequest protected (request:HttpServletRequest) extends Cookies {
   def list = {
       if (request.getCookies == null || request.getCookies.length == 0)
         List.empty[Cookie]

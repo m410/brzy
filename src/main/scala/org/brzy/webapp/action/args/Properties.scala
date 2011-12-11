@@ -31,7 +31,7 @@ trait Properties  extends Arg {
   def locales: Array[Locale]
 }
 
-class PropertiesRequest(request:HttpServletRequest) extends Properties {
+class PropertiesRequest protected (request:HttpServletRequest) extends Properties {
   def requestURI = request.getRequestURI
   def requestURL = request.getRequestURL
   def queryString = request.getQueryString

@@ -22,7 +22,7 @@ import collection.JavaConversions._
  * testing.  Unit testing should not depend on the use of the http servlet request object.  This
  * would also combine several args objects into one.
  */
-trait Attributes extends Arg {
+trait Parameters extends Arg {
   def apply(name:String):AnyRef
 
   def url:Map[String, String]
@@ -37,35 +37,34 @@ trait Attributes extends Arg {
 }
 
 
-class AttributeRequest(req:HttpServletRequest, urlParams:Map[String, String]) extends Attributes {
+class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String, String]) extends Parameters {
 
   def apply(name: String) = {
-    if (urlParams.containsKey(name))
+    if (urlParams.contains(name))
       urlParams(name)
     else if(req.getParameter(name) != null)
       req.getParameter(name)
     else if (req.getSession(false) != null && req.getSession.getAttribute(name) != null)
       req.getSession.getAttribute(name)
-    else if (req.getSession.getServletContext.getAttribute(name) != null)
-      req.getSession.getServletContext.getAttribute(name)
+    else if (req.getServletContext.getAttribute(name) != null)
+      req.getServletContext.getAttribute(name)
     else if (req.getHeader(name) != null)
       req.getHeader(name)
     else
-      error("No Parameter with name '"+name+"' in any scope")
+      throw new UnfoundParameterException("No Parameter with name '"+name+"' in any scope")
   }
 
-  def url = urlParams
+  val url = urlParams
 
-  def request = req.getParameterMap.map({case (n:String, v:Array[String]) => n->v}).toMap
+  val request = req.getParameterNames.map({ case (n:String)=> n->req.getParameterValues(n)}).toMap
 
-  def application = {
-    val ctx = req.getSession.getServletContext
-    ctx.getAttributeNames.map( { case (n:String)=> n->req.getAttribute(n)}).toMap
+  val application = {
+    req.getServletContext.getAttributeNames.map( { case (n:String)=> n->req.getAttribute(n)}).toMap
   }
 
-  def header = req.getHeaderNames.map({case (n:String)=> n->req.getHeader(n)}).toMap
+  val header = req.getHeaderNames.map({case (n:String)=> n->req.getHeader(n)}).toMap
 
-  def session = if (req.getSession(false) != null)
+  val session = if (req.getSession(false) != null)
       Option(req.getSession.getAttributeNames.map({case (n:String)=> n->req.getAttribute(n)}).toMap)
     else
       None

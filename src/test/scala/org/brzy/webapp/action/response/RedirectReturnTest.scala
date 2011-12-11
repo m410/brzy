@@ -1,4 +1,4 @@
-package org.brzy.webapp.action.returns
+package org.brzy.webapp.action.response
 
 import org.junit.Test
 import org.junit.Assert._
@@ -10,7 +10,7 @@ import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext,
 
 class RedirectReturnTest extends JUnitSuite {
 
-  @Test def testRedirect = {
+  @Test def testRedirect() {
     val ctlr = new UserController()
 //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "redirect").get
     val action = ctlr.actions.find(_.actionPath == "redirect").get//new Action("/users", method, ctlr, ".ssp")

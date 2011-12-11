@@ -1,40 +1,46 @@
 package org.brzy.webapp.action.args
 
 import javax.servlet.http.HttpServletRequest
-import org.brzy.webapp.action.Action
 import org.slf4j.LoggerFactory
+import org.brzy.webapp.action.Action
+import org.brzy.application.WebApp
+import org.brzy.webapp.controller.Permission
 
 /**
  * Document Me..
  * 
  * @author Michael Fortin
  */
-object ArgsFactory {
+object ArgsBuilder {
   val log = LoggerFactory.getLogger(getClass)
+  private val ParametersClass = classOf[Parameters]
+  private val CookiesClass = classOf[Cookies]
+  private val PostBodyClass = classOf[PostBody]
+  private val PrincipalClass = classOf[Principal]
+  private val PropertiesClass = classOf[Properties]
 
-  def apply(req:HttpServletRequest,action:Action) = {
+  def apply(req:HttpServletRequest,action:Action):Array[Arg] = {
     val path = parseActionPath(req.getRequestURI, req.getContextPath)
     val args = action.argTypes
-    log.trace("action:", args)
-    log.trace("arg types: {}, path: {}", args, path)
+    log.trace("arg types: '{}', path: '{}'", args, path)
 
     args.map(arg => arg match {
-      case a:Attributes =>
+      case ParametersClass =>
         val extractParameterValues = action.path.extractParameterValues(path)
         val map = extractParameterValues.zipWithIndex.map({case (v,idx) => {
           action.path.parameterNames(idx) -> v
         }}).toMap
-        new AttributeRequest(req, map)
-      case a:Cookies =>
+        new ParametersRequest(req, map)
+      case CookiesClass =>
         new CookiesRequest(req)
-      case a:PostBody =>
+      case PostBodyClass =>
         new PostBodyRequest(req)
-      case a:Principal =>
+      case PrincipalClass =>
         new PrincipalRequest(req)
-      case a:Properties =>
+      case PropertiesClass =>
         new PropertiesRequest(req)
       case _ =>
-        error("unknown action argument type: " + arg)
+        throw new UnknownActionArgException("Unknown action argument type: " + arg)
     }).toArray
   }
 

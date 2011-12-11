@@ -13,19 +13,17 @@
  */
 package org.brzy.webapp.action
 
-import org.springframework.mock.web.MockHttpServletRequest
+import args.{Principal, Parameters, ArgsBuilder}
 import org.junit.Test
 import org.junit.Assert._
 import collection.immutable.SortedSet
 import org.brzy.webapp.mock.UserController
-import javax.servlet.http.HttpServletRequest
-import org.easymock.EasyMock._
 import org.scalatest.junit.JUnitSuite
 
 
 class ActionTest extends JUnitSuite {
 
-  @Test def testCompare = {
+  @Test def testCompare() {
     val ctlr = new UserController()
 //    val clazz = ctlr.getClass
 //    val method = clazz.getMethods()(0)
@@ -64,27 +62,27 @@ class ActionTest extends JUnitSuite {
 
   }
 
-  @Test def testDefaultView = {
+  @Test def testDefaultView() {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "").get
     assertEquals("/user/list",action.defaultView)
   }
 
-  @Test def testParseActionPath = {
-    assertEquals("/users",Action.parseActionPath("/users.brzy",""))
-    assertEquals("/users",Action.parseActionPath("/users.brzy","/"))
-    assertEquals("/users",Action.parseActionPath("/home/users.brzy","/home"))
-    assertEquals("/users/1/edit",Action.parseActionPath("/users/1/edit.brzy",""))
+  @Test def testParseActionPath() {
+    assertEquals("/users",ArgsBuilder.parseActionPath("/users.brzy",""))
+    assertEquals("/users",ArgsBuilder.parseActionPath("/users.brzy","/"))
+    assertEquals("/users",ArgsBuilder.parseActionPath("/home/users.brzy","/home"))
+    assertEquals("/users/1/edit",ArgsBuilder.parseActionPath("/users/1/edit.brzy",""))
 
-    assertEquals("/path/pixel.gif",Action.parseActionPath("/path/pixel.gif",""))
+    assertEquals("/path/pixel.gif",ArgsBuilder.parseActionPath("/path/pixel.gif",""))
 
-    assertEquals("/",Action.parseActionPath("/.brzy",""))
-    assertEquals("/",Action.parseActionPath("/.brzy","/"))
-    assertEquals("/",Action.parseActionPath("/one/.brzy","/one"))
-    assertEquals("/",Action.parseActionPath("//.brzy",""))
+    assertEquals("/",ArgsBuilder.parseActionPath("/.brzy",""))
+    assertEquals("/",ArgsBuilder.parseActionPath("/.brzy","/"))
+    assertEquals("/",ArgsBuilder.parseActionPath("/one/.brzy","/one"))
+    assertEquals("/",ArgsBuilder.parseActionPath("//.brzy",""))
   }
 
-  @Test def testParameterExtract = {
+  @Test def testParameterExtract() {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "{id}/companies/{cid}").get
 
@@ -98,7 +96,7 @@ class ActionTest extends JUnitSuite {
     assertEquals("234543", result(1))
   }
 
-  @Test def testEmptyPath = {
+  @Test def testEmptyPath() {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "").get
 
@@ -110,14 +108,28 @@ class ActionTest extends JUnitSuite {
     assertEquals(0, result.size)
   }
 
-  @Test def testDefaultReturnPath = {
+  @Test def testDefaultReturnPath() {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "save").get
-    def result = action.execute(List(Parameters(Map("id"->Array("1")))),None)
+    val params = new Parameters {
+      def apply(name: String) = Map("id"->"1")
+      def url = Map("id"->"1")
+      def request = null
+      def application = null
+      def header = null
+      def session = null
+    }
+    val principal = new Principal {
+      def isLoggedIn = false
+      def name = null
+      def roles = null
+    }
+    def result = action.execute(Array(params),principal)
+    assert(result != null)
 
   }
 
-  @Test def testParameterMapExtraction = {
+  @Test def testParameterMapExtraction() {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "{id}/companies/{cid}").get
     

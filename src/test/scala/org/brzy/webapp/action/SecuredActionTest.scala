@@ -1,5 +1,6 @@
 package org.brzy.webapp.action
 
+import args.Principal
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
@@ -16,19 +17,25 @@ class SecuredActionTest extends JUnitSuite {
 		def index = "name" -> "value"
 		def index2 = "name" -> "value"
 	}
-	
+
+  class PrincipalMock(n:String, r:Roles) extends Principal {
+    def isLoggedIn = true
+    def name = n
+    def roles = r
+  }
+  
   @Test def testNoPermission() {
 		val action = controller.actions(0) 
-		assertTrue(action.isAuthorized(Option(Principal("me",Roles("USER")))))
+		assertTrue(action.isAuthorized(new PrincipalMock("me",Roles("USER"))))
 	}	
 
   @Test def testNoRolePermission() {
 		val action = controller.actions(1)
-		assertFalse(action.isAuthorized(Option(Principal("me",Roles("USER")))))
+		assertFalse(action.isAuthorized(new PrincipalMock("me",Roles("USER"))))
 	}
 
 	@Test def testHasPermission() {
 		val action = controller.actions(0) 
-		assertTrue(action.isAuthorized(Option(Principal("me",Roles("ADMIN")))))
+		assertTrue(action.isAuthorized(new PrincipalMock("me",Roles("ADMIN"))))
 	}	
 }

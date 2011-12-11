@@ -13,10 +13,9 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.Principal
-import org.brzy.webapp.action.Roles
 
 import java.security.MessageDigest
+import org.brzy.webapp.action.args.PrincipalSession
 
 
 /**
@@ -57,6 +56,8 @@ trait Permission[T<:Authenticated] {
 	}
 
 	def principal(t:T) = {
-		Principal(t.userName,Roles(t.authenticatedRoles:_*))
+		PrincipalSession(t.userName,t.authenticatedRoles)
 	}
+
+  def active(person:T):Boolean
 }
