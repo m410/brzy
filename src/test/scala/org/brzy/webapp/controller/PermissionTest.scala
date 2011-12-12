@@ -20,10 +20,11 @@ import org.scalatest.junit.JUnitSuite
 
 
 class PermissionTest extends JUnitSuite {
-  @Test def testEncrypt = {
+  @Test def testEncrypt() {
 		val permission = new Permission[User] {
 			def authenticator:Authenticator[User] = null
-		}
+      def active(person: User) = false
+    }
 		val encrypted = permission.encrypt("mypass")
     println("## encrypted=" + encrypted)
     assertNotNull(encrypted)

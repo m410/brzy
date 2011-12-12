@@ -15,14 +15,12 @@ package org.brzy.webapp.action.response
 
 import org.springframework.mock.web.{MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
 
-import org.junit.{Ignore, Test}
-import java.lang.reflect.Method
+import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 
 import org.brzy.webapp.mock.UserController
-import org.brzy.webapp.action.Action._
-import org.brzy.webapp.action.Xml
+import org.brzy.webapp.action.args.{Principal, Arg}
 
 class XmlReturnTest  extends JUnitSuite {
 
@@ -39,6 +37,11 @@ class XmlReturnTest  extends JUnitSuite {
     assertEquals(fooXml,xml.parse)
   }
 
+  class PrincipalMock extends Principal {
+    def isLoggedIn = false
+    def name = null
+    def roles = null
+  }
 
   @Test def testDefaultWithNoReturn() {
     val ctlr = new UserController()
@@ -46,12 +49,12 @@ class XmlReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/xml", action.defaultView)
-    val result = action.execute(List[AnyRef](),None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertEquals("text/xml",response.getContentType)
     assertEquals(expectedXml,response.getContentAsString)
   }
