@@ -4,10 +4,12 @@ import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.junit.Test
 import org.brzy.webapp.action._
+import args.{Arg, Principal, Parameters}
 import collection.JavaConversions._
+import response.{View, Model}
 
 class ImplControllerTest extends JUnitSuite {
-  @Test def testLoadController = {
+  @Test def testLoadController() {
     val controller = new ImplController
     assertNotNull(controller)
     assertEquals(2, controller.actions.size)
@@ -22,7 +24,7 @@ class ImplControllerTest extends JUnitSuite {
 //    })
   }
 
-  @Test def testAction = {
+  @Test def testAction() {
     val myCtl = new Controller("test") {
       val actions:List[Action] = List.empty[Action]
       def fun1(a: Parameters) = ""
@@ -33,10 +35,10 @@ class ImplControllerTest extends JUnitSuite {
     assertNotNull(action1.argTypes)
   }
 
-  @Test def testAction2 = {
+  @Test def testAction2() {
     val myCtl2 = new Controller("test") {
       val actions:List[Action] = List.empty[Action]
-      def fun2(a: Parameters, b: Headers) = ""
+      def fun2(a: Parameters) = ""
     }
     implicit val ctlRef2 = myCtl2
     val action2 = Action("f2","f2", myCtl2.fun2 _)
@@ -44,13 +46,27 @@ class ImplControllerTest extends JUnitSuite {
     assertNotNull(action2.argTypes)
   }
 
-  @Test def testIntercept = {
-    val parameters = new Parameters(Map.empty[String, Array[String]])
+  @Test def testIntercept() {
+    val parameters = new Parameters {
+      def apply(name: String) = null
+      def url = Map.empty[String,String]
+      def request = Map.empty[String,Array[String]]
+      def application = Map.empty[String,AnyRef]
+      def header = Map.empty[String,String]
+      def session = None
+    }
+
+    val principal = new Principal {
+      def isLoggedIn = false
+      def name = null
+      def roles = null
+    }
+
     val controller = new ImplController
     val action = controller.actions.find(_.actionPath == "list").get
     // need to create parameters from
-    val args = List[AnyRef](parameters)
-    val result = action.execute(args,None)
+    val args = Array[Arg](parameters)
+    val result = action.execute(args,principal)
     assertNotNull(result)
     assertTrue(result.isInstanceOf[Model])
   }
@@ -62,7 +78,7 @@ class ImplController extends Controller("impls") with Secured {
   val actions = Action("list", "list", list _, Roles("SUPER")) ::
           Action("showMore", "show", showMore _) :: Nil
 
-  override def intercept(action: () => AnyRef, actionArgs: List[AnyRef],principal:Option[Principal] = None) = {
+  override def intercept(action: () => AnyRef, actionArgs: Array[Arg],principal:Principal) = {
     val paramsOption = actionArgs.find(_.isInstanceOf[Parameters])
     assertTrue(paramsOption.isDefined)
     val result = action()
@@ -75,5 +91,5 @@ class ImplController extends Controller("impls") with Secured {
     Model("name" -> "value")
   }
 
-  def showMore(p: Parameters, h: Headers) = (Model("name" -> "value"), View("/home/other"))
+  def showMore(p: Parameters) = (Model("name" -> "value"), View("/home/other"))
 }

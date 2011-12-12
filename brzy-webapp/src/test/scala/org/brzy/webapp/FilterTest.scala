@@ -18,7 +18,7 @@ import org.junit.Assert._
 import javax.servlet.{RequestDispatcher, ServletResponse, ServletRequest, FilterChain}
 import org.springframework.mock.web.{MockRequestDispatcher, MockServletContext, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
-import org.brzy.application.{WebAppConf, WebApp}
+import org.brzy.application.WebApp
 
 class FilterTest extends JUnitSuite {
 

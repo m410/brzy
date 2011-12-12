@@ -5,13 +5,14 @@ import org.brzy.webapp.action.Action
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
+import org.brzy.webapp.action.args.ArgsBuilder
 
 class HomeControllerTest extends JUnitSuite {
-  @Test def testPathHome = {
+  @Test def testPathHome() {
     val ctlr = new HomeController()
     val action = ctlr.actions.find(_.actionPath == "").get
     assertEquals("/index",action.defaultView)
-    assertEquals("/",Action.parseActionPath("/.brzy",""))
+    assertEquals("/",ArgsBuilder.parseActionPath("/.brzy",""))
     assertTrue(action.path.isMatch("/"))
     
     val result = action.path.extractParameterValues("/")

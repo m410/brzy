@@ -18,10 +18,16 @@ import org.junit.Test
 import org.junit.Assert._
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
 import org.brzy.webapp.mock.UserController
-import org.brzy.webapp.action.Action._
 import java.lang.reflect.Method
+import org.brzy.webapp.action.args.{Principal, Arg}
 
 class ErrorReturnTest extends JUnitSuite {
+
+  class PrincipalMock extends Principal {
+    def isLoggedIn = false
+    def name = null
+    def roles = null
+  }
 
   @Test def testError404() {
     val ctlr = new UserController()
@@ -30,12 +36,12 @@ class ErrorReturnTest extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/error", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertEquals(404, response.getStatus)
   }
 }

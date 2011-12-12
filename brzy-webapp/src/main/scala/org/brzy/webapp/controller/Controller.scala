@@ -13,7 +13,7 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.{Args, Constraint, Action}
+import org.brzy.webapp.action.{Constraint, Action}
 
 /**
  * Base class for all controllers.

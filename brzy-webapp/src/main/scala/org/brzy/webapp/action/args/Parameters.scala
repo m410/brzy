@@ -46,8 +46,8 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
       req.getParameter(name)
     else if (req.getSession(false) != null && req.getSession.getAttribute(name) != null)
       req.getSession.getAttribute(name)
-    else if (req.getServletContext.getAttribute(name) != null)
-      req.getServletContext.getAttribute(name)
+    else if (req.getSession.getServletContext.getAttribute(name) != null)
+      req.getSession.getServletContext.getAttribute(name)
     else if (req.getHeader(name) != null)
       req.getHeader(name)
     else
@@ -59,7 +59,7 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
   val request = req.getParameterNames.map({ case (n:String)=> n->req.getParameterValues(n)}).toMap
 
   val application = {
-    req.getServletContext.getAttributeNames.map( { case (n:String)=> n->req.getAttribute(n)}).toMap
+    req.getSession.getServletContext.getAttributeNames.map( { case (n:String)=> n->req.getAttribute(n)}).toMap
   }
 
   val header = req.getHeaderNames.map({case (n:String)=> n->req.getHeader(n)}).toMap

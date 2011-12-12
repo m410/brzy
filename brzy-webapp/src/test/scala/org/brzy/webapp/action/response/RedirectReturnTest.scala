@@ -4,11 +4,17 @@ import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
 import org.brzy.webapp.mock.UserController
-import org.brzy.webapp.action.Action._
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
+import org.brzy.webapp.action.args.{Arg, Principal}
 
 
 class RedirectReturnTest extends JUnitSuite {
+
+  class PrincipalMock extends Principal {
+    def isLoggedIn = false
+    def name = null
+    def roles = null
+  }
 
   @Test def testRedirect() {
     val ctlr = new UserController()
@@ -17,12 +23,12 @@ class RedirectReturnTest extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/redirect", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
-    handleResults(action, result, request, response)
+    ResponseHandler(action, result, request, response)
     assertEquals("http://o2l.co",response.getRedirectedUrl)
   }
 }

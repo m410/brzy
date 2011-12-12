@@ -15,13 +15,19 @@ package org.brzy.webapp.action.response
 
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.webapp.action.Action._
 import org.brzy.webapp.mock.UserController
 import org.junit.Test
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import org.springframework.mock.web.{MockRequestDispatcher, MockHttpServletResponse, MockHttpServletRequest, MockServletContext}
+import org.brzy.webapp.action.args.{Principal, Arg}
 
 class DefaultReturnTest  extends JUnitSuite {
+
+  class PrincipalMock extends Principal {
+    def isLoggedIn = false
+    def name = null
+    def roles = null
+  }
 
   @Test
   def testDefaultWithNoReturn() {
@@ -31,7 +37,7 @@ class DefaultReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/list", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     var callCount = 0
@@ -45,7 +51,7 @@ class DefaultReturnTest  extends JUnitSuite {
 			}
 		}
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertTrue(callCount == 1)
   }
 
@@ -55,7 +61,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val action = ctlr.actions.find(_.actionPath == "other").get//new Action("/users/other", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
     assertEquals("/user/other", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     var callCount = 0
@@ -69,7 +75,7 @@ class DefaultReturnTest  extends JUnitSuite {
 			}
 		}
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertTrue(callCount == 1)
   }
 
@@ -79,7 +85,7 @@ class DefaultReturnTest  extends JUnitSuite {
     val action = ctlr.actions.find(_.actionPath == "other2").get//new Action("/users/some2", method, ctlr, ".ssp")
     assertNotNull(action.defaultView)
     assertEquals("/user/other2", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
 
@@ -94,7 +100,7 @@ class DefaultReturnTest  extends JUnitSuite {
 			}
 		}
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertTrue(callCount == 1)
   }
 }

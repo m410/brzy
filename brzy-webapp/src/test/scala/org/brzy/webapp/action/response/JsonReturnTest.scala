@@ -17,12 +17,17 @@ import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import org.springframework.mock.web.{MockServletContext, MockHttpServletResponse, MockHttpServletRequest}
-import org.brzy.webapp.action.Action
 import org.brzy.webapp.mock.UserController
-import org.brzy.webapp.action.Action._
 import java.lang.reflect.Method
+import org.brzy.webapp.action.args.{Arg, Principal}
 
 class JsonReturnTest  extends JUnitSuite {
+
+  class PrincipalMock extends Principal {
+    def isLoggedIn = false
+    def name = null
+    def roles = null
+  }
 
   val expected = """{"id":1,"version":0,"name":"hello"}"""
 
@@ -33,12 +38,12 @@ class JsonReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/json", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertEquals("application/json",response.getContentType)
     assertEquals(expected,response.getContentAsString)
   }
@@ -50,12 +55,12 @@ class JsonReturnTest  extends JUnitSuite {
 
     assertNotNull(action.defaultView)
     assertEquals("/user/json2", action.defaultView)
-    val result = action.execute(List.empty[AnyRef],None)
+    val result = action.execute(Array.empty[Arg],new PrincipalMock)
     assertNotNull(result)
 
     val request = new MockHttpServletRequest(new MockServletContext())
     val response = new MockHttpServletResponse()
-    handleResults(action,result,request,response)
+    ResponseHandler(action,result,request,response)
     assertEquals("application/json",response.getContentType)
     assertEquals("{\"name\":\"value\"}",response.getContentAsString)
   }
