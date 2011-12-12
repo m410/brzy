@@ -1,6 +1,6 @@
 package org.brzy.webapp.action
 
-import args.PostBodyRequest
+import args.MultipartRequest
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
 import java.io.FileInputStream
@@ -31,8 +31,8 @@ class FileUploadTest extends JUnitSuite {
     request.addFile(file)
 
     println(request.getFileMap)
-    val postbody = new PostBodyRequest(request)
-    val bytes = postbody.uploadedFile("file")
+    val postbody = new MultipartRequest(request)
+    val bytes = postbody.paramAsFile("file")
     assertNotNull(bytes)
     //    assertEquals(content,text)
   }
@@ -45,7 +45,7 @@ class FileUploadTest extends JUnitSuite {
     request.setContent(content.getBytes)
 
     request.setRequestURI("/files/upload")
-    val postbody = new PostBodyRequest(request)
+    val postbody = new MultipartRequest(request)
     val text = postbody.asText
     assertNotNull(text)
     assertEquals(content, text)
@@ -59,7 +59,7 @@ class FileUploadTest extends JUnitSuite {
     request.setContent(contentJson.getBytes)
 
     request.setRequestURI("/files/upload")
-    val postbody = new PostBodyRequest(request)
+    val postbody = new MultipartRequest(request)
     val json = postbody.asJson
     assertNotNull(json)
     assertTrue(json.isInstanceOf[Map[_, _]])
@@ -73,7 +73,7 @@ class FileUploadTest extends JUnitSuite {
     request.setContent(contentXml.getBytes)
 
     request.setRequestURI("/files/upload")
-    val postbody = new PostBodyRequest(request)
+    val postbody = new MultipartRequest(request)
     val xml = postbody.asXml
     assertNotNull(xml)
     assertTrue(xml.isInstanceOf[Elem])

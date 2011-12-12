@@ -15,7 +15,7 @@ object ArgsBuilder {
   val log = LoggerFactory.getLogger(getClass)
   private val ParametersClass = classOf[Parameters]
   private val CookiesClass = classOf[Cookies]
-  private val PostBodyClass = classOf[PostBody]
+  private val PostBodyClass = classOf[MultipartForm]
   private val PrincipalClass = classOf[Principal]
   private val PropertiesClass = classOf[Properties]
 
@@ -34,7 +34,7 @@ object ArgsBuilder {
       case CookiesClass =>
         new CookiesRequest(req)
       case PostBodyClass =>
-        new PostBodyRequest(req)
+        new MultipartRequest(req)
       case PrincipalClass =>
         new PrincipalRequest(req)
       case PropertiesClass =>
