@@ -15,19 +15,19 @@ import collection.JavaConversions._
  * 
  * @author Michael Fortin
  */
-trait PostBody  extends Arg {
+trait MultipartForm  extends Arg {
   def asText:String 
 
   def asXml:Elem
 
   def asJson:AnyRef
 
-  def uploadedFile(name: String): FileItem
+  def paramAsFile(name: String): FileItem
 }
 
 
-class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
-  private[this] val log = LoggerFactory.getLogger(classOf[PostBody])
+class MultipartRequest protected  (request:HttpServletRequest) extends MultipartForm {
+  private[this] val log = LoggerFactory.getLogger(classOf[MultipartForm])
   protected[this] val maxSize = 10000000
   protected[this] val tempDir = new java.io.File(util.Properties.tmpDir)
   protected[this] val sizeThreshold = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD
@@ -39,12 +39,26 @@ class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
   def asJson = tJson.parse(asText).asInstanceOf[AnyRef]
 
   /**
+   * Get non-file request parameters.
+   */
+  def parameters:Map[String, String] = {
+    val factory = new DiskFileItemFactory()
+    factory.setSizeThreshold(sizeThreshold)
+    factory.setRepository(tempDir)
+    val upload = new ServletFileUpload(factory)
+    val items = upload.parseRequest(request)
+    items.filter(_.asInstanceOf[FileItem].isFormField).map({case f:FileItem =>{
+      f.getFieldName -> f.getString
+    }}).toMap
+  }
+
+  /**
    * This uses the apache commons fileupload api to digest the multipart content of the body.  This
    * is used when uploading a file.  
    *
    * @param name The name of the parameter the data is uploaded as.
    */
-  def uploadedFile(name: String): FileItem = {
+  def paramAsFile(name: String): FileItem = {
     if (ServletFileUpload.isMultipartContent(request)) {
       val factory = new DiskFileItemFactory()
       factory.setSizeThreshold(sizeThreshold)
