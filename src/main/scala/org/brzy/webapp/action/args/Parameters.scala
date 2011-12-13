@@ -19,8 +19,8 @@ import collection.JavaConversions._
 /**
  * this is not in use, but a template of how action arguments should be done.  The
  * arguments should all be traits instead of case classes as to facilitate easier unit
- * testing.  Unit testing should not depend on the use of the http servlet request object.  This
- * would also combine several args objects into one.
+ * testing.  Unit testing should not depend on the use of the http servlet request
+ * object.  This would also combine several args objects into one.
  */
 trait Parameters extends Arg {
   def apply(name:String):AnyRef
@@ -28,6 +28,8 @@ trait Parameters extends Arg {
   def url:Map[String, String]
 
   def request:Map[String, Array[String]]
+
+  def param:Map[String, String]
 
   def application:Map[String, AnyRef]
 
@@ -54,18 +56,31 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
       throw new UnfoundParameterException("No Parameter with name '"+name+"' in any scope")
   }
 
+
   val url = urlParams
 
-  val request = req.getParameterNames.map({ case (n:String)=> n->req.getParameterValues(n)}).toMap
+  lazy val param = req.getParameterNames.map({
+    case (n:String)=> n->req.getParameter(n)
+  }).toMap ++ urlParams
 
-  val application = {
-    req.getSession.getServletContext.getAttributeNames.map( { case (n:String)=> n->req.getAttribute(n)}).toMap
+  lazy val request = req.getParameterNames.map({
+    case (n:String)=> n->req.getParameterValues(n)
+  }).toMap
+
+  lazy val application = {
+    req.getSession.getServletContext.getAttributeNames.map( {
+      case (n:String)=> n->req.getAttribute(n)
+    }).toMap
   }
 
-  val header = req.getHeaderNames.map({case (n:String)=> n->req.getHeader(n)}).toMap
+  lazy val header = req.getHeaderNames.map({
+    case (n:String)=> n->req.getHeader(n)
+  }).toMap
 
-  val session = if (req.getSession(false) != null)
-      Option(req.getSession.getAttributeNames.map({case (n:String)=> n->req.getAttribute(n)}).toMap)
+  lazy val session = if (req.getSession(false) != null)
+      Option(req.getSession.getAttributeNames.map({
+        case (n:String)=> n->req.getAttribute(n)
+      }).toMap)
     else
       None
 }
