@@ -3,8 +3,6 @@ package org.brzy.webapp.action.args
 import javax.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.brzy.webapp.action.Action
-import org.brzy.application.WebApp
-import org.brzy.webapp.controller.Permission
 
 /**
  * Document Me..
@@ -15,7 +13,7 @@ object ArgsBuilder {
   val log = LoggerFactory.getLogger(getClass)
   private val ParametersClass = classOf[Parameters]
   private val CookiesClass = classOf[Cookies]
-  private val PostBodyClass = classOf[MultipartForm]
+  private val PostBodyClass = classOf[PostBody]
   private val PrincipalClass = classOf[Principal]
   private val PropertiesClass = classOf[Properties]
 
@@ -34,7 +32,7 @@ object ArgsBuilder {
       case CookiesClass =>
         new CookiesRequest(req)
       case PostBodyClass =>
-        new MultipartRequest(req)
+        new PostBodyRequest(req)
       case PrincipalClass =>
         new PrincipalRequest(req)
       case PropertiesClass =>

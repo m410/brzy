@@ -15,19 +15,23 @@ import collection.JavaConversions._
  * 
  * @author Michael Fortin
  */
-trait MultipartForm  extends Arg {
+trait PostBody  extends Arg {
   def asText:String 
 
   def asXml:Elem
 
   def asJson:AnyRef
 
+  def parameters:Map[String, String]
+
   def paramAsFile(name: String): FileItem
 }
 
-
-class MultipartRequest protected  (request:HttpServletRequest) extends MultipartForm {
-  private[this] val log = LoggerFactory.getLogger(classOf[MultipartForm])
+/**
+ *
+ */
+class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
+  private[this] val log = LoggerFactory.getLogger(classOf[PostBody])
   protected[this] val maxSize = 10000000
   protected[this] val tempDir = new java.io.File(util.Properties.tmpDir)
   protected[this] val sizeThreshold = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD
