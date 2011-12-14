@@ -11,10 +11,11 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mock
+package org.brzy.mvc.mock
 
 import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.{Action,Parameters}
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.args.Parameters
 
 class PersonController extends Controller("persons"){
   val actions = List(
@@ -27,20 +28,20 @@ class PersonController extends Controller("persons"){
 
   def list =  "personsList"->Person.list
 
-  def get(params:Parameters) =  "person"->Person.get(params("id").toLong)
+  def get(params:Parameters) =  "person"->Person.get(params.url("id").toLong)
 
   def create() = "person"->new Person
 
   def save(p:Parameters) = {
-    val person = new Person(0, p("firstName"), p("lastName"))
+    val person = new Person(0, p.request("firstName")(0), p.request("lastName")(0))
 		person.insert()
     "person"->person
   }
 
-  def edit(params:Parameters) =  "person"->Person.get(params("id").toLong)
+  def edit(params:Parameters) =  "person"->Person.get(params.url("id").toLong)
 
   def update(p:Parameters) = {
-		val person = new Person(p("id")(0).toLong, p("firstName"), p("lastName"))
+		val person = new Person(p.url("id").toLong, p.request("firstName")(0), p.request("lastName")(0))
 		person.update()
     "person"->person
   }

@@ -21,7 +21,7 @@ import org.brzy.fab.mod.Mod
 
 class SquerylModConfigTest extends JUnitSuite {
   @Test
-  def testMerge = {
+  def testMerge() {
     def mod = new Mod(Map(
       "name" -> "brzy-squeryl",
       "org" -> "orb.grzy",

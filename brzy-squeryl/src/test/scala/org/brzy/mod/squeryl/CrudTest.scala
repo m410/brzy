@@ -15,14 +15,14 @@ package org.brzy.mod.squeryl
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Assert._
-import org.brzy.mock.Person
 import org.junit.Test
+import org.brzy.mvc.mock.Person
 
 
 class CrudTest extends JUnitSuite {
   val ctx = new SquerylContextManager("org.h2.Driver", "jdbc:h2:target/squeryl-test", "sa", "")
   
-  @Test def testCreate = {
+  @Test def testCreate() {
 
     try {
       val session = ctx.createSession

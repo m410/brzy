@@ -14,7 +14,9 @@
 package org.brzy.mod.jpa.mock
 
 import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action._
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.response._
 
 
 class UserController extends Controller("users"){
@@ -30,12 +32,12 @@ class UserController extends Controller("users"){
 
   def list() = "userList" -> User.list
 
-  def get(prms: Parameters) = "user" -> User.get(prms("id")(0).toLong)
+  def get(prms: Parameters) = "user" -> User.get(prms.url("id").toLong)
 
   def create = "user" -> new User()
 
   def save(params: Parameters)() = {
-    def user = User.construct(params.map)
+    def user = User.construct(params.requestAndUrl)
 
     user.validate match {
       case Some(violations) =>
@@ -46,10 +48,10 @@ class UserController extends Controller("users"){
     }
   }
 
-  def edit(params: Parameters) = "user" -> User.get(params("id")(0).toLong)
+  def edit(params: Parameters) = "user" -> User.get(params.url("id").toLong)
 
   def update(params: Parameters) = {
-    def user = User.construct(params.map)
+    def user = User.construct(params.requestAndUrl)
 
     user.validate match {
       case Some(violations) =>
@@ -61,9 +63,9 @@ class UserController extends Controller("users"){
   }
 
   def delete(params: Parameters) = {
-    User.get(params("id")(0).toLong) match {
+    User.get(params.url("id").toLong) match {
       case Some(user) =>
-        user.delete
+        user.delete()
         Flash("message2", "user deleted")
       case _ =>
         Error(500, "No entity found")
@@ -71,6 +73,7 @@ class UserController extends Controller("users"){
   }
 
   def custom() = {
-    (CookieAdd("id", "1"), SessionAdd("id" -> "x", "id2" -> "y"), SessionRemove("id2"), Flash("c", "Hello"), View("/x/y"))
+    val session = Session(List("id" -> "x", "id2" -> "y"), Array("id2"), false)
+    (Cookie("id", "1"), session, Flash("c", "Hello"), View("/x/y"))
   }
 }

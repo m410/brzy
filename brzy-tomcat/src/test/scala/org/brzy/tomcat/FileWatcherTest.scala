@@ -20,7 +20,7 @@ import org.scalatest.junit.JUnitSuite
 
 class FileWatcherTest extends JUnitSuite {
 
-  @Test def someTest = {
+  @Test def someTest() {
     assertTrue(true)
   }
 }

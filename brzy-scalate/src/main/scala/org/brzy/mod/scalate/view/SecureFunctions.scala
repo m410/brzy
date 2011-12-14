@@ -1,7 +1,7 @@
 package org.brzy.mod.scalate.view
 
 import javax.servlet.http.HttpServletRequest
-import org.brzy.webapp.action.Principal
+import org.brzy.webapp.action.args.PrincipalSession
 
 /**
  * Helpers view functions for security
@@ -14,8 +14,8 @@ object SecureFunctions {
         false
       }
       else {
-        val principal = req.getSession(false).getAttribute("brzy_principal").asInstanceOf[Principal]
-        principal.roles.allowed.forall(role=>roles.contains(role))
+        val principal = req.getSession(false).getAttribute("brzy_principal").asInstanceOf[PrincipalSession]
+        principal.roles.forall(role=>roles.contains(role))
       }
 
   def isLoggedIn()(implicit req:HttpServletRequest):Boolean =

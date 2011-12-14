@@ -23,47 +23,81 @@ import collection.JavaConversions._
  * object.  This would also combine several args objects into one.
  */
 trait Parameters extends Arg {
-  def apply(name:String):AnyRef
 
+  /**
+   * just request paramters and url parameters
+   */
+  def apply(name:String):String
+
+  /**
+   * all scopes
+   */
+  def get(name:String):Option[AnyRef]
+
+  def requestAndUrl:Map[String, String]
+
+  /**
+   * parameters embedded in the url for RESTful access.
+   */
   def url:Map[String, String]
 
+  /**
+   * the servlet request attributes
+   */
   def request:Map[String, Array[String]]
 
-  def param:Map[String, String]
-
+  /**
+   * The application scope attributes.  servlet 5 spec, uses the session scope.
+   */
   def application:Map[String, AnyRef]
 
+  /**
+   * Request headers
+   */
   def header:Map[String, String]
 
+  /**
+   * the optional session scope attributes
+   */
   def session:Option[Map[String, AnyRef]]
 }
 
 /**
- * Document me..
+ * Default implementation passed as the argument to the actions.
  */
 class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String, String]) extends Parameters {
 
-  def apply(name: String) = {
+  
+  def get(name: String) = {
     if (urlParams.contains(name))
-      urlParams(name)
+      Option(urlParams(name))
     else if(req.getParameter(name) != null)
-      req.getParameter(name)
+      Option(req.getParameter(name))
     else if (req.getSession(false) != null && req.getSession.getAttribute(name) != null)
-      req.getSession.getAttribute(name)
+      Option(req.getSession.getAttribute(name))
     else if (req.getSession.getServletContext.getAttribute(name) != null)
-      req.getSession.getServletContext.getAttribute(name)
+      Option(req.getSession.getServletContext.getAttribute(name))
     else if (req.getHeader(name) != null)
-      req.getHeader(name)
+      Option(req.getHeader(name))
     else
-      throw new UnfoundParameterException("No Parameter with name '"+name+"' in any scope")
+      None
   }
 
 
-  val url = urlParams
+  def requestAndUrl = urlParams ++ req.getParameterNames.map({
+      case (n:String)=> n->req.getParameter(n)
+    }).toMap
 
-  lazy val param = req.getParameterNames.map({
-    case (n:String)=> n->req.getParameter(n)
-  }).toMap ++ urlParams
+  def apply(name:String) = {
+    if (urlParams.contains(name))
+      urlParams(name)
+    else if (req.getParameter(name) != null)
+      req.getParameter(name)
+    else
+      throw new UnfoundParameterException("No Parameter with name '"+name+"' in request or url scope.")
+  }
+
+  val url = urlParams
 
   lazy val request = req.getParameterNames.map({
     case (n:String)=> n->req.getParameterValues(n)
