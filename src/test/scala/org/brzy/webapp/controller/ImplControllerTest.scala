@@ -54,6 +54,7 @@ class ImplControllerTest extends JUnitSuite {
       def application = Map.empty[String,AnyRef]
       def header = Map.empty[String,String]
       def session = None
+      def param = Map.empty[String,String]
     }
 
     val principal = new Principal {

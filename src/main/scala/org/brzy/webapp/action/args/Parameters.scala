@@ -38,7 +38,9 @@ trait Parameters extends Arg {
   def session:Option[Map[String, AnyRef]]
 }
 
-
+/**
+ * Document me..
+ */
 class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String, String]) extends Parameters {
 
   def apply(name: String) = {
