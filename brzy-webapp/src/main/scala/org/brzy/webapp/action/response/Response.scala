@@ -14,7 +14,9 @@
 package org.brzy.webapp.action.response
 
 /**
+ * Document Me..
  *
+ * @author Michael Fortin
  */
 trait Response
 

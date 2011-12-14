@@ -118,6 +118,7 @@ class ActionTest extends JUnitSuite {
       def application = null
       def header = null
       def session = null
+      def param = null
     }
     val principal = new Principal {
       def isLoggedIn = false
