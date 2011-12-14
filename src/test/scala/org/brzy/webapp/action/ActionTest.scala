@@ -112,13 +112,15 @@ class ActionTest extends JUnitSuite {
     val ctlr = new UserController()
     val action = ctlr.actions.find(_.actionPath == "save").get
     val params = new Parameters {
-      def apply(name: String) = Map("id"->"1")
+      def apply(name: String) = "1"
+      def get(name: String) = None
       def url = Map("id"->"1")
       def request = null
       def application = null
       def header = null
       def session = null
       def param = null
+      def requestAndUrl = null
     }
     val principal = new Principal {
       def isLoggedIn = false

@@ -48,13 +48,14 @@ class ImplControllerTest extends JUnitSuite {
 
   @Test def testIntercept() {
     val parameters = new Parameters {
-      def apply(name: String) = null
+      def apply(name: String) = ""
+      def get(name: String) = None
       def url = Map.empty[String,String]
       def request = Map.empty[String,Array[String]]
       def application = Map.empty[String,AnyRef]
       def header = Map.empty[String,String]
       def session = None
-      def param = Map.empty[String,String]
+      def requestAndUrl = Map.empty[String,String]
     }
 
     val principal = new Principal {

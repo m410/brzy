@@ -16,7 +16,7 @@ class FileUploadTest extends JUnitSuite {
   val contentJson = """{"key":"value"}"""
   val contentXml = """<something>some value</something>"""
 
-  @Test @Ignore def testUploadbytes = {
+  @Test @Ignore def testUploadbytes() {
     val request = new MockMultipartHttpServletRequest()
 
     request.setMethod("POST")
