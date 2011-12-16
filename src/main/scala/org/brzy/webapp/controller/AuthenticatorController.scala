@@ -7,59 +7,72 @@ import org.slf4j.LoggerFactory
 
 
 /**
- * Document Me..
- * 
+ * Simplifies secure login by extending this controller
+ *
  * @author Michael Fortin
  */
-abstract class AuthenticatorController[T<:Authenticated](permission:Permission[T], path:String)
+abstract class AuthenticatorController[T <: Authenticated](permission: Permission[T], path: String)
         extends Controller(path) {
 
   val log = LoggerFactory.getLogger(getClass)
-  
-  def loginViewName:String
+
+  val loginViewName: String = "/auth/login"
+
+  val logoutViewName: String = "/"
 
   val actions = List(
-		Action("",loginViewName,login _),
-		Action("logout","/",logout _),
-		Action("submit",loginViewName,submit _))
+    Action("", loginViewName, login _),
+    Action("logout", logoutViewName, logout _),
+    Action("submit", loginViewName, submit _))
 
-	def login(p:Parameters) {
-    log.debug("session: {}",p.session.mkString("[",", ","]"))
+  def login(p: Parameters) {
+    p.session match {
+      case Some(s) => log.debug("session: {}", s.mkString("[", ", ", "]"))
+      case _ => log.debug("session: {}", "None")
+    }
   }
 
-	def logout = (Redirect("/"),Session.remove("brzy_principal")) // TODO need to invalid the session
+  def logout = (Redirect("/"), Session.invalidate)
 
-  def submit(params:Parameters) = {
-	  log.debug("session: {}",params.session.mkString("[",", ","]"))
-		if(check(params)) {
-			permission.login(params.request("userName")(0),params.request("password")(0)) match {
-				case Some(auth) =>
-					if(permission.active(auth)) {
-            val direct = params.session.get("last_view") match {
-							case Some(lv) =>
-								log.debug("returning to view:'{}'",lv)
-                Redirect(lv.asInstanceOf[String].replaceFirst("\\.brzy",""))
-							case _ =>
-								Redirect("/")
-						}
-						val addTo = Session("brzy_principal"->permission.principal(auth))
-						val removeFrom = Session.remove("last_view")
-						(addTo,removeFrom,direct)
-					}
-					else {
-						Flash("Sory Your Account is not active.","account.disabled")
-					}
-				case _ =>
-					Flash("Invalid User Name or Password","login.invalid")
-			}
-		}
-		else {
-			Model("violations"->"Invalid User Name or Password")
-		}
-	}
+  def submit(p: Parameters) = {
+    log.debug("session: {}", p.session.get.mkString("[", ", ", "]"))
+    if (check(p)) {
+      permission.login(p("userName"), p("password")) match {
+        case Some(auth) => authOrRejectResponse(auth, p)
+        case _ => Flash("Invalid User Name or Password", "login.invalid")
+      }
+    }
+    else {
+      Model("violations" -> "Invalid User Name or Password")
+    }
+  }
 
-	def check(p:Parameters) =
-		p.request.get("userName").isDefined && !p.request("userName").equals("") &&
-		p.request.get("password").isDefined && !p.request("password").equals("")
+  private def authOrRejectResponse(auth: T, p: Parameters): Product = {
+    if (permission.active(auth)) {
+      val direct = directWithSession(p)
+      val addTo = Session("brzy_principal" -> permission.principal(auth))
+      val removeFrom = Session.remove("last_view")
+      (addTo, removeFrom, direct)
+    }
+    else {
+      Flash("Sory Your Account is not active.", "account.disabled")
+    }
+  }
 
+  private def check(p: Parameters) =
+    p.get("userName").isDefined && !p("userName").equals("") &&
+            p.get("password").isDefined && !p("password").equals("")
+
+  private def directWithSession(p: Parameters): Redirect = {
+    p.session match {
+      case Some(session) => session.get("last_view") match {
+        case Some(lastView) =>
+          log.debug("returning to view:'{}'", lastView)
+          Redirect(lastView.asInstanceOf[String].replaceFirst("\\.brzy", ""))
+        case _ =>
+          Redirect("/")
+      }
+      case _ => Redirect("/")
+    }
+  }
 }

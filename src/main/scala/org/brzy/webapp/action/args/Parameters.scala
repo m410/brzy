@@ -44,7 +44,7 @@ trait Parameters extends Arg {
   /**
    * the servlet request attributes
    */
-  def request:Map[String, Array[String]]
+  def request:Map[String, List[String]]
 
   /**
    * The application scope attributes.  servlet 5 spec, uses the session scope.
@@ -100,12 +100,12 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
   val url = urlParams
 
   lazy val request = req.getParameterNames.map({
-    case (n:String)=> n->req.getParameterValues(n)
+    case (n:String)=> n->req.getParameterValues(n).toList
   }).toMap
 
   lazy val application = {
     req.getSession.getServletContext.getAttributeNames.map( {
-      case (n:String)=> n->req.getAttribute(n)
+      case (n:String)=> n->req.getSession.getServletContext.getAttribute(n)
     }).toMap
   }
 
@@ -115,7 +115,7 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
 
   lazy val session = if (req.getSession(false) != null)
       Option(req.getSession.getAttributeNames.map({
-        case (n:String)=> n->req.getAttribute(n)
+        case (n:String)=> n->req.getSession.getAttribute(n)
       }).toMap)
     else
       None
