@@ -51,7 +51,7 @@ class ImplControllerTest extends JUnitSuite {
       def apply(name: String) = ""
       def get(name: String) = None
       def url = Map.empty[String,String]
-      def request = Map.empty[String,Array[String]]
+      def request = Map.empty[String,List[String]]
       def application = Map.empty[String,AnyRef]
       def header = Map.empty[String,String]
       def session = None
