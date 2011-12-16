@@ -67,7 +67,15 @@ trait Parameters extends Arg {
  */
 class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String, String]) extends Parameters {
 
-  
+  def apply(name:String) = {
+    if (urlParams.contains(name))
+      urlParams(name)
+    else if (req.getParameter(name) != null)
+      req.getParameter(name)
+    else
+      throw new UnfoundParameterException("No Parameter with name '"+name+"' in request or url scope.")
+  }
+
   def get(name: String) = {
     if (urlParams.contains(name))
       Option(urlParams(name))
@@ -83,19 +91,9 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
       None
   }
 
-
   def requestAndUrl = urlParams ++ req.getParameterNames.map({
       case (n:String)=> n->req.getParameter(n)
     }).toMap
-
-  def apply(name:String) = {
-    if (urlParams.contains(name))
-      urlParams(name)
-    else if (req.getParameter(name) != null)
-      req.getParameter(name)
-    else
-      throw new UnfoundParameterException("No Parameter with name '"+name+"' in request or url scope.")
-  }
 
   val url = urlParams
 
@@ -124,14 +122,14 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
     val buf = new StringBuilder()
             .append("Parameters(")
             .append("url=").append(url.mkString("[", ", ", "]"))
-            .append(",request=").append(request.map(a => a._1 -> a._2.toSeq).mkString("[", ", ", "]"))
+            .append(",request=").append(request.mkString("[", ", ", "]"))
     session match {
       case Some(s) => buf.append(",session=").append(s.mkString("[", ", ", "]"))
       case _ => buf.append(",session=<None>")
     }
-    buf.append(",header=").append(header.mkString("[", ", ", "]"))
-            .append(",application=").append(application.mkString("[", ", ", "]"))
-            .append(")")
+//    buf.append(",header=").append(header.mkString("[", ", ", "]"))
+//            .append(",application=").append(application.mkString("[", ", ", "]"))
+//            .append(")")
     buf.toString()
   }
 }

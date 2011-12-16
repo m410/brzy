@@ -27,12 +27,16 @@ trait Constraint
  * Defines the rules that a user must posses to be able to execute an action this constraint
  * is assigned too.
  */
-case class Roles(allowed:String*) extends Constraint
+case class Roles(allowed:String*) extends Constraint {
+  override def toString = "Roles("+allowed.mkString(",")+")"
+}
 
 /**
  * Defines the allowed Http methods ('GET','POST',etc) that this constraint is assigned too.
  */
-case class HttpMethods(allowed:HttpMethod*) extends Constraint
+case class HttpMethods(allowed:HttpMethod*) extends Constraint {
+  override def toString = "HttpMethods("+allowed.mkString(",")+")"
+}
 
 /**
  * This constraint will define wither the action must be called while in a secure request over an
@@ -44,7 +48,9 @@ case class Ssl(must:Boolean = true) extends Constraint
  * Defines the allowed Content type that this action accepts.  For example a content type of
  * 'text/xml' says an action with this constraint will only accept xml content type.
  */
-case class ContentTypes(allowed:String*) extends Constraint
+case class ContentTypes(allowed:String*) extends Constraint{
+  override def toString = "ContentTypes("+allowed.mkString(",")+")"
+}
 
 
 ///**
