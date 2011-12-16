@@ -119,4 +119,19 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
       }).toMap)
     else
       None
+
+  override def toString = {
+    val buf = new StringBuilder()
+            .append("Parameters(")
+            .append("url=").append(url.mkString("[", ", ", "]"))
+            .append(",request=").append(request.map(a => a._1 -> a._2.toSeq).mkString("[", ", ", "]"))
+    session match {
+      case Some(s) => buf.append(",session=").append(s.mkString("[", ", ", "]"))
+      case _ => buf.append(",session=<None>")
+    }
+    buf.append(",header=").append(header.mkString("[", ", ", "]"))
+            .append(",application=").append(application.mkString("[", ", ", "]"))
+            .append(")")
+    buf.toString()
+  }
 }
