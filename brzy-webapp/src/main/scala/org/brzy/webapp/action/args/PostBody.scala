@@ -64,7 +64,9 @@ class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
     factory.setRepository(tempDir)
     val upload = new ServletFileUpload(factory)
     val items = upload.parseRequest(request)
-    items.filter(_.asInstanceOf[FileItem].isFormField).map({case f:FileItem =>{
+    items.filter({case f:FileItem =>{
+      f.isFormField
+    }}).map({case f:FileItem =>{
       f.getFieldName -> f.getString
     }}).toMap
   }
@@ -84,10 +86,9 @@ class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
       upload.setSizeMax(maxSize)
       val items = upload.parseRequest(request)
 
-      val item = items.find(x => {
-        val i = x.asInstanceOf[FileItem]
+      val item = items.find({case i:FileItem => {
         !i.isFormField && i.getFieldName == name
-      })
+      }})
 
       item match {
         case Some(i) => i.asInstanceOf[FileItem]
@@ -97,5 +98,24 @@ class PostBodyRequest protected  (request:HttpServletRequest) extends PostBody {
     else {
       error("Not a multipart upload")
     }
+  }
+
+  override def toString = {
+    val factory = new DiskFileItemFactory()
+    factory.setSizeThreshold(sizeThreshold)
+    factory.setRepository(tempDir)
+    val upload = new ServletFileUpload(factory)
+    val items = upload.parseRequest(request)
+    val a = items.map({case f:FileItem =>{
+      if (f.isFormField)
+        f.getFieldName -> f.getString
+      else
+        f.getFieldName -> "<File>"
+    }}).toMap
+    new StringBuilder()
+            .append("PostBody(")
+            .append("params=").append(a.mkString("[",", ","]"))
+            .append(")")
+            .toString()
   }
 }

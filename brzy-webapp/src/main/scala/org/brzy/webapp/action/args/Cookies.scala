@@ -46,4 +46,9 @@ class CookiesRequest protected (request:HttpServletRequest) extends Cookies {
           CookieRequest(c.getComment, c.getDomain, c.getMaxAge, c.getName, c.getPath, c.getSecure, c.getValue, c.getVersion)
         }).toList
   }
+
+  override def toString = new StringBuilder()
+      .append("Cookies")
+      .append(list.mkString("[",", ","]"))
+      .toString()
 }

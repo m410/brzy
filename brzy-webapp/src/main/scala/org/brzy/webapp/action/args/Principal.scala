@@ -48,4 +48,15 @@ class PrincipalRequest(request:HttpServletRequest) extends Principal {
   def name = request.getSession.getAttribute("brzy_principal").asInstanceOf[PrincipalSession].name
 
   def roles = Roles(request.getSession.getAttribute("brzy_principal").asInstanceOf[PrincipalSession].roles:_*)
+
+  override def toString = {
+    val buf = new StringBuilder().append("Principal(")
+    buf.append("isLoggedIn=").append(isLoggedIn)
+    if (isLoggedIn) {
+      buf.append(",name=").append(name)
+      buf.append(",roles=").append(roles)
+    }
+    buf.append(")")
+    buf.toString()
+  }
 }
