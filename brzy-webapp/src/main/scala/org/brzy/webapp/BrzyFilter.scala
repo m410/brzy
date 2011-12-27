@@ -46,7 +46,14 @@ class BrzyFilter extends SFilter {
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) => // for action, don't continue
-        doAction(q.getRequestURI, req, res)
+        try { 
+					doAction(q.getRequestURI, req, res)
+				}
+				catch {
+				  case e: Throwable =>
+            log.error(e.getMessage,e)
+            throw e
+				}
       case _ => // pass it on if the url ends with any extension
         chain.doFilter(req, res)
     }
