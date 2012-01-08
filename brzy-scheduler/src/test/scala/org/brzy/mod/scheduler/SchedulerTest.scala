@@ -26,11 +26,11 @@ class SchedulerTest extends JUnitSuite {
       "scan_package" -> "org.brzy.mod.scheduler.mock"
       ))
     val provider = new SchedulerModProvider(config)
-    assertNotNull(provider.serviceMap)
-    assertEquals(1,provider.serviceMap.size)
+    assertNotNull(provider.jobs)
+    assertEquals(1,provider.jobs.size)
 
-    provider.startup
+    provider.startup()
     Thread.sleep(10000)
-    provider.shutdown
+    provider.shutdown()
   }
 }

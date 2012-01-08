@@ -23,13 +23,21 @@ import org.brzy.fab.conf.BaseConf
  */
 class SchedulerModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
   val scanPackage:Option[String] = map.get("scan_package").asInstanceOf[Option[String]].orElse(None)
+  val autoDiscover:Boolean = map.get("auto_discover") match {
+    case Some(e) => 
+      if (e.isInstanceOf[Boolean]) e.asInstanceOf[Boolean] else true
+    case _ => true
+  }
+//          .asInstanceOf[Option[Boolean]]
+//          .getOrElse(true)
 
   override def <<(that: BaseConf) = {
     if (that == null)
       this
     else {
       new SchedulerModConfig(Map[String, AnyRef](
-        "scan_package" -> that.map.getOrElse("scan_package", this.scanPackage.orNull)
+        "scan_package" -> that.map.getOrElse("scan_package", this.scanPackage.orNull),
+        "auto_discover" -> that.map.getOrElse("auto_discover", this.scanPackage)
         ) ++ super.<<(that).map)
     }
   }

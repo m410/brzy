@@ -15,14 +15,14 @@ package org.brzy.mod.scheduler
 
 import actors.{Exit, Actor}
 import org.slf4j.LoggerFactory
-import org.brzy.interceptor.Invoker
+import org.brzy.application.WebApp
 
 /**
  * The scala Actor that runs the Cron job for a single cron service.
  *
  * @author Michael Fortin
  */
-class JobRunner(val service: Cron) extends Actor {
+class JobRunner(val service: Cron, app:Option[WebApp]) extends Actor {
   private val log = LoggerFactory.getLogger(classOf[JobRunner])
 
   val serviceName = {
@@ -34,8 +34,17 @@ class JobRunner(val service: Cron) extends Actor {
     loop {
       react {
         case Execute =>
-          log.debug("execute: {}", service)
-          service.execute()
+          app match {
+            case Some(a) =>
+              log.debug("execute with interceptor: {}", service)
+              a.interceptor.doIn(()=>{
+                service.execute()
+                None
+              })
+            case _ =>
+              log.debug("execute without interceptor: {}", service)
+              service.execute()
+          }
         case Exit =>
           exit()
       }

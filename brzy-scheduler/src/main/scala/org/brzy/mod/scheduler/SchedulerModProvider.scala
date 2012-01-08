@@ -13,12 +13,14 @@
  */
 package org.brzy.mod.scheduler
 
-import org.reflections.scanners.{ResourcesScanner, TypeAnnotationsScanner, SubTypesScanner}
+import org.reflections.scanners.SubTypesScanner
 import org.reflections.util.{ConfigurationBuilder, ClasspathHelper}
 import org.reflections.Reflections
 import collection.JavaConversions._
-import collection.mutable.{ListBuffer, HashMap}
+import collection.mutable.ListBuffer
 import org.brzy.fab.mod.ModProvider
+import org.brzy.application.WebApp
+import org.slf4j.LoggerFactory
 
 /**
  * Cron scheduler service provider.
@@ -26,32 +28,40 @@ import org.brzy.fab.mod.ModProvider
  * @author Michael Fortin
  */
 class SchedulerModProvider(c: SchedulerModConfig) extends ModProvider {
+  private val log = LoggerFactory.getLogger(getClass)
+  val jobs = ListBuffer[Schedule]()
   val name = c.name.get
 
-    private[this] val reflections = new Reflections(new ConfigurationBuilder()
-      .setUrls(ClasspathHelper.getUrlsForPackagePrefix(c.scanPackage.get))
-      .setScanners(new SubTypesScanner()))
+  if (c.autoDiscover) {
+    val reflections = new Reflections(new ConfigurationBuilder()
+            .setUrls(ClasspathHelper.getUrlsForPackagePrefix(c.scanPackage.get))
+            .setScanners(new SubTypesScanner()))
 
-  val services =
+    val services =
       reflections.getSubTypesOf(classOf[Cron]).toList.filter(_.getName.indexOf("$") < 0)
 
-  val jobs = {
-    val list = ListBuffer[Schedule]()
-    services.foreach(s=> {
+    services.foreach(s => {
       val instance = s.newInstance.asInstanceOf[Cron]
-      list += Schedule(new JobRunner(instance),instance.expression)
+      jobs += Schedule(new JobRunner(instance,None), instance.expression)
     })
-    list.toList
   }
 
-  override val serviceMap = {
-    val map = HashMap[String, AnyRef]()
-    jobs.foreach(job=>  map += job.serviceName -> job.service )
-    map.toMap
+  def addScheduledService(service: Cron, app: WebApp) {
+    jobs += Schedule(new JobRunner(service, Option(app)), service.expression)
   }
 
-  override def startup = jobs.foreach(_.start)
+  override def startup() {
+    jobs.foreach(job=>{
+      log.debug("start cron: {}",job)
+      job.start()
+    })
+  }
 
-  override def shutdown = jobs.foreach(_.stop)
+  override def shutdown() {
+    jobs.foreach(job=>{
+      log.debug("stop cron: {}",job)
+      job.stop()
+    })
+  }
 
 }
