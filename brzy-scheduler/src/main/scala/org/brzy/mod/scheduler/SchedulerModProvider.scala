@@ -31,6 +31,7 @@ class SchedulerModProvider(c: SchedulerModConfig) extends ModProvider {
   private val log = LoggerFactory.getLogger(getClass)
   val jobs = ListBuffer[Schedule]()
   val name = c.name.get
+  log.debug("autoDiscover: {}", c.autoDiscover)
 
   if (c.autoDiscover) {
     val reflections = new Reflections(new ConfigurationBuilder()

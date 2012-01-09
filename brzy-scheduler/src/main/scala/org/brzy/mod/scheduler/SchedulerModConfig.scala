@@ -28,8 +28,6 @@ class SchedulerModConfig(override val map: Map[String, AnyRef]) extends RuntimeM
       if (e.isInstanceOf[Boolean]) e.asInstanceOf[Boolean] else true
     case _ => true
   }
-//          .asInstanceOf[Option[Boolean]]
-//          .getOrElse(true)
 
   override def <<(that: BaseConf) = {
     if (that == null)
