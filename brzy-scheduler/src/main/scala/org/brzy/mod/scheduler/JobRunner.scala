@@ -36,14 +36,24 @@ class JobRunner(val service: Cron, app:Option[WebApp]) extends Actor {
         case Execute =>
           app match {
             case Some(a) =>
-              log.debug("execute with interceptor: {}", service)
-              a.interceptor.doIn(()=>{
-                service.execute()
-                None
-              })
+              try {
+                a.interceptor.doIn(() => {
+                  log.debug("execute with interceptor: {}", service)
+                  service.execute()
+                  None
+                })
+              }
+              catch {
+                case t:Throwable => log.error(t.getMessage,t)
+              }
             case _ =>
-              log.debug("execute without interceptor: {}", service)
-              service.execute()
+              try {
+                log.debug("execute without interceptor: {}", service)
+                service.execute()
+              }
+              catch {
+                case t:Throwable => log.error(t.getMessage,t)
+              }
           }
         case Exit =>
           exit()
