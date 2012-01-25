@@ -165,7 +165,10 @@ object ResponseHandler {
         log.trace("session: {}", s)
         s.add.foreach(nvp => req.getSession.setAttribute(nvp._1, nvp._2))
         s.remove.foreach(a => req.getSession.removeAttribute(a))
-        if (s.invalidate) req.getSession.invalidate()
+        if (s.invalidate) {
+          log.trace("session invalidated")
+          req.getSession.invalidate()
+        }
       case s: Flash =>
         log.trace("flash: {}", s)
         new FlashMessage(s.code, req.getSession)

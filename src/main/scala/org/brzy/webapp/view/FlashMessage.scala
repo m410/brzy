@@ -24,9 +24,12 @@ import javax.servlet.http.HttpSession
 class FlashMessage(message:String,session:HttpSession) {
 	
 	session.setAttribute("flash-message",this)
-	
+
+	// TODO needs to get the message from the i18n configuration
 	def show = {
 		session.removeAttribute("flash-message")
 		message
 	}
+
+  override def toString = "FlashMessage("+message+", "+session+")"
 }

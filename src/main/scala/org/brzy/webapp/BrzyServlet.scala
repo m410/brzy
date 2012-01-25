@@ -68,12 +68,13 @@ class BrzyServlet extends HttpServlet {
   protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
     if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
       val redirect = req.getRequestURL.replace(0, 4, "https").toString
-      log.debug("redirect: {}",redirect)
+      log.trace("redirect: {}",redirect)
       Redirect(redirect)
 //      Redirect("https://"+req.getServerName+ req.getRequestURI + {if (req.getQueryString != null) "?" + req.getQueryString else ""})
     }
     else if (action.isSecured) {
       if (req.getSession(false) != null) {
+        log.trace("principal: {}",principal)
 
         if (action.isAuthorized(principal))
           action.execute(args, principal)
@@ -90,7 +91,7 @@ class BrzyServlet extends HttpServlet {
   }
 
   protected[webapp] def toLogin(req: HttpServletRequest): (Redirect, Flash, Session) = {
-    val flash = Flash("session.end", "Session ended, log in again")
+    val flash = Flash("Your session has ended. Please log in again", "session.end")
     val sessionParam = Session("last_view" -> req.getRequestURI)
     (Redirect("/auth"), flash, sessionParam)
   }
