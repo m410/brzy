@@ -1,4 +1,3 @@
-<% escapeMarkup = false %>
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "$attributeName$" %>
 <% import com.offer2lead.core.company.Company  %>

@@ -1,10 +1,9 @@
-<% escapeMarkup = false %>
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "$shortClassName$" %>
-<% import javax.validation.ConstraintViolation %>
+<% import javax.validation.{ConstraintViolation=>CV} %>
 <% import $fullClassName$ %>
 <% val $attributeName$ = attribute[$shortClassName$]("$attributeName$")  %>
-<% val violations = attributeOrElse[Set[ConstraintViolation[$shortClassName$]]]("violations", Set.empty[ConstraintViolation[$shortClassName$]])  %>
+<% val violations = attributeOrElse[Set[CV[$shortClassName$]]]("violations", Set.empty[CV[$shortClassName$]])  %>
 #if(hasFlash()) <div class="success">\${flash()}</div> #end
 <h2>Create Person</h2>
 <form action="\${action("/$attributeName$s/save")}" method="post" accept-charset="utf-8">
