@@ -1,7 +1,7 @@
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "$attributeName$" %>
 <% import $fullClassName$ %>
-<% val $attributeName$sList$ = attribute[List[$fullClassName$]]("$attributeName$sList$") %>
+<% val $attributeName$sList\$ = attribute[List[$fullClassName$]]("$attributeName$sList\$") %>
 #if(hasFlash()) <div class="success">\${flash()}</div> #end
 <dl>
   $fields:{ field |  <dt>$field$</dt> <dd>\${$attributeName$.$field$}</dd>$\n$}$

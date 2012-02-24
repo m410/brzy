@@ -1,7 +1,7 @@
 <% attributes("layout") = "/layouts/default.ssp" %>
 <% attributes("title") = "$attributeName$" %>
-<% import com.offer2lead.core.company.Company  %>
-<% val $attributeName$sList$ = attribute[List[$fullClassName$]]("$attributeName$sList$") %>
+<% import $fullClassName$  %>
+<% val $attributeName$sList\$ = attribute[List[$fullClassName$]]("$attributeName$sList\$") %>
 #if(hasFlash()) <div class="success">\${flash()}</div> #end
 <table>
   <caption>$attributeName$ List</caption>
@@ -16,7 +16,7 @@
     </tr>
   </tfoot>
   <tbody>
-    #for($attributeName$ <- $attributeName$sList)
+    #for($attributeName$ <- $attributeName$sList\$)
     <tr>
       <td><a href="\${link("/$attributeName$s/" + $attributeName$.id)}">\${$attributeName$.id}</a></td>
       $fields:{ field |     <td>\${$attributeName$.$field$}</td>$\n$}$
