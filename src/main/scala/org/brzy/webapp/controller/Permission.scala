@@ -24,7 +24,7 @@ import org.brzy.webapp.action.args.PrincipalSession
  *
  * @author Michael Fortin
  */
-trait Permission[T<:Authenticated] {
+trait Permission[T<:Identity] {
 	def authenticator:Authenticator[T]
 		
 	protected[controller] val HEX_CHAR_TABLE = Array(

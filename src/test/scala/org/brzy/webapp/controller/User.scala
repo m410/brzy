@@ -23,7 +23,7 @@ import org.brzy.webapp.action.response.Model
 class User(
     val id: Long = 0,
     val userName:String = "",
-    val password:String = "") extends Authenticated {
+    val password:String = "") extends Identity {
   def authenticatedRoles = Array.empty[String]
 }
 

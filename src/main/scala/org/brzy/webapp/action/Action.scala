@@ -94,7 +94,7 @@ trait Action extends Ordered[Action] {
         val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
         h.allowed.find(_ == methodName).isDefined
       case c:ContentTypes => c.allowed.contains(request.getContentType)
-      case Ssl(allowed) => true
+      case Secure(allowed) => true
       case r:Roles => true
       case _ => false
     })
@@ -110,13 +110,13 @@ trait Action extends Ordered[Action] {
   }
 
   def requiresSsl = {
-    {constraints ++ controller.constraints}.find(_.isInstanceOf[Ssl]).isDefined
+    {constraints ++ controller.constraints}.find(_.isInstanceOf[Secure]).isDefined
   }
 
   /**
    * Determines if this action requires authentication or not.
    */
-  def isSecured = controller.isInstanceOf[Secured]
+  def isSecured = controller.isInstanceOf[Authorization]
 
   /**
    * the default view to display if needed.
