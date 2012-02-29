@@ -17,8 +17,8 @@ import javax.validation.constraints._
 @Table(name="$className$")
 class $className$ {
   @BeanProperty @Id
-  @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "person_seq")
-  @SequenceGenerator(name="person_seq", sequenceName = "person_seq", allocationSize = 1, initialValue= 1)
+  @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "$className$_seq")
+  @SequenceGenerator(name="$className$_seq", sequenceName = "$className$_seq", allocationSize = 1, initialValue= 1)
   var id:JLong = _
 
   @BeanProperty @Version var version:JInt = _

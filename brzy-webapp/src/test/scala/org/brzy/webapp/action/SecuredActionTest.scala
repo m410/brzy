@@ -4,11 +4,11 @@ import args.Principal
 import org.junit.Test
 import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
-import org.brzy.webapp.controller.{Secured, Controller}
+import org.brzy.webapp.controller.{Authorization, Controller}
 
 class SecuredActionTest extends JUnitSuite {
 	
-	val controller = new Controller("") with Secured {
+	val controller = new Controller("") with Authorization {
 		override val constraints = List(Roles("ADMIN"))
 		def actions = List(
       Action("index","index",index _,Roles("ADMIN","USER")),

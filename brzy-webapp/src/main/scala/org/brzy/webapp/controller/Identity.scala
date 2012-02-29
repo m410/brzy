@@ -13,11 +13,13 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.action.{Constraint, Roles}
-
 /**
- * Marks a controller as a secure controller using role based authentication.
+ * Should be implemented by entities that are authenticated by the application.
  * 
  * @author Michael Fortin
  */
-trait Secured extends Intercepted { self:Controller => }
+trait Identity {
+	def userName:String
+	def password:String
+	def authenticatedRoles:Array[String]
+}

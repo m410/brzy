@@ -76,7 +76,7 @@ class ImplControllerTest extends JUnitSuite {
 
 
 
-class ImplController extends Controller("impls") with Secured {
+class ImplController extends Controller("impls") with Authorization {
   val actions = Action("list", "list", list _, Roles("SUPER")) ::
           Action("showMore", "show", showMore _) :: Nil
 

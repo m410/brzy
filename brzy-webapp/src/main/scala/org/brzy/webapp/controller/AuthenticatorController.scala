@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Michael Fortin
  */
-abstract class AuthenticatorController[T <: Authenticated](permission: Permission[T], path: String)
+abstract class AuthenticatorController[T <: Identity](permission: Permission[T], path: String)
         extends Controller(path) {
 
   val log = LoggerFactory.getLogger(getClass)

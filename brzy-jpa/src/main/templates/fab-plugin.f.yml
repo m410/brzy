@@ -9,6 +9,10 @@ plugins:
         method_name: createJpaDomain
         description: Generate A JPA Domain Class
         takes_args: true
+      - name: gen-jpa-auth-domain
+        method_name: createAuthDomain
+        description: Generate Person and Authority Domain Classes
+        takes_args: true
     dependencies:
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
     repositories:

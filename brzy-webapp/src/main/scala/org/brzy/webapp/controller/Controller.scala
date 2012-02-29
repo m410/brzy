@@ -35,6 +35,9 @@ abstract class Controller(val basePath:String) extends Ordered[Controller] {
   def actions:List[Action]
 
 
+  /**
+   * This can be used to create an action does does nothing but draw a view.
+   */
   def inaction() {}
 
 

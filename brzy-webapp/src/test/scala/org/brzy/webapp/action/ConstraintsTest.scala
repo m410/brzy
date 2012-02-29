@@ -16,16 +16,16 @@ package org.brzy.webapp.action
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import org.junit.Assert._
-import org.brzy.webapp.controller.{Secured, Controller}
+import org.brzy.webapp.controller.{Authorization, Controller}
 import org.springframework.mock.web.MockHttpServletRequest
 
 class ConstraintsTest extends JUnitSuite {
 
-  val controller = new Controller("") with Secured {
+  val controller = new Controller("") with Authorization {
 		override val constraints = List(Roles("ADMIN"))
 		def actions = List(
-      Action("index0", "index0", index _ ,Ssl(),HttpMethods(HttpMethod.GET),ContentTypes("text/xml")),
-      Action("index1", "index1", index _ ,Ssl()),
+      Action("index0", "index0", index _ ,Secure(),HttpMethods(HttpMethod.GET),ContentTypes("text/xml")),
+      Action("index1", "index1", index _ ,Secure()),
       Action("index2", "index2", index _ ,HttpMethods(HttpMethod.GET)),
       Action("index3", "index3", index _ ,ContentTypes("text/xml")),
       Action("index4", "index4", index2 _)
