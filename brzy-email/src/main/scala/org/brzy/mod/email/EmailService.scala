@@ -13,23 +13,22 @@
  */
 package org.brzy.mod.email
 
-import javax.mail.internet.{InternetAddress, MimeMessage}
-import java.beans.ConstructorProperties
 import javax.mail._
+import internet.{MimeBodyPart, MimeMultipart, InternetAddress, MimeMessage}
 import javax.mail.Message.RecipientType
 
 import org.brzy.service.Service
 import org.brzy.mod.email.{Message => EMessage}
+import java.util.Date
 
 /**
  * Sends a plain text email message. 
  *
  * @author Michael Fortin
  */
-@ConstructorProperties(Array("emailModConfig"))
 class EmailService(config: EmailModConfig) extends Service {
 
-  protected[this] val mailConfig = {
+  private[this] val mailConfig = {
     val p = new java.util.Properties
     p.put("mail.transport.protocol", config.transportProtocol.get)
     p.put("mail.smtp.auth", config.smtpAuth.get)
@@ -38,7 +37,7 @@ class EmailService(config: EmailModConfig) extends Service {
     p
   }
 
-  protected[this] val auth: Authenticator = {
+  private[this] val auth: Authenticator = {
 
     val authValue = config.smtpAuth match {
       case Some(e) =>
@@ -75,6 +74,14 @@ class EmailService(config: EmailModConfig) extends Service {
     msg.to.map(a => message.addRecipient(RecipientType.TO, new InternetAddress(a)))
     message.setSubject(msg.subject)
     message.setText(msg.body)
+    message.setSentDate(new Date());
+
+//    val mimeBodyPart = new MimeBodyPart();
+//    mimeBodyPart.setContent(msg.body, "text/plain");
+//    val multipart = new MimeMultipart();
+//    multipart.addBodyPart(mimeBodyPart);
+//    message.setContent(multipart);
+
     Transport.send(message)
   }
 }

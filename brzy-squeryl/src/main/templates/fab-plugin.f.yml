@@ -17,7 +17,7 @@ plugins:
       - {org: org.brzy.fab, name: fab-util, rev: "0.7", transitive: false}
       - {org: org.brzy.archetype, name: brzy-webapp, rev: "0.10.1", transitive: false}
     repositories:
-      - {id: scala-tools, url: "http://nexus.scala-tools.org/content/repositories/releases"}
+      - {id: scala-tools, url: "http://scala-tools.org/repo-releases"}
   - name: brzy-squeryl-default
     description: Adds dependencies to the default interpreter scope.
     dependencies_in_default_scope: true
