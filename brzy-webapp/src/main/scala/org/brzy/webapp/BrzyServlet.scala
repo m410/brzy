@@ -49,7 +49,7 @@ class BrzyServlet extends HttpServlet {
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
-        log.debug("{} >>> {}", req.getRequestURI, action)
+        log.debug("{} >>> {}", pathLog(req) , action)
         val args = ArgsBuilder(req,action)
         val principal = new PrincipalRequest(req)
 
@@ -64,6 +64,13 @@ class BrzyServlet extends HttpServlet {
         res.sendError(404)
     }
   }
+  
+  private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
+      .append(req.getMethod)
+      .append(":")
+      .append(req.getRequestURI)
+      .append(":")
+      .append(req.getContentType)
 
   protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
     if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
