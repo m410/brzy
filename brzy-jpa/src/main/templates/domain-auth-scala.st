@@ -9,13 +9,15 @@ import java.util.{List=>JList,Map=>JMap}
 
 import javax.persistence._
 import javax.validation.constraints._
+import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder, CompareToBuilder}
+
 
 /**
  *
  */
 @Entity
 @Table(name="authority")
-class Authority {
+class Authority extends Ordered[Authority]{
   @BeanProperty @Id
   @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "authority_seq")
   @SequenceGenerator(name="authority_seq", sequenceName = "authority_seq", allocationSize = 1, initialValue= 1)
@@ -24,7 +26,7 @@ class Authority {
   @BeanProperty @NotNull @Size(min=4,max=24) @Column(length=36) var name:String = _
   @BeanProperty @NotNull @Size(min=4,max=24) var description:String = _
 
-  def compareTo(that:Authority) = new CompareToBuilder().append(this.name,that.name).toComparison
+  def compare(that:Authority) = new CompareToBuilder().append(this.name,that.name).toComparison
 
   override def toString = description
 

@@ -15,6 +15,8 @@ class BrzyJpaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,mess
       else
         messenger.ask("enter package for Person and Authority: ")
 
+    val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
+    val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
     val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-jpa/templates"))
     val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
     outputDir.mkdirs
@@ -28,7 +30,7 @@ class BrzyJpaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,mess
     userWriter.write(userTemplate.toString)
     userWriter.close()
 
-    val roleTemplate = group.template("domain-role-scala")
+    val roleTemplate = group.template("domain-auth-scala")
     roleTemplate.setAttribute("packageName",packageName)
     roleTemplate.setAttribute("className",className)
     roleTemplate.setAttribute("attributeName", attributeName(className))

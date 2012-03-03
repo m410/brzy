@@ -34,4 +34,36 @@ class BrzySquerylPlugin(configPort:Int,messagePort:Int) extends Task(configPort,
 		writer.write(template.toString)
 		writer.close
 	}
+
+  def createAuthDomain(args:Array[String]) {
+    messenger.info("Create a Squeryl Domain Class")
+
+    val packageAndClass =
+      if(args.length == 1)
+        args(0)
+      else
+        messenger.ask("enter package for Person and Authority: ")
+
+    val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-squeryl/templates"))
+    val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
+    outputDir.mkdirs
+
+    val userTemplate = group.template("domain-user-scala")
+    userTemplate.setAttribute("packageName",packageName)
+    userTemplate.setAttribute("className",className)
+    userTemplate.setAttribute("attributeName", attributeName(className))
+    val userFile = File(outputDir, "Person.scala")
+    val userWriter = new BufferedWriter(new FileWriter(userFile))
+    userWriter.write(userTemplate.toString)
+    userWriter.close()
+
+    val roleTemplate = group.template("domain-auth-scala")
+    roleTemplate.setAttribute("packageName",packageName)
+    roleTemplate.setAttribute("className",className)
+    roleTemplate.setAttribute("attributeName", attributeName(className))
+    val roleFile = File(outputDir, "Authority.scala")
+    val roleWriter = new BufferedWriter(new FileWriter(roleFile))
+    roleWriter.write(roleTemplate.toString)
+    roleWriter.close()
+  }
 }

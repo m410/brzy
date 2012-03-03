@@ -63,7 +63,7 @@
   <repositories>
     <repository>
       <id>http://nexus.scala-tools.org</id>
-      <url>http://nexus.scala-tools.org/content/repositories/releases/</url>
+      <url>http://scala-tools.org/repo-releases/</url>
     </repository>
   </repositories>
   <dependencies>

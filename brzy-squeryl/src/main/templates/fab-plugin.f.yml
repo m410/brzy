@@ -9,6 +9,10 @@ plugins:
         method_name: createSquerylDomain
         description: Generate A Squeryl Domain Class
         takes_args: true
+      - name: gen-squeryl-auth-domain
+        method_name: createAuthDomain
+        description: Generate Squeryl Person and Authority Domain Classes
+        takes_args: true
     dependencies:
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
