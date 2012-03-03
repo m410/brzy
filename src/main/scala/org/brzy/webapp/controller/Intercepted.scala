@@ -22,5 +22,13 @@ import org.brzy.webapp.action.args.{Arg, Principal}
  * @author Michael Fortin
  */
 trait Intercepted {
+
+  /**
+   *
+   * @param action
+   * @param actionArgs
+   * @param principal
+   * @return
+   */
   def intercept(action: () => AnyRef, actionArgs: Array[Arg], principal: Principal): AnyRef = action()
 }

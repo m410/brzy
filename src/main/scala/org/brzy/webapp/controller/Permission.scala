@@ -24,22 +24,7 @@ import org.brzy.webapp.action.args.PrincipalSession
  *
  * @author Michael Fortin
  */
-<<<<<<< HEAD
 trait Permission[T<:Identity] {
-	def authenticator:Authenticator[T]
-		
-	protected[controller] val HEX_CHAR_TABLE = Array(
-	    '0'.asInstanceOf[Byte], '1'.asInstanceOf[Byte], '2'.asInstanceOf[Byte], '3'.asInstanceOf[Byte],
-	    '4'.asInstanceOf[Byte], '5'.asInstanceOf[Byte], '6'.asInstanceOf[Byte], '7'.asInstanceOf[Byte],
-	    '8'.asInstanceOf[Byte], '9'.asInstanceOf[Byte], 'a'.asInstanceOf[Byte], 'b'.asInstanceOf[Byte],
-	    'c'.asInstanceOf[Byte], 'd'.asInstanceOf[Byte], 'e'.asInstanceOf[Byte], 'f'.asInstanceOf[Byte])
-
-	protected[controller] def encodeHex(data:Array[Byte]) = {
-		val hex = new Array[Byte](2 * data.length)
-    var index:Int = 0
-=======
-trait Permission[T<:Authenticated] {
->>>>>>> 39bedab6daabb01bd57e6a2e1557589ed280c257
 
   // TODO document me
   /**
