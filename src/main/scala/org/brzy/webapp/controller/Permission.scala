@@ -80,6 +80,4 @@ trait Permission[T<:Identity] {
     }
     new String(hex, "UTF8")
   }
-
-
 }
