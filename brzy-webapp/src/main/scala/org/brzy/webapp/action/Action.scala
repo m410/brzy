@@ -93,7 +93,8 @@ trait Action extends Ordered[Action] {
       case h:HttpMethods =>
         val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
         h.allowed.find(_ == methodName).isDefined
-      case c:ContentTypes => c.allowed.contains(request.getContentType)
+      case c:ContentTypes =>
+        c.allowed.find(_.toLowerCase == request.getContentType.toLowerCase).isDefined
       case Secure(allowed) => true
       case r:Roles => true
       case _ => false

@@ -12,7 +12,7 @@ plugins:
 #    dependencies:
 #      - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
 #    repositories:
-#      - {id: scala-tools, url: "http://nexus.scala-tools.org/content/repositories/releases"}
+#      - {id: scala-tools, url: "http://scala-tools.org/repo-releases"}
 
   - name: brzy-spring-default
     description: Adds dependencies to the default interpreter scope.
