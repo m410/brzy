@@ -74,10 +74,11 @@ class BrzyServlet extends HttpServlet {
 
   protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
     if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
-      val redirect = req.getRequestURL.replace(0, 4, "https").toString
+      val buf = req.getRequestURL
+      // add https and remove the trailing .brzy extension
+      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
       log.trace("redirect: {}",redirect)
       Redirect(redirect)
-//      Redirect("https://"+req.getServerName+ req.getRequestURI + {if (req.getQueryString != null) "?" + req.getQueryString else ""})
     }
     else if (action.isSecured) {
       if (req.getSession(false) != null) {

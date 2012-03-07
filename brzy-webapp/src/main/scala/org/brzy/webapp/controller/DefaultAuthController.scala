@@ -77,7 +77,9 @@ class DefaultAuthController[T<:Identity](val permission:Permission[T], val ctlPa
       }
     }
     else {
-      Model("violations"->"Invalid User Name or Password")
+      val flash = Flash("Missing Username and Password", "login.invalid")
+      val model = Model("violations" -> "Invalid User Name or Password")
+      (model,flash)
     }
   }
 
