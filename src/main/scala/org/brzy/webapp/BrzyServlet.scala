@@ -49,7 +49,7 @@ class BrzyServlet extends HttpServlet {
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
-        log.debug("{} >>> {}", pathLog(req) , action)
+        log.debug("{} >> {}", pathLog(req) , action)
         val args = ArgsBuilder(req,action)
         val principal = new PrincipalRequest(req)
 
