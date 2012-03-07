@@ -111,7 +111,7 @@ trait Action extends Ordered[Action] {
   }
 
   def requiresSsl = {
-    {constraints ++ controller.constraints}.find(_.isInstanceOf[Secure]).isDefined
+    constraints.find(_.isInstanceOf[Secure]).isDefined || controller.constraints.find(_.isInstanceOf[Secure]).isDefined
   }
 
   /**
