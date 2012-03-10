@@ -67,4 +67,26 @@ class PropertiesRequest protected (request:HttpServletRequest) extends Propertie
   def localPort = request.getLocalPort
   def locale = request.getLocale
   def locales = request.getLocales.map(_.asInstanceOf[Locale]).toArray
+
+  override def toString = new StringBuilder().append("PropertiesRequest[")
+          .append("requestURI=").append(requestURI).append(", ")
+          .append("requestURL=").append(requestURL).append(", ")
+          .append("queryString=").append(queryString).append(", ")
+          .append("scheme=").append(scheme).append(", ")
+          .append("secure=").append(secure).append(", ")
+          .append("contentLength=").append(contentLength).append(", ")
+          .append("contentType=").append(contentType).append(", ")
+          .append("characterEncoding=").append(characterEncoding).append(", ")
+          .append("protocol=").append(protocol).append(", ")
+          .append("serverName=").append(serverName).append(", ")
+          .append("serverPort=").append(serverPort).append(", ")
+          .append("remoteAddr=").append(remoteAddr).append(", ")
+          .append("remoteHost=").append(remoteHost).append(", ")
+          .append("remotePort=").append(remotePort).append(", ")
+          .append("localAddr=").append(localAddr).append(", ")
+          .append("localName=").append(localName).append(", ")
+          .append("localPort=").append(localPort).append(", ")
+          .append("locale=").append(locale).append(", ")
+          .append("locales=").append(locales).append("]")
+          .toString()
 }

@@ -70,7 +70,8 @@ class BrzyServlet extends HttpServlet {
       .append(":")
       .append(req.getRequestURI)
       .append(":")
-      .append(req.getContentType)
+      .append(if(req.getContentType != null) req.getContentType else "" )
+
 
   protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
     if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
