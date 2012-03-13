@@ -21,7 +21,7 @@ class BrzySquerylPlugin(configPort:Int,messagePort:Int) extends Task(configPort,
 		// ask if you want to add the controller
 		// ask to create unit test
 
-		val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-squeryl/templates"))
+		val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-squeryl/templates"))
 		val template = group.template("domain-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
@@ -44,7 +44,7 @@ class BrzySquerylPlugin(configPort:Int,messagePort:Int) extends Task(configPort,
       else
         messenger.ask("enter package for Person and Authority: ")
 
-    val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-squeryl/templates"))
+    val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-squeryl/templates"))
     val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
     outputDir.mkdirs
 

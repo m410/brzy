@@ -1,7 +1,7 @@
 plugins:
   - name: brzy-scalate
     description: Generate Views for domain classes
-    source_file: .brzy/modules/brzy-scalate/BrzyScalatePlugin.scala
+    source_file: .fab/modules/brzy-scalate/BrzyScalatePlugin.scala
     class_name: BrzyScalatePlugin
     include_app_classpath: true
     dependencies:

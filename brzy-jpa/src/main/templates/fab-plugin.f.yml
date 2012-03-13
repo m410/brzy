@@ -1,7 +1,7 @@
 plugins:
   - name: brzy-jpa
     description: Generate JPA Domain Class
-    source_file: .brzy/modules/brzy-jpa/BrzyJpaPlugin.scala
+    source_file: .fab/modules/brzy-jpa/BrzyJpaPlugin.scala
     class_name: BrzyJpaPlugin
     extends_default: true
     tasks:
@@ -21,7 +21,7 @@ plugins:
   - name: brzy-jpa-default
     description: Adds dependencies and persistence.xml parsing to the default interpreter scope.
     dependencies_in_default_scope: true
-    source_file: .brzy/modules/brzy-jpa/BrzyJpaPersistencePlugin.scala
+    source_file: .fab/modules/brzy-jpa/BrzyJpaPersistencePlugin.scala
     class_name: BrzyJpaPersistencePlugin
     member_of_phase: compile
     tasks:

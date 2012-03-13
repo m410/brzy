@@ -1,7 +1,7 @@
 plugins:
 #  - name: brzy-spring
 #    description: Generate Scheduler Service
-#    source_file: .brzy/modules/brzy-scheduler/BrzySchedulerPlugin.scala
+#    source_file: .fab/modules/brzy-scheduler/BrzySchedulerPlugin.scala
 #    class_name: BrzySchedulerPlugin
 #    extends_default: true
 #    tasks:

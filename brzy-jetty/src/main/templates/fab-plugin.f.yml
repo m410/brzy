@@ -1,6 +1,6 @@
 name: brzy-jetty6
 description: Adds ability to run a web application inside Jetty 6.
-source_file: .brzy/modules/brzy-tomcat/BrzyJetty6Plugin.scala
+source_file: .fab/modules/brzy-tomcat/BrzyJetty6Plugin.scala
 class_name: BrzyJetty6Plugin
 extends_default: true
 tasks:

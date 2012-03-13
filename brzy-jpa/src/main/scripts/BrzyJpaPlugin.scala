@@ -17,7 +17,7 @@ class BrzyJpaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,mess
 
     val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
     val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
-    val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-jpa/templates"))
+    val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-jpa/templates"))
     val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
     outputDir.mkdirs
 
@@ -55,7 +55,7 @@ class BrzyJpaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,mess
 		// ask if you want to add the controller
 		// ask to create unit test
 
-		val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-jpa/templates"))
+		val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-jpa/templates"))
 		val template = group.template("domain-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)

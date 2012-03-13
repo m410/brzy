@@ -39,7 +39,7 @@ class BrzyScalatePlugin(configPort:Int,messagePort:Int) extends Task(configPort,
           Array.empty[String]
       }
 
-		val templateDir = File(".brzy/modules/brzy-scalate/templates")
+		val templateDir = File(".fab/modules/brzy-scalate/templates")
     val group = new StringTemplateGroup("brzy", templateDir)
     val outdir = File("webapp/" + name)
     outdir.mkdirs

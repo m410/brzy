@@ -21,7 +21,7 @@ class BrzyJmsPlugin(configPort:Int,messagePort:Int) extends Task(configPort,mess
 		// ask if you want to add the controller
 		// ask to create unit test
 
-		val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-jms/templates"))
+		val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-jms/templates"))
 		val template = group.template("service-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)

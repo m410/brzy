@@ -42,7 +42,7 @@ class BrzyServlet extends HttpServlet {
     internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
   }
 
-  protected[webapp]  def internal(req: HttpServletRequest, res: HttpServletResponse) {
+  private[this]  def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
@@ -73,7 +73,7 @@ class BrzyServlet extends HttpServlet {
       .append(if(req.getContentType != null) req.getContentType else "" )
 
 
-  protected[webapp] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
+  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
     if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
       val buf = req.getRequestURL
       // add https and remove the trailing .brzy extension
@@ -88,10 +88,10 @@ class BrzyServlet extends HttpServlet {
         if (action.isAuthorized(principal))
           action.execute(args, principal)
         else
-          toLogin(req)
+          sendToAuthorization(req)
       }
       else {
-        toLogin(req)
+        sendToAuthorization(req)
       }
     }
     else {
@@ -99,8 +99,15 @@ class BrzyServlet extends HttpServlet {
     }
   }
 
-  protected[webapp] def toLogin(req: HttpServletRequest): (Redirect, Flash, Session) = {
-    val flash = Flash("Your session has ended. Please log in again", "session.end")
+  /**
+   * TODO the redirect path is hard coded here to send them to /auth, that should be configurable
+   * some how.
+   *
+   * @param req The httpServletRequest
+   * @return The redirect to the authorization page
+   */
+  private[this] def sendToAuthorization(req: HttpServletRequest): (Redirect, Flash, Session) = {
+    val flash = Flash("Your session has ended. Please login again", "session.end")
     val sessionParam = Session("last_view" -> req.getRequestURI)
     (Redirect("/auth"), flash, sessionParam)
   }

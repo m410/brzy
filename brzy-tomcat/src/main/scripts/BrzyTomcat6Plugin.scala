@@ -60,7 +60,7 @@ class RunWebApp(contextName:String, port:Int) {
 	println("Running Web Application")
   val appBase = "webapp"
 	val container = new Embedded
-	val catalinaHome = File(".brzy/modules/brzy-tomcat")
+	val catalinaHome = File(".fab/modules/brzy-tomcat")
 	container.setCatalinaHome(catalinaHome.getAbsolutePath)
   val loader = new WebappLoader(this.getClass.getClassLoader)
 	val targetDir = File("")
@@ -117,7 +117,7 @@ class BrzyTomcat6Plugin(configPort:Int,messagePort:Int) extends Task(configPort,
 
 	  try {
 			new RunWebApp("",8080)
-		  new FileWatcher(sourceDir,classesDir, libsDir, new ScalaCompiler(new PrintWriter(System.out)))
+//		  new FileWatcher(sourceDir,classesDir, libsDir, new ScalaCompiler(new PrintWriter(System.out)))
 		}
 		catch {
 			case e:Exception => messenger.warn(e.getMessage,e)

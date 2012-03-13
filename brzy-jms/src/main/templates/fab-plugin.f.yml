@@ -1,7 +1,7 @@
 plugins:
   - name: brzy-scalate
     description: Generate Jms Service
-    source_file: .brzy/modules/brzy-jms/BrzyJmsPlugin.scala
+    source_file: .fab/modules/brzy-jms/BrzyJmsPlugin.scala
     class_name: BrzyJmsPlugin
     extends_default: true
     tasks:

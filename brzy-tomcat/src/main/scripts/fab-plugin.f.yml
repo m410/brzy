@@ -1,6 +1,6 @@
 name: brzy-tomcat6
 description: Adds ability to run a web application inside tomcat6.
-source_file: .brzy/modules/brzy-tomcat/BrzyTomcat6Plugin.scala
+source_file: .fab/modules/brzy-tomcat/BrzyTomcat6Plugin.scala
 class_name: BrzyTomcat6Plugin
 extends_default: false
 tasks:

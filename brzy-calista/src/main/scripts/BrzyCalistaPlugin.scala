@@ -21,7 +21,7 @@ class BrzyCalistaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,
 		// ask if you want to add the controller
 		// ask to create unit test
 
-		val group = new StringTemplateGroup("mygroup", File(".brzy/modules/brzy-calista/templates"))
+		val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-calista/templates"))
 		val template = group.template("domain-scala")
 		template.setAttribute("packageName",packageName)
 		template.setAttribute("className",className)
