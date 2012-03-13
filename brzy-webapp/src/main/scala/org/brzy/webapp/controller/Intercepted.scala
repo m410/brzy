@@ -17,18 +17,21 @@ import org.brzy.webapp.action.args.{Arg, Principal}
 
 
 /**
- * Adds action interceptor support to a controller.
+ * Adds action interceptor support to a controller. When added to any controller, the intercept
+ * method wraps the action.
  *
  * @author Michael Fortin
  */
 trait Intercepted {
 
   /**
+   * Wraps all the actions calls for the controller.
    *
-   * @param action
-   * @param actionArgs
-   * @param principal
-   * @return
+   * @param action This is a function that wraps the actual function the action points too.
+   * @param actionArgs The arguments to the action.
+   * @param principal The Principal.  This is here for use in fine grained authorization.
+   *
+   * @return The result of the call to the action argument.
    */
   def intercept(action: () => AnyRef, actionArgs: Array[Arg], principal: Principal): AnyRef = action()
 }

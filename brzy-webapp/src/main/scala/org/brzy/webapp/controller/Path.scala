@@ -15,18 +15,20 @@ package org.brzy.webapp.controller
 
 import collection.mutable.Buffer
 import java.util.regex.Pattern
-import org.slf4j.LoggerFactory
 
 /**
- * A representation of a RESTful like path.  This is used to compare paths of actions to see
- * if they're eligible for execution on that action.
+ *  * A representation of a RESTful like path.  This is used to compare paths of actions to see
+ * if they're eligible for execution on the action.
  *
  * @author Michael Fortin
+ * @param ctlrBase The path of the controller
+ * @param actionBase The path of the action
  */
 case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
 
-  protected[controller] val log = LoggerFactory.getLogger(classOf[Path])
-
+  /**
+   * The combined controller and action paths.
+   */
   protected[controller] val path = {
     val combined =
       if(actionBase.equals(""))
@@ -46,7 +48,7 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
   }
 
   /**
-   * extracts the attribute patterns out of the url
+   * Extracts the attribute patterns out of the url
    */
   protected[controller] val patternTokens = path.split("""\{|\}""").map(it=>{
       if(!it.contains("/") && it.contains(":"))
@@ -58,17 +60,27 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
     })
 
 	/**
-	 * Splits the url into parts
+	 * Splits the url into parts for comparison with the request uri.
 	 */
   protected[controller] val pathTokens = path.replaceAll("//", "/").split("/")
 
   /**
-   * strip out curlies, replace with embedded patter if it has a colon, otherwise use below
+   * strip out curly braces, replace with embedded regex pattern if it has a colon, otherwise use
+   * regex wildcard.
    */
   protected[controller] val pathPattern = "^" + patternTokens.foldLeft("")((a,b)=>a+b) + "$"
 
+  /**
+   * Create a regex expression out of the pattern path.
+   */
   protected[controller] val pathMatcher = pathPattern.r
 
+  /**
+   * Check to see of the request uri matches the path expression of this action.
+   *
+   * @param contextPath The path to compare to this actions path.
+   * @return true if it matches
+   */
   def isMatch(contextPath: String) = {
     val urlTokens: Array[String] = contextPath.replaceAll("//", "/").split("/")
     if (pathTokens.size == urlTokens.size) {
@@ -84,7 +96,10 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
       false
   }
 
-  protected[this] def isPattern(a:String) = a.endsWith("}") && a.startsWith("{")
+  /**
+   * check each path token to see if it's a url path variable.
+   */
+  private[this] def isPattern(a:String) = a.endsWith("}") && a.startsWith("{")
 
   protected[this] def toPattern(a:String) = {
     val minusCurlies = a.substring(1,a.length() -1)
