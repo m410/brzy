@@ -22,6 +22,10 @@ import org.brzy.webapp.action.{Constraint, Action}
  */
 abstract class Controller(val basePath:String) extends Ordered[Controller] {
 
+  /**
+   * The constraints for the controller.  Constraints set here apply to all actions.  When
+   * you add a constraint to the action is takes precedence over these.
+   */
   val constraints:List[Constraint] = List.empty[Constraint]
 
   /**
@@ -30,7 +34,8 @@ abstract class Controller(val basePath:String) extends Ordered[Controller] {
   implicit def selfReference = this
 
   /**
-   * List of actions for this controller
+   * List of actions for this controller.  When overriding this, it's adventages to make it
+   * a val so you the app doesn't make a list every time.
    */
   def actions:List[Action]
 
@@ -42,7 +47,7 @@ abstract class Controller(val basePath:String) extends Ordered[Controller] {
 
 
   /**
-   * Compares the basePath
+   * Compares the basePath of this controller to others.
    */
   def compare(that: Controller) = basePath.compareTo(that.basePath)
 }
