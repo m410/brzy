@@ -171,7 +171,7 @@ object ResponseHandler {
         }
       case s: Flash =>
         log.trace("flash: {}", s)
-        new FlashMessage(s.code, req.getSession)
+        new FlashMessage(s.message, req.getSession)
       case s: Cookie =>
         log.trace("cookie: {}", s)
         val cookie = new JCookie(s.name, s.value)

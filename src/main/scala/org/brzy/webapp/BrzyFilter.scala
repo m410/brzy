@@ -13,7 +13,6 @@
  */
 package org.brzy.webapp
 
-import action.Action
 import action.args.ArgsBuilder
 import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest, Filter => SFilter}
 import javax.servlet.http.HttpServletRequest
@@ -60,9 +59,10 @@ class BrzyFilter extends SFilter {
   }
 
   /**
-   *
+   * TODO might want to change this so the transaction is only done within the forwarded call
+   * and not wrapped around the entire dispatch.
    */
-  protected[brzy] def doAction(uri: String, req: ServletRequest, res: ServletResponse) {
+  private[this] def doAction(uri: String, req: ServletRequest, res: ServletResponse) {
     val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
 
     val forward =
