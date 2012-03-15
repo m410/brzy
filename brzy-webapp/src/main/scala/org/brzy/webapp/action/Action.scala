@@ -89,15 +89,18 @@ trait Action extends Ordered[Action] {
   }
 
   protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
-    !constraints.forall(constraint => constraint match {
+    !constraints.forall({
       case h:HttpMethods =>
         val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
         h.allowed.find(_ == methodName).isDefined
       case c:ContentTypes =>
         c.allowed.find(_.toLowerCase == request.getContentType.toLowerCase).isDefined
-      case Secure(allowed) => true
-      case r:Roles => true
-      case _ => false
+      case Secure(allowed) =>
+        true // ignored
+      case r:Roles =>
+        true // ignored
+      case _ =>
+        false // never happen, here to prevent compiler warning
     })
   }
 

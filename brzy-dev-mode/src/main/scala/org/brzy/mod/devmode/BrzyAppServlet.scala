@@ -30,6 +30,8 @@ class BrzyAppServlet extends HttpServlet {
   var classesDir = new File("target")
 
   override def init(config: ServletConfig) {
+    sourceDir = new File(config.getInitParameter("source_dir"))
+    classesDir = new File(config.getInitParameter("classes_dir"))
     webapp = makeApplication()
     config.getServletContext.setAttribute("application", webapp)
   }
@@ -51,12 +53,17 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   def makeApplication() = {
-    val classes = new URL("file:///home/kent/eclipsews/SmallExample/bin/");
+    val classes = classesDir.toURI.toURL
     applicationLoader = new URLClassLoader(Array(classes))
-    val clazz = applicationLoader.loadClass("org.brzy.application.WebApp")
-    val a = clazz.getConstructor(classOf[String]).newInstance(Array("development")).asInstanceOf[WebApp]
-    a.startup()
-    a
+    val clazz = applicationLoader.loadClass("org.brzy.application.WebApp$")
+    val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
+    declaredConstructor.setAccessible(true)
+    val inst = declaredConstructor.newInstance()
+    val method = clazz.getMethod("apply", classOf[String])
+    val a = method.invoke(inst,"development")
+    println("######" + a)
+    a.asInstanceOf[WebApp].startup()
+    a.asInstanceOf[WebApp]
   }
 
   def recompileSource(files: List[File]) {

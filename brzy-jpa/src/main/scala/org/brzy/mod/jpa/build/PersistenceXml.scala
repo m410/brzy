@@ -23,13 +23,13 @@ import org.brzy.application.WebAppConfiguration
  * @author Michael Fortin
  */
 class PersistenceXml(config: WebAppConfiguration) {
-  val jpaModConf = config.persistence.find(_.name.get == "brzy-jpa").get.asInstanceOf[JpaModConfig]
+  private[this] val jpaModConf = config.persistence.find(_.name.get == "brzy-jpa").get.asInstanceOf[JpaModConfig]
 
-  val transactionType = jpaModConf.transactionType.getOrElse("RESOURCE_LOCAL")
-  val persistenceUnitName = jpaModConf.persistenceUnit.getOrElse("brzy-unit")
-  val properties = jpaModConf.properties.getOrElse(Map.empty[String,String])
+  private[this] val transactionType = jpaModConf.transactionType.getOrElse("RESOURCE_LOCAL")
+  private[this] val persistenceUnitName = jpaModConf.persistenceUnit.getOrElse("brzy-unit")
+  private[this] val properties = jpaModConf.properties.getOrElse(Map.empty[String,String])
 
-  val entityClasses:List[String] = 
+  private[this] val entityClasses:List[String] =
       if(jpaModConf.entityDiscovery == "list") {
         jpaModConf.entities match {
           case Some(list) => list
@@ -40,8 +40,8 @@ class PersistenceXml(config: WebAppConfiguration) {
         List.empty[String]
       }
 
-  
-  val xml =
+
+  private[this] val xml =
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
@@ -56,5 +56,5 @@ class PersistenceXml(config: WebAppConfiguration) {
   </persistence-unit>
 </persistence>
 
-  def saveToFile(path:String) = XML.save(path, xml, "UTF-8", true, null)
+  def saveToFile(path:String) {XML.save(path, xml, "UTF-8", true, null)}
 }

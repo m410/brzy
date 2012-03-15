@@ -13,12 +13,13 @@
  */
 package org.brzy.webapp.action
 
-import args.{Principal, Parameters, ArgsBuilder}
+import args.{Arg, Principal, Parameters, ArgsBuilder}
 import org.junit.Test
 import org.junit.Assert._
 import collection.immutable.SortedSet
 import org.brzy.webapp.mock.UserController
 import org.scalatest.junit.JUnitSuite
+import org.brzy.webapp.controller.Controller
 
 
 class ActionTest extends JUnitSuite {
