@@ -33,9 +33,11 @@ class JpaModProvider(c:JpaModConfig) extends ModProvider with InterceptorProvide
    * Deregister all drivers that the DriverManager is aware of.
    */
   override def shutdown() {
+    log.debug("shutdown entityManagerFactory")
+    interceptor.entityManagerFactory.close()
     val drivers = DriverManager.getDrivers
     drivers.foreach(d=>{
-      log.debug("deregister: {}",d)
+      log.debug("deregister jdbc driver: {}",d)
       DriverManager.deregisterDriver(d)
     })
   }
