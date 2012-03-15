@@ -1,0 +1,15 @@
+name: brzy-tomcat6
+description: Adds ability to run a web application inside Jetty.
+source_file: .fab/modules/brzy-dev-mode/JettyPlugin.scala
+class_name: JettyPlugin
+extends_default: false
+tasks:
+  - name: jetty
+    method_name: runJetty
+    description: Run Jetty
+dependencies:
+  - {org: com.twitter, name: json, rev: "1.1.1", transitive: false}
+  - {org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
+  - {org: org.brzy.fab, name: fab-util, rev: "0.7", transitive: false}
+  - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
+  - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}

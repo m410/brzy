@@ -18,6 +18,7 @@
     <module>brzy-squeryl</module>
     <module>brzy-tomcat</module>
     <module>brzy-spring</module>
+    <module>brzy-dev-mode</module>
   </modules>
   <build>
     <plugins>
