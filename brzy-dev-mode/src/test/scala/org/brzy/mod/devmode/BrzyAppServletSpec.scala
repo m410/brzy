@@ -1,5 +1,3 @@
-package org.brzy.mod.devmode
-
 /*
  * Copyright 2001-2009 Artima, Inc.
  *
@@ -15,11 +13,14 @@ package org.brzy.mod.devmode
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.brzy.mod.devmode
+
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.io.{PrintWriter, FileWriter, File}
 import org.springframework.mock.web.{MockServletContext, MockHttpServletResponse, MockHttpServletRequest, MockServletConfig}
+
 
 class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
 

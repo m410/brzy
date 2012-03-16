@@ -25,13 +25,15 @@ class BrzyAppServlet extends HttpServlet {
   var applicationLoader: URLClassLoader = _
   var webapp: WebApp = _
   var lastModified = System.currentTimeMillis()
-  var classpath:List[File] = _
+  var classpath:List[URL] = _
   var sourceDir = new File(new File("src"),"scala")
   var classesDir = new File("target")
 
   override def init(config: ServletConfig) {
     sourceDir = new File(config.getInitParameter("source_dir"))
     classesDir = new File(config.getInitParameter("classes_dir"))
+    classpath = cpath
+
     webapp = makeApplication()
     config.getServletContext.setAttribute("application", webapp)
   }
@@ -53,12 +55,13 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   def makeApplication() = {
-    val classes = classesDir.toURI.toURL
-    applicationLoader = new URLClassLoader(Array(classes))
+    applicationLoader = new URLClassLoader(classpath.toArray, getClass.getClassLoader.getParent)
     val clazz = applicationLoader.loadClass("org.brzy.application.WebApp$")
+    println(clazz.getClassLoader)
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
     declaredConstructor.setAccessible(true)
     val inst = declaredConstructor.newInstance()
+    println(inst.asInstanceOf[org.brzy.application.WebApp$].getClass.getClassLoader)
     val method = clazz.getMethod("apply", classOf[String])
     val a = method.invoke(inst,"development")
     println("######" + a)
@@ -186,5 +189,38 @@ class BrzyAppServlet extends HttpServlet {
       Nil
     else
       a.toList
+  }
+
+  private def cpath: List[URL] = {
+    List(
+      classesDir.toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/aspectjweaver-1.6.8.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/beanwrap-0.2.2.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-webapp-1.0.0.beta3.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-fileupload-1.2.2.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-io-1.4.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-logging-1.1.1.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/dom4j-1.6.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/fab-configuration-0.8.1.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/google-collections-1.0.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/gson-1.4.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/guava-r09.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/ivy-2.2.0.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javassist-3.11.0.GA.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/json-1.1.1.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-classic-0.9.27.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-core-0.9.27.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/paranamer-2.3.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/reflections-0.9.5-RC2.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-compiler-2.8.2.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-library-2.8.2.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalabeans_2.8.1-0.2.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/servlet-api-6.0.29.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/slf4j-api-1.6.1.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/snakeyaml-1.7.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validation-api-1.0.0.GA.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validator-0.1.jar").toURI.toURL,
+      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar").toURI.toURL
+    )
   }
 }
