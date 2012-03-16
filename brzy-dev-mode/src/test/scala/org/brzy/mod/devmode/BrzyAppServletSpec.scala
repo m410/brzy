@@ -56,8 +56,10 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     changeTextFile(origional)
   }
 
+
   def changeTextFile(content:String) {
-    val outFile = new FileWriter(new File(""))
+    val f = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/org/brzy/test/Application.scala"
+    val outFile = new FileWriter(new File(f))
     val out = new PrintWriter(outFile)
     out.write(content)
     out.close()

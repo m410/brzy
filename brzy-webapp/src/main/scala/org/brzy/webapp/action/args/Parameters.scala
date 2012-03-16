@@ -25,15 +25,27 @@ import collection.JavaConversions._
 trait Parameters extends Arg {
 
   /**
-   * just request paramters and url parameters
+   * Get the url or request scope parameter by name.  This will throw an exception if no
+   * parameter exists with the givien name.
+   *
+   * @throws UnfoundParameterException when no parameter value is found.
    */
   def apply(name:String):String
 
   /**
-   * all scopes
+   * Searches all parameters for an attribute by the given name.  It looks in the url, request,
+   * session servlet context and headers in that order.
+   *
+   * Note that this uses the servlet 2.5 spec so if you search for a parameter in the servlet
+   * context application scope, it will implicitly create a session.
    */
   def get(name:String):Option[AnyRef]
 
+  /**
+   * This is a helper that merges the url parameters and the request parameters.  For the
+   * request parameters it calls the request.getParameter which will return a single value
+   * not an array.  If you want the array use request.
+   */
   def requestAndUrl:Map[String, String]
 
   /**
@@ -44,7 +56,7 @@ trait Parameters extends Arg {
   /**
    * the servlet request attributes
    */
-  def request:Map[String, List[String]]
+  def request:Map[String, Array[String]]
 
   /**
    * The application scope attributes.  servlet 5 spec, uses the session scope.
@@ -98,7 +110,7 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
   val url = urlParams
 
   lazy val request = req.getParameterNames.map({
-    case (n:String)=> n->req.getParameterValues(n).toList
+    case (n:String)=> n->req.getParameterValues(n)
   }).toMap
 
   lazy val application = {
@@ -111,12 +123,14 @@ class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String,
     case (n:String)=> n->req.getHeader(n)
   }).toMap
 
-  lazy val session = if (req.getSession(false) != null)
-      Option(req.getSession.getAttributeNames.map({
-        case (n:String)=> n->req.getSession.getAttribute(n)
-      }).toMap)
-    else
-      None
+  lazy val session = Option(
+      if (req.getSession(false) != null)
+        req.getSession.getAttributeNames.map({
+          case (n: String) => n -> req.getSession.getAttribute(n)
+        }).toMap
+      else
+        null
+    )
 
   override def toString = {
     val buf = new StringBuilder()

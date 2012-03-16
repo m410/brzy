@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
 class BrzyAppServlet extends HttpServlet {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyAppServlet])
   var applicationLoader: URLClassLoader = _
-  var webapp: WebApp = _
+  var webApp: AnyRef = _
   var lastModified = System.currentTimeMillis()
   var classpath:List[URL] = _
   var sourceDir = new File(new File("src"),"scala")
@@ -34,8 +34,8 @@ class BrzyAppServlet extends HttpServlet {
     classesDir = new File(config.getInitParameter("classes_dir"))
     classpath = cpath
 
-    webapp = makeApplication()
-    config.getServletContext.setAttribute("application", webapp)
+    webApp = makeApplication()
+    config.getServletContext.setAttribute("application", webApp)
   }
 
   override def service(req: ServletRequest, res: ServletResponse) {
@@ -61,12 +61,11 @@ class BrzyAppServlet extends HttpServlet {
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
     declaredConstructor.setAccessible(true)
     val inst = declaredConstructor.newInstance()
-    println(inst.asInstanceOf[org.brzy.application.WebApp$].getClass.getClassLoader)
+    println(inst.asInstanceOf[AnyRef].getClass.getClassLoader)
     val method = clazz.getMethod("apply", classOf[String])
     val a = method.invoke(inst,"development")
-    println("######" + a)
-    a.asInstanceOf[WebApp].startup()
-    a.asInstanceOf[WebApp]
+    a.getClass.getMethod("startup").invoke(a,null)
+    a
   }
 
   def recompileSource(files: List[File]) {
@@ -92,7 +91,8 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   def stopApplication() {
-    webapp.shutdown()
+    webApp.getClass.getMethod("shutdown").invoke(webApp,null)
+//    webApp.shutdown()
   }
 
 //  sourceModified match {
@@ -111,23 +111,23 @@ class BrzyAppServlet extends HttpServlet {
     val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
-    webapp.actions.find(_.path.isMatch(actionPath)) match {
-      case Some(action) =>
-        log.debug("{} >> {}", pathLog(req) , action)
-        val args = ArgsBuilder(req,action)
-        val principal = new PrincipalRequest(req)
-
-
-        if (!action.isConstrained(req)) {
-          val result = callActionOrLogin(req, action, principal, args)
-          ResponseHandler(action, result, req, res)
-        }
-        else {
-          res.sendError(500)
-        }
-      case _ =>
-        res.sendError(404)
-    }
+//    webApp.actions.find(_.path.isMatch(actionPath)) match {
+//      case Some(action) =>
+//        log.debug("{} >> {}", pathLog(req) , action)
+//        val args = ArgsBuilder(req,action)
+//        val principal = new PrincipalRequest(req)
+//
+//
+//        if (!action.isConstrained(req)) {
+//          val result = callActionOrLogin(req, action, principal, args)
+//          ResponseHandler(action, result, req, res)
+//        }
+//        else {
+//          res.sendError(500)
+//        }
+//      case _ =>
+//        res.sendError(404)
+//    }
   }
 
   private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
@@ -137,32 +137,32 @@ class BrzyAppServlet extends HttpServlet {
           .append(":")
           .append(if(req.getContentType != null) req.getContentType else "" )
 
-
-  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
-    if (webapp.useSsl && action.requiresSsl && !req.isSecure) {
-      val buf = req.getRequestURL
-      // add https and remove the trailing .brzy extension
-      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
-      log.trace("redirect: {}",redirect)
-      Redirect(redirect)
-    }
-    else if (action.isSecured) {
-      if (req.getSession(false) != null) {
-        log.trace("principal: {}",principal)
-
-        if (action.isAuthorized(principal))
-          action.execute(args, principal)
-        else
-          sendToAuthorization(req)
-      }
-      else {
-        sendToAuthorization(req)
-      }
-    }
-    else {
-      action.execute(args, principal)
-    }
-  }
+//
+//  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
+//    if (webApp.useSsl && action.requiresSsl && !req.isSecure) {
+//      val buf = req.getRequestURL
+//      // add https and remove the trailing .brzy extension
+//      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
+//      log.trace("redirect: {}",redirect)
+//      Redirect(redirect)
+//    }
+//    else if (action.isSecured) {
+//      if (req.getSession(false) != null) {
+//        log.trace("principal: {}",principal)
+//
+//        if (action.isAuthorized(principal))
+//          action.execute(args, principal)
+//        else
+//          sendToAuthorization(req)
+//      }
+//      else {
+//        sendToAuthorization(req)
+//      }
+//    }
+//    else {
+//      action.execute(args, principal)
+//    }
+//  }
 
   /**
    * TODO the redirect path is hard coded here to send them to /auth, that should be configurable
