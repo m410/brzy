@@ -26,11 +26,7 @@ import tools.nsc.{Settings, Global}
 
 class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
 
-  val sourceDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/"
-  val classesDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/"
-
-
-  test("An empty list should be empty") {
+  test("Call action, change source, and show new action") {
 
     // set the precondition
     changeSourceFile(origional)
@@ -45,6 +41,7 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     val servletConfig = new MockServletConfig(servletContext)
     servletConfig.addInitParameter("source_dir",sourceDir)
     servletConfig.addInitParameter("classes_dir",classesDir)
+    servletConfig.addInitParameter("classpath",cpath.foldLeft("")((r,c) => r+":"+c))
     val servlet = new BrzyAppServlet()
     servlet.init(servletConfig)
     
@@ -56,12 +53,12 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     servlet.service(req,res)
     res.getContentAsString should be("Hi there, Mike")
     changeSourceFile(changed)
-    Thread.sleep(1000)
+    Thread.sleep(2000)
 
     val res2 = new MockHttpServletResponse()
     servlet.service(req,res2)
     res2.getContentAsString should be("Waiting")
-    Thread.sleep(8000)
+    Thread.sleep(4000)
 
     val res3 = new MockHttpServletResponse()
     servlet.service(req,res3)
@@ -71,8 +68,11 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     changeSourceFile(origional)
   }
 
+  private[this] val sourceDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/"
+  private[this] val classesDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/"
 
-  def changeSourceFile(content:String) {
+
+  private[this] def changeSourceFile(content:String) {
     val f = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/org/brzy/test/HomeController.scala"
     val file = new File(f)
     val outFile = new FileWriter(file)
@@ -81,7 +81,7 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     out.close()
   }
 
-  val origional = """package org.brzy.test
+  private[this] val origional = """package org.brzy.test
 
 import org.brzy.webapp.action.response.Text
 import org.brzy.webapp.action.Action
@@ -93,7 +93,7 @@ class HomeController extends Controller("") {
   def index() = Text("Hi there, Mike")
 }"""
 
-  val changed = """package org.brzy.test
+  private[this] val changed = """package org.brzy.test
 
 import org.brzy.webapp.action.response.Text
 import org.brzy.webapp.action.Action
