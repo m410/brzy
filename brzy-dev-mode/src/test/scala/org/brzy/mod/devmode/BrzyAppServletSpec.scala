@@ -58,10 +58,10 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     changeSourceFile(changed)
     Thread.sleep(1000)
 
-//    val res2 = new MockHttpServletResponse()
-//    servlet.service(req,res2)
-//    res2.getContentAsString should be("Waiting")
-//    Thread.sleep(1000)
+    val res2 = new MockHttpServletResponse()
+    servlet.service(req,res2)
+    res2.getContentAsString should be("Waiting")
+    Thread.sleep(8000)
 
     val res3 = new MockHttpServletResponse()
     servlet.service(req,res3)

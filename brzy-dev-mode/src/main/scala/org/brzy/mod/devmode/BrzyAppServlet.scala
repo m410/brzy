@@ -10,6 +10,8 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
 import org.slf4j.LoggerFactory
 import org.brzy.webapp.action.response._
+import actors.Futures._
+import actors.Future
 
 /**
  * Accepts requests to the application like the Brzy servlet, but checks for changes in
@@ -25,6 +27,13 @@ class BrzyAppServlet extends HttpServlet {
   var classpath:List[URL] = _
   var sourceDir = new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/")
   var classesDir = new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/")
+
+  var compiling:Future[String] = new Future[String] {
+    def isSet = true
+    def apply() = null
+    def respond(k: (String) => Unit) {}
+    def inputChannel = null
+  }
 
   override def init(config: ServletConfig) {
 //    sourceDir = new File(config.getInitParameter("source_dir"))
@@ -91,43 +100,45 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   def stopApplication() {
-//    webApp.getClass.getMethod("shutdown").invoke(webApp,null)
     webApp.shutdown()
     webApp = null
   }
-
-//  sourceModified match {
-//    case Some(files) =>
-//      stopApplication()
-//      recompileSource(files)
-//      app = makeApplication()
-//      //        config.getServletContext.setAttribute("application", a)
-//      super.service(req, res)
-//    case None =>
-//      super.service(req, res)
-//  }
 
   private[this]  def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
-    sourceModified  match {
-      case Some(files) =>
-        stopApplication()
-        recompileSource(files)
-        webApp = makeApplication()
-      case None =>
-    }
+    println("compiling = " + compiling.isSet)
+    println("compiling = " + compiling.apply())
 
-    webApp.actions.find(_.path.isMatch(actionPath)) match {
-      case Some(action) =>
-        log.debug("{} >> {}", pathLog(req) , action)
-        val args = ArgsBuilder(req,action)
-        val principal = new PrincipalRequest(req)
-        val result = action.execute(args, principal)
-        ResponseHandler(action, result, req, res)
-      case _ => Error(404,"Not Found")
+    if (!compiling.isSet) {
+      res.getOutputStream.write("Waiting".getBytes("UTF-8"))
+    }
+    else {
+      sourceModified  match {
+        case Some(files) =>
+          compiling = future {
+            lastModified = System.currentTimeMillis() - 1000
+            stopApplication()
+            recompileSource(files)
+            webApp = makeApplication()
+            //        config.getServletContext.setAttribute("application", a)
+            println("#### done compile")
+            "ok"
+          }
+          res.getOutputStream.write("Waiting".getBytes("UTF-8"))
+        case None =>
+          webApp.actions.find(_.path.isMatch(actionPath)) match {
+            case Some(action) =>
+              log.debug("{} >> {}", pathLog(req) , action)
+              val args = ArgsBuilder(req,action)
+              val principal = new PrincipalRequest(req)
+              val result = action.execute(args, principal)
+              ResponseHandler(action, result, req, res)
+            case _ => Error(404,"Not Found")
+          }
+      }
     }
   }
 
