@@ -188,7 +188,10 @@ abstract class WebApp(conf: WebAppConfiguration) {
   def shutdown() {
     log.info("Shutdown: " + application.get.name.get + " - " + application.get.version.get)
     services.foreach(lifeCycleDestroy(_))
+
+    if(viewProvider != null)  // could be null in test situations
     viewProvider.shutdown()
+
     persistenceProviders.foreach(_.shutdown())
     moduleProviders.foreach(_.shutdown())
   }

@@ -33,9 +33,9 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
   test("An empty list should be empty") {
 
     // set the precondition
-    changeTextFile(origional)
+    changeSourceFile(origional)
 
-    recompileSource(List(
+    preCompile(List(
       new File(sourceDir + "org/brzy/test/Application.scala"),
       new File(sourceDir + "org/brzy/test/HomeController.scala"),
       new File(sourceDir + "org/brzy/test/ApplicationLoader.scala")
@@ -55,8 +55,8 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     
     servlet.service(req,res)
     res.getContentAsString should be("Hi there, Mike")
-    changeTextFile(changed)
-    Thread.sleep(100)
+    changeSourceFile(changed)
+    Thread.sleep(1000)
 
 //    val res2 = new MockHttpServletResponse()
 //    servlet.service(req,res2)
@@ -68,19 +68,17 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     res3.getContentAsString should be("Hello, Mike")
 
     // reset back to original
-    changeTextFile(origional)
+    changeSourceFile(origional)
   }
 
 
-  def changeTextFile(content:String) {
+  def changeSourceFile(content:String) {
     val f = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/org/brzy/test/HomeController.scala"
     val file = new File(f)
     val outFile = new FileWriter(file)
     val out = new PrintWriter(outFile)
     out.write(content)
     out.close()
-
-    println("changed file too " + content)
   }
 
   val origional = """package org.brzy.test
@@ -108,7 +106,7 @@ class HomeController extends Controller("") {
 }"""
 
 
-  def recompileSource(files: List[File]) {
+  private def preCompile(files: List[File]) {
     def error(s: String) {
       println(s)
     }

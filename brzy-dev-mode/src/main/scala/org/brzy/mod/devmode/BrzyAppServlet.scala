@@ -1,16 +1,13 @@
 package org.brzy.mod.devmode
 
-import java.io.{PrintWriter, File}
+import java.io.{File}
 import java.net.{URL, URLClassLoader}
-import org.brzy.webapp.BrzyServlet
 import javax.servlet.{ServletResponse, ServletRequest, ServletConfig}
 import org.brzy.application.WebApp
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.{Global, Settings}
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
-import java.util.Date
 import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
-import org.brzy.webapp.action.Action
 import org.slf4j.LoggerFactory
 import org.brzy.webapp.action.response._
 
@@ -24,7 +21,7 @@ class BrzyAppServlet extends HttpServlet {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyAppServlet])
   var applicationLoader: URLClassLoader = _
   var webApp: WebApp = _
-  var lastModified = System.currentTimeMillis()
+  var lastModified = System.currentTimeMillis() - 1000 // need to round to the previous second
   var classpath:List[URL] = _
   var sourceDir = new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/")
   var classesDir = new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/")
@@ -52,7 +49,6 @@ class BrzyAppServlet extends HttpServlet {
       None
     }
     else {
-      lastModified = System.currentTimeMillis()
       println("modified: " + files)
       Option(files)
     }
@@ -77,7 +73,7 @@ class BrzyAppServlet extends HttpServlet {
       println(s)
     }
     val settings = new Settings(error)
-//    settings.classpath.value = classpath.map(_.getAbsolutePath)
+    settings.classpath.value = classpath.map(url=>{new File(url.getPath).getAbsolutePath}).foldLeft("")((r,c) => r+":"+c)
     settings.sourcedir.value = sourceDir.getAbsolutePath
     settings.outdir.value = classesDir.getAbsolutePath
     settings.deprecation.value = true // enable detailed deprecation warnings
@@ -120,7 +116,7 @@ class BrzyAppServlet extends HttpServlet {
       case Some(files) =>
         stopApplication()
         recompileSource(files)
-        makeApplication()
+        webApp = makeApplication()
       case None =>
     }
 
@@ -183,7 +179,6 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   private[this] def findFiles(root: File): List[File] = {
-    println("root:"+root)
     if (root.isFile && root.getName.endsWith(".scala"))
       List(root)
     else
