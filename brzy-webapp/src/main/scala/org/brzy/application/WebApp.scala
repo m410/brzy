@@ -26,6 +26,9 @@ import org.brzy.interceptor.Invoker
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.service.Service
 import org.brzy.beanwrap.Build
+import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
+import org.brzy.webapp.action.response.ResponseHandler
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 
 /**
  * WebApp is short for web application.  This assembles and configures the application at
@@ -164,10 +167,14 @@ abstract class WebApp(conf: WebAppConfiguration) {
    */
   def startup() {
     log.info("Startup: " + application.get.name.get + " - " + application.get.version.get)
-    viewProvider.startup()
+    
+    if (viewProvider != null) // may not be set for some test cases
+      viewProvider.startup()
+    else
+      log.warn("No View Provider defined.")
+    
     persistenceProviders.foreach(_.startup())
     moduleProviders.foreach(_.startup())
-    viewProvider.startup()
     services.foreach(lifeCycleCreate(_))
     services.foreach(a=>log.trace("service: {}",a))
     controllers.foreach(a=>log.trace("controller: {}",a))

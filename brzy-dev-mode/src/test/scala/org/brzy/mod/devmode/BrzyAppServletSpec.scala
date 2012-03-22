@@ -20,18 +20,24 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.io.{PrintWriter, FileWriter, File}
 import org.springframework.mock.web.{MockServletContext, MockHttpServletResponse, MockHttpServletRequest, MockServletConfig}
+import tools.nsc.reporters.ConsoleReporter
+import tools.nsc.{Settings, Global}
 
 
 class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
 
+  val sourceDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/"
+  val classesDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/"
   test("An empty list should be empty") {
 
-    // compile the code
+    recompileSource(List(
+      new File(sourceDir + "org/brzy/test/Application.scala")
+    ))
 
     val servletContext = new MockServletContext()
     val servletConfig = new MockServletConfig(servletContext)
-    servletConfig.addInitParameter("source_dir","/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src")
-    servletConfig.addInitParameter("classes_dir","/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes")
+    servletConfig.addInitParameter("source_dir",sourceDir)
+    servletConfig.addInitParameter("classes_dir",classesDir)
     val servlet = new BrzyAppServlet()
     servlet.init(servletConfig)
     
@@ -103,4 +109,57 @@ class HomeController extends Controller("") {
   def index() = Text("Hello, Mike")
 }"""
 
+
+  def recompileSource(files: List[File]) {
+    def error(s: String) {
+      println(s)
+    }
+    val settings = new Settings(error)
+    settings.classpath.value = cpath.foldLeft("")((r,c) => r+":"+c)
+    settings.sourcedir.value = sourceDir
+    settings.outdir.value = classesDir
+    settings.deprecation.value = true // enable detailed deprecation warnings
+    settings.unchecked.value = true // enable detailed unchecked warnings
+
+    val reporter = new ConsoleReporter(settings)
+    val compiler = new Global(settings, reporter)
+    (new compiler.Run).compile(files.map(_.getAbsolutePath))
+
+    reporter.printSummary()
+    if (reporter.hasErrors || reporter.WARNING.count > 0) {
+        //      ...
+    }
+  }
+
+  private def cpath = List(
+      classesDir,
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/aspectjweaver-1.6.8.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/beanwrap-0.2.2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-scalate-1.0.0.beta2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-webapp-1.0.0.beta3.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-fileupload-1.2.2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-io-1.4.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-logging-1.1.1.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/dom4j-1.6.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/fab-configuration-0.8.1.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/google-collections-1.0.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/gson-1.4.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/guava-r09.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/ivy-2.2.0.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javassist-3.11.0.GA.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/json-1.1.1.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-classic-0.9.27.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-core-0.9.27.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/paranamer-2.3.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/reflections-0.9.5-RC2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-compiler-2.8.2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-library-2.8.2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalabeans_2.8.1-0.2.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/servlet-api-6.0.29.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/slf4j-api-1.6.1.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/snakeyaml-1.7.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validation-api-1.0.0.GA.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validator-0.1.jar",
+      "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar"
+    )
 }

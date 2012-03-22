@@ -55,7 +55,7 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   def makeApplication() = {
-    applicationLoader = new URLClassLoader(classpath.toArray, getClass.getClassLoader.getParent)
+    applicationLoader = new URLClassLoader(classpath.toArray, getClass.getClassLoader)
     val clazz = applicationLoader.loadClass("org.brzy.application.WebApp$")
     println(clazz.getClassLoader)
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
@@ -64,7 +64,7 @@ class BrzyAppServlet extends HttpServlet {
     println(inst.asInstanceOf[AnyRef].getClass.getClassLoader)
     val method = clazz.getMethod("apply", classOf[String])
     val a = method.invoke(inst,"development")
-    a.getClass.getMethod("startup").invoke(a,null)
+    a.getClass.getMethod("startup").invoke(a,Array.empty[AnyRef]:_*)
     a
   }
 
