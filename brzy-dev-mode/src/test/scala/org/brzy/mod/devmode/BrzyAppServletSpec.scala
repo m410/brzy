@@ -28,10 +28,17 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
 
   val sourceDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/"
   val classesDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/"
+
+
   test("An empty list should be empty") {
 
+    // set the precondition
+    changeTextFile(origional)
+
     recompileSource(List(
-      new File(sourceDir + "org/brzy/test/Application.scala")
+      new File(sourceDir + "org/brzy/test/Application.scala"),
+      new File(sourceDir + "org/brzy/test/HomeController.scala"),
+      new File(sourceDir + "org/brzy/test/ApplicationLoader.scala")
     ))
 
     val servletContext = new MockServletContext()
@@ -51,39 +58,37 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     changeTextFile(changed)
     Thread.sleep(100)
 
-    val res2 = new MockHttpServletResponse()
-    servlet.service(req,res2)
-    res2.getContentAsString should be("Waiting")
-    Thread.sleep(1000)
+//    val res2 = new MockHttpServletResponse()
+//    servlet.service(req,res2)
+//    res2.getContentAsString should be("Waiting")
+//    Thread.sleep(1000)
 
     val res3 = new MockHttpServletResponse()
     servlet.service(req,res3)
     res3.getContentAsString should be("Hello, Mike")
+
+    // reset back to original
     changeTextFile(origional)
   }
 
 
   def changeTextFile(content:String) {
-    val f = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/org/brzy/test/Application.scala"
-    val outFile = new FileWriter(new File(f))
+    val f = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/org/brzy/test/HomeController.scala"
+    val file = new File(f)
+    val outFile = new FileWriter(file)
     val out = new PrintWriter(outFile)
     out.write(content)
     out.close()
+
+    println("changed file too " + content)
   }
 
   val origional = """package org.brzy.test
 
-import org.brzy.application.WebAppConfiguration
-import org.brzy.application.WebApp
-import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.response.Text
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.controller.Controller
 
-class Application (config:WebAppConfiguration) extends WebApp(config) {
-  def makeServices = List.empty[AnyRef]
-  def makeControllers = List(proxyInstance[HomeController]()
-  )
-}
 
 class HomeController extends Controller("") {
   def actions = List(Action("","",index _))
@@ -92,17 +97,10 @@ class HomeController extends Controller("") {
 
   val changed = """package org.brzy.test
 
-import org.brzy.application.WebAppConfiguration
-import org.brzy.application.WebApp
-import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.response.Text
+import org.brzy.webapp.action.Action
+import org.brzy.webapp.controller.Controller
 
-class Application (config:WebAppConfiguration) extends WebApp(config) {
-  def makeServices = List.empty[AnyRef]
-  def makeControllers = List(proxyInstance[HomeController]()
-  )
-}
 
 class HomeController extends Controller("") {
   def actions = List(Action("","",index _))

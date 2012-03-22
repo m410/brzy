@@ -11,8 +11,8 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import java.util.Date
 import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
 import org.brzy.webapp.action.Action
-import org.brzy.webapp.action.response.{Flash, Session, Redirect, ResponseHandler}
 import org.slf4j.LoggerFactory
+import org.brzy.webapp.action.response._
 
 /**
  * Accepts requests to the application like the Brzy servlet, but checks for changes in
@@ -23,17 +23,16 @@ import org.slf4j.LoggerFactory
 class BrzyAppServlet extends HttpServlet {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyAppServlet])
   var applicationLoader: URLClassLoader = _
-  var webApp: AnyRef = _
+  var webApp: WebApp = _
   var lastModified = System.currentTimeMillis()
   var classpath:List[URL] = _
-  var sourceDir = new File(new File("src"),"scala")
-  var classesDir = new File("target")
+  var sourceDir = new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/")
+  var classesDir = new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/")
 
   override def init(config: ServletConfig) {
-    sourceDir = new File(config.getInitParameter("source_dir"))
-    classesDir = new File(config.getInitParameter("classes_dir"))
+//    sourceDir = new File(config.getInitParameter("source_dir"))
+//    classesDir = new File(config.getInitParameter("classes_dir"))
     classpath = cpath
-
     webApp = makeApplication()
     config.getServletContext.setAttribute("application", webApp)
   }
@@ -43,29 +42,34 @@ class BrzyAppServlet extends HttpServlet {
   }
   
   def sourceModified: Option[List[File]] = {
-    val files = findFiles(sourceDir).filter(_.lastModified() > lastModified)
+    val files = findFiles(sourceDir).filter(f=>{
+      println(f+" :" + f.lastModified() + " > " + lastModified)
+      f.lastModified() > lastModified
+    })
     
     if (files.isEmpty) {
+      println("modified: none")
       None
     }
     else {
       lastModified = System.currentTimeMillis()
+      println("modified: " + files)
       Option(files)
     }
   }
 
   def makeApplication() = {
     applicationLoader = new URLClassLoader(classpath.toArray, getClass.getClassLoader)
-    val clazz = applicationLoader.loadClass("org.brzy.application.WebApp$")
+    val clazz = applicationLoader.loadClass("org.brzy.test.ApplicationLoader")
     println(clazz.getClassLoader)
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
     declaredConstructor.setAccessible(true)
     val inst = declaredConstructor.newInstance()
     println(inst.asInstanceOf[AnyRef].getClass.getClassLoader)
-    val method = clazz.getMethod("apply", classOf[String])
-    val a = method.invoke(inst,"development")
-    a.getClass.getMethod("startup").invoke(a,Array.empty[AnyRef]:_*)
-    a
+    val method = clazz.getMethod("load", Array.empty[Class[_]]: _*)
+    val a = method.invoke(inst)
+    a.getClass.getMethod("startup").invoke(a)
+    a.asInstanceOf[WebApp]
   }
 
   def recompileSource(files: List[File]) {
@@ -91,8 +95,9 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   def stopApplication() {
-    webApp.getClass.getMethod("shutdown").invoke(webApp,null)
-//    webApp.shutdown()
+//    webApp.getClass.getMethod("shutdown").invoke(webApp,null)
+    webApp.shutdown()
+    webApp = null
   }
 
 //  sourceModified match {
@@ -111,23 +116,23 @@ class BrzyAppServlet extends HttpServlet {
     val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
-//    webApp.actions.find(_.path.isMatch(actionPath)) match {
-//      case Some(action) =>
-//        log.debug("{} >> {}", pathLog(req) , action)
-//        val args = ArgsBuilder(req,action)
-//        val principal = new PrincipalRequest(req)
-//
-//
-//        if (!action.isConstrained(req)) {
-//          val result = callActionOrLogin(req, action, principal, args)
-//          ResponseHandler(action, result, req, res)
-//        }
-//        else {
-//          res.sendError(500)
-//        }
-//      case _ =>
-//        res.sendError(404)
-//    }
+    sourceModified  match {
+      case Some(files) =>
+        stopApplication()
+        recompileSource(files)
+        makeApplication()
+      case None =>
+    }
+
+    webApp.actions.find(_.path.isMatch(actionPath)) match {
+      case Some(action) =>
+        log.debug("{} >> {}", pathLog(req) , action)
+        val args = ArgsBuilder(req,action)
+        val principal = new PrincipalRequest(req)
+        val result = action.execute(args, principal)
+        ResponseHandler(action, result, req, res)
+      case _ => Error(404,"Not Found")
+    }
   }
 
   private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
@@ -178,6 +183,7 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   private[this] def findFiles(root: File): List[File] = {
+    println("root:"+root)
     if (root.isFile && root.getName.endsWith(".scala"))
       List(root)
     else
