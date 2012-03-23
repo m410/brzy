@@ -15,7 +15,6 @@
  */
 package org.brzy.mod.devmode
 
-
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.io.{PrintWriter, FileWriter, File}
@@ -24,7 +23,7 @@ import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.{Settings, Global}
 
 
-class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
+class BrzyDynamicServletSpec extends FunSuite with ShouldMatchers {
 
   test("Call action, change source, and show new action") {
 
@@ -41,8 +40,8 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
     val servletConfig = new MockServletConfig(servletContext)
     servletConfig.addInitParameter("source_dir",sourceDir)
     servletConfig.addInitParameter("classes_dir",classesDir)
-    servletConfig.addInitParameter("classpath",cpath.foldLeft("")((r,c) => r+":"+c))
-    val servlet = new BrzyAppServlet()
+    servletConfig.addInitParameter("compiler_path",cpath.foldLeft("")((r,c) => r+":"+c))
+    val servlet = new BrzyDynamicServlet()
     servlet.init(servletConfig)
     
     val req = new MockHttpServletRequest(servletContext)
@@ -82,28 +81,24 @@ class BrzyAppServletSpec extends FunSuite with ShouldMatchers {
   }
 
   private[this] val origional = """package org.brzy.test
-
 import org.brzy.webapp.action.response.Text
 import org.brzy.webapp.action.Action
 import org.brzy.webapp.controller.Controller
-
-
 class HomeController extends Controller("") {
   def actions = List(Action("","",index _))
   def index() = Text("Hi there, Mike")
-}"""
+}
+"""
 
   private[this] val changed = """package org.brzy.test
-
 import org.brzy.webapp.action.response.Text
 import org.brzy.webapp.action.Action
 import org.brzy.webapp.controller.Controller
-
-
 class HomeController extends Controller("") {
   def actions = List(Action("","",index _))
   def index() = Text("Hello, Mike")
-}"""
+}
+"""
 
 
   private def preCompile(files: List[File]) {

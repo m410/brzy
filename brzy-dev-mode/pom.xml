@@ -67,11 +67,21 @@
       <artifactId>brzy-webapp</artifactId>
       <version>${brzy-webapp-version}</version>
     </dependency>
+
     <dependency>
-      <groupId>org.apache.tomcat</groupId>
+      <groupId>jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+      <version>6.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>jetty</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>6.0.29</version>
-      <scope>provided</scope>
+      <version>2.5-6.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <version>6.0.2</version>
     </dependency>
 
     <!-- Test -->

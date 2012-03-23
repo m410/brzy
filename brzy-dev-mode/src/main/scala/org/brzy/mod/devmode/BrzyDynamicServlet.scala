@@ -1,17 +1,22 @@
 package org.brzy.mod.devmode
 
 import java.io.{File}
-import java.net.{URL, URLClassLoader}
+import java.net.URLClassLoader
 import javax.servlet.{ServletResponse, ServletRequest, ServletConfig}
-import org.brzy.application.WebApp
-import tools.nsc.reporters.ConsoleReporter
-import tools.nsc.{Global, Settings}
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
-import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
+
 import org.slf4j.LoggerFactory
-import org.brzy.webapp.action.response._
 import actors.Futures._
 import actors.Future
+
+import tools.nsc.reporters.ConsoleReporter
+import tools.nsc.{Global, Settings}
+
+import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
+import org.brzy.webapp.action.response._
+import org.brzy.webapp.action.Action
+import org.brzy.application.WebApp
+
 
 /**
  * Accepts requests to the application like the Brzy servlet, but checks for changes in
@@ -19,8 +24,8 @@ import actors.Future
  *
  * @author Michael Fortin
  */
-class BrzyAppServlet extends HttpServlet {
-  private[this] val log = LoggerFactory.getLogger(classOf[BrzyAppServlet])
+class BrzyDynamicServlet extends HttpServlet {
+  private[this] val log = LoggerFactory.getLogger(classOf[BrzyDynamicServlet])
   private[this] var applicationLoader: URLClassLoader = _
   private[this] var webApp: WebApp = _
   private[this] var lastModified = System.currentTimeMillis() - 1000 // need to round to the previous second
@@ -38,13 +43,17 @@ class BrzyAppServlet extends HttpServlet {
   override def init(config: ServletConfig) {
     sourceDir = new File(config.getInitParameter("source_dir"))
     classesDir = new File(config.getInitParameter("classes_dir"))
-    classpath = config.getInitParameter("classpath")
+    classpath = config.getInitParameter("compiler_path")
+    webApp = config.getServletContext.getAttribute("application")
     log.info("source_dir: '{}'", sourceDir)
     log.info("classes_dir: '{}'", classesDir)
     log.info("classpath: '{}'", classpath)
     log.info("last modified: '{}'", lastModified)
-    webApp = makeApplication()
-    config.getServletContext.setAttribute("application", webApp)
+    
+    if(webApp == null)
+      webApp = makeApplication()
+    
+    log.info("webApp: '{}'", webApp)
   }
 
   override def service(req: ServletRequest, res: ServletResponse) {
@@ -78,8 +87,9 @@ class BrzyAppServlet extends HttpServlet {
   }
 
   private[this] def recompileSource(files: List[File]) {
+    val buf = new StringBuilder()
     def error(s: String) {
-      println(s)
+      buf.append(s)
     }
     val settings = new Settings(error)
     settings.classpath.value = classpath
@@ -92,10 +102,10 @@ class BrzyAppServlet extends HttpServlet {
     val compiler = new Global(settings, reporter)
     (new compiler.Run).compile(files.map(_.getAbsolutePath))
 
-    reporter.printSummary()
     if (reporter.hasErrors || reporter.WARNING.count > 0) {
-      //      ...
+      reporter.printSummary()
     }
+    buf.toString()
   }
 
   private[this] def stopApplication() {
@@ -110,7 +120,7 @@ class BrzyAppServlet extends HttpServlet {
 
     if (!compiling.isSet) {
       log.warn("Still Compiling Source...")
-      res.getOutputStream.write("Waiting".getBytes("UTF-8"))
+      renderWait(res)
     }
     else {
       sourceModified  match {
@@ -121,22 +131,27 @@ class BrzyAppServlet extends HttpServlet {
             stopApplication()
             recompileSource(files)
             webApp = makeApplication()
-//            config.getServletContext.setAttribute("application", webApp)
-            "ok"
+            req.getSession.getServletContext.setAttribute("application", webApp)
+            "ok" // todo replace with compiler errors
           }
-          res.getOutputStream.write("Waiting".getBytes("UTF-8"))
+          renderWait(res)
         case None =>
           webApp.actions.find(_.path.isMatch(actionPath)) match {
             case Some(action) =>
               log.debug("{} >> {}", pathLog(req) , action)
               val args = ArgsBuilder(req,action)
               val principal = new PrincipalRequest(req)
-              val result = action.execute(args, principal)
+              val result = callActionOrLogin(req,action,principal,args)
               ResponseHandler(action, result, req, res)
             case _ => Error(404,"Not Found")
           }
       }
     }
+  }
+
+  private[this] def renderWait(res:HttpServletResponse) {
+    res.setHeader("Content-Type","text/html")
+    res.getOutputStream.write(waitPage.getBytes("UTF-8"))
   }
 
   private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
@@ -146,32 +161,32 @@ class BrzyAppServlet extends HttpServlet {
           .append(":")
           .append(if(req.getContentType != null) req.getContentType else "" )
 
-//
-//  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
-//    if (webApp.useSsl && action.requiresSsl && !req.isSecure) {
-//      val buf = req.getRequestURL
-//      // add https and remove the trailing .brzy extension
-//      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
-//      log.trace("redirect: {}",redirect)
-//      Redirect(redirect)
-//    }
-//    else if (action.isSecured) {
-//      if (req.getSession(false) != null) {
-//        log.trace("principal: {}",principal)
-//
-//        if (action.isAuthorized(principal))
-//          action.execute(args, principal)
-//        else
-//          sendToAuthorization(req)
-//      }
-//      else {
-//        sendToAuthorization(req)
-//      }
-//    }
-//    else {
-//      action.execute(args, principal)
-//    }
-//  }
+
+  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
+    if (webApp.useSsl && action.requiresSsl && !req.isSecure) {
+      val buf = req.getRequestURL
+      // add https and remove the trailing .brzy extension
+      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
+      log.trace("redirect: {}",redirect)
+      Redirect(redirect)
+    }
+    else if (action.isSecured) {
+      if (req.getSession(false) != null) {
+        log.trace("principal: {}",principal)
+
+        if (action.isAuthorized(principal))
+          action.execute(args, principal)
+        else
+          sendToAuthorization(req)
+      }
+      else {
+        sendToAuthorization(req)
+      }
+    }
+    else {
+      action.execute(args, principal)
+    }
+  }
 
   /**
    * TODO the redirect path is hard coded here to send them to /auth, that should be configurable
@@ -199,37 +214,23 @@ class BrzyAppServlet extends HttpServlet {
     else
       a.toList
   }
-//
-//  private def cpath: List[URL] = {
-//    List(
-//      classesDir.toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/aspectjweaver-1.6.8.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/beanwrap-0.2.2.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-webapp-1.0.0.beta3.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-fileupload-1.2.2.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-io-1.4.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-logging-1.1.1.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/dom4j-1.6.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/fab-configuration-0.8.1.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/google-collections-1.0.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/gson-1.4.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/guava-r09.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/ivy-2.2.0.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javassist-3.11.0.GA.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/json-1.1.1.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-classic-0.9.27.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-core-0.9.27.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/paranamer-2.3.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/reflections-0.9.5-RC2.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-compiler-2.8.2.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-library-2.8.2.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalabeans_2.8.1-0.2.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/servlet-api-6.0.29.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/slf4j-api-1.6.1.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/snakeyaml-1.7.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validation-api-1.0.0.GA.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validator-0.1.jar").toURI.toURL,
-//      new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar").toURI.toURL
-//    )
-//  }
+
+  private[this] val waitPage = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="4">
+<title>Brzy Recompiling</title>
+<style>
+body {margin:0 auto;text-align:center;padding:4em 2em;
+ font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;color:#666}
+</style>
+</head>
+<body>
+<h1>Recompiling Source</h1>
+</body>
+</html>
+"""
+
 }
