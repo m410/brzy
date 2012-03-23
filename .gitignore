@@ -5,3 +5,4 @@ brzy.ipr
 brzy.iws
 .idea
 *.db
+/target/

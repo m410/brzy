@@ -52,15 +52,15 @@ class JettyApp extends Application {
   val server = new Server(8080)
   val warUrlString = new File(webDir).toURI.toURL.toExternalForm
   val context = new WebAppContext(warUrlString, "/")
-
+//  context.setExtraClasspath()
   val map = new java.util.HashMap[String, String]()
   map.put("brzy-env","development")
   context.setInitParams(map)
 
   context.addEventListener(new WebAppListener())
 
-  val brzyFil = new FilterHolder(new BrzyFilter(),"*")
-  context.addFilter(brzyFil)
+  val brzyFil = new FilterHolder(new BrzyFilter())
+  context.addFilter(brzyFil,"*",1)
 
   val brzyServ = new ServletHolder(new BrzyDynamicServlet())
   brzyServ.setInitParameter("source_dir",sourceDir)
@@ -70,4 +70,5 @@ class JettyApp extends Application {
 
   server.setHandler(context)
   server.start()
+  server.join()
 }

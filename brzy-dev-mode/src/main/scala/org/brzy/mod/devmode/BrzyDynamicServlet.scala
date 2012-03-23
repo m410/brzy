@@ -44,7 +44,7 @@ class BrzyDynamicServlet extends HttpServlet {
     sourceDir = new File(config.getInitParameter("source_dir"))
     classesDir = new File(config.getInitParameter("classes_dir"))
     classpath = config.getInitParameter("compiler_path")
-    webApp = config.getServletContext.getAttribute("application")
+    webApp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
     log.info("source_dir: '{}'", sourceDir)
     log.info("classes_dir: '{}'", classesDir)
     log.info("classpath: '{}'", classpath)
