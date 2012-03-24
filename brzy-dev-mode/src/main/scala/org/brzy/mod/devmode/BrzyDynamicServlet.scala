@@ -12,10 +12,10 @@ import actors.Future
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.{Global, Settings}
 
-import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
-import org.brzy.webapp.action.response._
 import org.brzy.webapp.action.Action
 import org.brzy.application.WebApp
+import org.brzy.webapp.action.response.{Error, Flash, Session, Redirect, ResponseHandler}
+import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
 
 
 /**
@@ -33,11 +33,11 @@ class BrzyDynamicServlet extends HttpServlet {
   private[this] var sourceDir:File = _
   private[this] var classesDir:File = _
 
-  var compiling:Future[String] = new Future[String] {
+  var appState:Future[DynamicAppState] = new Future[DynamicAppState] {
     def isSet = true
-    def apply() = null
-    def respond(k: (String) => Unit) {}
     def inputChannel = null
+    def apply() = Running
+    def respond(k: (DynamicAppState) => Unit) {}
   }
 
   override def init(config: ServletConfig) {
@@ -118,21 +118,23 @@ class BrzyDynamicServlet extends HttpServlet {
     val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
-    if (!compiling.isSet) {
+
+
+    if (!appState.isSet) {
       log.warn("Still Compiling Source...")
       renderWait(res)
     }
     else {
       sourceModified  match {
         case Some(files) =>
-          compiling = future {
+          appState = future {
             lastModified = System.currentTimeMillis() - 1000
             log.warn("Recompiling Source...")
             stopApplication()
             recompileSource(files)
             webApp = makeApplication()
             req.getSession.getServletContext.setAttribute("application", webApp)
-            "ok" // todo replace with compiler errors
+            Running // todo replace with compiler errors
           }
           renderWait(res)
         case None =>

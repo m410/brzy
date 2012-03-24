@@ -46,6 +46,13 @@
     </pluginRepository>
   </pluginRepositories>
 -->
+  <repositories>
+    <repository>
+      <id>fusesource.snapshots</id>
+      <name>FuseSource Snapshot Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>org.scala-lang</groupId>
@@ -82,6 +89,21 @@
       <groupId>jetty</groupId>
       <artifactId>jetty</artifactId>
       <version>6.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.scalate</groupId>
+      <artifactId>scalate-core</artifactId>
+      <version>1.5.2-scala_2.8.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-compiler</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- Test -->

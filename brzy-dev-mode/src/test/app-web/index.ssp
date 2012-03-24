@@ -1,0 +1,17 @@
+<% val display:String = "Nothing set for display"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="4">
+  <title>Brzy Recompiling</title>
+  <style>
+    body {margin:0 auto;text-align:center;padding:4em 2em;
+      font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;color:#666}
+  </style>
+</head>
+<body>
+<h1>Hi, I'm working, and feeling good</h1>
+<p>${display}</p>
+</body>
+</html>

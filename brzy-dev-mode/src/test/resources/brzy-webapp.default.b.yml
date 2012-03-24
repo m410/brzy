@@ -2,7 +2,12 @@
 archetype:
   name: brzy-webapp-archetype
   org: org.brzy.webapp
-  version: 0.13.2 # todo this needs to be set on the build
+  version: 0.13.2
+#
+archetype:
+  name: brzy-webapp-archetype
+  org: org.brzy.webapp
+  version: 0.14.0-SNAPSHOT
 
 build:
   default_task: "package"
@@ -32,18 +37,23 @@ build:
 
 views:
   name: brzy-scalate
-  org: org.brzy
-  version: 1.0.0.beta3
+  org: org.brzy.mod
+  version: 1.0.0.beta2
 
 repositories:
+  - {id: brzy, url: "http://repo.brzy.org/content/repositories/releases"}
+  - {id: brzy-snapshot, url: "http://repo.brzy.org/content/repositories/snapshots"}
+  - {id: scala-tools, url: "http://scala-tools.org/repo-releases"}
+  - {id: maven-central, url: "http://repo1.maven.org/maven2"}
+  - {id: reflections-repo, url: "http://reflections.googlecode.com/svn/repo"}
+  - {id: jboss, url: "http://repository.jboss.com/maven2"}
+  - {id: java-net2, url: "http://download.java.net/maven/2"}
 
 dependencies:
-  - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
-  - {conf: provided, org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
-  - {conf: provided, org: javax.servlet, name: servlet-api, rev: "2.5", transitive: false}
-  - {conf: compile, org: org.brzy.webapp, name: brzy-webapp, rev: "${project.version}", transitive: false}
-
-
-web_xml:
-  - listener: {listener-class: org.brzy.application.WebAppListener}
-
+  - {conf: compile, org: org.brzy.webapp, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
+  - {conf: compile, org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
+  - {conf: compile, org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.28", transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "0.9.28",transitive: false}
+  - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
+  - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5", transitive: false}

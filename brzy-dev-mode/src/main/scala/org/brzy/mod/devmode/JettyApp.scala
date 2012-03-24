@@ -6,6 +6,7 @@ import java.io.File
 import org.mortbay.jetty.servlet.{FilterHolder, ServletHolder, Context}
 import org.brzy.webapp.BrzyFilter
 import org.brzy.application.WebAppListener
+import org.fusesource.scalate.servlet.TemplateEngineServlet
 
 /**
  * Sample jetty app
@@ -13,9 +14,11 @@ import org.brzy.application.WebAppListener
  * @author Michael Fortin
  */
 class JettyApp extends Application {
+
   val sourceDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/"
   val classesDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/"
-  val webDir = "  val webDir = /Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-web/"
+  val webDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-web/"
+  val extraPath = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/resources/"
 
   val compilerPath = List(
     classesDir,
@@ -52,21 +55,24 @@ class JettyApp extends Application {
   val server = new Server(8080)
   val warUrlString = new File(webDir).toURI.toURL.toExternalForm
   val context = new WebAppContext(warUrlString, "/")
-//  context.setExtraClasspath()
   val map = new java.util.HashMap[String, String]()
   map.put("brzy-env","development")
   context.setInitParams(map)
+  context.setExtraClasspath(extraPath)
 
-  context.addEventListener(new WebAppListener())
+//  context.addEventListener(new WebAppListener())
 
   val brzyFil = new FilterHolder(new BrzyFilter())
-  context.addFilter(brzyFil,"*",1)
+  context.addFilter(brzyFil,"/*",1)
+
+  val sspServ = new ServletHolder(new TemplateEngineServlet())
+  context.addFilter(brzyFil,"*.ssp",1)
 
   val brzyServ = new ServletHolder(new BrzyDynamicServlet())
   brzyServ.setInitParameter("source_dir",sourceDir)
   brzyServ.setInitParameter("classes_dir",classesDir)
   brzyServ.setInitParameter("compiler_path",compilerPath.foldLeft("")((r,c) => r+":"+c))
-  context.addServlet(brzyServ, "*")
+  context.addServlet(brzyServ, "*.brzy")
 
   server.setHandler(context)
   server.start()

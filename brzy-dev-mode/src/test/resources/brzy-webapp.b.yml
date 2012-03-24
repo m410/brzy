@@ -1,33 +1,47 @@
+#
+# application configuration
+# configuration Reference: http://brzy.org/docs/config_reference
+# configuration dump: >brzy info
 application:
-  name: &name squeryl-scalate
-  org: org.brzy.squerylscalate
+  name: &name dev-test
+  org: org.brzy.test
   version: "1.0"
   author: Michael Fortin
-  description: &desc Demo
-  artifact_id: squeryl-scalate
+  description: &desc Demo Dynamic
+  artifact_id: jetty-dyn
   webapp_context: /
   application_class: org.brzy.test.Application
-dependencies:
-  - {conf: compile, org: com.h2database, name: h2, rev: 1.2.133}
+  
 persistence:
+ 
+dependencies:
+  - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133", transitive: false}
+  - {conf: compile, org: org.brzy.validator, name: validator, rev: "0.1", transitive: false }
+  - {conf: test, org: junit, name: junit, rev: "4.8.2"}
+  - {conf: test, org: org.scalatest, name: scalatest_2.8.1, rev: "1.5.1", transitive: false}
+
 modules:
+
 logging:
+  provider: logback
   appenders:
     - name: STDOUT
       appender_class: ch.qos.logback.core.ConsoleAppender
       layout: ch.qos.logback.classic.encoder.PatternLayoutEncoder
       pattern: "%-4relative [%thread] %-5level %class - %msg%n"
   loggers:
-    - {name: org.brzy, level: trace}
+    - {name: org.brzy, level: debug}
   root:
     level: INFO
     ref: [STDOUT]
+
 web_xml:
   - description: *desc
   - display-name: *name
+  
+# override defaults for any environment
 environment_overrides:
   - environment: development
   - environment: test
   - environment: production
-
-
+ 
