@@ -75,6 +75,7 @@ class BrzyDynamicServlet extends HttpServlet {
 
   private[this] def makeApplication() = {
     val cp = classpath.split(":").map(f=>{new File(f).toURI.toURL})
+    println("##### build new classloader")
     applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
     val clazz = applicationLoader.loadClass("org.brzy.test.ApplicationLoader")
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
@@ -83,6 +84,8 @@ class BrzyDynamicServlet extends HttpServlet {
     val method = clazz.getMethod("load", Array.empty[Class[_]]: _*)
     val a = method.invoke(inst)
     a.getClass.getMethod("startup").invoke(a)
+    println("##### started app")
+
     a.asInstanceOf[WebApp]
   }
 
@@ -98,13 +101,15 @@ class BrzyDynamicServlet extends HttpServlet {
     settings.deprecation.value = true // enable detailed deprecation warnings
     settings.unchecked.value = true // enable detailed unchecked warnings
 
+    println("##### start compile")
     val reporter = new ConsoleReporter(settings)
     val compiler = new Global(settings, reporter)
     (new compiler.Run).compile(files.map(_.getAbsolutePath))
-
+    println("##### done compile")
     if (reporter.hasErrors || reporter.WARNING.count > 0) {
       reporter.printSummary()
     }
+    println("##### compiler errors: '" + buf.toString()+"'")
     buf.toString()
   }
 

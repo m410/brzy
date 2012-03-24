@@ -74,7 +74,11 @@
       <artifactId>brzy-webapp</artifactId>
       <version>${brzy-webapp-version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.brzy.mod</groupId>
+      <artifactId>brzy-scalate</artifactId>
+      <version>1.0.0.beta3</version>
+    </dependency>
     <dependency>
       <groupId>jetty</groupId>
       <artifactId>jetty-util</artifactId>
