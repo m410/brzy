@@ -4,8 +4,8 @@ target/brzy-dev-mode-0.1-SNAPSHOT.jar:\
 src/test/resources/:\
 target/dependency/aspectjweaver-1.6.8.jar:\
 target/dependency/beanwrap-0.2.2.jar:\
-target/dependency/brzy-webapp-1.0.0.beta3.jar:\
 target/dependency/brzy-scalate-1.0.0.beta3.jar:\
+target/dependency/brzy-webapp-1.0.0.beta3.jar:\
 target/dependency/commons-fileupload-1.2.2.jar:\
 target/dependency/commons-io-1.4.jar:\
 target/dependency/commons-logging-1.1.1.jar:\
@@ -16,8 +16,8 @@ target/dependency/gson-1.4.jar:\
 target/dependency/guava-r09.jar:\
 target/dependency/ivy-2.2.0.jar:\
 target/dependency/javassist-3.11.0.GA.jar:\
-target/dependency/jetty-6.0.2.jar:\
-target/dependency/jetty-util-6.0.2.jar:\
+target/dependency/javax.servlet-2.5.0.v201103041518.jar:\
+target/dependency/jetty-all-7.6.2.v20120308.jar:\
 target/dependency/json-1.1.1.jar:\
 target/dependency/logback-classic-0.9.27.jar:\
 target/dependency/logback-core-0.9.27.jar:\
@@ -28,8 +28,6 @@ target/dependency/scala-library-2.8.2.jar:\
 target/dependency/scalabeans_2.8.1-0.2.jar:\
 target/dependency/scalate-core-1.5.2-scala_2.8.1.jar:\
 target/dependency/scalate-util-1.5.2-scala_2.8.1.jar:\
-target/dependency/scalatest_2.8.1-1.7.1.jar:\
-target/dependency/servlet-api-2.5-6.0.2.jar:\
 target/dependency/slf4j-api-1.6.1.jar:\
 target/dependency/snakeyaml-1.7.jar:\
 target/dependency/validation-api-1.0.0.GA.jar:\

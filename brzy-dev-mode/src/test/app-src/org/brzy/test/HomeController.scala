@@ -7,5 +7,5 @@ import org.brzy.webapp.controller.Controller
 
 class HomeController extends Controller("") {
   def actions = List(Action("","",index _))
-  def index() = Text("Hello this is me agagin... from Mike")
+  def index() = Text("Hello this is me, again... from The Senate")
 }

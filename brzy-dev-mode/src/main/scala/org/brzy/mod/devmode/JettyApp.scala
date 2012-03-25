@@ -1,12 +1,16 @@
 package org.brzy.mod.devmode
 
-import org.mortbay.jetty.webapp.WebAppContext
 import java.io.File
 import org.brzy.webapp.BrzyFilter
 import org.brzy.application.WebAppListener
 import org.fusesource.scalate.servlet.TemplateEngineServlet
-import org.mortbay.jetty.{SessionManager, Server}
-import org.mortbay.jetty.servlet._
+import org.eclipse.jetty.server.nio.SelectChannelConnector
+import org.eclipse.jetty.webapp.WebAppContext
+import org.eclipse.jetty.server.session.{HashSessionManager, SessionHandler}
+import org.eclipse.jetty.servlet.{ServletHandler, FilterHolder, ServletHolder}
+import org.eclipse.jetty.server.handler.ErrorHandler
+import org.eclipse.jetty.security.{ConstraintSecurityHandler, SecurityHandler}
+import org.eclipse.jetty.server.{SessionIdManager, SessionManager, Connector, Server}
 
 /**
  * Sample jetty app
@@ -24,8 +28,8 @@ object JettyApp extends scala.Application {
     classesDir,
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/aspectjweaver-1.6.8.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/beanwrap-0.2.2.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-webapp-1.0.0.beta3.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-scalate-1.0.0.beta3.jar",
+    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/brzy-webapp-1.0.0.beta3.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-fileupload-1.2.2.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-io-1.4.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/commons-logging-1.1.1.jar",
@@ -36,8 +40,8 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/guava-r09.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/ivy-2.2.0.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javassist-3.11.0.GA.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/jetty-6.0.2.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/jetty-util-6.0.2.jar",
+    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javax.servlet-2.5.0.v201103041518.jar",
+    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/jetty-all-7.6.2.v20120308.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/json-1.1.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-classic-0.9.27.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-core-0.9.27.jar",
@@ -48,8 +52,6 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalabeans_2.8.1-0.2.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalate-core-1.5.2-scala_2.8.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalate-util-1.5.2-scala_2.8.1.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalatest_2.8.1-1.7.1.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/servlet-api-2.5-6.0.2.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/slf4j-api-1.6.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/snakeyaml-1.7.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validation-api-1.0.0.GA.jar",
@@ -57,33 +59,34 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar"
   )
 
-  val server = new Server(8080)
-  val warUrlString = new File(webDir).toURI.toURL.toExternalForm
-  val context = new WebAppContext(warUrlString, "/")
-//  val context = new Context(server, "/", Context.SESSIONS)
-//  context.setResourceBase(warUrlString)
+  val server = new Server();
 
-  val map = new java.util.HashMap[String, String]()
-  map.put("brzy-env","development")
-  context.setInitParams(map)
-//  context.setExtraClasspath(extraPath)
+  val connector = new SelectChannelConnector()
+  connector.setPort(Integer.getInteger("jetty.port", 8080).intValue())
+  server.setConnectors(Array(connector))
 
-//  context.setSessionHandler(new SessionHandler(new HashSessionManager()))
-  context.addEventListener(new ApplicationLoadingListener())
+  val webapp = new WebAppContext()
+  webapp.setContextPath("/")
+  webapp.setResourceBase(webDir)
+  webapp.setDescriptor("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/web.xml")
+  webapp.setSessionHandler(new SessionHandler(new HashSessionManager()))
+//  webapp.setInitParameter("brzy-env", "development")
+//
+//  webapp.addEventListener(new ApplicationLoadingListener())
+//
+//  val brzyFil = new FilterHolder(new BrzyFilter())
+//  webapp.addFilter(brzyFil, "/*", 1)
+//
+//  val sspServ = new ServletHolder(new TemplateEngineServlet())
+//  webapp.addFilter(brzyFil, "*.ssp", 1)
+//
+//  val brzyServ = new ServletHolder(new BrzyDynamicServlet())
+//  brzyServ.setInitParameter("source_dir", sourceDir)
+//  brzyServ.setInitParameter("classes_dir", classesDir)
+//  brzyServ.setInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
+//  webapp.addServlet(brzyServ, "*.brzy")
 
-  val brzyFil = new FilterHolder(new BrzyFilter())
-  context.addFilter(brzyFil,"/*",1)
-
-  val sspServ = new ServletHolder(new TemplateEngineServlet())
-  context.addFilter(brzyFil,"*.ssp",1)
-
-  val brzyServ = new ServletHolder(new BrzyDynamicServlet())
-  brzyServ.setInitParameter("source_dir",sourceDir)
-  brzyServ.setInitParameter("classes_dir",classesDir)
-  brzyServ.setInitParameter("compiler_path",compilerPath.foldLeft("")((r,c) => r+":"+c))
-  context.addServlet(brzyServ, "*.brzy")
-
-  server.setHandler(context)
+  server.setHandler(webapp);
   server.start()
   server.join()
 }

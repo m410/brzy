@@ -138,7 +138,9 @@ class BrzyDynamicServlet extends HttpServlet {
             stopApplication()
             recompileSource(files)
             webApp = makeApplication()
-            req.getSession.getServletContext.setAttribute("application", webApp)
+            val session = req.getSession
+            val context = session.getServletContext
+            context.setAttribute("application", webApp)
             Running // todo replace with compiler errors
           }
           renderWait(res)
