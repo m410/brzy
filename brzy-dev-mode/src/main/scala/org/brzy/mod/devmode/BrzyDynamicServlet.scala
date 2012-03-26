@@ -138,6 +138,8 @@ class BrzyDynamicServlet extends HttpServlet {
             stopApplication()
             recompileSource(files)
             webApp = makeApplication()
+//            log.debug("context: {}",req.asInstanceOf[Request].getContext)
+//            log.debug("session manager: {}",req.asInstanceOf[Request].getSessionManager)
             val session = req.getSession
             val context = session.getServletContext
             context.setAttribute("application", webApp)

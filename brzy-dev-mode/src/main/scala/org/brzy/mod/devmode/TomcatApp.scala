@@ -1,20 +1,18 @@
 package org.brzy.mod.devmode
 
+import org.apache.catalina.startup.Tomcat
+import java.io.File
 import org.brzy.webapp.BrzyFilter
 import org.fusesource.scalate.servlet.TemplateEngineServlet
-import org.eclipse.jetty.server.nio.SelectChannelConnector
-import org.eclipse.jetty.webapp.WebAppContext
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.servlet.{FilterHolder, ServletHolder}
-import java.util.EnumSet
-import javax.servlet.DispatcherType
+import org.apache.catalina.deploy.{FilterMap, FilterDef}
 
 /**
- * Sample jetty app
+ * Document Me..
  *
  * @author Michael Fortin
  */
-object JettyApp extends scala.Application {
+object TomcatApp extends Application {
+
 
   val sourceDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-src/"
   val classesDir = "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/src/test/app-classes/"
@@ -39,7 +37,6 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/ivy-2.2.0.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javassist-3.11.0.GA.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javax.servlet-3.0.0.v201112011016.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/jetty-all-8.1.2.v20120308.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/json-1.1.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-classic-0.9.27.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-core-0.9.27.jar",
@@ -57,37 +54,38 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar"
   )
 
-  val server = new Server();
+  val tomcat = new Tomcat()
+  tomcat.setPort(8080)
+  val ctx = tomcat.addContext("/", new File(webDir).getAbsolutePath)
 
-  val connector = new SelectChannelConnector()
-  connector.setPort(Integer.getInteger("jetty.port", 8080).intValue())
-  server.setConnectors(Array(connector))
+  ctx.setApplicationEventListeners(Array(new ApplicationLoadingListener))
 
-//  val webapp = new ServletContextHandler(ServletContextHandler.SESSIONS)
-  val webapp = new WebAppContext()
-  webapp.setContextPath("/")
-  webapp.setResourceBase(webDir)
-  webapp.setParentLoaderPriority(true)
-//  webapp.setServer(server)
-  server.setHandler(webapp)
+//  val filterDef = new FilterDef()
+//  filterDef.setFilter(new BrzyFilter)
+//  filterDef.setFilterName("brzy-filter")
+//  ctx.addFilterDef(filterDef)
+//
+//  val map = new FilterMap()
+//  map.addURLPattern("/*")
+//  map.setFilterName("brzy-filter")
+//  ctx.addFilterMap(map)
 
-//  webapp.setDescriptor("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/web.xml")
+//  val sw0 = ctx.createWrapper()
+//  sw0.addLifecycleListener(new ApplicationLoadingListener)
+//  ctx.addChild(sw0)
 
-  webapp.setInitParameter("brzy-env", "development")
-  webapp.addEventListener(new ApplicationLoadingListener())
+  val sw = ctx.createWrapper()
+  sw.setServlet(new BrzyDynamicServlet)
+  sw.addInitParameter("source_dir", sourceDir)
+  sw.addInitParameter("classes_dir", classesDir)
+  sw.addInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
+  sw.setName("brzy")
+  ctx.addChild(sw)
+  ctx.addServletMapping("*.brzy","brzy")
 
-  val brzyFil = new FilterHolder(new BrzyFilter())
-  webapp.addFilter(brzyFil,"/*",EnumSet.of(DispatcherType.REQUEST))
+  Tomcat.addServlet(ctx,"scalate",new TemplateEngineServlet)
+  ctx.addServletMapping("*.ssp","scalate")
 
-  val sspServ = new ServletHolder(new TemplateEngineServlet())
-  webapp.addServlet(sspServ, "*.ssp")
-
-  val brzyServ = new ServletHolder(new BrzyDynamicServlet())
-  brzyServ.setInitParameter("source_dir", sourceDir)
-  brzyServ.setInitParameter("classes_dir", classesDir)
-  brzyServ.setInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
-  webapp.addServlet(brzyServ, "*.brzy")
-
-  server.start()
-  server.join()
+  tomcat.start()
+  tomcat.getServer.await()
 }

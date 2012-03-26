@@ -95,9 +95,25 @@
       <!--<version>6.1.26</version>-->
     <!--</dependency>-->
     <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>7.0.26</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-logging-log4j</artifactId>
+      <version>7.0.26</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>7.0.26</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.eclipse.jetty.aggregate</groupId>
       <artifactId>jetty-all</artifactId>
-      <version>7.6.2.v20120308</version>
+      <version>8.1.2.v20120308</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
