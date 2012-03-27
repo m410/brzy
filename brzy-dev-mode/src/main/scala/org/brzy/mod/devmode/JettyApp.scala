@@ -5,9 +5,9 @@ import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.eclipse.jetty.server.nio.SelectChannelConnector
 import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.servlet.{FilterHolder, ServletHolder}
 import java.util.EnumSet
 import javax.servlet.DispatcherType
+import org.eclipse.jetty.servlet.{ServletContextHandler, FilterHolder, ServletHolder}
 
 /**
  * Sample jetty app
@@ -36,10 +36,8 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/google-collections-1.0.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/gson-1.4.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/guava-r09.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/ivy-2.2.0.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javassist-3.11.0.GA.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/javax.servlet-3.0.0.v201112011016.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/jetty-all-8.1.2.v20120308.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/json-1.1.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-classic-0.9.27.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/logback-core-0.9.27.jar",
@@ -48,8 +46,6 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-compiler-2.8.2.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scala-library-2.8.2.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalabeans_2.8.1-0.2.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalate-core-1.5.2-scala_2.8.1.jar",
-    "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/scalate-util-1.5.2-scala_2.8.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/slf4j-api-1.6.1.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/snakeyaml-1.7.jar",
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/validation-api-1.0.0.GA.jar",
@@ -57,36 +53,23 @@ object JettyApp extends scala.Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar"
   )
 
-  val server = new Server();
+  val server = new Server(8080)
 
-  val connector = new SelectChannelConnector()
-  connector.setPort(Integer.getInteger("jetty.port", 8080).intValue())
-  server.setConnectors(Array(connector))
-
-//  val webapp = new ServletContextHandler(ServletContextHandler.SESSIONS)
   val webapp = new WebAppContext()
-  webapp.setContextPath("/")
   webapp.setResourceBase(webDir)
-  webapp.setParentLoaderPriority(true)
-//  webapp.setServer(server)
+  webapp.setContextPath("/")
   server.setHandler(webapp)
-
-//  webapp.setDescriptor("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/web.xml")
 
   webapp.setInitParameter("brzy-env", "development")
   webapp.addEventListener(new ApplicationLoadingListener())
 
-  val brzyFil = new FilterHolder(new BrzyFilter())
-  webapp.addFilter(brzyFil,"/*",EnumSet.of(DispatcherType.REQUEST))
+//  webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.allOf(classOf[DispatcherType]))
+  webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
 
-  val sspServ = new ServletHolder(new TemplateEngineServlet())
-  webapp.addServlet(sspServ, "*.ssp")
-
-  val brzyServ = new ServletHolder(new BrzyDynamicServlet())
+  val brzyServ = webapp.addServlet(classOf[BrzyDynamicServlet], "*.brzy")
   brzyServ.setInitParameter("source_dir", sourceDir)
   brzyServ.setInitParameter("classes_dir", classesDir)
   brzyServ.setInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
-  webapp.addServlet(brzyServ, "*.brzy")
 
   server.start()
   server.join()

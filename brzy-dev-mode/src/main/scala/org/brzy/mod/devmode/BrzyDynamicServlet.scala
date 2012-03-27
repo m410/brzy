@@ -56,8 +56,46 @@ class BrzyDynamicServlet extends HttpServlet {
     log.info("webApp: '{}'", webApp)
   }
 
-  override def service(req: ServletRequest, res: ServletResponse) {
-    internal(req.asInstanceOf[HttpServletRequest], res.asInstanceOf[HttpServletResponse])
+  override def service(req: HttpServletRequest, resp: HttpServletResponse) {
+    internal(req, resp)
+  }
+
+  private[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
+    log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
+    val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
+    log.trace("action-path: {}", actionPath)
+
+    if (!appState.isSet) {
+      log.warn("Still Compiling Source...")
+      renderWait(res)
+    }
+    else {
+      sourceModified  match {
+        case Some(files) =>
+          val servCtx = req.getSession.getServletContext
+
+          appState = future {
+            lastModified = System.currentTimeMillis() - 1000
+            log.warn("Recompiling Source...")
+            stopApplication()
+            recompileSource(files)
+            webApp = makeApplication()
+            servCtx.setAttribute("application", webApp)
+            Running // todo replace with compiler errors
+          }
+          renderWait(res)
+        case None =>
+          webApp.actions.find(_.path.isMatch(actionPath)) match {
+            case Some(action) =>
+              log.debug("{} >> {}", pathLog(req) , action)
+              val args = ArgsBuilder(req,action)
+              val principal = new PrincipalRequest(req)
+              val result = callActionOrLogin(req,action,principal,args)
+              ResponseHandler(action, result, req, res)
+            case _ => Error(404,"Not Found")
+          }
+      }
+    }
   }
 
   private[this] def sourceModified: Option[List[File]] = {
@@ -75,7 +113,6 @@ class BrzyDynamicServlet extends HttpServlet {
 
   private[this] def makeApplication() = {
     val cp = classpath.split(":").map(f=>{new File(f).toURI.toURL})
-    println("##### build new classloader")
     applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
     val clazz = applicationLoader.loadClass("org.brzy.test.ApplicationLoader")
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
@@ -84,8 +121,6 @@ class BrzyDynamicServlet extends HttpServlet {
     val method = clazz.getMethod("load", Array.empty[Class[_]]: _*)
     val a = method.invoke(inst)
     a.getClass.getMethod("startup").invoke(a)
-    println("##### started app")
-
     a.asInstanceOf[WebApp]
   }
 
@@ -101,63 +136,18 @@ class BrzyDynamicServlet extends HttpServlet {
     settings.deprecation.value = true // enable detailed deprecation warnings
     settings.unchecked.value = true // enable detailed unchecked warnings
 
-    println("##### start compile")
     val reporter = new ConsoleReporter(settings)
     val compiler = new Global(settings, reporter)
     (new compiler.Run).compile(files.map(_.getAbsolutePath))
-    println("##### done compile")
     if (reporter.hasErrors || reporter.WARNING.count > 0) {
       reporter.printSummary()
     }
-    println("##### compiler errors: '" + buf.toString()+"'")
     buf.toString()
   }
 
   private[this] def stopApplication() {
     webApp.shutdown()
     webApp = null
-  }
-
-  private[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
-    log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
-    val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
-    log.trace("action-path: {}", actionPath)
-
-
-
-    if (!appState.isSet) {
-      log.warn("Still Compiling Source...")
-      renderWait(res)
-    }
-    else {
-      sourceModified  match {
-        case Some(files) =>
-          appState = future {
-            lastModified = System.currentTimeMillis() - 1000
-            log.warn("Recompiling Source...")
-            stopApplication()
-            recompileSource(files)
-            webApp = makeApplication()
-//            log.debug("context: {}",req.asInstanceOf[Request].getContext)
-//            log.debug("session manager: {}",req.asInstanceOf[Request].getSessionManager)
-            val session = req.getSession
-            val context = session.getServletContext
-            context.setAttribute("application", webApp)
-            Running // todo replace with compiler errors
-          }
-          renderWait(res)
-        case None =>
-          webApp.actions.find(_.path.isMatch(actionPath)) match {
-            case Some(action) =>
-              log.debug("{} >> {}", pathLog(req) , action)
-              val args = ArgsBuilder(req,action)
-              val principal = new PrincipalRequest(req)
-              val result = callActionOrLogin(req,action,principal,args)
-              ResponseHandler(action, result, req, res)
-            case _ => Error(404,"Not Found")
-          }
-      }
-    }
   }
 
   private[this] def renderWait(res:HttpServletResponse) {
