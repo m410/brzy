@@ -63,7 +63,7 @@ object JettyApp extends scala.Application {
   webapp.setInitParameter("brzy-env", "development")
   webapp.addEventListener(new ApplicationLoadingListener())
 
-//  webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.allOf(classOf[DispatcherType]))
+  webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.of(DispatcherType.REQUEST))
   webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
 
   val brzyServ = webapp.addServlet(classOf[BrzyDynamicServlet], "*.brzy")

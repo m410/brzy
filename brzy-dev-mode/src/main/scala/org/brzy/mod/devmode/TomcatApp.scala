@@ -2,9 +2,8 @@ package org.brzy.mod.devmode
 
 import org.apache.catalina.startup.Tomcat
 import java.io.File
-import org.brzy.webapp.BrzyFilter
-import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.apache.catalina.deploy.{FilterMap, FilterDef}
+import org.fusesource.scalate.servlet.TemplateEngineServlet
 
 /**
  * Document Me..
@@ -56,23 +55,23 @@ object TomcatApp extends Application {
 
   val tomcat = new Tomcat()
   tomcat.setPort(8080)
+  tomcat.getHost.setAppBase(webDir)
+  tomcat.setBaseDir(webDir)
+
   val ctx = tomcat.addContext("/", new File(webDir).getAbsolutePath)
+  ctx.setConfigFile(new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/tomcat-default.xml").toURI.toURL)
+  ctx.addApplicationListener("org.brzy.mod.devmode.ApplicationLoadingListener")
 
-  ctx.setApplicationEventListeners(Array(new ApplicationLoadingListener))
+  val filterDef = new FilterDef()
+  filterDef.setFilterClass("org.brzy.webapp.BrzyFilter")
+  filterDef.setFilterName("brzy-filter")
+  ctx.addFilterDef(filterDef)
 
-//  val filterDef = new FilterDef()
-//  filterDef.setFilter(new BrzyFilter)
-//  filterDef.setFilterName("brzy-filter")
-//  ctx.addFilterDef(filterDef)
-//
-//  val map = new FilterMap()
-//  map.addURLPattern("/*")
-//  map.setFilterName("brzy-filter")
-//  ctx.addFilterMap(map)
-
-//  val sw0 = ctx.createWrapper()
-//  sw0.addLifecycleListener(new ApplicationLoadingListener)
-//  ctx.addChild(sw0)
+  val map = new FilterMap()
+  map.addURLPattern("/*")
+  map.setFilterName("brzy-filter")
+  map.setDispatcher("REQUEST")
+  ctx.addFilterMap(map)
 
   val sw = ctx.createWrapper()
   sw.setServlet(new BrzyDynamicServlet)

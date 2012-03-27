@@ -9,7 +9,6 @@ class ApplicationLoader {
     val projectApplicationClass = config.application.get.applicationClass.get
     val applicationLoader = getClass.getClassLoader
     val appClass = applicationLoader.loadClass(projectApplicationClass)
-//    Build.reflect[WebApp](projectApplicationClass, Array(config))
     val constructor = appClass.getConstructor(Array(classOf[WebAppConfiguration]):_*)
     constructor.newInstance(Array(config):_*).asInstanceOf[WebApp]
   }
