@@ -10,7 +10,7 @@
   	<module>brzy-webapp</module>
 	  <module>brzy-calista</module>
     <module>brzy-email</module>
-    <module>brzy-jetty</module>
+    <module>brzy-jetty8</module>
     <module>brzy-jms</module>
     <module>brzy-jpa</module>
     <module>brzy-scalate</module>
@@ -18,7 +18,6 @@
     <module>brzy-squeryl</module>
     <module>brzy-tomcat</module>
     <module>brzy-spring</module>
-    <module>brzy-dev-mode</module>
   </modules>
   <build>
     <plugins>

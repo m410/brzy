@@ -1,7 +1,0 @@
-#
-# tomcat development web server
-#
-mod_type: build
-name: brzy-jetty
-version: "${pom.version}"
-org: org.brzy.mod
