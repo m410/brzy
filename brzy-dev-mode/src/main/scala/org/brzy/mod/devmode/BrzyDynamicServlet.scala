@@ -1,6 +1,5 @@
 package org.brzy.mod.devmode
 
-import java.io.{File}
 import java.net.URLClassLoader
 import javax.servlet.{ServletResponse, ServletRequest, ServletConfig}
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
@@ -16,6 +15,7 @@ import org.brzy.webapp.action.Action
 import org.brzy.application.WebApp
 import org.brzy.webapp.action.response.{Error, Flash, Session, Redirect, ResponseHandler}
 import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
+import java.io.{StringWriter, PrintWriter, File}
 
 
 /**
@@ -67,7 +67,7 @@ class BrzyDynamicServlet extends HttpServlet {
 
     if (!appState.isSet) {
       log.warn("Still Compiling Source...")
-      renderWait(res)
+      render(res)
     }
     else {
       sourceModified  match {
@@ -78,22 +78,29 @@ class BrzyDynamicServlet extends HttpServlet {
             lastModified = System.currentTimeMillis() - 1000
             log.warn("Recompiling Source...")
             stopApplication()
-            recompileSource(files)
+            val (hasErrors, errorText) = recompileSource(files)
             webApp = makeApplication()
             servCtx.setAttribute("application", webApp)
-            Running // todo replace with compiler errors
+            
+            if(hasErrors)
+              CompilerError(errorText)
+            else
+              Running 
           }
-          renderWait(res)
+          render(res)
         case None =>
-          webApp.actions.find(_.path.isMatch(actionPath)) match {
-            case Some(action) =>
-              log.debug("{} >> {}", pathLog(req) , action)
-              val args = ArgsBuilder(req,action)
-              val principal = new PrincipalRequest(req)
-              val result = callActionOrLogin(req,action,principal,args)
-              ResponseHandler(action, result, req, res)
-            case _ => Error(404,"Not Found")
-          }
+          if (appState.isSet && appState().isInstanceOf[CompilerError])
+            render(res, compilerErrorPage(appState().asInstanceOf[CompilerError].message))
+          else
+            webApp.actions.find(_.path.isMatch(actionPath)) match {
+              case Some(action) =>
+                log.debug("{} >> {}", pathLog(req) , action)
+                val args = ArgsBuilder(req,action)
+                val principal = new PrincipalRequest(req)
+                val result = callActionOrLogin(req,action,principal,args)
+                ResponseHandler(action, result, req, res)
+              case _ => Error(404,"Not Found")
+            }
       }
     }
   }
@@ -124,10 +131,12 @@ class BrzyDynamicServlet extends HttpServlet {
     a.asInstanceOf[WebApp]
   }
 
-  private[this] def recompileSource(files: List[File]) {
-    val buf = new StringBuilder()
+  private[this] def recompileSource(files: List[File]) =  {
+    val result = new StringWriter()
+    val writer = new PrintWriter(result)
+
     def error(s: String) {
-      buf.append(s)
+      println("######## errors")
     }
     val settings = new Settings(error)
     settings.classpath.value = classpath
@@ -136,13 +145,14 @@ class BrzyDynamicServlet extends HttpServlet {
     settings.deprecation.value = true // enable detailed deprecation warnings
     settings.unchecked.value = true // enable detailed unchecked warnings
 
-    val reporter = new ConsoleReporter(settings)
+    val reporter = new ConsoleReporter(settings,Console.in, writer)
     val compiler = new Global(settings, reporter)
     (new compiler.Run).compile(files.map(_.getAbsolutePath))
     if (reporter.hasErrors || reporter.WARNING.count > 0) {
       reporter.printSummary()
     }
-    buf.toString()
+    log.debug("errors: {}, message: {}",reporter.hasErrors,result.toString)
+    (reporter.hasErrors,result.toString)
   }
 
   private[this] def stopApplication() {
@@ -150,9 +160,13 @@ class BrzyDynamicServlet extends HttpServlet {
     webApp = null
   }
 
-  private[this] def renderWait(res:HttpServletResponse) {
+  private[this] def render(res:HttpServletResponse, msg:String = "") {
     res.setHeader("Content-Type","text/html")
-    res.getOutputStream.write(waitPage.getBytes("UTF-8"))
+    
+    if (msg == "")
+      res.getOutputStream.write(waitPage.getBytes("UTF-8"))
+    else
+      res.getOutputStream.write(compilerErrorPage(msg).getBytes("UTF-8"))
   }
 
   private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
@@ -225,7 +239,7 @@ class BrzyDynamicServlet extends HttpServlet {
 <title>Brzy Recompiling</title>
 <style>
 body {margin:0 auto;text-align:center;padding:4em 2em;
- font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;color:#666}
+ font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;color:#333}
 </style>
 </head>
 <body>
@@ -234,4 +248,26 @@ body {margin:0 auto;text-align:center;padding:4em 2em;
 </html>
 """
 
+  private[this] def compilerErrorPage(msg:String) = {
+    new StringBuilder()
+    .append("""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brzy Recompiling</title>
+<style>
+body {margin:0 auto;text-align:center;padding:4em 2em; font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;color:#333}
+code {width:980px;text-align:left;background:#eee;color:#000;display:block;padding:10px}
+</style>
+</head>
+<body>
+<h1>Compiler Error</h1>
+<code>""")
+    .append(msg)
+    .append("""</code>
+</body>
+</html>""")
+    .toString()
+  }
 }
