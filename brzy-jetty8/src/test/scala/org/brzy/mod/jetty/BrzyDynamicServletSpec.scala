@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.brzy.mod.devmode
+package org.brzy.mod.jetty
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers

@@ -2,6 +2,6 @@
 # tomcat development web server
 #
 mod_type: build
-name: brzy-dev-mode
+name: brzy-jetty8
 version: "${pom.version}"
 org: org.brzy.mod
