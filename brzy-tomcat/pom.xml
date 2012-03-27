@@ -60,6 +60,26 @@
     </plugins>
   </build>
   <dependencies>
+
+    <!--
+        <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>7.0.26</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-logging-log4j</artifactId>
+      <version>7.0.26</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>7.0.26</version>
+    </dependency>
+
+    -->
+
     <dependency>
     <groupId>org.brzy.fab</groupId>
     <artifactId>fab-configuration</artifactId>

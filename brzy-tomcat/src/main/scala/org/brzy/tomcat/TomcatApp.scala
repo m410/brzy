@@ -1,8 +1,9 @@
-package org.brzy.mod.devmode
+package org.brzy.tomcat
 
-import org.apache.catalina.startup.Tomcat
 import java.io.File
 import org.apache.catalina.deploy.{FilterMap, FilterDef}
+import org.brzy.mod.devmode.BrzyDynamicServlet
+import org.apache.catalina.startup.Tomcat
 import org.fusesource.scalate.servlet.TemplateEngineServlet
 
 /**
@@ -80,10 +81,10 @@ object TomcatApp extends Application {
   sw.addInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
   sw.setName("brzy")
   ctx.addChild(sw)
-  ctx.addServletMapping("*.brzy","brzy")
+  ctx.addServletMapping("*.brzy", "brzy")
 
-  Tomcat.addServlet(ctx,"scalate",new TemplateEngineServlet)
-  ctx.addServletMapping("*.ssp","scalate")
+  Tomcat.addServlet(ctx, "scalate", new TemplateEngineServlet)
+  ctx.addServletMapping("*.ssp", "scalate")
 
   tomcat.start()
   tomcat.getServer.await()
