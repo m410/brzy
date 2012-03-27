@@ -46,7 +46,7 @@ class BrzyFilter extends SFilter {
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) => // for action, don't continue
         try { 
-					doAction(q.getRequestURI, req, res)
+					doAction(q.getRequestURI, req, res,chain)
 				}
 				catch {
 				  case e: Throwable =>
@@ -62,7 +62,7 @@ class BrzyFilter extends SFilter {
    * TODO might want to change this so the transaction is only done within the forwarded call
    * and not wrapped around the entire dispatch.
    */
-  private[this] def doAction(uri: String, req: ServletRequest, res: ServletResponse) {
+  private[this] def doAction(uri: String, req: ServletRequest, res: ServletResponse, chain: FilterChain) {
     val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
 
     val forward =
@@ -74,7 +74,10 @@ class BrzyFilter extends SFilter {
     // the aop interceptors are run here so that the view rendering is also within the transaction
     log.trace("intercept: {}", forward)
     webapp.interceptor.doIn(() => {
-      req.getRequestDispatcher(forward + ".brzy").forward(req, res)
+      if (forward.endsWith(".brzy"))
+        chain.doFilter(req,res)
+      else
+        req.getRequestDispatcher(forward + ".brzy").forward(req, res)
       None // the interceptor expects a return value
     })
   }
