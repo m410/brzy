@@ -1,10 +1,10 @@
 package org.brzy.tomcat
 
 import java.io.File
-import org.apache.catalina.deploy.{FilterMap, FilterDef}
-import org.brzy.mod.devmode.BrzyDynamicServlet
-import org.apache.catalina.startup.Tomcat
-import org.fusesource.scalate.servlet.TemplateEngineServlet
+//import org.apache.catalina.deploy.{FilterMap, FilterDef}
+//import org.brzy.mod.devmode.BrzyDynamicServlet
+//import org.apache.catalina.startup.Tomcat
+//import org.fusesource.scalate.servlet.TemplateEngineServlet
 
 /**
  * Document Me..
@@ -54,38 +54,38 @@ object TomcatApp extends Application {
     "/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/target/dependency/xml-apis-1.0.b2.jar"
   )
 
-  val tomcat = new Tomcat()
-  tomcat.setPort(8080)
-  tomcat.getHost.setAppBase(webDir)
-  tomcat.setBaseDir(webDir)
+//  val tomcat = new Tomcat()
+//  tomcat.setPort(8080)
+//  tomcat.getHost.setAppBase(webDir)
+//  tomcat.setBaseDir(webDir)
 
-  val ctx = tomcat.addContext("/", new File(webDir).getAbsolutePath)
-  ctx.setConfigFile(new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/tomcat-default.xml").toURI.toURL)
-  ctx.addApplicationListener("org.brzy.mod.devmode.ApplicationLoadingListener")
+//  val ctx = tomcat.addContext("/", new File(webDir).getAbsolutePath)
+//  ctx.setConfigFile(new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/tomcat-default.xml").toURI.toURL)
+//  ctx.addApplicationListener("org.brzy.mod.devmode.ApplicationLoadingListener")
 
-  val filterDef = new FilterDef()
-  filterDef.setFilterClass("org.brzy.webapp.BrzyFilter")
-  filterDef.setFilterName("brzy-filter")
-  ctx.addFilterDef(filterDef)
+//  val filterDef = new FilterDef()
+//  filterDef.setFilterClass("org.brzy.webapp.BrzyFilter")
+//  filterDef.setFilterName("brzy-filter")
+//  ctx.addFilterDef(filterDef)
 
-  val map = new FilterMap()
-  map.addURLPattern("/*")
-  map.setFilterName("brzy-filter")
-  map.setDispatcher("REQUEST")
-  ctx.addFilterMap(map)
+//  val map = new FilterMap()
+//  map.addURLPattern("/*")
+//  map.setFilterName("brzy-filter")
+//  map.setDispatcher("REQUEST")
+// ctx.addFilterMap(map)
 
-  val sw = ctx.createWrapper()
-  sw.setServlet(new BrzyDynamicServlet)
-  sw.addInitParameter("source_dir", sourceDir)
-  sw.addInitParameter("classes_dir", classesDir)
-  sw.addInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
-  sw.setName("brzy")
-  ctx.addChild(sw)
-  ctx.addServletMapping("*.brzy", "brzy")
+//  val sw = ctx.createWrapper()
+//  sw.setServlet(new BrzyDynamicServlet)
+//  sw.addInitParameter("source_dir", sourceDir)
+//  sw.addInitParameter("classes_dir", classesDir)
+//  sw.addInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
+//  sw.setName("brzy")
+//  ctx.addChild(sw)
+//  ctx.addServletMapping("*.brzy", "brzy")
 
-  Tomcat.addServlet(ctx, "scalate", new TemplateEngineServlet)
-  ctx.addServletMapping("*.ssp", "scalate")
+//  Tomcat.addServlet(ctx, "scalate", new TemplateEngineServlet)
+//  ctx.addServletMapping("*.ssp", "scalate")
 
-  tomcat.start()
-  tomcat.getServer.await()
+//  tomcat.start()
+//  tomcat.getServer.await()
 }

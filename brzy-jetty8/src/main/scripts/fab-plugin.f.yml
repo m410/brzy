@@ -1,4 +1,4 @@
-name: brzy-tomcat6
+name: brzy-jetty8
 description: Adds ability to run a web application inside Jetty.
 source_file: .fab/modules/brzy-jetty8/JettyPlugin.scala
 class_name: JettyPlugin
@@ -14,6 +14,11 @@ dependencies:
   - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
   - {org: org.brzy.webapp, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
+  - {org: org.brzy.mod, name: brzy-jetty8, rev: "${pom.version}", transitive: false}
   - {org: org.brzy.mod, name: brzy-scalate, rev: 1.0.0.beta3, transitive: false}
+  - {org: org.eclipse.jetty.orbit, name: javax.servlet, rev: 3.0.0.v201112011016, transitive: false}
   - {org: org.eclipse.jetty.aggregate, name: jetty-all, rev: 8.1.2.v20120308, transitive: false}
   - {org: org.fusesource.scalate, name: scalate-core, rev: 1.5.2-scala_2.8.1, transitive: false}
+repositories:
+  - {id: maven-central, url: "http://repo1.maven.org/maven2" }
+
