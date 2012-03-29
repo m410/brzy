@@ -2,6 +2,7 @@
 
 
 import org.brzy.fab.file.{File,Files}
+import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 import org.brzy.webapp.BrzyFilter
 import org.fusesource.scalate.servlet.TemplateEngineServlet
@@ -15,9 +16,12 @@ class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messag
 
   def runJetty() {
     val webDir = configuration.webappDir.getAbsolutePath
-    val sourceDir = configuration.sourceDir.getAbsolutePath
+    val sourceDir = File(configuration.sourceDir,"scala").getAbsolutePath
     val classesDir = File(configuration.targetDir,"classes").getAbsolutePath
-    val compilerPath = {Files(configuration.cacheDir,"fab/jetty-8/*") ++ List(File(classesDir))}.map(_.getAbsolutePath)
+    val files = Files(".fab/fab/brzy-jetty8/*.jar") ++ Files(".fab/app/compile/*.jar")
+    val compilerPath = {files ++ List(File(classesDir))}.map(_.toURI.toURL.toExternalForm)
+
+    // TODO need to add the configuration the classes dir, with configuration files
 
     messenger.debug("webDir: " + webDir)
     messenger.debug("classesDir: " + classesDir)
