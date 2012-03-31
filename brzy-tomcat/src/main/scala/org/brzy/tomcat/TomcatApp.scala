@@ -58,22 +58,22 @@ object TomcatApp extends Application {
 //  tomcat.setPort(8080)
 //  tomcat.getHost.setAppBase(webDir)
 //  tomcat.setBaseDir(webDir)
-//
+
 //  val ctx = tomcat.addContext("/", new File(webDir).getAbsolutePath)
 //  ctx.setConfigFile(new File("/Users/m410/Projects/Brzy/brzy-webapp/brzy-dev-mode/tomcat-default.xml").toURI.toURL)
 //  ctx.addApplicationListener("org.brzy.mod.devmode.ApplicationLoadingListener")
-//
+
 //  val filterDef = new FilterDef()
 //  filterDef.setFilterClass("org.brzy.webapp.BrzyFilter")
 //  filterDef.setFilterName("brzy-filter")
 //  ctx.addFilterDef(filterDef)
-//
+
 //  val map = new FilterMap()
 //  map.addURLPattern("/*")
 //  map.setFilterName("brzy-filter")
 //  map.setDispatcher("REQUEST")
-//  ctx.addFilterMap(map)
-//
+// ctx.addFilterMap(map)
+
 //  val sw = ctx.createWrapper()
 //  sw.setServlet(new BrzyDynamicServlet)
 //  sw.addInitParameter("source_dir", sourceDir)
@@ -82,10 +82,10 @@ object TomcatApp extends Application {
 //  sw.setName("brzy")
 //  ctx.addChild(sw)
 //  ctx.addServletMapping("*.brzy", "brzy")
-//
+
 //  Tomcat.addServlet(ctx, "scalate", new TemplateEngineServlet)
 //  ctx.addServletMapping("*.ssp", "scalate")
-//
+
 //  tomcat.start()
 //  tomcat.getServer.await()
 }

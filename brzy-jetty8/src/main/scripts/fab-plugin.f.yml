@@ -1,8 +1,8 @@
-name: brzy-tomcat6
+name: brzy-jetty8
 description: Adds ability to run a web application inside Jetty.
 source_file: .fab/modules/brzy-jetty8/JettyPlugin.scala
 class_name: JettyPlugin
-extends_default: false
+extends_default: true
 tasks:
   - name: jetty8
     method_name: runJetty
@@ -13,7 +13,23 @@ dependencies:
   - {org: org.brzy.fab, name: fab-util, rev: "0.7", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
-  - {org: org.brzy.webapp, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
+  - {org: org.brzy.mod, name: brzy-jetty8, rev: "${pom.version}", transitive: false}
   - {org: org.brzy.mod, name: brzy-scalate, rev: 1.0.0.beta3, transitive: false}
-  - {org: org.eclipse.jetty.aggregate, name: jetty-all, rev: 8.1.2.v20120308 }
+  - {org: org.eclipse.jetty.orbit, name: javax.servlet, rev: 3.0.0.v201112011016, transitive: false}
+  - {org: org.eclipse.jetty.aggregate, name: jetty-all, rev: 8.1.2.v20120308, transitive: false}
+  - {org: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.27", transitive: false}
+  - {org: compile, org: ch.qos.logback, name: logback-core, rev: "0.9.27", transitive: false}
+  - {org: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
   - {org: org.fusesource.scalate, name: scalate-core, rev: 1.5.2-scala_2.8.1, transitive: false}
+#
+#  - {org: org.brzy.webapp, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
+#  - {org: commons-io, name: commons-io, rev: "1.4", transitive: false}
+#  - {org: com.google.collections, name: google-collections, rev: "1.0", transitive: false}
+#  - {org: dom4j, name: dom4j, rev: "1.6", transitive: false}
+#  - {org: com.google.code.gson, name: gson, rev: "1.4", transitive: false}
+#  - {org: xml-apis, name: xml-apis, rev: 1.0.b2, transitive: false}
+#  - {org: janino, name: janino, rev: 2.5.10, transitive: false}
+
+repositories:
+  - {id: maven-central, url: "http://repo1.maven.org/maven2" }
+
