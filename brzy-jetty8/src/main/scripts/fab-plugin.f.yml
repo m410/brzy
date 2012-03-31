@@ -15,5 +15,5 @@ dependencies:
   - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
   - {org: org.brzy.webapp, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
   - {org: org.brzy.mod, name: brzy-scalate, rev: 1.0.0.beta3, transitive: false}
-  - {org: org.eclipse.jetty.aggregate, name: jetty-all, rev: 8.1.2.v20120308, transitive: false}
+  - {org: org.eclipse.jetty.aggregate, name: jetty-all, rev: 8.1.2.v20120308 }
   - {org: org.fusesource.scalate, name: scalate-core, rev: 1.5.2-scala_2.8.1, transitive: false}
