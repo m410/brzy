@@ -39,17 +39,16 @@ import java.io.{StringWriter, PrintWriter, File}
  */
 class BrzyDynamicServlet extends HttpServlet {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyDynamicServlet])
-  private[this] var applicationLoader: URLClassLoader = _
   private[this] var webApp: WebApp = _
-  private[this] var lastModified = System.currentTimeMillis() - 1000 // need to round to the previous second
   private[this] var classpath:String = _
+  private[this] var loaderClass:String = _
   private[this] var sourceDir:File = _
   private[this] var classesDir:File = _
 
   var appState:Future[DynamicAppState] = new Future[DynamicAppState] {
     def isSet = true
     def inputChannel = null
-    def apply() = Running
+    def apply() = Running(webApp)
     def respond(k: (DynamicAppState) => Unit) {}
   }
 
@@ -57,12 +56,14 @@ class BrzyDynamicServlet extends HttpServlet {
     sourceDir = new File(config.getInitParameter("source_dir"))
     classesDir = new File(config.getInitParameter("classes_dir"))
     classpath = config.getInitParameter("compiler_path")
+    loaderClass = config.getInitParameter("loader_class")
     webApp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
     log.info("source_dir: '{}'", sourceDir)
     log.info("classes_dir: '{}'", classesDir)
     log.info("classpath: '{}'", classpath)
     log.info("last modified: '{}'", lastModified)
-    
+
+
     if(webApp == null)
       webApp = makeApplication()
     
@@ -98,7 +99,7 @@ class BrzyDynamicServlet extends HttpServlet {
             if(hasErrors)
               CompilerError(errorText)
             else
-              Running 
+              Running(webApp)
           }
           render(res)
         case None =>
@@ -134,7 +135,7 @@ class BrzyDynamicServlet extends HttpServlet {
   private[this] def makeApplication() = {
     val cp = classpath.split(":").map(f=>{new File(f).toURI.toURL})
     applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
-    val clazz = applicationLoader.loadClass("org.brzy.test.ApplicationLoader")
+    val clazz = applicationLoader.loadClass(loaderClass)
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
     declaredConstructor.setAccessible(true)
     val inst = declaredConstructor.newInstance()

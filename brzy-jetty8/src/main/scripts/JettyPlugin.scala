@@ -17,9 +17,11 @@ class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messag
   def runJetty() {
     val webDir = configuration.webappDir.getAbsolutePath
     val sourceDir = File(configuration.sourceDir,"scala").getAbsolutePath
-    val classesDir = File(configuration.targetDir,"classes").getAbsolutePath
+    val classesDir = File(configuration.webappDir,"WEB-INF/classes").getAbsolutePath
     val files = Files(".fab/fab/brzy-jetty8/*.jar") ++ Files(".fab/app/compile/*.jar")
-    val compilerPath = {files ++ List(File(classesDir))}.map(_.toURI.toURL.toExternalForm)
+    val compilerPath = {files ++ List(File(classesDir))}
+            .map(_.toURI.toURL.toExternalForm.substring(5))
+            .foldLeft("")((r, c) => r + ":" + c)
 
     // TODO need to add the configuration the classes dir, with configuration files
 
@@ -43,7 +45,8 @@ class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messag
     val brzyServ = webapp.addServlet(classOf[BrzyDynamicServlet], "*.brzy")
     brzyServ.setInitParameter("source_dir", sourceDir)
     brzyServ.setInitParameter("classes_dir", classesDir)
-    brzyServ.setInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))
+    brzyServ.setInitParameter("compiler_path", compilerPath)
+    brzyServ.setInitParameter("loader_class", compilerPath)
 
     server.start()
     server.join()

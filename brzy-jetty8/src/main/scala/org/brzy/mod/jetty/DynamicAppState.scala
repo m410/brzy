@@ -13,15 +13,19 @@
  */
 package org.brzy.mod.jetty
 
+import org.brzy.application.WebApp
+
 /**
- * Document Me..
+ * The different states of the compiler.
  *
  * @author Michael Fortin
  */
 sealed trait DynamicAppState
 
-object Running extends DynamicAppState
+case class Running(webApp:WebApp) extends DynamicAppState
 
 object Compiling extends DynamicAppState
 
 case class CompilerError(message:String) extends DynamicAppState
+
+//object DisabledCompiler
