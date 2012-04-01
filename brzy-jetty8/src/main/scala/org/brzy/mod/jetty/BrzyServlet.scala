@@ -37,14 +37,11 @@ import java.io.{StringWriter, PrintWriter, File}
  *
  * @author Michael Fortin
  */
-class BrzyDynamicServlet extends HttpServlet {
-  private[this] val log = LoggerFactory.getLogger(classOf[BrzyDynamicServlet])
+class BrzyServlet extends HttpServlet {
+  private[this] val log = LoggerFactory.getLogger(classOf[BrzyServlet])
   private[this] var webApp: WebApp = _
-  private[this] var classpath:String = _
-  private[this] var loaderClass:String = _
-  private[this] var sourceDir:File = _
-  private[this] var classesDir:File = _
-
+  private[this] var appLoader:AppLoader = _
+  
   var appState:Future[DynamicAppState] = new Future[DynamicAppState] {
     def isSet = true
     def inputChannel = null
@@ -53,20 +50,20 @@ class BrzyDynamicServlet extends HttpServlet {
   }
 
   override def init(config: ServletConfig) {
-    sourceDir = new File(config.getInitParameter("source_dir"))
-    classesDir = new File(config.getInitParameter("classes_dir"))
-    classpath = config.getInitParameter("compiler_path")
-    loaderClass = config.getInitParameter("loader_class")
-    webApp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+    val sourceDir = new File(config.getInitParameter("source_dir"))
+    val classesDir = new File(config.getInitParameter("classes_dir"))
+    val classpath = config.getInitParameter("compiler_path")
+    val loaderClass = config.getInitParameter("loader_class")
+
     log.info("source_dir: '{}'", sourceDir)
     log.info("classes_dir: '{}'", classesDir)
     log.info("classpath: '{}'", classpath)
-    log.info("last modified: '{}'", lastModified)
+    log.info("app loader class: '{}'", loaderClass)
 
+    appLoader = AppLoader(sourceDir,classesDir,classpath,loaderClass)
+    webApp = appLoader.makeApplication()
+    config.getServletContext.setAttribute("application",webApp)
 
-    if(webApp == null)
-      webApp = makeApplication()
-    
     log.info("webApp: '{}'", webApp)
   }
 
@@ -84,23 +81,9 @@ class BrzyDynamicServlet extends HttpServlet {
       render(res)
     }
     else {
-      sourceModified  match {
+      appLoader.sourceModified  match {
         case Some(files) =>
-          val servCtx = req.getSession.getServletContext
-
-          appState = future {
-            lastModified = System.currentTimeMillis() - 1000
-            log.warn("Recompiling Source...")
-            stopApplication()
-            val (hasErrors, errorText) = recompileSource(files)
-            webApp = makeApplication()
-            servCtx.setAttribute("application", webApp)
-            
-            if(hasErrors)
-              CompilerError(errorText)
-            else
-              Running(webApp)
-          }
+          appState = appLoader.reload(files.asInstanceOf[List[File]])
           render(res)
         case None =>
           if (appState.isSet && appState().isInstanceOf[CompilerError])
@@ -117,61 +100,6 @@ class BrzyDynamicServlet extends HttpServlet {
             }
       }
     }
-  }
-
-  private[this] def sourceModified: Option[List[File]] = {
-    val files = findFiles(sourceDir).filter(f=>{
-      f.lastModified() > lastModified
-    })
-    
-    if (files.isEmpty) {
-      None
-    }
-    else {
-      Option(files)
-    }
-  }
-
-  private[this] def makeApplication() = {
-    val cp = classpath.split(":").map(f=>{new File(f).toURI.toURL})
-    applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
-    val clazz = applicationLoader.loadClass(loaderClass)
-    val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
-    declaredConstructor.setAccessible(true)
-    val inst = declaredConstructor.newInstance()
-    val method = clazz.getMethod("load", Array.empty[Class[_]]: _*)
-    val a = method.invoke(inst)
-    a.getClass.getMethod("startup").invoke(a)
-    a.asInstanceOf[WebApp]
-  }
-
-  private[this] def recompileSource(files: List[File]) =  {
-    val result = new StringWriter()
-    val writer = new PrintWriter(result)
-
-    def error(s: String) {
-      println("######## errors")
-    }
-    val settings = new Settings(error)
-    settings.classpath.value = classpath
-    settings.sourcedir.value = sourceDir.getAbsolutePath
-    settings.outdir.value = classesDir.getAbsolutePath
-    settings.deprecation.value = true // enable detailed deprecation warnings
-    settings.unchecked.value = true // enable detailed unchecked warnings
-
-    val reporter = new ConsoleReporter(settings,Console.in, writer)
-    val compiler = new Global(settings, reporter)
-    (new compiler.Run).compile(files.map(_.getAbsolutePath))
-    if (reporter.hasErrors || reporter.WARNING.count > 0) {
-      reporter.printSummary()
-    }
-    log.debug("errors: {}, message: {}",reporter.hasErrors,result.toString)
-    (reporter.hasErrors,result.toString)
-  }
-
-  private[this] def stopApplication() {
-    webApp.shutdown()
-    webApp = null
   }
 
   private[this] def render(res:HttpServletResponse, msg:String = "") {
@@ -228,20 +156,6 @@ class BrzyDynamicServlet extends HttpServlet {
     val flash = Flash("Your session has ended. Please login again", "session.end")
     val sessionParam = Session("last_view" -> req.getRequestURI)
     (Redirect("/auth"), flash, sessionParam)
-  }
-
-  private[this] def findFiles(root: File): List[File] = {
-    if (root.isFile && root.getName.endsWith(".scala"))
-      List(root)
-    else
-      makeList(root.listFiles).flatMap {f => findFiles(f)}
-  }
-
-  private[this] def makeList(a: Array[File]): List[File] = {
-    if (a == null)
-      Nil
-    else
-      a.toList
   }
 
   private[this] val waitPage = """

@@ -10,7 +10,7 @@ import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
 import java.util.EnumSet
 import javax.servlet.DispatcherType
-import org.brzy.mod.jetty.{BrzyDynamicServlet, ApplicationLoadingListener}
+import org.brzy.mod.jetty.{BrzyServlet, ApplicationLoadingListener}
 
 class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
 
@@ -23,12 +23,15 @@ class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messag
             .map(_.toURI.toURL.toExternalForm.substring(5))
             .foldLeft("")((r, c) => r + ":" + c)
 
+    val loaderClass = "org.brzy.jpajsp.ApplicationLoader"
     // TODO need to add the configuration the classes dir, with configuration files
 
     messenger.debug("webDir: " + webDir)
     messenger.debug("classesDir: " + classesDir)
     messenger.debug("sourceDir: " + sourceDir)
     messenger.debug("compilerPath: " + compilerPath)
+    messenger.debug("config properties: " + configuration.properties)
+    messenger.debug("config modules: " + configuration.property("modules"))
 
     val server = new Server(8080)
     val webapp = new WebAppContext()
@@ -37,16 +40,17 @@ class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messag
     server.setHandler(webapp)
 
     webapp.setInitParameter("brzy-env", "development")
-    webapp.addEventListener(new ApplicationLoadingListener())
+//    webapp.addEventListener(new ApplicationLoadingListener())
 
-    webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.of(DispatcherType.REQUEST))
-    webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
-
-    val brzyServ = webapp.addServlet(classOf[BrzyDynamicServlet], "*.brzy")
+    val brzyServ = webapp.addServlet(classOf[BrzyServlet], "*.brzy")
     brzyServ.setInitParameter("source_dir", sourceDir)
     brzyServ.setInitParameter("classes_dir", classesDir)
     brzyServ.setInitParameter("compiler_path", compilerPath)
-    brzyServ.setInitParameter("loader_class", compilerPath)
+    brzyServ.setInitParameter("loader_class", loaderClass)
+
+    webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
+
+    webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.of(DispatcherType.REQUEST))
 
     server.start()
     server.join()

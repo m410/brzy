@@ -13,7 +13,6 @@
  */
 package org.brzy.mod.jetty
 
-import org.brzy.webapp.BrzyFilter
 import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
@@ -77,7 +76,7 @@ object JettyApp extends scala.Application {
   webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.of(DispatcherType.REQUEST))
   webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
 
-  val brzyServ = webapp.addServlet(classOf[BrzyDynamicServlet], "*.brzy")
+  val brzyServ = webapp.addServlet(classOf[BrzyServlet], "*.brzy")
   brzyServ.setInitParameter("source_dir", sourceDir)
   brzyServ.setInitParameter("classes_dir", classesDir)
   brzyServ.setInitParameter("compiler_path", compilerPath.foldLeft("")((r, c) => r + ":" + c))

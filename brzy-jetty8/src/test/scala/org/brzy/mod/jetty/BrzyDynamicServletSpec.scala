@@ -41,7 +41,7 @@ class BrzyDynamicServletSpec extends FunSuite with ShouldMatchers {
     servletConfig.addInitParameter("source_dir",sourceDir)
     servletConfig.addInitParameter("classes_dir",classesDir)
     servletConfig.addInitParameter("compiler_path",cpath.foldLeft("")((r,c) => r+":"+c))
-    val servlet = new BrzyDynamicServlet()
+    val servlet = new BrzyServlet()
     servlet.init(servletConfig)
     
     val req = new MockHttpServletRequest(servletContext)
