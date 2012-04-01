@@ -4,13 +4,12 @@
 import org.brzy.fab.file.{File,Files}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
-import org.brzy.webapp.BrzyFilter
 import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
 import java.util.EnumSet
 import javax.servlet.DispatcherType
-import org.brzy.mod.jetty.{BrzyServlet, ApplicationLoadingListener}
+import org.brzy.mod.jetty.{BrzyServlet, BrzyFilter}
 
 class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
 
