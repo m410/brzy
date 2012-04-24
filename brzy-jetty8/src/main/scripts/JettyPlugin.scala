@@ -11,7 +11,7 @@ import java.util.EnumSet
 import javax.servlet.DispatcherType
 import org.brzy.mod.jetty.{BrzyServlet, BrzyFilter}
 
-class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
+class JettyPlugin extends Task {
 
   def runJetty() {
     val webDir = configuration.webappDir.getAbsolutePath
@@ -30,7 +30,7 @@ class JettyPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messag
     messenger.debug("sourceDir: " + sourceDir)
     messenger.debug("compilerPath: " + compilerPath)
     messenger.debug("config properties: " + configuration.properties)
-    messenger.debug("config modules: " + configuration.property("modules"))
+    messenger.debug("config modules: " + configuration.get("modules").asInstanceOf[String])
 
     val server = new Server(8080)
     val webapp = new WebAppContext()

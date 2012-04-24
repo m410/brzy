@@ -103,7 +103,7 @@ class RunWebApp(contextName:String, port:Int) {
 }
 
 
-class BrzyTomcat6Plugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
+class BrzyTomcat6Plugin extends Task {
 
 	def runTomcat() {
 		messenger.info("Run tomcat")

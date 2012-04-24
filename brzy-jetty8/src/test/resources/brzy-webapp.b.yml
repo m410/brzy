@@ -18,7 +18,7 @@ dependencies:
   - {conf: compile, org: com.h2database, name: h2, rev: "1.2.133", transitive: false}
   - {conf: compile, org: org.brzy.validator, name: validator, rev: "0.1", transitive: false }
   - {conf: test, org: junit, name: junit, rev: "4.8.2"}
-  - {conf: test, org: org.scalatest, name: scalatest_2.8.1, rev: "1.5.1", transitive: false}
+  - {conf: test, org: org.scalatest, name: scalatest_2.8.1, rev: 1.7.2, transitive: false}
 
 modules:
 

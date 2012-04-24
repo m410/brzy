@@ -5,7 +5,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 
-class BrzyJmsPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
+class BrzyJmsPlugin extends Task  {
 
 	def genJsmService(args:Array[String]) {
 		messenger.info("Create a JMS Service Class")

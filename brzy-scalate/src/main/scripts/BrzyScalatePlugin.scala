@@ -7,7 +7,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 
-class BrzyScalatePlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
+class BrzyScalatePlugin extends Task  {
 
   private[this] val ignore = Array("getClass", "toString", "equals", "hashCode", "notify",
     "notifyAll", "wait", "clone", "finalize", "productArity", "productElements", "productPrefix",

@@ -5,7 +5,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 
-class BrzySquerylPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
+class BrzySquerylPlugin extends Task  {
 
 	def createSquerylDomain(args:Array[String]) {
 		messenger.info("Create a Squeryl Domain Class")

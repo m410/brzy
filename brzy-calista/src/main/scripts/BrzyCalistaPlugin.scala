@@ -5,7 +5,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 
-class BrzyCalistaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort) {
+class BrzyCalistaPlugin extends Task {
 
 	def calistaDomain(args:Array[String]) {
 		messenger.info("Create a Calista Domain Class")

@@ -4,7 +4,7 @@ import org.brzy.fab.file.{Files, File}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 
-class BrzyJpaPlugin(configPort:Int,messagePort:Int) extends Task(configPort,messagePort)  {
+class BrzyJpaPlugin extends Task  {
 
   def createAuthDomain(args:Array[String]) {
     messenger.info("Create a JPA Domain Class")
