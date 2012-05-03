@@ -13,8 +13,6 @@
  */
 package org.brzy.application
 
-import org.brzy.application.{WebApp, WebAppConfiguration}
-
 /**
  * Need to subclass to be able to dynamcally load the application for developement mode.
  *

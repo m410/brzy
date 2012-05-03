@@ -60,7 +60,7 @@
     <dependency>
       <groupId>org.brzy.mod</groupId>
       <artifactId>brzy-scalate</artifactId>
-      <version>1.0.0.beta3</version>
+      <version>1.0.0.beta3-SNAPSHOT</version>
     </dependency>
 
     <dependency>
