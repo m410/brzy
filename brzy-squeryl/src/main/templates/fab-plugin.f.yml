@@ -18,7 +18,7 @@ plugins:
       - {org: org.clapper, name: scalasti_2.8.0, rev: "0.5"}
       - {org: com.twitter, name: json, rev: "1.1.1", transitive: false}
       - {org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
-      - {org: org.brzy.fab, name: fab-util, rev: "0.7", transitive: false}
+#      - {org: org.brzy.fab, name: fab-util, rev: "0.7", transitive: false}
       - {org: org.brzy.archetype, name: brzy-webapp, rev: "0.10.1", transitive: false}
     repositories:
       - {id: scala-tools, url: "http://scala-tools.org/repo-releases"}

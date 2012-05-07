@@ -1,8 +1,7 @@
 
 import java.io.{BufferedWriter, FileWriter}
 import org.clapper.scalasti.StringTemplateGroup
-import org.brzy.fab.file.{Files, File}
-import org.brzy.fab.file.FileUtils._
+import org.brzy.fab.file.File
 import org.brzy.fab.build.Task
 
 class BrzyCalistaPlugin extends Task {
