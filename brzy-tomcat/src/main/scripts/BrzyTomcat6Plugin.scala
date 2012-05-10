@@ -7,51 +7,51 @@ import org.apache.catalina.loader.WebappLoader
 import org.apache.catalina.startup.Embedded
 
 import org.brzy.fab.file.{File,Files}
-import org.brzy.fab.compile.ScalaCompiler
-import org.brzy.fab.compile.{Compiler=>SCompiler}
-import actors.Actor._
-import actors.{Exit, TIMEOUT}
-import java.io.{PrintWriter, File=>JFile}
+//import org.brzy.fab.compile.ScalaCompiler
+//import org.brzy.fab.compile.{Compiler=>SCompiler}
+//import actors.Actor._
+//import actors.{Exit, TIMEOUT}
+//import java.io.{PrintWriter, File=>JFile}
 import org.brzy.fab.build.Task
 
 /*
  * watch the source directory for changes
  */
-class FileWatcher(baseDir: JFile, destDir: JFile, libDir: JFile, compiler: SCompiler) {
-  val paths = findFiles(baseDir)
-  val libs = Files(libDir, "*.jar").toArray
-  private[this] var lastModified: Long = System.currentTimeMillis
-
-  private[this] val watcher = actor {
-    loop {
-      reactWithin(100) {
-        case TIMEOUT =>
-          paths.find(_.lastModified > lastModified) match {
-            case Some(f) =>
-              lastModified = System.currentTimeMillis
-              val success = compiler.compile(baseDir, destDir, libs)
-              f
-            case _ => // nothing
-          }
-        case Exit => exit()
-      }
-    }
-  }.start()
-
-  private def findFiles(root: JFile): List[JFile] = {
-    if (root.isFile && root.getName.endsWith(".scala"))
-      List(root)
-    else
-      makeList(root.listFiles).flatMap {f => findFiles(f)}
-  }
-
-  private def makeList(a: Array[JFile]): List[JFile] = {
-    if (a == null)
-      Nil
-    else
-      a.toList
-  }
-}
+//class FileWatcher(baseDir: JFile, destDir: JFile, libDir: JFile, compiler: SCompiler) {
+//  val paths = findFiles(baseDir)
+//  val libs = Files(libDir, "*.jar").toArray
+//  private[this] var lastModified: Long = System.currentTimeMillis
+//
+//  private[this] val watcher = actor {
+//    loop {
+//      reactWithin(100) {
+//        case TIMEOUT =>
+//          paths.find(_.lastModified > lastModified) match {
+//            case Some(f) =>
+//              lastModified = System.currentTimeMillis
+//              val success = compiler.compile(baseDir, destDir, libs)
+//              f
+//            case _ => // nothing
+//          }
+//        case Exit => exit()
+//      }
+//    }
+//  }.start()
+//
+//  private def findFiles(root: JFile): List[JFile] = {
+//    if (root.isFile && root.getName.endsWith(".scala"))
+//      List(root)
+//    else
+//      makeList(root.listFiles).flatMap {f => findFiles(f)}
+//  }
+//
+//  private def makeList(a: Array[JFile]): List[JFile] = {
+//    if (a == null)
+//      Nil
+//    else
+//      a.toList
+//  }
+//}
 
 /*
   Runs tomcat
