@@ -1,4 +1,3 @@
-import org.brzy.application.WebAppConfiguration
 import org.brzy.fab.file.{File,Files}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
@@ -9,6 +8,7 @@ import org.eclipse.jetty.server.Server
 import java.util.EnumSet
 import javax.servlet.DispatcherType
 import org.brzy.mod.jetty.{BrzyServlet, BrzyFilter}
+import com.twitter.json.Json
 
 class JettyPlugin extends Task {
 
@@ -17,14 +17,16 @@ class JettyPlugin extends Task {
     val sourceDir = File(configuration.sourceDir,"scala").getAbsolutePath
     val classesDir = File(configuration.webappDir,"WEB-INF/classes").getAbsolutePath
     val cpaths = Classpaths()
-    val files = cpaths.appClasspaths("compile") ++ cpaths.builderClasspaths("jetty8")
+    val files = cpaths.appClasspaths("compile") ++
+            cpaths.appClasspaths("provided") //++
+        // cpaths.builderClasspaths("brzy-jetty8")
     val compilerPath = {files ++ List(File(classesDir))}
             .map(_.toURI.toURL.toExternalForm.substring(5)) // peel off the prefix
             .foldLeft("")((r, c) => r + ":" + c)
 
-    val config = WebAppConfiguration.fromJson(configuration.get("config").asInstanceOf[String])
-    val loaderClass = config.application.get.applicationClass + "Loader"
-    // TODO need to add the configuration the classes dir, with configuration files
+    val config = Json.parse(configuration.get("config").asInstanceOf[String]).asInstanceOf[Map[String,_]]
+    val appMap = config("config").asInstanceOf[Map[String,_]]("application").asInstanceOf[Map[String,_]]
+    val loaderClass = appMap("application_class").asInstanceOf[String] + "Loader"
 
     messenger.debug("webDir: " + webDir)
     messenger.debug("classesDir: " + classesDir)
