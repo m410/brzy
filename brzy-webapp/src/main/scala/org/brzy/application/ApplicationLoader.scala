@@ -13,6 +13,8 @@
  */
 package org.brzy.application
 
+import org.slf4j.LoggerFactory
+
 /**
  * Need to subclass to be able to dynamcally load the application for developement mode.
  *
@@ -20,9 +22,12 @@ package org.brzy.application
  */
 class ApplicationLoader {
   def load: WebApp = {
-    val config = WebAppConfiguration.runtime("developement")
-    val projectApplicationClass = config.application.get.applicationClass.get
     val applicationLoader = getClass.getClassLoader
+    LoggerFactory.getLogger(getClass).debug("app loader classloader={}",applicationLoader)
+
+    val config = WebAppConfiguration.runtime("development")
+    val projectApplicationClass = config.application.get.applicationClass.get
+
     val appClass = applicationLoader.loadClass(projectApplicationClass)
     val constructor = appClass.getConstructor(Array(classOf[WebAppConfiguration]): _*)
     constructor.newInstance(Array(config): _*).asInstanceOf[WebApp]

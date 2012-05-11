@@ -7,6 +7,7 @@ import com.twitter.json.Json
 import org.brzy.fab.conf.{WebXml, Yaml, Logging}
 import collection.mutable.ListBuffer
 import org.brzy.fab.mod.{ViewMod, PersistenceMod, Mod, ProjectModuleConfiguration}
+import java.util.MissingResourceException
 
 /**
  * Document Me..
@@ -170,7 +171,18 @@ object WebAppConfiguration {
   protected[application] def makeRuntimeMod(reference: Mod): Mod = {
     val modResource: String = "modules/" + reference.name.get + "/brzy-module.b.yml"
     log.debug("module conf: '{}'", modResource)
-    val cpUrl = getClass.getClassLoader.getResource(modResource)
+
+    val cpUrl = if (getClass.getClassLoader.getResource(modResource) != null)
+        getClass.getClassLoader.getResource(modResource)
+      else
+        getClass.getClassLoader.getResource("/" + modResource)
+
+    if (cpUrl == null) {
+      val msg = "Cound not find the configuration for '" + modResource + "'" + " in classloader " + getClass.getClassLoader
+      val cls = getClass.getName
+      throw new MissingResourceException(msg, cls, modResource)
+    }
+
     val yaml = Yaml(cpUrl.openStream)
 
     if (yaml.get("config_class").isDefined && yaml.get("config_class").get != null) {

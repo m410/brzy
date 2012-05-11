@@ -18,6 +18,7 @@ import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
 import java.util.EnumSet
 import javax.servlet.DispatcherType
+import java.net.URL
 
 /**
  * Sample jetty app
@@ -71,7 +72,7 @@ object JettyApp extends scala.Application {
   server.setHandler(webapp)
 
   webapp.setInitParameter("brzy-env", "development")
-  webapp.addEventListener(new ApplicationLoadingListener())
+  webapp.addEventListener(new ApplicationLoadingListener("",Array.empty[URL]))
 
   webapp.addFilter(classOf[BrzyFilter],"/*",EnumSet.of(DispatcherType.REQUEST))
   webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
