@@ -26,12 +26,8 @@ class JettyPlugin extends Task {
       File(configuration.webappDir, "WEB-INF").trash()
     }
 
-
     val cpaths = Classpaths()
-
-    val runPathJars = cpaths.appClasspaths("compile") // ++
-//            cpaths.appClasspaths("provided") ++
-//            cpaths.builderClasspaths("brzy-jetty8")
+    val runPathJars = cpaths.appClasspaths("compile")
 
     val runPath = runPathJars ++ List(classesDir)
     val compilerPath = runPath.map(_.toURI.toURL.toExternalForm.substring(5)) // peel off the prefix
@@ -41,6 +37,7 @@ class JettyPlugin extends Task {
     val appMap = config("config").asInstanceOf[Map[String, _]]("application").asInstanceOf[Map[String, _]]
     val loaderClass = appMap("application_class").asInstanceOf[String] + "Loader"
 
+    messenger.debug("loader: " + loaderClass)
     messenger.debug("webDir: " + webDir)
     messenger.debug("classesDir: " + classesDir.getAbsolutePath)
     messenger.debug("sourceDir: " + sourceDir)
@@ -62,6 +59,8 @@ class JettyPlugin extends Task {
     brzyServ.setInitParameter("classes_dir", classesDir.getAbsolutePath)
     brzyServ.setInitParameter("compiler_path", compilerPath)
     brzyServ.setInitParameter("loader_class", loaderClass)
+    brzyServ.setInitOrder(1)
+    brzyServ.setEnabled(true)
 
     webapp.addFilter(classOf[BrzyFilter], "/*", EnumSet.of(DispatcherType.REQUEST))
 

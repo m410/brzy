@@ -8,7 +8,7 @@ import org.brzy.application.WebApp
 import org.slf4j.LoggerFactory
 import actors.Futures._
 import actors.Future
-import java.net.{URLClassLoader}
+import java.net.URLClassLoader
 
 
 /**
@@ -63,8 +63,12 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, lo
   }
 
   def makeApplication() = {
-    val cp = compilerPath.split(":").map(f => { new File(f).toURI.toURL})
+    val cp = compilerPath.split(":").filter(_ != "").map(f => { new File(f).toURI.toURL})
     applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
+    log.debug("parent classloader: {}",getClass.getClassLoader)
+    log.debug("sub application classpath: {}",cp)
+    log.debug("sub application classloader: {}",applicationLoader)
+
     val clazz = applicationLoader.loadClass(loaderClass)
     val declaredConstructor = clazz.getDeclaredConstructor(Array.empty[Class[_]]: _*)
     declaredConstructor.setAccessible(true)
@@ -86,7 +90,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, lo
   }
 
   def stopApplication() {
-    webApp.shutdown()
+    webApp.getClass.getMethod("startup").invoke(webApp)
     webApp = null
   }
 
