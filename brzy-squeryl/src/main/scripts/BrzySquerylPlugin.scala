@@ -32,7 +32,7 @@ class BrzySquerylPlugin extends Task  {
     
 		val writer = new BufferedWriter(new FileWriter(outputFile))
 		writer.write(template.toString)
-		writer.close
+		writer.close()
 	}
 
   def createAuthDomain(args:Array[String]) {
@@ -43,6 +43,10 @@ class BrzySquerylPlugin extends Task  {
         args(0)
       else
         messenger.ask("enter package for Person and Authority: ")
+
+
+    val className = packageAndClass.substring(packageAndClass.lastIndexOf(".") +1)
+    val packageName = packageAndClass.substring(0,packageAndClass.lastIndexOf("."))
 
     val group = new StringTemplateGroup("mygroup", File(".fab/modules/brzy-squeryl/templates"))
     val outputDir = File("src/scala" + packageName.split("\\.").foldLeft("")((r,c)=> r + "/" + c))
@@ -65,5 +69,14 @@ class BrzySquerylPlugin extends Task  {
     val roleWriter = new BufferedWriter(new FileWriter(roleFile))
     roleWriter.write(roleTemplate.toString)
     roleWriter.close()
+  }
+
+  private[this] def attributeName(name:String) = {
+    val base = name.substring(0,1).toLowerCase + name.substring(1,name.length)
+
+    if(base.endsWith("y"))
+      base.substring(0,base.length -1) + "ies"
+    else
+      base + "s"
   }
 }
