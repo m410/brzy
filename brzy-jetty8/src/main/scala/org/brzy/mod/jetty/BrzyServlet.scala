@@ -52,15 +52,16 @@ class BrzyServlet extends HttpServlet {
   override def init(config: ServletConfig) {
     val sourceDir = new File(config.getInitParameter("source_dir"))
     val classesDir = new File(config.getInitParameter("classes_dir"))
-    val classpath = config.getInitParameter("compiler_path")
+    val compilerPath = config.getInitParameter("compiler_path")
+    val runPath = config.getInitParameter("run_path")
     val loaderClass = config.getInitParameter("loader_class")
 
     log.info("source_dir: '{}'", sourceDir)
     log.info("classes_dir: '{}'", classesDir)
-    log.info("classpath: '{}'", classpath)
+    log.info("classpath: '{}'", compilerPath)
     log.info("app loader class: '{}'", loaderClass)
 
-    appLoader = AppLoader(sourceDir,classesDir,classpath,loaderClass)
+    appLoader = AppLoader(sourceDir,classesDir,compilerPath,runPath,loaderClass)
     webApp = appLoader.makeApplication()
     config.getServletContext.setAttribute("application",webApp)
 

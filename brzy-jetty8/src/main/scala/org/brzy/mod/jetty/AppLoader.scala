@@ -14,7 +14,7 @@ import java.net.URLClassLoader
  *
  * @author Michael Fortin
  */
-class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, loaderClass:String) {
+class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, runPath:String, loaderClass:String) {
 
   private[this] val log = LoggerFactory.getLogger(getClass)
   private[this] var applicationLoader: URLClassLoader = _
@@ -61,7 +61,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, lo
   }
 
   def makeApplication() = {
-    val cp = compilerPath.split(":").filter(_ != "").map(f => { new File(f).toURI.toURL})
+    val cp = runPath.split(":").filter(_ != "").map(f => { new File(f).toURI.toURL})
     applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
     log.debug("parent classloader: {}",getClass.getClassLoader)
     log.debug("sub application classpath: {}",cp)
@@ -114,9 +114,9 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, lo
 object AppLoader {
   private[this] var inst:Option[AppLoader] = None
   
-  def apply(sourceDir:File, classesDir:File, compilerPath:String, loaderClass:String) = {
+  def apply(sourceDir:File, classesDir:File, compilerPath:String, runPath:String, loaderClass:String) = {
     if (inst.isEmpty)
-      inst = Option(new AppLoader(sourceDir, classesDir, compilerPath, loaderClass))
+      inst = Option(new AppLoader(sourceDir, classesDir, compilerPath, runPath, loaderClass))
     inst.get
   }
 }
