@@ -27,8 +27,9 @@ import org.brzy.interceptor.ProxyFactory._
 import org.brzy.service.Service
 import org.brzy.beanwrap.Build
 import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
-import org.brzy.webapp.action.response.ResponseHandler
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import javax.servlet.FilterChain
+import org.brzy.webapp.action.response._
 
 /**
  * WebApp is short for web application.  This assembles and configures the application at
@@ -41,11 +42,97 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
  */
 abstract class WebApp(conf: WebAppConfiguration) {
 
-  val log = LoggerFactory.getLogger(getClass)
+  protected[this] val log = LoggerFactory.getLogger(getClass)
 
   val application = conf.application
 
   val useSsl = conf.useSsl.getOrElse(false)
+
+  def isPath(context:String, uri:String) = {
+    actions.find(_.path.isMatch(ArgsBuilder.parseActionPath(uri, context))).isDefined
+  }
+
+  def wrapWithTransaction(req:HttpServletRequest,res:HttpServletResponse,chain:FilterChain) {
+    val uri = req.getRequestURI
+    val contextPath = req.getContextPath
+
+    val forward =
+      if (contextPath == "")
+        uri.substring(0, uri.length)
+      else
+        uri.substring(contextPath.length, uri.length)
+
+    interceptor.doIn(() => {
+      if (forward.endsWith(".brzy"))
+        chain.doFilter(req, res)
+      else
+        req.getRequestDispatcher(forward + ".brzy").forward(req, res)
+      None // the interceptor expects a return value
+    })
+  }
+
+  def callAction(req:HttpServletRequest, res:HttpServletResponse) {
+    val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
+    log.trace("action-path: {}", actionPath)
+
+    actions.find(_.path.isMatch(actionPath)) match {
+      case Some(action) =>
+        log.debug("{} >> {}", pathLog(req) , action)
+        val args = ArgsBuilder(req,action)
+        val principal = new PrincipalRequest(req)
+        val result = callActionOrLogin(req, action, principal, args)
+        ResponseHandler(action, result, req, res)
+      case _ =>
+        res.sendError(404)
+    }
+  }
+
+  private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
+          .append(req.getMethod)
+          .append(":")
+          .append(req.getRequestURI)
+          .append(":")
+          .append(if(req.getContentType != null) req.getContentType else "" )
+
+
+  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
+    if (useSsl && action.requiresSsl && !req.isSecure) {
+      val buf = req.getRequestURL
+      // add https and remove the trailing .brzy extension
+      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
+      log.trace("redirect: {}",redirect)
+      Redirect(redirect)
+    }
+    else if (action.isSecured) {
+      if (req.getSession(false) != null) {
+        log.trace("principal: {}",principal)
+
+        if (action.isAuthorized(principal))
+          action.execute(args, principal)
+        else
+          sendToAuthorization(req)
+      }
+      else {
+        sendToAuthorization(req)
+      }
+    }
+    else {
+      action.execute(args, principal)
+    }
+  }
+
+  /**
+   * TODO the redirect path is hard coded here to send them to /auth, that should be configurable
+   * some how.
+   *
+   * @param req The httpServletRequest
+   * @return The redirect to the authorization page
+   */
+  private[this] def sendToAuthorization(req: HttpServletRequest): (Redirect, Flash, Session) = {
+    val flash = Flash("Your session has ended. Please login again", "session.end")
+    val sessionParam = Session("last_view" -> req.getRequestURI)
+    (Redirect("/auth"), flash, sessionParam)
+  }
 
   /**
    * The view resource provider for the application.  There is only one view provider for the
@@ -115,7 +202,7 @@ abstract class WebApp(conf: WebAppConfiguration) {
    * override this.  To add your services manually you should wrap in the interceptor by calling
    * the instance method.
    * {{{
-   *   override val serviceMap = Map(
+   *   override val services = Map(
    *     "emailService" -> instance[EmailService]
    *   )
    * }}}
