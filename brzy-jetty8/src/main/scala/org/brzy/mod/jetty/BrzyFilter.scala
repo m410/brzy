@@ -15,12 +15,12 @@ package org.brzy.mod.jetty
  */
 
 import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest, Filter => SFilter}
-import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 
 import org.slf4j.LoggerFactory
 
-import org.brzy.application.WebApp
-import org.brzy.webapp.action.args.ArgsBuilder
+//import org.brzy.application.WebApp
+//import org.brzy.webapp.action.args.ArgsBuilder
 
 /**
  * Forwards only requests to brzy actions, lets all other requests pass through.
@@ -36,46 +36,71 @@ class BrzyFilter extends SFilter {
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
     val q = req.asInstanceOf[HttpServletRequest]
     log.trace("uri : {}", q.getRequestURI)
-    val actionPath = ArgsBuilder.parseActionPath(q.getRequestURI, q.getContextPath)
-    val webapp = q.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+    val webapp = q.getServletContext.getAttribute("application")
+    log.trace("webapp: {}", webapp)
 
-    webapp.actions.find(_.path.isMatch(actionPath)) match {
-      case Some(action) => // for action, don't continue
-        doAction(webapp, q, res, chain)
-      case _ => // pass it on if the url ends with any extension
-        chain.doFilter(req, res)
-    }
+    val path = webapp.getClass.getMethod("isPath", classOf[String], classOf[String])
+    val trans = webapp.getClass.getMethod("wrapWithTransaction", classOf[HttpServletRequest],classOf[HttpServletResponse], classOf[FilterChain])
+
+    if (path.invoke(webapp, q.getContextPath, q.getRequestURI).asInstanceOf[Boolean])
+      trans.invoke(webapp,req,res,chain)
+    else
+      chain.doFilter(req, res)
+
+//    webapp.actions.find(_.path.isMatch(actionPath)) match {
+//      case Some(action) => // for action, don't continue
+//        doAction(webapp, q, res, chain)
+//      case _ => // pass it on if the url ends with any extension
+//        chain.doFilter(req, res)
+//    }
   }
 
-  /**
-   * TODO might want to change this so the transaction is only done within the forwarded call
-   * and not wrapped around the entire dispatch.
-   */
-  private[this] def doAction(webapp:WebApp, req: HttpServletRequest, res: ServletResponse, chain: FilterChain) {
-    val uri = req.getRequestURI
-    val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
-
-    val forward =
-      if (contextPath == "")
-        uri.substring(0, uri.length)
-      else
-        uri.substring(contextPath.length, uri.length)
-
-    // the aop interceptors are run here so that the view rendering is also within the transaction
-    log.trace("intercept: {}", forward)
-    webapp.interceptor.doIn(() => {
-      if (forward.endsWith(".brzy"))
-        chain.doFilter(req, res)
-      else
-        req.getRequestDispatcher(forward + ".brzy").forward(req, res)
-      None // the interceptor expects a return value
-    })
-  }
+//  /**
+//   * TODO might want to change this so the transaction is only done within the forwarded call
+//   * and not wrapped around the entire dispatch.
+//   */
+//  private[this] def doAction(webapp:WebApp, req: HttpServletRequest, res: ServletResponse, chain: FilterChain) {
+//    val uri = req.getRequestURI
+//    val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
+//
+//    val forward =
+//      if (contextPath == "")
+//        uri.substring(0, uri.length)
+//      else
+//        uri.substring(contextPath.length, uri.length)
+//
+//    // the aop interceptors are run here so that the view rendering is also within the transaction
+//    log.trace("intercept: {}", forward)
+//    webapp.interceptor.doIn(() => {
+//      if (forward.endsWith(".brzy"))
+//        chain.doFilter(req, res)
+//      else
+//        req.getRequestDispatcher(forward + ".brzy").forward(req, res)
+//      None // the interceptor expects a return value
+//    })
+//  }
 
   /**
    *
    */
   def destroy() {
     log.trace("Destroy")
+  }
+
+  def parseActionPath(uri: String, ctx: String) = {
+    val newuri =
+      if (uri.startsWith("//"))
+        uri.substring(1, uri.length)
+      else
+        uri
+
+    if (newuri.endsWith(".brzy") && (ctx == "" || ctx == "/"))
+      newuri.substring(0, newuri.length - 5)
+    else if (newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
+      newuri.substring(ctx.length, newuri.length - 5)
+    else if (!newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
+      newuri.substring(ctx.length, newuri.length)
+    else
+      newuri
   }
 }

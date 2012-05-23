@@ -3,11 +3,9 @@ package org.brzy.mod.jetty
 import tools.nsc.reporters.ConsoleReporter
 import tools.nsc.{Settings, Global}
 import java.io.{File, StringWriter, PrintWriter}
-import org.brzy.application.WebApp
 
 import org.slf4j.LoggerFactory
 import actors.Futures._
-import actors.Future
 import java.net.URLClassLoader
 
 
@@ -21,7 +19,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, lo
   private[this] val log = LoggerFactory.getLogger(getClass)
   private[this] var applicationLoader: URLClassLoader = _
   private[this] var lastModified = System.currentTimeMillis() - 1000 // need to round to the previous second
-  private[this] var webApp:WebApp = _
+  private[this] var webApp:AnyRef = _
 
   private[this] val settings = {
 
@@ -76,7 +74,8 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, lo
     val method = clazz.getMethod("load", Array.empty[Class[_]]: _*)
     val a = method.invoke(inst)
     a.getClass.getMethod("startup").invoke(a)
-    a.asInstanceOf[WebApp]
+    webApp = a
+    a
   }
 
   def recompileSource(files: List[File]) =  {

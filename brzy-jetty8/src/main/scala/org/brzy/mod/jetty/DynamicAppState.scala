@@ -13,7 +13,7 @@
  */
 package org.brzy.mod.jetty
 
-import org.brzy.application.WebApp
+//import org.brzy.application.WebApp
 
 /**
  * The different states of the compiler.
@@ -22,7 +22,7 @@ import org.brzy.application.WebApp
  */
 sealed trait DynamicAppState
 
-case class Running(webApp:WebApp) extends DynamicAppState
+case class Running(webApp:AnyRef) extends DynamicAppState
 
 object Compiling extends DynamicAppState
 

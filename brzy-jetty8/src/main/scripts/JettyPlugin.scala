@@ -64,7 +64,7 @@ class JettyPlugin extends Task {
 
     webapp.addFilter(classOf[BrzyFilter], "/*", EnumSet.of(DispatcherType.REQUEST))
 
-    webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
+//    webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
 
     server.start()
     server.join()

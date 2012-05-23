@@ -15,7 +15,7 @@ package org.brzy.mod.jetty
 
 import javax.servlet.{ServletContextEvent, ServletContextListener}
 import java.io.File
-import org.brzy.application.{ApplicationLoader, WebApp}
+//import org.brzy.application.{ApplicationLoader, WebApp}
 import java.net.{URL, URLClassLoader}
 import org.slf4j.LoggerFactory
 import ch.qos.logback.classic.LoggerContext
@@ -47,7 +47,7 @@ class ApplicationLoadingListener(loaderClass:String, cp:Array[URL]) extends Serv
   def contextDestroyed(servletContextEvent: ServletContextEvent) {
     val app: Any = servletContextEvent.getServletContext.getAttribute("application")
 
-    if (app != null)
-      app.asInstanceOf[WebApp].shutdown()
+//    if (app != null)
+//      app.asInstanceOf[WebApp].shutdown()
   }
 }
