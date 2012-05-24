@@ -13,22 +13,14 @@
  */
 package org.brzy.mod.jetty
 
-import java.net.URLClassLoader
-import javax.servlet.{ServletResponse, ServletRequest, ServletConfig}
+import javax.servlet.ServletConfig
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 
 import org.slf4j.LoggerFactory
-import actors.Futures._
 import actors.Future
 
-import tools.nsc.reporters.ConsoleReporter
-import tools.nsc.{Global, Settings}
-
-//import org.brzy.webapp.action.Action
-//import org.brzy.application.WebApp
-//import org.brzy.webapp.action.response.{Error, Flash, Session, Redirect, ResponseHandler}
-//import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
-import java.io.{StringWriter, PrintWriter, File}
+import java.io.File
+import java.lang.reflect.Method
 
 
 /**
@@ -39,15 +31,8 @@ import java.io.{StringWriter, PrintWriter, File}
  */
 class BrzyServlet extends HttpServlet {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyServlet])
-  private[this] var webApp: AnyRef = _
   private[this] var appLoader:AppLoader = _
-  
-  var appState:Future[DynamicAppState] = new Future[DynamicAppState] {
-    def isSet = true
-    def inputChannel = null
-    def apply() = Running(webApp)
-    def respond(k: (DynamicAppState) => Unit) {}
-  }
+  private[this] var appState:Future[DynamicAppState] = _
 
   override def init(config: ServletConfig) {
     val sourceDir = new File(config.getInitParameter("source_dir"))
@@ -58,14 +43,21 @@ class BrzyServlet extends HttpServlet {
 
     log.info("source_dir: '{}'", sourceDir)
     log.info("classes_dir: '{}'", classesDir)
-    log.info("classpath: '{}'", compilerPath)
+    log.info("compiler_path: '{}'", compilerPath)
+    log.info("run_path: '{}'", runPath)
     log.info("app loader class: '{}'", loaderClass)
 
     appLoader = AppLoader(sourceDir,classesDir,compilerPath,runPath,loaderClass)
-    webApp = appLoader.makeApplication()
+    val webApp = appLoader.makeApplication()
     config.getServletContext.setAttribute("application",webApp)
 
-    log.info("webApp: '{}'", webApp)
+    log.info("init webApp: '{}'", webApp)
+    appState = new Future[DynamicAppState] {
+      def isSet = true
+      def inputChannel = null
+      def apply() = Running(webApp)
+      def respond(k: (DynamicAppState) => Unit) {}
+    }
   }
 
   override def service(req: HttpServletRequest, resp: HttpServletResponse) {
@@ -74,36 +66,31 @@ class BrzyServlet extends HttpServlet {
 
   private[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
-//    val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
-//    log.trace("action-path: {}", actionPath)
 
-    if (!appState.isSet) {
+    if (appState.isSet) {
+      appState() match {
+        case Running(wa) => checkOrCall(res,{()=>callActionMethod(wa).invoke(wa,req,res)})
+        case Compiling => render(res)
+        case c:CompilerError => checkOrCall(res,{()=>render(res, compilerErrorPage(c.message))})
+      }
+    }
+    else {
       log.warn("Still Compiling Source...")
       render(res)
     }
-    else {
-      appLoader.sourceModified  match {
-        case Some(files) =>
-          appState = appLoader.reload(files.asInstanceOf[List[File]])
-          render(res)
-        case None =>
-          if (appState.isSet && appState().isInstanceOf[CompilerError])
-            render(res, compilerErrorPage(appState().asInstanceOf[CompilerError].message))
-          else {
-            val callAction = webApp.getClass.getMethod("callAction", classOf[HttpServletRequest],classOf[HttpServletResponse])
-            callAction.invoke(webApp,req,res)
-          }
-//            webApp.actions.find(_.path.isMatch(actionPath)) match {
-//              case Some(action) =>
-//                log.debug("{} >> {}", pathLog(req) , action)
-//                val args = ArgsBuilder(req,action)
-//                val principal = new PrincipalRequest(req)
-//                val result = callActionOrLogin(req,action,principal,args)
-//                ResponseHandler(action, result, req, res)
-//              case _ => Error(404,"Not Found")
-//            }
-      }
+  }
+
+  private[this] def checkOrCall(res: HttpServletResponse, call:()=>Unit) {
+    appLoader.sourceModified  match {
+      case Some(files) =>
+        appState = appLoader.reload(files.asInstanceOf[List[File]])
+        render(res)
+      case None => call()
     }
+  }
+
+  def callActionMethod(wa: AnyRef): Method = {
+    wa.getClass.getMethod("callAction", classOf[HttpServletRequest], classOf[HttpServletResponse])
   }
 
   private[this] def render(res:HttpServletResponse, msg:String = "") {
@@ -114,53 +101,6 @@ class BrzyServlet extends HttpServlet {
     else
       res.getOutputStream.write(compilerErrorPage(msg).getBytes("UTF-8"))
   }
-//
-//  private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
-//          .append(req.getMethod)
-//          .append(":")
-//          .append(req.getRequestURI)
-//          .append(":")
-//          .append(if(req.getContentType != null) req.getContentType else "" )
-//
-//
-//  private[this] def callActionOrLogin(req: HttpServletRequest, action: Action, principal: Principal, args: Array[Arg]): AnyRef = {
-//    if (webApp.useSsl && action.requiresSsl && !req.isSecure) {
-//      val buf = req.getRequestURL
-//      // add https and remove the trailing .brzy extension
-//      val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
-//      log.trace("redirect: {}",redirect)
-//      Redirect(redirect)
-//    }
-//    else if (action.isSecured) {
-//      if (req.getSession(false) != null) {
-//        log.trace("principal: {}",principal)
-//
-//        if (action.isAuthorized(principal))
-//          action.execute(args, principal)
-//        else
-//          sendToAuthorization(req)
-//      }
-//      else {
-//        sendToAuthorization(req)
-//      }
-//    }
-//    else {
-//      action.execute(args, principal)
-//    }
-//  }
-
-//  /**
-//   * TODO the redirect path is hard coded here to send them to /auth, that should be configurable
-//   * some how.
-//   *
-//   * @param req The httpServletRequest
-//   * @return The redirect to the authorization page
-//   */
-//  private[this] def sendToAuthorization(req: HttpServletRequest): (Redirect, Flash, Session) = {
-//    val flash = Flash("Your session has ended. Please login again", "session.end")
-//    val sessionParam = Session("last_view" -> req.getRequestURI)
-//    (Redirect("/auth"), flash, sessionParam)
-//  }
 
   private[this] val waitPage = """
 <!DOCTYPE html>

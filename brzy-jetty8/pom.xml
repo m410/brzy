@@ -55,15 +55,25 @@
       <version>${fab-configuration-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.brzy.webapp</groupId>
-      <artifactId>brzy-webapp</artifactId>
-      <version>${brzy-webapp-version}</version>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.27</version>
     </dependency>
     <dependency>
-      <groupId>org.brzy.mod</groupId>
-      <artifactId>brzy-scalate</artifactId>
-      <version>1.0.0.beta3-SNAPSHOT</version>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>0.9.27</version>
     </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.brzy.webapp</groupId>-->
+      <!--<artifactId>brzy-webapp</artifactId>-->
+      <!--<version>${brzy-webapp-version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.brzy.mod</groupId>-->
+      <!--<artifactId>brzy-scalate</artifactId>-->
+      <!--<version>1.0.0.beta3-SNAPSHOT</version>-->
+    <!--</dependency>-->
 
     <dependency>
       <groupId>org.eclipse.jetty.aggregate</groupId>

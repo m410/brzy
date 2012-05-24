@@ -21,6 +21,9 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, ru
   private[this] var lastModified = System.currentTimeMillis() - 1000 // need to round to the previous second
   private[this] var webApp:AnyRef = _
 
+  log.debug("compilerPath:{}",compilerPath)
+  log.debug("runPath:{}",runPath)
+
   private[this] val settings = {
 
     def error(s: String) {
@@ -44,6 +47,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, ru
 
   def reload(files:List[File]) = future {
     lastModified = System.currentTimeMillis() - 1000
+    log.warn("changed files:{}",files)
     log.warn("Recompiling Source...")
     stopApplication()
     val (hasErrors, errorText) = recompileSource(files)
