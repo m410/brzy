@@ -3,6 +3,7 @@ import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 import org.brzy.fab.common.Classpaths
 import org.brzy.mod.jetty.{ApplicationLoadingListener, BrzyServlet, BrzyFilter}
+import org.eclipse.jetty.servlet.ServletContextHandler
 import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
@@ -23,6 +24,14 @@ class JettyPlugin extends Task {
       val classesDirBase = File(configuration.targetDir, "webinf")
       webClasses.copyTo(classesDirBase)
 
+//      File(configuration.webappDir, "WEB-INF/classes/brzy-webapp.b.yml").trash()
+//      File(configuration.webappDir, "WEB-INF/classes/i18n").trash()
+//      File(configuration.webappDir, "WEB-INF/classes/com").trash()
+//      File(configuration.webappDir, "WEB-INF/classes/logback.xml").trash()
+//      File(configuration.webappDir, "WEB-INF/classes/modules").trash()
+//      File(configuration.webappDir, "WEB-INF/classes/org").trash()
+//      File(configuration.webappDir, "WEB-INF/lib").trash()
+//      File(configuration.webappDir, "WEB-INF/web.xml").trash()
       File(configuration.webappDir, "WEB-INF").trash()
     }
 
@@ -50,12 +59,13 @@ class JettyPlugin extends Task {
 
     val server = new Server(8080)
     val webapp = new WebAppContext()
+//    val webapp = new ServletContextHandler(ServletContextHandler.SESSIONS)
     webapp.setResourceBase(webDir)
     webapp.setContextPath("/")
     server.setHandler(webapp)
 
     webapp.setInitParameter("brzy-env", "development")
-    webapp.addEventListener(new ApplicationLoadingListener(loaderClass, runPathPre.map(_.toURI.toURL).toArray))
+//    webapp.addEventListener(new ApplicationLoadingListener(loaderClass, runPathPre.map(_.toURI.toURL).toArray))
 
 
     val brzyServ = webapp.addServlet(classOf[BrzyServlet], "*.brzy")

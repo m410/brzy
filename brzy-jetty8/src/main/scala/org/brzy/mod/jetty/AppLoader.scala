@@ -67,6 +67,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, ru
   def makeApplication() = {
     val cp = runPath.split(":").filter(_ != "").map(f => { new File(f).toURI.toURL})
     applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
+    java.lang.Thread.currentThread().setContextClassLoader(applicationLoader)
     log.debug("parent classloader: {}",getClass.getClassLoader)
     log.debug("sub application classpath: {}",cp)
     log.debug("sub application classloader: {}",applicationLoader)

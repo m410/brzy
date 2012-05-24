@@ -35,13 +35,17 @@ class ApplicationLoadingListener(loaderClass:String, cp:Array[URL]) extends Serv
     }
 
     val applicationLoader = new URLClassLoader(cp, getClass.getClassLoader)
+    java.lang.Thread.currentThread().setContextClassLoader(applicationLoader)
+
     LoggerFactory.getLogger(getClass).debug("this classloader={}",getClass.getClassLoader)
     LoggerFactory.getLogger(getClass).debug("app  classloader={}",applicationLoader)
 
     val appClass = applicationLoader.loadClass(loaderClass)
     val loaderInstance = appClass.newInstance()
     val method = appClass.getMethod("load")
-    ctx.getServletContext.setAttribute("application", method.invoke(loaderInstance))
+    val webapp = method.invoke(loaderInstance)
+    webapp.getClass.getMethod("startup").invoke(webapp)
+    ctx.getServletContext.setAttribute("application", webapp)
   }
 
   def contextDestroyed(servletContextEvent: ServletContextEvent) {

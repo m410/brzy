@@ -47,12 +47,25 @@ class BrzyServlet extends HttpServlet {
     log.info("run_path: '{}'", runPath)
     log.info("app loader class: '{}'", loaderClass)
 
+    // TODO this needs to be on the filter, not the servlet
     appLoader = AppLoader(sourceDir,classesDir,compilerPath,runPath,loaderClass)
-    val webApp = appLoader.makeApplication()
-    config.getServletContext.setAttribute("application",webApp)
 
-    log.info("init webApp: '{}'", webApp)
-    appState = new Future[DynamicAppState] {
+    if (config.getServletContext.getAttribute("application")!=null) {
+      val webApp = config.getServletContext.getAttribute("application")
+      log.info("already initialized webApp: '{}'", webApp)
+      appState = initializeTheFuture(webApp)
+    }
+    else {
+      val webApp = appLoader.makeApplication()
+      config.getServletContext.setAttribute("application",webApp)
+      log.info("initializing webApp: '{}'", webApp)
+      appState = initializeTheFuture(webApp)
+    }
+  }
+
+
+  private[this] def initializeTheFuture(webApp: AnyRef): Future[DynamicAppState]  = {
+    new Future[DynamicAppState] {
       def isSet = true
       def inputChannel = null
       def apply() = Running(webApp)
@@ -89,7 +102,7 @@ class BrzyServlet extends HttpServlet {
     }
   }
 
-  def callActionMethod(wa: AnyRef): Method = {
+  private[this] def callActionMethod(wa: AnyRef): Method = {
     wa.getClass.getMethod("callAction", classOf[HttpServletRequest], classOf[HttpServletResponse])
   }
 
