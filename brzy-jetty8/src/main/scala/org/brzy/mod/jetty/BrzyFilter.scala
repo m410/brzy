@@ -56,6 +56,7 @@ class BrzyFilter extends SFilter {
     else {
       val webApp = appLoader.makeApplication()
       config.getServletContext.setAttribute("application",webApp)
+      config.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
       log.info("initializing webApp: '{}'", webApp)
       appState = initializeTheFuture(webApp)
     }
@@ -82,6 +83,7 @@ class BrzyFilter extends SFilter {
       appState() match {
         case Running(wa) =>
           q.getServletContext.setAttribute("application",wa)
+          q.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
           val path = isPathMethod(wa)
           if (path.invoke(wa, q.getContextPath, q.getRequestURI).asInstanceOf[Boolean])
             checkOrCall(res,{()=>wrapTransMethod(wa).invoke(wa, req, res, chain)})

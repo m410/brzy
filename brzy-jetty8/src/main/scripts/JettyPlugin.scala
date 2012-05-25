@@ -2,7 +2,7 @@ import org.brzy.fab.file.{File, Files}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 import org.brzy.fab.common.Classpaths
-import org.brzy.mod.jetty.{ApplicationLoadingListener, BrzyServlet, BrzyFilter}
+import org.brzy.mod.jetty.{ScalateWrapperServlet, ApplicationLoadingListener, BrzyServlet, BrzyFilter}
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.eclipse.jetty.webapp.WebAppContext
@@ -59,14 +59,11 @@ class JettyPlugin extends Task {
 
     val server = new Server(8080)
     val webapp = new WebAppContext()
-//    val webapp = new ServletContextHandler(ServletContextHandler.SESSIONS)
     webapp.setResourceBase(webDir)
     webapp.setContextPath("/")
     server.setHandler(webapp)
 
     webapp.setInitParameter("brzy-env", "development")
-//    webapp.addEventListener(new ApplicationLoadingListener(loaderClass, runPathPre.map(_.toURI.toURL).toArray))
-
 
     val filter = webapp.addFilter(classOf[BrzyFilter], "/*", EnumSet.of(DispatcherType.REQUEST))
     filter.setInitParameter("source_dir", sourceDir)
@@ -75,20 +72,9 @@ class JettyPlugin extends Task {
     filter.setInitParameter("run_path", runPath)
     filter.setInitParameter("loader_class", loaderClass)
 
-    val brzyServ = webapp.addServlet(classOf[BrzyServlet], "*.brzy")
-//    brzyServ.setInitParameter("source_dir", sourceDir)
-//    brzyServ.setInitParameter("classes_dir", classesDir.getAbsolutePath)
-//    brzyServ.setInitParameter("compiler_path", compilerPath)
-//    brzyServ.setInitParameter("run_path", runPath)
-//    brzyServ.setInitParameter("loader_class", loaderClass)
-//    brzyServ.setInitOrder(1)
-//    brzyServ.setEnabled(true)
+    webapp.addServlet(classOf[BrzyServlet], "*.brzy")
 
-
-
-//    val scalateServ = webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
-//    scalateServ.setInitOrder(1)
-//    scalateServ.setEnabled(true)
+    webapp.addServlet(classOf[ScalateWrapperServlet], "*.ssp")
 
     server.start()
     server.join()

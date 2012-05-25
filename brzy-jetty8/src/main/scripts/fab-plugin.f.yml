@@ -23,6 +23,7 @@ dependencies:
   - {org: compile, org: ch.qos.logback, name: logback-core, rev: "0.9.27", transitive: false}
   - {org: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
   - {org: org.fusesource.scalate, name: scalate-core, rev: 1.5.2-scala_2.8.1, transitive: false}
+  - {org: org.fusesource.scalate, name: scalate-util, rev: 1.5.2-scala_2.8.1, transitive: false}
 repositories:
   - {id: maven-central, url: "http://repo1.maven.org/maven2" }
 

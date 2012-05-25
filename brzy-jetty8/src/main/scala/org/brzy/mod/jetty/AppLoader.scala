@@ -44,6 +44,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, ru
   private[this] val reporter = new ConsoleReporter(settings,Console.in, writer)
   private[this] val compiler = new Global(settings, reporter)
 
+  def childClassLoader = applicationLoader
 
   def reload(files:List[File]) = future {
     lastModified = System.currentTimeMillis() - 1000
