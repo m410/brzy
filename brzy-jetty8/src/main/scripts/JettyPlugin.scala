@@ -68,16 +68,23 @@ class JettyPlugin extends Task {
 //    webapp.addEventListener(new ApplicationLoadingListener(loaderClass, runPathPre.map(_.toURI.toURL).toArray))
 
 
-    val brzyServ = webapp.addServlet(classOf[BrzyServlet], "*.brzy")
-    brzyServ.setInitParameter("source_dir", sourceDir)
-    brzyServ.setInitParameter("classes_dir", classesDir.getAbsolutePath)
-    brzyServ.setInitParameter("compiler_path", compilerPath)
-    brzyServ.setInitParameter("run_path", runPath)
-    brzyServ.setInitParameter("loader_class", loaderClass)
-    brzyServ.setInitOrder(1)
-    brzyServ.setEnabled(true)
+    val filter = webapp.addFilter(classOf[BrzyFilter], "/*", EnumSet.of(DispatcherType.REQUEST))
+    filter.setInitParameter("source_dir", sourceDir)
+    filter.setInitParameter("classes_dir", classesDir.getAbsolutePath)
+    filter.setInitParameter("compiler_path", compilerPath)
+    filter.setInitParameter("run_path", runPath)
+    filter.setInitParameter("loader_class", loaderClass)
 
-    webapp.addFilter(classOf[BrzyFilter], "/*", EnumSet.of(DispatcherType.REQUEST))
+    val brzyServ = webapp.addServlet(classOf[BrzyServlet], "*.brzy")
+//    brzyServ.setInitParameter("source_dir", sourceDir)
+//    brzyServ.setInitParameter("classes_dir", classesDir.getAbsolutePath)
+//    brzyServ.setInitParameter("compiler_path", compilerPath)
+//    brzyServ.setInitParameter("run_path", runPath)
+//    brzyServ.setInitParameter("loader_class", loaderClass)
+//    brzyServ.setInitOrder(1)
+//    brzyServ.setEnabled(true)
+
+
 
 //    val scalateServ = webapp.addServlet(classOf[TemplateEngineServlet], "*.ssp")
 //    scalateServ.setInitOrder(1)

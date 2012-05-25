@@ -62,6 +62,8 @@ abstract class WebApp(conf: WebAppConfiguration) {
       else
         uri.substring(contextPath.length, uri.length)
 
+    log.debug("forward:{}",forward)
+
     interceptor.doIn(() => {
       if (forward.endsWith(".brzy"))
         chain.doFilter(req, res)
