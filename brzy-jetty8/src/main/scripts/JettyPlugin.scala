@@ -2,9 +2,8 @@ import org.brzy.fab.file.{File, Files}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
 import org.brzy.fab.common.Classpaths
-import org.brzy.mod.jetty.{ScalateWrapperServlet, ApplicationLoadingListener, BrzyServlet, BrzyFilter}
+import org.brzy.mod.jetty.{ScalateWrapperServlet, BrzyServlet, BrzyFilter}
 import org.eclipse.jetty.servlet.ServletContextHandler
-import org.fusesource.scalate.servlet.TemplateEngineServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
 import java.util.EnumSet
@@ -23,15 +22,6 @@ class JettyPlugin extends Task {
     if (webClasses.exists()) {
       val classesDirBase = File(configuration.targetDir, "webinf")
       webClasses.copyTo(classesDirBase)
-
-//      File(configuration.webappDir, "WEB-INF/classes/brzy-webapp.b.yml").trash()
-//      File(configuration.webappDir, "WEB-INF/classes/i18n").trash()
-//      File(configuration.webappDir, "WEB-INF/classes/com").trash()
-//      File(configuration.webappDir, "WEB-INF/classes/logback.xml").trash()
-//      File(configuration.webappDir, "WEB-INF/classes/modules").trash()
-//      File(configuration.webappDir, "WEB-INF/classes/org").trash()
-//      File(configuration.webappDir, "WEB-INF/lib").trash()
-//      File(configuration.webappDir, "WEB-INF/web.xml").trash()
       File(configuration.webappDir, "WEB-INF").trash()
     }
 

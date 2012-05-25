@@ -1,7 +1,6 @@
 package org.brzy.mod.jetty
 
 import javax.servlet.http.HttpServlet
-import org.fusesource.scalate.servlet.TemplateEngineServlet
 import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
 
 /**
@@ -11,18 +10,18 @@ import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
  */
 class ScalateWrapperServlet extends HttpServlet {
 
-  // todo, need to create class using refection and from the child classloader
-  val scalateServlet = new TemplateEngineServlet()
-
+  var servletConfig:ServletConfig = _
 
   override def init(config: ServletConfig) {
-    scalateServlet.init(config)
+    servletConfig = config
     super.init(config)
   }
 
   override def service(req: ServletRequest, res: ServletResponse) {
     val loader = req.getServletContext.getAttribute("classLoader").asInstanceOf[ClassLoader]
-    java.lang.Thread.currentThread().setContextClassLoader(loader)
-    scalateServlet.service(req,res)
+    val templateClass = loader.loadClass("org.fusesource.scalate.servlet.TemplateEngineServlet")
+    val instance = templateClass.newInstance()
+    templateClass.getMethod("init",classOf[ServletConfig]).invoke(instance,servletConfig)
+    templateClass.getMethod("service",classOf[ServletRequest],classOf[ServletResponse]).invoke(instance,req,res)
   }
 }
