@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.core.util.StatusPrinter
 
-
+@deprecated
 class ApplicationLoadingListener(loaderClass:String, cp:Array[URL]) extends ServletContextListener {
 
   def contextInitialized(ctx: ServletContextEvent) {

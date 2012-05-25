@@ -95,7 +95,7 @@ class AppLoader private(sourceDir:File, classesDir:File, compilerPath:String, ru
   }
 
   def stopApplication() {
-    webApp.getClass.getMethod("startup").invoke(webApp)
+    webApp.getClass.getMethod("shutdown").invoke(webApp)
     webApp = null
   }
 
