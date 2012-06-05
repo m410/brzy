@@ -12,8 +12,6 @@ dependencies:
   - {org: com.twitter, name: json, rev: "1.1.1", transitive: false}
   - {org: org.brzy.fab, name: fab-common, rev: "${fab-common-version}", transitive: false}
   - {org: org.brzy.fab, name: fab-builder, rev: "${fab-builder-version}", transitive: false}
-#  - {org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
-#  - {org: org.brzy.webapp, name: brzy-webapp, rev: "${brzy-webapp-version}", transitive: false}
   - {org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
   - {org: org.brzy.mod, name: brzy-jetty8, rev: "${pom.version}", transitive: false}
@@ -24,6 +22,4 @@ dependencies:
   - {org: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
 #  - {org: org.fusesource.scalate, name: scalate-core, rev: 1.5.2-scala_2.8.1, transitive: false}
 #  - {org: org.fusesource.scalate, name: scalate-util, rev: 1.5.2-scala_2.8.1, transitive: false}
-repositories:
-  - {id: maven-central, url: "http://repo1.maven.org/maven2" }
 
