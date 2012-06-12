@@ -1,3 +1,7 @@
+import ch.qos.logback.classic.joran.JoranConfigurator
+import ch.qos.logback.classic.LoggerContext
+import ch.qos.logback.core.util.StatusPrinter
+import java.io.{FileWriter, BufferedWriter}
 import org.brzy.fab.file.{File, Files}
 import org.brzy.fab.file.FileUtils._
 import org.brzy.fab.build.Task
@@ -9,6 +13,7 @@ import org.eclipse.jetty.server.Server
 import java.util.EnumSet
 import javax.servlet.DispatcherType
 import com.twitter.json.Json
+import org.slf4j.LoggerFactory
 
 class JettyPlugin extends Task {
 
@@ -47,6 +52,12 @@ class JettyPlugin extends Task {
     messenger.debug("compilerPath: " + compilerPath)
     messenger.debug("config properties: " + configuration.properties)
 
+    val loggerContext:LoggerContext  = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+    val configurator:JoranConfigurator  = new JoranConfigurator()
+    configurator.setContext(loggerContext)
+    configurator.doConfigure(makeLogConfig())
+    StatusPrinter.printInCaseOfErrorsOrWarnings(loggerContext)
+
     val server = new Server(8080)
     val webapp = new WebAppContext()
     webapp.setResourceBase(webDir)
@@ -68,5 +79,25 @@ class JettyPlugin extends Task {
 
     server.start()
     server.join()
+  }
+
+  def makeLogConfig() = {
+    val file = File(configuration.targetDir, "logback-server-confg.xml")
+    val writer = new BufferedWriter(new FileWriter(file))
+    writer.write("""<configuration>
+                   |  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+                   |    <file>jetty.log</file>
+                   |    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                   |      <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+                   |    </encoder>
+                   |  </appender>
+                   |  <logger name="org.eclipse" level="error"><appender-ref ref="FILE"/></logger>
+                   |  <logger name="org.hibernate" level="error"><appender-ref ref="FILE"/></logger>
+                   |  <root level="info">
+                   |    <appender-ref ref="FILE" />
+                   |  </root>
+                   |</configuration>""".stripMargin)
+    writer.close()
+    file
   }
 }

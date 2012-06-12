@@ -10,7 +10,16 @@ import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
  */
 class ScalateWrapperServlet extends HttpServlet {
 
-  var servletConfig:ServletConfig = _
+  private[this] var servletConfig: ServletConfig = _
+  private[this] var scalateServletClass: Class[_] = _
+  private[this] var scalateServletInst: AnyRef = _
+  private[this] var classLoader: ClassLoader = _
+
+  private[this] val ReqCls = classOf[ServletRequest]
+  private[this] val resCls = classOf[ServletResponse]
+  private[this] val configCls = classOf[ServletConfig]
+  private[this] val scalateServletClassName = "org.fusesource.scalate.servlet.TemplateEngineServlet"
+
 
   override def init(config: ServletConfig) {
     servletConfig = config
@@ -20,9 +29,14 @@ class ScalateWrapperServlet extends HttpServlet {
   override def service(req: ServletRequest, res: ServletResponse) {
     val loader = req.getServletContext.getAttribute("classLoader").asInstanceOf[ClassLoader]
     Thread.currentThread().setContextClassLoader(loader)
-    val templateClass = loader.loadClass("org.fusesource.scalate.servlet.TemplateEngineServlet")
-    val instance = templateClass.newInstance()
-    templateClass.getMethod("init",classOf[ServletConfig]).invoke(instance,servletConfig)
-    templateClass.getMethod("service",classOf[ServletRequest],classOf[ServletResponse]).invoke(instance,req,res)
+
+    if (scalateServletInst == null || classLoader == null || loader != classLoader) {
+      classLoader = loader
+      scalateServletClass = classLoader.loadClass(scalateServletClassName)
+      scalateServletInst = scalateServletClass.newInstance().asInstanceOf[AnyRef]
+      scalateServletClass.getMethod("init", configCls).invoke(scalateServletInst, servletConfig)
+    }
+
+    scalateServletClass.getMethod("service", ReqCls, resCls).invoke(scalateServletInst, req, res)
   }
 }

@@ -39,25 +39,25 @@ class BrzyFilter extends SFilter {
     val runPath = config.getInitParameter("run_path")
     val loaderClass = config.getInitParameter("loader_class")
 
-    log.info("source_dir: '{}'", sourceDir)
-    log.info("classes_dir: '{}'", classesDir)
-    log.info("compiler_path: '{}'", compilerPath)
-    log.info("run_path: '{}'", runPath)
-    log.info("app loader class: '{}'", loaderClass)
+    log.debug("source_dir: '{}'", sourceDir)
+    log.debug("classes_dir: '{}'", classesDir)
+    log.debug("compiler_path: '{}'", compilerPath)
+    log.debug("run_path: '{}'", runPath)
+    log.debug("app loader class: '{}'", loaderClass)
 
     // TODO this needs to be on the filter, not the servlet
     appLoader = AppLoader(sourceDir,classesDir,compilerPath,runPath,loaderClass)
 
     if (config.getServletContext.getAttribute("application")!=null) {
       val webApp = config.getServletContext.getAttribute("application")
-      log.info("already initialized webApp: '{}'", webApp)
+      log.debug("already initialized webApp: '{}'", webApp)
       appState = initializeTheFuture(webApp)
     }
     else {
       val webApp = appLoader.makeApplication()
       config.getServletContext.setAttribute("application",webApp)
       config.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
-      log.info("initializing webApp: '{}'", webApp)
+      log.debug("initializing webApp: '{}'", webApp)
       appState = initializeTheFuture(webApp)
     }
   }
