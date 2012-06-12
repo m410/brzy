@@ -19,6 +19,7 @@ class ScalateWrapperServlet extends HttpServlet {
 
   override def service(req: ServletRequest, res: ServletResponse) {
     val loader = req.getServletContext.getAttribute("classLoader").asInstanceOf[ClassLoader]
+    Thread.currentThread().setContextClassLoader(loader)
     val templateClass = loader.loadClass("org.fusesource.scalate.servlet.TemplateEngineServlet")
     val instance = templateClass.newInstance()
     templateClass.getMethod("init",classOf[ServletConfig]).invoke(instance,servletConfig)
