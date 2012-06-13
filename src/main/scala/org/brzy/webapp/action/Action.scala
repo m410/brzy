@@ -88,7 +88,7 @@ trait Action extends Ordered[Action] {
     y || x
   }
 
-  protected[this] def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
+  protected def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
     !constraints.forall({
       case h:HttpMethods =>
         val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
@@ -104,7 +104,7 @@ trait Action extends Ordered[Action] {
     })
   }
 
-  protected[this] def secureConstraints(constraints:List[Constraint], p:Principal) = {
+  protected def secureConstraints(constraints:List[Constraint], p:Principal) = {
     constraints.forall(constraint => constraint match {
       case r:Roles =>
         r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
@@ -147,7 +147,7 @@ trait Action extends Ordered[Action] {
     }
   }
 
-  protected[action] def toClassList(t: List[_]) = {
+  protected def toClassList(t: List[_]) = {
     t.map(t => {
       if (t.toString.endsWith(".type"))
         Class.forName(t.toString.substring(0, t.toString.length - 5))
@@ -428,7 +428,7 @@ object Action {
 //   * An Action can only return one instance of a Direction.  This will execute it.  For example
 //   * a Redirect will be run as an 'HttpServletResponse.sendRedirect(target)'.
 //   */
-//  protected[action] def handleDirection(action: Action, direct: Direction, req: Request, res: Response) =
+//  protected def handleDirection(action: Action, direct: Direction, req: Request, res: Response) =
 //    direct match {
 //      case view: View =>
 //        val target: String = view.path + ".ssp" //action.viewType
@@ -486,7 +486,7 @@ object Action {
 //   * While an action can only return zero or one Direction, it can return zero or more Data
 //   * subclasses.  This Handles their execution.
 //   */
-//  protected[action] def handleData(data: Data, req: Request, res: Response) =
+//  protected def handleData(data: Data, req: Request, res: Response) =
 //    data match {
 //      case model: Model =>
 //        log.trace("model: {}", model)

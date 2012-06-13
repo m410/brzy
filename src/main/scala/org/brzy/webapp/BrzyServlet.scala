@@ -32,7 +32,7 @@ import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
  */
 class BrzyServlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
-  protected[webapp] var webapp: WebApp = _
+  protected var webapp: WebApp = _
 
   override def init(config: ServletConfig) {
     webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]

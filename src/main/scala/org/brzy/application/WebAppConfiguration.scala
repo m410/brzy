@@ -153,7 +153,7 @@ object WebAppConfiguration {
     m4.asInstanceOf[WebAppConfiguration]
   }
 
-  protected[application] def isRuntime(mod: Mod):Boolean = {
+  protected def isRuntime(mod: Mod):Boolean = {
     val modResource: String = "modules/" + mod.name.get + "/brzy-module.b.yml"
     val cpUrl = getClass.getClassLoader.getResource(modResource)
     val yaml = Yaml(cpUrl.openStream)
@@ -168,7 +168,7 @@ object WebAppConfiguration {
   /**
    * Loads the application configuration from the classpath
    */
-  protected[application] def makeRuntimeMod(reference: Mod): Mod = {
+  protected def makeRuntimeMod(reference: Mod): Mod = {
     val modResource: String = "modules/" + reference.name.get + "/brzy-module.b.yml"
     log.debug("module conf: '{}'", modResource)
 
@@ -206,7 +206,7 @@ object WebAppConfiguration {
   /**
    * Loads the application configuration from the file system
    */
-  protected[application] def makeBuildTimeMod(reference: Mod, modResourceDir: File): Mod = {
+  protected def makeBuildTimeMod(reference: Mod, modResourceDir: File): Mod = {
     val pFile = new File(modResourceDir, reference.name.get)
     val modFile = new File(pFile, "brzy-module.b.yml")
     val yaml = Yaml(modFile)
