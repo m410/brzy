@@ -42,7 +42,7 @@ import org.brzy.webapp.action.response._
  */
 abstract class WebApp(conf: WebAppConfiguration) {
 
-  protected[this] val log = LoggerFactory.getLogger(getClass)
+  private[this] val log = LoggerFactory.getLogger(getClass)
 
   val application = conf.application
 
@@ -285,12 +285,12 @@ abstract class WebApp(conf: WebAppConfiguration) {
     moduleProviders.foreach(_.shutdown())
   }
 
-  protected[application] def lifeCycleCreate(service: AnyRef) {
+  protected def lifeCycleCreate(service: AnyRef) {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].initializeService()
   }
 
-  protected[application] def lifeCycleDestroy(service: AnyRef) {
+  protected def lifeCycleDestroy(service: AnyRef) {
     if(service.isInstanceOf[Service])
       service.asInstanceOf[Service].destroyService()
   }

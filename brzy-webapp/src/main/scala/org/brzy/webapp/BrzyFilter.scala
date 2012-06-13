@@ -27,7 +27,7 @@ import org.brzy.application.WebApp
  * @author Michael Fortin
  */
 class BrzyFilter extends SFilter {
-  protected[webapp] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
+  private[this] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
   protected[webapp] var webapp: WebApp = _
 
   /**

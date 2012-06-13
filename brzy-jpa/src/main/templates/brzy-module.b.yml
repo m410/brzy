@@ -13,17 +13,19 @@ repositories:
   - {id: jboss-groups, url: "http://repository.jboss.org/nexus/content/groups/public"}
   
 dependencies:
-  - {conf: compile, org: antlr, name: antlr, rev: "2.7.6", transitive: false}
+  - {conf: compile, org: antlr, name: antlr, rev: 2.7.6, transitive: false}
   - {conf: compile, org: commons-collections, name: commons-collections, rev: "3.1", transitive: false}
-  - {conf: compile, org: dom4j, name: dom4j, rev: "1.6.1", transitive: false}
-  - {conf: compile, org: javassist, name: javassist, rev: "3.12.0.GA", transitive: false}
+  - {conf: compile, org: dom4j, name: dom4j, rev: 1.6.1, transitive: false}
+  - {conf: compile, org: javassist, name: javassist, rev: 3.12.0.GA, transitive: false}
   - {conf: compile, org: javax.transaction, name: jta, rev: "1.1", transitive: false}
-  - {conf: compile, org: javax.validation, name: validation-api, rev: "1.0.0.GA", transitive: false}
-  - {conf: compile, org: org.hibernate.javax.persistence, name: hibernate-jpa-2.0-api, rev: "1.0.0.Final", transitive: false}
+  - {conf: compile, org: javax.validation, name: validation-api, rev: 1.0.0.GA, transitive: false}
+  - {conf: compile, org: org.hibernate.javax.persistence, name: hibernate-jpa-2.0-api, rev: 1.0.0.Final, transitive: false}
   - {conf: compile, org: org.hibernate, name: hibernate-entitymanager, rev: "${hibernate-version}", transitive: false}
   - {conf: compile, org: org.hibernate, name: hibernate-core, rev: "${hibernate-version}", transitive: false}
-  - {conf: compile, org: org.hibernate, name: hibernate-commons-annotations, rev: "3.2.0.Final", transitive: false}
+  - {conf: compile, org: org.hibernate, name: hibernate-commons-annotations, rev: 3.2.0.Final, transitive: false}
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "${validator-version}", transitive: false}
+  - {conf: compile, org: javax.validation, name: validation-api, rev: 1.0.0.GA, transitive: false}
+  - {conf: compile, org: org.jboss.logging, name: jboss-logging, rev: 3.1.1.GA, transitive: false}
   - {conf: compile, org: org.brzy.mod, name: brzy-jpa, rev: "${pom.version}", transitive: false}
   - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}"}
 

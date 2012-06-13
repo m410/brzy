@@ -278,7 +278,7 @@ object WebAppConf {
   /**
    * Loads the application configuration from the classpath
    */
-  protected[application] def makeRuntimeMod(reference: Mod): Mod = {
+  protected def makeRuntimeMod(reference: Mod): Mod = {
     val modResource: String = "modules/" + reference.name.get + "/brzy-module.b.yml"
     log.debug("module conf: '{}'", modResource)
     val cpUrl = getClass.getClassLoader.getResource(modResource)
@@ -303,7 +303,7 @@ object WebAppConf {
   /**
    * Loads the application configuration from the file system
    */
-  protected[application] def makeBuildTimeMod(reference: Mod, modResourceDir: File): Mod = {
+  protected def makeBuildTimeMod(reference: Mod, modResourceDir: File): Mod = {
     val pFile = new File(modResourceDir, reference.name.get)
     val modFile = new File(pFile, "brzy-module.b.yml")
     val yaml = Yaml(modFile)
@@ -349,7 +349,7 @@ object WebAppConf {
     new WebAppConf(conf, views, persistence, modules)
   }
 
-  protected[application] def inst[T](className:String,args:Map[String,AnyRef]) = {
+  protected def inst[T](className:String,args:Map[String,AnyRef]) = {
     val clazz = Class.forName(className)
     val constructor = clazz.getConstructor(classOf[Map[String,AnyRef]])
     constructor.newInstance(args).asInstanceOf[T]

@@ -13,7 +13,7 @@ class BrzyScalatePlugin extends Task  {
     "notifyAll", "wait", "clone", "finalize", "productArity", "productElements", "productPrefix",
     "productIterator", "copy$default$1")
 
-  protected[this] def permit(f:Method) =
+  protected def permit(f:Method) =
       !ignore.contains(f.getName) && f.getParameterTypes.length == 0 && !f.getName.startsWith("get")
   
 	def genSspViews(args:Array[String]) {

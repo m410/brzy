@@ -25,20 +25,20 @@ import javax.validation.{ConstraintViolation, Validation => jValidation}
  * @author Michael Fortin
  */
 class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manifest[PK]) extends Dao[T,PK]{
-  protected[jpa] val entityClass = man.erasure
-  protected[jpa] val keyClass = pk.erasure
+  protected val entityClass = man.erasure
+  protected val keyClass = pk.erasure
 
-  protected[jpa] val validator = jValidation.buildDefaultValidatorFactory.getValidator
+  protected val validator = jValidation.buildDefaultValidatorFactory.getValidator
 
-  protected[jpa] val countQuery = "select count(t.id) from " + entityClass.getName + " t"
-  protected[jpa] val listQuery = "select distinct t from " + entityClass.getName + " t"
+  protected val countQuery = "select count(t.id) from " + entityClass.getName + " t"
+  protected val listQuery = "select distinct t from " + entityClass.getName + " t"
 
   /**
    * Implicit methods on instances of the entity
    */
   class EntityCrudOps[T](t:T) extends PersistentCrudOps(t) {
 
-    protected[jpa] def entityManager = JpaContext.value
+    protected def entityManager = JpaContext.value
 
     override def validate = {
       val set = validator.validate(t).toSet
@@ -71,7 +71,7 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
     }
   }
 
-  protected[jpa] def entityManager = JpaContext.value
+  protected def entityManager = JpaContext.value
 
   override def newPersistentCrudOps(t: T) = new EntityCrudOps(t)
 
@@ -93,11 +93,11 @@ class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manife
       alternate
   }
 
-  protected[jpa] val StringClass = classOf[String]
-  protected[jpa] val JIntegerClass = classOf[java.lang.Integer]
-  protected[jpa] val JLongClass = classOf[java.lang.Long]
-  protected[jpa] val IntClass = classOf[Int]
-  protected[jpa] val LongClass = classOf[Long]
+  protected val StringClass = classOf[String]
+  protected val JIntegerClass = classOf[java.lang.Integer]
+  protected val JLongClass = classOf[java.lang.Long]
+  protected val IntClass = classOf[Int]
+  protected val LongClass = classOf[Long]
 
 
   def load(strId:String) = {
