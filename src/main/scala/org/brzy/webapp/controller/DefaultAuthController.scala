@@ -29,7 +29,7 @@ import org.brzy.webapp.action.args.{Principal, Parameters}
  * @see Authority
  * @author Michael Fortin
  */
-class DefaultAuthController[T<:Identity](val permission:Permission[T], val ctlPath:String) extends Controller(ctlPath)  {
+class DefaultAuthController[T <: Identity](val permission: Permission[T], val ctlPath: String) extends Controller(ctlPath) {
   private[this] val log = LoggerFactory.getLogger(classOf[DefaultAuthController[T]])
 
   /**
@@ -48,38 +48,38 @@ class DefaultAuthController[T<:Identity](val permission:Permission[T], val ctlPa
   def onLogoutRedirectTo = "/"
 
   val actions = List(
-    Action("",loginForm,login _),
-    Action("logout",onLogoutRedirectTo,logout _),
-    Action("submit",loginForm,submit _)
+    Action("", loginForm, login _),
+    Action("logout", onLogoutRedirectTo, logout _),
+    Action("submit", loginForm, submit _)
   )
 
-  def login(p:Parameters) {
+  def login(p: Parameters) {
     p.session match {
-      case Some(s) => log.debug("session: {}",s.mkString("[",", ","]"))
-      case _ => log.debug("session: {}","None")
+      case Some(s) => log.debug("session: {}", s.mkString("[", ", ", "]"))
+      case _ => log.debug("session: {}", "None")
     }
   }
 
-  def logout(principal:Principal) = {
+  def logout(principal: Principal) = {
     onExplicitLogout(principal)
     (Redirect(onLogoutRedirectTo), Session.invalidate)
   }
 
-  def submit(p:Parameters) = {
-    if(check(p)) {
-      permission.login(p("userName"),p("password")) match {
+  def submit(p: Parameters) = {
+    if (check(p)) {
+      permission.login(p("userName"), p("password")) match {
         case Some(auth) =>
           onSuccessfulLogin(auth)
           authOrRejectResponse(auth, p)
         case _ =>
           onFailedLogin()
-          Flash("Invalid User Name or Password","login.invalid")
+          Flash("Invalid User Name or Password", "login.invalid")
       }
     }
     else {
       val flash = Flash("Missing Username and Password", "login.invalid")
       val model = Model("violations" -> "Invalid User Name or Password")
-      (model,flash)
+      (model, flash)
     }
   }
 
@@ -87,7 +87,7 @@ class DefaultAuthController[T<:Identity](val permission:Permission[T], val ctlPa
    * helper for subclasses to implement
    * @param authenticated
    */
-  def onSuccessfulLogin(authenticated:T) {
+  def onSuccessfulLogin(authenticated: T) {
   }
 
   /**
@@ -100,7 +100,7 @@ class DefaultAuthController[T<:Identity](val permission:Permission[T], val ctlPa
    * helper for subclasses to implement
    * @param principal
    */
-  def onExplicitLogout(principal:Principal) {
+  def onExplicitLogout(principal: Principal) {
   }
 
   private def authOrRejectResponse(auth: T, p: Parameters): Product = {
@@ -116,7 +116,7 @@ class DefaultAuthController[T<:Identity](val permission:Permission[T], val ctlPa
     }
   }
 
-  private def check(p:Parameters) =
+  private def check(p: Parameters) =
     p.get("userName").isDefined && !p("userName").equals("") &&
             p.get("password").isDefined && !p("password").equals("")
 
