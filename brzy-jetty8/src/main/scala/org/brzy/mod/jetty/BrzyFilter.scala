@@ -63,6 +63,7 @@ class BrzyFilter extends SFilter {
   }
 
 
+
   private[this] def initializeTheFuture(webApp: AnyRef): Future[DynamicAppState]  = {
     new Future[DynamicAppState] {
       def isSet = true
@@ -74,49 +75,54 @@ class BrzyFilter extends SFilter {
 
 
 
-  def doFilter(req: ServletRequest, r: ServletResponse, chain: FilterChain) {
-    val q = req.asInstanceOf[HttpServletRequest]
-    val res = r.asInstanceOf[HttpServletResponse]
-    log.debug("uri : {}", q.getRequestURI)
+  def doFilter(rq: ServletRequest, r: ServletResponse, chain: FilterChain) {
+    val request = rq.asInstanceOf[HttpServletRequest]
+    val response = r.asInstanceOf[HttpServletResponse]
+    log.debug("uri : {}", request.getRequestURI)
 
     if (appState.isSet) {
       appState() match {
         case Running(wa) =>
-          q.getServletContext.setAttribute("application",wa)
-          q.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
+          request.getServletContext.setAttribute("application",wa)
+          request.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
           Thread.currentThread().setContextClassLoader(appLoader.childClassLoader)
 
           val path = isPathMethod(wa)
 
-          if (path.invoke(wa, q.getContextPath, q.getRequestURI).asInstanceOf[Boolean])
-            checkOrCall(res,{()=>wrapTransMethod(wa).invoke(wa, req, res, chain)})
+          if (path.invoke(wa, request.getContextPath, request.getRequestURI).asInstanceOf[Boolean])
+            checkOrCall(request, response,{()=>wrapTransMethod(wa).invoke(wa, request, response, chain)})
           else
-            chain.doFilter(req, res)
+            chain.doFilter(request, response)
         case Compiling =>
-          q.getServletContext.setAttribute("application",null)
-          render(res)
+          request.getServletContext.setAttribute("application",null)
+          render(response)
         case c:CompilerError =>
-          q.getServletContext.setAttribute("application",null)
-          checkOrCall(res,{()=>render(res, compilerErrorPage(c.message))})
+          request.getServletContext.setAttribute("application",null)
+          checkOrCall(request, response,{()=>render(response, compilerErrorPage(c.message))})
       }
     }
     else {
       log.warn("Still Compiling Source...")
-      render(res)
+      render(response)
     }
   }
 
+  def destroy() {
+    log.trace("Destroy")
+    appLoader.stopApplication()
+  }
 
-  private[this] def checkOrCall(res: HttpServletResponse, call:()=>Unit) {
+  private[this] def checkOrCall(req: HttpServletRequest, res: HttpServletResponse, call:()=>Unit) {
     appLoader.sourceModified  match {
       case Some(files) =>
+        // because of classloader issues for classes created on one loader, and read in another.
+        req.getSession.invalidate()
         appState = appLoader.reload(files.asInstanceOf[List[File]])
         render(res)
       case None =>
         call()
     }
   }
-
 
   private[this] def wrapTransMethod(webapp: AnyRef): Method = {
     webapp.getClass.getMethod("wrapWithTransaction", classOf[HttpServletRequest], classOf[HttpServletResponse], classOf[FilterChain])
@@ -179,10 +185,4 @@ code {width:980px;text-align:left;background:#eee;color:#000;display:block;paddi
   }
 
 
-  /**
-   *
-   */
-  def destroy() {
-    log.trace("Destroy")
-  }
 }

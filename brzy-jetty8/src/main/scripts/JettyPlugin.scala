@@ -93,6 +93,8 @@ class JettyPlugin extends Task {
                    |  </appender>
                    |  <logger name="org.eclipse" level="error"><appender-ref ref="FILE"/></logger>
                    |  <logger name="org.hibernate" level="error"><appender-ref ref="FILE"/></logger>
+                   |  <logger name="org.fusesource" level="warn"><appender-ref ref="FILE"/></logger>
+                   |  <logger name="org.brzy" level="warn"><appender-ref ref="FILE"/></logger>
                    |  <root level="info">
                    |    <appender-ref ref="FILE" />
                    |  </root>
