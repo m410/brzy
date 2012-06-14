@@ -84,7 +84,10 @@ class BrzyFilter extends SFilter {
         case Running(wa) =>
           q.getServletContext.setAttribute("application",wa)
           q.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
+          Thread.currentThread().setContextClassLoader(appLoader.childClassLoader)
+
           val path = isPathMethod(wa)
+
           if (path.invoke(wa, q.getContextPath, q.getRequestURI).asInstanceOf[Boolean])
             checkOrCall(res,{()=>wrapTransMethod(wa).invoke(wa, req, res, chain)})
           else

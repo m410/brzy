@@ -25,12 +25,15 @@ import javax.validation.{ConstraintViolation, Validation => jValidation}
  * @author Michael Fortin
  */
 class JpaDao[T <:{def id:PK}, PK <: AnyRef]()(implicit man:Manifest[T],pk:Manifest[PK]) extends Dao[T,PK]{
+
   protected val entityClass = man.erasure
+
   protected val keyClass = pk.erasure
 
   protected val validator = jValidation.buildDefaultValidatorFactory.getValidator
 
   protected val countQuery = "select count(t.id) from " + entityClass.getName + " t"
+
   protected val listQuery = "select distinct t from " + entityClass.getName + " t"
 
   /**
