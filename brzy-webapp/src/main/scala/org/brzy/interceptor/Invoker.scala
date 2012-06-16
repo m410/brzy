@@ -51,7 +51,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
   /**
    * Recursive method to call each ThreadLocal session context.
    */
-  protected[interceptor] def traverse(it: Iterator[ManagedThreadContext], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
+  protected def traverse(it: Iterator[ManagedThreadContext], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
     val managedFactory = it.next()
     var returnValue: AnyRef = null
     var nested = false

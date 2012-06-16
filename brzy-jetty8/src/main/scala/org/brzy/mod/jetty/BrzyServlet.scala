@@ -41,6 +41,10 @@ class BrzyServlet extends HttpServlet {
 
   private[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.debug("request: {}, context: {}", req.getServletPath, req.getContextPath)
+
+//    val loader = req.getServletContext.getAttribute("classLoader").asInstanceOf[ClassLoader]
+//    Thread.currentThread().setContextClassLoader(loader)
+
     val webApp = req.getServletContext.getAttribute("application")
     callActionMethod(webApp).invoke(webApp, req, res)
   }

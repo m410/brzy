@@ -8,6 +8,7 @@ tasks:
     method_name: runJetty
     description: Run Jetty
     depends: [init]
+    extends_default: false
 dependencies:
   - {org: com.twitter, name: json, rev: "1.1.1", transitive: false}
   - {org: org.brzy.fab, name: fab-common, rev: "${fab-common-version}", transitive: false}

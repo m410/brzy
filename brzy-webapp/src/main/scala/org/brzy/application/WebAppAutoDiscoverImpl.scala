@@ -19,6 +19,7 @@ import java.beans.ConstructorProperties
 import java.lang.reflect.Constructor
 import collection.mutable.{ListBuffer, WeakHashMap}
 import org.brzy.webapp.controller.{ControllerScanner, Controller}
+import org.slf4j.LoggerFactory
 
 /**
  * Web Application that uses automatic discovery to find the services and controllers.
@@ -32,7 +33,7 @@ class WebAppAutoDiscoverImpl(conf:WebAppConfiguration) extends WebApp(conf) {
    * it's lazy because it needs to be initialize last.  It will be initilaized once the
    * makeService method is called
    */
-  protected[this] lazy val mapOfServices = {
+  protected lazy val mapOfServices = {
     val map = WeakHashMap.empty[String, AnyRef]
 
     val serviceClasses = ServiceScanner(conf.application.get.org.get).services
@@ -73,16 +74,16 @@ class WebAppAutoDiscoverImpl(conf:WebAppConfiguration) extends WebApp(conf) {
   }
 
 
-  protected[application] def canFindByName(c: Class[_]): Boolean = {
+  protected def canFindByName(c: Class[_]): Boolean = {
     c.getAnnotation(classOf[ConstructorProperties]) != null
   }
 
-  protected[application] def makeArgsByName(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
+  protected def makeArgsByName(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
     val constructorProps = c.getAnnotation(classOf[ConstructorProperties])
     constructorProps.value.map(mapOfServices(_))
   }
 
-  protected[application] def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
+  protected def makeArgsByType(c: Class[_], services: Map[String, AnyRef]): Array[AnyRef] = {
     val constructor: Constructor[_] = c.getConstructors.find(_ != null).get
     constructor.getParameterTypes.map((argClass: Class[_]) => {
       mapOfServices.values.find((s: AnyRef) => {
@@ -95,7 +96,7 @@ class WebAppAutoDiscoverImpl(conf:WebAppConfiguration) extends WebApp(conf) {
       }) match {
         case Some(e) => e
         case _ =>
-          log.warn("No service for type '{}' on class {}",argClass, c)
+          LoggerFactory.getLogger(getClass).warn("No service for type '{}' on class {}",argClass, c)
           null
       }
     })

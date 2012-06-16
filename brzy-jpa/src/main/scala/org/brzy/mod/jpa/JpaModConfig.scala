@@ -59,7 +59,7 @@ class JpaModConfig(override val map: Map[String, AnyRef]) extends PersistenceMod
     webXml.foreach(w => print(tab + "  ", w, pw))
   }
 
-  protected[this] def print(tab: String, a: AnyRef, pw: PrintWriter) {
+  protected def print(tab: String, a: AnyRef, pw: PrintWriter) {
     a match {
       case l: List[_] => l.foreach(i => pw.println(tab + i))
       case l: Map[_, _] => l.foreach({case (x, y) => pw.println(tab + x + ": " + y)})
