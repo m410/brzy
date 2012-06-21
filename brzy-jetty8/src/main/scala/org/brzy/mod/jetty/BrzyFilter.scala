@@ -17,9 +17,12 @@ import javax.servlet.{FilterChain, FilterConfig, ServletResponse, ServletRequest
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 
 import org.slf4j.LoggerFactory
-import java.lang.reflect.Method
+import java.lang.reflect.{InvocationTargetException, Method}
 import actors.Future
 import java.io.File
+import ch.qos.logback.classic.LoggerContext
+import ch.qos.logback.classic.joran.JoranConfigurator
+import ch.qos.logback.core.util.StatusPrinter
 
 /**
  * Forwards only requests to brzy actions, lets all other requests pass through.
@@ -28,8 +31,8 @@ import java.io.File
  */
 class BrzyFilter extends SFilter {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
-  private[this] var appLoader:AppLoader = _
-  private[this] var appState:Future[DynamicAppState] = _
+  private[this] var appLoader: AppLoader = _
+  private[this] var appState: Future[DynamicAppState] = _
 
 
   def init(config: FilterConfig) {
@@ -46,33 +49,41 @@ class BrzyFilter extends SFilter {
     log.debug("app loader class: '{}'", loaderClass)
 
     // TODO this needs to be on the filter, not the servlet
-    appLoader = AppLoader(sourceDir,classesDir,compilerPath,runPath,loaderClass)
+    appLoader = AppLoader(sourceDir, classesDir, compilerPath, runPath, loaderClass)
 
-    if (config.getServletContext.getAttribute("application")!=null) {
+    if (config.getServletContext.getAttribute("application") != null) {
       val webApp = config.getServletContext.getAttribute("application")
       log.debug("already initialized webApp: '{}'", webApp)
       appState = initializeTheFuture(webApp)
     }
     else {
       val webApp = appLoader.makeApplication()
-      config.getServletContext.setAttribute("application",webApp)
-      config.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
+      config.getServletContext.setAttribute("application", webApp)
+      config.getServletContext.setAttribute("classLoader", appLoader.childClassLoader)
       log.debug("initializing webApp: '{}'", webApp)
       appState = initializeTheFuture(webApp)
     }
+
+    val context = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+    val configurator: JoranConfigurator = new JoranConfigurator()
+    configurator.setContext(context)
+    context.reset()
+    configurator.doConfigure(appLoader.childClassLoader.getResource("logback.xml"))
+    StatusPrinter.printInCaseOfErrorsOrWarnings(context)
   }
 
 
-
-  private[this] def initializeTheFuture(webApp: AnyRef): Future[DynamicAppState]  = {
+  private[this] def initializeTheFuture(webApp: AnyRef): Future[DynamicAppState] = {
     new Future[DynamicAppState] {
       def isSet = true
+
       def inputChannel = null
+
       def apply() = Running(webApp)
+
       def respond(k: (DynamicAppState) => Unit) {}
     }
   }
-
 
 
   def doFilter(rq: ServletRequest, r: ServletResponse, chain: FilterChain) {
@@ -83,8 +94,8 @@ class BrzyFilter extends SFilter {
     if (appState.isSet) {
       appState() match {
         case Running(wa) =>
-          request.getServletContext.setAttribute("application",wa)
-          request.getServletContext.setAttribute("classLoader",appLoader.childClassLoader)
+          request.getServletContext.setAttribute("application", wa)
+          request.getServletContext.setAttribute("classLoader", appLoader.childClassLoader)
           Thread.currentThread().setContextClassLoader(appLoader.childClassLoader)
 
           val path = isPathMethod(wa)
@@ -94,11 +105,13 @@ class BrzyFilter extends SFilter {
           else
             chain.doFilter(request, response)
         case Compiling =>
-          request.getServletContext.setAttribute("application",null)
+          request.getServletContext.setAttribute("application", null)
           render(response)
-        case c:CompilerError =>
-          request.getServletContext.setAttribute("application",null)
-          checkOrCall(request, response,{()=>render(response, compilerErrorPage(c.message))})
+        case c: CompilerError =>
+          request.getServletContext.setAttribute("application", null)
+          checkOrCall(request, response, {
+            () => render(response, compilerErrorPage(c.message))
+          })
       }
     }
     else {
@@ -112,15 +125,20 @@ class BrzyFilter extends SFilter {
     appLoader.stopApplication()
   }
 
-  private[this] def checkOrCall(req: HttpServletRequest, res: HttpServletResponse, call:()=>Unit) {
-    appLoader.sourceModified  match {
+  private[this] def checkOrCall(req: HttpServletRequest, res: HttpServletResponse, call: () => Unit) {
+    appLoader.sourceModified match {
       case Some(files) =>
         // because of classloader issues for classes created on one loader, and read in another.
         req.getSession.invalidate()
         appState = appLoader.reload(files.asInstanceOf[List[File]])
         render(res)
       case None =>
-        call()
+        try {
+          call()
+        }
+        catch {
+          case i: InvocationTargetException => throw i.getCause
+        }
     }
   }
 
@@ -133,9 +151,8 @@ class BrzyFilter extends SFilter {
   }
 
 
-
-  private[this] def render(res:HttpServletResponse, msg:String = "") {
-    res.setHeader("Content-Type","text/html")
+  private[this] def render(res: HttpServletResponse, msg: String = "") {
+    res.setHeader("Content-Type", "text/html")
 
     if (msg == "")
       res.getOutputStream.write(waitPage.getBytes("UTF-8"))
@@ -161,9 +178,9 @@ body {margin:0 auto;text-align:center;padding:4em 2em;
 </html>
                                """
 
-  private[this] def compilerErrorPage(msg:String) = {
+  private[this] def compilerErrorPage(msg: String) = {
     new StringBuilder()
-            .append("""
+            .append( """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,7 +195,7 @@ code {width:980px;text-align:left;background:#eee;color:#000;display:block;paddi
 <h1>Compiler Error</h1>
 <code>""")
             .append(msg)
-            .append("""</code>
+            .append( """</code>
 </body>
 </html>""")
             .toString()

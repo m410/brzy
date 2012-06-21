@@ -2,6 +2,7 @@ package org.brzy.mod.jetty
 
 import javax.servlet.http.HttpServlet
 import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Wrapper around scalate servlet that sets the classloader.
@@ -37,6 +38,11 @@ class ScalateWrapperServlet extends HttpServlet {
       scalateServletClass.getMethod("init", configCls).invoke(scalateServletInst, servletConfig)
     }
 
-    scalateServletClass.getMethod("service", ReqCls, resCls).invoke(scalateServletInst, req, res)
+    try {
+      scalateServletClass.getMethod("service", ReqCls, resCls).invoke(scalateServletInst, req, res)
+    }
+    catch {
+      case i: InvocationTargetException => throw i.getCause
+    }
   }
 }

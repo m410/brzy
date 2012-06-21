@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 import actors.Future
 
 import java.io.File
-import java.lang.reflect.Method
+import java.lang.reflect.{InvocationTargetException, Method}
 
 
 /**
@@ -41,15 +41,17 @@ class BrzyServlet extends HttpServlet {
 
   private[this] def internal(req: HttpServletRequest, res: HttpServletResponse) {
     log.debug("request: {}, context: {}", req.getServletPath, req.getContextPath)
-
-//    val loader = req.getServletContext.getAttribute("classLoader").asInstanceOf[ClassLoader]
-//    Thread.currentThread().setContextClassLoader(loader)
-
     val webApp = req.getServletContext.getAttribute("application")
-    callActionMethod(webApp).invoke(webApp, req, res)
+
+    try {
+      callActionMethod(webApp).invoke(webApp, req, res)
+    }
+    catch {
+      case i: InvocationTargetException => throw i.getCause
+    }
   }
 
   private[this] def callActionMethod(wa: AnyRef): Method = {
-    wa.getClass.getMethod("callAction", classOf[HttpServletRequest], classOf[HttpServletResponse])
+      wa.getClass.getMethod("callAction", classOf[HttpServletRequest], classOf[HttpServletResponse])
   }
 }
