@@ -71,7 +71,7 @@ trait Permission[T<:Identity] {
     var index:Int = 0
 
     for (b <- data) {
-      val v:Int = b & 0xFF;
+      val v:Int = b & 0xFF
 
       hex(index) = HEX_CHAR_TABLE(v >>> 4)
       index=index+1

@@ -14,7 +14,7 @@
 package org.brzy.interceptor
 
 import javassist.util.proxy.MethodHandler
-import java.lang.reflect.Method
+import java.lang.reflect.{InvocationTargetException, Method}
 import org.brzy.fab.interceptor.ManagedThreadContext
 
 /**
@@ -40,7 +40,14 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
 
   override def invoke(itSelf: AnyRef, m1: Method, m2: Method, args: Array[AnyRef]): AnyRef = {
     val iterator = factories.iterator
-    val fun = {() => m2.invoke(itSelf, args: _*)}
+    val fun = {() =>
+      try {
+        m2.invoke(itSelf, args: _*)
+      }
+      catch {
+        case i: InvocationTargetException => throw i.getCause
+      }
+    }
 
     if (iterator.hasNext)
       traverse(iterator, Option(itSelf))(fun)
