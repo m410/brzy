@@ -13,6 +13,7 @@
     <module>brzy-jetty8</module>
     <module>brzy-jms</module>
     <module>brzy-jpa</module>
+    <module>brzy-migrate</module>
     <module>brzy-scalate</module>
     <module>brzy-scheduler</module>
     <module>brzy-squeryl</module>

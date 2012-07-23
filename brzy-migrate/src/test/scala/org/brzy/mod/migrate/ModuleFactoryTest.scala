@@ -11,8 +11,23 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.spring.mock
+package org.brzy.mod.migrate
 
-class MyService {
-  def doSomeService = "Service Called"
+import org.scalatest.junit.JUnitSuite
+import org.junit.Assert._
+import org.junit.{Ignore, Test}
+import org.brzy.application.WebAppConfiguration
+
+class ModuleFactoryTest extends JUnitSuite {
+  @Test @Ignore def testAssemble() {
+    val config = WebAppConfiguration.runtime("test")
+    assertNotNull(config.modules)
+    assertEquals(1, config.modules.size)
+    config.modules.foreach(p => {
+      val email = p.asInstanceOf[MigrateModConfig]
+      val host = email.applicationContext.get
+      assertNotNull(host)
+      assertEquals("localhost", host)
+    })
+  }
 }
