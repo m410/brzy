@@ -20,9 +20,8 @@ import org.scalatest.junit.JUnitSuite
 
 
 class ModuleInitializeTest extends JUnitSuite {
-  @Test def testConTextSetup = {
-    val mod = new MIgrateModProvider(new MigrateModConfig(Map(
-        "application_context" -> "applicationContext.xml",
+  @Test @Ignore def testConTextSetup() {
+    val mod = new MigrateModProvider(new MigrateModConfig(Map(
         "name" -> "brzy-sping"
       )))
     assertEquals(1,mod.serviceMap.size)

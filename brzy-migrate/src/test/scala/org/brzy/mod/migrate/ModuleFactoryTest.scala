@@ -23,11 +23,6 @@ class ModuleFactoryTest extends JUnitSuite {
     val config = WebAppConfiguration.runtime("test")
     assertNotNull(config.modules)
     assertEquals(1, config.modules.size)
-    config.modules.foreach(p => {
-      val email = p.asInstanceOf[MigrateModConfig]
-      val host = email.applicationContext.get
-      assertNotNull(host)
-      assertEquals("localhost", host)
-    })
+
   }
 }

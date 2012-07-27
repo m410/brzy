@@ -4,7 +4,7 @@ name: brzy-spring
 org: org.brzy
 version: "0.3"
 config_class: org.brzy.mod.spring.MigrateModConfig
-provider_class: org.brzy.mod.spring.MIgrateModProvider
+provider_class: org.brzy.mod.spring.MigrateModProvider
 
 application_context: "classpath:applicationContext.xml"
 

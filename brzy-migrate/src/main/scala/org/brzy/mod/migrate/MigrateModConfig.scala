@@ -23,20 +23,6 @@ import java.io.PrintWriter
  * @author Michael Fortin
  */
 class MigrateModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
-  val applicationContext: Option[String] = map.get("application_context").asInstanceOf[Option[String]].orElse(None)
 
-  override def <<(that: BaseConf) =
-    if (that == null)
-      this
-    else
-      new MigrateModConfig(Map[String, AnyRef](
-        "application_context" -> that.map.getOrElse("application_context", this.applicationContext.orNull)
-        ) ++ super.<<(that).map)
 
-  override def prettyPrint(t: String, pw: PrintWriter) {
-    val tab = t + "  "
-    super.prettyPrint(tab,pw)
-    pw.print(tab +"application_context: ")
-    pw.println(applicationContext.getOrElse("<None>"))
-  }
 }

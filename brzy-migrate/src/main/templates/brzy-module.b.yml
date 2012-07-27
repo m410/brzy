@@ -5,7 +5,7 @@ name: brzy-spring
 org: org.brzy
 version: "${pom.version}"
 config_class: org.brzy.mod.spring.MigrateModConfig
-provider_class: org.brzy.mod.spring.MIgrateModProvider
+provider_class: org.brzy.mod.spring.MigrateModProvider
 
 application_context: applicationContext.xml
 
