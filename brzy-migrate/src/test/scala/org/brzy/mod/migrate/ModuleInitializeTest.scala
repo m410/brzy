@@ -11,8 +11,19 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.spring.mock
+package org.brzy.mod.migrate
 
-class MyService {
-  def doSomeService = "Service Called"
+import org.junit.Test
+import org.junit.Ignore
+import org.junit.Assert._
+import org.scalatest.junit.JUnitSuite
+
+
+class ModuleInitializeTest extends JUnitSuite {
+  @Test @Ignore def testConTextSetup() {
+    val mod = new MigrateModProvider(new MigrateModConfig(Map(
+        "name" -> "brzy-sping"
+      )))
+    assertEquals(1,mod.serviceMap.size)
+  }
 }

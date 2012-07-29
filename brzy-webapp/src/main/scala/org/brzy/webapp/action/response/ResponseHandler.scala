@@ -138,6 +138,7 @@ object ResponseHandler {
         while ( { inRead = input.read; inRead} >= 0)
           res.getOutputStream.write(inRead)
       case s: Stream =>
+        log.trace("stream: {}", s)
         res.setContentType(s.contentType)
         s.io(res.getOutputStream)
       case j: Json[_] =>

@@ -11,23 +11,18 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.spring
+package org.brzy.mod.migrate
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.Assert._
-import org.junit.{Ignore, Test}
-import org.brzy.application.WebAppConfiguration
+import org.brzy.fab.mod.RuntimeMod
+import org.brzy.fab.conf.BaseConf
+import java.io.PrintWriter
 
-class ModuleFactoryTest extends JUnitSuite {
-  @Test @Ignore def testAssemble() {
-    val config = WebAppConfiguration.runtime("test")
-    assertNotNull(config.modules)
-    assertEquals(1, config.modules.size)
-    config.modules.foreach(p => {
-      val email = p.asInstanceOf[SpringModConfig]
-      val host = email.applicationContext.get
-      assertNotNull(host)
-      assertEquals("localhost", host)
-    })
-  }
+/**
+ * Spring module configuration.
+ *
+ * @author Michael Fortin
+ */
+class MigrateModConfig(override val map: Map[String, AnyRef]) extends RuntimeMod(map) {
+
+
 }

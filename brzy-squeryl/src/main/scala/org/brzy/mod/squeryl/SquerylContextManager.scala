@@ -38,7 +38,7 @@ class SquerylContextManager(driver:String, url:String, usr:String, pass:String) 
       else if(url.contains("jdbc:postgresql")) new PostgreSqlAdapter
       else if(url.contains("jdbc:mysql")) new MySQLAdapter
       else if(url.contains("jdbc:h2")) new H2Adapter
-      else error("no adapter found for driver:" + url)
+      else throw new UnknownSquerylAdaptorException("no adapter found for driver:" + url)
 
   val empty:T = null
   val context = new DynamicVariable(empty)
@@ -48,9 +48,9 @@ class SquerylContextManager(driver:String, url:String, usr:String, pass:String) 
     context.value
   })
 
-  def destroySession(s: T) = {
+  def destroySession(s: T) {
     log.trace("Destroy Session: {}",s)
-    s.connection.commit
+    s.connection.commit()
     s.close
     context.value = empty
   }

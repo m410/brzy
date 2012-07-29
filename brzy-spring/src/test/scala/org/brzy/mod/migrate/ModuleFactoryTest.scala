@@ -11,20 +11,23 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mod.spring
+package org.brzy.mod.migrate
 
-import org.junit.Test
-import org.junit.Ignore
-import org.junit.Assert._
 import org.scalatest.junit.JUnitSuite
+import org.junit.Assert._
+import org.junit.{Ignore, Test}
+import org.brzy.application.WebAppConfiguration
 
-
-class ModuleInitializeTest extends JUnitSuite {
-  @Test def testConTextSetup = {
-    val mod = new SpringModProvider(new SpringModConfig(Map(
-        "application_context" -> "applicationContext.xml",
-        "name" -> "brzy-sping"
-      )))
-    assertEquals(1,mod.serviceMap.size)
+class ModuleFactoryTest extends JUnitSuite {
+  @Test @Ignore def testAssemble() {
+    val config = WebAppConfiguration.runtime("test")
+    assertNotNull(config.modules)
+    assertEquals(1, config.modules.size)
+    config.modules.foreach(p => {
+      val email = p.asInstanceOf[SpringModConfig]
+      val host = email.applicationContext.get
+      assertNotNull(host)
+      assertEquals("localhost", host)
+    })
   }
 }

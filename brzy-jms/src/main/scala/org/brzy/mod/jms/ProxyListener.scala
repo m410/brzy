@@ -27,17 +27,17 @@ class ProxyListener(service:AnyRef) extends MessageListener with ExceptionListen
   val annotation = service.getClass.getAnnotation(classOf[Queue])
   val onMessageMethod = service.getClass.getMethod(annotation.listenerMethod, classOf[String])
 
-  def onException(exception: JMSException) = {
+  def onException(exception: JMSException) {
     log.error("Exception Receiving Message:",exception)
   }
 
-  def onMessage(msg: Message) = {
+  def onMessage(msg: Message) {
     log.trace("Receiving Message: {}",msg)
 
     msg match {
       case t:TextMessage => onMessageMethod.invoke(service,t.getText)
-      case o:ObjectMessage => error("ObjectMesages are not Implemented yet")
-      case _ => error("Unknown Message Type: " + msg)
+      case o:ObjectMessage => throw new RuntimeException("ObjectMesages are not Implemented yet")
+      case _ => throw new RuntimeException("Unknown Message Type: " + msg)
     }
   }
 }
