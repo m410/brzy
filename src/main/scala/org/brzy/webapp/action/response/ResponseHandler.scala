@@ -102,7 +102,7 @@ object ResponseHandler {
       case view: View =>
         val target: String = view.path + ".ssp" //action.viewType
         log.trace("view: {}", target)
-        // TODO Should be set by the view and overridable by the controller
+        // TODO Should be set by the view and override-able by the controller
         res.setHeader("Content-Type","text/html; charset=utf-8")
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
@@ -114,9 +114,9 @@ object ResponseHandler {
           if (s.path.startsWith("http"))
             s.path
           else if (req.getContextPath.endsWith("/") && s.path.startsWith("/"))
-            req.getContextPath + s.path.substring(1, s.path.length)
+            checkSecured(req, req.getContextPath + s.path.substring(1, s.path.length))
           else
-            req.getContextPath + s.path
+            checkSecured(req, req.getContextPath + s.path)
         log.trace("sending redirect to: {}", target)
         res.sendRedirect(target)
       case s: Error =>
@@ -152,6 +152,20 @@ object ResponseHandler {
         res.getWriter.write(j.parse)
       case _ => throw new UnknownActionDirectionException("Unknown Driection: %s".format(direct))
     }
+  }
+
+  /**
+   * Fixes an issue where the ssl is handled by a firewall or load-balancer, the request will
+   * be in http, not https.  This explicitly sets the https protocol in the redirect url.
+   * @param req http servlet request
+   * @param basePath the absolute path of the request including servlet context
+   * @return the context path for insecure redirect or the full path with ssl protocol.
+   */
+  private def checkSecured(req:HttpServletRequest, basePath:String) = {
+    if(req.isSecure)
+      "https://" + req.getServerName + basePath
+    else
+      basePath
   }
 
   /**
