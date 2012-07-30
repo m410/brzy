@@ -2,7 +2,7 @@
 archetype:
   name: brzy-webapp-archetype
   org: org.brzy.webapp
-  version: 0.15.0-SNAPSHOT # todo this needs to be set on the build
+  version: 1.0.0.beta4-SNAPSHOT # todo this needs to be set on the build
 
 build:
   default_task: "package"

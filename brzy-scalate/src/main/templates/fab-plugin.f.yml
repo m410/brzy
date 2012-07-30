@@ -10,8 +10,7 @@ plugins:
       - {org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
       - {org: org.brzy.fab, name: fab-common, rev: "${fab-common-version}", transitive: false}
       - {org: org.brzy.fab, name: fab-builder, rev: "${fab-builder-version}", transitive: false}
-#      - {org: org.brzy.fab, name: fab-util, rev: "0.7", transitive: false}
-      - {org: org.brzy.archetype, name: brzy-webapp, rev: "0.10.1", transitive: false}
+      - {org: org.brzy.webapp, name: brzy-webapp-archetype, rev: "0.15.0-SNAPSHOT", transitive: false}
       - {org: org.scala-lang, name: scala-compiler, rev: "2.8.1", transitive: false}
       - {org: org.scala-lang, name: scala-library, rev: "2.8.1", transitive: false}
     repositories:
