@@ -117,7 +117,6 @@ object ResponseHandler {
             checkSecured(req, req.getContextPath + s.path.substring(1, s.path.length))
           else
             checkSecured(req, req.getContextPath + s.path)
-        log.trace("sending redirect to: {}", target)
         res.sendRedirect(target)
       case s: Error =>
         log.trace("Error: {}", s)
