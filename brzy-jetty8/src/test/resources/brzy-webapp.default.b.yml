@@ -7,7 +7,7 @@ archetype:
 archetype:
   name: brzy-webapp-archetype
   org: org.brzy.webapp
-  version: 0.14.0-SNAPSHOT
+  version: 0.14.0
 
 build:
   default_task: "package"
