@@ -46,7 +46,7 @@ abstract class WebApp(conf: WebAppConfiguration) {
 
   val application = conf.application
 
-  val useSsl = conf.useSsl.getOrElse(false)
+  val useSsl = conf.useSsl
 
   def isPath(context:String, uri:String) = {
     actions.find(_.path.isMatch(ArgsBuilder.parseActionPath(uri, context))).isDefined

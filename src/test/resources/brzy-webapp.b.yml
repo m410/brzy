@@ -13,6 +13,8 @@ application:
     test: value
   webapp_context: mainapp
 
+use_ssl: true
+
 #
 # dependencies
 # scope:organization:name:version

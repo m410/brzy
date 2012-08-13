@@ -26,9 +26,9 @@ import org.brzy.fab.mod.ProjectModuleConfiguration
 class WebAppConfFile(override val map: Map[String, AnyRef]) extends ProjectModuleConfiguration(map) {
  
 
-  val useSsl: Option[Boolean] = map.get("use_ssl") match {
-    case Some(e) => if(e != null) Option(e.asInstanceOf[Boolean]) else Option(false)
-    case _ => Option(false)
+  val useSsl: Boolean = map.get("use_ssl") match {
+    case Some(e) => e.asInstanceOf[Boolean]
+    case _ => false
   }
 
   val logging: Option[Logging] = map.get("logging") match {
@@ -53,7 +53,7 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ProjectModul
   override def prettyPrint(t: String, pw: PrintWriter) {
     val tab = t + "  "
     super.prettyPrint(tab,pw)
-    pw.println("Use SSL: " + useSsl.getOrElse("<None>"))
+    pw.println("Use SSL: " + useSsl)
     pw.println("Logging")
     logging match {
       case Some(l) => l.prettyPrint(tab,pw)
@@ -73,6 +73,7 @@ class WebAppConfFile(override val map: Map[String, AnyRef]) extends ProjectModul
     else {
       val that = it.asInstanceOf[WebAppConfFile]
       new WebAppConfFile(Map[String, AnyRef](
+        "use_ssl" -> {{if (that.useSsl) that.useSsl else this.useSsl}.asInstanceOf[AnyRef]},
         "environment" -> {if( this.environment != "") this.environment else that.environment},
         "application" -> {this.application.getOrElse(that.application.get)}.map,
         "build" -> {

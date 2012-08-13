@@ -24,6 +24,7 @@ class WebAppConfTest extends JUnitSuite {
     val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     assertNotNull(wac)
     assertTrue(wac.application.isDefined)
+    assertTrue(wac.useSsl)
     assertTrue(wac.build.isDefined)
     assertTrue(wac.logging.isDefined)
     assertNotNull(wac.logging.get.loggers)

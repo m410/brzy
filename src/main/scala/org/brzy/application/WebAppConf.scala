@@ -69,7 +69,7 @@ class WebAppConf(
    * to the client to same url but over ssl.  It defaults to false, when not present and can
    * be set to true for the production environment.
    */
-  val useSsl: Boolean = confFile.useSsl.get
+  val useSsl: Boolean = confFile.useSsl
 
   /**
    * The application meta data, like author description and version.

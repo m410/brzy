@@ -16,9 +16,9 @@ import java.util.MissingResourceException
  */
 class WebAppConfiguration(override val map: Map[String, AnyRef]) extends ProjectModuleConfiguration(map) {
 
-  val useSsl: Option[Boolean] = map.get("use_ssl") match {
-    case Some(e) => if(e != null) Option(e.asInstanceOf[Boolean]) else Option(false)
-    case _ => Option(false)
+  val useSsl: Boolean = map.get("use_ssl") match {
+    case Some(e) => e.asInstanceOf[Boolean]
+    case _ => false
   }
 
   val logging: Option[Logging] = map.get("logging") match {
@@ -43,7 +43,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
   override def prettyPrint(t: String, pw: PrintWriter) {
     val tab = t + "  "
     super.prettyPrint(t,pw)
-    pw.println("Use SSL: " + useSsl.getOrElse("<None>"))
+    pw.println("Use SSL: " + useSsl)
     pw.println("Logging")
     logging match {
       case Some(l) => l.prettyPrint(tab,pw)
@@ -58,7 +58,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
   override def mergeConfiguration(t: ProjectModuleConfiguration) = {
     val that = t.asInstanceOf[WebAppConfiguration]
     val mergedWebXml = this.webXml ++ that.webXml
-    val mergedUseSsl = this.useSsl.getOrElse(that.useSsl.getOrElse(false)).asInstanceOf[AnyRef]
+    val mergedUseSsl = if (this.useSsl) this.useSsl else that.useSsl
 
     val mergedLogging = {
       if (this.logging.isDefined) {
@@ -73,7 +73,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
     val superMap = super.mergeConfiguration(that).map
 
     val newData = Map[String, AnyRef](
-      "use_ssl" -> mergedUseSsl,
+      "use_ssl" -> mergedUseSsl.asInstanceOf[AnyRef],
       "logging" -> mergedLogging,
       "web_xml" -> mergedWebXml
     ) ++ superMap
@@ -101,15 +101,21 @@ object WebAppConfiguration {
   }
 
   def runtime(env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
-    val archetypeConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
+    val asStream = getClass.getResourceAsStream(defaultConfig)
+    val yaml = Yaml(asStream)
+    val archetypeConfig = new WebAppConfiguration(yaml)
 
     // todo persistence modules will have lost some information, they're not the right instance
-    val projectConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(appConfig)))
+    val asStream1 = getClass.getResourceAsStream(appConfig)
+    val yaml1 = Yaml(asStream1)
+    val projectConfig = new WebAppConfiguration(yaml1)
+
+
     val envConfig = projectConfig.map.get("environment_overrides") match {
       case Some(ec) =>
         ec.asInstanceOf[List[Map[String,AnyRef]]].find(findEnv(_,env)) match {
           case Some(e) =>
-            new WebAppConfiguration(e.asInstanceOf[Map[String,AnyRef]])
+            new WebAppConfiguration(e)
           case _ =>
             new WebAppConfiguration(Map.empty[String,AnyRef])
         }
