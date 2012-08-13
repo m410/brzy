@@ -10,7 +10,7 @@
   <parent>
   <groupId>org.brzy.webapp</groupId>
   <artifactId>pom</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0.beta1</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +18,7 @@
     <brzy-scalate-version>1.0.0.beta2</brzy-scalate-version>
     <brzy-validator-version>0.1</brzy-validator-version>
     <beanwrap-version>0.2.3</beanwrap-version>
-    <fab-configuration-version>0.9-SNAPSHOT</fab-configuration-version>
+    <fab-configuration-version>0.9</fab-configuration-version>
   </properties>
   <build>
     <resources>
