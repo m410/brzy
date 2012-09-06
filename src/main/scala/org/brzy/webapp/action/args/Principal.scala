@@ -36,17 +36,40 @@ case class PrincipalSession(name:String, roles:Array[String]) {
 }
 
 /**
- * Document me..
+ * Used as the default implementation of the Principal action argument.
+ * @see Principal
  */
 class PrincipalRequest(request:HttpServletRequest) extends Principal {
 
+  /**
+   * Check to see if the principal user is logged in.
+   * @return true for logged in
+   */
   def isLoggedIn = {
     request.getSession(false) != null && request.getSession.getAttribute("brzy_principal") != null
   }
 
-  def name = request.getSession.getAttribute("brzy_principal").asInstanceOf[PrincipalSession].name
+  /**
+   * The name of the logged in user, or null.
+   * @return
+   */
+  def name = {
+    if (isLoggedIn)
+      request.getSession.getAttribute("brzy_principal").asInstanceOf[PrincipalSession].name
+    else
+      null
+  }
 
-  def roles = Roles(request.getSession.getAttribute("brzy_principal").asInstanceOf[PrincipalSession].roles:_*)
+  /**
+   * The roles of the logged in user
+   * @return A Roles constraint object with the names of the roles, or null if not logged in.
+   */
+  def roles = {
+    if (isLoggedIn)
+      Roles(request.getSession.getAttribute("brzy_principal").asInstanceOf[PrincipalSession].roles:_*)
+    else
+      null
+  }
 
   override def toString = {
     val buf = new StringBuilder().append("Principal(")

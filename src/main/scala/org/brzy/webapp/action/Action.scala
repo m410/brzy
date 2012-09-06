@@ -107,7 +107,10 @@ trait Action extends Ordered[Action] {
   protected def secureConstraints(constraints:List[Constraint], p:Principal) = {
     constraints.forall(constraint => constraint match {
       case r:Roles =>
-        r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+        if(p.isLoggedIn)
+          r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+        else
+          false
       case _ =>
         true
     })
