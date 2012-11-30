@@ -47,7 +47,7 @@ trait Properties  extends Arg {
 /**
  * Document me..
  */
-class PropertiesRequest protected (request:HttpServletRequest) extends Properties {
+class PropertiesRequest protected[args] (request:HttpServletRequest) extends Properties {
   def requestURI = request.getRequestURI
   def requestURL = request.getRequestURL
   def queryString = request.getQueryString

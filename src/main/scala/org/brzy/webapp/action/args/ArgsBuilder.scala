@@ -52,7 +52,7 @@ object ArgsBuilder {
         new PropertiesRequest(req)
       case _ =>
         throw new UnknownActionArgException("Unknown action argument type: " + arg)
-    }).toArray
+    }).toArray.asInstanceOf[Array[Arg]]
   }
 
   /**

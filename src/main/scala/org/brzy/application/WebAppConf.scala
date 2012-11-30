@@ -33,7 +33,7 @@ import java.io.{PrintWriter, File}
  *
  * @author Michael Fortin
  */
-@deprecated
+@deprecated("Not sure why I removed it")
 class WebAppConf(
       val confFile: WebAppConfFile,
       val views: ViewMod,
@@ -166,7 +166,7 @@ class WebAppConf(
  *
  * @author Michael Fortin
  */
-@deprecated
+@deprecated("Not sure why I removed it")
 object WebAppConf {
   private val log = LoggerFactory.getLogger(getClass)
   val defaultConfigFile = "/brzy-webapp.default.b.yml"
