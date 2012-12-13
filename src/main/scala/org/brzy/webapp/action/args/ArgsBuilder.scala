@@ -32,8 +32,8 @@ object ArgsBuilder {
 
   def apply(req:HttpServletRequest,action:Action):Array[Arg] = {
     val path = parseActionPath(req.getRequestURI, req.getContextPath)
-    val args = action.argTypes
-    log.trace("arg types: '{}', path: '{}'", args, path)
+    val args = action.argTypes.toArray
+    log.trace("arg types: '{}', path: '{}'", Array(args, path):_*)
 
     args.map(arg => arg match {
       case ParametersClass =>
@@ -52,7 +52,7 @@ object ArgsBuilder {
         new PropertiesRequest(req)
       case _ =>
         throw new UnknownActionArgException("Unknown action argument type: " + arg)
-    }).toArray
+    })
   }
 
   /**

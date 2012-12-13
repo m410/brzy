@@ -48,7 +48,7 @@ object ResponseHandler {
   private def matchData(result: Any, req:HttpServletRequest,res:HttpServletResponse) {
     result match {
       case (s: String, m: AnyRef) =>
-        log.trace("tuple: ({},{})", s, m)
+        log.trace("tuple: ({},{})", Array(s, m):_*)
         handleData(Model(s -> m), req, res)
       case d: Data =>
         log.trace("Data: {}", d)

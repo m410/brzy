@@ -79,7 +79,7 @@ abstract class WebApp(conf: WebAppConfiguration) {
 
     actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
-        log.debug("{} >> {}", pathLog(req) , action)
+        log.debug("{} >> {}", Array(pathLog(req) , action):_*)
         val args = ArgsBuilder(req,action)
         val principal = new PrincipalRequest(req)
         val result = callActionOrLogin(req, action, principal, args)
