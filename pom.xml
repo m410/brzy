@@ -13,7 +13,7 @@
     <brzy-scalate-version>1.0.0.beta2</brzy-scalate-version>
     <brzy-validator-version>0.1</brzy-validator-version>
     <beanwrap-version>0.2.3</beanwrap-version>
-    <fab-configuration-version>0.9</fab-configuration-version>
+    <fab-configuration-version>0.10-SNAPSHOT</fab-configuration-version>
   </properties>
   <build>
     <resources>
@@ -140,6 +140,7 @@
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-configuration</artifactId>
       <version>${fab-configuration-version}</version>
+      <classifier>${scala.version}</classifier>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>
