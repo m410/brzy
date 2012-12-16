@@ -31,6 +31,7 @@
           <scalaVersion>${scala.version}</scalaVersion>
           <args>
             <arg>-deprecation</arg>
+            <arg>-unchecked</arg>
           </args>
         </configuration>
         <executions>
