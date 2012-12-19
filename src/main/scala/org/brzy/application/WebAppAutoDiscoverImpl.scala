@@ -96,7 +96,7 @@ class WebAppAutoDiscoverImpl(conf:WebAppConfiguration) extends WebApp(conf) {
       }) match {
         case Some(e) => e
         case _ =>
-          LoggerFactory.getLogger(getClass).warn("No service for type '{}' on class {}",Array(argClass, c):_*)
+          LoggerFactory.getLogger(getClass).warn("No service for type '{}' on class {}",argClass, c)
           null
       }
     })

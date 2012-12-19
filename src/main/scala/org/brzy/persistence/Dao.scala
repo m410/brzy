@@ -101,7 +101,7 @@ trait Dao[T <: {def id: PK}, PK] {
     /**
      * Insert the entity, with an optional commit immediately parameter.
      */
-    def insert(commit: Boolean = false)
+    def insert(commit: Boolean = false):T
 
     /**
      * Commit the current transaction.

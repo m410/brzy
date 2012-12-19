@@ -43,13 +43,13 @@ class BrzyServlet extends HttpServlet {
   }
 
   private[this]  def internal(req: HttpServletRequest, res: HttpServletResponse) {
-    log.trace("request: {}, context: {}", Array(req.getServletPath, req.getContextPath):_*)
+    log.trace("request: {}, context: {}", req.getServletPath, req.getContextPath)
     val actionPath = ArgsBuilder.parseActionPath(req.getRequestURI, req.getContextPath)
     log.trace("action-path: {}", actionPath)
 
     webapp.actions.find(_.path.isMatch(actionPath)) match {
       case Some(action) =>
-        log.debug("{} >> {}", Array(pathLog(req) , action):_*)
+        log.debug("{} >> {}", pathLog(req) , action)
         val args = ArgsBuilder(req,action)
         val principal = new PrincipalRequest(req)
 

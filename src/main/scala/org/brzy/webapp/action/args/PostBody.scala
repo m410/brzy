@@ -43,7 +43,7 @@ trait PostBody extends Arg {
 /**
  * Document me..
  */
-class PostBodyRequest (request: HttpServletRequest,
+class PostBodyRequest protected(request: HttpServletRequest,
         val maxSize:Long = 10000000,
         val tempDir:File = new File(util.Properties.tmpDir),
         val sizeThreshold:Int = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD) extends PostBody {

@@ -77,7 +77,7 @@ trait Parameters extends Arg {
 /**
  * Default implementation passed as the argument to the actions.
  */
-class ParametersRequest (req:HttpServletRequest, urlParams:Map[String, String]) extends Parameters {
+class ParametersRequest protected (req:HttpServletRequest, urlParams:Map[String, String]) extends Parameters {
 
   def apply(name:String) = {
     if (urlParams.contains(name))
