@@ -71,6 +71,8 @@ class BrzyFilter extends SFilter {
       else
         uri.substring(contextPath.length, uri.length)
 
+    // todo get the transaction from the action, wrap call in it, if it's session in view
+
     // the aop interceptors are run here so that the view rendering is also within the transaction
     log.trace("intercept: {}", forward)
     webapp.interceptor.doIn(() => {

@@ -78,7 +78,7 @@
     <profile>
       <id>2.10.0</id>
       <properties>
-        <scala.version>2.10.0-RC3</scala.version>
+        <scala.version>2.10.0</scala.version>
       </properties>
     </profile>
   </profiles>
