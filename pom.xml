@@ -77,6 +77,9 @@
     </profile>
     <profile>
       <id>2.10.0</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <properties>
         <scala.version>2.10.0</scala.version>
       </properties>
@@ -163,11 +166,19 @@
       <artifactId>validator</artifactId>
       <version>${brzy-validator-version}</version>
     </dependency>
+
+    <!--<dependency>-->
+      <!--<groupId>com.twitter</groupId>-->
+      <!--<artifactId>json</artifactId>-->
+      <!--<version>1.1.1</version>-->
+    <!--</dependency>-->
+
     <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>json</artifactId>
-      <version>1.1.1</version>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-json_2.10</artifactId>
+      <version>2.5-M4</version>
     </dependency>
+
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>

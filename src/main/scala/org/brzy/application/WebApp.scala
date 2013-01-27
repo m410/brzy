@@ -246,7 +246,7 @@ abstract class WebApp(conf: WebAppConfiguration) {
    */
   val actions = {
     val list = new ListBuffer[Action]()
-    controllers.foreach(ctl => { ctl.actions.foreach(a=> list += a)})
+    controllers.foreach((ctl:Controller) => { ctl.actions.foreach(a=> list += a)})
     SortedSet[Action]() ++ list.toIterable
   }
 
@@ -266,7 +266,7 @@ abstract class WebApp(conf: WebAppConfiguration) {
     moduleProviders.foreach(_.startup())
     services.foreach(lifeCycleCreate(_))
     services.foreach(a=>log.trace("service: {}",a))
-    controllers.foreach(a=>log.trace("controller: {}",a))
+    controllers.foreach((a:Controller)=>log.trace("controller: {}",a))
     actions.foreach(a=>log.debug("action: {}",a))
   }
 

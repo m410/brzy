@@ -4,9 +4,8 @@ import java.io.{File, PrintWriter}
 import org.slf4j.LoggerFactory
 import com.twitter.json.Json
 
-import org.brzy.fab.conf.{WebXml, Yaml, Logging}
-import collection.mutable.ListBuffer
-import org.brzy.fab.mod.{ViewMod, PersistenceMod, Mod, ProjectModuleConfiguration}
+import org.brzy.fab.conf.{Yaml, Logging}
+import org.brzy.fab.mod.{Mod, ProjectModuleConfiguration}
 import java.util.MissingResourceException
 
 /**

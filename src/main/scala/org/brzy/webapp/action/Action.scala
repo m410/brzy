@@ -151,7 +151,7 @@ trait Action extends Ordered[Action] {
   }
 
   protected def toClassList(t: List[_]) = {
-    t.map(t => {
+    t.map((t:Any) => {
       if (t.toString.endsWith(".type"))
         Class.forName(t.toString.substring(0, t.toString.length - 5))
       else
@@ -182,6 +182,8 @@ object Action {
 
   /**
    * Construct an action depending on how many arguments there are.
+   * @todo change this to
+   *       apply(pathExpr:String, f:F, view:View=NoView, trans:Trans=DefautTrans, constraints:Constraints*)
    */
   def apply[F <: AnyRef](path: String, view: String, action: F, constraints: Constraint*)
           (implicit m: Manifest[F], controller: Controller): Action = {

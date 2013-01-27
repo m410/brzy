@@ -18,7 +18,6 @@ import collection.mutable.ListBuffer
 import collection.SortedSet
 import org.brzy.fab.mod.{Mod, PersistenceMod, RuntimeMod, ViewMod}
 import org.slf4j.LoggerFactory
-import com.twitter.json.Json
 import java.io.{PrintWriter, File}
 
 /**
@@ -150,13 +149,15 @@ class WebAppConf(
   }
 
   def toJson = {
-    val data = Map(
-      "config" -> confFile.map,
-      "views" -> Map("viewClass"->views.getClass.getName,"view"->views.map),
-      "persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}),
-      "modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
+    import net.liftweb.json.JsonDSL._
+    import net.liftweb.json._
 
-    Json.build(data).toString()
+    compact(render(
+      ("config" -> confFile.map)~
+      ("views" -> Map("viewClass"->views.getClass.getName,"view"->views.map))~
+      ("persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}))~
+      ("modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
+    ))
   }
 }
 
@@ -321,15 +322,18 @@ object WebAppConf {
   }
 
   def fromJson(json: String) = {
+    import net.liftweb.json._
+
     var data:Map[String, AnyRef] = Map.empty[String,AnyRef]
 
     try {
-      data = Json.parse(json).asInstanceOf[Map[String, AnyRef]]
+      data = parse(json).extract[Map[String,AnyRef]]
     }
     catch {
       case e:Exception =>
         throw new java.lang.RuntimeException("json:"+json,e)
     }
+
     val conf = new WebAppConfFile(data("config").asInstanceOf[Map[String,AnyRef]])
 
     val v = data("views").asInstanceOf[Map[String,AnyRef]]
