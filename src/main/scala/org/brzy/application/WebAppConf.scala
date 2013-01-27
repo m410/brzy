@@ -149,15 +149,15 @@ class WebAppConf(
   }
 
   def toJson = {
-    import net.liftweb.json.JsonDSL._
     import net.liftweb.json._
-
-    compact(render(
-      ("config" -> confFile.map)~
-      ("views" -> Map("viewClass"->views.getClass.getName,"view"->views.map))~
-      ("persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}))~
-      ("modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
-    ))
+    implicit val formats = Serialization.formats(NoTypeHints)
+    Serialization.write(
+      Map(
+        "config" -> confFile.map,
+        "views" -> Map("viewClass"->views.getClass.getName,"view"->views.map),
+        "persistence" -> persistence.map(p=>{ Map("persistClass"->p.getClass.getName,"persist"->p.map)}),
+        "modules" -> modules.map(m=>{Map("modClass"->m.getClass.getName,"mod"->m.map)}))
+    )
   }
 }
 
@@ -323,6 +323,7 @@ object WebAppConf {
 
   def fromJson(json: String) = {
     import net.liftweb.json._
+    implicit val formats = Serialization.formats(NoTypeHints)
 
     var data:Map[String, AnyRef] = Map.empty[String,AnyRef]
 

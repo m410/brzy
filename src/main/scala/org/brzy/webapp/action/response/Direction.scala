@@ -16,8 +16,10 @@ package org.brzy.webapp.action.response
 import org.scalastuff.scalabeans.Preamble._
 import xml.Elem
 import java.io.OutputStream
-import com.twitter.json.{Json=>tJson}
+
 import org.brzy.webapp.action.Parser
+
+import net.liftweb.json._
 
 /**
  * Document Me..
@@ -104,19 +106,9 @@ case class Stream(io: (OutputStream)=>Unit, contentType: String) extends Directi
  */
 case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json") extends Direction with Parser {
 
-  def parse = target match {
-    case s: String =>
-      s
-    case l: List[_] =>
-      tJson.build(l).toString()
-    case m: Map[_, _] =>
-      tJson.build(m).toString()
-    case _ =>
-      val descriptor = descriptorOf[T]
-      val map = descriptor.properties.map(p=>{
-        p.name -> descriptor.get(target,p.name)
-      }).toMap
-      tJson.build(map).toString()
+  def parse = {
+    implicit val formats = Serialization.formats(NoTypeHints)
+    Serialization.write(target)
   }
 }
 
@@ -129,23 +121,11 @@ case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "applicatio
  */
 case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json") extends Direction with Parser {
   def parse = {
+    implicit val formats = Serialization.formats(NoTypeHints)
     val sb = new StringBuilder()
     sb.append(callback)
     sb.append("(")
-    sb.append(target match {
-      case s: String =>
-        s
-      case l: List[_] =>
-        tJson.build(l).toString()
-      case m: Map[_, _] =>
-        tJson.build(m).toString()
-      case _ =>
-        val descriptor = descriptorOf[T]
-        val map = descriptor.properties.map(p=>{
-          p.name -> descriptor.get(target,p.name)
-        }).toMap
-        tJson.build(map).toString()
-    })
+    sb.append(Serialization.write(target))
     sb.append(")")
     sb.toString()
   }

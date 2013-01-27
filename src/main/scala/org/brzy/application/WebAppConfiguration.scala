@@ -2,11 +2,12 @@ package org.brzy.application
 
 import java.io.{File, PrintWriter}
 import org.slf4j.LoggerFactory
-import com.twitter.json.Json
 
 import org.brzy.fab.conf.{Yaml, Logging}
 import org.brzy.fab.mod.{Mod, ProjectModuleConfiguration}
 import java.util.MissingResourceException
+import net.liftweb.json._
+import scala.Some
 
 /**
  * Document Me..
@@ -232,7 +233,8 @@ object WebAppConfiguration {
   }
 
   def fromJson(json: String) = {
-    val m = Json.parse(json).asInstanceOf[Map[String, AnyRef]]
+    implicit val formats = Serialization.formats(NoTypeHints)
+    val m = parse(json).extract[Map[String,AnyRef]]
     new WebAppConfiguration(m("config").asInstanceOf[Map[String, AnyRef]])
   }
 }

@@ -17,11 +17,13 @@ import org.apache.commons.fileupload.FileItem
 import org.apache.commons.fileupload.disk.DiskFileItemFactory
 import io.Source
 import xml.{XML, Elem}
-import com.twitter.json.{Json => tJson}
+
 import org.apache.commons.fileupload.servlet.ServletFileUpload
 import javax.servlet.http.HttpServletRequest
 import collection.JavaConversions._
 import java.io.File
+
+import net.liftweb.json._
 
 /**
  * Document Me..
@@ -52,7 +54,7 @@ class PostBodyRequest (request: HttpServletRequest,
 
   def asXml = XML.load(request.getInputStream)
 
-  def asJson = tJson.parse(asText).asInstanceOf[AnyRef]
+  def asJson = parse(asText)
 
 
   private lazy val fileItems = {

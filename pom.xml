@@ -9,10 +9,9 @@
   <version>0.11.0-SNAPSHOT</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <scala.version>2.8.2</scala.version>
-    <brzy-scalate-version>1.0.0.beta2</brzy-scalate-version>
-    <brzy-validator-version>0.1</brzy-validator-version>
-    <beanwrap-version>0.2.3</beanwrap-version>
+    <brzy-scalate-version>0.110-SNAPSHOT</brzy-scalate-version>
+    <brzy-validator-version>0.3-SNAPSHOT</brzy-validator-version>
+    <!--<beanwrap-version>0.2.3</beanwrap-version>-->
     <fab-configuration-version>0.10-SNAPSHOT</fab-configuration-version>
   </properties>
   <build>
@@ -115,11 +114,11 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.brzy.beanwrap</groupId>
-      <artifactId>beanwrap</artifactId>
-      <version>${beanwrap-version}</version>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.brzy.beanwrap</groupId>-->
+      <!--<artifactId>beanwrap</artifactId>-->
+      <!--<version>${beanwrap-version}</version>-->
+    <!--</dependency>-->
 
     <dependency>
       <groupId>org.reflections</groupId>
