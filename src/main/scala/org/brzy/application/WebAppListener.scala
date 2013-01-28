@@ -21,9 +21,11 @@ import ch.qos.logback.classic.LoggerContext
 /**
  * Web application listener placed in the web.xml to initialize and destroy the 
  * application.  This Loads the Webapp, and places it in the application context.
- * 
+ *
+ * @see http://www.softwareengineeringsolutions.com/blogs/2010/08/01/programmatic-definition-of-components-in-servlet-specification-3-0/
  * @author Michael Fortin
  */
+//@WebListener
 class WebAppListener extends ServletContextListener {
 
   private[this] val log = LoggerFactory.getLogger(classOf[WebAppListener])
