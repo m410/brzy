@@ -73,7 +73,7 @@ class WebAppConf(
   /**
    * The application meta data, like author description and version.
    */
-  val application: Option[Application] = confFile.application
+  val application: Option[org.brzy.fab.conf.Application] =  confFile.application
 
   val build: Option[Build] = confFile.build
 

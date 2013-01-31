@@ -11,10 +11,10 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <brzy-scalate-version>0.110-SNAPSHOT</brzy-scalate-version>
+    <brzy-scalate-version>0.11.0-SNAPSHOT</brzy-scalate-version>
     <brzy-validator-version>0.3-SNAPSHOT</brzy-validator-version>
-    <!--<beanwrap-version>0.2.3</beanwrap-version>-->
-    <fab-configuration-version>0.10-SNAPSHOT</fab-configuration-version>
+    <beanwrap-version>0.3-SNAPSHOT</beanwrap-version>
+    <fab-configuration-version>0.11-SNAPSHOT</fab-configuration-version>
   </properties>
   <build>
     <resources>
@@ -54,35 +54,6 @@
           </args>
         </configuration>
       </plugin>
-      <!--<plugin>-->
-        <!--<groupId>org.scala-tools</groupId>-->
-        <!--<artifactId>maven-scala-plugin</artifactId>-->
-        <!--<version>2.15.2</version>-->
-        <!--<configuration>-->
-          <!--<scalaVersion>${scala.version}</scalaVersion>-->
-          <!--<args>-->
-            <!--<arg>-deprecation</arg>-->
-            <!--<arg>-unchecked</arg>-->
-          <!--</args>-->
-        <!--</configuration>-->
-        <!--<executions>-->
-          <!--<execution>-->
-            <!--<id>scala-compile-first</id>-->
-            <!--<phase>process-resources</phase>-->
-            <!--<goals>-->
-              <!--<goal>add-source</goal>-->
-              <!--<goal>compile</goal>-->
-            <!--</goals>-->
-          <!--</execution>-->
-          <!--<execution>-->
-            <!--<id>scala-test-compile</id>-->
-            <!--<phase>process-test-resources</phase>-->
-            <!--<goals>-->
-              <!--<goal>testCompile</goal>-->
-            <!--</goals>-->
-          <!--</execution>-->
-        <!--</executions>-->
-      <!--</plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -122,21 +93,21 @@
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
     </repository>
-    <repository>
-      <id>jboss</id>
-      <name>jboss repository</name>
-      <url>http://repository.jboss.com/maven2</url>
-    </repository>
-    <repository>
-      <id>reflections-repo</id>
-      <name>Reflections Maven2 Repository</name>
-      <url>http://reflections.googlecode.com/svn/repo</url>
-    </repository>
-    <repository>
-      <id>scala-tools-snapshot</id>
-      <name>scala-tools-snapshot</name>
-      <url>http://www.scala-tools.org/repo-snapshots</url>
-    </repository>
+    <!--<repository>-->
+      <!--<id>jboss</id>-->
+      <!--<name>jboss repository</name>-->
+      <!--<url>http://repository.jboss.com/maven2</url>-->
+    <!--</repository>-->
+    <!--<repository>-->
+      <!--<id>reflections-repo</id>-->
+      <!--<name>Reflections Maven2 Repository</name>-->
+      <!--<url>http://reflections.googlecode.com/svn/repo</url>-->
+    <!--</repository>-->
+    <!--<repository>-->
+      <!--<id>scala-tools-snapshot</id>-->
+      <!--<name>scala-tools-snapshot</name>-->
+      <!--<url>http://www.scala-tools.org/repo-snapshots</url>-->
+    <!--</repository>-->
   </repositories>
   <dependencies>
     <dependency>
@@ -146,56 +117,61 @@
       <scope>provided</scope>
     </dependency>
 
-    <!--<dependency>-->
-      <!--<groupId>org.brzy.beanwrap</groupId>-->
-      <!--<artifactId>beanwrap</artifactId>-->
-      <!--<version>${beanwrap-version}</version>-->
-    <!--</dependency>-->
-
     <dependency>
-      <groupId>org.reflections</groupId>
-      <artifactId>reflections</artifactId>
-      <version>0.9.5-RC2</version>
-      <exclusions>
-        <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>servlet-api</artifactId>
-          <groupId>javax.servlet</groupId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.brzy.beanwrap</groupId>
+      <artifactId>beanwrap</artifactId>
+      <version>${beanwrap-version}</version>
     </dependency>
+
+    <!--<dependency>-->
+      <!--<groupId>org.reflections</groupId>-->
+      <!--<artifactId>reflections</artifactId>-->
+      <!--<version>0.9.5-RC2</version>-->
+      <!--<exclusions>-->
+        <!--<exclusion>-->
+          <!--<groupId>ch.qos.logback</groupId>-->
+          <!--<artifactId>logback-classic</artifactId>-->
+        <!--</exclusion>-->
+        <!--<exclusion>-->
+          <!--<artifactId>slf4j-api</artifactId>-->
+          <!--<groupId>org.slf4j</groupId>-->
+        <!--</exclusion>-->
+        <!--<exclusion>-->
+          <!--<artifactId>servlet-api</artifactId>-->
+          <!--<groupId>javax.servlet</groupId>-->
+        <!--</exclusion>-->
+      <!--</exclusions>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-configuration</artifactId>
       <version>${fab-configuration-version}</version>
-      <classifier>${scala.version}</classifier>
+      <!--<classifier>${scala.version}</classifier>-->
     </dependency>
+
+    <!-- I want to remove these -->
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.11.0.GA</version>
     </dependency>
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.0.9</version>
-    </dependency>
-    <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>1.6.8</version>
     </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.9</version>
+    </dependency>
+
     <dependency>
       <groupId>org.brzy.validator</groupId>
       <artifactId>validator</artifactId>
       <version>${brzy-validator-version}</version>
+      <scope>${scala.verson}</scope>
     </dependency>
 
     <!--<dependency>-->
@@ -208,6 +184,13 @@
       <groupId>net.liftweb</groupId>
       <artifactId>lift-json_2.10</artifactId>
       <version>2.5-M4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>1.0.0.GA</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -234,6 +217,10 @@
       <artifactId>commons-io</artifactId>
       <version>1.4</version>
     </dependency>
+
+
+
+    <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

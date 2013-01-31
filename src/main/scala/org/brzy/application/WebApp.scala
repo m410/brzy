@@ -25,7 +25,7 @@ import org.brzy.webapp.controller.Controller
 import org.brzy.interceptor.Invoker
 import org.brzy.interceptor.ProxyFactory._
 import org.brzy.service.Service
-import org.brzy.beanwrap.Build
+import org.brzy.beanwrap.Builder
 import org.brzy.webapp.action.args.{Principal, Arg, PrincipalRequest, ArgsBuilder}
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import javax.servlet.FilterChain
@@ -146,7 +146,9 @@ abstract class WebApp(conf: WebAppConfiguration) {
       case Some(v) =>
         log.trace("provider: {}", v.providerClass.getOrElse("null"))
         if (v.providerClass.isDefined && v.providerClass.get != null)
-          Build.reflect[ViewModProvider](v.providerClass.get, Array(v))
+          // todo fix me
+          Builder[ViewModProvider]().make
+//          Build.reflect[ViewModProvider](v.providerClass.get, Array(v))
         else
           null
       case _ => null
@@ -159,7 +161,9 @@ abstract class WebApp(conf: WebAppConfiguration) {
   val persistenceProviders: List[ModProvider] = {
     conf.persistence.map(persist => {
       log.debug("persistence: {}", persist)
-      Build.reflect[ModProvider](persist.providerClass.get, Array(persist))
+      // todo fix me
+      Builder[ModProvider]().make
+//      Build.reflect[ModProvider](persist.providerClass.get, Array(persist))
     }).toList
   }
 
@@ -306,13 +310,15 @@ object WebApp {
 
   def apply(config: WebAppConfiguration): WebApp = {
     log.debug("application class: {}", config.application.get.applicationClass.getOrElse("NA"))
+    val projectApplicationClass = config.application.get.applicationClass.get
+//    Build.reflect[WebApp](projectApplicationClass, Array(config))
+    val args = Array(config)
+    val c = Class.forName(projectApplicationClass)
+    val constructor = c.getConstructor(args.map(_.getClass):_*)
+    constructor.newInstance(args:_*).asInstanceOf[WebApp]
 
-    if (config.application.get.applicationClass.isDefined) {
-      val projectApplicationClass = config.application.get.applicationClass.get
-      Build.reflect[WebApp](projectApplicationClass, Array(config))
-    }
-    else
-      new WebAppAutoDiscoverImpl(config)
+
+
   }
 
 }

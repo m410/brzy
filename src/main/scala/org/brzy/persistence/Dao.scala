@@ -15,7 +15,7 @@ package org.brzy.persistence
 
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
-import org.brzy.beanwrap.{Build, Editors}
+import org.brzy.beanwrap.{Builder, Editors}
 
 /**
  * This is a persistent super class that can be used by persistence  modules to enable the
@@ -67,13 +67,17 @@ trait Dao[T <: {def id: PK}, PK] {
    * editors repository.
    */
   def construct(map: Map[String, AnyRef])(implicit m: Manifest[T]): T = {
-    Build[T](map.asInstanceOf[Map[String,String]], editors).make
+    implicit val implicitEditors = editors
+    map.foldLeft(Builder[T]())((a,b)=>{a.set(b._1,b._2)}).make
   }
 
   /**
    * This creates and instance of the entity using a default no-args constructor.
    */
-  def construct()(implicit m: Manifest[T]): T = Build[T](Map.empty[String,String], editors).make
+  def construct()(implicit m: Manifest[T]): T = {
+    implicit val implicitEditors = editors
+    Builder[T]().make
+  }
 
   /**
    * sets the default editors for building an entity from the request parameters.

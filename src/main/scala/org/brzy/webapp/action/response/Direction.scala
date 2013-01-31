@@ -13,16 +13,12 @@
  */
 package org.brzy.webapp.action.response
 
-import org.scalastuff.scalabeans.Preamble._
-import xml.Elem
+import org.brzy.webapp.action.Parser
+import net.liftweb.json._
 import java.io.OutputStream
 
-import org.brzy.webapp.action.Parser
-
-import net.liftweb.json._
-
 /**
- * Document Me..
+ * What direction to send the client request too.  Can be a vew, redirect, forward, etc.
  * 
  * @author Michael Fortin
  */
@@ -57,15 +53,7 @@ case class Redirect(path: String) extends Direction
 case class Xml[T<:AnyRef:Manifest](t: T, contentType: String = "text/xml") extends Direction with Parser {
 
   def parse = {
-    val descriptor = descriptorOf[T]
-    val map = descriptor.properties.map(p=>{
-      p.name -> descriptor.get(t,p.name)
-    }).toMap
-    def node(name: String, elem: Elem) = elem.copy(label = name)
-    val tmp = <class>
-      {map.map(p => node({p._1}, <property>{p._2}</property>))}
-    </class>
-    node(t.getClass.getSimpleName, tmp)
+    <class></class>
   }.toString()
 }
 
