@@ -19,26 +19,34 @@ class Application(conf: WebAppConfiguration) {
 
   val useSsl = conf.useSsl
 
-  val services = List.empty[AnyRef]
+  def services = List.empty[AnyRef]
 
-  val controllers = List.empty[Controller]
+  def controllers = List.empty[Controller]
 
   /**
    * @param request
    * @return
    */
-  def actionFor(request:HttpServletRequest):Option[Action] = {
-    val path = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
-    actions.find(_.path.isMatch(path))
+  def doFilterAction(request:HttpServletRequest):FilterDirect = {
+    val method = request.getMethod.asInstanceOf[String]
+    val contentType = request.getContentType.asInstanceOf[String]
+    val path = request.getRequestURI.asInstanceOf[String]
+    actions.find(_.isMatch(method, contentType, path))
+
+    NotAnAction
   }
 
-  val moduleProviders:List[ModProvider] = List.empty[ModProvider]
+  def doServiceAction(request:HttpServletRequest):Option[Action] = {
+    None
+  }
 
-  val persistenceProviders:List[ModProvider] = List.empty[ModProvider]
+  def moduleProviders:List[ModProvider] = List.empty[ModProvider]
 
-  val viewProvider:Option[ViewModProvider] = None
+  def persistenceProviders:List[ModProvider] = List.empty[ModProvider]
 
-  val localThreadSessions:List[ManagedThreadContext] = List.empty[ManagedThreadContext]
+  def viewProvider:Option[ViewModProvider] = None
+
+  def threadLocalSessions:List[ManagedThreadContext] = List.empty[ManagedThreadContext]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

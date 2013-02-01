@@ -5,7 +5,7 @@ import org.brzy.webapp.action.response.{Model, Response}
 
 class MyController extends Controller("home"){ self:PersonStore =>
 
-  override def actions = super.actions ++ List(
+  override val actions = super.actions ++ List(
     Action("{id}",get _)
   )
 

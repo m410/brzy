@@ -8,5 +8,5 @@ package org.brzy.exp
  */
 trait EmailProvider extends Application {
   val emailService = new EmailService
-  abstract override val services = super.services ++ List(emailService)
+  abstract override def services = super.services ++ List(emailService)
 }

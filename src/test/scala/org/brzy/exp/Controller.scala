@@ -27,7 +27,7 @@ abstract class Controller(val basePath:String) extends Ordered[Controller] {
    * List of actions for this controller.  When overriding this, it's adventages to make it
    * a val so you the app doesn't make a list every time.
    */
-  val actions:List[Action] = List.empty[Action]
+  def actions:List[Action] = List.empty[Action]
 
 
   /**
