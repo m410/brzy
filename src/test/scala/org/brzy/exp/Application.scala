@@ -1,12 +1,11 @@
-package org.brzy.application
+package org.brzy.exp
 
 import org.slf4j.LoggerFactory
-import org.brzy.webapp.controller.Controller
-import org.brzy.webapp.action.Action
 import org.brzy.fab.mod.{ViewModProvider, ModProvider}
 import org.brzy.webapp.action.args.ArgsBuilder
-import org.brzy.interceptor.Invoker
 import javax.servlet.http.HttpServletRequest
+import org.brzy.application.WebAppConfiguration
+import org.brzy.fab.interceptor.ManagedThreadContext
 
 /**
  * Document Me..
@@ -25,28 +24,6 @@ class Application(conf: WebAppConfiguration) {
   val controllers = List.empty[Controller]
 
   /**
-   * in filter
-   * application.actionFor(request) match {
-   *   case Some(a) =>
-   *     if(isInternalPath(request))
-   *      a.transaction.doIn {()=> chain.doFilter(req,res) }
-   *     else
-   *      req.getRequestDispatcher(forward + ".brzy").forward(req, res)
-   *   case _ =>
-   *     chain.doFilter(req,res)
-   *  }
-   *
-   *  application.actionFor(request) match {
-   *   case Some(a) =>
-   *   if(a.isSecure(request))
-   *   if(a.requiredAuthentication(request) && a.authenticated(request))
-   *    if(a.isAuthorized(request))
-   *      val result = a.execute(request,response)
-          ResponseHandler(action, result, request, response)
-   *    else
-   *   case _ =>
-   *  }
-   *
    * @param request
    * @return
    */
@@ -61,7 +38,7 @@ class Application(conf: WebAppConfiguration) {
 
   val viewProvider:Option[ViewModProvider] = None
 
-  val interceptors:List[Invoker] = List.empty[Invoker]
+  val localThreadSessions:List[ManagedThreadContext] = List.empty[ManagedThreadContext]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

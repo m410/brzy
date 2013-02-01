@@ -24,6 +24,7 @@ import java.io.OutputStream
  */
 sealed trait Direction extends Response
 
+case object NoView extends Direction
 
 /**
  * Override the default view.
