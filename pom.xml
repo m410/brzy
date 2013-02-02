@@ -16,6 +16,32 @@
     <beanwrap-version>0.3-SNAPSHOT</beanwrap-version>
     <fab-configuration-version>0.11-SNAPSHOT</fab-configuration-version>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>2.9.2</id>
+      <properties>
+        <scala.version>2.9.2</scala.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>2.8.2</id>
+      <properties>
+        <scala.version>2.8.2</scala.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>2.10.0</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <scala.version>2.10.0</scala.version>
+      </properties>
+    </profile>
+  </profiles>
+
+
   <build>
     <resources>
       <resource>
@@ -64,29 +90,8 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>2.9.2</id>
-      <properties>
-        <scala.version>2.9.2</scala.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>2.8.2</id>
-      <properties>
-        <scala.version>2.8.2</scala.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>2.10.0</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <scala.version>2.10.0</scala.version>
-      </properties>
-    </profile>
-  </profiles>
+
+
   <repositories>
     <repository>
       <id>scala-tools.org</id>
@@ -171,14 +176,7 @@
       <groupId>org.brzy.validator</groupId>
       <artifactId>validator</artifactId>
       <version>${brzy-validator-version}</version>
-      <scope>${scala.verson}</scope>
     </dependency>
-
-    <!--<dependency>-->
-      <!--<groupId>com.twitter</groupId>-->
-      <!--<artifactId>json</artifactId>-->
-      <!--<version>1.1.1</version>-->
-    <!--</dependency>-->
 
     <dependency>
       <groupId>net.liftweb</groupId>

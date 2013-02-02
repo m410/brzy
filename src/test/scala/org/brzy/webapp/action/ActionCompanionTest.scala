@@ -26,6 +26,7 @@ import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
 import response.ResponseHandler
+import javax.servlet.http.HttpServletResponse
 
 
 class ActionCompanionTest extends JUnitSuite {
@@ -55,6 +56,18 @@ class ActionCompanionTest extends JUnitSuite {
 					}
 				}
 			}
+      def startAsync() = null
+      def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+      def isAsyncStarted = false
+      def isAsyncSupported = false
+      def getAsyncContext = null
+      def getDispatcherType = null
+
+      def authenticate(p1: HttpServletResponse) = false
+      def login(p1: String, p2: String) {}
+      def logout() {}
+      def getParts = null
+      def getPart(p1: String) = null
 		}
 
     val tup = ("attributeKey","attributeValue")

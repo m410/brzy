@@ -20,6 +20,7 @@ import org.junit.Test
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import org.springframework.mock.web.{MockRequestDispatcher, MockHttpServletResponse, MockHttpServletRequest, MockServletContext}
 import org.brzy.webapp.action.args.{Principal, Arg}
+import javax.servlet.http.HttpServletResponse
 
 class DefaultReturnTest  extends JUnitSuite {
 
@@ -49,6 +50,18 @@ class DefaultReturnTest  extends JUnitSuite {
 					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ){}
 				}
 			}
+      def startAsync() = null
+      def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+      def isAsyncStarted = false
+      def isAsyncSupported = false
+      def getAsyncContext = null
+      def getDispatcherType = null
+
+      def authenticate(p1: HttpServletResponse) = false
+      def login(p1: String, p2: String) {}
+      def logout() {}
+      def getParts = null
+      def getPart(p1: String) = null
 		}
     val response = new MockHttpServletResponse()
     ResponseHandler(action,result,request,response)
@@ -73,6 +86,18 @@ class DefaultReturnTest  extends JUnitSuite {
 					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ){}
 				}
 			}
+      def startAsync() = null
+      def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+      def isAsyncStarted = false
+      def isAsyncSupported = false
+      def getAsyncContext = null
+      def getDispatcherType = null
+
+      def authenticate(p1: HttpServletResponse) = false
+      def login(p1: String, p2: String) {}
+      def logout() {}
+      def getParts = null
+      def getPart(p1: String) = null
 		}
     val response = new MockHttpServletResponse()
     ResponseHandler(action,result,request,response)
@@ -98,6 +123,18 @@ class DefaultReturnTest  extends JUnitSuite {
 					override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {}
 				}
 			}
+      def startAsync() = null
+      def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+      def isAsyncStarted = false
+      def isAsyncSupported = false
+      def getAsyncContext = null
+      def getDispatcherType = null
+
+      def authenticate(p1: HttpServletResponse) = false
+      def login(p1: String, p2: String) {}
+      def logout() {}
+      def getParts = null
+      def getPart(p1: String) = null
 		}
     val response = new MockHttpServletResponse()
     ResponseHandler(action,result,request,response)

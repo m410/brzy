@@ -19,6 +19,7 @@ import javax.servlet.{RequestDispatcher, ServletResponse, ServletRequest, Filter
 import org.springframework.mock.web.{MockRequestDispatcher, MockServletContext, MockHttpServletRequest, MockHttpServletResponse}
 import org.scalatest.junit.JUnitSuite
 import org.brzy.application.WebApp
+import javax.servlet.http.HttpServletResponse
 
 class FilterTest extends JUnitSuite {
 
@@ -33,7 +34,20 @@ class FilterTest extends JUnitSuite {
 					}
 				}
 			}
-		}
+
+      def startAsync() = null
+      def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+      def isAsyncStarted = false
+      def isAsyncSupported = false
+      def getAsyncContext = null
+      def getDispatcherType = null
+
+      def authenticate(p1: HttpServletResponse) = false
+      def login(p1: String, p2: String) {}
+      def logout() {}
+      def getParts = null
+      def getPart(p1: String) = null
+    }
     val response = new MockHttpServletResponse()
 
     val chain = new FilterChain(){
@@ -58,6 +72,18 @@ class FilterTest extends JUnitSuite {
 					}
 				}
 			}
+      def startAsync() = null
+      def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+      def isAsyncStarted = false
+      def isAsyncSupported = false
+      def getAsyncContext = null
+      def getDispatcherType = null
+
+      def authenticate(p1: HttpServletResponse) = false
+      def login(p1: String, p2: String) {}
+      def logout() {}
+      def getParts = null
+      def getPart(p1: String) = null
 		}
     val response = new MockHttpServletResponse()
 

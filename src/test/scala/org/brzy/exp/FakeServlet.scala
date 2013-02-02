@@ -33,6 +33,9 @@ class FakeServlet {
   val application:Application = new Application(null)
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
+    val request = req.asInstanceOf[HttpServletRequest]
+    val response = req.asInstanceOf[HttpServletResponse]
+
     application.doFilterAction(request)  match {
       case ActOn(action) =>
         val tlocal = application.threadLocalSessions
@@ -42,9 +45,9 @@ class FakeServlet {
       case ActOnAsync(action) =>
         chain.doFilter(req,res)
       case RedirectToSecure(path) =>
-        res.sendRedirect(path)
+        response.sendRedirect(path)
       case RedirectToAuthenticate(path)=>
-        res.sendRedirect(path)
+        response.sendRedirect(path)
       case DispatchTo(path) =>
         req.getRequestDispatcher(s"$path.brzy").forward(req, res)
       case NotAnAction =>
@@ -52,7 +55,10 @@ class FakeServlet {
     }
   }
 
-  override def service(req: ServletRequest, res: ServletResponse) {
+  def service(req: ServletRequest, res: ServletResponse) {
+    val request = req.asInstanceOf[HttpServletRequest]
+    val response = req.asInstanceOf[HttpServletResponse]
+
     val action = application.doServiceAction(request).getOrElse(throw new RuntimeException("error"))
     action.doService(request, response)
   }
