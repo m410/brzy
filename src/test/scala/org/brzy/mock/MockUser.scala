@@ -11,16 +11,16 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.interceptor
+package org.brzy.mock
 
-import java.lang.reflect.Method
+import javax.validation.constraints.{NotNull,Size}
+
 
 /**
- * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
- * 
  * @author Michael Fortin
  */
-@deprecated("Not using aop any more")
-trait MethodMatcher {
-  def isMatch(a: AnyRef, m: Method): Boolean
+class MockUser {
+  var id:Long = _
+  var version:Int = _
+  @NotNull @Size(max=30) var name:String = _
 }

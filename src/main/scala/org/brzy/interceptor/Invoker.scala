@@ -24,6 +24,7 @@ import org.brzy.fab.interceptor.ManagedThreadContext
  *
  * @author Michael Fortin
  */
+@deprecated("Not using aop any more")
 class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
 
   /**

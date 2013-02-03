@@ -1,12 +1,13 @@
 package org.brzy.application
 
 import org.scalatest.FlatSpec
-import org.brzy.webapp.controller.Controller
+import org.brzy.controller.Controller
 import org.brzy.service.Service
-import org.brzy.webapp.action.Action
+import org.brzy.action.Action
 
 
-class WebAppProxySpec extends FlatSpec {
+class WebAppProxySpec extends FlatSpec  with Fixture{
+
   "A Webapp" should "proxy controller with injection" in  {
     val wc = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     val webapp = new TestWebapp(wc)
@@ -19,23 +20,4 @@ class WebAppProxySpec extends FlatSpec {
     assert(1 == size, "Controllers.size must equal 1, but it was " + size)
 
   }
-}
-
-class TestWebapp(wc:WebAppConfiguration) extends WebApp(wc) {
-  private lazy val myService = proxyInstance[FixtureService]()
-
-  def makeServices = List(myService)
-
-  def makeControllers = {
-    val myController = proxyInstance[FixtureController](myService)
-    List(myController)
-  }
-}
-
-class FixtureService extends Service {
-  def anything = "anything"
-}
-
-class FixtureController(val fixtureService:FixtureService) extends Controller("") {
-  def actions = List.empty[Action]
 }

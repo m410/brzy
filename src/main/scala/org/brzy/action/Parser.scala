@@ -6,21 +6,19 @@
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.interceptor
-
-import java.lang.reflect.Method
+package org.brzy.action
 
 /**
- * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
+ * Used by action return objects that need to parse some data. 
  * 
  * @author Michael Fortin
  */
-@deprecated("Not using aop any more")
-trait MethodMatcher {
-  def isMatch(a: AnyRef, m: Method): Boolean
+trait Parser {
+  def parse:String
+  def contentType:String
 }

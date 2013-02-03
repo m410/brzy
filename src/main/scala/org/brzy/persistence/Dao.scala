@@ -16,7 +16,7 @@ package org.brzy.persistence
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
 import org.brzy.beanwrap.{Builder, Editors}
-
+import scala.language.implicitConversions
 /**
  * This is a persistent super class that can be used by persistence  modules to enable the
  * use of the Abstract CrudController. It's used by Squeryl Module and the JPA Module.  
@@ -28,12 +28,12 @@ trait Dao[T <: {def id: PK}, PK] {
   /**
    * Retrieve the object by it's primary key
    */
-  def apply(id:PK):T
+  def findBy(id:PK):T
   
   /**
    * Retrieve a single entity by primary key.
    */
-  def get(id: PK): Option[T]
+  def getBy(id: PK): Option[T]
 
   def getOrElse(id: PK, alternate: T): T
 
@@ -105,7 +105,7 @@ trait Dao[T <: {def id: PK}, PK] {
     /**
      * Insert the entity, with an optional commit immediately parameter.
      */
-    def insert(commit: Boolean = false)
+    def insert(commit: Boolean = false):T
 
     /**
      * Commit the current transaction.

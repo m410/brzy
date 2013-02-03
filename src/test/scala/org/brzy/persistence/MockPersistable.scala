@@ -15,20 +15,19 @@ package org.brzy.persistence
 
 import java.lang.String
 import org.brzy.validator.Validator
-import javax.validation.ConstraintViolation
-
+import scala.language.implicitConversions
 
 class MockPersistable[E<:{def id:PK},PK] extends Dao[E,PK] {
 
   def list(size: Int, offset: Int) = Nil
 
-  def list() = Nil
+  def list = Nil
 
   def load(id: String) = null.asInstanceOf[E]
 
-  def apply(id: PK) = null.asInstanceOf[E]
+  def findBy(id: PK) = null.asInstanceOf[E]
 
-  def get(id: PK) = None
+  def getBy(id: PK) = None
 
   def getOrElse(id: PK, alternate: E) = alternate
 
@@ -36,14 +35,14 @@ class MockPersistable[E<:{def id:PK},PK] extends Dao[E,PK] {
 
   def newPersistentCrudOps(t: E) = new MockCrudOps(t)
 
-  def count():Long = 0
+  def count:Long = 0
 
   class MockCrudOps(t:E) extends PersistentCrudOps(t) {
-		def validate() = Validator(t).violations
-    def insert(commit:Boolean = false) = {}
-    def commit = {}
-    def update():E = t
-    def delete = {}
-    def discard = {}
+		def validate = Validator(t).violations
+    def insert(commit:Boolean = false) = t
+    def commit() {}
+    def update() = t
+    def delete() {}
+    def discard() {}
   }
 }

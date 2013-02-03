@@ -20,6 +20,7 @@ import javassist.util.proxy.{ProxyObject, ProxyFactory => PFactory, MethodFilter
  * Creates an instance of a javassist proxy around a controller or service.
  * @author Michael Fortin
  */
+@deprecated("Not using aop any more")
 object ProxyFactory {
 
   private val filter = new MethodFilter {

@@ -11,16 +11,11 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.interceptor
+package org.brzy.mock
 
-import java.lang.reflect.Method
+import org.brzy.service.Service
 
-/**
- * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
- * 
- * @author Michael Fortin
- */
-@deprecated("Not using aop any more")
-trait MethodMatcher {
-  def isMatch(a: AnyRef, m: Method): Boolean
+
+class UserService extends Service{
+  def someMethod = "Service Method Called"
 }

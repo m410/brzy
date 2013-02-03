@@ -80,6 +80,35 @@
           </args>
         </configuration>
       </plugin>
+      <!-- disable surefire -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+      <!-- enable scalatest -->
+      <plugin>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest-maven-plugin</artifactId>
+        <version>1.0-M2</version>
+        <configuration>
+          <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+          <junitxml>.</junitxml>
+          <filereports>WDF TestSuite.txt</filereports>
+        </configuration>
+        <executions>
+          <execution>
+            <id>test</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- add classifier -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -98,21 +127,6 @@
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
     </repository>
-    <!--<repository>-->
-      <!--<id>jboss</id>-->
-      <!--<name>jboss repository</name>-->
-      <!--<url>http://repository.jboss.com/maven2</url>-->
-    <!--</repository>-->
-    <!--<repository>-->
-      <!--<id>reflections-repo</id>-->
-      <!--<name>Reflections Maven2 Repository</name>-->
-      <!--<url>http://reflections.googlecode.com/svn/repo</url>-->
-    <!--</repository>-->
-    <!--<repository>-->
-      <!--<id>scala-tools-snapshot</id>-->
-      <!--<name>scala-tools-snapshot</name>-->
-      <!--<url>http://www.scala-tools.org/repo-snapshots</url>-->
-    <!--</repository>-->
   </repositories>
   <dependencies>
     <dependency>
@@ -128,25 +142,6 @@
       <version>${beanwrap-version}</version>
     </dependency>
 
-    <!--<dependency>-->
-      <!--<groupId>org.reflections</groupId>-->
-      <!--<artifactId>reflections</artifactId>-->
-      <!--<version>0.9.5-RC2</version>-->
-      <!--<exclusions>-->
-        <!--<exclusion>-->
-          <!--<groupId>ch.qos.logback</groupId>-->
-          <!--<artifactId>logback-classic</artifactId>-->
-        <!--</exclusion>-->
-        <!--<exclusion>-->
-          <!--<artifactId>slf4j-api</artifactId>-->
-          <!--<groupId>org.slf4j</groupId>-->
-        <!--</exclusion>-->
-        <!--<exclusion>-->
-          <!--<artifactId>servlet-api</artifactId>-->
-          <!--<groupId>javax.servlet</groupId>-->
-        <!--</exclusion>-->
-      <!--</exclusions>-->
-    <!--</dependency>-->
     <dependency>
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-configuration</artifactId>

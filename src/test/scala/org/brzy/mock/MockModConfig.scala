@@ -11,16 +11,20 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.interceptor
+package org.brzy.mock
 
-import java.lang.reflect.Method
+import org.brzy.fab.conf.BaseConf
+import org.brzy.fab.mod.ViewMod
 
-/**
- * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
- * 
- * @author Michael Fortin
- */
-@deprecated("Not using aop any more")
-trait MethodMatcher {
-  def isMatch(a: AnyRef, m: Method): Boolean
+class MockModConfig(override val map:Map[String,AnyRef]) extends ViewMod(map) {
+
+  override def <<(it: BaseConf) = {
+    if(it == null)
+      this
+    else {
+      val that = it.asInstanceOf[ViewMod]
+      new MockModConfig(super.<<(that).map)
+    }
+  }
+
 }

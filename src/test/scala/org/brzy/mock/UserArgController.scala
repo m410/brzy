@@ -11,16 +11,24 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.interceptor
+package org.brzy.mock
 
-import java.lang.reflect.Method
+import org.brzy.action.response.View
+import org.brzy.controller.Controller
+import org.brzy.action.args.Parameters
 
-/**
- * Used by interceptors to decide if the current method needs to be wrapped in a transaction.
- * 
- * @author Michael Fortin
- */
-@deprecated("Not using aop any more")
-trait MethodMatcher {
-  def isMatch(a: AnyRef, m: Method): Boolean
+
+class UserArgController extends Controller("userArgs"){
+  self:UserService =>
+
+  override val actions = List(
+    action("",listAction _,View("list")),
+    action("{id}",getAction _, View("view")),
+    action("custom",custom _, View("custom")))
+
+  def listAction = "userList"-> someMethod
+
+  def getAction(prms:Parameters) = "user"-> someMethod
+
+	def custom = "custom"->someMethod
 }

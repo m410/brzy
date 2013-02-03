@@ -18,6 +18,7 @@ package org.brzy.interceptor
  * 
  * @author Michael Fortin
  */
+
 trait ContextFactory[T] {
 
   /**
