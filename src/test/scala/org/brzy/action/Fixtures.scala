@@ -18,6 +18,19 @@ import org.brzy.mock.{MockUserStore, MockUser}
 
 trait Fixtures {
 
+
+  val params = new Parameters {
+    def apply(name: String) = "1"
+    def get(name: String) = None
+    def url = Map("id"->"1")
+    def request = null
+    def application = null
+    def header = null
+    def session = null
+    def param = null
+    def requestAndUrl = null
+  }
+
   val controller2 = new Controller("") with Authorization {
     override val constraints = List(Roles("ADMIN"))
     override def actions = List(
@@ -70,8 +83,8 @@ trait Fixtures {
     override val constraints = Seq(Roles("ADMIN"))
 
     override def actions = List(
-      get(expr="index0", act=index _, view=View("index0"),constraints=Seq(Secure(),ContentTypes("text/xml"))),
-      get(expr="index1", act=index _, view=View("index1") ,constraints=Seq(Secure())),
+      get(expr="index0", act=index _, view=View("index0"),constraints=Seq(Ssl(),ContentTypes("text/xml"))),
+      get(expr="index1", act=index _, view=View("index1") ,constraints=Seq(Ssl())),
       get(expr="index2", act=index _, view=View("index2") ),
       get(expr="index3", act=index _, view=View("index3") ,constraints=Seq(ContentTypes("text/xml"))),
       get(expr="index4", act=index2 _,view= View("index4"))

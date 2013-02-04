@@ -14,11 +14,11 @@
 package org.brzy.action
 
 
-import args.{Arg, Principal}
+import args.{PrincipalRequest, ArgsBuilder, Arg, Principal}
 
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import org.brzy.persistence.Transaction
-import org.brzy.action.response.{View, Direction}
+import response.{ResponseHandler, View, Direction}
 
 import HttpMethod._
 import org.brzy.controller.{Intercepted, Controller}
@@ -49,26 +49,51 @@ trait Action extends Ordered[Action] {
 
   def async:Boolean
 
+  def methods:Seq[HttpMethod]
+
   def argTypes:Array[Class[_]]
 
-  def isAuthorized(p:Principal):Boolean = {
-    // todo implement me
-    false
+  protected val pathExpression = Path(controller.basePath,path)
+
+  def isAuthorized(principal:Principal):Boolean = {
+    if (constrs.find(_.isInstanceOf[Roles]).isDefined)
+      secureConstraints(constrs, principal)
+    else
+      secureConstraints(controller.constraints, principal)
+  }
+
+  protected def secureConstraints(constraints:Seq[Constraint], p:Principal) = {
+    constraints.forall(constraint => constraint match {
+      case r:Roles =>
+        if(p.isLoggedIn)
+          r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+        else
+          false
+      case _ =>
+        true
+    })
   }
 
   def paramsFor(uri:String):Map[String,String] = {
-    // todo implement me
-    Map.empty[String,String]
+    val values = pathExpression.extractParameterValues(uri)
+    pathExpression.parameterNames.zip(values).toMap
   }
 
   def isMatch(method: String, contentType: String, path: String) = {
-    // todo implement me
-    false
+    pathExpression.isMatch(path) && methods.find(_.toString.equalsIgnoreCase(method)).isDefined
+  }
+
+  def requiresSsl = {
+    constrs.find(_.isInstanceOf[Ssl]).isDefined || controller.constraints.find(_.isInstanceOf[Ssl]).isDefined
   }
 
   def doService(request: HttpServletRequest, response: HttpServletResponse) {
-    // todo implement me
+    val args = ArgsBuilder(request,this)
+    val principal = new PrincipalRequest(request)
+    ResponseHandler(this, execute(args, principal), request, response)
   }
+
+  def execute(args: Array[Arg], principal: Principal):AnyRef
 
   def compare(that: Action) = path.compareTo(that.path)
 

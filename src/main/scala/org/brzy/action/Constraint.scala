@@ -35,7 +35,7 @@ case class Roles(allowed:String*) extends Constraint {
  * This constraint will define wither the action must be called while in a secure request over an
  * SSL socket.
  */
-case class Secure(must:Boolean = true) extends Constraint
+case class Ssl(must:Boolean = true) extends Constraint
 
 /**
  * Defines the allowed Content type that this action accepts.  For example a content type of

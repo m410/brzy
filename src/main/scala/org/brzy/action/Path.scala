@@ -11,7 +11,7 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.controller
+package org.brzy.action
 
 import collection.mutable.Buffer
 import java.util.regex.Pattern
@@ -24,7 +24,6 @@ import java.util.regex.Pattern
  * @param ctlrBase The path of the controller
  * @param actionBase The path of the action
  */
-@deprecated("Move to action trait")
 case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
 
   /**

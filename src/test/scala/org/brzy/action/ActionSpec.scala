@@ -95,23 +95,6 @@ class ActionSpec extends WordSpec with ShouldMatchers {
       val ctlr = new UserController with MockUserStore
       val action = ctlr.actions.find(_.path == "save").get
 
-      val params = new Parameters {
-        def apply(name: String) = "1"
-        def get(name: String) = None
-        def url = Map("id"->"1")
-        def request = null
-        def application = null
-        def header = null
-        def session = null
-        def param = null
-        def requestAndUrl = null
-      }
-      val principal = new Principal {
-        def isLoggedIn = false
-        def name = null
-        def roles = null
-      }
-
       action.doService(null, null)
     }
     "parameter map extraction" in {

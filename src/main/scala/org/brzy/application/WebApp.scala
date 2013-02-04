@@ -13,16 +13,18 @@
  */
 package org.brzy.application
 
-
 import org.slf4j.LoggerFactory
 
 import org.brzy.fab.interceptor.ManagedThreadContext
 import org.brzy.fab.mod.{ModProvider, ViewModProvider}
 import javax.servlet.http.HttpServletRequest
 
-import org.brzy.{NotAnAction, FilterDirect}
+import org.brzy._
+import action.args.{PrincipalRequest, ArgsBuilder}
 import org.brzy.controller.Controller
 import org.brzy.action.Action
+import org.brzy.ActOnAsync
+
 
 /**
  * WebApp is short for web application.  This assembles and configures the application at
@@ -34,6 +36,8 @@ import org.brzy.action.Action
  * @author Michael Fortin
  */
 class WebApp(conf: WebAppConfiguration) {
+
+  private val log = LoggerFactory.getLogger(getClass)
 
   /**
    * The application class, hold information like the application name and version.
@@ -64,15 +68,49 @@ class WebApp(conf: WebAppConfiguration) {
   def doFilterAction(request:HttpServletRequest):FilterDirect = {
     val method = request.getMethod
     val contentType = request.getContentType
-    val path = request.getRequestURI
-    actions.find(_.isMatch(method, contentType, path))
+    val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
 
-    NotAnAction
+    actions.find(_.isMatch(method, contentType, actionPath)) match  {
+      case Some(action) =>
+        if (!actionPath.endsWith(".brzy") && !action.async)
+          DispatchTo(actionPath + ".brzy")
+        if (!actionPath.endsWith(".brzy_async") && action.async)
+          DispatchTo(actionPath + ".brzy_async")
+        if (action.requiresSsl && !request.isSecure)
+          RedirectToSecure(request)
+        else if (!action.isAuthorized(new PrincipalRequest(request)))
+          RedirectToAuthenticate("/auth")
+        else if (!action.async)
+          ActOn(action)
+        else
+          ActOnAsync(action)
+      case _ => NotAnAction
+    }
   }
 
+  /**
+   *
+   * @param request
+   * @return
+   */
   def serviceAction(request:HttpServletRequest):Option[Action] = {
-    None
+
+    if (log.isDebugEnabled)
+      log.debug(pathLog(request))
+
+    val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
+    val contentType = request.getHeader("Content-Type")
+    val method = request.getMethod
+    actions.find(_.isMatch(method, contentType, actionPath))
   }
+
+    private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()
+        .append(req.getMethod)
+        .append(":")
+        .append(req.getRequestURI)
+        .append(":")
+        .append(if(req.getContentType != null) req.getContentType else "" )
+        .toString()
 
   def moduleProviders:List[ModProvider] = List.empty[ModProvider]
 

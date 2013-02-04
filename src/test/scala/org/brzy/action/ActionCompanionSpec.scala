@@ -13,21 +13,16 @@
  */
 package org.brzy.action
 
-import Action._
-
+import org.brzy.BrzyServlet
 import args.{ArgsBuilder, Parameters}
 
-import org.junit.Test
 import org.junit.Assert._
 
-import javax.servlet.{RequestDispatcher, ServletRequest, ServletResponse}
 import org.springframework.mock.web.{MockServletContext, MockRequestDispatcher, MockHttpServletRequest, MockHttpServletResponse}
-import org.scalatest.junit.JUnitSuite
+
 import response.ResponseHandler
-import javax.servlet.http.HttpServletResponse
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
-import org.brzy.BrzyServlet
 
 
 class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
@@ -38,7 +33,7 @@ class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
       val request = new MockHttpServletRequest("GET", "/users/10.brzy")
 
       val ctlr = new UserController()
-      val action = ctlr.actions.find(_.path == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
+      val action = ctlr.actions.find(_.path == "{id}").get
 
       val result = ArgsBuilder(request, action)
       assertNotNull(result)
@@ -51,7 +46,7 @@ class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
     "parse results" in {
       val tup = ("attributeKey","attributeValue")
       val ctlr = new UserController()
-      val action = ctlr.actions.find(_.path == "{id}").get//new Action("/users/{id}", ctlr.getClass.getMethods()(0), ctlr, ".jsp")
+      val action = ctlr.actions.find(_.path == "{id}").get
       ResponseHandler(action, tup, request, response)
       assertNotNull(request.getAttribute("attributeKey"))
     }
@@ -67,13 +62,13 @@ class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
       val service = new BrzyServlet
       assertEquals("/user", ArgsBuilder.parseActionPath(uri,context))
     }
-    "find action path 2" in {
+    "find action path 3" in {
       val context = ""
       val uri = "/home/10/create.brzy"
       val service = new BrzyServlet
       assertEquals("/home/10/create", ArgsBuilder.parseActionPath(uri,context))
     }
-    "find action path 3" in {
+    "find action path 4" in {
       val context = "/brzy"
       val uri = "/brzy/.brzy"
       val service = new BrzyServlet
