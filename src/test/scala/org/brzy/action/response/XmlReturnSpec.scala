@@ -13,16 +13,12 @@
  */
 package org.brzy.action.response
 
-import org.springframework.mock.web.{MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
 
-import org.junit.Test
-import org.scalatest.junit.JUnitSuite
-
-
-import org.brzy.action.args.{Principal, Arg}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.brzy.mock.{MockUserStore, UserController}
+
+
 
 class XmlReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
 

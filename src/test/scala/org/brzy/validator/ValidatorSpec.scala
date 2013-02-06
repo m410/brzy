@@ -1,9 +1,6 @@
 package org.brzy.validator
 
 import constraints.{Size, NotNull}
-import org.junit.Test
-
-import org.scalatest.junit.JUnitSuite
 import java.lang.String
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec

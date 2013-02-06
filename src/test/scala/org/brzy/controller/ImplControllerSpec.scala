@@ -1,14 +1,10 @@
 package org.brzy.controller
 
-import org.scalatest.junit.JUnitSuite
 
-import org.junit.Test
 import org.brzy.action._
-import args.{Arg, Principal, Parameters}
-import collection.JavaConversions._
-import response.{View, Model}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
+
 
 class ImplControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 

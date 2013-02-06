@@ -1,11 +1,9 @@
 package org.brzy.controller
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.Test
-
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.brzy.action.Path
+
 
 class PathSpec extends WordSpec with ShouldMatchers with Fixtures {
 

@@ -1,5 +1,3 @@
-package org.brzy.action
-
 /*
  * Copyright 2010 Michael Fortin <mike@brzy.org>
  *
@@ -8,20 +6,18 @@ package org.brzy.action
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
+package org.brzy.action
 
-import args.{ParametersRequest, Parameters}
 
-import org.junit.Test
-import org.scalatest.junit.JUnitSuite
-import org.springframework.mock.web.{MockServletContext, MockHttpServletRequest}
-import collection.JavaConversions._
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
+
+
 
 class ParametersSpec extends WordSpec with ShouldMatchers with Fixtures {
 

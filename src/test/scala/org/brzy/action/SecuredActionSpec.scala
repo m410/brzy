@@ -1,13 +1,8 @@
 package org.brzy.action
 
-import args.Principal
-import org.junit.Test
 
-import org.scalatest.junit.JUnitSuite
-import org.brzy.controller.{Authorization, Controller}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
-import response.View
 
 class SecuredActionSpec extends WordSpec with ShouldMatchers with Fixtures {
 

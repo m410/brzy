@@ -13,15 +13,14 @@
  */
 package org.brzy.action.response
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.Test
 
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
 import java.lang.reflect.Method
-import org.brzy.action.args.{Principal, Arg}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.brzy.mock.{MockUserStore, UserController}
+
+
 
 class ErrorReturnSpec extends WordSpec with ShouldMatchers with Fixtures {
 

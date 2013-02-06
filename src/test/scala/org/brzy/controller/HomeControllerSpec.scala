@@ -1,11 +1,10 @@
 package org.brzy.controller
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.Test
 
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
 import org.brzy.action.args.ArgsBuilder
+
 
 class HomeControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 

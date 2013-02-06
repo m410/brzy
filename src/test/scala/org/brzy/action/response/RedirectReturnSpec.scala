@@ -1,10 +1,5 @@
 package org.brzy.action.response
 
-import org.junit.Test
-
-import org.scalatest.junit.JUnitSuite
-import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
-import org.brzy.action.args.{Arg, Principal}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.brzy.mock.{MockUserStore, UserController}

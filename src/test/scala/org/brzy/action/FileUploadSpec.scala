@@ -1,13 +1,10 @@
 package org.brzy.action
 
 import args.PostBodyRequest
-import org.scalatest.junit.JUnitSuite
 
-import java.io.FileInputStream
 import xml.Elem
-import org.springframework.mock.web.{MockHttpServletRequest, MockMultipartHttpServletRequest, MockMultipartFile, MockHttpServletResponse}
 import io.Source
-import org.junit.{Ignore, Test}
+import org.springframework.mock.web.{MockMultipartHttpServletRequest, MockMultipartFile}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 

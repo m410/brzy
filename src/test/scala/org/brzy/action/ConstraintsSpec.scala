@@ -13,10 +13,7 @@
  */
 package org.brzy.action
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.Test
 
-import org.brzy.controller.{Authorization, Controller}
 import org.springframework.mock.web.MockHttpServletRequest
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers

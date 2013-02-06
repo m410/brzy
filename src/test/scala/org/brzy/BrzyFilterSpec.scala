@@ -17,7 +17,7 @@ package org.brzy
 import org.brzy.application.WebApp
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
-import org.springframework.mock.web.{MockFilterChain, MockFilterConfig, MockHttpServletResponse, MockHttpServletRequest}
+import org.springframework.mock.web.{MockFilterChain, MockHttpServletResponse, MockHttpServletRequest}
 
 class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
 
