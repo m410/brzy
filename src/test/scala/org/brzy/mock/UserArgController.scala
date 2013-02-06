@@ -19,17 +19,16 @@ import org.brzy.action.args.Parameters
 import org.brzy.action.{Ssl, Roles}
 
 
-class UserArgController extends Controller("userArgs") with Authorization {
-  self:UserService =>
+class UserArgController(s:UserService) extends Controller("userArgs") with Authorization {
 
   override val actions = List(
     action(expr="",act=listAction _,view=View("list"),constraints=Seq(Roles("ADMIN"))),
     action(expr="{id}", act=getAction _, view=View("view"),constraints=Seq(Ssl())),
     action("custom",custom _, View("custom")))
 
-  def listAction = "userList"-> someMethod
+  def listAction = "userList"-> s.someMethod
 
-  def getAction(prms:Parameters) = "user"-> someMethod
+  def getAction(prms:Parameters) = "user"-> s.someMethod
 
-	def custom = "custom"->someMethod
+	def custom = "custom"-> s.someMethod
 }

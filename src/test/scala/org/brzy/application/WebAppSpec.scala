@@ -17,9 +17,13 @@ package org.brzy.application
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
+import org.springframework.mock.web.MockHttpServletRequest
+import org.brzy._
 
 
 class WebAppSpec extends WordSpec with ShouldMatchers  with Fixture {
+
+  val webapp = WebApp("test")
 
   "WebApp" should {
     "create webapp" in {
@@ -30,28 +34,46 @@ class WebAppSpec extends WordSpec with ShouldMatchers  with Fixture {
       assert(webapp != null)
 
       assert(webapp.services != null)
-      assert(1 == webapp.services.size)
+      assert(1 == webapp.services.size, s"expected 1, was ${webapp.services.size}")
 
       assert(webapp.controllers != null)
-      assert(2 == webapp.controllers.size)
+      assert(2 == webapp.controllers.size, s"expected 2, was ${webapp.controllers.size}")
 
       assert(webapp.actions != null)
-      assert(19 == webapp.actions.size)
+      assert(20 == webapp.actions.size, s"expected 20, was ${webapp.actions.size}")
     }
     "call doFilter and return dispath to servlet" in {
-
+      val request = new MockHttpServletRequest("GET", "/users_none/pass_through.gif")
+      val action = webapp.doFilterAction(request)
+      action match {
+        case NotAnAction =>
+        case _ => assert(false, s"expected NotAnAction, was $action")
+      }
+    }
+    "call doFilter and return dispath to .brzy" in {
+      val request = new MockHttpServletRequest("GET", "/users")
+      val action = webapp.doFilterAction(request)
+      assert(action.isInstanceOf[DispatchTo], s"expected DispatchTo, was $action")
     }
     "call doFilter and return dispath to async servlet" in {
-
+      val request = new MockHttpServletRequest("GET", "/userArgs/.brzy")
+      val action = webapp.doFilterAction(request)
+      assert(action.isInstanceOf[RedirectToAuthenticate], s"expected RedirectToAuthenticate, was $action")
     }
     "call doFilter and return redirect to ssl" in {
-
+      val request = new MockHttpServletRequest("GET", "/userArgs/123")
+      val action = webapp.doFilterAction(request)
+      assert(action.isInstanceOf[RedirectToSecure], s"expected RedirectToSecure, was $action")
     }
     "call doFilter and return redirect to authenticate" in {
-
+      val request = new MockHttpServletRequest("GET", "/users/async.brzy_async")
+      val action = webapp.doFilterAction(request)
+      assert(action.isInstanceOf[ActOnAsync], s"expected ActOnAsync, was $action")
     }
     "call doFilter and return action" in {
-
+      val request = new MockHttpServletRequest("GET", "/users.brzy")
+      val action = webapp.doFilterAction(request)
+      assert(action.isInstanceOf[ActOn], s"expected ActOn, was $action")
     }
     "call doFilter and return async action" in {
 
