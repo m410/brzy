@@ -25,8 +25,9 @@ class UserController extends Controller("users") {
     action("",listAction _, View("list")),
     action("{id}",getAction _, View("view")),
     action("create",create _, View("create")),
-    action("other",someOther _, View("other")),
-    action("other2",someOther2 _, View("other2")),
+    get("get",someOther _, View("get")),
+    post("post",someOther2 _, View("post")),
+    async("async",asyncStart _, View("async")),
     action("xml",xml _, View("xml")),
     action("redirect",redirect _, View("redirect")),
     action("json",json _, View("json")),
@@ -60,6 +61,10 @@ class UserController extends Controller("users") {
     user.id = 1
     user.name = "hello"
     Json(user)
+  }
+
+  def asyncStart(p:Parameters) = {
+    Async({(params)=>println("hello");Text("hello")})
   }
 
   def json2 = new Json(this) with Parser {

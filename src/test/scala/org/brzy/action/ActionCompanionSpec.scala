@@ -30,23 +30,23 @@ class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
   "ArgsBuilder" should {
 
     "make args for action" in {
-      val request = new MockHttpServletRequest("GET", "/users/10.brzy")
+      val request = new MockHttpServletRequest("GET", "/users/10/items/123.brzy")
 
       val ctlr = new UserController()
-      val action = ctlr.actions.find(_.path == "{id}").get
+      val action = ctlr.actions.find(_.path == "{id}/items/{iid}").get
 
       val result = ArgsBuilder(request, action)
       assert(result != null)
       assert(1 == result.length)
       val parameters: Parameters = result(0).asInstanceOf[Parameters]
-      assert(1 == parameters.url.size)
+      assert(2 == parameters.url.size)
       assert("10".equalsIgnoreCase(parameters("id")))
     }
 
     "parse results" in {
       val tup = ("attributeKey","attributeValue")
       val ctlr = new UserController()
-      val action = ctlr.actions.find(_.path == "{id}").get
+      val action = ctlr.actions.find(_.path == "{id}/items/{iid}").get
       ResponseHandler(action, tup, request, response)
       assert(null != request.getAttribute("attributeKey"))
     }

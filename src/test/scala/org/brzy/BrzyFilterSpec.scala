@@ -18,6 +18,7 @@ import org.brzy.application.WebApp
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
 import org.springframework.mock.web.{MockFilterChain, MockHttpServletResponse, MockHttpServletRequest}
+import javax.servlet.{ServletResponse, ServletRequest, FilterChain}
 
 class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
 
@@ -29,36 +30,66 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
     "filter Not an action" in {
       filter.doFilter(request1,response1,chain1)
     }
-    "filter dispatch to" in {
+    "filter dispatch pass through" in {
       // todo need to preserve http status
-      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val request = new MockHttpServletRequest("GET", "/users/pass_through.gif")
       val response = new MockHttpServletResponse()
-      val chain = new MockFilterChain()
+      var called = false
+      val chain = new FilterChain(){
+        def doFilter(p1: ServletRequest, p2: ServletResponse) {
+          called = true
+        }
+      }
       filter.doFilter(request,response,chain)
+      assert(called)
     }
     "filter redirect to auth" in {
-      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val request = new MockHttpServletRequest("GET", "/userArgs/.brzy")
       val response = new MockHttpServletResponse()
-      val chain = new MockFilterChain()
+      var called = false
+      val chain = new FilterChain(){
+        def doFilter(p1: ServletRequest, p2: ServletResponse) {
+          called = true
+        }
+      }
       filter.doFilter(request,response,chain)
+      assert(!called)
     }
     "filter redirect to secure" in {
-      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val request = new MockHttpServletRequest("GET", "/userArgs/123.brzy")
       val response = new MockHttpServletResponse()
-      val chain = new MockFilterChain()
+      var called = false
+      val chain = new FilterChain(){
+        def doFilter(p1: ServletRequest, p2: ServletResponse) {
+          called = true
+        }
+      }
       filter.doFilter(request,response,chain)
+      assert(!called)
     }
     "filter act on async" in {
-      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val request = new MockHttpServletRequest("GET", "/users/async.brzy_async")
       val response = new MockHttpServletResponse()
-      val chain = new MockFilterChain()
+      var called = false
+      val chain = new FilterChain(){
+        def doFilter(p1: ServletRequest, p2: ServletResponse) {
+          called = true
+        }
+      }
       filter.doFilter(request,response,chain)
+      assert(called)
     }
     "filter act on standard" in {
-      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val request = new MockHttpServletRequest("GET", "/users.brzy")
       val response = new MockHttpServletResponse()
-      val chain = new MockFilterChain()
+      var called = false
+      val chain = new FilterChain(){
+        def doFilter(p1: ServletRequest, p2: ServletResponse) {
+          called = true
+        }
+      }
       filter.doFilter(request,response,chain)
+      assert(called)
     }
   }
 }

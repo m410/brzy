@@ -20,7 +20,7 @@ import java.lang.reflect.Method
  * 
  * @author Michael Fortin
  */
-@deprecated("Not using aop any more")
+@deprecated("Not using aop any more","0.11")
 trait MethodMatcher {
   def isMatch(a: AnyRef, m: Method): Boolean
 }

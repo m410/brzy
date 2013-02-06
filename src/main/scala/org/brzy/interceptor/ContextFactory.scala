@@ -18,7 +18,7 @@ package org.brzy.interceptor
  * 
  * @author Michael Fortin
  */
-@deprecated("Not used")
+@deprecated("Not used","0.11")
 trait ContextFactory[T] {
 
   /**
