@@ -4,7 +4,7 @@ import org.brzy.persistence.MockPersistable
 import org.brzy.action.{Roles, Action}
 import org.brzy.action.args.{Principal, Arg, Parameters}
 import org.brzy.action.response.{View, Model}
-import org.junit.Assert._
+
 import org.brzy.mock.{MockUserStore, MockUser}
 
 
@@ -43,9 +43,9 @@ trait Fixtures {
 
     override def intercept(action: () => AnyRef, actionArgs: Array[Arg],principal:Principal) = {
       val paramsOption = actionArgs.find(_.isInstanceOf[Parameters])
-      assertTrue(paramsOption.isDefined)
+      assert(true == paramsOption.isDefined)
       val result = action()
-      assertTrue(result.isInstanceOf[Model])
+      assert(true == result.isInstanceOf[Model])
       result
     }
 

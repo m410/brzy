@@ -13,7 +13,7 @@
  */
 package org.brzy.application
 
-import org.junit.Assert._
+
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -24,19 +24,37 @@ class WebAppSpec extends WordSpec with ShouldMatchers  with Fixture {
   "WebApp" should {
     "create webapp" in {
       val webappConf = WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml")
-      assertNotNull(webappConf)
+      assert(webappConf != null)
 
       val webapp = WebApp(webappConf)
-      assertNotNull(webapp)
+      assert(webapp != null)
 
-      assertNotNull(webapp.services)
-      assertEquals(1, webapp.services.size)
+      assert(webapp.services != null)
+      assert(1 == webapp.services.size)
 
-      assertNotNull(webapp.controllers)
-      assertEquals(2, webapp.controllers.size)
+      assert(webapp.controllers != null)
+      assert(2 == webapp.controllers.size)
 
-      assertNotNull(webapp.actions)
-      assertEquals(19, webapp.actions.size)
+      assert(webapp.actions != null)
+      assert(19 == webapp.actions.size)
+    }
+    "call doFilter and return dispath to servlet" in {
+
+    }
+    "call doFilter and return dispath to async servlet" in {
+
+    }
+    "call doFilter and return redirect to ssl" in {
+
+    }
+    "call doFilter and return redirect to authenticate" in {
+
+    }
+    "call doFilter and return action" in {
+
+    }
+    "call doFilter and return async action" in {
+
     }
   }
 }

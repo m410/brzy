@@ -15,7 +15,7 @@ package org.brzy.action
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
-import org.junit.Assert._
+
 import org.brzy.controller.{Authorization, Controller}
 import org.springframework.mock.web.MockHttpServletRequest
 import org.scalatest.WordSpec
@@ -43,21 +43,21 @@ class ConstraintsSpec extends WordSpec with ShouldMatchers with Fixtures {
       request.setContentType("text/html")
       request.setSecure(true)
       val action = controller.actions.find(_.path == "index3").get
-//      assertTrue("Should be true for content type", action.isConstrained(request))
+//      assert(true == "Should be true for content type", action.isConstrained(request))
     }
     "accepty http methods" in {
       val request = new MockHttpServletRequest("POST", "//users.brzy")
       request.setContentType("text/xml")
       request.setSecure(true)
       val action = controller.actions.find(_.path == "index2").get
-//      assertTrue("Should be true for http method", action.isConstrained(request))
+//      assert(true == "Should be true for http method", action.isConstrained(request))
     }
     "accept ssl" in {
       val request = new MockHttpServletRequest("GET", "//users.brzy")
       request.setContentType("text/xml")
       request.setSecure(false)
       val action = controller.actions.find(_.path == "index1").get
-//      assertTrue("Should be true for secure", action.requiresSsl)
+//      assert(true == "Should be true for secure", action.requiresSsl)
     }
   }
 

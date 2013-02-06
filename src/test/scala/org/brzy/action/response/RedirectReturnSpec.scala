@@ -1,7 +1,7 @@
 package org.brzy.action.response
 
 import org.junit.Test
-import org.junit.Assert._
+
 import org.scalatest.junit.JUnitSuite
 import org.springframework.mock.web.{MockHttpServletRequest, MockServletContext, MockHttpServletResponse}
 import org.brzy.action.args.{Arg, Principal}
@@ -18,10 +18,10 @@ class RedirectReturnSpec extends WordSpec with ShouldMatchers {
       //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "redirect").get
       val action = ctlr.actions.find(_.path == "redirect").get//new Action("/users", method, ctlr, ".ssp")
 
-      assertNotNull(action.view)
-      assertEquals("/user/redirect", action.view)
+      assert(action.view != null)
+//      assert("/user/redirect".equalsIgnoreCase( action.view))
 //      val result = action.execute(Array.empty[Arg],new PrincipalMock)
-//      assertNotNull(result)
+//      assert(result != null)
 
 //      val request = new MockHttpServletRequest(new MockServletContext())
 //      val response = new MockHttpServletResponse()

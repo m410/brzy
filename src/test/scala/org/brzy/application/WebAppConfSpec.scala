@@ -13,7 +13,7 @@
  */
 package org.brzy.application
 
-import org.junit.Assert._
+
 
 import org.brzy.mock.MockSquerylModConfig
 import org.scalatest.matchers.ShouldMatchers
@@ -26,72 +26,72 @@ class WebAppConfSpec extends WordSpec with ShouldMatchers with Fixture {
 
     "create configuration" in {
       val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
-      assertNotNull(wac)
-      assertTrue(wac.application.isDefined)
-      assertTrue(wac.useSsl)
-      assertTrue(wac.build.isDefined)
-      assertTrue(wac.logging.isDefined)
-      assertNotNull(wac.logging.get.loggers)
-      assertNotNull(wac.logging.get.appenders)
-      assertNotNull(wac.logging.get.root)
-      assertEquals(1, wac.logging.get.root.get.ref.size)
-      assertNotNull(wac.dependencies)
-      assertEquals(23, wac.dependencies.size)
-      assertNotNull(wac.dependencyExcludes)
-      assertEquals(0, wac.dependencyExcludes.size)
-      assertNotNull(wac.repositories)
-      assertEquals(8, wac.repositories.size)
-      assertEquals(0, wac.modules.size)
-      assertEquals(1, wac.persistence.size)
+      assert(wac != null)
+      assert(true == wac.application.isDefined)
+      assert(true == wac.useSsl)
+      assert(true == wac.build.isDefined)
+      assert(true == wac.logging.isDefined)
+      assert(wac.logging.get.loggers != null)
+      assert(wac.logging.get.appenders != null)
+      assert(wac.logging.get.root != null)
+      assert(1 == wac.logging.get.root.get.ref.size)
+      assert(wac.dependencies != null)
+      assert(23 == wac.dependencies.size)
+      assert(wac.dependencyExcludes != null)
+      assert(0 == wac.dependencyExcludes.size)
+      assert(wac.repositories != null)
+      assert(8 == wac.repositories.size)
+      assert(0 == wac.modules.size)
+      assert(1 == wac.persistence.size)
 
       val squeryl = wac.persistence.find(_.name.get == "brzy-squeryl")
-      assertTrue(squeryl.isDefined)
-      assertTrue(squeryl.get.isInstanceOf[MockSquerylModConfig])
+      assert(true == squeryl.isDefined)
+      assert(true == squeryl.get.isInstanceOf[MockSquerylModConfig])
       val squerylConfig = squeryl.get.asInstanceOf[MockSquerylModConfig]
-      assertTrue(squerylConfig.driver.isDefined)
-      assertEquals("org.h2.Driver",squerylConfig.driver.get)
+      assert(true == squerylConfig.driver.isDefined)
+      assert("org.h2.Driver".equalsIgnoreCase(squerylConfig.driver.get))
 
-      assertNotNull(wac.webXml)
-      assertNotNull(wac.environment)
-      assertEquals("test",wac.environment)
-      assertEquals(9, wac.webXml.size)
+      assert(wac.webXml != null)
+      assert(wac.environment != null)
+      assert("test".equalsIgnoreCase(wac.environment))
+      assert(9 == wac.webXml.size)
 
-      assertTrue(wac.views.isDefined)
-      assertEquals(2, wac.views.get.webXml.size)
+      assert(true == wac.views.isDefined)
+      assert(2 == wac.views.get.webXml.size)
 
-      assertEquals(1, wac.logging.get.root.get.ref.size)
-      assertEquals("STDOUT", wac.logging.get.root.get.ref.get(0))
+      assert(1 == wac.logging.get.root.get.ref.size)
+      assert("STDOUT".equalsIgnoreCase( wac.logging.get.root.get.ref.get(0)))
     }
 
     "create json" in {
       val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
       val json = wac.toJson
-      assertNotNull(json)
+      assert(json != null)
       val wacFromJson = WebAppConfiguration.fromJson(json)
-      assertNotNull(wacFromJson)
+      assert(wacFromJson != null)
 
-      assertTrue(wacFromJson.application.isDefined)
-      assertTrue(wacFromJson.build.isDefined)
-      assertNotNull(wacFromJson.logging.isDefined)
-      assertTrue(wacFromJson.logging.get.loggers.isDefined)
-      assertTrue(wacFromJson.logging.get.appenders.isDefined)
-      assertTrue(wacFromJson.logging.get.root.isDefined)
-      assertEquals(1, wacFromJson.logging.get.root.get.ref.size)
-      assertNotNull(wacFromJson.dependencies)
-      assertEquals(23, wacFromJson.dependencies.size)
-      assertNotNull(wacFromJson.dependencyExcludes)
-      assertEquals(0, wacFromJson.dependencyExcludes.size)
-      assertNotNull(wacFromJson.repositories)
-      assertEquals(8, wacFromJson.repositories.size)
-      assertEquals(0, wac.modules.size)
-      assertEquals(1, wac.persistence.size)
-      assertNotNull(wacFromJson.webXml)
-      assertNotNull(wacFromJson.environment)
-      assertEquals("test",wac.environment)
-      assertEquals(9, wacFromJson.webXml.size)
+      assert(true == wacFromJson.application.isDefined)
+      assert(true == wacFromJson.build.isDefined)
+      assert(wacFromJson.logging.isDefined)
+      assert(true == wacFromJson.logging.get.loggers.isDefined)
+      assert(true == wacFromJson.logging.get.appenders.isDefined)
+      assert(true == wacFromJson.logging.get.root.isDefined)
+      assert(1 == wacFromJson.logging.get.root.get.ref.size)
+      assert(wacFromJson.dependencies != null)
+      assert(23 == wacFromJson.dependencies.size)
+      assert(wacFromJson.dependencyExcludes != null)
+      assert(0 == wacFromJson.dependencyExcludes.size)
+      assert(wacFromJson.repositories != null)
+      assert(8 == wacFromJson.repositories.size)
+      assert(0 == wac.modules.size)
+      assert(1 == wac.persistence.size)
+      assert(wacFromJson.webXml != null)
+      assert(wacFromJson.environment != null)
+      assert("test".equalsIgnoreCase(wac.environment))
+      assert(9 == wacFromJson.webXml.size)
 
-      assertEquals(1, wacFromJson.logging.get.root.get.ref.size)
-      assertEquals("STDOUT", wacFromJson.logging.get.root.get.ref.get(0))
+      assert(1 == wacFromJson.logging.get.root.get.ref.size)
+      assert("STDOUT".equalsIgnoreCase( wacFromJson.logging.get.root.get.ref.get(0)))
     }
   }
 }

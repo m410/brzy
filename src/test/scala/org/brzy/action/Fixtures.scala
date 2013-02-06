@@ -10,7 +10,7 @@ import org.springframework.mock.web.{MockRequestDispatcher, MockServletContext, 
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import javax.servlet.http.HttpServletResponse
 
-import org.junit.Assert._
+
 
 import collection.JavaConversions._
 import org.brzy.mock.{MockUserStore, MockUser}
@@ -116,9 +116,10 @@ trait Fixtures {
   val request = new MockHttpServletRequest(new MockServletContext()) {
     override def getRequestDispatcher(path:String):RequestDispatcher = {
       new MockRequestDispatcher(path) {
-        assertEquals("/user/view.ssp",path)
+//        assertEquals("/user/view.ssp",path)
         override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {
-          assertTrue("Correct rc attribute", fwdReq.getAttribute("rc") == null)
+          assert(fwdReq.getAttribute("rc") == null) // todo always false
+//          assert(true == "Correct rc attribute") // todo always false
         }
       }
     }

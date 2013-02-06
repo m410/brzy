@@ -42,6 +42,7 @@ class BrzyFilter extends SFilter {
     val request = req.asInstanceOf[HttpServletRequest]
     val response = req.asInstanceOf[HttpServletResponse]
 
+    // todo need to preserve http status
     webapp.doFilterAction(request)  match {
       case ActOn(action) =>
         action.trans.doWith(webapp.threadLocalSessions, {()=>

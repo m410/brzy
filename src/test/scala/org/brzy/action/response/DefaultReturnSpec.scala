@@ -13,7 +13,7 @@
  */
 package org.brzy.action.response
 
-import org.junit.Assert._
+
 import org.scalatest.junit.JUnitSuite
 import org.junit.Test
 import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
@@ -33,16 +33,16 @@ class DefaultReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
       //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "list").get
       val action = ctlr.actions.find(_.path == "").get//new Action("/users", method, ctlr, ".ssp")
 
-      assertNotNull(action.view)
-      assertEquals("/user/list", action.view)
+      assert(action.view != null)
+      assert("/user/list".equals( action.view))
 //      val result = action.execute(Array.empty[Arg],new PrincipalMock)
-//      assertNotNull(result)
+//      assert(result != null)
 
       var callCount = 0
       val request = new MockHttpServletRequest(new MockServletContext()) {
         override def getRequestDispatcher(path:String):RequestDispatcher = {
           new MockRequestDispatcher(path) {
-            assertEquals("/user/list.ssp",path)
+            assert("/user/list.ssp".equals(path))
             callCount = callCount + 1
             override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ){}
           }
@@ -62,23 +62,23 @@ class DefaultReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
       }
 //      val response = new MockHttpServletResponse()
 //      ResponseHandler(action,result,request,response)
-      assertTrue(callCount == 1)
+      assert(callCount == 1)
     }
 
     "return default view" in {
       val ctlr = new UserController  with MockUserStore
       //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther").get
       val action = ctlr.actions.find(_.path == "other").get//new Action("/users/other", method, ctlr, ".ssp")
-      assertNotNull(action.view)
-      assertEquals("/user/other", action.view)
+      assert(action.view != null)
+      assert("/user/other".equals( action.view))
 //      val result = action.execute(Array.empty[Arg],new PrincipalMock)
-//      assertNotNull(result)
+//      assert(result != null)
 
       var callCount = 0
       val request = new MockHttpServletRequest(new MockServletContext()) {
         override def getRequestDispatcher(path:String):RequestDispatcher = {
           new MockRequestDispatcher(path) {
-            assertEquals("/index.ssp",path)
+            assert("/index.ssp".equals(path))
             callCount = callCount + 1
             override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ){}
           }
@@ -98,24 +98,24 @@ class DefaultReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
       }
 //      val response = new MockHttpServletResponse()
 //      ResponseHandler(action,result,request,response)
-      assertTrue(callCount == 1)
+      assert(callCount == 1)
     }
 
     "return default view again" in {
       val ctlr = new UserController with MockUserStore
       //    val method: Method = ctlr.getClass.getMethods.find(_.getName == "someOther2").get
       val action = ctlr.actions.find(_.path == "other2").get//new Action("/users/some2", method, ctlr, ".ssp")
-      assertNotNull(action.view)
-      assertEquals("/user/other2", action.view)
+      assert(action.view != null)
+      assert("/user/other2".equals( action.view))
 //      val result = action.execute(Array.empty[Arg],new PrincipalMock)
-//      assertNotNull(result)
+//      assert(result != null)
 
 
       var callCount = 0
       val request = new MockHttpServletRequest(new MockServletContext()) {
         override def getRequestDispatcher(path:String):RequestDispatcher = {
           new MockRequestDispatcher(path) {
-            assertEquals("/users/page.ssp",path)
+            assert("/users/page.ssp".equals(path))
             callCount = callCount + 1
             override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {}
           }
@@ -135,7 +135,7 @@ class DefaultReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
       }
 //      val response = new MockHttpServletResponse()
 //      ResponseHandler(action,result,request,response)
-      assertTrue(callCount == 1)
+      assert(callCount == 1)
     }
   }
 

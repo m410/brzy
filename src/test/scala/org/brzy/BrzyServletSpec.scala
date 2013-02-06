@@ -13,7 +13,7 @@
  */
 package org.brzy
 
-import org.junit.Assert._
+
 import org.springframework.mock.web.{MockServletConfig, MockServletContext, MockHttpServletResponse, MockHttpServletRequest}
 import org.brzy.application.{WebAppConfiguration, WebApp}
 import org.scalatest.matchers.ShouldMatchers
@@ -24,9 +24,9 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
   "Brzy Servlet" should {
     "find action by path" in {
       val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
-      assertNotNull(webapp)
-      assertEquals(2,webapp.controllers.size)
-      assertEquals(19,webapp.actions.size)
+      assert(webapp != null)
+      assert(2 == webapp.controllers.size)
+      assert(19 == webapp.actions.size)
 
       val request = new MockHttpServletRequest("GET", "//users.brzy")
       val response = new MockHttpServletResponse()
@@ -37,14 +37,14 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
       val servlet = new BrzyServlet()
       servlet.init(new MockServletConfig(context))
       servlet.service(request,response)
-      assertEquals(200,response.getStatus)
+      assert(200 == response.getStatus)
     }
 
     "find path with params" in {
       val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
-      assertNotNull(webapp)
-      assertEquals(2,webapp.controllers.size)
-      assertEquals(19,webapp.actions.size)
+      assert(webapp != null)
+      assert(2 == webapp.controllers.size)
+      assert(19 == webapp.actions.size)
 
       val request = new MockHttpServletRequest("GET", "//users/10.brzy")
       val response = new MockHttpServletResponse()
@@ -55,7 +55,7 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
       val servlet = new BrzyServlet()
       servlet.init(new MockServletConfig(context))
       servlet.service(request,response)
-      assertEquals(200,response.getStatus)
+      assert(200 == response.getStatus)
     }
   }
 }

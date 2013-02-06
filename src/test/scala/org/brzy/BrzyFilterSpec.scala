@@ -13,7 +13,7 @@
  */
 package org.brzy
 
-import org.junit.Assert._
+
 import org.brzy.application.WebApp
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
@@ -31,7 +31,7 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
 
       val app = WebApp("test")
       app.actions.foreach(a => println("### action: " + a))
-      assertTrue(!app.actions.isEmpty)
+      assert(true != app.actions.isEmpty)
 
       val filter = new BrzyFilter
       filter.webapp = app

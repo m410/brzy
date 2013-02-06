@@ -2,7 +2,7 @@ package org.brzy.action
 
 import args.PostBodyRequest
 import org.scalatest.junit.JUnitSuite
-import org.junit.Assert._
+
 import java.io.FileInputStream
 import xml.Elem
 import org.springframework.mock.web.{MockHttpServletRequest, MockMultipartHttpServletRequest, MockMultipartFile, MockHttpServletResponse}
@@ -36,7 +36,7 @@ class FileUploadSpec extends WordSpec with ShouldMatchers{
       println(request.getFileMap)
       val postbody = new PostBodyRequest(request)
       val bytes = postbody.paramAsFile("file")
-      assertNotNull(bytes)
+      assert(bytes != null)
     }
     "upload text" in {
       val request = new MockMultipartHttpServletRequest()
@@ -48,8 +48,8 @@ class FileUploadSpec extends WordSpec with ShouldMatchers{
       request.setRequestURI("/files/upload")
       val postbody = new PostBodyRequest(request)
       val text = postbody.asText
-      assertNotNull(text)
-      assertEquals(content, text)
+      assert(text != null)
+      assert(content.equalsIgnoreCase(text))
     }
     "upload json" in {
       val request = new MockMultipartHttpServletRequest()
@@ -61,8 +61,8 @@ class FileUploadSpec extends WordSpec with ShouldMatchers{
       request.setRequestURI("/files/upload")
       val postbody = new PostBodyRequest(request)
       val json = postbody.asJson
-      assertNotNull(json)
-      assertTrue(json.isInstanceOf[Map[_, _]])
+      assert(json != null)
+      assert(true == json.isInstanceOf[Map[_, _]])
     }
     "upload xml" in {
       val request = new MockMultipartHttpServletRequest()
@@ -74,8 +74,8 @@ class FileUploadSpec extends WordSpec with ShouldMatchers{
       request.setRequestURI("/files/upload")
       val postbody = new PostBodyRequest(request)
       val xml = postbody.asXml
-      assertNotNull(xml)
-      assertTrue(xml.isInstanceOf[Elem])
+      assert(xml != null)
+      assert(true == xml.isInstanceOf[Elem])
     }
   }
 

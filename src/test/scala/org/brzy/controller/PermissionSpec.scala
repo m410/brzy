@@ -13,7 +13,7 @@
  */
 package org.brzy.controller
 
-import org.junit.Assert._
+
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 
@@ -28,15 +28,15 @@ class PermissionSpec extends WordSpec with ShouldMatchers with Fixtures {
       }
       val encrypted = permission.encrypt("mypass")
       println("## encrypted=" + encrypted)
-      assertNotNull(encrypted)
+      assert(encrypted != null)
 
       val wrongPass = permission.encrypt("myPass")
       println("## wrongPass=" + wrongPass)
-      assertTrue(!wrongPass.equals(encrypted))
+      assert(true == !wrongPass.equals(encrypted))
 
       val rightPass = permission.encrypt("mypass")
       println("## rightPass=" + rightPass)
-      assertTrue(rightPass equals encrypted )
+      assert(rightPass equals encrypted )
     }
   }
 

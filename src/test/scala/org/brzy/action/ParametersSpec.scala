@@ -15,7 +15,7 @@ package org.brzy.action
  */
 
 import args.{ParametersRequest, Parameters}
-import org.junit.Assert._
+
 import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import org.springframework.mock.web.{MockServletContext, MockHttpServletRequest}
@@ -27,15 +27,15 @@ class ParametersSpec extends WordSpec with ShouldMatchers with Fixtures {
 
   "Parameters" should {
     "return random types" in {
-      assertNotNull(parameters2("id"))
-      assertNotNull(parameters2("lastName"))
-      assertNotNull(parameters2("firstName"))
-      assertEquals("12321",parameters2("id"))
-      assertEquals(true,parameters2.url.contains("id"))
-      assertEquals("12321",parameters2("id"))
-      assertEquals("thumb",parameters2("lastName"))
-      assertEquals("john",parameters2("firstName"))
-      assertEquals("yes",parameters2("other"))
+      assert(parameters2("id") != null)
+      assert(parameters2("lastName") != null)
+      assert(parameters2("firstName") != null)
+      assert("12321".equalsIgnoreCase(parameters2("id")))
+      assert(true == parameters2.url.contains("id"))
+      assert("12321".equalsIgnoreCase(parameters2("id")))
+      assert("thumb".equalsIgnoreCase(parameters2("lastName")))
+      assert("john".equalsIgnoreCase(parameters2("firstName")))
+      assert("yes".equalsIgnoreCase(parameters2("other")))
     }
   }
 }

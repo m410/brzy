@@ -13,7 +13,7 @@
  */
 package org.brzy.controller
 
-import org.junit.Assert._
+
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -24,8 +24,8 @@ class UserControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
   "UserController" should {
     "create" in {
       val controller = new UserController
-      assertNotNull(controller)
-      assertNotNull(controller.create())
+      assert(controller != null)
+      assert(controller.create()!=null)
     }
   }
 }

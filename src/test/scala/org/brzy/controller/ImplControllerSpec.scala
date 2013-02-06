@@ -1,7 +1,7 @@
 package org.brzy.controller
 
 import org.scalatest.junit.JUnitSuite
-import org.junit.Assert._
+
 import org.junit.Test
 import org.brzy.action._
 import args.{Arg, Principal, Parameters}
@@ -15,8 +15,8 @@ class ImplControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
   "A Contoller Implementataion" should {
     "load" in {
 //      val controller = new ImplController
-//      assertNotNull(controller)
-//      assertEquals(2, controller.actions.size)
+//      assert(controller != null)
+//      assert(2 == controller.actions.size)
 
     }
     "call action" in {
@@ -25,8 +25,8 @@ class ImplControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 //      }
 //      implicit val ctlRef = myCtl
 //      val action1 = Action("f1", "f1", myCtl.fun1 _)
-//      assertNotNull(action1.returnType)
-//      assertNotNull(action1.argTypes)
+//      assert(action1.returnType != null)
+//      assert(action1.argTypes != null)
     }
     "call another action" in {
 //      val myCtl2 = new Controller("test") {
@@ -34,8 +34,8 @@ class ImplControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 //      }
 //      implicit val ctlRef2 = myCtl2
 //      val action2 = Action("f2","f2", myCtl2.fun2 _)
-//      assertNotNull(action2.returnType)
-//      assertNotNull(action2.argTypes)
+//      assert(action2.returnType != null)
+//      assert(action2.argTypes != null)
     }
     "intercept an action" in {
 //
@@ -44,8 +44,8 @@ class ImplControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 //      // need to create parameters from
 //      val args = Array[Arg](parameters)
 //      val result = action.execute(args,principal)
-//      assertNotNull(result)
-//      assertTrue(result.isInstanceOf[Model])
+//      assert(result != null)
+//      assert(true == result.isInstanceOf[Model])
     }
   }
 }
