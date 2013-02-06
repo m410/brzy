@@ -17,24 +17,47 @@ package org.brzy
 import org.brzy.application.WebApp
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
+import org.springframework.mock.web.{MockFilterChain, MockFilterConfig, MockHttpServletResponse, MockHttpServletRequest}
 
 class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
 
-  "Brzy Filter" should {
-    "filter forward" in {
+  val filter = new BrzyFilter
+  filter.webapp = WebApp("test")
 
-      val filter = new BrzyFilter
-      filter.webapp = WebApp("test")
+
+  "Brzy Filter" should {
+    "filter Not an action" in {
       filter.doFilter(request1,response1,chain1)
     }
-    "filter pass through" in {
-
-      val app = WebApp("test")
-      app.actions.foreach(a => println("### action: " + a))
-      assert(true != app.actions.isEmpty)
-
-      val filter = new BrzyFilter
-      filter.webapp = app
+    "filter dispatch to" in {
+      // todo need to preserve http status
+      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val response = new MockHttpServletResponse()
+      val chain = new MockFilterChain()
+      filter.doFilter(request,response,chain)
+    }
+    "filter redirect to auth" in {
+      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val response = new MockHttpServletResponse()
+      val chain = new MockFilterChain()
+      filter.doFilter(request,response,chain)
+    }
+    "filter redirect to secure" in {
+      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val response = new MockHttpServletResponse()
+      val chain = new MockFilterChain()
+      filter.doFilter(request,response,chain)
+    }
+    "filter act on async" in {
+      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val response = new MockHttpServletResponse()
+      val chain = new MockFilterChain()
+      filter.doFilter(request,response,chain)
+    }
+    "filter act on standard" in {
+      val request = new MockHttpServletRequest("GET", "//users.brzy")
+      val response = new MockHttpServletResponse()
+      val chain = new MockFilterChain()
       filter.doFilter(request,response,chain)
     }
   }

@@ -12,7 +12,7 @@ views:
   name: brzy-scalate
   org: org.brzy
   version: "0.6"
-  config_class: org.brzy.webapp.mock.MockModConfig
+  config_class: org.brzy.mock.MockModConfig
   file_extension: ".ssp"
 
 repositories:

@@ -7,8 +7,8 @@ name: brzy-scalate
 org: org.brzy
 version: "0.2"
 file_extension: ".ssp"
-config_class: org.brzy.webapp.mock.MockModConfig
-provider_class: org.brzy.webapp.mock.MockModProvider
+config_class: org.brzy.mock.MockModConfig
+provider_class: org.brzy.mock.MockModProvider
 
 dependencies:
   - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}

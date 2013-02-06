@@ -40,7 +40,7 @@ class BrzyFilter extends SFilter {
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
     val request = req.asInstanceOf[HttpServletRequest]
-    val response = req.asInstanceOf[HttpServletResponse]
+    val response = res.asInstanceOf[HttpServletResponse]
 
     // todo need to preserve http status
     webapp.doFilterAction(request)  match {

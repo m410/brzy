@@ -2,8 +2,8 @@ mod_type: persistence
 name: brzy-squeryl
 org: org.brzy
 version: "${pom.version}"
-config_class: org.brzy.webapp.mock.MockSquerylModConfig
-provider_class: org.brzy.webapp.mock.MockSquerylModProvider
+config_class: org.brzy.mock.MockSquerylModConfig
+provider_class: org.brzy.mock.MockSquerylModProvider
 
 repositories:
   - id: "fusesource.m2"

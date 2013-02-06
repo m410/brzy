@@ -18,7 +18,7 @@ case class Transaction(propagation: Propagation = REQUIRED, isolation: Isolation
     //after
   }
 
-  def doWithResult(t: List[ManagedThreadContext], scope: () => AnyRef) {
+  def doWithResult(t: List[ManagedThreadContext], scope: () => AnyRef):AnyRef = {
     //before
     val anyRef = scope()
     //after
