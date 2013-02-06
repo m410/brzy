@@ -234,7 +234,7 @@ object WebAppConfiguration {
 
   def fromJson(json: String) = {
     implicit val formats = Serialization.formats(NoTypeHints)
-    val m = parse(json).extract[Map[String,AnyRef]]
+    val m = parse(json).asInstanceOf[JObject].values
     new WebAppConfiguration(m("config").asInstanceOf[Map[String, AnyRef]])
   }
 }

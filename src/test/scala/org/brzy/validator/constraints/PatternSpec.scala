@@ -10,7 +10,7 @@ class PatternSpec extends WordSpec with ShouldMatchers {
   "Pattern validator" should {
     "validate" in {
       val pattern = Pattern("hello")
-      assert(true == pattern.isValid("hello you"))
+      assert(pattern.isValid("hello you"))
     }
     "not validate" in {
       val pattern = Pattern("hello")

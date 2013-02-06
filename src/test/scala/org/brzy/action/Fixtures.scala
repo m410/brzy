@@ -119,7 +119,7 @@ trait Fixtures {
 //        assertEquals("/user/view.ssp",path)
         override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {
           assert(fwdReq.getAttribute("rc") == null) // todo always false
-//          assert(true == "Correct rc attribute") // todo always false
+//          assert("Correct rc attribute") // todo always false
         }
       }
     }

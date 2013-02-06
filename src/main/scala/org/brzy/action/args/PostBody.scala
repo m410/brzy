@@ -16,14 +16,12 @@ package org.brzy.action.args
 import org.apache.commons.fileupload.FileItem
 import org.apache.commons.fileupload.disk.DiskFileItemFactory
 import io.Source
-import xml.{XML, Elem}
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload
 import javax.servlet.http.HttpServletRequest
 import collection.JavaConversions._
 import java.io.File
 
-import net.liftweb.json._
 
 /**
  * Document Me..
@@ -32,10 +30,6 @@ import net.liftweb.json._
  */
 trait PostBody extends Arg {
   def asText: String
-
-  def asXml: Elem
-
-  def asJson: AnyRef
 
   def parameters: Map[String, String]
 
@@ -51,10 +45,6 @@ class PostBodyRequest (request: HttpServletRequest,
         val sizeThreshold:Int = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD) extends PostBody {
 
   def asText = Source.fromInputStream(request.getInputStream).mkString
-
-  def asXml = XML.load(request.getInputStream)
-
-  def asJson = parse(asText)
 
 
   private lazy val fileItems = {

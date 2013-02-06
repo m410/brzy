@@ -11,16 +11,16 @@ class PathSpec extends WordSpec with ShouldMatchers with Fixtures {
     "match" in {
       val actionPath = Path("users", "{id}/items/{iid}")
       val path = "/users/1232/items/234543"
-      assert(true == actionPath.isMatch(path))
+      assert(actionPath.isMatch(path))
 
       val result = actionPath.parameterNames
-      assert(true == !result.isEmpty)
+      assert(!result.isEmpty)
       assert(2 == result.size)
       assert("id".equalsIgnoreCase( result(0)))
       assert("iid".equalsIgnoreCase( result(1)))
 
       val values = actionPath.extractParameterValues(path)
-      assert(true == !values.isEmpty)
+      assert(!values.isEmpty)
       assert(2 == values.size)
       assert("1232".equalsIgnoreCase( values(0)))
       assert("234543".equalsIgnoreCase( values(1)))
@@ -28,40 +28,40 @@ class PathSpec extends WordSpec with ShouldMatchers with Fixtures {
     "exrtract parameters" in {
       val actionPath = Path("users", "{id}")
       val path = "/users/10"
-      assert(true == actionPath.isMatch(path))
+      assert(actionPath.isMatch(path))
 
       val result = actionPath.parameterNames
-      assert(true == !result.isEmpty)
+      assert(!result.isEmpty)
       assert(1 == result.size)
       assert("id".equalsIgnoreCase( result(0)))
     }
     "parent var path" in {
       val actionPath = Path("", "users/{parent}/items")
       val path = "/users/1232/items"
-      assert(true == actionPath.isMatch(path))
+      assert(actionPath.isMatch(path))
 
       val result = actionPath.parameterNames
-      assert(true == !result.isEmpty)
+      assert(!result.isEmpty)
       assert(1 == result.size)
       assert("parent".equalsIgnoreCase( result(0)))
 
       val values = actionPath.extractParameterValues(path)
-      assert(true == !values.isEmpty)
+      assert(!values.isEmpty)
       assert(1 == values.size)
       assert("1232".equalsIgnoreCase( values(0)))
     }
     "match path with pattern" in {
       val path = Path("","""users/{p:\d+}/items""")
       val target = "/users/1232/items"
-      assert(true == path.isMatch(target))
+      assert(path.isMatch(target))
 
       val result = path.parameterNames
-      assert(true == !result.isEmpty)
+      assert(!result.isEmpty)
       assert(1 == result.size)
       assert("p".equalsIgnoreCase( result(0)))
 
       val values = path.extractParameterValues(target)
-      assert(true == !values.isEmpty)
+      assert(!values.isEmpty)
       assert(1 == values.size)
       assert("1232".equalsIgnoreCase( values(0)))
     }
@@ -73,21 +73,21 @@ class PathSpec extends WordSpec with ShouldMatchers with Fixtures {
     "path with extension match" in {
       val path = Path("", """path/pixel.gif""")
       val target = "/path/pixel.gif"
-      assert(true == path.isMatch(target))
+      assert(path.isMatch(target))
     }
     "extract parameters base" in {
       val actionPath = Path("users", "/")
       val path = "/users"
       val result = actionPath.parameterNames
-      assert(true == result.isEmpty)
-      assert(true == actionPath.isMatch(path))
+      assert(result.isEmpty)
+      assert(actionPath.isMatch(path))
     }
     "extract parameters root" in {
       val actionPath = Path("", "")
       val path = "/"
       val result = actionPath.parameterNames
-      assert(true == result.isEmpty)
-      assert(true == actionPath.isMatch(path))
+      assert(result.isEmpty)
+      assert(actionPath.isMatch(path))
     }
   }
 }

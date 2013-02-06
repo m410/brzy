@@ -13,10 +13,13 @@ class SubPathControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
       val ctlr = new SubPathController()
       val action = ctlr.actions.find(_.path == "{vid}").get
 //      assert("/person/sub/view".equalsIgnoreCase(action.view))
-      assert("/person/100/sub/200".equalsIgnoreCase(ArgsBuilder.parseActionPath("/person/100/sub/200.brzy","")))
-      assert(true == action.isMatch("/person/100/sub/200","",""))
 
-      val result = action.paramsFor("/person/100/sub/200")
+      val path = ArgsBuilder.parseActionPath("/person/100/sub/200.brzy", "")
+      val expected = "/person/100/sub/200"
+      assert(expected.equalsIgnoreCase(path))
+      assert(action.isMatch("GET","text/html",expected))
+
+      val result = action.paramsFor(expected)
       assert(result != null)
       assert(2 == result.size)
       assert("100".equalsIgnoreCase(result("pid")))

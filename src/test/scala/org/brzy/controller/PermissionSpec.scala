@@ -32,7 +32,7 @@ class PermissionSpec extends WordSpec with ShouldMatchers with Fixtures {
 
       val wrongPass = permission.encrypt("myPass")
       println("## wrongPass=" + wrongPass)
-      assert(true == !wrongPass.equals(encrypted))
+      assert(!wrongPass.equals(encrypted))
 
       val rightPass = permission.encrypt("mypass")
       println("## rightPass=" + rightPass)

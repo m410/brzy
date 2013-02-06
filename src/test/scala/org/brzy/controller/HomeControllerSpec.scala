@@ -14,7 +14,7 @@ class HomeControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
       val action = ctlr.actions.find(_.path == "").get
 //      assert("/index".equalsIgnoreCase(action.view))
       assert("/".equalsIgnoreCase(ArgsBuilder.parseActionPath("/.brzy","")))
-      assert(true == action.isMatch("/","",""))
+      assert(action.isMatch("GET","","/"))
 
       val result = action.paramsFor("/")
       assert(result != null)

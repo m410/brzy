@@ -23,15 +23,15 @@ class ParametersSpec extends WordSpec with ShouldMatchers with Fixtures {
 
   "Parameters" should {
     "return random types" in {
-      assert(parameters2("id") != null)
-      assert(parameters2("lastName") != null)
-      assert(parameters2("firstName") != null)
-      assert("12321".equalsIgnoreCase(parameters2("id")))
-      assert(true == parameters2.url.contains("id"))
-      assert("12321".equalsIgnoreCase(parameters2("id")))
-      assert("thumb".equalsIgnoreCase(parameters2("lastName")))
-      assert("john".equalsIgnoreCase(parameters2("firstName")))
-      assert("yes".equalsIgnoreCase(parameters2("other")))
+      assert(parameters("id") != null)
+      assert(parameters("lastName") != null)
+      assert(parameters("firstName") != null)
+      assert("12321".equalsIgnoreCase(parameters("id")))
+      assert(parameters.url.contains("id"))
+      assert("12321".equalsIgnoreCase(parameters("id")))
+      assert("thumb".equalsIgnoreCase(parameters("lastName")))
+      assert("john".equalsIgnoreCase(parameters("firstName")))
+      assert("yes".equalsIgnoreCase(parameters("other")))
     }
   }
 }

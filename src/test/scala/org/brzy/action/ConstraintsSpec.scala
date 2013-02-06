@@ -40,21 +40,21 @@ class ConstraintsSpec extends WordSpec with ShouldMatchers with Fixtures {
       request.setContentType("text/html")
       request.setSecure(true)
       val action = controller.actions.find(_.path == "index3").get
-//      assert(true == "Should be true for content type", action.isConstrained(request))
+//      assert("Should be true for content type", action.isConstrained(request))
     }
     "accepty http methods" in {
       val request = new MockHttpServletRequest("POST", "//users.brzy")
       request.setContentType("text/xml")
       request.setSecure(true)
       val action = controller.actions.find(_.path == "index2").get
-//      assert(true == "Should be true for http method", action.isConstrained(request))
+//      assert("Should be true for http method", action.isConstrained(request))
     }
     "accept ssl" in {
       val request = new MockHttpServletRequest("GET", "//users.brzy")
       request.setContentType("text/xml")
       request.setSecure(false)
       val action = controller.actions.find(_.path == "index1").get
-//      assert(true == "Should be true for secure", action.requiresSsl)
+//      assert("Should be true for secure", action.requiresSsl)
     }
   }
 

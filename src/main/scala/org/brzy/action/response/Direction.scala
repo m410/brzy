@@ -13,14 +13,24 @@
  */
 package org.brzy.action.response
 
-import org.brzy.action.Parser
-import net.liftweb.json._
-import java.io.OutputStream
+
 import org.brzy.action.args.{ParametersRequest, Parameters}
-import javax.servlet.{AsyncContext, AsyncListener}
 import org.brzy.fab.interceptor.ManagedThreadContext
-import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import org.brzy.persistence.Transaction
+import org.brzy.action.Parser
+
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import javax.servlet.{AsyncContext, AsyncListener}
+
+import net.liftweb.json._
+
+import java.io.OutputStream
+
+import scala.reflect.runtime.universe._
+import scala.reflect._
+import scala.reflect.runtime.{currentMirror=>cm}
+import xml.Elem
+
 
 /**
  * What direction to send the client request too.  Can be a vew, redirect, forward, etc.
@@ -56,10 +66,24 @@ case class Redirect(path: String) extends Direction
 /**
  * Return xml as the body of the response.
  */
-case class Xml[T<:AnyRef:Manifest](t: T, contentType: String = "text/xml") extends Direction with Parser {
+case class Xml[T<:AnyRef:TypeTag:ClassTag](t: T, contentType: String = "text/xml") extends Direction with Parser {
 
-  def parse = {
-    <class></class>
+  def parse =  {
+    val tag = typeOf[T]
+    val map = tag.declarations.filter((d:Symbol)=>{
+      d match {
+        case s:MethodSymbol =>
+          s.isGetter
+        case _ => false
+      }
+    }).map(p=>{
+      p.asMethod.name.toString -> cm.reflect(t).reflectMethod(p.asMethod)()
+    }).toMap
+    def node(name: String, elem: Elem) = elem.copy(label = name)
+    val tmp = <class>
+      {map.map(p => node({p._1}, <property>{p._2}</property>))}
+    </class>
+    node(tag.typeSymbol.name.toString, tmp)
   }.toString()
 }
 

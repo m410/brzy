@@ -13,7 +13,7 @@ class SecuredActionSpec extends WordSpec with ShouldMatchers with Fixtures {
     }
     "accept action" in {
       val action = controller2.actions(0)
-      assert(true == action.isAuthorized(new PrincipalMock("me",Roles("ADMIN"))))
+      assert(action.isAuthorized(new PrincipalMock("me",Roles("ADMIN"))))
     }
   }
 }

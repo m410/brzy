@@ -41,7 +41,7 @@ class ImplControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 //      val args = Array[Arg](parameters)
 //      val result = action.execute(args,principal)
 //      assert(result != null)
-//      assert(true == result.isInstanceOf[Model])
+//      assert(result.isInstanceOf[Model])
     }
   }
 }

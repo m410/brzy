@@ -17,7 +17,8 @@ package org.brzy.action.response
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.brzy.mock.{MockUserStore, UserController}
-
+import org.brzy.action.args.Arg
+import org.springframework.mock.web.{MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
 
 
 class XmlReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
@@ -35,22 +36,22 @@ class XmlReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {
       val foo = Foo("bar")
       val xml = Xml(foo)
       assert(xml != null)
-      assert(fooXml.equalsIgnoreCase(xml.parse))
+      fooXml should equal(xml.parse)
     }
     "accept xml" in {
       val ctlr = new UserController with MockUserStore
       val action = ctlr.actions.find(_.path == "xml").get
 
       assert(action.view != null)
-//      assert("/user/xml".equals(action.view))
-//      val result = action.execute(Array.empty[Arg],new PrincipalMock)
-//      assert(result != null)
+      assert(action.view.isInstanceOf[NoView.type ])
+      val result = action.execute(Array.empty[Arg],new PrincipalMock)
+      assert(result != null)
 
-//      val request = new MockHttpServletRequest(new MockServletContext())
-//      val response = new MockHttpServletResponse()
-//      ResponseHandler(action,result,request,response)
-//      assertEquals("text/xml",response.getContentType)
-//      assertEquals(expectedXml,response.getContentAsString)
+      val request = new MockHttpServletRequest(new MockServletContext())
+      val response = new MockHttpServletResponse()
+      ResponseHandler(action,result,request,response)
+      response.getContentType should be equals("text/xml")
+      response.getContentAsString should be equals(expectedXml)
     }
   }
 }

@@ -43,9 +43,9 @@ trait Fixtures {
 
     override def intercept(action: () => AnyRef, actionArgs: Array[Arg],principal:Principal) = {
       val paramsOption = actionArgs.find(_.isInstanceOf[Parameters])
-      assert(true == paramsOption.isDefined)
+      assert(paramsOption.isDefined)
       val result = action()
-      assert(true == result.isInstanceOf[Model])
+      assert(result.isInstanceOf[Model])
       result
     }
 
@@ -60,7 +60,10 @@ trait Fixtures {
 
 
   class SubPathController extends Controller("/person/{pid}/sub") {
-    override val actions = List(get("{vid}",view _,View("/person/sub/view")))
+    override val actions = List(
+      get("{vid}",view _,View("/person/sub/view"))
+    )
+
     def view(p:Parameters) = "hello" -> "world"
   }
 }

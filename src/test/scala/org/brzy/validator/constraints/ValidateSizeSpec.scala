@@ -10,7 +10,7 @@ class ValidateSizeSpec extends WordSpec with ShouldMatchers {
   "Validate Size" should {
     "validate" in {
       val size = Size(5 to 10)
-      assert(true == size.isValid("hello you"))
+      assert(size.isValid("hello you"))
     }
     "invaldiate" in {
       val size = Size(5 to 10)
@@ -18,7 +18,7 @@ class ValidateSizeSpec extends WordSpec with ShouldMatchers {
     }
     "validate number" in {
       val size = Size(5 to 10)
-      assert(true == size.isValid(Integer.valueOf(6)))
+      assert(size.isValid(Integer.valueOf(6)))
     }
     "invalidate number" in {
       val size = Size(5 to 10)

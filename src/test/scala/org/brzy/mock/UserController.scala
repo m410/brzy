@@ -28,7 +28,7 @@ class UserController extends Controller("users") {
     get("get",someOther _, View("get")),
     post("post",someOther2 _, View("post")),
     async("async",asyncStart _, View("async")),
-    action("xml",xml _, View("xml")),
+    action("xml",xml _),
     action("redirect",redirect _, View("redirect")),
     action("json",json _, View("json")),
     action("json2",json2 _, View("json2")),

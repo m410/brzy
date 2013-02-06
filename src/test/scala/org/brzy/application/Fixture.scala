@@ -8,7 +8,7 @@ trait Fixture {
 
   class TestWebapp(wc:WebAppConfiguration) extends WebApp(wc) {
     override val controllers = List(new FixtureController with FixtureService)
-
+    override val services = List(new FixtureService{})
   }
 
   trait FixtureService extends Service {
