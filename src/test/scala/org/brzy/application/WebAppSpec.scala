@@ -65,7 +65,12 @@ class WebAppSpec extends WordSpec with ShouldMatchers  with Fixture {
       val action = webapp.doFilterAction(request)
       assert(action.isInstanceOf[RedirectToSecure], s"expected RedirectToSecure, was $action")
     }
-    "call doFilter and return redirect to authenticate" in {
+    "call doFilter and return async redirect" in {
+      val request = new MockHttpServletRequest("GET", "/users/async")
+      val action = webapp.doFilterAction(request)
+      assert(action.isInstanceOf[DispatchTo], s"expected DispathTo, was $action")
+    }
+    "call doFilter and return async action" in {
       val request = new MockHttpServletRequest("GET", "/users/async.brzy_async")
       val action = webapp.doFilterAction(request)
       assert(action.isInstanceOf[ActOnAsync], s"expected ActOnAsync, was $action")
@@ -74,9 +79,6 @@ class WebAppSpec extends WordSpec with ShouldMatchers  with Fixture {
       val request = new MockHttpServletRequest("GET", "/users.brzy")
       val action = webapp.doFilterAction(request)
       assert(action.isInstanceOf[ActOn], s"expected ActOn, was $action")
-    }
-    "call doFilter and return async action" in {
-
     }
   }
 }

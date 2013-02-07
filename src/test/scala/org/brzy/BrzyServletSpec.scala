@@ -26,7 +26,7 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
       val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
       assert(webapp != null)
       assert(2 == webapp.controllers.size)
-      assert(19 == webapp.actions.size)
+      assert(20 == webapp.actions.size)
 
       val request = new MockHttpServletRequest("GET", "//users.brzy")
       val response = new MockHttpServletResponse()
@@ -44,7 +44,7 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
       val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
       assert(webapp != null)
       assert(2 == webapp.controllers.size)
-      assert(19 == webapp.actions.size)
+      assert(20 == webapp.actions.size)
 
       val request = new MockHttpServletRequest("GET", "//users/10.brzy")
       val response = new MockHttpServletResponse()

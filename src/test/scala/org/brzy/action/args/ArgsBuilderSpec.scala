@@ -26,5 +26,29 @@ class ArgsBuilderSpec extends WordSpec with ShouldMatchers with Fixtures {
       assert(args(0).isInstanceOf[Parameters])
       assert(args(1).isInstanceOf[Principal])
     }
+    "pull action path with extension" in {
+      val apath = ArgsBuilder.parseActionPath("/ctx/usr/path.brzy","/ctx")
+      apath.isAsync should be (false)
+      apath.isServlet should be (true)
+      apath.path should be equals("/usr/path")
+    }
+    "pull action path without extension" in {
+      val apath = ArgsBuilder.parseActionPath("/usr/path","")
+      apath.isAsync should be (false)
+      apath.isServlet should be (false)
+      apath.path should be equals("/usr/path")
+    }
+    "pull action path with extra slashes" in {
+      val apath = ArgsBuilder.parseActionPath("/ctx////usr/path.brzy","/ctx")
+      apath.isAsync should be (false)
+      apath.isServlet should be (true)
+      apath.path should be equals("/usr/path")
+    }
+    "pull action path with async extension" in {
+      val apath = ArgsBuilder.parseActionPath("/usr/path.brzy_async","")
+      apath.isAsync should be (true)
+      apath.isServlet should be (true)
+      apath.path should be equals("/usr/path")
+    }
   }
 }

@@ -18,6 +18,7 @@ import org.brzy.view.FlashMessage
 import javax.servlet.http.{Cookie=>JCookie, HttpServletResponse, HttpServletRequest}
 import org.slf4j.LoggerFactory
 import org.brzy.action.Action
+import org.brzy.application.WebApp
 
 /**
  * Document Me..
@@ -149,7 +150,14 @@ object ResponseHandler {
         log.trace("jsonp: {}", j)
         res.setContentType(j.contentType)
         res.getWriter.write(j.parse)
-      case _ => throw new UnknownActionDirectionException("Unknown Driection: %s".format(direct))
+      case j: Async =>
+        log.trace("async: {}", j)
+        val asyncContext = req.startAsync()
+        asyncContext.addListener(j.listener)
+        val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+        asyncContext.start(j.start(action, webapp.threadLocalSessions, action.trans, asyncContext))
+      case _ =>
+        throw new UnknownActionDirectionException("Unknown Driection: %s".format(direct))
     }
   }
 

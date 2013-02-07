@@ -8,6 +8,16 @@ import org.brzy.action.Path
 class PathSpec extends WordSpec with ShouldMatchers with Fixtures {
 
   "Action path" should {
+    "match on path with .brzy extension" in {
+      val actionPath = Path("users", "{id}")
+      val path = "/users/1232.brzy"
+      assert(actionPath.isMatch(path))
+    }
+    "match on path with .brzy_async extension" in {
+      val actionPath = Path("users", "{id}")
+      val path = "/users/1232.brzy_async"
+      assert(actionPath.isMatch(path))
+    }
     "match" in {
       val actionPath = Path("users", "{id}/items/{iid}")
       val path = "/users/1232/items/234543"

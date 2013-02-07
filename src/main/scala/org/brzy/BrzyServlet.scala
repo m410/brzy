@@ -37,7 +37,7 @@ class BrzyServlet extends HttpServlet {
 
   override def service(req: ServletRequest, res: ServletResponse) {
     val request = req.asInstanceOf[HttpServletRequest]
-    val response = req.asInstanceOf[HttpServletResponse]
+    val response = res.asInstanceOf[HttpServletResponse]
 
     webapp.serviceAction(request)
             .getOrElse(throw new RuntimeException(s"Action not found: ${request.getRequestURI}"))

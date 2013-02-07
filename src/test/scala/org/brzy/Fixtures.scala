@@ -8,37 +8,6 @@ import javax.servlet.http.HttpServletResponse
 
 trait Fixtures {
 
-  val request1 = new MockHttpServletRequest(new MockServletContext,"GET", "/users/10") {
-    override def getRequestDispatcher(path:String):RequestDispatcher = {
-      new MockRequestDispatcher(path) {
-        assert("/users/10.brzy".equalsIgnoreCase(path))
-        override def forward( fwdReq:ServletRequest, fwdRes:ServletResponse ) {
-          assert(fwdReq != null)
-          assert(fwdRes != null)
-        }
-      }
-    }
-
-    def startAsync() = null
-    def startAsync(p1: ServletRequest, p2: ServletResponse) = null
-    def isAsyncStarted = false
-    def isAsyncSupported = false
-    def getAsyncContext = null
-    def getDispatcherType = null
-
-    def authenticate(p1: HttpServletResponse) = false
-    def login(p1: String, p2: String) {}
-    def logout() {}
-    def getParts = null
-    def getPart(p1: String) = null
-  }
-  val response1 = new MockHttpServletResponse()
-
-  val chain1 = new FilterChain(){
-    def doFilter(p1: ServletRequest, p2: ServletResponse) {
-      //        fail("Should not be called")
-    }
-  }
 
 
   val request = new MockHttpServletRequest(new MockServletContext,"GET", "/companies/2") {

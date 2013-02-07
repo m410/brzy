@@ -45,20 +45,20 @@ class ActionSpec extends WordSpec with ShouldMatchers {
       assert("list".equals(vpath), s"shoule be list, was $vpath" )
     }
     "parse action path" in {
-      assert("/users".equals(ArgsBuilder.parseActionPath("/users.brzy","")))
-      assert("/users".equals(ArgsBuilder.parseActionPath("/users.brzy","/")))
-      assert("/users".equals(ArgsBuilder.parseActionPath("/home/users.brzy","/home")))
-      assert("/users/1/edit".equals(ArgsBuilder.parseActionPath("/users/1/edit.brzy","")))
-      assert("/path/pixel.gif".equals(ArgsBuilder.parseActionPath("/path/pixel.gif","")))
+      assert("/users".equals(ArgsBuilder.parseActionPath("/users.brzy","").path))
+      assert("/users".equals(ArgsBuilder.parseActionPath("/users.brzy","/").path))
+      assert("/users".equals(ArgsBuilder.parseActionPath("/home/users.brzy","/home").path))
+      assert("/users/1/edit".equals(ArgsBuilder.parseActionPath("/users/1/edit.brzy","").path))
+      assert("/path/pixel.gif".equals(ArgsBuilder.parseActionPath("/path/pixel.gif","").path))
 
-      assert("/".equals(ArgsBuilder.parseActionPath("/.brzy","")))
-      assert("/".equals(ArgsBuilder.parseActionPath("/.brzy","/")))
-      assert("/".equals(ArgsBuilder.parseActionPath("/one/.brzy","/one")))
-      assert("/".equals(ArgsBuilder.parseActionPath("//.brzy","")))
+      assert("/".equals(ArgsBuilder.parseActionPath("/.brzy","").path))
+      assert("/".equals(ArgsBuilder.parseActionPath("/.brzy","/").path))
+      assert("/".equals(ArgsBuilder.parseActionPath("/one/.brzy","/one").path))
+      assert("/".equals(ArgsBuilder.parseActionPath("//.brzy","").path))
     }
     "parameter extract" in {
       val ctlr = new UserController with MockUserStore
-      val action = ctlr.actions.find(_.path == "{id}/companies/{cid}").get
+      val action = ctlr.actions.find(_.path == "{id:\\d+}/companies/{cid:\\d+}").get
 
       val path = "/users/1232/companies/234543"
       assert(action.isMatch("GET","",path))
@@ -88,7 +88,7 @@ class ActionSpec extends WordSpec with ShouldMatchers {
     }
     "parameter map extraction" in {
       val ctlr = new UserController with MockUserStore
-      val action = ctlr.actions.find(_.path == "{id}/companies/{cid}").get
+      val action = ctlr.actions.find(_.path == "{id:\\d+}/companies/{cid:\\d+}").get
 
       val path = "/users/1232/companies/234543"
       assert(action.isMatch("GET","",path))

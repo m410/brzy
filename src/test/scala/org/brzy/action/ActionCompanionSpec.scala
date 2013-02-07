@@ -54,25 +54,33 @@ class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
       val context = "/home"
       val uri = "/home/users"
       val service = new BrzyServlet
-      assert("/users".equalsIgnoreCase(ArgsBuilder.parseActionPath(uri,context)))
+      val actionPath = ArgsBuilder.parseActionPath(uri, context)
+      assert("/users".equalsIgnoreCase(actionPath.path))
+      assert(!actionPath.isServlet)
     }
     "find action path 2" in {
       val context = "/home"
       val uri = "/home/user.brzy"
       val service = new BrzyServlet
-      assert("/user".equalsIgnoreCase(ArgsBuilder.parseActionPath(uri,context)))
+      val actionPath = ArgsBuilder.parseActionPath(uri, context)
+      assert("/user".equalsIgnoreCase(actionPath.path), s"should be '/user', but was ${actionPath.path}")
+      assert(actionPath.isServlet)
     }
     "find action path 3" in {
       val context = ""
       val uri = "/home/10/create.brzy"
       val service = new BrzyServlet
-      assert("/home/10/create".equalsIgnoreCase(ArgsBuilder.parseActionPath(uri,context)))
+      val actionPath = ArgsBuilder.parseActionPath(uri, context)
+      assert("/home/10/create".equalsIgnoreCase(actionPath.path), s"should be '/home/10/create', but was ${actionPath.path}")
+      assert(actionPath.isServlet)
     }
     "find action path 4" in {
       val context = "/brzy"
       val uri = "/brzy/.brzy"
       val service = new BrzyServlet
-      assert("/".equalsIgnoreCase(ArgsBuilder.parseActionPath(uri,context)))
+      val actionPath = ArgsBuilder.parseActionPath(uri, context)
+      assert("/".equalsIgnoreCase(actionPath.path), s"should be '/', but was ${actionPath.path}")
+      assert(actionPath.isServlet)
     }
   }
 

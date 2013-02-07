@@ -17,7 +17,7 @@ package org.brzy.action.response
 import org.brzy.action.args.{ParametersRequest, Parameters}
 import org.brzy.fab.interceptor.ManagedThreadContext
 import org.brzy.persistence.Transaction
-import org.brzy.action.Parser
+import org.brzy.action.{Action, Parser}
 
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import javax.servlet.{AsyncContext, AsyncListener}
@@ -122,7 +122,8 @@ case class Stream(io: (OutputStream)=>Unit, contentType: String) extends Directi
  * @param target The object to serialize into json
  * @param contentType the content type header value to set.
  */
-case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json") extends Direction with Parser {
+case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json")
+        extends Direction with Parser {
 
   def parse = {
     implicit val formats = Serialization.formats(NoTypeHints)
@@ -137,7 +138,9 @@ case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "applicatio
  * @param target The target object to serialize into json.
  * @param contentType Defaults to application/json, but can be overriden.
  */
-case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json") extends Direction with Parser {
+case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json")
+        extends Direction with Parser {
+
   def parse = {
     implicit val formats = Serialization.formats(NoTypeHints)
     val sb = new StringBuilder()
@@ -151,13 +154,14 @@ case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: S
 
 /**
  *
- * @param action
+ * @param asyncAction
  * @param timeout
  * @param listener
  *
  * @author Michael Fortin
  */
-case class Async(action: (Parameters) => AnyRef, timeout: Int = 0, listener: AsyncListener = new BlankAsyncListener) {
+case class Async(asyncAction: (Parameters) => AnyRef, timeout: Int = 0, listener: AsyncListener = new BlankAsyncListener)
+        extends Direction {
 
 
   /**
@@ -167,7 +171,7 @@ case class Async(action: (Parameters) => AnyRef, timeout: Int = 0, listener: Asy
    * @param asyncContext
    * @return
    */
-  def start(threadLocalSessions: List[ManagedThreadContext], trans: Transaction, asyncContext: AsyncContext) = {
+  def start(action:Action, threadLocalSessions: List[ManagedThreadContext], trans: Transaction, asyncContext: AsyncContext) = {
     asyncContext.addListener(listener)
     asyncContext.setTimeout(timeout)
 
@@ -176,10 +180,10 @@ case class Async(action: (Parameters) => AnyRef, timeout: Int = 0, listener: Asy
         trans.doWith(threadLocalSessions, { () =>
           val request = asyncContext.getRequest.asInstanceOf[HttpServletRequest]
           val response = asyncContext.getRequest.asInstanceOf[HttpServletResponse]
-          // todo fix url parameters
-          val parameters = new ParametersRequest(request, Map.empty[String, String])
-          val result = action(parameters)
-          ResponseHandler.apply(null, result, request, response)
+          val urlParams = action.paramsFor(request.getRequestURI)
+          val parameters = new ParametersRequest(request, urlParams)
+          val result = asyncAction(parameters)
+          ResponseHandler.apply(action, result, request, response)
         })
       }
     }

@@ -16,7 +16,7 @@ class SubPathControllerSpec extends WordSpec with ShouldMatchers with Fixtures {
 
       val path = ArgsBuilder.parseActionPath("/person/100/sub/200.brzy", "")
       val expected = "/person/100/sub/200"
-      assert(expected.equalsIgnoreCase(path))
+      assert(expected.equalsIgnoreCase(path.path))
       assert(action.isMatch("GET","text/html",expected))
 
       val result = action.paramsFor(expected)

@@ -23,7 +23,7 @@ class UserController extends Controller("users") {
 
   override val actions = List(
     action("",listAction _, View("list")),
-    action("{id}",getAction _, View("view")),
+    action("{id:\\d+}",getAction _, View("view")),
     action("create",create _, View("create")),
     get("get",someOther _, View("get")),
     post("post",someOther2 _, View("post")),
@@ -34,10 +34,10 @@ class UserController extends Controller("users") {
     action("json2",json2 _, View("json2")),
     action("error",error _, View("error")),
     action("save",save _, View("save")),
-    action("{id}/edit",edit _, View("edit")),
-    action("{id}/update",update _, View("update")),
-    action("{id}/delete",delete _, View("delete")),
-    action("{id}/companies/{cid}",company _, View("companie")),
+    action("{id:\\d+}/edit",edit _, View("edit")),
+    action("{id:\\d+}/update",update _, View("update")),
+    action("{id:\\d+}/delete",delete _, View("delete")),
+    action("{id:\\d+}/companies/{cid:\\d+}",company _, View("companie")),
     action("custom",custom _, View("custom")))
   
   def listAction() = "userList" -> list

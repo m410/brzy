@@ -55,7 +55,7 @@ class BrzyFilter extends SFilter {
       case RedirectToAuthenticate(path)=>
         response.sendRedirect(path)
       case DispatchTo(path) =>
-        req.getRequestDispatcher(s"$path.brzy").forward(req, res)
+        req.getRequestDispatcher(path).forward(req, res)
       case NotAnAction =>
         chain.doFilter(req,res)
     }

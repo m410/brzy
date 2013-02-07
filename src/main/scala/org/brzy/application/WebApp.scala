@@ -70,21 +70,28 @@ class WebApp(conf: WebAppConfiguration) {
     val contentType = request.getContentType
     val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
 
-    actions.find(_.isMatch(method, contentType, actionPath)) match  {
+    log.debug("method:{}", method)
+    log.debug("contentType:{}", contentType)
+    log.debug("actionPath:{}", actionPath)
+
+    actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
       case Some(action) =>
-        if (!actionPath.endsWith(".brzy") && !action.async)
-          DispatchTo(actionPath + ".brzy")
-        if (!actionPath.endsWith(".brzy_async") && action.async)
-          DispatchTo(actionPath + ".brzy_async")
+
         if (action.requiresSsl && !request.isSecure)
           RedirectToSecure(request)
         else if (!action.isAuthorized(new PrincipalRequest(request)))
           RedirectToAuthenticate("/auth")
-        else if (!action.async)
+        else if (actionPath.isServlet && !actionPath.isAsync && !action.async)
           ActOn(action)
-        else
+        else if (actionPath.isServlet && actionPath.isAsync && action.async)
           ActOnAsync(action)
-      case _ => NotAnAction
+        else if (action.async)
+          DispatchTo(actionPath.path + ".brzy_async")
+        else
+          DispatchTo(actionPath.path + ".brzy")
+
+      case _ =>
+        NotAnAction
     }
   }
 
@@ -101,7 +108,7 @@ class WebApp(conf: WebAppConfiguration) {
     val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
     val contentType = request.getHeader("Content-Type")
     val method = request.getMethod
-    actions.find(_.isMatch(method, contentType, actionPath))
+    actions.find(_.isMatch(method, contentType, actionPath.path))
   }
 
     private[this] def pathLog(req:HttpServletRequest) = new StringBuilder()

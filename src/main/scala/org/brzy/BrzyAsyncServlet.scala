@@ -24,15 +24,12 @@ class BrzyAsyncServlet extends HttpServlet {
 
   override def service(req: ServletRequest, res: ServletResponse) {
     val request = req.asInstanceOf[HttpServletRequest]
-    val response = req.asInstanceOf[HttpServletResponse]
-    val asyncContext = request.startAsync()
+    val response = res.asInstanceOf[HttpServletResponse]
     val action = webapp.serviceAction(request).getOrElse(throw new RuntimeException("error"))
 
-    val async = action.trans.doWithResult(webapp.threadLocalSessions,()=>{
-      action.doService(request, response).asInstanceOf[Async]
-    }).asInstanceOf[Async]
-
-    asyncContext.addListener(async.listener)
-    asyncContext.start(async.start(webapp.threadLocalSessions,action.trans,asyncContext))
+    action.trans.doWith(webapp.threadLocalSessions,()=>{
+      log.debug("async doService:{}",action)
+      action.doService(request, response)
+    })
   }
 }
