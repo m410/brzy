@@ -52,11 +52,18 @@ class WebAppListener extends ServletContextListener {
     main.addMapping("*.brzy")
 
     val async = servletContext.addServlet("BrzyAsyncServlet", "org.brzy.BrzyAsuncServlet")
+    async.setAsyncSupported(true)
     async.addMapping("*.brzy_async")
 
     val filter = servletContext.addFilter("BrzyFilter", "org.brzy.BrzyFilter")
     val dispatchTypes = util.EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD)
     filter.addMappingForUrlPatterns(dispatchTypes,true,"/*")
+
+    // todo this really should be added dynamically
+    val scalate = servletContext.addServlet("ScalateServlet", "org.fusesource.scalate.servlet.TemplateEngineServlet")
+    scalate.addMapping("*.ssp")
+    scalate.addMapping("*.jade")
+    scalate.addMapping("*.scaml")
   }
   
   def contextDestroyed(servletContextEvent: ServletContextEvent) {
