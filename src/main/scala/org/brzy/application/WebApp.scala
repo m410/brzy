@@ -35,7 +35,7 @@ import org.brzy.ActOnAsync
  * 
  * @author Michael Fortin
  */
-class WebApp(conf: WebAppConfiguration) {
+class WebApp(conf: WebAppConfiguration) extends WebAppTrait {
 
   private val log = LoggerFactory.getLogger(getClass)
 
