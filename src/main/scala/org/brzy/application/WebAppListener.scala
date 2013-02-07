@@ -13,10 +13,11 @@
  */
 package org.brzy.application
 
-import javax.servlet.{ServletContextEvent, ServletContextListener}
+import javax.servlet.{DispatcherType, ServletContextEvent, ServletContextListener}
 import org.slf4j.LoggerFactory
 import ch.qos.logback.core.util.StatusPrinter
 import ch.qos.logback.classic.LoggerContext
+import java.util
 
 /**
  * Web application listener placed in the web.xml to initialize and destroy the 
@@ -25,7 +26,6 @@ import ch.qos.logback.classic.LoggerContext
  * @see http://www.softwareengineeringsolutions.com/blogs/2010/08/01/programmatic-definition-of-components-in-servlet-specification-3-0/
  * @author Michael Fortin
  */
-//@WebListener
 class WebAppListener extends ServletContextListener {
 
   private[this] val log = LoggerFactory.getLogger(classOf[WebAppListener])
@@ -40,11 +40,23 @@ class WebAppListener extends ServletContextListener {
       println("### LoggerFactory is instance of %s".format(factory.getClass.toString))
     }
 
-    val env = servletContextEvent.getServletContext.getInitParameter("brzy-env")
+    val servletContext = servletContextEvent.getServletContext
+
+    val env = servletContext.getInitParameter("brzy-env")
     log.info("Brzy Environment  : {}", env)
     val app = WebApp(env)
-    servletContextEvent.getServletContext.setAttribute("application", app)
+    servletContext.setAttribute("application", app)
     app.startup()
+
+    val main = servletContext.addServlet("BrzyServlet", "org.brzy.BrzyServlet")
+    main.addMapping("*.brzy")
+
+    val async = servletContext.addServlet("BrzyAsyncServlet", "org.brzy.BrzyAsuncServlet")
+    async.addMapping("*.brzy_async")
+
+    val filter = servletContext.addFilter("BrzyFilter", "org.brzy.BrzyFilter")
+    val dispatchTypes = util.EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD)
+    filter.addMappingForUrlPatterns(dispatchTypes,true,"/*")
   }
   
   def contextDestroyed(servletContextEvent: ServletContextEvent) {
