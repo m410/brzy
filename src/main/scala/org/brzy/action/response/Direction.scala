@@ -15,7 +15,7 @@ package org.brzy.action.response
 
 
 import org.brzy.action.args.{ParametersRequest, Parameters}
-import org.brzy.fab.interceptor.ManagedThreadContext
+import org.brzy.fab.interceptor.ThreadContextSessionFactory
 import org.brzy.persistence.Transaction
 import org.brzy.action.{Action, Parser}
 
@@ -171,7 +171,7 @@ case class Async(asyncAction: (Parameters) => AnyRef, timeout: Int = 0, listener
    * @param asyncContext
    * @return
    */
-  def start(action:Action, threadLocalSessions: List[ManagedThreadContext], trans: Transaction, asyncContext: AsyncContext) = {
+  def start(action:Action, threadLocalSessions: List[ThreadContextSessionFactory], trans: Transaction, asyncContext: AsyncContext) = {
     asyncContext.addListener(listener)
     asyncContext.setTimeout(timeout)
 

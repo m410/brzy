@@ -47,10 +47,16 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
     preSlash.replaceAll("//", "/")
   }
 
+	/**
+	 * Splits the url into parts for comparison with the request uri.
+	 */
+  protected val pathTokens = path.replaceAll("//", "/").split("/")
+
   /**
-   * Extracts the attribute patterns out of the url
+   * Create a regex expression out of the pattern path.
    */
-  protected val patternTokens = path.split("""\{|\}""").map(it=>{
+  protected val pathMatcher = {
+    val patternTokens = path.split("""\{|\}""").map(it=>{
       if(!it.contains("/") && it.contains(":"))
         "(" + it.split(":")(1) + ")"
       else if(!it.contains("/"))
@@ -59,21 +65,9 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
         it
     })
 
-	/**
-	 * Splits the url into parts for comparison with the request uri.
-	 */
-  protected val pathTokens = path.replaceAll("//", "/").split("/")
-
-  /**
-   * strip out curly braces, replace with embedded regex pattern if it has a colon, otherwise use
-   * regex wildcard.
-   */
-  protected val pathPattern = "^" + patternTokens.foldLeft("")((a,b)=>a+b) + "$"
-
-  /**
-   * Create a regex expression out of the pattern path.
-   */
-  protected val pathMatcher = pathPattern.r
+    val pathPattern = "^" + patternTokens.foldLeft("")((a,b)=>a+b) + "$"
+    pathPattern.r
+  }
 
   /**
    * Check to see of the request uri matches the path expression of this action.
@@ -99,7 +93,7 @@ case class Path(ctlrBase: String, actionBase: String) extends Ordered[Path] {
   /**
    * check each path token to see if it's a url path variable.
    */
-  private[this] def isPattern(a:String) = a.endsWith("}") && a.startsWith("{")
+  protected def isPattern(a:String) = a.endsWith("}") && a.startsWith("{")
 
   protected def toPattern(a:String) = {
     val minusCurlies = a.substring(1,a.length() -1)
