@@ -15,12 +15,12 @@ package org.brzy.application
 
 import org.slf4j.LoggerFactory
 
-import org.brzy.fab.interceptor.ManagedThreadContext
 import org.brzy.fab.mod.{ModProvider, ViewModProvider}
 import javax.servlet.http.HttpServletRequest
 
 import org.brzy._
 import action.args.{PrincipalRequest, ArgsBuilder}
+import fab.interceptor.ThreadContextSessionFactory
 import org.brzy.controller.Controller
 import org.brzy.action.Action
 import org.brzy.ActOnAsync
@@ -125,7 +125,7 @@ class WebApp(conf: WebAppConfiguration) extends WebAppTrait {
 
   def viewProvider:Option[ViewModProvider] = None
 
-  def threadLocalSessions:List[ManagedThreadContext] = List.empty[ManagedThreadContext]
+  def threadLocalSessions:List[ThreadContextSessionFactory] = List.empty[ThreadContextSessionFactory]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

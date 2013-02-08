@@ -4,10 +4,10 @@ import org.brzy.fab.mod.ModProvider
 import org.slf4j.LoggerFactory
 import java.sql.DriverManager
 import collection.JavaConversions._
-import org.brzy.fab.interceptor.{ManagedThreadContext, InterceptorProvider}
+import org.brzy.fab.interceptor.{ThreadContextFactoryProvider, ThreadContextSessionFactory}
 import util.DynamicVariable
 
-class MockSquerylModProvider(c:MockSquerylModConfig) extends ModProvider with InterceptorProvider {
+class MockSquerylModProvider(c:MockSquerylModConfig) extends ModProvider with ThreadContextFactoryProvider {
 
   private val log = LoggerFactory.getLogger(getClass)
   val name = c.name.get
@@ -21,7 +21,7 @@ class MockSquerylModProvider(c:MockSquerylModConfig) extends ModProvider with In
 
   }
 
-  override def interceptor = new ManagedThreadContext {
+  override def sessionFactory = new ThreadContextSessionFactory {
     type T = Session
 
     def empty = new Session()

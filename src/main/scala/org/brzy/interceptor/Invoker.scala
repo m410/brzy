@@ -15,7 +15,7 @@ package org.brzy.interceptor
 
 import javassist.util.proxy.MethodHandler
 import java.lang.reflect.{InvocationTargetException, Method}
-import org.brzy.fab.interceptor.ManagedThreadContext
+import org.brzy.fab.interceptor.ThreadContextSessionFactory
 
 /**
  *  This is the javassist implementation of the methodHandler.  It's called on any controller
@@ -25,7 +25,7 @@ import org.brzy.fab.interceptor.ManagedThreadContext
  * @author Michael Fortin
  */
 @deprecated("Not using aop any more","0.11")
-class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
+class Invoker(val factories: List[ThreadContextSessionFactory]) extends MethodHandler {
 
   /**
    * Execute a function inside a session context.
@@ -59,7 +59,7 @@ class Invoker(val factories: List[ManagedThreadContext]) extends MethodHandler {
   /**
    * Recursive method to call each ThreadLocal session context.
    */
-  protected def traverse(it: Iterator[ManagedThreadContext], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
+  protected def traverse(it: Iterator[ThreadContextSessionFactory], itSelf: Option[AnyRef])( target:() => AnyRef): AnyRef = {
     val managedFactory = it.next()
     var returnValue: AnyRef = null
     var nested = false
