@@ -19,30 +19,26 @@ import scala.language.implicitConversions
 
 class MockPersistable[E<:{def id:PK},PK] extends Dao[E,PK] {
 
-  def list(size: Int, offset: Int) = Nil
+  def findBy(id: PK)(implicit pk: Manifest[PK], t: Manifest[E]) = null.asInstanceOf[E]
 
-  def list = Nil
+  def getBy(id: PK)(implicit pk: Manifest[PK], t: Manifest[E]) = None
 
-  def load(id: String) = null.asInstanceOf[E]
+  def getOrElse(id: PK, alternate: E)(implicit pk: Manifest[PK], t: Manifest[E]) = alternate
 
-  def findBy(id: PK) = null.asInstanceOf[E]
+  def load(id: String)(implicit pk: Manifest[PK], t: Manifest[E]) = null.asInstanceOf[E]
 
-  def getBy(id: PK) = None
+  def list(size: Int, offset: Int)(implicit t: Manifest[E]) = List.empty[E]
 
-  def getOrElse(id: PK, alternate: E) = alternate
+  def count(implicit t: Manifest[E]) = 1
 
-  override implicit def applyCrudOps(t:E) = new MockCrudOps(t)
+  implicit def applyCrudOps(t: E)(implicit m: Manifest[E]) = new MockCrudOps(t)
 
-  def newPersistentCrudOps(t: E) = new MockCrudOps(t)
-
-  def count:Long = 0
 
   class MockCrudOps(t:E) extends PersistentCrudOps(t) {
 		def validate = Validator(t).violations
     def insert(commit:Boolean = false) = t
     def commit() {}
-    def update() = t
+    def update(commit:Boolean = false) = t
     def delete() {}
-    def discard() {}
   }
 }

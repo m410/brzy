@@ -104,12 +104,7 @@ trait Fixtures {
     def login(user:String,pass:String) = None
   }
 
-  class UserController extends CrudController[Long,MockUser]("users") with MockUserStore {
-    override val actions = super.actions ++ List(
-      action("{id}/items/{iid}",sub _,View("itmes"))
-    )
-    def sub(p:Parameters) = Model("a"->"b")
-  }
+  class UserController extends CrudController[Long,MockUser]("users") with MockUserStore
 
 
   val response = new MockHttpServletResponse()

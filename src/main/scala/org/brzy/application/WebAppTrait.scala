@@ -1,16 +1,16 @@
 package org.brzy.application
 
 import org.brzy.controller.Controller
-import org.brzy.action.args.{PrincipalRequest, ArgsBuilder}
 import org.brzy._
 import action.Action
 
-import fab.interceptor.ManagedThreadContext
+import fab.interceptor.ThreadContextSessionFactory
 import fab.mod.{ViewModProvider, ModProvider}
 
 import javax.servlet.http.HttpServletRequest
 
 import org.slf4j.LoggerFactory
+import view.StaticViewProvider
 
 
 /**
@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory
  */
 trait WebAppTrait {
 
-  private val log = LoggerFactory.getLogger(getClass)
 
   val conf: WebAppConfiguration
 
@@ -61,14 +60,9 @@ trait WebAppTrait {
    */
   def serviceAction(request:HttpServletRequest):Option[Action]
 
+  def viewProvider:ViewModProvider = new StaticViewProvider
 
-  def moduleProviders:List[ModProvider]
-
-  def persistenceProviders:List[ModProvider]
-
-  def viewProvider:Option[ViewModProvider]
-
-  def threadLocalSessions:List[ManagedThreadContext]
+  def threadLocalSessions:List[ThreadContextSessionFactory]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

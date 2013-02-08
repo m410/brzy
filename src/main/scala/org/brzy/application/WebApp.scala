@@ -35,14 +35,14 @@ import org.brzy.ActOnAsync
  * 
  * @author Michael Fortin
  */
-class WebApp(conf: WebAppConfiguration) extends WebAppTrait {
+class WebApp(val conf: WebAppConfiguration) extends WebAppTrait {
 
   private val log = LoggerFactory.getLogger(getClass)
 
   /**
    * The application class, hold information like the application name and version.
    */
-  val application = conf.application
+  val application = conf.application.get
 
   /**
    * A flag to tell if ssl is enabled.  It can be turned on and off for different environments.
@@ -123,8 +123,6 @@ class WebApp(conf: WebAppConfiguration) extends WebAppTrait {
 
   def persistenceProviders:List[ModProvider] = List.empty[ModProvider]
 
-  def viewProvider:Option[ViewModProvider] = None
-
   def threadLocalSessions:List[ThreadContextSessionFactory] = List.empty[ThreadContextSessionFactory]
 
   /**
@@ -132,7 +130,7 @@ class WebApp(conf: WebAppConfiguration) extends WebAppTrait {
    * from the available controllers.
    */
   lazy val actions = {
-    controllers.flatMap((ctl:Controller) => { ctl.actions}).sorted.toSeq
+    controllers.flatMap((ctl:Controller) => { ctl.actions}).sorted.toList
   }
 
   def startup(){}

@@ -40,11 +40,11 @@ class UserController extends Controller("users") {
     action("{id:\\d+}/companies/{cid:\\d+}",company _, View("companie")),
     action("custom",custom _, View("custom")))
   
-  def listAction() = "userList" -> list
+  def listAction() = "userList" -> list()
 
-  def getAction(p: Parameters) = "user" -> get(p("id").toString.toLong)
+  def getAction(p: Parameters) = "user" -> findBy(p("id").toString.toLong)
 
-  def company(p: Parameters) = "user" -> get(p("id").toString.toLong)
+  def company(p: Parameters) = "user" -> findBy(p("id").toString.toLong)
 
   def create = "user" -> new MockUser()
 
@@ -85,7 +85,7 @@ class UserController extends Controller("users") {
     }
   }
 
-  def edit(params: Parameters) = "user" -> get(params("id").toString.toLong)
+  def edit(params: Parameters) = "user" -> findBy(params("id").toString.toLong)
 
   def update(params: Parameters) = {
     def user = construct(params.request.map(n=>{n._1->n._2(0)}))
@@ -100,7 +100,7 @@ class UserController extends Controller("users") {
   }
 
   def delete(params: Parameters) = {
-    get(params("id").toString.toLong) match {
+    getBy(params("id").toString.toLong) match {
       case Some(user) =>
         user.delete()
         Flash("message2", "user deleted")

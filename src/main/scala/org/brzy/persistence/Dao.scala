@@ -17,6 +17,8 @@ import javax.validation.ConstraintViolation
 import collection.immutable.Set
 import org.brzy.beanwrap.{Builder, Editors}
 import scala.language.implicitConversions
+
+
 /**
  * This is a persistent super class that can be used by persistence  modules to enable the
  * use of the Abstract CrudController. It's used by Squeryl Module and the JPA Module.  
@@ -28,25 +30,20 @@ trait Dao[T <: {def id: PK}, PK] {
   /**
    * Retrieve the object by it's primary key
    */
-  def findBy(id:PK):T
+  def findBy(id:PK)(implicit pk:Manifest[PK],t:Manifest[T]):T
   
   /**
    * Retrieve a single entity by primary key.
    */
-  def getBy(id: PK): Option[T]
+  def getBy(id: PK)(implicit pk:Manifest[PK],t:Manifest[T]): Option[T]
 
-  def getOrElse(id: PK, alternate: T): T
+  def getOrElse(id: PK, alternate: T)(implicit pk:Manifest[PK],t:Manifest[T]): T
 
   /**
    * This is a convenience accessor to an entity, it does the casting, if necessary, from a string
    * to the primary key's type.
    */
-  def load(id: String): T
-
-  /**
-   * Returns a list of all entities.
-   */
-  def list: List[T]
+  def load(id: String)(implicit pk:Manifest[PK],t:Manifest[T]): T
 
   /**
    * This implements basic paging.  It does not sort or order the returned list.  To do that
@@ -55,12 +52,12 @@ trait Dao[T <: {def id: PK}, PK] {
    * @param size the size of the dataset to return
    * @param offset the beginning of the dataset
    */
-  def list(size: Int, offset: Int): List[T]
+  def list(size: Int = 50, offset: Int = 0)(implicit t:Manifest[T]): List[T]
 
   /**
    * Returns a count of the number of entities in the data store.
    */
-  def count: Long
+  def count(implicit t:Manifest[T]): Long
 
   /**
    * Build the entity from a map of name value pairs.  This depends on the editors setup in the
@@ -85,22 +82,15 @@ trait Dao[T <: {def id: PK}, PK] {
   def editors = Editors()
 
   /**
-   * Used by the abstract CrudController to to add persistence capability to the controller.  I'm
-   * sure there's a better way to do this, but for now, this must be implemented in concrete
-   * classes.
-   */
-  def newPersistentCrudOps(t: T): PersistentCrudOps[T]
-
-  /**
    * Adds the persistence crud operations to the entity.
    */
-  implicit def applyCrudOps(t: T): PersistentCrudOps[T]
+  implicit def applyCrudOps(t: T)(implicit m:Manifest[T]): PersistentCrudOps
 
   /**
    *  Implements the crud operations that are applied directly to instances of persistent
    * objects.  This needs to be created as an implicit value in the companion object.
    */
-  abstract class PersistentCrudOps[T](t: T) {
+  abstract class PersistentCrudOps(t: T) {
 
     /**
      * Insert the entity, with an optional commit immediately parameter.
@@ -115,7 +105,7 @@ trait Dao[T <: {def id: PK}, PK] {
     /**
      * Update the entity in the db, and return the new instance.
      */
-    def update(): T
+    def update(commit: Boolean = false): T
 
     /**
      * Delete the entity from the database.

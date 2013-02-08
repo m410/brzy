@@ -14,7 +14,7 @@
 package org.brzy.controller
 import org.brzy.persistence.Dao
 import org.brzy.action.args.Parameters
-import org.brzy.action.response.{Flash, Redirect, Model}
+import org.brzy.action.response.{View, Flash, Redirect, Model}
 
 import scala.reflect._
 import scala.language.reflectiveCalls
@@ -29,7 +29,7 @@ import scala.language.reflectiveCalls
  * @see org.brzy.persistence.Persistent
  * @author Michael Fortin
  */
-abstract class CrudController[PK, E <: {def id : PK}:Manifest](basePath: String)
+abstract class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](basePath: String)
         extends Controller(basePath)  {
         self:Dao[E, PK] =>
 
@@ -40,18 +40,17 @@ abstract class CrudController[PK, E <: {def id : PK}:Manifest](basePath: String)
     name.substring(0, 1).toLowerCase + name.substring(1)
   }
 
-//  override val actions = List(
-//    get("",  listAction _, View(viewBasePath + "list")) ,
-//    get("{id}", view _, View(viewBasePath + "view") ) ,
-//    get("create", create _, View(viewBasePath + "create")) ,
-//    post("save", save _, View(viewBasePath + "create")) ,
-//    get("{id}/edit", edit _, View(viewBasePath + "edit") ) ,
-//    post("{id}/update", update _, View(viewBasePath + "edit")) ,
-//    post("{id}/delete", delete _, View(viewBasePath + "list"))
-//  )
+  override val actions = List(
+    get("",  listAction _, View(viewBasePath + "list")) ,
+    get("{id}", view _, View(viewBasePath + "view") ) ,
+    get("create", create _, View(viewBasePath + "create")) ,
+    post("save", save _, View(viewBasePath + "create")) ,
+    get("{id}/edit", edit _, View(viewBasePath + "edit") ) ,
+    post("{id}/update", update _, View(viewBasePath + "edit")) ,
+    post("{id}/delete", delete _, View(viewBasePath + "list"))
+  )
 
-
-  def listAction(p:Parameters) = entityName + "sList" -> list
+  def listAction(p:Parameters) = entityName + "sList" -> list()
 
   def view(params: Parameters) = entityName -> load(params("id").toString)
 
