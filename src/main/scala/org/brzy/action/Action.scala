@@ -18,7 +18,7 @@ import args.{PrincipalRequest, ArgsBuilder, Arg, Principal}
 
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import org.brzy.persistence.Transaction
-import response.{ResponseHandler, View, Direction}
+import response.{ResponseHandler, Direction}
 
 import HttpMethod._
 import org.brzy.controller.{Intercepted, Controller}

@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory
  *
  * @author Michael Fortin
  */
-abstract class AuthenticatorController[T <: Authenticated]( path: String) extends Controller(path) {
+@deprecated("Use AuthController","0.11")
+abstract class AuthenticatorController[T <: Authenticated]( path: String) extends Controller {
   self:Permission[T] =>
 
   val log = LoggerFactory.getLogger(getClass)

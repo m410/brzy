@@ -12,12 +12,13 @@
  * language governing permissions and limitations under the License.
  */
 package org.brzy.controller
-import org.brzy.persistence.Dao
+import org.brzy.persistence.{Transaction, Dao}
 import org.brzy.action.args.Parameters
 import org.brzy.action.response.{View, Flash, Redirect, Model}
 
 import scala.reflect._
 import scala.language.reflectiveCalls
+import org.brzy.action.Constraint
 
 /**
  * Controller writers can extend this to get all the crud operations in their
@@ -29,11 +30,15 @@ import scala.language.reflectiveCalls
  * @see org.brzy.persistence.Persistent
  * @author Michael Fortin
  */
-abstract class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](basePath: String)
-        extends Controller(basePath)  {
+abstract class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: String)
+        extends Controller  {
         self:Dao[E, PK] =>
 
   val viewBasePath = ""
+
+  val constraints = Seq.empty[Constraint]
+
+  val transaction = Transaction()
 
   private[this] val entityName = {
     val name = classTag[E].runtimeClass.getSimpleName

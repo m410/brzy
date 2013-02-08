@@ -31,7 +31,7 @@ trait Fixtures {
     def requestAndUrl = null
   }
 
-  val controller2 = new Controller("") with Authorization {
+  val controller2 = new BaseController("") with Authorization {
     override val constraints = List(Roles("ADMIN"))
     override def actions = List(
       get(expr="index", act=index _, view=View("index"),constraints=Seq(Roles("ADMIN","USER"))),
@@ -79,7 +79,7 @@ trait Fixtures {
   }
 
 
-  val controller = new Controller("") with Authorization {
+  val controller = new BaseController("") with Authorization {
     override val constraints = Seq(Roles("ADMIN"))
 
     override def actions = List(

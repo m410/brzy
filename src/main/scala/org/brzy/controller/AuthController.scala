@@ -3,6 +3,8 @@ package org.brzy.controller
 import org.brzy.action.response._
 import org.brzy.action.args.{Principal, Parameters}
 import org.slf4j.LoggerFactory
+import org.brzy.action.Constraint
+import org.brzy.persistence.Transaction
 
 
 /**
@@ -29,9 +31,15 @@ import org.slf4j.LoggerFactory
  * @see Authority
  * @author Michael Fortin
  */
-class DefaultAuthController[T <: Authenticated](ctlPath: String) extends Controller(ctlPath) {
-  self:Permission[T] =>
-  private[this] val log = LoggerFactory.getLogger(classOf[DefaultAuthController[T]])
+class AuthController[T <: Authenticated](val basePath: String)
+        extends Controller {
+        self:Permission[T] =>
+
+  private[this] val log = LoggerFactory.getLogger(classOf[AuthController[T]])
+
+  val constraints = Seq.empty[Constraint]
+
+  val transaction = Transaction()
 
   /**
    * override to change the form of the login page

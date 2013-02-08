@@ -1,9 +1,6 @@
 package org.brzy.application
 
 import org.scalatest.FlatSpec
-import org.brzy.controller.Controller
-import org.brzy.service.Service
-import org.brzy.action.Action
 
 
 class WebAppProxySpec extends FlatSpec  with Fixture{

@@ -24,13 +24,13 @@ trait Fixtures {
   class UserController extends CrudController[Long,MockUser]("users") with MockUserStore
 
 
-  class HomeController extends Controller("") {
+  class HomeController extends BaseController("") {
     override val actions = List(action("", index _, View("/index")))
     def index = "hello" -> "world"
   }
 
 
-  class ImplController extends Controller("impls") with Authorization {
+  class ImplController extends BaseController("impls") with Authorization {
     override val actions = List(
       get(expr="list", act=list _, view=View("list"), constraints=Seq(Roles("SUPER"))),
       action("showMore", showMore _, View("show") )
@@ -54,7 +54,7 @@ trait Fixtures {
 
 
 
-  class SubPathController extends Controller("/person/{pid}/sub") {
+  class SubPathController extends BaseController("/person/{pid}/sub") {
     override val actions = List(
       get("{vid}",view _,View("/person/sub/view"))
     )

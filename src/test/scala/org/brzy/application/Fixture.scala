@@ -1,7 +1,7 @@
 package org.brzy.application
 
 import org.brzy.service.Service
-import org.brzy.controller.Controller
+import org.brzy.controller.BaseController
 
 
 trait Fixture {
@@ -15,7 +15,7 @@ trait Fixture {
     def anything = "anything"
   }
 
-  class FixtureController extends Controller("") {
+  class FixtureController extends BaseController("") {
     self: FixtureService =>
   }
 }

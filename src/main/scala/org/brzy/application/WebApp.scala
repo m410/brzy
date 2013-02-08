@@ -15,13 +15,13 @@ package org.brzy.application
 
 import org.slf4j.LoggerFactory
 
-import org.brzy.fab.mod.{ModProvider, ViewModProvider}
+import org.brzy.fab.mod.ModProvider
 import javax.servlet.http.HttpServletRequest
 
 import org.brzy._
 import action.args.{PrincipalRequest, ArgsBuilder}
 import fab.interceptor.ThreadContextSessionFactory
-import org.brzy.controller.Controller
+import controller.Controller
 import org.brzy.action.Action
 import org.brzy.ActOnAsync
 

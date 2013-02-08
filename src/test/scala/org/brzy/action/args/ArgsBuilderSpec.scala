@@ -1,12 +1,8 @@
 package org.brzy.action.args
 
-import org.scalatest.{WordSpec, FlatSpec}
+import org.scalatest.WordSpec
 import org.springframework.mock.web.{MockServletContext, MockHttpServletRequest}
-import org.brzy.action.Action
-import org.brzy.controller.Controller
-import org.brzy.action.response.Model
 import org.scalatest.matchers.ShouldMatchers
-import scala.Predef._
 
 
 class ArgsBuilderSpec extends WordSpec with ShouldMatchers with Fixtures {

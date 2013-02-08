@@ -13,7 +13,6 @@
  */
 package org.brzy.controller
 
-import org.brzy.action.{Constraint, Roles}
 
 /**
  * Marks a controller as a secure controller using role based authentication.

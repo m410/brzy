@@ -14,12 +14,12 @@
 package org.brzy.mock
 
 import org.brzy.action.response.View
-import org.brzy.controller.{Authorization, Controller}
+import org.brzy.controller.{Authorization, BaseController}
 import org.brzy.action.args.Parameters
 import org.brzy.action.{Ssl, Roles}
 
 
-class UserArgController(s:UserService) extends Controller("userArgs") with Authorization {
+class UserArgController(s:UserService) extends BaseController("userArgs") with Authorization {
 
   override val actions = List(
     action(expr="",act=listAction _,view=View("list"),constraints=Seq(Roles("ADMIN"))),

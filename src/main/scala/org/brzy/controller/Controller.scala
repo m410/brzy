@@ -1,43 +1,40 @@
-/*
- * Copyright 2010 Michael Fortin <mike@brzy.org>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");  you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
 package org.brzy.controller
 
-import org.brzy.action.{Constraint, Action}
+import org.brzy.action.{Action, Constraint}
+import org.brzy.persistence.Transaction
 import org.brzy.action.response.{NoView, Direction}
 import org.brzy.action.HttpMethod._
 import org.brzy.persistence.Transaction
 
 /**
- * Base class for all controllers.
- *
+ * This is the root trait for all Controllers.
+ * 
  * @author Michael Fortin
  */
-abstract class Controller(val basePath: String) extends Ordered[Controller] {
+trait Controller {
+
+  /**
+   * The base of the path expression used to select an action.
+   */
+  val basePath: String
 
   /**
    * The constraints for the controller.  Constraints set here apply to all actions.  When
    * you add a constraint to the action is takes precedence over these.
    */
-  val constraints: Seq[Constraint] = Seq.empty[Constraint]
+  val constraints: Seq[Constraint]
 
-  val transaction: Transaction = Transaction()
+  /**
+   * The default transaction for all actions defined in an instance of a controller.
+   */
+  val transaction: Transaction
 
   /**
    * List of actions for this controller.  When overriding this, it's adventages to make it
    * a val so you the app doesn't make a list every time.
    */
-  def actions: List[Action] = List.empty[Action]
+  def actions: List[Action]
+
 
 
   def action[F <: AnyRef:Manifest](
@@ -77,9 +74,4 @@ abstract class Controller(val basePath: String) extends Ordered[Controller] {
           constraints: Seq[Constraint] = constraints): Action = {
     Action(expr, act, transaction, Seq(GET), view, constraints,  true, this)
   }
-
-  /**
-   * Compares the basePath of this controller to others.
-   */
-  def compare(that: Controller) = basePath.compareTo(that.basePath)
 }
