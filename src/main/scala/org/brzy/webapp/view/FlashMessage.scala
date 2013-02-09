@@ -11,11 +11,25 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mock
+package org.brzy.webapp.view
 
-import org.brzy.webapp.service.Service
+import javax.servlet.http.HttpSession
 
+/**
+ * This is the session scope attribute that that holds a flash message and a reference to it's
+ * session.  Once it's called by the client, it removes itself from the http session.
+ * 
+ * @author Michael Fortin
+ */
+class FlashMessage(message:String,session:HttpSession) {
+	
+	session.setAttribute("flash-message",this)
 
-class UserService extends Service{
-  def someMethod = "Service Method Called"
+	// TODO needs to get the message from the i18n configuration
+	def show = {
+		session.removeAttribute("flash-message")
+		message
+	}
+
+  override def toString = "FlashMessage("+message+", "+session+")"
 }

@@ -13,12 +13,12 @@
  */
 package org.brzy.mock
 
-import org.brzy.controller.Controller
-import org.brzy.action.response._
-import org.brzy.action.args.Parameters
-import org.brzy.action.Parser
+import org.brzy.webapp.controller.BaseController
+import org.brzy.webapp.action.response._
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.Parser
 
-class UserController extends Controller("users") {
+class UserController extends BaseController("users") {
     self: MockUserStore =>
 
   override val actions = List(
