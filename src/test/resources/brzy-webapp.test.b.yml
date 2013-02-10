@@ -4,7 +4,7 @@ archetype:
   org: any
 
 build:
-  scala_version: 2.8.0
+  scala_version: 2.10.0
   package_type: war
   module_resources: ".fab/modules"
 
@@ -30,19 +30,18 @@ repositories:
     url: "http://repo1.maven.org/maven2"
 
 dependencies:
-  - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "2.8.0", transitive: false}
-  - {conf: provided, org: org.scala-lang, name: scala-library, rev: "2.8.0", transitive: false}
+  - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "2.10.0", transitive: false}
+  - {conf: provided, org: org.scala-lang, name: scala-library, rev: "2.10.0", transitive: false}
   - {conf: compile, org: org.brzy.webapp, name: brzy-webapp, rev: "0.6", transitive: false}
-  - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA", transitive: false}
-  - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8", transitive: false}
-  - {conf: compile, org: org.reflections, name: reflections, rev: "0.9.5-RC2", transitive: false}
-  - {conf: compile, org: dom4j, name: dom4j, rev: "1.6.1", transitive: false}
-  - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
+#  - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
+#  - {conf: compile, org: org.reflections, name: reflections, rev: "0.9.5-RC2", transitive: false}
+#  - {conf: compile, org: dom4j, name: dom4j, rev: "1.6.1", transitive: false}
+#  - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
   - {conf: compile, org: org.yaml, name: snakeyaml, rev: "1.7"}
   - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
   - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "${logback-version}",transitive: false}
   - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "${logback-version}",transitive: false}
-  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
+  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.7.2",transitive: false}
 
 web_xml:
  - listener: {listener-class: org.brzy.application.WebAppListener}

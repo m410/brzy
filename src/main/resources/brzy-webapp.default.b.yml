@@ -7,7 +7,7 @@ archetype:
 build:
   default_task: "package"
   compiler_type: "scala"
-  compiler_version: "2.8.1"
+  compiler_version: "2.10.0"
   compiler_args: ""
   target_dir: "{working_dir}/target"
   webapp_dir: "{working_dir}/webapp"
@@ -37,30 +37,21 @@ views:
 
 repositories:
   - {id: brzy, url: "http://repo.brzy.org/content/repositories/releases"}
-  - {id: brzy-snapshot, url: "http://repo.brzy.org/content/repositories/snapshots"}
-  - {id: java-net2, url: "http://download.java.net/maven/2"}
-  - {id: scala-tools, url: "http://scala-tools.org/repo-releases"}
-  - {id: jboss, url: "http://repository.jboss.com/maven2"}
-  - {id: reflections-repo, url: "http://reflections.googlecode.com/svn/repo"}
-  - {id: maven-central, url: "http://repo1.maven.org/maven2"}
+  - {id: maven-ctl, url: "http://repo.maven.apache.org/maven2"}
 
 dependencies:
   - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {conf: provided, org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
-  - {conf: provided, org: javax.servlet, name: servlet-api, rev: "2.5", transitive: false}
+  - {conf: provided, conf: org.apache.tomcat, name: tomcat-servlet-api, rev: 7.0.35, transitive: false}
   - {conf: compile, org: org.brzy.webapp, name: brzy-webapp, rev: "${project.version}", transitive: false}
   - {conf: compile, org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
   - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}"}
-  - {conf: compile, org: javassist, name: javassist, rev: "3.11.0.GA", transitive: false}
-  - {conf: compile, org: org.aspectj, name: aspectjweaver, rev: "1.6.8", transitive: false}
-  - {conf: compile, org: org.reflections, name: reflections, rev: "0.9.5-RC2", transitive: false}
-  - {conf: compile, org: dom4j, name: dom4j, rev: "1.6.1", transitive: false}
   - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
   - {conf: compile, org: org.yaml, name: snakeyaml, rev: "1.7"}
   - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
-  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "0.9.27", transitive: false}
-  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "0.9.27", transitive: false}
-  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.6.1",transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "1.0.9", transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "1.0.9", transitive: false}
+  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.7.2",transitive: false}
 
 web_xml:
   - listener: {listener-class: org.brzy.application.WebAppListener}
