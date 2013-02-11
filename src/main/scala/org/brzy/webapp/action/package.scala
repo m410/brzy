@@ -11,11 +11,9 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mock
+package org.brzy.webapp
 
-import org.brzy.webapp.service.Service
-
-
-class UserService extends Service{
-  def someMethod = "Service Method Called"
-}
+/**
+ *
+ */
+package object action 

@@ -13,10 +13,10 @@
  */
 package org.brzy.mock
 
-import org.brzy.controller.BaseController
-import org.brzy.action.response._
-import org.brzy.action.args.Parameters
-import org.brzy.action.Parser
+import org.brzy.webapp.controller.BaseController
+import org.brzy.webapp.action.response._
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.Parser
 
 class UserController extends BaseController("users") {
     self: MockUserStore =>

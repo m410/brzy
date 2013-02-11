@@ -1,6 +1,6 @@
 package org.brzy.mock
 
-import org.brzy.persistence.Dao
+import org.brzy.webapp.persistence.Dao
 import org.brzy.validator.Validator
 import scala.language.implicitConversions
 

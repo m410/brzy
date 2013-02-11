@@ -6,16 +6,18 @@
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.brzy.mock
+package org.brzy.webapp.controller
 
-import org.brzy.webapp.service.Service
-
-
-class UserService extends Service{
-  def someMethod = "Service Method Called"
+/**
+ * Services that gets the authenticated entity form the database.
+ * 
+ * @author Michael Fortin
+ */
+trait Authenticator[T<:Authenticated] {
+	def login(user:String, pass:String):Option[T]
 }

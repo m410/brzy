@@ -13,10 +13,10 @@
  */
 package org.brzy.mock
 
-import org.brzy.action.response.View
-import org.brzy.controller.{Authorization, BaseController}
-import org.brzy.action.args.Parameters
-import org.brzy.action.{Ssl, Roles}
+import org.brzy.webapp.action.response.View
+import org.brzy.webapp.controller.{BaseController, Authorization}
+import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.{Ssl, Roles}
 
 
 class UserArgController(s:UserService) extends BaseController("userArgs") with Authorization {

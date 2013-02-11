@@ -108,14 +108,10 @@
           </execution>
         </executions>
       </plugin>
-      <!-- add classifier -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.4</version>
-        <!--<configuration>-->
-          <!--<classifier>${scala.version}</classifier>-->
-        <!--</configuration>-->
       </plugin>
     </plugins>
   </build>
@@ -146,7 +142,6 @@
       <groupId>org.brzy.fab</groupId>
       <artifactId>fab-configuration</artifactId>
       <version>${fab-configuration-version}</version>
-      <!--<classifier>${scala.version}</classifier>-->
     </dependency>
 
     <!-- I want to remove these -->
