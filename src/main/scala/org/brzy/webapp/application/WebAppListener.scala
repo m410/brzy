@@ -48,23 +48,30 @@ class WebAppListener extends ServletContextListener {
     servletContext.setAttribute("application", app)
     app.startup()
 
+    val filter = servletContext.addFilter("BrzyFilter", "org.brzy.BrzyFilter")
+    val dispatchTypes = util.EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD)
+    filter.addMappingForUrlPatterns(dispatchTypes,true,"/*")
+    log.debug("add Brzy Filter: {}", filter)
+
     val main = servletContext.addServlet("BrzyServlet", "org.brzy.BrzyServlet")
     main.addMapping("*.brzy")
+    log.debug("add Brzy Servlet : {}", main)
 
     val async = servletContext.addServlet("BrzyAsyncServlet", "org.brzy.BrzyAsuncServlet")
     async.setAsyncSupported(true)
     async.addMapping("*.brzy_async")
+    log.debug("add Brzy Async Servlet : {}", async)
 
-    val filter = servletContext.addFilter("BrzyFilter", "org.brzy.BrzyFilter")
-    val dispatchTypes = util.EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD)
-    filter.addMappingForUrlPatterns(dispatchTypes,true,"/*")
 
     // todo this really should be added dynamically
     val scalate = servletContext.addServlet("ScalateServlet", "org.fusesource.scalate.servlet.TemplateEngineServlet")
     scalate.addMapping("*.ssp")
     scalate.addMapping("*.jade")
     scalate.addMapping("*.scaml")
+    log.debug("add Scalate Servlet : {}", scalate)
+
   }
+
   
   def contextDestroyed(servletContextEvent: ServletContextEvent) {
     val app: Any = servletContextEvent.getServletContext.getAttribute("application")

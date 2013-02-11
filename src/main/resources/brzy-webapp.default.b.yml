@@ -55,11 +55,11 @@ dependencies:
   - {conf: test, org: org.scalatest, name: scalatest_2.10, rev: 1.9.1, transitive: false}
 
 web_xml:
-  - listener: {listener-class: org.brzy.application.WebAppListener}
-  - filter: {filter-name: BrzyFilter, filter-class: org.brzy.webapp.BrzyFilter}
-  - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}
-  - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.webapp.BrzyServlet, load-on-startup: "1"}
-  - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
+  - listener: {listener-class: org.brzy.webapp.application.WebAppListener}
+#  - filter: {filter-name: BrzyFilter, filter-class: org.brzy.webapp.BrzyFilter}
+#  - filter-mapping: {filter-name: BrzyFilter, url-pattern: "/*"}
+#  - servlet: { servlet-name: BrzyServlet, servlet-class: org.brzy.webapp.BrzyServlet, load-on-startup: "1"}
+#  - servlet-mapping: { servlet-name: BrzyServlet, url-pattern: "*.brzy"}
   - welcome-file-list: { welcome-file: "index.brzy"}
   - error-page: { error-code: "404", location: "/errors/404.ssp"}
   - error-page: { error-code: "500", location: "/errors/500.ssp"}
