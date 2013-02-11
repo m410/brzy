@@ -13,10 +13,9 @@
  */
 package org.brzy.controller
 
-import org.brzy.action.{Constraint, Action}
-import org.brzy.action.response.{NoView, Direction}
-import org.brzy.action.HttpMethod._
-import org.brzy.persistence.Transaction
+import org.brzy.webapp.action.{Constraint, Action}
+import org.brzy.webapp.persistence.Transaction
+import org.brzy.webapp.controller.Controller
 
 /**
  * Base class for all controllers.

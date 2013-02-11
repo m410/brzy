@@ -15,14 +15,12 @@ package org.brzy.webapp.action
 
 
 import args.{PrincipalRequest, ArgsBuilder, Arg, Principal}
-import response.{ResponseHandler, Direction}
 import HttpMethod._
 
-import org.brzy.webapp.persistence.Transaction
 import org.brzy.webapp.controller.{Intercepted, Controller}
 
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
-import org.brzy.persistence.Transaction
+import org.brzy.webapp.persistence.Transaction
 import response.{ResponseHandler, Direction}
 
 
