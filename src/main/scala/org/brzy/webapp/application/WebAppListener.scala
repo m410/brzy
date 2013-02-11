@@ -48,16 +48,16 @@ class WebAppListener extends ServletContextListener {
     servletContext.setAttribute("application", app)
     app.startup()
 
-    val filter = servletContext.addFilter("BrzyFilter", "org.brzy.BrzyFilter")
+    val filter = servletContext.addFilter("BrzyFilter", "org.brzy.webapp.BrzyFilter")
     val dispatchTypes = util.EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD)
     filter.addMappingForUrlPatterns(dispatchTypes,true,"/*")
     log.debug("add Brzy Filter: {}", filter)
 
-    val main = servletContext.addServlet("BrzyServlet", "org.brzy.BrzyServlet")
+    val main = servletContext.addServlet("BrzyServlet", "org.brzy.webapp.BrzyServlet")
     main.addMapping("*.brzy")
     log.debug("add Brzy Servlet : {}", main)
 
-    val async = servletContext.addServlet("BrzyAsyncServlet", "org.brzy.BrzyAsuncServlet")
+    val async = servletContext.addServlet("BrzyAsyncServlet", "org.brzy.webapp.BrzyAsyncServlet")
     async.setAsyncSupported(true)
     async.addMapping("*.brzy_async")
     log.debug("add Brzy Async Servlet : {}", async)
