@@ -59,52 +59,6 @@ class BrzyFilter extends SFilter {
     }
   }
 
-//  def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
-//    val q = req.asInstanceOf[HttpServletRequest]
-//    log.trace("uri : {}", q.getRequestURI)
-//    val actionPath = ArgsBuilder.parseActionPath(q.getRequestURI, q.getContextPath)
-//
-//    webapp.actions.find(_.path.isMatch(actionPath)) match {
-//      case Some(action) => // for action, don't continue
-//        try {
-//					doAction(q.getRequestURI, req, res,chain)
-//				}
-//				catch {
-//				  case e: Throwable =>
-//            log.error(e.getMessage,e)
-//            throw e
-//				}
-//      case _ => // pass it on if the url ends with any extension
-//        chain.doFilter(req, res)
-//    }
-//  }
-//
-//  /**
-//   * TODO might want to change this so the transaction is only done within the forwarded call
-//   * and not wrapped around the entire dispatch.
-//   */
-//  private[this] def doAction(uri: String, req: ServletRequest, res: ServletResponse, chain: FilterChain) {
-//    val contextPath = req.asInstanceOf[HttpServletRequest].getContextPath
-//
-//    val forward =
-//      if (contextPath == "")
-//        uri.substring(0, uri.length)
-//      else
-//        uri.substring(contextPath.length, uri.length)
-//
-//    // todo get the transaction from the action, wrap call in it, if it's session in view
-//
-//    // the aop interceptors are run here so that the view rendering is also within the transaction
-//    log.trace("intercept: {}", forward)
-//    webapp.interceptor.doIn(() => {
-//      if (forward.endsWith(".brzy"))
-//        chain.doFilter(req,res)
-//      else
-//        req.getRequestDispatcher(forward + ".brzy").forward(req, res)
-//      None // the interceptor expects a return value
-//    })
-//  }
-
   /**
    *
    */
