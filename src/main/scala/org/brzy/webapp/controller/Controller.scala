@@ -25,7 +25,7 @@ import org.brzy.webapp.persistence.Transaction
  */
 trait Controller extends Ordered[Controller] {
 
-  val basePath: String
+  def basePath: String
 
   /**
    * The constraints for the controller.  Constraints set here apply to all actions.  When

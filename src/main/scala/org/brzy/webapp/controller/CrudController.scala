@@ -34,7 +34,14 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
         extends Controller  {
         self:Dao[E, PK] =>
 
-  val viewBasePath = ""
+  /**
+   * Uses reflection to get the name of this class without the controller suffix.
+   * @return
+   */
+  def viewBasePath = {
+    val simpleName = this.getClass.getSimpleName
+    simpleName.substring(0,simpleName.indexOf("Controller")).toLowerCase
+  }
 
   val constraints: Seq[Constraint] = Seq.empty[Constraint]
 
