@@ -20,8 +20,6 @@ import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.brzy.mock.{MockUserStore, UserController}
 import org.brzy.webapp.action.args.Arg
-import org.brzy.webapp.action.response.{ResponseHandler, View}
-import scala.Predef._
 
 
 class DefaultReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {

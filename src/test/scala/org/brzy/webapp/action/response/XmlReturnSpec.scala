@@ -18,8 +18,6 @@ import org.scalatest.matchers.ShouldMatchers
 import org.brzy.mock.{MockUserStore, UserController}
 import org.brzy.webapp.action.args.Arg
 import org.springframework.mock.web.{MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
-import org.brzy.webapp.action.response.{ResponseHandler, NoView, Xml}
-import scala.Predef._
 
 
 class XmlReturnSpec  extends WordSpec with ShouldMatchers with Fixtures {

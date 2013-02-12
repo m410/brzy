@@ -16,8 +16,6 @@ package org.brzy.webapp.application
 import org.brzy.mock.MockSquerylModConfig
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
-import org.brzy.webapp.application.WebAppConfiguration
-import scala.Predef._
 
 
 class WebAppConfSpec extends WordSpec with ShouldMatchers with Fixture {

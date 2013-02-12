@@ -23,12 +23,15 @@ import javax.servlet.http.HttpServletResponse
 class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
 
   val filter = new BrzyFilter
-  filter.webapp = WebApp("test")
+  val webapp = WebApp("test")
 
 
   "Brzy Filter" should {
     "filter Not an action" in {
-      val request1 = new MockHttpServletRequest(new MockServletContext,"GET", "/users/10") {
+      val context = new MockServletContext
+      context.setAttribute("application",webapp)
+
+      val request1 = new MockHttpServletRequest(context,"GET", "/users/10") {
         override def getRequestDispatcher(path:String):RequestDispatcher = {
           new MockRequestDispatcher(path) {
             assert("/users/10.brzy".equalsIgnoreCase(path),s"expected '/users/10.brzy', was '$path'")
@@ -64,7 +67,11 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
     }
     "filter dispatch pass through" in {
       // todo need to preserve http status
-      val request = new MockHttpServletRequest("GET", "/users/pass_through.gif")
+      val context = new MockServletContext
+      context.setAttribute("application",webapp)
+
+
+      val request = new MockHttpServletRequest(context, "GET", "/users/pass_through.gif")
       val response = new MockHttpServletResponse()
       var called = false
       val chain = new FilterChain(){
@@ -76,7 +83,10 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
       assert(called)
     }
     "filter redirect to auth" in {
-      val request = new MockHttpServletRequest("GET", "/userArgs/.brzy")
+      val context = new MockServletContext
+      context.setAttribute("application",webapp)
+
+      val request = new MockHttpServletRequest(context, "GET", "/userArgs/.brzy")
       val response = new MockHttpServletResponse()
       var called = false
       val chain = new FilterChain(){
@@ -88,7 +98,10 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
       assert(!called)
     }
     "filter redirect to secure" in {
-      val request = new MockHttpServletRequest("GET", "/userArgs/123.brzy")
+      val context = new MockServletContext
+      context.setAttribute("application",webapp)
+
+      val request = new MockHttpServletRequest(context, "GET", "/userArgs/123.brzy")
       val response = new MockHttpServletResponse()
       var called = false
       val chain = new FilterChain(){
@@ -100,7 +113,10 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
       assert(!called)
     }
     "filter act on async" in {
-      val request = new MockHttpServletRequest("GET", "/users/async.brzy_async")
+      val context = new MockServletContext
+      context.setAttribute("application",webapp)
+
+      val request = new MockHttpServletRequest(context, "GET", "/users/async.brzy_async")
       val response = new MockHttpServletResponse()
       var called = false
       val chain = new FilterChain(){
@@ -112,7 +128,10 @@ class BrzyFilterSpec extends WordSpec with ShouldMatchers with Fixtures {
       assert(called)
     }
     "filter act on standard" in {
-      val request = new MockHttpServletRequest("GET", "/users.brzy")
+      val context = new MockServletContext
+      context.setAttribute("application",webapp)
+
+      val request = new MockHttpServletRequest(context, "GET", "/users.brzy")
       val response = new MockHttpServletResponse()
       var called = false
       val chain = new FilterChain(){

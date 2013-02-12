@@ -27,11 +27,11 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
       assert(2 == webapp.controllers.size)
       assert(20 == webapp.actions.size)
 
-      val request = new MockHttpServletRequest("GET", "//users.brzy")
-      val response = new MockHttpServletResponse()
-
-      val context = new MockServletContext()
+      val context = new MockServletContext
       context.setAttribute("application",webapp)
+
+      val request = new MockHttpServletRequest(context, "GET", "//users.brzy")
+      val response = new MockHttpServletResponse()
 
       val servlet = new BrzyServlet()
       servlet.init(new MockServletConfig(context))
@@ -45,11 +45,11 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
       assert(2 == webapp.controllers.size)
       assert(20 == webapp.actions.size)
 
-      val request = new MockHttpServletRequest("GET", "//users/10.brzy")
-      val response = new MockHttpServletResponse()
-
-      val context = new MockServletContext()
+      val context = new MockServletContext
       context.setAttribute("application",webapp)
+
+      val request = new MockHttpServletRequest(context, "GET", "//users/10.brzy")
+      val response = new MockHttpServletResponse()
 
       val servlet = new BrzyServlet()
       servlet.init(new MockServletConfig(context))

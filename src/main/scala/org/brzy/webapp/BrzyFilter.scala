@@ -28,35 +28,45 @@ import org.brzy.webapp.application.WebApp
 class BrzyFilter extends SFilter {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
 
-  /**
-   *
-   */
   def init(config: FilterConfig) {
     log.debug("Init Filter: {}", config)
   }
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
-    val request = req.asInstanceOf[HttpServletRequest]
-    val response = res.asInstanceOf[HttpServletResponse]
-    val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
 
-    // todo need to preserve http status
-    webapp.doFilterAction(request)  match {
-      case ActOn(action) =>
-        action.trans.doWith(webapp.threadLocalSessions, {()=>
+    try {
+
+      val request = req.asInstanceOf[HttpServletRequest]
+      val response = res.asInstanceOf[HttpServletResponse]
+      val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
+
+      // todo need to preserve http status
+      webapp.doFilterAction(request)  match {
+        case ActOn(action) =>
+          action.trans.doWith(webapp.threadLocalSessions, {()=>
+            chain.doFilter(req,res)
+          })
+        case ActOnAsync(action) =>
           chain.doFilter(req,res)
-        })
-      case ActOnAsync(action) =>
-        chain.doFilter(req,res)
-      case RedirectToSecure(path) =>
-        response.sendRedirect(path)
-      case RedirectToAuthenticate(path)=>
-        response.sendRedirect(path)
-      case DispatchTo(path) =>
-        req.getRequestDispatcher(path).forward(req, res)
-      case NotAnAction =>
-        chain.doFilter(req,res)
+        case RedirectToSecure(path) =>
+          response.sendRedirect(path)
+        case RedirectToAuthenticate(path)=>
+          response.sendRedirect(path)
+        case DispatchTo(path) =>
+          req.getRequestDispatcher(path).forward(req, res)
+        case NotAnAction =>
+          chain.doFilter(req,res)
+      }
+
     }
+    catch {
+      case e:Throwable =>
+        log.error(s"${e.getMessage}",e)
+      throw e
+    }
+
+
+
   }
 
   /**
