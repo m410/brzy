@@ -28,19 +28,17 @@ import org.brzy.webapp.application.WebApp
 class BrzyFilter extends SFilter {
   private[this] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
 
-  var webapp: WebApp = _
-
   /**
    *
    */
   def init(config: FilterConfig) {
     log.debug("Init Filter: {}", config)
-    webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
     val request = req.asInstanceOf[HttpServletRequest]
     val response = res.asInstanceOf[HttpServletResponse]
+    val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
 
     // todo need to preserve http status
     webapp.doFilterAction(request)  match {

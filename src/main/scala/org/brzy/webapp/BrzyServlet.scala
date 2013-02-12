@@ -29,15 +29,14 @@ import javax.servlet.{ServletConfig, ServletResponse, ServletRequest}
  */
 class BrzyServlet extends HttpServlet {
   private val log = LoggerFactory.getLogger(classOf[BrzyServlet])
-  protected var webapp: WebApp = _
 
   override def init(config: ServletConfig) {
-    webapp = config.getServletContext.getAttribute("application").asInstanceOf[WebApp]
   }
 
   override def service(req: ServletRequest, res: ServletResponse) {
     val request = req.asInstanceOf[HttpServletRequest]
     val response = res.asInstanceOf[HttpServletResponse]
+    val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
 
     webapp.serviceAction(request)
             .getOrElse(throw new RuntimeException(s"Action not found: ${request.getRequestURI}"))
