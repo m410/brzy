@@ -3,6 +3,7 @@ package org.brzy.webapp.persistence
 import org.brzy.fab.interceptor.ThreadContextSessionFactory
 import Propagation._
 import Isolation._
+import org.slf4j.LoggerFactory
 
 /**
  * Document Me..
@@ -11,12 +12,14 @@ import Isolation._
  */
 case class Transaction(propagation: Propagation = REQUIRED, isolation: Isolation = Default, readOnly:Boolean = false) {
 
+  private val log = LoggerFactory.getLogger(getClass)
 
   def doWith(it: List[ThreadContextSessionFactory], scope: () => Unit) {
+    log.debug("doWith session factories: {}",it)
     val iterator = it.iterator
 
     if (iterator.hasNext)
-      traverse(iterator, scala.None)(scope)
+      traverse(iterator)(scope)
     else
       scope() // no managed thread contexts
   }
@@ -25,11 +28,10 @@ case class Transaction(propagation: Propagation = REQUIRED, isolation: Isolation
   /**
    * Recursive method to call each ThreadLocal session context.
    */
-  protected def traverse(it: Iterator[ThreadContextSessionFactory], itSelf: Option[AnyRef])( target:() => Unit) {
+  protected def traverse(it: Iterator[ThreadContextSessionFactory])( target:() => Unit) {
     val managedFactory = it.next()
     var nested = false
 
-    if (itSelf.isEmpty || managedFactory.isManaged(itSelf.get)) {
       val ctx = {
         if (managedFactory.context.value == managedFactory.empty)
           managedFactory.createSession
@@ -43,7 +45,7 @@ case class Transaction(propagation: Propagation = REQUIRED, isolation: Isolation
         managedFactory.context.withValue(ctx) {
 
           if (it.hasNext)
-            traverse(it, itSelf)(target)
+            traverse(it)(target)
           else
             target()
         }
@@ -52,12 +54,5 @@ case class Transaction(propagation: Propagation = REQUIRED, isolation: Isolation
         if (!nested)
           managedFactory.destroySession(ctx)
       }
-    }
-    else {
-      if (it.hasNext)
-        traverse(it, itSelf)(target)
-      else
-        target()
-    }
   }
 }
