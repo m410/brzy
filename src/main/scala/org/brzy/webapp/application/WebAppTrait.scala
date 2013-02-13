@@ -7,7 +7,7 @@ import controller.Controller
 
 import javax.servlet.http.HttpServletRequest
 import org.brzy.fab.mod.ViewModProvider
-import org.brzy.fab.threadcontext.ThreadContextSessionFactory
+import org.brzy.webapp.persistence.SessionFactory
 
 
 /**
@@ -59,7 +59,7 @@ trait WebAppTrait {
 
   def viewProvider:ViewModProvider = new StaticViewProvider
 
-  def threadLocalSessions:List[ThreadContextSessionFactory]
+  def threadLocalSessions:List[SessionFactory]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

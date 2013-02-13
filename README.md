@@ -10,8 +10,8 @@ contract of the types of arguments it takes and response object it returns.  The
 to learn and the action methods are designed in a way that makes them easily comprehensible
 and testable.
 
-    class PersonController extends Controller("persons") {
-      override val actions = List( Action("", "list", index _))
+    class PersonController extends BaseController("persons") {
+      override val actions = List( get("", index _, View("list"))
       def index = “persons”->Person.list
     }
 
@@ -45,34 +45,20 @@ See Configuration Reference for more detailed information about the details of t
 The application class is the main assembly point of the application.  There are two, one that
 automatically discovers controllers and actions and one to manually assemble the application.
 
-    class Application(c:WebAppConfiguration) extends WebApp(c) {
-      def makeServices = List.empy[AnyRef]
-      def makeControllers = List( proxyInstance[HomeController]())
+    class Application(c:WebAppConfiguration) extends WebApp(c) with JpaProvider {
+      override val controllers = super.controllers ++ List( 
+        new HomeController
+      )
     }
-
-In the example above, the proxyInstance method wraps the controller in an AOP proxy for the
-purpose of transaction interception.  If the controller has constructor args you can pass
-them as arguments of the proxyInstance function.
-
-    class Application(c:WebAppConfiguration) extends WebApp(c) {
-      lazy def service = proxyInstance[MyService]()
-      def makeServices = List(service)
-      def makeControllers = List( proxyInstance[HomeController](service))
-    }
-
-In this example, a service is created and added to the list of services.  It has to be
-declare lazy because of how the way the super class is initialized.  Then added to the
-services and controllers.  Adding it to the list of services will add life cycle support
-if the call implement the trait org.brzy.service.Service.
 
 ## RESTful Action Path
 Path expressions represent the restful path the corresponds to an action.  This makes for
 easily bookmark-able and highly customizable application paths.
 
-    class HomeController extends Controller("home") {
+    class HomeController extends BaseController("home") {
       override val actions = List(
-        Action("", "/index", list _),
-        Action("{id:\\d+}", "view", view _)
+        get("", list _, View("/index"),
+        post("{id:\\d+}", view _, View("view"))
       )
       def view(p:Parameters) = Model(“id”->p.url(“id”))
     }
@@ -103,22 +89,21 @@ does not match a path expression will default to the containers default resource
 
 Path expressions can also contain file expressions, the following action definition is valid.
 
-    class FilesController extends Controller("files") with Securered {
-      override val actions = List( Action("{id}.gif", "/index", index _))
+    class FilesController extends BaseController("files") with Secured {
+      override val actions = List( 
+        get("{id}.gif", index _, View("/index"))
+      )
       // ...
     }
-
-## Transactions
-TODO
 
 ## Constraints
 Constraints are part of an action, and define how an action may be called.  Constraints are
 added to the controller or appended to the end of the action.
 
-## Secure
+## Ssl
 Requires that the controller or action be called only when the connection is secured over ssl.
 
-    class HomeController extends Controller("") with Secured {
+    class HomeController extends BaseController("") with Secured {
       override val constraints = Array(Ssl())
       override val actions = List(
         Action("", "/index", index _,Roles(“ROLE_ADMIN”))
@@ -129,11 +114,12 @@ Requires that the controller or action be called only when the connection is sec
 This sets all actions on the controller to be callable over ssl.
 
 ## ContentTypes
-Defines what content types are allowed to call the action. It defaults to all.
+Defines what content types are allowed to call the action. It defaults to all.  The content
+type is extracted from the accept content type header sent in the request.
 
-    class HomeController extends Controller("") with Secured {
+    class HomeController extends BaseController("") with Secured {
       override val actions = List(
-        Action("", "/index", index _, ContentType(“text/json”))
+        get("", index _, View("/index"), ContentType(“text/json”))
       )
       def index(p:PostBody) = {
         val json = p.asJson
@@ -147,25 +133,33 @@ to call this action.
 ## HttpMethods
 What http methods are allowed to call the action, It defaults to all.
 
-    class HomeController extends Controller("") with Secured {
+    class HomeController extends BaseController("") with Secured with PersonStore {
       override val actions = List(
-        Action("{id}", "/save", save _, HttpMethod(Post))
+        get("{id}", save _, View("/save")),
+        post("{id}", , save _, View("/save")),
+        action("{id}", save _, View("/save")),
+        async("{id}", asyncStart _)
       )
-      def save(p:Parameters) = {
-        // save it
-        (View(“view”),Model(“person”->Person(p.url(“id”))))
+      def save(p:Parameters) = { 
+        // ...
+        (View(“view”),Model(“person”-> get(p.url(“id”))))
       }
     }
 
-This would result in the action ‘save’ only accessible if the request is a http post.  This
-also overrides the response to override the default view.
+In the list of actions the one created with the get method only accepts GET requests, the post
+only accepts POST and the action accepts any request menthod.  The action method can be refined by
+adding an HttpMethods argument.
+
+The action method async is special, it sets the actions as an async servlet that starts
+an async connection to the client.  It must be a Http GET, and the method it references must return
+an Async response type.
 
 ## Roles
 What roles are allowed to call the action or controller, It defaults to all.
 
     class HomeController extends Controller("") with Secured {
-      override val constraints = Array(Roles(“ROLE_ADMIN”))
-      override val actions = List( Action("", "/index", index _))
+      override val constraints = Seq(Roles(“ROLE_ADMIN”))
+      override val actions = List( get("", index _, View("/index")))
       // ...
     }
 
@@ -174,11 +168,16 @@ to be authorized to execute any action in this controller.  If they do not posse
 user will get a http 403 disallowed error.
 
 ## Transaction
-What transactional state the action should be called in.  Default to propagation required and
-read only false.
+There are two transactions DefaultTransaction and NoTransaction.  Default will let you set
+the transaction isolation and a read only flag, but it may or may not be implemented by the
+underlying connection.
 
-**NOTE**: custom transactions are not implemented yet.
-
+    class PersonController extends BaseController("persons") with Secured {
+      override val transaction = DefaultTransaction(SERIALIZED)
+      override val actions = List( get("", index _, View("/index")))
+      // ...
+    }
+    
 ## Arg types
 The type of arguments that an action can take are limited to the Traits listed below.  They
 are traits so that they can easily be implemented for unit testing.
@@ -188,8 +187,8 @@ The parameters argument trait is the most commonly used action argument.  It mak
 attributes of the application, session, header, request and url accessible to the action.
 All attributes are read only.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters) = {
         val obj = p(“reference”)
         val sessionObj = p.session match {
@@ -202,8 +201,8 @@ All attributes are read only.
 Properties can be used to access some less frequently used attributes of the servlet
 request object itself, like remoteHost.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters,pr:Properties) = {
         val remoteHost = pr.remoteHost
         Model(“name”->”value”)
@@ -222,8 +221,8 @@ Another caveat to it’s usage, is that when combined with the Parameters action
 request scope attributes will not be accessible from the parameters object.
 
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( post("", "/index", action _))
       def action(p:PostBody) = {
         val fileItem = p.paramAsFile(“file”)
         Model(“name”->”value”)
@@ -234,8 +233,8 @@ request scope attributes will not be accessible from the parameters object.
 Used by authentication, this holds the user role names and user name of the authenticated
 user.  It also has a flag to indicate if there is an authenticated user present.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters,pr:Principal) = {
         val person = Person.findByUserName(pr.name)
         //...
@@ -245,8 +244,8 @@ user.  It also has a flag to indicate if there is an authenticated user present.
 ### Cookies
 This arg is used to read any cookies in the request.  It holds a list of all available cookies.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters,c:Cookies) = {
         val cookies = c.cookies
         Model(“name”->”value”)
@@ -265,8 +264,8 @@ Tuple of String, AnyRef
 You may simply return a tuple, that will be interpreted as a single name value pair to be placed
 in the model in request scope.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = “name”->p(“someParameter”)
     }
 
@@ -274,8 +273,8 @@ in the model in request scope.
 ### Session
 A Data response object.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters) =
         (Model(“name”->”value”),Session(“name”->”value”))
     }
@@ -291,16 +290,16 @@ A Data response object.  The  model is probably the most common response type.  
 tuples and adds them as name value pairs to the request scope to make them available for
 rendering in views.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = Model(“name”->”value”)
     }
 
 ### View
 A Direction response object.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = (Model(“name”->”value”),View(“other”))
     }
 
@@ -312,8 +311,8 @@ response object was missing from this example the view that would be rendered wo
 ### Redirect
 A Direction Response object sends a 302 redirect to the client, with the context relative path.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = Redirect(“/home/view”)
     }
 
@@ -321,7 +320,7 @@ A Direction Response object sends a 302 redirect to the client, with the context
 A Direction Response object will transparently forward directly to another controller within
 the same transaction.
 
-    class HomeController extends Controller("") {
+    class HomeController extends BaseController("") {
       override val actions = List(
         Action("", "/index", action _),
         Action("{id}", "/view", view _)
@@ -334,8 +333,8 @@ the same transaction.
 A Direction Response object that will convert an object or a map to a json data structure and
 set the content type header to ‘text/json’
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = {
         val someMapOfValues = Map.empty[String,String]
         Json(someMapOfValues)
@@ -349,7 +348,7 @@ or mixing in your own.
       override def parse = “”
       override def contentType = “text”
     }
-    class MyController extends Controller("") {
+    class MyController extends BaseController("") {
       // ...
       def action(p:Parameters) = new Json(data) with MyParser
     }
@@ -358,8 +357,8 @@ or mixing in your own.
 A Direction Response object is much like the Json response type but it wraps the data within a
 javascript method call and returns the call as javascript.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = Jsonp(“call”,map)
     }
 
@@ -368,8 +367,8 @@ You can also extend this one with the parse in the same fashion as the example a
 ### Xml
 A Direction Response object returns xml in the response with the content type set to ‘text/xml’.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = Xml(Map(“name”->”value”))
     }
 
@@ -377,8 +376,8 @@ A Direction Response object returns xml in the response with the content type se
 A Direction Response object can stream data in the response.  The is the preferred way to
 download files.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters) = Stream({io:OutputSeam =>
         io.write(byte)
       },“type”)
@@ -388,24 +387,42 @@ download files.
 A Direction Response object is similar to stream, it returns a byte array to the output stream.
 Generally Stream is peferable, but this can be used for small files.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = Binary(data,“application/pdf”)
     }
 
 ### Text
 A Direction Response object is suitable for returning plain text as the response.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) = Text(str)
     }
+
+### Async
+The Async return type can only be returned from mentods that are reference in async
+actions.  There are three parameters,
+
+ *  A function to execute in a async runnable thread.
+ *  An int timeout which default to zero (never).
+ *  An AsyncContextListener which defaults to a blank listener.
+
+    class HomeController extends BaseController("") {
+      override val actions = List( async("async", startAsync _, View("")))
+      def startAsync(p:Parameters) = Async({(params)=>{
+        // listen for some evens here, then return to client
+        Json(Map("name"->"value"))
+      }})
+
+    }
+
 
 ### Error
 A Direction Response object is used in many cases where an action returns an error.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", index _))
       def action(p:Parameters) = {
         if(somecheck())
           Model(“name”->”value”)
@@ -418,8 +435,8 @@ A Direction Response object is used in many cases where an action returns an err
 A Data Response object, this object gets places in session scope, and gets called once from
 the view.  Once displayed it removes itself from the session.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) =
           (Model(“name”->”value”),Flash(“code”,”default”))
     }
@@ -427,8 +444,8 @@ the view.  Once displayed it removes itself from the session.
 ### Headers
 A Data Response object, allows you to add http headers to the response.
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) =
           (Model(“name”->”value”),Headers(“cache”->”no_cache”))
     }
@@ -436,8 +453,8 @@ A Data Response object, allows you to add http headers to the response.
 ### Cookie
 A Data Response object that adds a cookies to the response
 
-    class HomeController extends Controller("") {
-      override val actions = List( Action("", "/index", action _))
+    class HomeController extends BaseController("") {
+      override val actions = List( get("", "/index", action _))
       def action(p:Parameters) =
           (Model(“name”->”value”),Cookie(“name”,”value”))
     }
@@ -445,8 +462,8 @@ A Data Response object that adds a cookies to the response
 ## Action interceptor
 A controller can intercept the call to an action.
 
-    class HomeController extends Controller("") with Intercepted {
-      override val actions = List( Action("", "/index", index _))
+    class HomeController extends BaseController("") with Intercepted {
+      override val actions = List( get("", "/index", index _))
       override def intercept(a:()=>AnyRef, args:Array[Arg], p:Principal)={
         // do additional checks
         a()
@@ -485,7 +502,7 @@ needed in the Application class.
 Controllers are not authenticated unless they have the Secured trait.  With the secured trait,
 the user is implicitly validated against the Roles Constraint on the controller and actions.
 
-    class HomeController extends Controller("") extends Secured{
+    class HomeController extends BaseController("") extends Secured{
       override val constraints = Array(Roles(“USER”,”ADMIN”))
       // ...
     }
@@ -525,7 +542,7 @@ Using the PostBody action argument you can read json from the request like this.
 ### Download
 Using the Json response object, simple pass your class to it as an argument.
 
-    class HomeController extends Controller("home") {
+    class HomeController extends BaseController("home") {
       override val actions = List(
         Action("j", "", a _,HttpMethods(Post),ContentTypes(“text/json”))
       )
@@ -542,7 +559,7 @@ Using the PostBody action argument you can read json from the request like this.
 ### Download
 Using the Xml response object, simple pass your class to it as an argument.
 
-    class HomeController extends Controller("xml") {
+    class HomeController extends BaseController("xml") {
       override val actions = List(
         Action("", "", act _, HttpMethods(Post),ContentTypes(“text/xml”))
       )

@@ -16,7 +16,7 @@ package org.brzy.webapp.application
 import org.slf4j.LoggerFactory
 
 import org.brzy.fab.mod.ModProvider
-import org.brzy.fab.threadcontext.ThreadContextSessionFactory
+import org.brzy.webapp.persistence.SessionFactory
 import javax.servlet.http.HttpServletRequest
 
 import org.brzy.webapp.action.Action
@@ -122,7 +122,7 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
 
   def persistenceProviders:List[ModProvider] = List.empty[ModProvider]
 
-  def threadLocalSessions:List[ThreadContextSessionFactory] = List.empty[ThreadContextSessionFactory]
+  def threadLocalSessions:List[SessionFactory] = List.empty[SessionFactory]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

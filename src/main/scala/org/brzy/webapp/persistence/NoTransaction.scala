@@ -2,7 +2,6 @@ package org.brzy.webapp.persistence
 
 import Propagation._
 import Isolation._
-import org.brzy.fab.threadcontext.ThreadContextSessionFactory
 
 /**
  * Document Me..
@@ -14,7 +13,7 @@ case object NoTransaction extends Transaction {
   def isolation = NONE
   def readOnly = true
 
-  override def doWith(it: List[ThreadContextSessionFactory], scope: () => Unit) {
+  override def doWith(it: List[SessionFactory], scope: () => Unit) {
     scope()
   }
 }
