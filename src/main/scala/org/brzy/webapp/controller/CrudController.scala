@@ -12,13 +12,13 @@
  * language governing permissions and limitations under the License.
  */
 package org.brzy.webapp.controller
-import org.brzy.webapp.persistence.{Transaction, Dao}
+import org.brzy.webapp.persistence.{DefaultTransaction, Dao}
 import org.brzy.webapp.action.args.Parameters
 import org.brzy.webapp.action.response.{View, Flash, Redirect, Model}
 
 import scala.reflect._
 import scala.language.reflectiveCalls
-import org.brzy.webapp.action.{Action, Constraint}
+import org.brzy.webapp.action.Constraint
 
 /**
  * Controller writers can extend this to get all the crud operations in their
@@ -40,12 +40,13 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
    */
   def viewBasePath = {
     val simpleName = this.getClass.getSimpleName
-    simpleName.substring(0,simpleName.indexOf("Controller")).toLowerCase
+    val dir = simpleName.substring(0, simpleName.indexOf("Controller")).toLowerCase
+    s"/$dir/"
   }
 
-  val constraints: Seq[Constraint] = Seq.empty[Constraint]
+  val constraints = Seq.empty[Constraint]
 
-  val transaction: Transaction = Transaction()
+  val transaction = DefaultTransaction()
 
 
   private[this] val entityName = {
@@ -86,8 +87,7 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
   def edit(params: Parameters) = entityName -> load(params("id").toString)
 
   def update(p: Parameters) = {
-    val cmap:Map[String,String] = p.request.map(n=>{n._1->n._2(0)})
-    val entity = construct(cmap)
+    val entity = construct(p.requestAndUrl)
     entity.validate match {
       case Some(violations) =>
         Model(entityName -> entity, "violations" -> violations)

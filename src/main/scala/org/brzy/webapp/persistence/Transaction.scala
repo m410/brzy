@@ -10,9 +10,16 @@ import org.slf4j.LoggerFactory
  *
  * @author Michael Fortin
  */
-case class Transaction(propagation: Propagation = REQUIRED, isolation: Isolation = Default, readOnly:Boolean = false) {
+trait Transaction {
 
   private val log = LoggerFactory.getLogger(getClass)
+
+  def propagation: Propagation // = REQUIRED
+
+  def isolation: Isolation // = Default
+
+  def readOnly:Boolean // = false
+
 
   def doWith(it: List[ThreadContextSessionFactory], scope: () => Unit) {
     log.debug("doWith session factories: {}",it)

@@ -4,7 +4,7 @@ import org.brzy.webapp.action.response._
 import org.brzy.webapp.action.args.{Principal, Parameters}
 import org.slf4j.LoggerFactory
 import org.brzy.webapp.action.Constraint
-import org.brzy.webapp.persistence.Transaction
+import org.brzy.webapp.persistence.DefaultTransaction
 
 
 /**
@@ -38,7 +38,7 @@ class AuthController[T <: Authenticated](val basePath: String) extends Controlle
 
   val constraints = Seq.empty[Constraint]
 
-  val transaction = Transaction()
+  val transaction = DefaultTransaction()
 
   /**
    * override to change the form of the login page

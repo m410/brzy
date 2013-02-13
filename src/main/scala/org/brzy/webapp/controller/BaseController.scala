@@ -1,7 +1,7 @@
 package org.brzy.webapp.controller
 
 import org.brzy.webapp.action.{Action, Constraint}
-import org.brzy.webapp.persistence.Transaction
+import org.brzy.webapp.persistence.DefaultTransaction
 
 /**
  * Document Me..
@@ -10,10 +10,10 @@ import org.brzy.webapp.persistence.Transaction
  */
 class BaseController(val basePath: String) extends Controller {
 
-  val constraints: Seq[Constraint] = Seq.empty[Constraint]
+  val constraints  = Seq.empty[Constraint]
 
-  val transaction: Transaction = Transaction()
+  val transaction = DefaultTransaction()
 
-  def actions: List[Action] = List.empty[Action]
+  def actions = List.empty[Action]
 
 }

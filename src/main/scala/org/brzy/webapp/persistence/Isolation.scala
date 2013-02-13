@@ -1,7 +1,7 @@
 package org.brzy.webapp.persistence
 
 /**
- * Document Me..
+ * Transaction isolation level passed to the underlying connection.
  * 
  * @author Michael Fortin
  */
@@ -9,32 +9,32 @@ object Isolation extends Enumeration {
   type Isolation = Value
 
   /**
-   * Use the JDBC driver's default isolation level. Kodo uses this option if you do not explicitly specify any other.
+   * Use the default isolation level of the underlying datastore.
     */
-  val Default         = Value("Default")
+  val DEFAULT = Value("DEFAULT")
 
   /**
    * No transaction isolation.
    */
-  val None            = Value("None")
+  val NONE = Value("NONE")
 
   /**
-   * Dirty reads are prevented; non-repeatable reads and phantom reads can occur.
+   * A constant indicating that dirty reads are prevented; non-repeatable reads and phantom reads can occur.
    */
-  val ReadCommited    = Value("ReadCommited")
+  val READ_COMMITTED = Value("READ_COMMITTED")
 
   /**
-   * Dirty reads, non-repeatable reads and phantom reads can occur.
+   * A constant indicating that dirty reads, non-repeatable reads and phantom reads can occur.
    */
-  val ReadUncommitted = Value("ReadUncommitted")
+  val READ_UNCOMMITTED = Value("READ_UNCOMMITTED")
 
   /**
-   * Dirty reads and non-repeatable reads are prevented; phantom reads can occur.
+   * A constant indicating that dirty reads and non-repeatable reads are prevented; phantom reads can occur.
    */
-  val RepeatableRead  = Value("RepeatableRead")
+  val REPEATABLE_READ = Value("REPEATABLE_READ")
 
   /**
-   * Dirty reads, non-repeatable reads, and phantom reads are prevented.
+   * A constant indicating that dirty reads, non-repeatable reads and phantom reads are prevented.
    */
-  val Serializable    = Value("Serializable")
+  val SERIALIZABLE = Value("SERIALIZABLE")
 }

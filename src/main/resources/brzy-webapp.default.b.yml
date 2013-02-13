@@ -42,6 +42,7 @@ repositories:
 dependencies:
   - {conf: provided, org: org.scala-lang, name: scala-compiler, rev: "${scala.version}", transitive: false}
   - {conf: provided, org: org.scala-lang, name: scala-library, rev: "${scala.version}", transitive: false}
+  - {conf: provided, org: org.scala-lang, name: scala-reflect, rev: "${scala.version}", transitive: false}
   - {conf: provided, org: org.apache.tomcat, name: tomcat-servlet-api, rev: 7.0.35, transitive: false}
   - {conf: compile, org: org.brzy.webapp, name: brzy-webapp, rev: "${project.version}", transitive: false}
   - {conf: compile, org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
