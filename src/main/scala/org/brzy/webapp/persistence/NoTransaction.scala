@@ -10,7 +10,6 @@ import org.brzy.fab.threadcontext.ThreadContextSessionFactory
  * @author Michael Fortin
  */
 case object NoTransaction extends Transaction {
-  def propagation = REQUIRED
   def isolation = NONE
   def readOnly = true
 

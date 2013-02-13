@@ -14,8 +14,6 @@ trait Transaction {
 
   private val log = LoggerFactory.getLogger(getClass)
 
-  def propagation: Propagation // = REQUIRED
-
   def isolation: Isolation // = Default
 
   def readOnly:Boolean // = false

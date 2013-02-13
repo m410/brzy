@@ -9,7 +9,6 @@ import Isolation._
  * @author Michael Fortin
  */
 case class DefaultTransaction(
-        propagation: Propagation = REQUIRED,
         isolation: Isolation = DEFAULT,
         readOnly:Boolean = false)
         extends Transaction

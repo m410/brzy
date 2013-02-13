@@ -1,7 +1,7 @@
 package org.brzy.webapp.persistence
 
 /**
- * Document Me..
+ * Not used anywhere at the moment, and probably never will be.
  * 
  * @author Michael Fortin
  */
