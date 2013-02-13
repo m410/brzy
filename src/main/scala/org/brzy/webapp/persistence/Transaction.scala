@@ -1,6 +1,6 @@
 package org.brzy.webapp.persistence
 
-import org.brzy.fab.interceptor.ThreadContextSessionFactory
+import org.brzy.fab.threadcontext.ThreadContextSessionFactory
 import Propagation._
 import Isolation._
 import org.slf4j.LoggerFactory

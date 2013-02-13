@@ -16,8 +16,9 @@ package org.brzy.webapp.persistence
 import javax.validation.ConstraintViolation
 import collection.immutable.Set
 import org.brzy.beanwrap.{Builder, Editors}
-import scala.language.implicitConversions
 
+import scala.language.implicitConversions
+import scala.reflect.runtime.universe._
 
 /**
  * This is a persistent super class that can be used by persistence  modules to enable the
@@ -79,7 +80,7 @@ trait Dao[T <: {def id: PK}, PK] {
   /**
    * sets the default editors for building an entity from the request parameters.
    */
-  def editors = Editors()
+  def editors(implicit t:TypeTag[T]) = Editors()
 
   /**
    * Adds the persistence crud operations to the entity.

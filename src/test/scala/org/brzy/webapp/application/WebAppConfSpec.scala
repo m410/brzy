@@ -23,7 +23,7 @@ class WebAppConfSpec extends WordSpec with ShouldMatchers with Fixture {
   "WebAppConf" should {
 
     "create configuration" in {
-      val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+      val wac = WebAppConfig.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
       assert(wac != null)
       assert(wac.application.isDefined)
       assert(wac.useSsl, "ssl should be true: "+wac.useSsl)
@@ -62,10 +62,10 @@ class WebAppConfSpec extends WordSpec with ShouldMatchers with Fixture {
     }
 
     "create json" in {
-      val wac = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+      val wac = WebAppConfig.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
       val json = wac.toJson
       assert(json != null)
-      val wacFromJson = WebAppConfiguration.fromJson(json)
+      val wacFromJson = WebAppConfig.fromJson(json)
       assert(wacFromJson != null)
 
       assert(wacFromJson.application.isDefined)

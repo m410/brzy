@@ -6,7 +6,7 @@ import org.scalatest.FlatSpec
 class WebAppProxySpec extends FlatSpec  with Fixture{
 
   "A Webapp" should "proxy controller with injection" in  {
-    val wc = WebAppConfiguration.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
+    val wc = WebAppConfig.runtime(env = "test", defaultConfig = "/brzy-webapp.test.b.yml")
     val webapp = new TestWebapp(wc)
     assert(webapp != null, "webapp can't be null")
 

@@ -14,7 +14,7 @@
 package org.brzy.webapp
 
 import org.springframework.mock.web.{MockServletConfig, MockServletContext, MockHttpServletResponse, MockHttpServletRequest}
-import org.brzy.webapp.application.{WebAppConfiguration, WebApp}
+import org.brzy.webapp.application.{WebAppConfig, WebApp}
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.WordSpec
 
@@ -22,7 +22,7 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
 
   "Brzy Servlet" should {
     "find action by path" in {
-      val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
+      val webapp = WebApp(WebAppConfig.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
       assert(webapp != null)
       assert(2 == webapp.controllers.size)
       assert(20 == webapp.actions.size)
@@ -40,7 +40,7 @@ class BrzyServletSpec extends WordSpec with ShouldMatchers {
     }
 
     "find path with params" in {
-      val webapp = WebApp(WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
+      val webapp = WebApp(WebAppConfig.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
       assert(webapp != null)
       assert(2 == webapp.controllers.size)
       assert(20 == webapp.actions.size)

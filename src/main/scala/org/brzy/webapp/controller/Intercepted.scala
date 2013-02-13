@@ -17,7 +17,7 @@ import org.brzy.webapp.action.args.{Arg, Principal}
 
 
 /**
- * Adds action interceptor support to a controller. When added to any controller, the intercept
+ * Adds action threadcontext support to a controller. When added to any controller, the intercept
  * method wraps the action.
  *
  * @author Michael Fortin

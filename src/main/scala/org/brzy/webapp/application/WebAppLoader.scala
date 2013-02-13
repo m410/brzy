@@ -28,11 +28,11 @@ class WebAppLoader {
     LoggerFactory.getLogger(getClass).debug("app loader classloader={}",applicationLoader)
 
     try {
-      val config = WebAppConfiguration.runtime("development")
+      val config = WebAppConfig.runtime("development")
       val projectApplicationClass = config.application.get.applicationClass.get
 
       val appClass = applicationLoader.loadClass(projectApplicationClass)
-      val constructor = appClass.getConstructor(Array(classOf[WebAppConfiguration]): _*)
+      val constructor = appClass.getConstructor(Array(classOf[WebAppConfig]): _*)
       constructor.newInstance(Array(config): _*).asInstanceOf[WebApp]
     }
     catch {

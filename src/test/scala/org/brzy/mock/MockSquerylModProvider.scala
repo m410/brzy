@@ -4,7 +4,7 @@ import org.brzy.fab.mod.ModProvider
 import org.slf4j.LoggerFactory
 import java.sql.DriverManager
 import collection.JavaConversions._
-import org.brzy.fab.interceptor.{ThreadContextFactoryProvider, ThreadContextSessionFactory}
+import org.brzy.fab.threadcontext.{ThreadContextFactoryProvider, ThreadContextSessionFactory}
 import util.DynamicVariable
 
 class MockSquerylModProvider(c:MockSquerylModConfig) extends ModProvider with ThreadContextFactoryProvider {

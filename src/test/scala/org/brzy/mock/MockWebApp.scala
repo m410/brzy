@@ -1,9 +1,9 @@
 package org.brzy.mock
 
-import org.brzy.webapp.application.{WebAppConfiguration, WebApp}
+import org.brzy.webapp.application.{WebAppConfig, WebApp}
 
 
-class MockWebApp(config:WebAppConfiguration) extends WebApp(config) {
+class MockWebApp(config:WebAppConfig) extends WebApp(config) {
 
   val userService = new UserService
 

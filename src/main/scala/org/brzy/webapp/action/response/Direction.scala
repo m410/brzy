@@ -15,7 +15,7 @@ package org.brzy.webapp.action.response
 
 
 import org.brzy.webapp.action.args.{ParametersRequest, Parameters}
-import org.brzy.fab.interceptor.ThreadContextSessionFactory
+import org.brzy.fab.threadcontext.ThreadContextSessionFactory
 import org.brzy.webapp.persistence.Transaction
 import org.brzy.webapp.action.{Action, Parser}
 

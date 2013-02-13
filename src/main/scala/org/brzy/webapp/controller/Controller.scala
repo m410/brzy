@@ -31,9 +31,9 @@ trait Controller extends Ordered[Controller] {
    * The constraints for the controller.  Constraints set here apply to all actions.  When
    * you add a constraint to the action is takes precedence over these.
    */
-  val constraints: Seq[Constraint]
+  def constraints: Seq[Constraint]
 
-  val transaction: Transaction
+  def transaction: Transaction
 
   /**
    * List of actions for this controller.  When overriding this, it's adventages to make it

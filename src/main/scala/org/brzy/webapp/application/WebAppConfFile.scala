@@ -23,6 +23,7 @@ import org.brzy.fab.mod.ProjectModuleConfiguration
  *
  * @author Michael Fortin
  */
+@deprecated("Not used","0.11")
 class WebAppConfFile(override val map: Map[String, AnyRef]) extends ProjectModuleConfiguration(map) {
  
 

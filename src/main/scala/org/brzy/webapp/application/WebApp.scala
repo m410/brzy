@@ -16,7 +16,7 @@ package org.brzy.webapp.application
 import org.slf4j.LoggerFactory
 
 import org.brzy.fab.mod.ModProvider
-import org.brzy.fab.interceptor.ThreadContextSessionFactory
+import org.brzy.fab.threadcontext.ThreadContextSessionFactory
 import javax.servlet.http.HttpServletRequest
 
 import org.brzy.webapp.action.Action
@@ -34,7 +34,7 @@ import controller.Controller
  * 
  * @author Michael Fortin
  */
-class WebApp(val conf: WebAppConfiguration) extends WebAppTrait {
+class WebApp(val conf: WebAppConfig) extends WebAppTrait {
 
   private val log = LoggerFactory.getLogger(getClass)
 
@@ -144,9 +144,9 @@ class WebApp(val conf: WebAppConfiguration) extends WebAppTrait {
 object WebApp {
   private val log = LoggerFactory.getLogger(getClass)
 
-  def apply(env: String): WebApp = apply(WebAppConfiguration.runtime(env))
+  def apply(env: String): WebApp = apply(WebAppConfig.runtime(env))
 
-  def apply(config: WebAppConfiguration): WebApp = {
+  def apply(config: WebAppConfig): WebApp = {
     log.debug("application class: {}", config.application.get.applicationClass.getOrElse("NA"))
     val projectApplicationClass = config.application.get.applicationClass.get
 //    Build.reflect[WebApp](projectApplicationClass, Array(config))

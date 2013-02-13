@@ -6,7 +6,7 @@ import org.brzy.webapp.controller.BaseController
 
 trait Fixture {
 
-  class TestWebapp(wc:WebAppConfiguration) extends WebApp(wc) {
+  class TestWebapp(wc:WebAppConfig) extends WebApp(wc) {
     override val controllers = List(new FixtureController with FixtureService)
     override val services = List(new FixtureService{})
   }

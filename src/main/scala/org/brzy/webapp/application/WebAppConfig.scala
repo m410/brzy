@@ -14,7 +14,7 @@ import scala.Some
  * 
  * @author Michael Fortin
  */
-class WebAppConfiguration(override val map: Map[String, AnyRef]) extends ProjectModuleConfiguration(map) {
+class WebAppConfig(override val map: Map[String, AnyRef]) extends ProjectModuleConfiguration(map) {
 
   val useSsl: Boolean = map.get("use_ssl") match {
     case Some(e) => e.asInstanceOf[Boolean]
@@ -56,7 +56,7 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
 
 
   override def mergeConfiguration(t: ProjectModuleConfiguration) = {
-    val that = t.asInstanceOf[WebAppConfiguration]
+    val that = t.asInstanceOf[WebAppConfig]
     val mergedWebXml = this.webXml ++ that.webXml
     val mergedUseSsl = if (this.useSsl) this.useSsl else that.useSsl
 
@@ -82,11 +82,11 @@ class WebAppConfiguration(override val map: Map[String, AnyRef]) extends Project
   }
 
   override def instance(m:Map[String,AnyRef]) = {
-    new WebAppConfiguration(m)
+    new WebAppConfig(m)
   }
 }
 
-object WebAppConfiguration {
+object WebAppConfig {
 
   private val log = LoggerFactory.getLogger(getClass)
 
@@ -103,24 +103,24 @@ object WebAppConfiguration {
   def runtime(env: String, appConfig: String = appConfigFile, defaultConfig: String = defaultConfigFile) = {
     val asStream = getClass.getResourceAsStream(defaultConfig)
     val yaml = Yaml(asStream)
-    val archetypeConfig = new WebAppConfiguration(yaml)
+    val archetypeConfig = new WebAppConfig(yaml)
 
     // todo persistence modules will have lost some information, they're not the right instance
     val asStream1 = getClass.getResourceAsStream(appConfig)
     val yaml1 = Yaml(asStream1)
-    val projectConfig = new WebAppConfiguration(yaml1)
+    val projectConfig = new WebAppConfig(yaml1)
 
 
     val envConfig = projectConfig.map.get("environment_overrides") match {
       case Some(ec) =>
         ec.asInstanceOf[List[Map[String,AnyRef]]].find(findEnv(_,env)) match {
           case Some(e) =>
-            new WebAppConfiguration(e)
+            new WebAppConfig(e)
           case _ =>
-            new WebAppConfiguration(Map.empty[String,AnyRef])
+            new WebAppConfig(Map.empty[String,AnyRef])
         }
       case _ =>
-        new WebAppConfiguration(Map.empty[String,AnyRef])
+        new WebAppConfig(Map.empty[String,AnyRef])
     }
     val viewModule = makeRuntimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull))
     val persistenceModules = projectConfig.persistence.map(makeRuntimeMod(_))
@@ -132,22 +132,22 @@ object WebAppConfiguration {
     })
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
     val m4 = m3 << envConfig
-    m4.asInstanceOf[WebAppConfiguration]
+    m4.asInstanceOf[WebAppConfig]
   }
 
   def buildtime(modBaseDir: File, env: String, appConfigPath: String, defaultConfig: String = defaultConfigFile) = {
-    val archetypeConfig = new WebAppConfiguration(Yaml(getClass.getResourceAsStream(defaultConfig)))
-    val projectConfig = new WebAppConfiguration(Yaml(new File(appConfigPath)))
+    val archetypeConfig = new WebAppConfig(Yaml(getClass.getResourceAsStream(defaultConfig)))
+    val projectConfig = new WebAppConfig(Yaml(new File(appConfigPath)))
     val envConfig = projectConfig.map.get("environment_overrides") match {
       case Some(ec) =>
         ec.asInstanceOf[List[Map[String,AnyRef]]].find(findEnv(_,env)) match {
           case Some(e) =>
-            new WebAppConfiguration(e.asInstanceOf[Map[String,AnyRef]])
+            new WebAppConfig(e.asInstanceOf[Map[String,AnyRef]])
           case _ =>
-            new WebAppConfiguration(Map.empty[String,AnyRef])
+            new WebAppConfig(Map.empty[String,AnyRef])
         }
       case _ =>
-        new WebAppConfiguration(Map.empty[String,AnyRef])
+        new WebAppConfig(Map.empty[String,AnyRef])
     }
     val viewModule = makeBuildTimeMod(projectConfig.views.getOrElse(archetypeConfig.views.orNull),modBaseDir)
     val persistenceModules = projectConfig.persistence.map(makeBuildTimeMod(_,modBaseDir))
@@ -156,7 +156,7 @@ object WebAppConfiguration {
     val m2 = persistenceModules.foldLeft(m1)((r,c) => r << c)
     val m3 = modules.foldLeft(m2)((r,c) => r << c)
     val m4 = m3 << envConfig
-    m4.asInstanceOf[WebAppConfiguration]
+    m4.asInstanceOf[WebAppConfig]
   }
 
   protected def isRuntime(mod: Mod):Boolean = {
@@ -235,6 +235,6 @@ object WebAppConfiguration {
   def fromJson(json: String) = {
     implicit val formats = Serialization.formats(NoTypeHints)
     val m = parse(json).asInstanceOf[JObject].values
-    new WebAppConfiguration(m("config").asInstanceOf[Map[String, AnyRef]])
+    new WebAppConfig(m("config").asInstanceOf[Map[String, AnyRef]])
   }
 }

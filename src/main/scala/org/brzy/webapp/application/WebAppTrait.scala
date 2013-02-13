@@ -7,7 +7,7 @@ import controller.Controller
 
 import javax.servlet.http.HttpServletRequest
 import org.brzy.fab.mod.ViewModProvider
-import org.brzy.fab.interceptor.ThreadContextSessionFactory
+import org.brzy.fab.threadcontext.ThreadContextSessionFactory
 
 
 /**
@@ -20,7 +20,7 @@ import org.brzy.fab.interceptor.ThreadContextSessionFactory
 trait WebAppTrait {
 
 
-  val conf: WebAppConfiguration
+  val conf: WebAppConfig
 
   /**
    * The application class, hold information like the application name and version.

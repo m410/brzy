@@ -25,7 +25,7 @@ class WebAppSpec extends WordSpec with ShouldMatchers  with Fixture {
 
   "WebApp" should {
     "create webapp" in {
-      val webappConf = WebAppConfiguration.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml")
+      val webappConf = WebAppConfig.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml")
       assert(webappConf != null)
 
       val webapp = WebApp(webappConf)

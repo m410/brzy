@@ -19,7 +19,7 @@ import org.brzy.webapp.persistence.Transaction
  * Or simply add it directly to your application:
  *
  * {{{
- * class Application(config:WebAppConfiguration) extends WebApp(config) {
+ * class Application(config:WebAppConfig) extends WebApp(config) {
  *  lazy val securityService = proxyInstance[SecurityService]()
  *  def makeServices = List(securityService)
  *  def makeControllers = List(proxyInstance[DefaultAuthController](securityService,"auth"))
