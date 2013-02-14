@@ -1,6 +1,5 @@
 package org.brzy.webapp.persistence
 
-import Propagation._
 import Isolation._
 
 /**
