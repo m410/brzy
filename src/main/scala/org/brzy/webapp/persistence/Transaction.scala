@@ -1,6 +1,6 @@
 package org.brzy.webapp.persistence
 
-import org.brzy.fab.threadcontext.ThreadContextSessionFactory
+import org.brzy.webapp.persistence.SessionFactory
 import Propagation._
 import Isolation._
 import org.slf4j.LoggerFactory
@@ -19,7 +19,7 @@ trait Transaction {
   def readOnly:Boolean // = false
 
 
-  def doWith(it: List[ThreadContextSessionFactory], scope: () => Unit) {
+  def doWith(it: List[SessionFactory], scope: () => Unit) {
     log.debug("doWith session factories: {}",it)
     val iterator = it.iterator
 
@@ -33,13 +33,13 @@ trait Transaction {
   /**
    * Recursive method to call each ThreadLocal session context.
    */
-  protected def traverse(it: Iterator[ThreadContextSessionFactory])( target:() => Unit) {
+  protected def traverse(it: Iterator[SessionFactory])( target:() => Unit) {
     val managedFactory = it.next()
     var nested = false
 
       val ctx = {
         if (managedFactory.context.value == managedFactory.empty)
-          managedFactory.createSession
+          managedFactory.createSession(isolation, readOnly)
         else {
           nested = true
           managedFactory.context.value
