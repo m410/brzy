@@ -48,7 +48,7 @@ trait Controller extends Ordered[Controller] {
           view: Direction = NoView,
           transaction: Transaction = transaction,
           methods: Seq[HttpMethod] = Seq(GET,POST),
-          constraints: Seq[Constraint] = constraints): Action = {
+          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
     Action(expr, act, transaction, methods, view, constraints, false, this)
   }
 
@@ -57,7 +57,7 @@ trait Controller extends Ordered[Controller] {
           act: F,
           view: Direction = NoView,
           transaction: Transaction = transaction,
-          constraints: Seq[Constraint] = constraints): Action = {
+          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
     Action(expr, act, transaction, Seq(POST), view, constraints, false, this)
   }
 
@@ -67,7 +67,7 @@ trait Controller extends Ordered[Controller] {
           view: Direction = NoView,
           transaction: Transaction = transaction,
           methods: Seq[HttpMethod] = Seq.empty[HttpMethod],
-          constraints: Seq[Constraint] = constraints): Action = {
+          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
     Action(expr, act, transaction, Seq(GET), view, constraints,  false, this)
   }
 
@@ -76,7 +76,7 @@ trait Controller extends Ordered[Controller] {
           act: F,
           view: Direction = NoView,
           transaction: Transaction = transaction,
-          constraints: Seq[Constraint] = constraints): Action = {
+          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
     Action(expr, act, transaction, Seq(GET), view, constraints,  true, this)
   }
 

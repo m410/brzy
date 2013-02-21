@@ -76,7 +76,7 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
     actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
       case Some(action) =>
 
-        if (action.requiresSsl && !request.isSecure)
+        if (useSsl && action.requiresSsl && !request.isSecure)
           RedirectToSecure(request)
         else if (!action.isAuthorized(new PrincipalRequest(request)))
           RedirectToAuthenticate("/auth")
