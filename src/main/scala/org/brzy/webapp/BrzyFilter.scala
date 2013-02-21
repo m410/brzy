@@ -60,7 +60,7 @@ class BrzyFilter extends SFilter {
           log.info("DispatchTo({})",path)
           req.getRequestDispatcher(path).forward(req, res)
         case NotAnAction =>
-          log.info("NotAnAction")
+          log.info("NotAnAction({})",request.getRequestURI)
           chain.doFilter(req,res)
       }
 
