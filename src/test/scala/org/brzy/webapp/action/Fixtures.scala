@@ -32,7 +32,7 @@ trait Fixtures {
   val controller2 = new BaseController("") with Authorization {
     override val constraints = List(Roles("ADMIN"))
     override def actions = List(
-      get(expr="index", act=index _, view=View("index"),constraints=Seq(Roles("ADMIN","USER"))),
+      get(expr="index", action=index _, view=View("index"),constraints=Seq(Roles("ADMIN","USER"))),
       action("index2", index2 _, View("index2"))
     )
     def index = "name" -> "value"
@@ -81,11 +81,11 @@ trait Fixtures {
     override val constraints = Seq(Roles("ADMIN"))
 
     override def actions = List(
-      get(expr="index0", act=index _, view=View("index0"),constraints=Seq(Ssl(),ContentTypes("text/xml"))),
-      get(expr="index1", act=index _, view=View("index1") ,constraints=Seq(Ssl())),
-      get(expr="index2", act=index _, view=View("index2") ),
-      get(expr="index3", act=index _, view=View("index3") ,constraints=Seq(ContentTypes("text/xml"))),
-      get(expr="index4", act=index2 _,view= View("index4"))
+      get(expr="index0", action=index _, view=View("index0"),constraints=Seq(Ssl(),ContentTypes("text/xml"))),
+      get(expr="index1", action=index _, view=View("index1") ,constraints=Seq(Ssl())),
+      get(expr="index2", action=index _, view=View("index2") ),
+      get(expr="index3", action=index _, view=View("index3") ,constraints=Seq(ContentTypes("text/xml"))),
+      get(expr="index4", action=index2 _,view= View("index4"))
     )
     def index = "name" -> "value"
     def index2 = "name" -> "value"

@@ -22,8 +22,8 @@ import org.brzy.webapp.action.{Ssl, Roles}
 class UserArgController(s:UserService) extends BaseController("userArgs") with Authorization {
 
   override val actions = List(
-    action(expr="",act=listAction _,view=View("list"),constraints=Seq(Roles("ADMIN"))),
-    action(expr="{id}", act=getAction _, view=View("view"),constraints=Seq(Ssl())),
+    action(expr="",action=listAction _,view=View("list"),constraints=Seq(Roles("ADMIN"))),
+    action(expr="{id}", action=getAction _, view=View("view"),constraints=Seq(Ssl())),
     action("custom",custom _, View("custom")))
 
   def listAction = "userList"-> s.someMethod

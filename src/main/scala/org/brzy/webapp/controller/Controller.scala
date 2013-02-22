@@ -44,40 +44,40 @@ trait Controller extends Ordered[Controller] {
 
   def action[F <: AnyRef:Manifest](
           expr: String,
-          act: F,
+          action: F,
           view: Direction = NoView,
-          transaction: Transaction = transaction,
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
           methods: Seq[HttpMethod] = Seq(GET,POST),
-          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
-    Action(expr, act, transaction, methods, view, constraints, false, this)
+          transaction: Transaction = transaction): Action = {
+    Action(expr, action, transaction, methods, view, constraints, false, this)
   }
 
   def post[F <: AnyRef:Manifest](
           expr: String,
-          act: F,
+          action: F,
           view: Direction = NoView,
-          transaction: Transaction = transaction,
-          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
-    Action(expr, act, transaction, Seq(POST), view, constraints, false, this)
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
+          transaction: Transaction = transaction): Action = {
+    Action(expr, action, transaction, Seq(POST), view, constraints, false, this)
   }
 
   def get[F <: AnyRef:Manifest](
           expr: String,
-          act: F,
+          action: F,
           view: Direction = NoView,
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
           transaction: Transaction = transaction,
-          methods: Seq[HttpMethod] = Seq.empty[HttpMethod],
-          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
-    Action(expr, act, transaction, Seq(GET), view, constraints,  false, this)
+          methods: Seq[HttpMethod] = Seq.empty[HttpMethod]): Action = {
+    Action(expr, action, transaction, Seq(GET), view, constraints,  false, this)
   }
 
   def async[F <: AnyRef:Manifest](
           expr: String,
-          act: F,
+          action: F,
           view: Direction = NoView,
-          transaction: Transaction = transaction,
-          constraints: Seq[Constraint] = Seq.empty[Constraint]): Action = {
-    Action(expr, act, transaction, Seq(GET), view, constraints,  true, this)
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
+          transaction: Transaction = transaction): Action = {
+    Action(expr, action, transaction, Seq(GET), view, constraints,  true, this)
   }
 
   /**

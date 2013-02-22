@@ -33,7 +33,7 @@ trait Fixtures {
 
   class ImplController extends BaseController("impls") with Authorization {
     override val actions = List(
-      get(expr="list", act=list _, view=View("list"), constraints=Seq(Roles("SUPER"))),
+      get(expr="list", action=list _, view=View("list"), constraints=Seq(Roles("SUPER"))),
       action("showMore", showMore _, View("show") )
     )
 
