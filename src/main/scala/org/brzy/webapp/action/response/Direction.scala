@@ -44,7 +44,7 @@ case object NoView extends Direction
 /**
  * Override the default view.
  */
-case class View(path: String) extends Direction
+case class View(path: String, contentType:String = "text/html; charset=utf-8") extends Direction
 
 /**
  * Forward to another action without sending a redirect to the client.

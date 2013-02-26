@@ -37,63 +37,131 @@ object ResponseHandler {
    */
   def apply(action: Action, actionResult: AnyRef, req: HttpServletRequest, res: HttpServletResponse) {
     log.trace("results: {}", actionResult)
-    matchData(actionResult,req,res)
+//    matchData(actionResult,req,res)
     // need to handle the direction after the data or a servlet error doesn't happen
 
-    actionResult match {
-      case d: Data =>
-        handleDirection(action, action.view, req, res)
-      case _ =>
-        matchDirection(actionResult,action,req,res)
-    }
+    pullData(actionResult).foreach(handleData(_,req,res))
+    val direction = pullDirection(actionResult, action.view)
+    handleDirection(action,direction,req,res)
+
+//    actionResult match {
+//      case d: Data =>
+//        handleDirection(action, action.view, req, res)
+//      case _ =>
+//        matchDirection(actionResult,action,req,res)
+//    }
   }
 
-  private def matchData(result: Any, req:HttpServletRequest,res:HttpServletResponse) {
-    result match {
-      case (s: String, m: AnyRef) =>
-        log.trace("tuple: ({},{})", Array(s, m):_*)
-        handleData(Model(s -> m), req, res)
-      case d: Data =>
-        log.trace("Data: {}", d)
-        handleData(d, req, res)
-      case tup: (_, _) =>
-        log.trace("tuple: {}", tup)
-        tup.productIterator.foreach(s => matchData(s,req,res))
-      case r: (_, _, _) =>
-        log.trace("tuple: {}", r)
-        r.productIterator.foreach(s => matchData(s,req,res))
-      case r: (_, _, _, _) =>
-        log.trace("tuple: {}", r)
-        r.productIterator.foreach(s => matchData(s,req,res))
-      case r: (_, _, _, _, _) =>
-        log.trace("tuple: {}", r)
-        r.productIterator.foreach(s => matchData(s,req,res))
-      case _ => //ignore and Direction in the list
-    }
-  }
-
-  private  def matchDirection(directionResult: Any, action:Action, req:HttpServletRequest,res:HttpServletResponse) {
-    directionResult match {
+  private def pullDirection(actionResult: AnyRef, actionView:Direction):Direction = {
+    val directionOption = actionResult match {
+      case Unit =>
+        Option(actionView)
       case d: Direction =>
-        log.trace("Direction: {}", d)
-        handleDirection(action, d, req, res)
+        Option(d)
       case d: Data => // ignore it
+        Option(actionView)
       case (s: String, m: AnyRef) =>
-        log.trace("tuple default: {}", action.view)
-        handleDirection(action, action.view, req, res)
+        Option(actionView)
       case tup: (_, _) =>
-        tup.productIterator.foreach(s => matchDirection(s,action,req,res))
+        Option(tup.productIterator.find({
+          case d:Direction => true
+          case _ => false
+        }).getOrElse(actionView).asInstanceOf[Direction])
       case r: (_, _, _) =>
-        r.productIterator.foreach(s => matchDirection(s,action,req,res))
+        Option(r.productIterator.find({
+          case d:Direction => true
+          case _ => false
+        }).getOrElse(actionView).asInstanceOf[Direction])
       case r: (_, _, _, _) =>
-        r.productIterator.foreach(s => matchDirection(s,action,req,res))
+        Option(r.productIterator.find({
+          case d:Direction => true
+          case _ => false
+        }).getOrElse(actionView).asInstanceOf[Direction])
       case r: (_, _, _, _, _) =>
-        r.productIterator.foreach(s => matchDirection(s,action,req,res))
+        Option(r.productIterator.find({
+          case d:Direction => true
+          case _ => false
+        }).getOrElse(actionView).asInstanceOf[Direction])
       case _ =>
-        log.trace("default: {}", action.view)
-        handleDirection(action, action.view, req, res)
+        throw new ToManyActionReturnsException("Returns are limited to tuple of 5 values")
+    }
+
+    directionOption match {
+      case Some(NoView) => throw new NoViewException("No Direction returned for action")
+      case Some(definedDirection) => definedDirection
+      case _ => throw new NoViewException("No Direction returned for action")
     }
   }
+
+  private def pullData(actionResult: Any, data:Seq[Data] = Seq.empty[Data]):Seq[Data] = {
+    actionResult match {
+      case Unit =>
+        Seq.empty[Data]
+      case d: Direction =>
+        Seq.empty[Data]
+      case d: Data =>
+        data ++ Seq(d)
+      case (s: String, m: AnyRef) =>
+        data ++ Seq(Model(s->m))
+      case tup: (_, _) =>
+        tup.productIterator.foldLeft(data)((d,t)=> d ++ pullData(t) )
+      case r: (_, _, _) =>
+        r.productIterator.foldLeft(data)((d,t)=> d ++ pullData(t) )
+      case r: (_, _, _, _) =>
+        r.productIterator.foldLeft(data)((d,t)=> d ++ pullData(t) )
+      case r: (_, _, _, _, _) =>
+        r.productIterator.foldLeft(data)((d,t)=> d ++ pullData(t) )
+      case _ =>
+        throw new ToManyActionReturnsException("Unknown response (tuples max is 5):"+ actionResult)
+    }
+  }
+
+//  private def matchData(result: Any, req:HttpServletRequest, res:HttpServletResponse) {
+//    result match {
+//      case (s: String, m: AnyRef) =>
+//        log.trace("tuple: ({},{})", Array(s, m):_*)
+//        handleData(Model(s -> m), req, res)
+//      case d: Data =>
+//        log.trace("Data: {}", d)
+//        handleData(d, req, res)
+//      case tup: (_, _) =>
+//        log.trace("tuple: {}", tup)
+//        tup.productIterator.foreach(s => matchData(s,req,res))
+//      case r: (_, _, _) =>
+//        log.trace("tuple: {}", r)
+//        r.productIterator.foreach(s => matchData(s,req,res))
+//      case r: (_, _, _, _) =>
+//        log.trace("tuple: {}", r)
+//        r.productIterator.foreach(s => matchData(s,req,res))
+//      case r: (_, _, _, _, _) =>
+//        log.trace("tuple: {}", r)
+//        r.productIterator.foreach(s => matchData(s,req,res))
+//      case _ => //ignore and Direction in the list
+//    }
+//  }
+//
+//  private  def matchDirection(directionResult: Any, action:Action, req:HttpServletRequest,res:HttpServletResponse) {
+//    directionResult match {
+//      case d: Direction =>
+//        log.trace("Direction: {}", d)
+//        handleDirection(action, d, req, res)
+//      case d: Data => // ignore it
+//      case (s: String, m: AnyRef) =>
+//        log.trace("tuple default: {}", action.view)
+//        handleDirection(action, action.view, req, res)
+//      case tup: (_, _) =>
+//        tup.productIterator.foreach(s => matchDirection(s,action,req,res))
+//      case r: (_, _, _) =>
+//        r.productIterator.foreach(s => matchDirection(s,action,req,res))
+//      case r: (_, _, _, _) =>
+//        r.productIterator.foreach(s => matchDirection(s,action,req,res))
+//      case r: (_, _, _, _, _) =>
+//        r.productIterator.foreach(s => matchDirection(s,action,req,res))
+//      case _ =>
+//        log.trace("default: {}", action.view)
+//        handleDirection(action, action.view, req, res)
+//    }
+//  }
 
 
   /**
@@ -103,10 +171,9 @@ object ResponseHandler {
   private def handleDirection(action: Action, direct: Direction, req: HttpServletRequest, res: HttpServletResponse)  {
     direct match {
       case view: View =>
-        val target: String = view.path + ".ssp" //action.viewType
+        val target: String = view.path + ".ssp" //todo fix hard-coding, need reference to application
         log.trace("view: {}", target)
-        // TODO Should be set by the view and override-able by the controller
-        res.setHeader("Content-Type","text/html; charset=utf-8")
+        res.setHeader("Content-Type",view.contentType)
         req.getRequestDispatcher(target).forward(req, res)
       case f: Forward =>
         log.trace("forward: {}", f)

@@ -73,7 +73,7 @@ class UserController extends BaseController("users") {
 
   def error = Error(404, "Not Found")
 
-  def save(params: Parameters)() = {
+  def save(params: Parameters) = {
     def user: MockUser = construct(params.request.map(n=>{n._1->n._2(0)}))
 
     user.validate match {
