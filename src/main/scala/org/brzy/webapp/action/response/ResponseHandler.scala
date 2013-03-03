@@ -21,6 +21,7 @@ import org.brzy.webapp.application.WebApp
 import javax.servlet.http.{Cookie=>JCookie, HttpServletResponse, HttpServletRequest}
 import java.io.ByteArrayInputStream
 import org.slf4j.LoggerFactory
+import java.util.concurrent.{ThreadPoolExecutor, TimeUnit, LinkedBlockingQueue}
 
 /**
  * Document Me..
@@ -36,20 +37,10 @@ object ResponseHandler {
    * in the HttpSession.
    */
   def apply(action: Action, actionResult: AnyRef, req: HttpServletRequest, res: HttpServletResponse) {
-    log.trace("results: {}", actionResult)
-//    matchData(actionResult,req,res)
-    // need to handle the direction after the data or a servlet error doesn't happen
-
+    log.info("results: {}", actionResult)
     pullData(actionResult).foreach(handleData(_,req,res))
     val direction = pullDirection(actionResult, action.view)
     handleDirection(action,direction,req,res)
-
-//    actionResult match {
-//      case d: Data =>
-//        handleDirection(action, action.view, req, res)
-//      case _ =>
-//        matchDirection(actionResult,action,req,res)
-//    }
   }
 
   private def pullDirection(actionResult: AnyRef, actionView:Direction):Direction = {
@@ -116,54 +107,6 @@ object ResponseHandler {
     }
   }
 
-//  private def matchData(result: Any, req:HttpServletRequest, res:HttpServletResponse) {
-//    result match {
-//      case (s: String, m: AnyRef) =>
-//        log.trace("tuple: ({},{})", Array(s, m):_*)
-//        handleData(Model(s -> m), req, res)
-//      case d: Data =>
-//        log.trace("Data: {}", d)
-//        handleData(d, req, res)
-//      case tup: (_, _) =>
-//        log.trace("tuple: {}", tup)
-//        tup.productIterator.foreach(s => matchData(s,req,res))
-//      case r: (_, _, _) =>
-//        log.trace("tuple: {}", r)
-//        r.productIterator.foreach(s => matchData(s,req,res))
-//      case r: (_, _, _, _) =>
-//        log.trace("tuple: {}", r)
-//        r.productIterator.foreach(s => matchData(s,req,res))
-//      case r: (_, _, _, _, _) =>
-//        log.trace("tuple: {}", r)
-//        r.productIterator.foreach(s => matchData(s,req,res))
-//      case _ => //ignore and Direction in the list
-//    }
-//  }
-//
-//  private  def matchDirection(directionResult: Any, action:Action, req:HttpServletRequest,res:HttpServletResponse) {
-//    directionResult match {
-//      case d: Direction =>
-//        log.trace("Direction: {}", d)
-//        handleDirection(action, d, req, res)
-//      case d: Data => // ignore it
-//      case (s: String, m: AnyRef) =>
-//        log.trace("tuple default: {}", action.view)
-//        handleDirection(action, action.view, req, res)
-//      case tup: (_, _) =>
-//        tup.productIterator.foreach(s => matchDirection(s,action,req,res))
-//      case r: (_, _, _) =>
-//        r.productIterator.foreach(s => matchDirection(s,action,req,res))
-//      case r: (_, _, _, _) =>
-//        r.productIterator.foreach(s => matchDirection(s,action,req,res))
-//      case r: (_, _, _, _, _) =>
-//        r.productIterator.foreach(s => matchDirection(s,action,req,res))
-//      case _ =>
-//        log.trace("default: {}", action.view)
-//        handleDirection(action, action.view, req, res)
-//    }
-//  }
-
-
   /**
    * An Action can only return one instance of a Direction.  This will execute it.  For example
    * a Redirect will be run as an 'HttpServletResponse.sendRedirect(target)'.
@@ -221,10 +164,12 @@ object ResponseHandler {
         res.getWriter.write(j.parse)
       case j: Async =>
         log.trace("async: {}", j)
-        val asyncContext = req.startAsync()
+        val asyncContext = req.startAsync(req,res)
         asyncContext.addListener(j.listener)
         val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
-        asyncContext.start(j.start(action, webapp.threadLocalSessions, action.trans, asyncContext))
+//        val executor = new ThreadPoolExecutor(10, 10, 50000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue[Runnable](100))
+//        executor.execute(j.start(action, webapp.threadLocalSessions, action.trans, asyncContext))
+        asyncContext.start(j.run(action, webapp.threadLocalSessions, action.trans, asyncContext))
       case _ =>
         throw new UnknownActionDirectionException("Unknown Driection: %s".format(direct))
     }

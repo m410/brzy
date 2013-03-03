@@ -14,7 +14,7 @@
 package org.brzy.webapp.action.response
 
 
-import org.brzy.webapp.action.args.{ParametersRequest, Parameters}
+import org.brzy.webapp.action.args.{PostBodyRequest, PostBody, ParametersRequest, Parameters}
 import org.brzy.webapp.persistence.SessionFactory
 import org.brzy.webapp.persistence.Transaction
 import org.brzy.webapp.action.{Action, Parser}
@@ -154,13 +154,13 @@ case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: S
 
 /**
  *
- * @param asyncAction
+ * @param actOn
  * @param timeout
  * @param listener
  *
  * @author Michael Fortin
  */
-case class Async(asyncAction: (Parameters) => AnyRef, timeout: Int = 0, listener: AsyncListener = new BlankAsyncListener)
+case class Async(actOn: (PostBody) => AnyRef, timeout: Int = 0, listener: AsyncListener = new BlankAsyncListener)
         extends Direction {
 
 
@@ -171,7 +171,7 @@ case class Async(asyncAction: (Parameters) => AnyRef, timeout: Int = 0, listener
    * @param asyncContext
    * @return
    */
-  def start(action:Action, threadLocalSessions: List[SessionFactory], trans: Transaction, asyncContext: AsyncContext) = {
+  def run(action:Action, threadLocalSessions: List[SessionFactory], trans: Transaction, asyncContext: AsyncContext) = {
     asyncContext.addListener(listener)
     asyncContext.setTimeout(timeout)
 
@@ -179,11 +179,10 @@ case class Async(asyncAction: (Parameters) => AnyRef, timeout: Int = 0, listener
       def run() {
         trans.doWith(threadLocalSessions, { () =>
           val request = asyncContext.getRequest.asInstanceOf[HttpServletRequest]
-          val response = asyncContext.getRequest.asInstanceOf[HttpServletResponse]
-          val urlParams = action.paramsFor(request.getRequestURI)
-          val parameters = new ParametersRequest(request, urlParams)
-          val result = asyncAction(parameters)
-          ResponseHandler.apply(action, result, request, response)
+          val response = asyncContext.getResponse.asInstanceOf[HttpServletResponse]
+          val result = actOn(new PostBodyRequest(request))
+          response.getOutputStream.println("something to say")
+          ResponseHandler(action, result, request, response)
         })
       }
     }

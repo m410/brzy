@@ -63,15 +63,22 @@ class PostBodyRequest (request: HttpServletRequest,
   /**
    * Get non-file request parameters.
    */
-  def parameters: Map[String, String] = fileItems.filter({
-    case f: FileItem => {
-      f.isFormField
+  def parameters: Map[String, String] = {
+    if (ServletFileUpload.isMultipartContent(request)) {
+      fileItems.filter({
+        case f: FileItem => {
+          f.isFormField
+        }
+      }).map({
+        case f: FileItem => {
+          f.getFieldName -> f.getString
+        }
+      }).toMap
     }
-  }).map({
-    case f: FileItem => {
-      f.getFieldName -> f.getString
+    else {
+      request.getParameterMap.map(m=>m._1 -> m._2(0)).toMap
     }
-  }).toMap
+  }
 
 
   /**
@@ -95,17 +102,26 @@ class PostBodyRequest (request: HttpServletRequest,
   }
 
   override def toString = {
-    val a = fileItems.map({
-      case f: FileItem => {
-        if (f.isFormField)
-          f.getFieldName -> f.getString
-        else
-          f.getFieldName -> "<File>"
+    val embeddedFiles = {
+      if (ServletFileUpload.isMultipartContent(request)) {
+        fileItems.map({
+          case f: FileItem => {
+            if (f.isFormField)
+              f.getFieldName -> f.getString
+            else
+              f.getFieldName -> "<File>"
+          }
+        }).toMap
       }
-    }).toMap
+      else {
+        Map.empty[String,String]
+      }
+    }
+
     new StringBuilder()
-            .append("PostBody")
-            .append(a.mkString("[", ", ", "]"))
+            .append("PostBody(")
+            .append(embeddedFiles.mkString("[", ", ", "]"))
+            .append(")")
             .toString()
   }
 }
