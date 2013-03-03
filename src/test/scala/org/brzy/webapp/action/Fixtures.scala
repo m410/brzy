@@ -10,7 +10,7 @@ import javax.servlet.{ServletResponse, ServletRequest, RequestDispatcher}
 import javax.servlet.http.HttpServletResponse
 
 import org.springframework.mock.web.{MockRequestDispatcher, MockHttpServletResponse, MockServletContext, MockHttpServletRequest}
-import org.brzy.mock.{MockUserStore, MockUser}
+import org.brzy.mock.{MockUserComponent, MockUserStore, MockUser}
 
 import collection.JavaConversions._
 
@@ -102,7 +102,11 @@ trait Fixtures {
     def login(user:String,pass:String) = None
   }
 
-  class UserController extends CrudController[Long,MockUser]("users") with MockUserStore
+  class UserController extends CrudController[Long,MockUser]("users") with MockUserComponent {
+    def store = mockUserStore
+    implicit def crudOps(e: MockUser) = new MockCrudOps(e)
+    def toId(s: String) = s.toLong
+  }
 
 
   val response = new MockHttpServletResponse()

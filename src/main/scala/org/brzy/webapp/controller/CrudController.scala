@@ -12,13 +12,16 @@
  * language governing permissions and limitations under the License.
  */
 package org.brzy.webapp.controller
-import org.brzy.webapp.persistence.{DefaultTransaction, Dao}
+
+import org.brzy.webapp.persistence.{RichCrudOps, Store, DefaultTransaction}
 import org.brzy.webapp.action.args.Parameters
 import org.brzy.webapp.action.response.{View, Flash, Redirect, Model}
 
 import scala.reflect._
 import scala.language.reflectiveCalls
 import org.brzy.webapp.action.Constraint
+
+import scala.language.implicitConversions
 
 /**
  * Controller writers can extend this to get all the crud operations in their
@@ -30,9 +33,13 @@ import org.brzy.webapp.action.Constraint
  * @see org.brzy.persistence.Persistent
  * @author Michael Fortin
  */
-class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: String)
-        extends Controller  {
-        self:Dao[E, PK] =>
+abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath: String) extends Controller  {
+
+  def store:Store[PK,E]
+
+  implicit def crudOps(e:E):RichCrudOps[E]
+
+  def toId(s:String):PK
 
   /**
    * Uses reflection to get the name of this class without the controller suffix.
@@ -49,7 +56,7 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
   val transaction = DefaultTransaction()
 
 
-  private[this] val entityName = {
+  val entityName = {
     val name = classTag[E].runtimeClass.getSimpleName
     name.substring(0, 1).toLowerCase + name.substring(1)
   }
@@ -64,15 +71,15 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
     post("{id}/delete", delete _, View(viewBasePath + "list"))
   )
 
-  def listAction(p:Parameters) = entityName + "sList" -> list()
+  def listAction(p:Parameters) = entityName + "sList" -> store.list()
 
-  def view(params: Parameters) = entityName -> load(params("id").toString)
+  def view(params: Parameters) = entityName -> store(toId(params("id")))
 
-  def create() = entityName -> construct
+  def create() = entityName -> store.blankInstance
 
   def save(p: Parameters) = {
     val cmap:Map[String,String] = p.request.map(n=>{n._1->n._2(0)})
-    val entity = construct(cmap)
+    val entity = store.make(cmap)
     entity.validate match {
       case Some(violations) =>
         Model(entityName -> entity, "violations" -> violations)
@@ -84,10 +91,10 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
     }
   }
 
-  def edit(params: Parameters) = entityName -> load(params("id").toString)
+  def edit(params: Parameters) = entityName -> store(toId(params("id")))
 
   def update(p: Parameters) = {
-    val entity = construct(p.requestAndUrl)
+    val entity = store.make(p.requestAndUrl)
     entity.validate match {
       case Some(violations) =>
         Model(entityName -> entity, "violations" -> violations)
@@ -100,7 +107,7 @@ class CrudController[PK:Manifest, E <: {def id : PK}:Manifest](val basePath: Str
   }
 
   def delete(p: Parameters) = {
-    val entity = load(p("id").toString)
+    val entity = store(toId(p("id")))
     entity.delete()
     val redirect = Redirect("/" + basePath )
     val flash = Flash(entityName + " was Deleted.", entityName + ".delete")

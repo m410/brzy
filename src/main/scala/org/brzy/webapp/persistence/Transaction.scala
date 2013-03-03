@@ -1,7 +1,5 @@
 package org.brzy.webapp.persistence
 
-import org.brzy.webapp.persistence.SessionFactory
-import Propagation._
 import Isolation._
 import org.slf4j.LoggerFactory
 

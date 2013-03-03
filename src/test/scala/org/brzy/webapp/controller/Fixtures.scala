@@ -3,7 +3,7 @@ package org.brzy.webapp.controller
 import org.brzy.webapp.persistence.MockPersistable
 import org.brzy.webapp.action.args.{Principal, Arg, Parameters}
 
-import org.brzy.mock.{MockUserStore, MockUser}
+import org.brzy.mock.{MockUserComponent, MockUser}
 import org.brzy.webapp.action.response.View
 import org.brzy.webapp.action.response.Model
 import org.brzy.webapp.action.Roles
@@ -22,7 +22,11 @@ trait Fixtures {
     def login(user:String,pass:String) = None
   }
 
-  class UserController extends CrudController[Long,MockUser]("users") with MockUserStore
+  class UserController extends CrudController[Long,MockUser]("users") with MockUserComponent {
+    def store = mockUserStore
+    implicit def crudOps(e: MockUser) = new MockCrudOps(e)
+    def toId(s: String) = s.toLong
+  }
 
 
   class HomeController extends BaseController("") {
