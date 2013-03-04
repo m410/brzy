@@ -39,7 +39,21 @@ class BrzyAsyncServletSpec extends WordSpec with ShouldMatchers with Fixtures {
           def getResponse = null
           def start(p1: Runnable) { callCount = callCount + 1 }
         }
-        def startAsync(p1: ServletRequest, p2: ServletResponse) = null
+        def startAsync(p1: ServletRequest, p2: ServletResponse) =new AsyncContext {
+          def dispatch(p1: ServletContext, p2: String) {}
+          def dispatch(p1: String) {}
+          def dispatch() {}
+          def getRequest = p1
+          def getTimeout = 0
+          def createListener[T <: AsyncListener](p1: Class[T]) = null.asInstanceOf[T]
+          def setTimeout(p1: Long) {}
+          def addListener(p1: AsyncListener, p2: ServletRequest, p3: ServletResponse) {}
+          def addListener(p1: AsyncListener) {}
+          def complete() {}
+          def hasOriginalRequestAndResponse = false
+          def getResponse = p2
+          def start(p1: Runnable) { callCount = callCount + 1 }
+        }
         def isAsyncStarted = false
         def isAsyncSupported = false
         def getAsyncContext = null
