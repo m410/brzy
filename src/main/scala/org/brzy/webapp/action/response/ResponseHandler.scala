@@ -22,6 +22,8 @@ import javax.servlet.http.{Cookie=>JCookie, HttpServletResponse, HttpServletRequ
 import java.io.ByteArrayInputStream
 import org.slf4j.LoggerFactory
 import java.util.concurrent.{ThreadPoolExecutor, TimeUnit, LinkedBlockingQueue}
+import com.sun.tools.internal.jxc.SchemaGenerator.Runner
+import javax.servlet.{AsyncEvent, AsyncListener}
 
 /**
  * Document Me..
@@ -107,6 +109,8 @@ object ResponseHandler {
     }
   }
 
+
+
   /**
    * An Action can only return one instance of a Direction.  This will execute it.  For example
    * a Redirect will be run as an 'HttpServletResponse.sendRedirect(target)'.
@@ -164,12 +168,34 @@ object ResponseHandler {
         res.getWriter.write(j.parse)
       case j: Async =>
         log.trace("async: {}", j)
-        val asyncContext = req.startAsync(req,res)
-        asyncContext.addListener(j.listener)
+        val asyncContext = req.startAsync()
+        asyncContext.addListener(new AsyncListener {
+          def onComplete(p1: AsyncEvent) {println(s"############# complete $p1")}
+          def onTimeout(p1: AsyncEvent) {println(s"############# timeout $p1")}
+          def onError(p1: AsyncEvent) {println(s"############# error $p1")}
+          def onStartAsync(p1: AsyncEvent) {println(s"############# on start $p1")}
+        })
         val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
 //        val executor = new ThreadPoolExecutor(10, 10, 50000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue[Runnable](100))
 //        executor.execute(j.start(action, webapp.threadLocalSessions, action.trans, asyncContext))
-        asyncContext.start(j.run(action, webapp.threadLocalSessions, action.trans, asyncContext))
+        asyncContext.setTimeout(10000)
+        asyncContext.getResponse.getWriter.write(s"Hello there --")
+        asyncContext.getResponse.getWriter.flush()
+
+        asyncContext.start(new Runnable {
+          def run() {
+            var count = 1
+            while(true){
+              Thread.sleep(5000)
+              asyncContext.getResponse.getWriter.write(s"Hello there $count")
+              asyncContext.getResponse.getWriter.flush()
+              count = count + 1
+              println(s"############# count:$count")
+              if (count>5)
+                asyncContext.complete()
+            }
+          }
+        })
       case _ =>
         throw new UnknownActionDirectionException("Unknown Driection: %s".format(direct))
     }

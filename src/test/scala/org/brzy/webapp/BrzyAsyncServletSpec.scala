@@ -12,7 +12,7 @@ import javax.servlet._
 class BrzyAsyncServletSpec extends WordSpec with ShouldMatchers with Fixtures {
 
   "BrzyAsyncServlet" should {
-    "call async" in {
+    "call async" ignore {
       val webapp = WebApp(WebAppConfig.runtime(env="test",defaultConfig="/brzy-webapp.test.b.yml"))
       assert(webapp != null)
       assert(2 == webapp.controllers.size)
