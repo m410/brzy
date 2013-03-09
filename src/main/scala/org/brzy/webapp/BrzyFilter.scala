@@ -43,24 +43,24 @@ class BrzyFilter extends SFilter {
       // todo need to preserve http status
       webapp.doFilterAction(request)  match {
         case ActOn(action) =>
-          log.info("ActOn({})",action)
+          log.debug("ActOn({})",action)
           action.trans.doWith(webapp.threadLocalSessions, {()=>
             chain.doFilter(req,res)
           })
         case ActOnAsync(action) =>
-          log.info("ActOnAsync({})",action)
+          log.debug("ActOnAsync({})",action)
           chain.doFilter(req,res)
         case RedirectToSecure(path) =>
-          log.info("RedirectToSecure({})",path)
+          log.debug("RedirectToSecure({})",path)
           response.sendRedirect(path)
         case RedirectToAuthenticate(path)=>
-          log.info("RedirectToAuthenticate({})",path)
+          log.debug("RedirectToAuthenticate({})",path)
           response.sendRedirect(path)
         case DispatchTo(path) =>
-          log.info("DispatchTo({})",path)
+          log.debug("DispatchTo({})",path)
           req.getRequestDispatcher(path).forward(req, res)
         case NotAnAction =>
-          log.info("NotAnAction({})",request.getRequestURI)
+          log.debug("NotAnAction({})",request.getRequestURI)
           chain.doFilter(req,res)
       }
 
