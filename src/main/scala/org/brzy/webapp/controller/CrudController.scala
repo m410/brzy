@@ -13,16 +13,18 @@
  */
 package org.brzy.webapp.controller
 
-import org.brzy.webapp.persistence.{RichCrudOps, Store, DefaultTransaction}
+import org.brzy.webapp.persistence.{RichCrudOps, Store}
+import org.brzy.webapp.persistence.DefaultTransaction
 import org.brzy.webapp.action.args.Parameters
-import org.brzy.webapp.action.response.{View, Flash, Redirect, Model}
+import org.brzy.webapp.action.Constraint
+import org.brzy.webapp.action.response._
+
 
 import scala.reflect._
 import scala.language.reflectiveCalls
-import org.brzy.webapp.action.Constraint
-
 import scala.language.implicitConversions
 
+import java.lang.{Long=>Lng}
 /**
  * Controller writers can extend this to get all the crud operations in their
  * controller.  The controller has to be associated with a persistent class
@@ -61,6 +63,12 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
     name.substring(0, 1).toLowerCase + name.substring(1)
   }
 
+  def onUpdateToView(e:E):Direction = Redirect(s"/$basePath/${e.id}")
+
+  def onSaveToView(e:E):Direction = Redirect(s"/$basePath/${e.id}")
+
+  def onDeleteToView:Direction = Redirect(s"/$basePath" )
+
   override val actions = List(
     get("",  listAction _, View(viewBasePath + "list")) ,
     get("{id}", view _, View(viewBasePath + "view") ) ,
@@ -71,7 +79,11 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
     post("{id}/delete", delete _, View(viewBasePath + "list"))
   )
 
-  def listAction(p:Parameters) = entityName + "sList" -> store.list()
+  def listAction(p:Parameters) = {
+    val start = p.requestAndUrl.getOrElse("start","0").toInt
+    val size = p.requestAndUrl.getOrElse("size","50").toInt
+    Model(s"${entityName}sList" -> store.list(size,start), s"${entityName}sCount" -> Lng.valueOf(store.count))
+  }
 
   def view(params: Parameters) = entityName -> store(toId(params("id")))
 
@@ -85,7 +97,7 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
         Model(entityName -> entity, "violations" -> violations)
       case _ =>
         entity.insert(commit = true)
-        val redirect = Redirect("/" + basePath + "/" + entity.id)
+        val redirect = onSaveToView(entity)
         val flash = Flash("New " + entityName + " saved.", entityName + ".save")
         (redirect, flash)
     }
@@ -100,7 +112,7 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
         Model(entityName -> entity, "violations" -> violations)
       case _ =>
         val updated = entity.update()
-        val redirect = Redirect("/" + basePath + "/" + updated.id)
+        val redirect = onUpdateToView(entity)
         val flash = Flash(entityName + " updated.", entityName + ".update")
         (redirect, flash)
     }
@@ -109,7 +121,7 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
   def delete(p: Parameters) = {
     val entity = store(toId(p("id")))
     entity.delete()
-    val redirect = Redirect("/" + basePath )
+    val redirect = onDeleteToView
     val flash = Flash(entityName + " was Deleted.", entityName + ".delete")
     (redirect, flash)
   }

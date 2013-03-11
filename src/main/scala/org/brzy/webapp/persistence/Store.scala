@@ -19,4 +19,6 @@ trait Store[PK,E] {
   def get(id:PK):Option[E]
 
   def list(size: Int = 50, offset: Int = 0):List[E]
+
+  def count:Long
 }

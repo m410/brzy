@@ -29,6 +29,8 @@ trait MockUserComponent {
 
     def list(size: Int = 50, offset: Int = 0) = List(new MockUser)
 
+    def count = 1
+
     def blankInstance= new MockUser
 
   }
