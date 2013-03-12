@@ -15,7 +15,7 @@ package org.brzy.webapp.controller
 
 import org.brzy.webapp.persistence.{RichCrudOps, Store}
 import org.brzy.webapp.persistence.DefaultTransaction
-import org.brzy.webapp.action.args.Parameters
+import org.brzy.webapp.action.args.{Principal, Parameters}
 import org.brzy.webapp.action.Constraint
 import org.brzy.webapp.action.response._
 
@@ -85,11 +85,11 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
     Model(s"${entityName}sList" -> store.list(size,start), s"${entityName}sCount" -> Lng.valueOf(store.count))
   }
 
-  def view(params: Parameters) = entityName -> store(toId(params("id")))
+  def view(p: Parameters, r: Principal) = entityName -> store(toId(p("id")))
 
   def create() = entityName -> store.blankInstance
 
-  def save(p: Parameters) = {
+  def save(p: Parameters, r: Principal) = {
     val cmap:Map[String,String] = p.request.map(n=>{n._1->n._2(0)})
     val entity = store.make(cmap)
     entity.validate match {
@@ -103,22 +103,22 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
     }
   }
 
-  def edit(params: Parameters) = entityName -> store(toId(params("id")))
+  def edit(p: Parameters, r: Principal) = entityName -> store(toId(p("id")))
 
-  def update(p: Parameters) = {
+  def update(p: Parameters, r: Principal) = {
     val entity = store.make(p.requestAndUrl)
     entity.validate match {
       case Some(violations) =>
         Model(entityName -> entity, "violations" -> violations)
       case _ =>
-        val updated = entity.update()
+        entity.update()
         val redirect = onUpdateToView(entity)
         val flash = Flash(entityName + " updated.", entityName + ".update")
         (redirect, flash)
     }
   }
 
-  def delete(p: Parameters) = {
+  def delete(p: Parameters, r: Principal) = {
     val entity = store(toId(p("id")))
     entity.delete()
     val redirect = onDeleteToView
