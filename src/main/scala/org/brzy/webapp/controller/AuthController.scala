@@ -56,24 +56,19 @@ class AuthController[T <: Authenticated](val basePath: String) extends Controlle
   def onLogoutRedirectTo = "/"
 
   override val actions = List(
-    get("", loginAction _, View(loginForm)),
-    get("logout", logout _, View(onLogoutRedirectTo)),
-    post("submit", submit _, View(loginForm))
+    get("", ()=>Unit, View(loginForm)),
+    post("submit", authorizeAction _, View(loginForm)),
+    get("logout", logoutAction _, View(onLogoutRedirectTo))
   )
 
-  def loginAction(p: Parameters) {
-    p.session match {
-      case Some(s) => log.debug("session: {}", s.mkString("[", ", ", "]"))
-      case _ => log.debug("session: {}", "None")
-    }
-  }
 
-  def logout(principal: Principal) = {
+
+  def logoutAction(principal: Principal) = {
     onExplicitLogout(principal)
     (Redirect(onLogoutRedirectTo), Session.invalidate)
   }
 
-  def submit(p: Parameters) = {
+  def authorizeAction(p: Parameters) = {
     if (check(p)) {
       login(p("userName"), p("password")) match {
         case Some(auth) =>
@@ -120,7 +115,7 @@ class AuthController[T <: Authenticated](val basePath: String) extends Controlle
       (session, direct)
     }
     else {
-      Flash("Sory Your Account is not active.", "account.disabled")
+      Flash("Sorry Your Account is not active.", "account.disabled")
     }
   }
 

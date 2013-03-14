@@ -196,7 +196,7 @@ object WebAppConfig {
       // with the duplicate code below.  This should remove this later once the build runner
       // classloader is ironed out.
       val configClassName = yaml.get("config_class").get.asInstanceOf[String]
-      log.debug("config_class for mod: {}", configClassName)
+//      log.debug("config_class for mod: {}", configClassName)
       val c = Class.forName(configClassName)
       val constructor = c.getConstructor(Array(classOf[Map[_, _]]): _*)
       val modInst = constructor.newInstance(yaml).asInstanceOf[Mod]

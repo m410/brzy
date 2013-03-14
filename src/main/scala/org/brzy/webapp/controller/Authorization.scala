@@ -13,10 +13,31 @@
  */
 package org.brzy.webapp.controller
 
+import org.brzy.webapp.action.args.{Principal, Arg}
+import org.brzy.webapp.action.response.{Flash, Redirect}
+
 
 /**
  * Marks a controller as a secure controller using role based authentication.
  * 
  * @author Michael Fortin
  */
-trait Authorization extends Intercepted { self:Controller => }
+trait Authorization extends Intercepted { self:Controller =>
+
+  /**
+   * Wraps all the actions calls for the controller.  If the user is not authenticated
+   * they are redirected to the login page.
+   *
+   * @param action This is a function that wraps the actual function the action points too.
+   * @param actionArgs The arguments to the action.
+   * @param principal The Principal.  This is here for use in fine grained authorization.
+   *
+   * @return The result of the call to the action argument.
+   */
+  override def intercept(action: () => AnyRef, actionArgs: Array[Arg], principal: Principal) = {
+    if (principal.isLoggedIn)
+      super.intercept(action, actionArgs, principal)
+    else
+      (Redirect("/auth"),Flash("Your session has ended. Please login again", "session.end"))
+  }
+}

@@ -34,7 +34,7 @@ class ActionCompanionSpec extends WordSpec with ShouldMatchers with Fixtures {
 
       val result = ArgsBuilder(request, action)
       assert(result != null)
-      assert(1 == result.length)
+      assert(2 == result.length)
       val parameters: Parameters = result(0).asInstanceOf[Parameters]
       assert(1 == parameters.url.size, s"expected 1 but was ${parameters.url.size}")
       assert("10".equalsIgnoreCase(parameters("id")))
