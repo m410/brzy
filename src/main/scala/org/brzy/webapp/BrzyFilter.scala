@@ -26,7 +26,7 @@ import org.brzy.webapp.application.WebApp
  * @author Michael Fortin
  */
 class BrzyFilter extends SFilter {
-  private[this] val log = LoggerFactory.getLogger(classOf[BrzyFilter])
+  private[this] val log = LoggerFactory.getLogger(getClass)
 
   def init(config: FilterConfig) {
     log.debug("Init Filter: {}", config)
@@ -35,7 +35,6 @@ class BrzyFilter extends SFilter {
   def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
 
     try {
-
       val request = req.asInstanceOf[HttpServletRequest]
       val response = res.asInstanceOf[HttpServletResponse]
       val webapp = req.getServletContext.getAttribute("application").asInstanceOf[WebApp]
@@ -44,17 +43,16 @@ class BrzyFilter extends SFilter {
       webapp.doFilterAction(request)  match {
         case ActOn(action) =>
           log.debug("ActOn({})",action)
-          action.trans.doWith(webapp.threadLocalSessions, {()=>
-            chain.doFilter(req,res)
-          })
+          action.trans.doWith(webapp.threadLocalSessions, {()=> chain.doFilter(req,res)})
         case ActOnAsync(action) =>
           log.debug("ActOnAsync({})",action)
           chain.doFilter(req,res)
         case RedirectToSecure(path) =>
           log.debug("RedirectToSecure({})",path)
           response.sendRedirect(path)
-        case RedirectToAuthenticate(path)=>
-          log.debug("RedirectToAuthenticate({})",path)
+        case RedirectToAuthenticate(path,lastView) =>
+          log.debug("RedirectToAuthenticate({},{})",Array(path,lastView):_*)
+          request.getSession.setAttribute("last_view",lastView)
           response.sendRedirect(path)
         case DispatchTo(path) =>
           log.debug("DispatchTo({})",path)
@@ -63,16 +61,12 @@ class BrzyFilter extends SFilter {
           log.debug("NotAnAction({})",request.getRequestURI)
           chain.doFilter(req,res)
       }
-
     }
     catch {
       case e:Throwable =>
-        log.error(s"${e.getMessage}",e)
-      throw e
+        log.error(e.getMessage,e)
+        throw e
     }
-
-
-
   }
 
   /**

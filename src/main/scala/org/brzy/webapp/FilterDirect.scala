@@ -25,7 +25,7 @@ object RedirectToSecure {
   }
 }
 
-case class RedirectToAuthenticate(path:String) extends FilterDirect
+case class RedirectToAuthenticate(path:String, lastView:String = "") extends FilterDirect
 
 case class DispatchTo(path:String) extends FilterDirect
 

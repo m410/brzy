@@ -215,6 +215,11 @@
       <artifactId>commons-codec</artifactId>
       <version>1.7</version>
     </dependency>
+    <dependency>
+      <groupId>org.jasypt</groupId>
+      <artifactId>jasypt</artifactId>
+      <version>1.7</version>
+    </dependency>
 
 
     <!-- Test -->

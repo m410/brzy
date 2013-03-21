@@ -13,7 +13,9 @@
  */
 package org.brzy.webapp.application
 
-import javax.servlet.{DispatcherType, ServletContextEvent, ServletContextListener}
+import javax.servlet._
+
+import http.{HttpSessionAttributeListener, HttpSessionListener}
 import org.slf4j.LoggerFactory
 import ch.qos.logback.core.util.StatusPrinter
 import ch.qos.logback.classic.LoggerContext
@@ -41,12 +43,13 @@ class WebAppListener extends ServletContextListener {
     }
 
     val servletContext = servletContextEvent.getServletContext
-
     val env = servletContext.getInitParameter("brzy-env")
     log.info("Brzy Environment  : {}", env)
     val app = WebApp(env)
     servletContext.setAttribute("application", app)
     app.startup()
+
+    app.containerListeners.foreach(servletContext.addListener(_))
 
     val filter = servletContext.addFilter("BrzyFilter", "org.brzy.webapp.BrzyFilter")
     val dispatchTypes = util.EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD)

@@ -8,6 +8,7 @@ import controller.Controller
 import javax.servlet.http.HttpServletRequest
 import org.brzy.fab.mod.ViewModProvider
 import org.brzy.webapp.persistence.SessionFactory
+import java.util.EventListener
 
 
 /**
@@ -60,6 +61,8 @@ trait WebAppTrait {
   def viewProvider:ViewModProvider = new StaticViewProvider
 
   def threadLocalSessions:List[SessionFactory]
+
+  def containerListeners:Seq[EventListener]
 
   /**
    * Actions are lazily assembled once the application is started. The actions are collected

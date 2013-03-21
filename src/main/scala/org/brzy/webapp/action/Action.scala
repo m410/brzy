@@ -17,7 +17,7 @@ package org.brzy.webapp.action
 import args.{PrincipalRequest, ArgsBuilder, Arg, Principal}
 import HttpMethod._
 
-import org.brzy.webapp.controller.{Intercepted, Controller}
+import org.brzy.webapp.controller.{Authorization, Intercepted, Controller}
 
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import org.brzy.webapp.persistence.Transaction
@@ -57,19 +57,22 @@ trait Action extends Ordered[Action] {
   protected val pathExpression = Path(controller.basePath,path)
 
   def isAuthorized(principal:Principal):Boolean = {
-    if (constrs.find(_.isInstanceOf[Roles]).isDefined)
-      secureConstraints(constrs, principal)
-    else
-      secureConstraints(controller.constraints, principal)
-  }
-
-  protected def secureConstraints(constraints:Seq[Constraint], p:Principal) = {
-    constraints.forall(constraint => constraint match {
-      case r:Roles =>
-        if(p.isLoggedIn)
-          r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
+    controller  match {
+      case a:Authorization =>
+        if(principal.isLoggedIn)
+          areRolesAllowed(constrs, principal) && areRolesAllowed(controller.constraints, principal)
         else
           false
+      case _ =>
+        true
+    }
+
+  }
+
+  protected def areRolesAllowed(constraints:Seq[Constraint], p:Principal) = {
+    constraints.forall(constraint => constraint match {
+      case r:Roles =>
+        r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
       case _ =>
         true
     })
@@ -84,9 +87,17 @@ trait Action extends Ordered[Action] {
     pathExpression.isMatch(path) && methods.find(_.toString.equalsIgnoreCase(method)).isDefined
   }
 
-  def requiresSsl = {
-    constrs.find(_.isInstanceOf[Ssl]).isDefined || controller.constraints.find(_.isInstanceOf[Ssl]).isDefined
-  }
+  def requiresSsl = constrs.find({case Ssl(_) => true; case _ => false})  match {
+      case Some(ssl) => // action override controller
+        ssl.asInstanceOf[Ssl].usingSsl
+      case None =>
+        controller.constraints.find({case Ssl(_) => true; case _ => false})  match {
+          case Some(ssl) => // check controller
+            ssl.asInstanceOf[Ssl].usingSsl
+          case None =>
+            false
+        }
+    }
 
   def doService(request: HttpServletRequest, response: HttpServletResponse) {
     val args = ArgsBuilder(request,this)

@@ -69,7 +69,7 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
 
   def onDeleteToView:Direction = Redirect(s"/$basePath" )
 
-  override val actions = List(
+  override def actions = List(
     get("",  listAction _, View(viewBasePath + "list")) ,
     get("{id}", view _, View(viewBasePath + "view") ) ,
     get("create", create _, View(viewBasePath + "create")) ,

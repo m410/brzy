@@ -23,6 +23,7 @@ import org.brzy.webapp.action.Action
 import org.brzy.webapp.action.args.{PrincipalRequest, ArgsBuilder}
 import org.brzy.webapp._
 import controller.Controller
+import java.util.EventListener
 
 
 /**
@@ -36,7 +37,7 @@ import controller.Controller
  */
 class WebApp(val conf: WebAppConfig) extends WebAppTrait {
 
-  private val log = LoggerFactory.getLogger(getClass)
+  private[this] val log = LoggerFactory.getLogger(getClass)
 
   /**
    * The application class, hold information like the application name and version.
@@ -68,18 +69,14 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
     val method = request.getMethod
     val contentType = request.getContentType
     val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
-
-    log.debug("method:{}", method)
-    log.debug("contentType:{}", contentType)
-    log.debug("actionPath:{}", actionPath)
+    log.trace("uri:{}",request.getRequestURI)
 
     actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
       case Some(action) =>
-
-        if (useSsl && action.requiresSsl && !request.isSecure)
+        if (!request.isSecure && useSsl && action.requiresSsl )
           RedirectToSecure(request)
         else if (!action.isAuthorized(new PrincipalRequest(request)))
-          RedirectToAuthenticate("/auth")
+          RedirectToAuthenticate("/auth", request.getRequestURI)
         else if (actionPath.isServlet && !actionPath.isAsync && !action.async)
           ActOn(action)
         else if (actionPath.isServlet && actionPath.isAsync && action.async)
@@ -131,6 +128,15 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
   lazy val actions = {
     controllers.flatMap((ctl:Controller) => { ctl.actions}).sorted.toList
   }
+
+  /**
+   * Add any container event listeners to the application here.  The event listener must implement
+   * one of these interfaces.
+   *
+   * @see http://docs.oracle.com/javaee/6/api/javax/servlet/ServletContext.html#addListener(T)
+   * @return
+   */
+  def containerListeners:Seq[EventListener] = Seq.empty[EventListener]
 
   def startup(){}
 

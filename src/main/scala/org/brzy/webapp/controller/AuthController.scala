@@ -1,10 +1,11 @@
 package org.brzy.webapp.controller
 
 import org.brzy.webapp.action.response._
-import org.brzy.webapp.action.args.{Principal, Parameters}
+import org.brzy.webapp.action.args.{Cookies, Principal, Parameters}
 import org.slf4j.LoggerFactory
 import org.brzy.webapp.action.Constraint
 import org.brzy.webapp.persistence.DefaultTransaction
+import org.jasypt.util.text.BasicTextEncryptor
 
 
 /**
@@ -55,12 +56,64 @@ class AuthController[T <: Authenticated](val basePath: String) extends Controlle
    */
   def onLogoutRedirectTo = "/"
 
-  override val actions = List(
-    get("", ()=>Unit, View(loginForm)),
+  val credentialCookieName = "o2l_credentials"
+
+  val credentialCookieAge = 120*24*60*60
+
+  val credentialCookieKey:String = """MySecretKeyThatMustBeChanged"""
+
+  protected def decodeUserPass(cookieValue:String):(String,String) = {
+    val UsrPass(usr,pass) = encryptor.decrypt(cookieValue)
+    (usr,pass)
+  }
+
+  protected def encodeCookieValue(usr:String,pass:String) = {
+    encryptor.encrypt("user:"+usr+",password:"+pass)
+  }
+
+  protected val encryptor = {
+    val enc = new BasicTextEncryptor()
+    enc.setPassword(credentialCookieKey)
+    enc
+  }
+
+  protected def decodeCookie(cookieValue:String):(String,String) = {
+    val UsrPass(usr,pass) = encryptor.decrypt(cookieValue)
+    (usr,pass)
+  }
+
+  protected val UsrPass = """^user:(.*?),password:(.*)$""".r
+
+
+  override def actions = List(
+    get("", authPage _, View(loginForm)),
     post("submit", authorizeAction _, View(loginForm)),
     get("logout", logoutAction _, View(onLogoutRedirectTo))
   )
 
+  def authPage(p:Parameters, cookies:Cookies) = {
+      cookies.list.find(_.name == credentialCookieName)  match {
+        case Some(cookie) =>
+          val (userName, password) = decodeCookie(cookie.value)
+
+          login(userName,password) match {
+            case Some(auth) =>
+              p.session match {
+                case Some(session) => session.get("last_view") match {
+                  case Some(lastView) =>
+                    Redirect(lastView.asInstanceOf[String].replaceFirst("\\.brzy", ""))
+                  case _ =>
+                    Redirect("/")
+                }
+                case _ => Redirect("/")
+              }
+            case _ =>
+              Flash("Invalid User Name or Password")
+          }
+        case _ =>
+          View("/home/login")
+      }
+  }
 
 
   def logoutAction(principal: Principal) = {
