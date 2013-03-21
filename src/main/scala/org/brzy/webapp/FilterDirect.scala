@@ -19,9 +19,7 @@ case class RedirectToSecure(path:String) extends FilterDirect
 
 object RedirectToSecure {
   def apply(request:HttpServletRequest) = {
-    val buf = request.getRequestURL
-    val redirect = buf.replace(0, 4, "https").replace(buf.length() - 5, buf.length(),"").toString
-    new RedirectToSecure(redirect)
+    new RedirectToSecure(request.getRequestURL.replace(0, 4, "https").toString)
   }
 }
 

@@ -69,7 +69,7 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
     val method = request.getMethod
     val contentType = request.getContentType
     val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
-    log.trace("uri:{}",request.getRequestURI)
+    log.trace("url:{}",request.getRequestURL.toString)
 
     actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
       case Some(action) =>
