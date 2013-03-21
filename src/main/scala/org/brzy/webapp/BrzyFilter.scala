@@ -60,6 +60,9 @@ class BrzyFilter extends SFilter {
         case NotAnAction =>
           log.debug("NotAnAction({})",request.getRequestURI)
           chain.doFilter(req,res)
+        case Forbidden =>
+          log.debug("Forbidden({})",request.getRequestURI)
+          response.sendError(403,"Forbidden, Not Authorized to view this resource")
       }
     }
     catch {

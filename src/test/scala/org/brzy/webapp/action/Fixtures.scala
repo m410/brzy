@@ -40,7 +40,7 @@ trait Fixtures {
   }
 
   class PrincipalMock(n:String, r:Roles) extends Principal {
-    def isLoggedIn = true
+    def isLoggedIn = n != null
     def name = n
     def roles = r
   }

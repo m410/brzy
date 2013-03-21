@@ -56,17 +56,18 @@ trait Action extends Ordered[Action] {
 
   protected val pathExpression = Path(controller.basePath,path)
 
-  def isAuthorized(principal:Principal):Boolean = {
-    controller  match {
-      case a:Authorization =>
-        if(principal.isLoggedIn)
-          areRolesAllowed(constrs, principal) && areRolesAllowed(controller.constraints, principal)
-        else
-          false
-      case _ =>
-        true
-    }
+  def isAuthenticated(principal:Principal):Boolean = controller  match {
+    case a:Authorization =>
+      principal.isLoggedIn
+    case _ =>
+      true
+  }
 
+  def isAuthorized(principal:Principal):Boolean = controller  match {
+    case a:Authorization =>
+      areRolesAllowed(constrs, principal) && areRolesAllowed(controller.constraints, principal)
+    case _ =>
+      true
   }
 
   protected def areRolesAllowed(constraints:Seq[Constraint], p:Principal) = {

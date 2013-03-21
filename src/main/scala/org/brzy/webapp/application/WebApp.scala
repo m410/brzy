@@ -69,14 +69,26 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
     val method = request.getMethod
     val contentType = request.getContentType
     val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
-    log.trace("url:{}",request.getRequestURL.toString)
+
+    if (log.isTraceEnabled) {
+      val ports = Array(
+        request.getRequestURL.toString,
+        request.getRemotePort.toString,
+        request.getLocalPort.toString,
+        request.getServerPort.toString)
+
+      log.trace("url({}), ports(remote:{},local:{},server:{})", ports:_*)
+    }
+
 
     actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
       case Some(action) =>
         if (!request.isSecure && useSsl && action.requiresSsl )
           RedirectToSecure(request)
+        else if (!action.isAuthenticated(new PrincipalRequest(request)))
+          RedirectToAuthenticate(s"${request.getContextPath}/auth", request.getRequestURI)
         else if (!action.isAuthorized(new PrincipalRequest(request)))
-          RedirectToAuthenticate("/auth", request.getRequestURI)
+          Forbidden
         else if (actionPath.isServlet && !actionPath.isAsync && !action.async)
           ActOn(action)
         else if (actionPath.isServlet && actionPath.isAsync && action.async)
@@ -85,7 +97,6 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
           DispatchTo(actionPath.path + ".brzy_async")
         else
           DispatchTo(actionPath.path + ".brzy")
-
       case _ =>
         NotAnAction
     }

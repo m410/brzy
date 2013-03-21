@@ -19,7 +19,8 @@ case class RedirectToSecure(path:String) extends FilterDirect
 
 object RedirectToSecure {
   def apply(request:HttpServletRequest) = {
-    new RedirectToSecure(request.getRequestURL.replace(0, 4, "https").toString)
+    val url = request.getRequestURL.replace(0, 4, "https")
+    new RedirectToSecure(url.toString)
   }
 }
 
@@ -28,3 +29,5 @@ case class RedirectToAuthenticate(path:String, lastView:String = "") extends Fil
 case class DispatchTo(path:String) extends FilterDirect
 
 case object NotAnAction  extends FilterDirect
+
+case object Forbidden extends FilterDirect
