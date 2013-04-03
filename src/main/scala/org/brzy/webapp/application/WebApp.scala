@@ -49,6 +49,10 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
    */
   val useSsl = conf.useSsl
 
+  def ignoredResources = Seq(
+    ".jpg",".jpeg",".gif",".png",".css",".js",".eot",".svg",".ttf",".htc"
+  )
+
   /**
    * The services for the application.  It's for things like jms listeners and cron schedulers.
    */
@@ -70,35 +74,30 @@ class WebApp(val conf: WebAppConfig) extends WebAppTrait {
     val contentType = request.getContentType
     val actionPath = ArgsBuilder.parseActionPath(request.getRequestURI, request.getContextPath)
 
-    if (log.isTraceEnabled) {
-      val ports = Array(
-        request.getRequestURL.toString,
-        request.getRemotePort.toString,
-        request.getLocalPort.toString,
-        request.getServerPort.toString)
+    if (ignoredResources.find(request.getRequestURI.endsWith(_)).isDefined)
+      NotAnAction
+    else {
+      log.trace("url({})", request.getRequestURI)
 
-      log.trace("url({}), ports(remote:{},local:{},server:{})", ports:_*)
-    }
-
-
-    actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
-      case Some(action) =>
-        if (!request.isSecure && useSsl && action.requiresSsl )
-          RedirectToSecure(request)
-        else if (!action.isAuthenticated(new PrincipalRequest(request)))
-          RedirectToAuthenticate(s"${request.getContextPath}/auth", request.getRequestURI)
-        else if (!action.isAuthorized(new PrincipalRequest(request)))
-          Forbidden
-        else if (actionPath.isServlet && !actionPath.isAsync && !action.async)
-          ActOn(action)
-        else if (actionPath.isServlet && actionPath.isAsync && action.async)
-          ActOnAsync(action)
-        else if (action.async)
-          DispatchTo(actionPath.path + ".brzy_async")
-        else
-          DispatchTo(actionPath.path + ".brzy")
-      case _ =>
-        NotAnAction
+      actions.find(_.isMatch(method, contentType, actionPath.path)) match  {
+        case Some(action) =>
+          if (!request.isSecure && useSsl && action.requiresSsl )
+            RedirectToSecure(request)
+          else if (!action.isAuthenticated(new PrincipalRequest(request)))
+            RedirectToAuthenticate(s"${request.getContextPath}/auth", request.getRequestURI)
+          else if (!action.isAuthorized(new PrincipalRequest(request)))
+            Forbidden
+          else if (actionPath.isServlet && !actionPath.isAsync && !action.async)
+            ActOn(action)
+          else if (actionPath.isServlet && actionPath.isAsync && action.async)
+            ActOnAsync(action)
+          else if (action.async)
+            DispatchTo(actionPath.path + ".brzy_async")
+          else
+            DispatchTo(actionPath.path + ".brzy")
+        case _ =>
+          NotAnAction
+      }
     }
   }
 

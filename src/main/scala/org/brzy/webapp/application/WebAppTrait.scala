@@ -33,6 +33,8 @@ trait WebAppTrait {
    */
   val useSsl:Boolean
 
+  def ignoredResources:Seq[String]
+
   /**
    * The services for the application.  It's for things like jms listeners and cron schedulers.
    */
