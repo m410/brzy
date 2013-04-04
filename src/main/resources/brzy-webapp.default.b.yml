@@ -47,12 +47,11 @@ dependencies:
   - {conf: compile, org: org.brzy.webapp, name: brzy-webapp, rev: "${project.version}", transitive: false}
   - {conf: compile, org: org.brzy.fab, name: fab-configuration, rev: "${fab-configuration-version}", transitive: false}
   - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}"}
-#  - {conf: compile, org: com.google.guava, name: guava, rev: "r06", transitive: false}
   - {conf: compile, org: org.yaml, name: snakeyaml, rev: "1.7"}
   - {conf: compile, org: commons-lang, name: commons-lang, rev: "2.5"}
-  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: "1.0.9", transitive: false}
-  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: "1.0.9", transitive: false}
-  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: "1.7.2",transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-classic, rev: 1.0.11, transitive: false}
+  - {conf: compile, org: ch.qos.logback, name: logback-core, rev: 1.0.11, transitive: false}
+  - {conf: compile, org: org.slf4j, name: slf4j-api, rev: 1.7.5,transitive: false}
   - {conf: test, org: org.scalatest, name: scalatest_2.10, rev: 1.9.1, transitive: false}
 
 web_xml:
