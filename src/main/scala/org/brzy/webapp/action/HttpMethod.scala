@@ -15,5 +15,6 @@ object HttpMethod extends Enumeration {
   val DELETE = Value("DELETE")
   val TRACE = Value("TRACE")
   val CONNECT = Value("CONNECT")
+  val PATCH = Value("PATCH")
 
 }

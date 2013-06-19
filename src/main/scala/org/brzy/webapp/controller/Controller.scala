@@ -61,6 +61,33 @@ trait Controller extends Ordered[Controller] {
     Action(expr, action, transaction, Seq(POST), view, constraints, false, this)
   }
 
+  def put[F <: AnyRef:Manifest](
+          expr: String,
+          action: F,
+          view: Direction = NoView,
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
+          transaction: Transaction = transaction): Action = {
+    Action(expr, action, transaction, Seq(PUT), view, constraints, false, this)
+  }
+
+  def patch[F <: AnyRef:Manifest](
+          expr: String,
+          action: F,
+          view: Direction = NoView,
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
+          transaction: Transaction = transaction): Action = {
+    Action(expr, action, transaction, Seq(PATCH), view, constraints, false, this)
+  }
+
+  def delete[F <: AnyRef:Manifest](
+          expr: String,
+          action: F,
+          view: Direction = NoView,
+          constraints: Seq[Constraint] = Seq.empty[Constraint],
+          transaction: Transaction = transaction): Action = {
+    Action(expr, action, transaction, Seq(DELETE), view, constraints, false, this)
+  }
+
   def get[F <: AnyRef:Manifest](
           expr: String,
           action: F,
