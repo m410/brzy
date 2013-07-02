@@ -46,6 +46,10 @@ trait Dao[T <: {def id: PK}, PK] {
    */
   def load(id: String)(implicit pk:Manifest[PK],t:Manifest[T]): T
 
+  def defaultSort = "id"
+
+  def defaultOrder = "desc"
+
   /**
    * This implements basic paging.  It does not sort or order the returned list.  To do that
    * you should implement your own list function.
@@ -53,7 +57,7 @@ trait Dao[T <: {def id: PK}, PK] {
    * @param size the size of the dataset to return
    * @param offset the beginning of the dataset
    */
-  def list(size: Int = 50, offset: Int = 0)(implicit t:Manifest[T]): List[T]
+  def list(size: Int = 50, offset: Int = 0, sort:String = defaultSort, order:String = defaultOrder)(implicit t:Manifest[T]): List[T]
 
   /**
    * Returns a count of the number of entities in the data store.

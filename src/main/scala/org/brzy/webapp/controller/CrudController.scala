@@ -70,7 +70,7 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
   def onDeleteToView:Direction = Redirect(s"/$basePath" )
 
   override def actions = List(
-    get("",  table _, View(viewBasePath + "list")) ,
+    get("",  list _, View(viewBasePath + "list")) ,
     get("{id}", view _, View(viewBasePath + "view") ) ,
     get("create", create _, View(viewBasePath + "create")) ,
     post("save", save _, View(viewBasePath + "create")) ,
@@ -79,10 +79,16 @@ abstract class CrudController[PK:Manifest, E<:{def id:PK}:Manifest](val basePath
     post("{id}/delete", delete _, View(viewBasePath + "list"))
   )
 
-  def table(p:Parameters) = {
+  def defaultListSort = "id"
+  def defaultListOrder = "desc"
+  def defaultListLimit = "50"
+
+  def list(p:Parameters) = {
     val start = p.requestAndUrl.getOrElse("start","0").toInt
-    val limit = p.requestAndUrl.getOrElse("size","50").toInt
-    Model("table" -> Table(store.list(limit,start), start, limit, store.count.toInt))
+    val limit = p.requestAndUrl.getOrElse("size", defaultListLimit).toInt
+    val sort = p.requestAndUrl.getOrElse("sort", defaultListSort)
+    val order = p.requestAndUrl.getOrElse("order", defaultListOrder)
+    Model("table" -> Table(store.list(limit,start, sort, order), start, limit, store.count, sort, order))
   }
 
   def view(p: Parameters, r: Principal) = entityName -> store(toId(p("id")))

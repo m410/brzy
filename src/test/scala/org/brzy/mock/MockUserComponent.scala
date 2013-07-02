@@ -27,7 +27,7 @@ trait MockUserComponent {
 
     def make(map:Map[String,AnyRef])(implicit m: Manifest[MockUser]) = new MockUser
 
-    def list(size: Int = 50, offset: Int = 0) = List(new MockUser)
+    def list(limit: Int, offset: Int, sort: String, order: String) = List(new MockUser)
 
     def count = 1
 

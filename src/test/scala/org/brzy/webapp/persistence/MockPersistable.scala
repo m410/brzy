@@ -27,7 +27,7 @@ class MockPersistable[E<:{def id:PK},PK] extends Dao[E,PK] {
 
   def load(id: String)(implicit pk: Manifest[PK], t: Manifest[E]) = null.asInstanceOf[E]
 
-  def list(size: Int, offset: Int)(implicit t: Manifest[E]) = List.empty[E]
+  def list(size: Int, offset: Int, sort: String, order: String)(implicit t: Manifest[E]) = List.empty[E]
 
   def count(implicit t: Manifest[E]) = 1
 

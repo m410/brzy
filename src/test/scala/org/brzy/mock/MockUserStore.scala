@@ -23,7 +23,7 @@ trait MockUserStore extends Dao[MockUser,Long]{
 
   def load(id: String)(implicit pk: Manifest[Long], t: Manifest[MockUser]) = new MockUser
 
-  def list(size: Int, offset: Int)(implicit t: Manifest[MockUser]) = List(new MockUser)
+  def list(size: Int = 0, offset: Int  = 0, sort:String = "", order:String = "")(implicit t: Manifest[MockUser]) = List(new MockUser)
 
   def count(implicit t: Manifest[MockUser]) = 1
 
