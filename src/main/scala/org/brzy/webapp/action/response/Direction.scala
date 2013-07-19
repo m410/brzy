@@ -14,7 +14,7 @@
 package org.brzy.webapp.action.response
 
 
-import org.brzy.webapp.action.args.{PostBodyRequest, PostBody, ParametersRequest, Parameters}
+import org.brzy.webapp.action.args.{PostBodyRequest, PostBody}
 import org.brzy.webapp.persistence.SessionFactory
 import org.brzy.webapp.persistence.Transaction
 import org.brzy.webapp.action.{Action, Parser}

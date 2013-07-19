@@ -58,7 +58,7 @@ class BrzyFilter extends SFilter {
           log.debug("DispatchTo({})",path)
           req.getRequestDispatcher(path).forward(req, res)
         case NotAnAction =>
-          log.debug("NotAnAction({})",request.getRequestURI)
+          log.trace("NotAnAction({})",request.getRequestURI)
           chain.doFilter(req,res)
         case Forbidden =>
           log.debug("Forbidden({})",request.getRequestURI)
