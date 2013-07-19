@@ -16,4 +16,4 @@ dependencies:
   - {conf: compile, org: org.hibernate, name: hibernate-validator, rev: "4.0.2.GA", transitive: false}
   - {conf: compile, org: javax.validation, name: validation-api, rev: "1.0.0.GA", transitive: false}
   - {conf: compile, org: javax.xml.bind, name: jaxb-api, rev: "2.1", transitive: false}
-  - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}"}
+  - {conf: compile, org: org.brzy.beanwrap, name: beanwrap, rev: "${beanwrap-version}", transitive: false}

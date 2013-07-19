@@ -11,8 +11,8 @@ config_class: org.brzy.mock.MockModConfig
 provider_class: org.brzy.mock.MockModProvider
 
 dependencies:
-  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2"}
-  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.9"}
+  - {conf: compile, org: org.fusesource.scalate, name: scalate-core, rev: "1.2", transitive: false}
+  - {conf: compile, org: org.brzy, name: brzy-scalate, rev: "0.9", transitive: false}
 
 repositories:
   - id: "fusesource.m2"
