@@ -6,15 +6,15 @@
   <groupId>org.brzy.webapp</groupId>
   <artifactId>brzy-webapp</artifactId>
   <name>Brzy WebApp</name>
-  <version>0.11.0-SNAPSHOT</version>
+  <version>0.11.0</version>
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <brzy-scalate-version>0.11.0-SNAPSHOT</brzy-scalate-version>
-    <brzy-validator-version>0.3-SNAPSHOT</brzy-validator-version>
-    <beanwrap-version>0.3-SNAPSHOT</beanwrap-version>
-    <fab-configuration-version>0.11-SNAPSHOT</fab-configuration-version>
+    <brzy-scalate-version>0.11.0</brzy-scalate-version>
+    <brzy-validator-version>0.3</brzy-validator-version>
+    <beanwrap-version>0.3</beanwrap-version>
+    <fab-configuration-version>0.11</fab-configuration-version>
   </properties>
 
   <profiles>
