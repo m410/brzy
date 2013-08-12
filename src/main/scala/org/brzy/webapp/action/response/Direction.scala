@@ -13,24 +13,38 @@
  */
 package org.brzy.webapp.action.response
 
-import org.scalastuff.scalabeans.Preamble._
-import xml.Elem
+
+import org.brzy.webapp.action.args.{PostBodyRequest, PostBody}
+import org.brzy.webapp.persistence.SessionFactory
+import org.brzy.webapp.persistence.Transaction
+import org.brzy.webapp.action.{Action, Parser}
+
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import javax.servlet.{AsyncContext, AsyncListener}
+
+import net.liftweb.json._
+
 import java.io.OutputStream
-import com.twitter.json.{Json=>tJson}
-import org.brzy.webapp.action.Parser
+
+import scala.reflect.runtime.universe._
+import scala.reflect._
+import scala.reflect.runtime.{currentMirror=>cm}
+import xml.Elem
+
 
 /**
- * Document Me..
+ * What direction to send the client request too.  Can be a vew, redirect, forward, etc.
  * 
  * @author Michael Fortin
  */
 sealed trait Direction extends Response
 
+case object NoView extends Direction
 
 /**
  * Override the default view.
  */
-case class View(path: String) extends Direction
+case class View(path: String, contentType:String = "text/html; charset=utf-8") extends Direction
 
 /**
  * Forward to another action without sending a redirect to the client.
@@ -52,18 +66,24 @@ case class Redirect(path: String) extends Direction
 /**
  * Return xml as the body of the response.
  */
-case class Xml[T<:AnyRef:Manifest](t: T, contentType: String = "text/xml") extends Direction with Parser {
+case class Xml[T<:AnyRef:TypeTag:ClassTag](t: T, contentType: String = "text/xml") extends Direction with Parser {
 
-  def parse = {
-    val descriptor = descriptorOf[T]
-    val map = descriptor.properties.map(p=>{
-      p.name -> descriptor.get(t,p.name)
+  def parse =  {
+    val tag = typeOf[T]
+    val map = tag.declarations.filter((d:Symbol)=>{
+      d match {
+        case s:MethodSymbol =>
+          s.isGetter
+        case _ => false
+      }
+    }).map(p=>{
+      p.asMethod.name.toString -> cm.reflect(t).reflectMethod(p.asMethod)()
     }).toMap
     def node(name: String, elem: Elem) = elem.copy(label = name)
     val tmp = <class>
       {map.map(p => node({p._1}, <property>{p._2}</property>))}
     </class>
-    node(t.getClass.getSimpleName, tmp)
+    node(tag.typeSymbol.name.toString, tmp)
   }.toString()
 }
 
@@ -102,21 +122,12 @@ case class Stream(io: (OutputStream)=>Unit, contentType: String) extends Directi
  * @param target The object to serialize into json
  * @param contentType the content type header value to set.
  */
-case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json") extends Direction with Parser {
+case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "application/json")
+        extends Direction with Parser {
 
-  def parse = target match {
-    case s: String =>
-      s
-    case l: List[_] =>
-      tJson.build(l).toString()
-    case m: Map[_, _] =>
-      tJson.build(m).toString()
-    case _ =>
-      val descriptor = descriptorOf[T]
-      val map = descriptor.properties.map(p=>{
-        p.name -> descriptor.get(target,p.name)
-      }).toMap
-      tJson.build(map).toString()
+  def parse = {
+    implicit val formats = Serialization.formats(NoTypeHints)
+    Serialization.write(target)
   }
 }
 
@@ -127,30 +138,56 @@ case class Json[T<:AnyRef:Manifest](target: T, contentType: String = "applicatio
  * @param target The target object to serialize into json.
  * @param contentType Defaults to application/json, but can be overriden.
  */
-case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json") extends Direction with Parser {
+case class Jsonp[T<:AnyRef:Manifest](callback: String, target: T, contentType: String = "application/json")
+        extends Direction with Parser {
+
   def parse = {
+    implicit val formats = Serialization.formats(NoTypeHints)
     val sb = new StringBuilder()
     sb.append(callback)
     sb.append("(")
-    sb.append(target match {
-      case s: String =>
-        s
-      case l: List[_] =>
-        tJson.build(l).toString()
-      case m: Map[_, _] =>
-        tJson.build(m).toString()
-      case _ =>
-        val descriptor = descriptorOf[T]
-        val map = descriptor.properties.map(p=>{
-          p.name -> descriptor.get(target,p.name)
-        }).toMap
-        tJson.build(map).toString()
-    })
+    sb.append(Serialization.write(target))
     sb.append(")")
     sb.toString()
   }
 }
 
+/**
+ *
+ * @param actOn
+ * @param timeout
+ * @param listener
+ *
+ * @author Michael Fortin
+ */
+case class Async(actOn: (PostBody) => AnyRef, timeout: Int = 0, listener: AsyncListener = new BlankAsyncListener)
+        extends Direction {
+
+
+  /**
+   *
+   * @param threadLocalSessions
+   * @param trans
+   * @param asyncContext
+   * @return
+   */
+  def run(action:Action, threadLocalSessions: List[SessionFactory], trans: Transaction, asyncContext: AsyncContext) = {
+    asyncContext.addListener(listener)
+    asyncContext.setTimeout(timeout)
+
+    new Runnable {
+      def run() {
+        trans.doWith(threadLocalSessions, { () =>
+          val request = asyncContext.getRequest.asInstanceOf[HttpServletRequest]
+          val response = asyncContext.getResponse.asInstanceOf[HttpServletResponse]
+          val result = actOn(new PostBodyRequest(request))
+          response.getOutputStream.println("something to say")
+          ResponseHandler(action, result, request, response)
+        })
+      }
+    }
+  }
+}
 /**
  * Return an error to the client, eg. 403.
  */

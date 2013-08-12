@@ -13,13 +13,11 @@
  */
 package org.brzy.webapp.action
 
-import HttpMethod._
 
 /**
  * Set constraints upon actions to refine the action selection process.
  * 
  * @author Michael Fortin
- * @version $Id: $
  */
 trait Constraint
 
@@ -32,17 +30,10 @@ case class Roles(allowed:String*) extends Constraint {
 }
 
 /**
- * Defines the allowed Http methods ('GET','POST',etc) that this constraint is assigned too.
- */
-case class HttpMethods(allowed:HttpMethod*) extends Constraint {
-  override def toString = "HttpMethods("+allowed.mkString(",")+")"
-}
-
-/**
  * This constraint will define wither the action must be called while in a secure request over an
  * SSL socket.
  */
-case class Secure(must:Boolean = true) extends Constraint
+case class Ssl(usingSsl:Boolean = true) extends Constraint
 
 /**
  * Defines the allowed Content type that this action accepts.  For example a content type of

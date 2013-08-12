@@ -30,8 +30,7 @@ trait Principal  extends Arg {
 /**
  * Document me..
  */
-@serializable
-case class PrincipalSession(name:String, roles:Array[String]) {
+case class PrincipalSession(name:String, roles:Array[String]) extends Serializable {
   override def toString = "PrincipalSession("+name+", "+roles.mkString(",")+")"
 }
 

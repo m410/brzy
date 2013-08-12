@@ -16,12 +16,12 @@ package org.brzy.webapp.action.args
 import org.apache.commons.fileupload.FileItem
 import org.apache.commons.fileupload.disk.DiskFileItemFactory
 import io.Source
-import xml.{XML, Elem}
-import com.twitter.json.{Json => tJson}
+
 import org.apache.commons.fileupload.servlet.ServletFileUpload
 import javax.servlet.http.HttpServletRequest
 import collection.JavaConversions._
 import java.io.File
+
 
 /**
  * Document Me..
@@ -31,10 +31,6 @@ import java.io.File
 trait PostBody extends Arg {
   def asText: String
 
-  def asXml: Elem
-
-  def asJson: AnyRef
-
   def parameters: Map[String, String]
 
   def paramAsFile(name: String): FileItem
@@ -43,16 +39,12 @@ trait PostBody extends Arg {
 /**
  * Document me..
  */
-class PostBodyRequest protected(request: HttpServletRequest,
+class PostBodyRequest (request: HttpServletRequest,
         val maxSize:Long = 10000000,
         val tempDir:File = new File(util.Properties.tmpDir),
         val sizeThreshold:Int = DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD) extends PostBody {
 
   def asText = Source.fromInputStream(request.getInputStream).mkString
-
-  def asXml = XML.load(request.getInputStream)
-
-  def asJson = tJson.parse(asText).asInstanceOf[AnyRef]
 
 
   private lazy val fileItems = {
@@ -71,15 +63,22 @@ class PostBodyRequest protected(request: HttpServletRequest,
   /**
    * Get non-file request parameters.
    */
-  def parameters: Map[String, String] = fileItems.filter({
-    case f: FileItem => {
-      f.isFormField
+  def parameters: Map[String, String] = {
+    if (ServletFileUpload.isMultipartContent(request)) {
+      fileItems.filter({
+        case f: FileItem => {
+          f.isFormField
+        }
+      }).map({
+        case f: FileItem => {
+          f.getFieldName -> f.getString
+        }
+      }).toMap
     }
-  }).map({
-    case f: FileItem => {
-      f.getFieldName -> f.getString
+    else {
+      request.getParameterMap.map(m=>m._1 -> m._2(0)).toMap
     }
-  }).toMap
+  }
 
 
   /**
@@ -103,17 +102,26 @@ class PostBodyRequest protected(request: HttpServletRequest,
   }
 
   override def toString = {
-    val a = fileItems.map({
-      case f: FileItem => {
-        if (f.isFormField)
-          f.getFieldName -> f.getString
-        else
-          f.getFieldName -> "<File>"
+    val embeddedFiles = {
+      if (ServletFileUpload.isMultipartContent(request)) {
+        fileItems.map({
+          case f: FileItem => {
+            if (f.isFormField)
+              f.getFieldName -> f.getString
+            else
+              f.getFieldName -> "<File>"
+          }
+        }).toMap
       }
-    }).toMap
+      else {
+        Map.empty[String,String]
+      }
+    }
+
     new StringBuilder()
-            .append("PostBody")
-            .append(a.mkString("[", ", ", "]"))
+            .append("PostBody(")
+            .append(embeddedFiles.mkString("[", ", ", "]"))
+            .append(")")
             .toString()
   }
 }

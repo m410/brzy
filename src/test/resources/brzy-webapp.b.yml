@@ -6,9 +6,9 @@ application:
   name: Test app
   author: Fred
   description: Some Description
-  org: &group org.brzy.webapp.mock
+  org: &group org.brzy.mock
   artifact_id: sample-jpa
-  application_class: org.brzy.webapp.mock.MockWebApp
+  application_class: org.brzy.mock.MockWebApp
   properties:
     test: value
   webapp_context: mainapp

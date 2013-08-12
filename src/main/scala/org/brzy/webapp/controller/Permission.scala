@@ -24,7 +24,7 @@ import org.brzy.webapp.action.args.PrincipalSession
  *
  * @author Michael Fortin
  */
-trait Permission[T<:Identity] {
+trait Permission[T<:Authenticated] {
 
   // TODO document me
   /**

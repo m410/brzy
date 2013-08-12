@@ -14,12 +14,15 @@
 package org.brzy.webapp.action
 
 
-import args.{Arg, Principal}
-import org.slf4j.LoggerFactory
+import args.{PrincipalRequest, ArgsBuilder, Arg, Principal}
+import HttpMethod._
 
-import org.brzy.webapp.controller._
+import org.brzy.webapp.controller.{Authorization, Intercepted, Controller}
 
-import javax.servlet.http.{HttpServletRequest => Request}
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import org.brzy.webapp.persistence.Transaction
+import response.{ResponseHandler, Direction}
+
 
 /**
  * An action is an entry point into the application.  A controller will have one or more actions.
@@ -34,212 +37,178 @@ import javax.servlet.http.{HttpServletRequest => Request}
  * @author Michael Fortin
  */
 trait Action extends Ordered[Action] {
-  def actionPath: String
 
-  /**
-   * A list of arguments types needed to execute the action.  The argument types must be a subclass
-   * of Args.
-   */
-  def argTypes: List[AnyRef]
+  def path: String
 
-  /**
-   * The return type of the action.  The return type must be a subclass of either Data or
-   * Direction.
-   */
-  def returnType: AnyRef
+  def trans: Transaction
 
-  def execute(args: Array[Arg], principal: Principal): AnyRef
+  def constrs: Seq[Constraint]
 
-  /**
-   * The reference to the parent controller
-   */
+  def view: Direction
+
   def controller: Controller
 
-  /**
-   * The default view to render if not explicitly set in the return types.
-   */
-  def view: String
+  def async:Boolean
 
-  /**
-   * A list of constraints to be applied to the action.  A constraint will allow or disallow the
-   * execution of the action.
-   */
-  def constraints: List[Constraint]
+  def methods:Seq[HttpMethod]
 
-  /**
-   * The RESTful like path called by a client to execute this action.
-   */
-  val path = Path(controller.basePath, actionPath)
+  def argTypes:Array[Class[_]]
 
-  /**
-   * For secure actions, this is called to test the users permission to execute it.
-   */
-  def isAuthorized(principal: Principal) = {
-    if (constraints.find(_.isInstanceOf[Roles]).isDefined)
-      secureConstraints(constraints, principal)
-    else
-      secureConstraints(controller.constraints, principal)
+  protected val pathExpression = Path(controller.basePath,path)
+
+  def isAuthenticated(principal:Principal):Boolean = controller  match {
+    case a:Authorization =>
+      principal.isLoggedIn
+    case _ =>
+      true
   }
 
-
-  def isConstrained(r:Request) = {
-    val y = nonSecureConstraints(constraints,r)
-    val x = nonSecureConstraints(controller.constraints,r)
-    y || x
+  def isAuthorized(principal:Principal):Boolean = controller  match {
+    case a:Authorization =>
+      areRolesAllowed(constrs, principal) && areRolesAllowed(controller.constraints, principal)
+    case _ =>
+      true
   }
 
-  protected def nonSecureConstraints(constraints:List[Constraint], request:Request) = {
-    !constraints.forall({
-      case h:HttpMethods =>
-        val methodName = HttpMethod.withName(request.getMethod.toUpperCase)
-        h.allowed.find(_ == methodName).isDefined
-      case c:ContentTypes =>
-        c.allowed.find(_.toLowerCase == request.getContentType.toLowerCase).isDefined
-      case Secure(allowed) =>
-        true // ignored
-      case r:Roles =>
-        true // ignored
-      case _ =>
-        false // never happen, here to prevent compiler warning
-    })
-  }
-
-  protected def secureConstraints(constraints:List[Constraint], p:Principal) = {
+  protected def areRolesAllowed(constraints:Seq[Constraint], p:Principal) = {
     constraints.forall(constraint => constraint match {
       case r:Roles =>
-        if(p.isLoggedIn)
-          r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
-        else
-          false
+        r.allowed.find(x=>p.roles.allowed.contains(x)).isDefined
       case _ =>
         true
     })
   }
 
-  def requiresSsl = {
-    constraints.find(_.isInstanceOf[Secure]).isDefined || controller.constraints.find(_.isInstanceOf[Secure]).isDefined
+  def paramsFor(uri:String):Map[String,String] = {
+    val values = pathExpression.extractParameterValues(uri)
+    pathExpression.parameterNames.zip(values).toMap
   }
 
-  /**
-   * Determines if this action requires authentication or not.
-   */
-  def isSecured = controller.isInstanceOf[Authorization]
+  def isMatch(method: String, contentType: String, path: String) = {
+    pathExpression.isMatch(path) && methods.find(_.toString.equalsIgnoreCase(method)).isDefined
+  }
 
-  /**
-   * the default view to display if needed.
-   */
-  val defaultView = {
-    if (view.startsWith("/")) {
-      view
+  def requiresSsl = constrs.find({case Ssl(_) => true; case _ => false})  match {
+      case Some(ssl) => // action override controller
+        ssl.asInstanceOf[Ssl].usingSsl
+      case None =>
+        controller.constraints.find({case Ssl(_) => true; case _ => false})  match {
+          case Some(ssl) => // check controller
+            ssl.asInstanceOf[Ssl].usingSsl
+          case None =>
+            false
+        }
     }
-    else {
-      val clazz = controller.getClass
-      val folder: String =
-        if (clazz.getSimpleName.indexOf("Controller") == -1)
-          clazz.getSimpleName
-        else
-          clazz.getSimpleName.substring(0, clazz.getSimpleName.indexOf("Controller"))
 
-      new StringBuilder()
-              .append("/")
-              .append(folder.substring(0, 1).toLowerCase)
-              .append(folder.substring(1))
-              .append("/")
-              .append(view)
-              .toString()
-    }
+  def doService(request: HttpServletRequest, response: HttpServletResponse) {
+    val args = ArgsBuilder(request,this)
+    val principal = new PrincipalRequest(request)
+    ResponseHandler(this, execute(args, principal), request, response)
   }
 
-  protected def toClassList(t: List[_]) = {
-    t.map(t => {
-      if (t.toString.endsWith(".type"))
-        Class.forName(t.toString.substring(0, t.toString.length - 5))
-      else
-        Class.forName(t.toString)
-    })
-  }
+  def execute(args: Array[Arg], principal: Principal):AnyRef
 
-  override def compare(that: Action): Int = path.compare(that.path)
+  def compare(that: Action) = path.compareTo(that.path)
 
   override def toString = {
     val buffer = new StringBuilder().
-          append("Action[").append(controller.basePath).
-          append(", ").append(actionPath)
+            append("Action[").append(controller.basePath).
+            append(", ").append(path)
 
-    if (!constraints.isEmpty)
-      buffer.append(", ").append(constraints)
-    
+    if (!constrs.isEmpty)
+      buffer.append(", ").append(constrs)
+
     buffer.append("]")
     buffer.toString()
-  }
-}
+  }}
 
 /**
  * Factory methods for constructing Actions
  */
 object Action {
-  private[this] val log = LoggerFactory.getLogger(getClass)
 
   /**
    * Construct an action depending on how many arguments there are.
    */
-  def apply[F <: AnyRef](path: String, view: String, action: F, constraints: Constraint*)
-          (implicit m: Manifest[F], controller: Controller): Action = {
+  def apply[F <: AnyRef:Manifest](
+          path: String,
+          action: F,
+          transaction: Transaction,
+          methods:Seq[HttpMethod],
+          view:Direction,
+          constraints: Seq[Constraint],
+          async:Boolean,
+          controller:Controller): Action = {
 
     if (action.isInstanceOf[() => _]) {
-      val t1 = m.typeArguments(0)
+      val t1 = manifest[F].typeArguments(0)
       new Action0[t1.type, () => t1.type](
         path,
         view,
         action.asInstanceOf[() => t1.type],
-        controller,
-        constraints.toList)
+        transaction,
+        methods,
+        constraints,
+        async,
+        controller)
     }
     else if (action.isInstanceOf[(_) => _]) {
-      val t2 = m.typeArguments(1)
-      val t1 = m.typeArguments(0)
+      val t2 = manifest[F].typeArguments(1)
+      val t1 = manifest[F].typeArguments(0)
       new Action1[t1.type, t2.type, (t1.type) => t2.type](
         path,
         view,
         action.asInstanceOf[(t1.type) => t2.type],
-        controller,
-        constraints.toList)
+        transaction,
+        methods,
+        constraints,
+        async,
+        controller)
     }
     else if (action.isInstanceOf[(_, _) => _]) {
-      val t3 = m.typeArguments(2)
-      val t2 = m.typeArguments(1)
-      val t1 = m.typeArguments(0)
+      val t3 = manifest[F].typeArguments(2)
+      val t2 = manifest[F].typeArguments(1)
+      val t1 = manifest[F].typeArguments(0)
       new Action2[t1.type, t2.type, t3.type, (t1.type, t2.type) => t3.type](
         path,
         view,
         action.asInstanceOf[(t1.type, t2.type) => t3.type],
-        controller,
-        constraints.toList)
+        transaction,
+        methods,
+        constraints,
+        async,
+        controller)
     }
     else if (action.isInstanceOf[(_, _, _) => _]) {
-      val t4 = m.typeArguments(3)
-      val t3 = m.typeArguments(2)
-      val t2 = m.typeArguments(1)
-      val t1 = m.typeArguments(0)
+      val t4 = manifest[F].typeArguments(3)
+      val t3 = manifest[F].typeArguments(2)
+      val t2 = manifest[F].typeArguments(1)
+      val t1 = manifest[F].typeArguments(0)
       new Action3[t1.type, t2.type, t3.type, t4.type, (t1.type, t2.type, t3.type) => t4.type](
         path,
         view,
         action.asInstanceOf[(t1.type, t2.type, t3.type) => t4.type],
-        controller,
-        constraints.toList)
+        transaction,
+        methods,
+        constraints,
+        async,
+        controller)
     }
     else if (action.isInstanceOf[(_, _, _, _) => _]) {
-      val t5 = m.typeArguments(4)
-      val t4 = m.typeArguments(3)
-      val t3 = m.typeArguments(2)
-      val t2 = m.typeArguments(1)
-      val t1 = m.typeArguments(0)
+      val t5 = manifest[F].typeArguments(4)
+      val t4 = manifest[F].typeArguments(3)
+      val t3 = manifest[F].typeArguments(2)
+      val t2 = manifest[F].typeArguments(1)
+      val t1 = manifest[F].typeArguments(0)
       new Action4[t1.type, t2.type, t3.type, t4.type, t5.type, (t1.type, t2.type, t3.type, t4.type) => t5.type](
         path,
         view,
         action.asInstanceOf[(t1.type, t2.type, t3.type, t4.type) => t5.type],
-        controller,
-        constraints.toList)
+        transaction,
+        methods,
+        constraints,
+        async,
+        controller)
     }
     else
       throw new RuntimeException("To many arguments, only 4 arguments are allowed currently")
@@ -248,12 +217,19 @@ object Action {
   /**
    * An Action that takes no arguments
    */
-  class Action0[R, F <: Function0[R]](val actionPath: String, val view: String, val action: F,
-          val controller: Controller, val constraints: List[Constraint])
-          (implicit m: Manifest[F]) extends Action {
-    def returnType: AnyRef = m.typeArguments(0)
+  class Action0[R, F <: Function0[R]:Manifest](
+          val path: String,
+          val view: Direction,
+          val action: F,
+          val trans: Transaction,
+          val methods:Seq[HttpMethod],
+          val constrs: Seq[Constraint],
+          val async:Boolean,
+          val controller: Controller)
+          extends Action {
+    def returnType: AnyRef = manifest[F].typeArguments(0)
 
-    def argTypes: List[AnyRef] = List.empty[AnyRef]
+    def argTypes: Array[Class[_]] = Array.empty[Class[_]]
 
     def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
@@ -271,12 +247,19 @@ object Action {
   /**
    * An action with a single argument that implements Args.
    */
-  class Action1[A, R, F <: Function1[A, R]](val actionPath: String, val view: String, val action: F,
-          val controller: Controller, val constraints: List[Constraint])
-          (implicit m: Manifest[F]) extends Action {
-    def returnType: AnyRef = m.typeArguments(1)
+  class Action1[A, R, F <: Function1[A, R]:Manifest](
+          val path: String,
+          val view: Direction,
+          val action: F,
+          val trans: Transaction,
+          val methods:Seq[HttpMethod],
+          val constrs: Seq[Constraint],
+          val async:Boolean,
+          val controller: Controller)
+          extends Action {
+    def returnType: AnyRef = manifest[F].typeArguments(1)
 
-    def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 1))
+    def argTypes: Array[Class[_]] = toClassList(manifest[F].typeArguments.slice(0, 1))
 
     def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
@@ -294,12 +277,19 @@ object Action {
   /**
    * An action with two arguments.  All arguments must be a subclass of Args.
    */
-  class Action2[A1, A2, R, F <: Function2[A1, A2, R]](val actionPath: String, val view: String, val action: F,
-          val controller: Controller, val constraints: List[Constraint])
-          (implicit m: Manifest[F]) extends Action {
-    def returnType: AnyRef = m.typeArguments(2)
+  class Action2[A1, A2, R, F <: Function2[A1, A2, R]:Manifest](
+          val path: String,
+          val view: Direction,
+          val action: F,
+          val trans: Transaction,
+          val methods:Seq[HttpMethod],
+          val constrs: Seq[Constraint],
+          val async:Boolean,
+          val controller: Controller)
+          extends Action {
+    def returnType: AnyRef = manifest[F].typeArguments(2)
 
-    def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 2))
+    def argTypes: Array[Class[_]] = toClassList(manifest[F].typeArguments.slice(0, 2))
 
     def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
@@ -316,12 +306,18 @@ object Action {
   /**
    * An action with three arguments.  All arguments must be a subclass of Args.
    */
-  class Action3[A1, A2, A3, R, F <: Function3[A1, A2, A3, R]](val actionPath: String, val view: String, val action: F,
-          val controller: Controller, val constraints: List[Constraint])
-          (implicit m: Manifest[F]) extends Action {
-    def returnType: AnyRef = m.typeArguments(3)
-
-    def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 3))
+  class Action3[A1, A2, A3, R, F <: Function3[A1, A2, A3, R]:Manifest](
+          val path: String,
+          val view: Direction,
+          val action: F,
+          val trans: Transaction,
+          val methods:Seq[HttpMethod],
+          val constrs: Seq[Constraint],
+          val async:Boolean,
+          val controller: Controller)
+          extends Action  {
+    def returnType: AnyRef = manifest[F].typeArguments(3)
+    def argTypes: Array[Class[_]] = toClassList(manifest[F].typeArguments.slice(0, 3))
 
     def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
@@ -339,15 +335,19 @@ object Action {
    * An action with four arguments.  All arguments must be a subclass of Args.
    */
 
-  class Action4[A1, A2, A3, A4, R, F <: Function4[A1, A2, A3, A4, R]](
-          val actionPath: String,
-          val view: String,
+  class Action4[A1, A2, A3, A4, R, F <: Function4[A1, A2, A3, A4, R]:Manifest](
+          val path: String,
+          val view: Direction,
           val action: F,
-          val controller: Controller,
-          val constraints: List[Constraint])(implicit m: Manifest[F]) extends Action {
-    def returnType: AnyRef = m.typeArguments(4)
+          val trans: Transaction,
+          val methods:Seq[HttpMethod],
+          val constrs: Seq[Constraint],
+          val async:Boolean,
+          val controller: Controller)
+          extends Action {
+    def returnType: AnyRef = manifest[F].typeArguments(4)
 
-    def argTypes: List[AnyRef] = toClassList(m.typeArguments.slice(0, 4))
+    def argTypes: Array[Class[_]] = toClassList(manifest[F].typeArguments.slice(0, 4))
 
     def execute(args: Array[Arg], principal: Principal) = {
       if (controller.isInstanceOf[Intercepted]) {
@@ -359,5 +359,14 @@ object Action {
       else
         action.apply(args(0).asInstanceOf[A1], args(1).asInstanceOf[A2], args(2).asInstanceOf[A3], args(3).asInstanceOf[A4]).asInstanceOf[AnyRef]
     }
+  }
+
+  protected def toClassList(t: List[Manifest[_]]) = {
+    t.map(t => {
+      if (t.toString().endsWith(".type"))
+        Class.forName(t.toString().substring(0, t.toString().length - 5))
+      else
+        Class.forName(t.toString())
+    }).toArray
   }
 }

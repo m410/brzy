@@ -18,6 +18,6 @@ package org.brzy.webapp.controller
  * 
  * @author Michael Fortin
  */
-trait Authenticator[T<:Identity] {
+trait Authenticator[T<:Authenticated] {
 	def login(user:String, pass:String):Option[T]
 }

@@ -19,7 +19,7 @@ import org.brzy.webapp.action.Action
 
 /**
  * Document Me..
- * 
+ *
  * @author Michael Fortin
  */
 object ArgsBuilder {
@@ -30,18 +30,14 @@ object ArgsBuilder {
   private val PrincipalClass = classOf[Principal]
   private val PropertiesClass = classOf[Properties]
 
-  def apply(req:HttpServletRequest,action:Action):Array[Arg] = {
-    val path = parseActionPath(req.getRequestURI, req.getContextPath)
+  def apply(req: HttpServletRequest, action: Action): Array[Arg] = {
+    val actionPath = parseActionPath(req.getRequestURI, req.getContextPath)
     val args = action.argTypes
-    log.trace("arg types: '{}', path: '{}'", args, path)
+    log.trace("arg types: '{}', path: '{}'", Array(args, actionPath): _*)
 
     args.map(arg => arg match {
       case ParametersClass =>
-        val extractParameterValues = action.path.extractParameterValues(path)
-        val map = extractParameterValues.zipWithIndex.map({case (v,idx) => {
-          action.path.parameterNames(idx) -> v
-        }}).toMap
-        new ParametersRequest(req, map)
+        new ParametersRequest(req, action.paramsFor(actionPath.path))
       case CookiesClass =>
         new CookiesRequest(req)
       case PostBodyClass =>
@@ -52,26 +48,27 @@ object ArgsBuilder {
         new PropertiesRequest(req)
       case _ =>
         throw new UnknownActionArgException("Unknown action argument type: " + arg)
-    }).toArray
+    })
   }
 
   /**
    * TODO Copied form action, need to fix this.
    */
-  def parseActionPath(uri: String, ctx: String) = {
-    val newuri =
-      if (uri.startsWith("//"))
-        uri.substring(1, uri.length)
-      else
-        uri
+  def parseActionPath(uri: String, ctx: String):ActionPath = {
 
-    if (newuri.endsWith(".brzy") && (ctx == "" || ctx == "/"))
-      newuri.substring(0, newuri.length - 5)
-    else if (newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
-      newuri.substring(ctx.length, newuri.length - 5)
-    else if (!newuri.endsWith(".brzy") && (ctx != "" || ctx != "/"))
-      newuri.substring(ctx.length, newuri.length)
+    val newuri = uri
+            .replace(ctx,"")
+            .replaceAll("^([\\w\\.])","/$1") // fix removal of first slash
+            .replaceAll("/+","/") // replace all double slashes
+            .replace(".brzy_async","") // remove extnsion
+            .replace(".brzy","") // remove other extension
+            .trim()
+
+    if (uri.endsWith(".brzy"))
+      ActionPath(newuri, true, false)
+    else if(uri.endsWith(".brzy_async"))
+      ActionPath(newuri, true, true)
     else
-      newuri
+      ActionPath(newuri,  false, false)
   }
 }
